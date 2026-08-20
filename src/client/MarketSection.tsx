@@ -80,6 +80,7 @@ export function MarketSection(props: SectionProps) {
   const [sizeOpen, setSizeOpen] = useState(false)
   const [confirming, setConfirming] = useState<MarketEntry | null>(null)
   const [removing, setRemoving] = useState<MarketEntry | null>(null)
+  const [removingLocal, setRemovingLocal] = useState<MarketEntry | null>(null)
   const [publishOpen, setPublishOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [verifyBusy, setVerifyBusy] = useState(false)
@@ -169,24 +170,30 @@ export function MarketSection(props: SectionProps) {
       }
       if (catsClamped) {
         wrap.style.maxHeight = 'none'
-        const hasHidden = visible < pills.length
+        // 展开按钮占据第三行右端：凡是伸进按钮区的可见 pill 一律强制换行到
+        // 第 4 行（被裁掉），行尾给按钮留出位置，杜绝遮挡（v1.4.0 修复
+        // 「文档与渲染」被「展开 N 个类别」压住的问题）。
         let lastVisible = visible - 1
-        if (hasHidden && lastVisible >= 0) {
-          // 只给第三行末尾预留按钮宽度（前两行填满整行），
-          // 而不是整列预留空白；加边距后若掉到第 4 行则撤销并改用前一个做锚点。
+        if (visible < pills.length) {
           const btnW = (wrap.querySelector<HTMLElement>('.pcm-chip-more-btn')?.offsetWidth ?? 104) + 8
-          const pill = pills[lastVisible]
-          pill.style.marginRight = btnW + 'px'
-          if (rowOf(pill) >= CATS_CLAMPED_ROWS) {
-            pill.style.marginRight = ''
+          const zoneStart = wrapRect.width - btnW
+          while (lastVisible >= 0) {
+            const pr = pills[lastVisible]!.getBoundingClientRect()
+            if (pr.right - wrapRect.left <= zoneStart) break
+            pills[lastVisible]!.style.marginRight = wrapRect.width + 'px'
             lastVisible -= 1
           }
+        }
+        let visibleFinal = 0
+        for (const pill of pills) {
+          if (rowOf(pill) < CATS_CLAMPED_ROWS) visibleFinal += 1
         }
         const probe = pills[Math.max(0, lastVisible)]
         const maxH = probe !== undefined
           ? probe.getBoundingClientRect().bottom - wrapRect.top + 1
           : 96
         wrap.style.maxHeight = maxH + 'px'
+        visible = visibleFinal
       } else {
         wrap.style.maxHeight = 'none'
       }
@@ -400,6 +407,21 @@ export function MarketSection(props: SectionProps) {
       .catch(() => setToast(t('installFailed')))
   }, [t, fetchStatus])
 
+  const doUninstallLocal = useCallback((entry: MarketEntry) => {
+    setRemovingLocal(null)
+    fetch('/dsh-store/uninstall', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: entry.name }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+        setToast(body.ok === true ? t('uninstallDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
+        fetchStatus()
+      })
+      .catch(() => setToast(t('installFailed')))
+  }, [t, fetchStatus])
+
   const doUninstall = useCallback((entry: MarketEntry) => {
     setRemoving(null)
     fetch('/dsh-store/uninstall', {
@@ -606,6 +628,9 @@ export function MarketSection(props: SectionProps) {
                     ) : (
                       <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
                     )}
+                    {installed && entry.local === true && (
+                      <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
+                    )}
                     {installed && entry.local !== true && (
                       <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                     )}
@@ -650,6 +675,15 @@ export function MarketSection(props: SectionProps) {
           statusLine={status?.install?.line ?? null}
           onClose={() => setConfirming(null)}
           onConfirm={() => doInstall(confirming)}
+        />
+      )}
+
+      {removingLocal !== null && (
+        <LocalUninstallModal
+          t={t}
+          entry={removingLocal}
+          onClose={() => setRemovingLocal(null)}
+          onConfirm={() => doUninstallLocal(removingLocal)}
         />
       )}
 
@@ -722,6 +756,39 @@ function InstallModal(props: {
         <div className={riskClass}>{riskText}</div>
         <div className="pcm-cmd">{t('installVia').replace('{0}', target)}</div>
         {installing && statusLine !== null && <div className="pcm-cmd">{statusLine}</div>}
+      </div>
+    </Modal>
+  )
+}
+
+function LocalUninstallModal(props: {
+  t: (key: string) => string
+  entry: MarketEntry
+  onClose: () => void
+  onConfirm: () => void
+}) {
+  const { t, entry } = props
+  const [checked, setChecked] = useState(false)
+  return (
+    <Modal
+      open
+      onClose={props.onClose}
+      title={t('localUninstallTitle').replace('{0}', entry.name)}
+      description={t('localUninstallDesc')}
+      footer={(
+        <>
+          <Button variant="ghost" onClick={props.onClose}>{t('cancel')}</Button>
+          <Button variant="primary" disabled={!checked} onClick={props.onConfirm}>{t('uninstall')}</Button>
+        </>
+      )}
+    >
+      <div className="pcm-modal-body">
+        <div className="pcm-risk pcm-risk-nonplugin">{t('localUninstallWarn')}</div>
+        <div className="pcm-cmd">{entry.name}</div>
+        <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, cursor: 'pointer' }}>
+          <input type="checkbox" checked={checked} onChange={e => setChecked(e.target.checked)} />
+          {t('localUninstallCheck')}
+        </label>
       </div>
     </Modal>
   )

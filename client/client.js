@@ -98,6 +98,10 @@ const en = {
 	installDone: "Installed. Refresh the page to activate.",
 	installFailed: "Install failed",
 	uninstallTitle: "Uninstall {0}?",
+	localUninstallTitle: "Uninstall local package {0}?",
+	localUninstallDesc: "This package is not in the market index — it may be a DSH host or environment component.",
+	localUninstallWarn: "Removing host components can break DSH features and cannot be restored from the market.",
+	localUninstallCheck: "I understand the risk and want to uninstall it.",
 	uninstallDesc: "Removes the package and its bundle row from this profile.",
 	uninstalling: "Uninstalling {0}…",
 	uninstallDone: "Uninstalled.",
@@ -209,6 +213,10 @@ const zh = {
 	installDone: "安装完成。刷新页面即可生效。",
 	installFailed: "安装失败",
 	uninstallTitle: "卸载 {0}？",
+	localUninstallTitle: "卸载本地组件 {0}？",
+	localUninstallDesc: "该包不在市场索引中，可能是 DSH 宿主或环境组件。",
+	localUninstallWarn: "卸载宿主组件可能导致 DSH 功能异常，且无法从市场一键恢复。",
+	localUninstallCheck: "我已了解风险，确认卸载",
 	uninstallDesc: "将从该 profile 移除依赖与 bundle 条目。",
 	uninstalling: "正在卸载 {0}…",
 	uninstallDone: "已卸载。",
@@ -391,6 +399,7 @@ function MarketSection(props) {
 	const [sizeOpen, setSizeOpen] = (0, react.useState)(false);
 	const [confirming, setConfirming] = (0, react.useState)(null);
 	const [removing, setRemoving] = (0, react.useState)(null);
+	const [removingLocal, setRemovingLocal] = (0, react.useState)(null);
 	const [publishOpen, setPublishOpen] = (0, react.useState)(false);
 	const [toast, setToast] = (0, react.useState)(null);
 	const [verifyBusy, setVerifyBusy] = (0, react.useState)(false);
@@ -463,20 +472,22 @@ function MarketSection(props) {
 			for (const pill of pills) if (rowOf(pill) < CATS_CLAMPED_ROWS) visible += 1;
 			if (catsClamped) {
 				wrap.style.maxHeight = "none";
-				const hasHidden = visible < pills.length;
 				let lastVisible = visible - 1;
-				if (hasHidden && lastVisible >= 0) {
+				if (visible < pills.length) {
 					const btnW = (wrap.querySelector(".pcm-chip-more-btn")?.offsetWidth ?? 104) + 8;
-					const pill = pills[lastVisible];
-					pill.style.marginRight = btnW + "px";
-					if (rowOf(pill) >= CATS_CLAMPED_ROWS) {
-						pill.style.marginRight = "";
+					const zoneStart = wrapRect.width - btnW;
+					while (lastVisible >= 0) {
+						if (pills[lastVisible].getBoundingClientRect().right - wrapRect.left <= zoneStart) break;
+						pills[lastVisible].style.marginRight = wrapRect.width + "px";
 						lastVisible -= 1;
 					}
 				}
+				let visibleFinal = 0;
+				for (const pill of pills) if (rowOf(pill) < CATS_CLAMPED_ROWS) visibleFinal += 1;
 				const probe = pills[Math.max(0, lastVisible)];
 				const maxH = probe !== void 0 ? probe.getBoundingClientRect().bottom - wrapRect.top + 1 : 96;
 				wrap.style.maxHeight = maxH + "px";
+				visible = visibleFinal;
 			} else wrap.style.maxHeight = "none";
 			const totalCats = categoriesRef.current.length;
 			setHiddenCatCount(Math.max(0, totalCats - (visible - 1)));
@@ -715,6 +726,17 @@ function MarketSection(props) {
 			})
 		}).then((res) => res.json()).then((body) => {
 			setToast(body.ok === true ? t("installDone") : t("installFailed") + ": " + (body.message ?? body.error ?? ""));
+			fetchStatus();
+		}).catch(() => setToast(t("installFailed")));
+	}, [t, fetchStatus]);
+	const doUninstallLocal = (0, react.useCallback)((entry) => {
+		setRemovingLocal(null);
+		fetch("/dsh-store/uninstall", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ name: entry.name })
+		}).then((res) => res.json()).then((body) => {
+			setToast(body.ok === true ? t("uninstallDone") : t("installFailed") + ": " + (body.message ?? body.error ?? ""));
 			fetchStatus();
 		}).catch(() => setToast(t("installFailed")));
 	}, [t, fetchStatus]);
@@ -1103,23 +1125,33 @@ function MarketSection(props) {
 								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: "pcm-actions",
 									onClick: (e) => e.stopPropagation(),
-									children: [installed ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-										variant: "outline",
-										size: "sm",
-										disabled: true,
-										children: t("installed")
-									}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-										variant: "primary",
-										size: "sm",
-										onClick: () => setConfirming(entry),
-										children: t("install")
-									}), installed && entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-										variant: "ghost",
-										size: "sm",
-										className: "pcm-uninstall-btn",
-										onClick: () => setRemoving(entry),
-										children: t("uninstall")
-									})]
+									children: [
+										installed ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "outline",
+											size: "sm",
+											disabled: true,
+											children: t("installed")
+										}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "primary",
+											size: "sm",
+											onClick: () => setConfirming(entry),
+											children: t("install")
+										}),
+										installed && entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "ghost",
+											size: "sm",
+											className: "pcm-uninstall-btn",
+											onClick: () => setRemovingLocal(entry),
+											children: t("uninstall")
+										}),
+										installed && entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "ghost",
+											size: "sm",
+											className: "pcm-uninstall-btn",
+											onClick: () => setRemoving(entry),
+											children: t("uninstall")
+										})
+									]
 								})
 							]
 						}, (entry.local === true ? "local:" : "") + entry.owner + "/" + entry.name);
@@ -1177,6 +1209,12 @@ function MarketSection(props) {
 				statusLine: status?.install?.line ?? null,
 				onClose: () => setConfirming(null),
 				onConfirm: () => doInstall(confirming)
+			}),
+			removingLocal !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(LocalUninstallModal, {
+				t,
+				entry: removingLocal,
+				onClose: () => setRemovingLocal(null),
+				onConfirm: () => doUninstallLocal(removingLocal)
 			}),
 			removing !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
 				open: true,
@@ -1261,6 +1299,53 @@ function InstallModal(props) {
 				installing && statusLine !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-cmd",
 					children: statusLine
+				})
+			]
+		})
+	});
+}
+function LocalUninstallModal(props) {
+	const { t, entry } = props;
+	const [checked, setChecked] = (0, react.useState)(false);
+	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
+		open: true,
+		onClose: props.onClose,
+		title: t("localUninstallTitle").replace("{0}", entry.name),
+		description: t("localUninstallDesc"),
+		footer: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+			variant: "ghost",
+			onClick: props.onClose,
+			children: t("cancel")
+		}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+			variant: "primary",
+			disabled: !checked,
+			onClick: props.onConfirm,
+			children: t("uninstall")
+		})] }),
+		children: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+			className: "pcm-modal-body",
+			children: [
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-risk pcm-risk-nonplugin",
+					children: t("localUninstallWarn")
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-cmd",
+					children: entry.name
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+					style: {
+						display: "flex",
+						gap: 8,
+						alignItems: "center",
+						fontSize: 13,
+						cursor: "pointer"
+					},
+					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+						type: "checkbox",
+						checked,
+						onChange: (e) => setChecked(e.target.checked)
+					}), t("localUninstallCheck")]
 				})
 			]
 		})

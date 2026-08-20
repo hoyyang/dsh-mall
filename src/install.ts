@@ -167,15 +167,23 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
   }
 }
 
-export async function runUninstall(config: MarketConfig, repo: string): Promise<{ ok: boolean; message: string }> {
+export async function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{ ok: boolean; message: string }> {
   installState.active = true
   installState.kind = 'uninstall'
-  installState.target = repo
+  installState.target = name ?? repo
   installState.phase = 'uninstalling'
   installState.line = null
   installState.startedAt = Date.now()
   try {
-    const dep = installedDepForProfile(config.profile, repo)
+    // 本地已装条目按包名精确卸载（repo 形如 @scope/name，不是 owner/repo）
+    let dep: { name: string; spec: string } | null = null
+    if (name !== undefined && name !== '') {
+      const deps = readManifest(config.profile).dependencies
+      const hit = Object.entries(deps).find(([n]) => n.toLowerCase() === name.toLowerCase())
+      if (hit !== undefined) dep = { name: hit[0], spec: hit[1] }
+    } else {
+      dep = installedDepForProfile(config.profile, repo)
+    }
     if (dep === null) {
       const message = 'Not installed (no matching dependency in the profile).'
       installState.lastResult = { ok: false, message }

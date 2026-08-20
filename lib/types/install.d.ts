@@ -30,7 +30,7 @@ export declare function runInstall(config: MarketConfig, repo: string, npmName: 
     ok: boolean;
     message: string;
 }>;
-export declare function runUninstall(config: MarketConfig, repo: string): Promise<{
+export declare function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{
     ok: boolean;
     message: string;
 }>;
