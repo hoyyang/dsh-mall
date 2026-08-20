@@ -19,7 +19,7 @@ interface RunResult {
   timedOut: boolean
 }
 
-function runDsh(profile: string, args: string[]): Promise<RunResult> {
+export function runDsh(profile: string, args: string[]): Promise<RunResult> {
   return new Promise((resolve) => {
     const child = spawn('dsh', ['plugin', '--profile', profile, ...args], {
       env: { ...process.env },
@@ -169,6 +169,30 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
 
 /** 批量更新：对每个 npm 包名跑 dsh plugin add <name>（不带版本 = 装 latest），
  *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
+/** 商店自身更新：dsh plugin add dsh-store@latest。host 代码更新后需要重启
+ *  dsh 才生效（bundle 层的 JS 已经加载），返回值固定带 needRestart。 */
+export async function runSelfUpdate(config: MarketConfig): Promise<{ ok: boolean; message: string; needRestart: boolean }> {
+  installState.active = true
+  installState.kind = 'update'
+  installState.target = 'dsh-store'
+  installState.phase = 'updating'
+  installState.line = 'dsh plugin add dsh-store@latest'
+  installState.startedAt = Date.now()
+  try {
+    const result = await runDsh(config.profile, ['add', 'dsh-store@latest'])
+    const ok = result.exitCode === 0 && !result.timedOut
+    const message = ok ? 'Updated dsh-store.' : (result.timedOut ? 'Update timed out (10 min)' : resultMessage(result))
+    installState.lastResult = { ok, message }
+    return { ok, message, needRestart: true }
+  } finally {
+    installState.active = false
+    installState.kind = null
+    installState.phase = null
+    installState.target = null
+    installState.line = null
+  }
+}
+
 export async function runUpdate(config: MarketConfig, targets: Array<{ name: string; to: string }>): Promise<{ ok: boolean; message: string; results: Array<{ name: string; ok: boolean; message: string }> }> {
   installState.active = true
   installState.kind = 'update'
@@ -203,6 +227,131 @@ export async function runUpdate(config: MarketConfig, targets: Array<{ name: str
     installState.target = null
     installState.line = null
   }
+}
+
+// ---------------------------------------------------------- enable/disable
+// 借鉴 dshmarket（其机制移植自 Noob-stupid/dsh-plugin-hub）：
+// 在 profile 的用户 patch 层（cordis.patch.yml）写顶层条目
+// "- id: <loaderId>" + "disabled: true|false" —— DSH 官方机制，HMR watcher
+// 会在 ~1s 内重合成、重启后持久，无需重启。
+// 写安全：只认顶层（无缩进）"- id:" 行；宿主基础设施条目拒绝切换。
+
+const PROTECTED_MODULE_RE = [
+  /^@deepseek-ai\//,
+  /^cordis:/,
+  /^dsh-store$/,
+]
+
+export function patchFilePath(profile: string): string {
+  return join(profileDir(profile), 'cordis.patch.yml')
+}
+
+/** 用户 patch 层当前停用的 loader id 列表。 */
+export function patchDisables(profile: string): string[] {
+  try {
+    const lines = readFileSync(patchFilePath(profile), 'utf8').split(/\r?\n/)
+    const out: string[] = []
+    for (let i = 0; i < lines.length - 1; i++) {
+      const m = /^- id:\s*(.+)$/.exec(lines[i] ?? '')
+      if (m !== null && /^\s*disabled:\s*true\s*$/.test(lines[i + 1] ?? '')) out.push(String(m[1]).trim())
+    }
+    return out
+  } catch {
+    return []
+  }
+}
+
+/** 停用（enabled=false）或重新启用（enabled=true）一个 loader 条目。 */
+export function setPluginEnabled(profile: string, loaderId: string, enabled: boolean): { ok: boolean; message: string } {
+  if (PROTECTED_MODULE_RE.some(re => re.test(loaderId))) {
+    return { ok: false, message: 'protected host entry — refusing to toggle' }
+  }
+  const file = patchFilePath(profile)
+  let lines: string[]
+  try {
+    lines = readFileSync(file, 'utf8').split(/\r?\n/)
+  } catch {
+    lines = []
+  }
+  let row = -1
+  for (let i = 0; i < lines.length; i++) {
+    const m = /^- id:\s*(.+)$/.exec(lines[i] ?? '')
+    if (m !== null && String(m[1]).trim() === loaderId) { row = i; break }
+  }
+  if (row >= 0) {
+    if (enabled) {
+      // 顶层条目：删掉 id 行与其后的 disabled 行（若有）
+      lines.splice(row, 1)
+      if (/^\s*disabled:/.test(lines[row] ?? '')) lines.splice(row, 1)
+    } else {
+      if (/^\s*disabled:\s*true\s*$/.test(lines[row + 1] ?? '')) return { ok: true, message: 'already disabled' }
+      lines.splice(row + 1, 0, '  disabled: true')
+    }
+  } else if (!enabled) {
+    if (lines.length > 0 && lines[lines.length - 1] !== '') lines.push('')
+    lines.push('- id: ' + loaderId, '  disabled: true')
+  } else {
+    return { ok: true, message: 'not disabled' }
+  }
+  try {
+    writeFileSync(file, lines.join('\n').replace(/\n+$/, '\n'))
+  } catch (err) {
+    return { ok: false, message: 'failed to write patch: ' + (err instanceof Error ? err.message : String(err)) }
+  }
+  return { ok: true, message: enabled ? 'enabled' : 'disabled' }
+}
+
+/** 已装依赖的激活状态（借鉴 dshmarket 的状态模型，精简为三态）：
+ *  live=启用中（bundle 层已装配且未被停用；官方组件经 patch insert 挂载恒为 live）；
+ *  disabled=patch 层停用（cordis.patch.yml 的 disabled: true）；
+ *  restart=bundle 未声明（如刚安装还没被装配/刷新）。 */
+export function pluginStatesOf(profile: string, manifest: { dependencies: Record<string, string>; bundles: string[] }): Record<string, 'live' | 'disabled' | 'restart'> {
+  const disables = new Set(patchDisables(profile))
+  const bundleSet = new Set(manifest.bundles)
+  const out: Record<string, 'live' | 'disabled' | 'restart'> = {}
+  for (const name of Object.keys(manifest.dependencies)) {
+    if (disables.has(name)) {
+      out[name] = 'disabled'
+    } else if (bundleSet.has(name) || name.startsWith('@deepseek-ai/')) {
+      out[name] = 'live'
+    } else {
+      out[name] = 'restart'
+    }
+  }
+  return out
+}
+
+// -------------------------------------------------------- rollback snapshots
+// 更新前记录旧 spec；回退时直接把旧 spec 写回 package.json 再 pnpm install
+// （dshmarket 的 restoreManifestDeps 同款思路：#65/#69 证明直接改 manifest
+// 是唯一可靠回退——pnpm 失败时可能已写过 package.json 留下幽灵依赖）。
+
+export function snapshotDep(profile: string, name: string, spec: string, to: string, state: { rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }> }): Record<string, { name: string; from: string; to: string; spec: string; at: string }> {
+  const from = (spec.match(/(\d+\.\d+\.\d+)/) ?? [])[1] ?? spec
+  const rollbacks = { ...(state.rollbacks ?? {}) }
+  rollbacks[name] = { name, from, to, spec, at: new Date().toISOString() }
+  state.rollbacks = rollbacks
+  return rollbacks
+}
+
+export function rollbackDep(profile: string, name: string, state: { rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }> }): { ok: boolean; message: string } | null {
+  const entry = state.rollbacks?.[name]
+  if (entry === undefined) return null
+  try {
+    const file = join(profileDir(profile), 'package.json')
+    const manifest = JSON.parse(readFileSync(file, 'utf8')) as { dependencies?: Record<string, string> }
+    const deps = manifest.dependencies ?? {}
+    // caret/波浪范围会再次解析到最新版（^0.19.0 仍匹配 0.19.2），
+    // 回退必须写精确版本号；无版本 spec（github: 等）原样恢复。
+    const exact = /^[\^~]/.test(entry.spec) && /^\d+\.\d+\.\d+$/.test(entry.from) ? entry.from : entry.spec
+    deps[name] = exact
+    manifest.dependencies = deps
+    writeFileSync(file, JSON.stringify(manifest, null, 2) + '\n')
+    delete state.rollbacks![name]
+  } catch (err) {
+    return { ok: false, message: 'failed to restore manifest: ' + (err instanceof Error ? err.message : String(err)) }
+  }
+  return { ok: true, message: 'restored ' + name + ' spec to ' + entry.spec }
 }
 
 export async function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{ ok: boolean; message: string }> {

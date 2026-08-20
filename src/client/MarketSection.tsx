@@ -12,6 +12,7 @@ import {
   Button,
   IconCheckOutline16,
   IconCopyOutline16,
+  IconLinkOutline16,
   IconLoadingOutline16,
   IconRefreshOutline14,
   IconSearchOutline16,
@@ -51,6 +52,11 @@ interface StatusBody {
   tokenConfigured?: boolean
   rateLimit?: { remaining?: number; reset?: number } | null
   updates?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
+  pluginStates?: Record<string, 'live' | 'disabled' | 'restart'>
+  rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }>
+  skipUpdates?: string[]
+  patchDisables?: string[]
+  selfUpdate?: { from: string; to: string | null }
 }
 
 export function MarketSection(props: SectionProps) {
@@ -91,6 +97,7 @@ export function MarketSection(props: SectionProps) {
   const [sortOpen, setSortOpen] = useState(false)
   const [sizeOpen, setSizeOpen] = useState(false)
   const [confirming, setConfirming] = useState<MarketEntry | null>(null)
+  const [rollbacking, setRollbacking] = useState<string | null>(null)
   const [removing, setRemoving] = useState<MarketEntry | null>(null)
   const [removingLocal, setRemovingLocal] = useState<MarketEntry | null>(null)
   const [publishOpen, setPublishOpen] = useState(false)
@@ -99,6 +106,10 @@ export function MarketSection(props: SectionProps) {
   const [detail, setDetail] = useState<MarketEntry | null>(null)
   const [updateBusy, setUpdateBusy] = useState(false)
   const [updatingNames, setUpdatingNames] = useState<Set<string>>(new Set())
+  const [selfUpdateBusy, setSelfUpdateBusy] = useState(false)
+  const [selfUpdateDone, setSelfUpdateDone] = useState(false)
+  const [toggling, setToggling] = useState<Set<string>>(new Set())
+  const scrollRef = useRef<HTMLDivElement | null>(null)
 
   const refreshing = status?.refreshing === true
   const installing = status?.install?.active === true
@@ -463,6 +474,12 @@ export function MarketSection(props: SectionProps) {
   const currentPage = Math.min(page, totalPages)
   const pageList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
+  // 翻页焦点管理（ARIA APG pagination 模式）：列表滚回顶部，
+  // 焦点留在当前页码按钮上（aria-current 标记 + 读屏播报）。
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 })
+  }, [currentPage])
+
   useEffect(() => {
     verifyPage(pageList)
   }, [pageList, verifyPage])
@@ -563,6 +580,103 @@ export function MarketSection(props: SectionProps) {
     runUpdateRequest([u.name], t('updateDone'))
   }, [updateBusy, runUpdateRequest, t])
 
+  // ---- 启用/停用、回退、不参与一键更新、商店自身更新 ----
+  const skipSet = useMemo(() => new Set((status?.skipUpdates ?? []).map(n => n.toLowerCase())), [status])
+  const rollbacks = status?.rollbacks ?? {}
+  const stateOf = useCallback((e: MarketEntry): 'live' | 'disabled' | 'restart' | null => {
+    const deps = status?.installed ?? {}
+    let depName: string | null = null
+    for (const n of Object.keys(deps)) {
+      if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) { depName = n; break }
+      if (n.toLowerCase() === e.name.toLowerCase()) { depName = n; break }
+    }
+    if (depName === null) return null
+    return status?.pluginStates?.[depName] ?? null
+  }, [status])
+
+  const doToggle = useCallback((e: MarketEntry) => {
+    const deps = status?.installed ?? {}
+    let depName: string | null = null
+    for (const n of Object.keys(deps)) {
+      if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) { depName = n; break }
+      if (n.toLowerCase() === e.name.toLowerCase()) { depName = n; break }
+    }
+    if (depName === null || toggling.has(depName)) return
+    const next = stateOf(e) === 'disabled'
+    setToggling(prev => new Set(prev).add(depName))
+    fetch('/dsh-store/toggle', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: depName, enabled: next }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+        setToast(body.ok === true ? t('toggleDone') : t('toggleFailed') + ': ' + (body.message ?? body.error ?? ''))
+        fetchStatus()
+      })
+      .catch(() => setToast(t('toggleFailed')))
+      .finally(() => setToggling(prev => { const s = new Set(prev); s.delete(depName); return s }))
+  }, [status, stateOf, toggling, fetchStatus, t])
+
+  const doRollback = useCallback((e: MarketEntry) => {
+    const deps = status?.installed ?? {}
+    let depName: string | null = null
+    for (const n of Object.keys(deps)) {
+      if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) { depName = n; break }
+      if (n.toLowerCase() === e.name.toLowerCase()) { depName = n; break }
+    }
+    if (depName === null || rollbacks[depName] === undefined) return
+    setRollbacking(e.name)
+    fetch('/dsh-store/rollback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: depName }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+        setToast(body.ok === true ? t('rollbackDone') + ' ' + (body.message ?? '') : t('rollbackFailed') + ': ' + (body.message ?? body.error ?? ''))
+        fetchStatus()
+      })
+      .catch(() => setToast(t('rollbackFailed')))
+      .finally(() => setRollbacking(null))
+  }, [status, rollbacks, fetchStatus, t])
+
+  const doToggleSkip = useCallback((e: MarketEntry) => {
+    const deps = status?.installed ?? {}
+    let depName: string | null = null
+    for (const n of Object.keys(deps)) {
+      if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) { depName = n; break }
+      if (n.toLowerCase() === e.name.toLowerCase()) { depName = n; break }
+    }
+    if (depName === null) return
+    const next = !skipSet.has(depName.toLowerCase())
+    fetch('/dsh-store/skip', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: depName, skip: next }),
+    })
+      .then(() => fetchStatus())
+      .catch(() => setToast(t('toggleFailed')))
+  }, [status, skipSet, fetchStatus, t])
+
+  const doSelfUpdate = useCallback(() => {
+    if (selfUpdateBusy || status?.selfUpdate?.to == null) return
+    setSelfUpdateBusy(true)
+    fetch('/dsh-store/self-update', { method: 'POST' })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; needRestart?: boolean; message?: string; error?: string }) => {
+        if (body.ok === true) {
+          setSelfUpdateDone(true)
+          setToast(t('selfUpdateDone') + (body.needRestart === true ? ' ' + t('restartNeeded') : ''))
+        } else {
+          setToast(t('selfUpdateFailed') + ': ' + (body.message ?? body.error ?? ''))
+        }
+        fetchStatus()
+      })
+      .catch(() => setToast(t('selfUpdateFailed')))
+      .finally(() => setSelfUpdateBusy(false))
+  }, [selfUpdateBusy, status, fetchStatus, t])
+
   const sortItems = useMemo<MenuEntry[]>(() => [
     { type: 'label', id: 'dim-label', text: t('sortDim') },
     { id: 'stars', label: t('sortStars') },
@@ -581,12 +695,6 @@ export function MarketSection(props: SectionProps) {
     if (data.source === 'snapshot') return t('sourceSnapshot').replace('{0}', relativeFromNow(data.updated, t))
     const synced = fetchAt !== null ? relativeFromNow(fetchAt, t) : relativeFromNow(data.updated, t)
     return t('syncedAt').replace('{0}', synced)
-  })()
-
-  const progressLabel = (() => {
-    const p = status?.progress
-    if (p === undefined || p.shards === undefined || p.shards === 0) return ''
-    return t('shardProgress').replace('{0}', String(p.repos ?? 0)).replace('{1}', String(p.shard ?? 0)).replace('{2}', String(p.shards))
   })()
 
   const rateNote = (() => {
@@ -627,17 +735,9 @@ export function MarketSection(props: SectionProps) {
           {t('publish')}
         </Button>
       </div>
-      {updates.length > 0 && (
-        <div className="pcm-update-all-row">
-          <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
-            {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
-          </button>
-        </div>
-      )}
       <div className="pcm-header-row2">
         <span className="pcm-subtitle">{t('autoRefresh')}</span>
         {data !== null && <span className="pcm-source">{sourceLabel}</span>}
-        {progressLabel !== '' && <span className="pcm-progress">{progressLabel}</span>}
         <span className="pcm-divider" />
         <Button
           variant="outline"
@@ -649,6 +749,17 @@ export function MarketSection(props: SectionProps) {
         >
           {refreshing ? t('refreshing') : t('refresh')}
         </Button>
+        {updates.length > 0 && (
+          <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
+            {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
+          </button>
+        )}
+        {status?.selfUpdate?.to != null && !selfUpdateDone && (
+          <button className="pcm-self-update-btn" onClick={doSelfUpdate} disabled={selfUpdateBusy}>
+            {selfUpdateBusy ? t('updatingAll') : t('selfUpdateBtn').replace('{0}', status.selfUpdate.from).replace('{1}', status.selfUpdate.to)}
+          </button>
+        )}
+        {selfUpdateDone && <span className="pcm-self-update-warn">{t('restartNeeded')}</span>}
       </div>
       </div>
 
@@ -685,24 +796,25 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        <Menu
-          open={langOpen}
-          onClose={() => setLangOpen(false)}
-          onSelect={id => { setLangChoice(id); setPage(1) }}
-          align="end"
-          anchor={(
-            <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
-              <span className="pcm-lang-flag">🌐</span>
-              <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
-              <span className="pcm-lang-caret" aria-hidden="true" />
-            </button>
-          )}
-          items={langItems}
-          selectedId={langChoice}
-        />
       </div>
       <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
         <div className="pcm-sort-slot">
+          <Menu
+            open={langOpen}
+            onClose={() => setLangOpen(false)}
+            onSelect={id => { setLangChoice(id); setPage(1) }}
+            align="end"
+            portal
+            anchor={(
+              <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
+                <span className="pcm-lang-flag">🌐</span>
+                <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
+                <span className="pcm-lang-caret" aria-hidden="true" />
+              </button>
+            )}
+            items={langItems}
+            selectedId={langChoice}
+          />
           <Menu
             open={sortOpen}
             onClose={() => setSortOpen(false)}
@@ -737,7 +849,7 @@ export function MarketSection(props: SectionProps) {
       </div>
       </div>
 
-      <div className="pcm-scroll">
+      <div className="pcm-scroll" ref={scrollRef}>
       {list.length === 0 ? (
         <div className="pcm-empty">{data === null ? t('loading') : t('empty')}</div>
       ) : (
@@ -809,18 +921,45 @@ export function MarketSection(props: SectionProps) {
                         <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                       )}
                       {entry.local !== true && (
-                        <Button variant="ghost" size="sm" className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+                        <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                           {t('sourceBtn')}
                         </Button>
                       )}
                     </div>
                   </div>
-                  {(entry.verified != null || disclosure != null || entry.installable != null) && (
+                  {installed && (
+                    <div className="pcm-state-row" onClick={e => e.stopPropagation()}>
+                      <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')}>
+                        {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
+                      </span>
+                      {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
+                        <label className="pcm-switch" title={t('toggleHint')}>
+                          <input
+                            type="checkbox"
+                            checked={stateOf(entry) !== 'disabled'}
+                            disabled={toggling.has(entry.npm ?? entry.name)}
+                            onChange={() => doToggle(entry)}
+                          />
+                          <span className="pcm-switch-track" />
+                        </label>
+                      )}
+                      {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
+                        <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
+                          {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
+                        </Button>
+                      )}
+                      {entry.local !== true && (
+                        <label className="pcm-skip-row" title={t('skipHint')}>
+                          <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
+                          <span>{t('skipUpdate')}</span>
+                        </label>
+                      )}
+                    </div>
+                  )}
+                  {(entry.verified != null || disclosure != null) && (
                     <div className="pcm-safety-row">
                       {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by)}>✓ {t('verifiedBadge')}</span>}
                       {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
-                      {entry.installable === 'manual' && <span className="pcm-safety pcm-safety-manual">⚙ {t('manualInstall')}</span>}
-                      {entry.installable === 'non-plugin' && <span className="pcm-safety pcm-safety-nonplugin">⊘ {t('nonpluginBadge')}</span>}
                     </div>
                   )}
                   <div className="pcm-desc">{(() => {
@@ -840,7 +979,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
-                      {installed && <span className="pcm-badge pcm-badge-installed">{t('installed')}</span>}
                     </div>
                   </div>
                 </div>
@@ -857,7 +995,7 @@ export function MarketSection(props: SectionProps) {
         {pageItems(currentPage, totalPages).map((item: number | '…', i: number) => item === '…' ? (
           <span key={'e' + i} style={{ opacity: .5 }}>…</span>
         ) : (
-          <button key={item} className={'pcm-page' + (item === currentPage ? ' on' : '')} onClick={() => setPage(item)}>{item}</button>
+          <button key={item} className={'pcm-page' + (item === currentPage ? ' on' : '')} aria-current={item === currentPage ? 'page' : undefined} onClick={() => setPage(item)}>{item}</button>
         ))}
         <Button variant="outline" size="sm" disabled={currentPage >= totalPages} onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}>
           {t('nextPage')}

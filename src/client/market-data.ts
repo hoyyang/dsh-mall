@@ -125,7 +125,7 @@ export function relativeFromNow(iso: string | null, t: (key: string) => string):
   if (minutes < 1) return t('justNow')
   if (minutes < 60) return t('minsAgo').replace('{0}', String(minutes))
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return t('hoursAgo').replace('{0}', String(hours))
+  if (hours < 24) return t('hoursMinsAgo').replace('{0}', String(hours)).replace('{1}', String(minutes % 60))
   const days = Math.floor(hours / 24)
   if (days < 30) return t('daysAgo').replace('{0}', String(days))
   const months = Math.floor(days / 30)

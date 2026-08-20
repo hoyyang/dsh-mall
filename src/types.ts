@@ -93,6 +93,10 @@ export interface MarketState {
   verdicts: Record<string, boolean>
   /** 收藏条目（小写 owner/repo 或 local:包名），持久化在 profile 的 dsh-store/state.json。 */
   favorites?: string[]
+  /** 更新前快照（包名 → 旧 spec/版本），「回退到上个版本」数据源。 */
+  rollbacks?: Record<string, RollbackEntry>
+  /** 「不参与一键更新」的包名列表。 */
+  skipUpdates?: string[]
 }
 
 export interface InstallState {
@@ -118,4 +122,16 @@ export interface MarketConfig {
   githubToken: string
   /** Custom registry source URL (registry.json format); empty = default CDN index. */
   registryUrl: string
+}
+
+/** 已装插件激活状态（借鉴 dshmarket 的激活状态模型，按其语义精简）。 */
+export type PluginState = 'live' | 'disabled' | 'restart'
+
+/** 回退快照：更新前记录的旧版本信息，供「回退到上个版本」恢复。 */
+export interface RollbackEntry {
+  name: string
+  from: string
+  to: string
+  spec: string
+  at: string
 }

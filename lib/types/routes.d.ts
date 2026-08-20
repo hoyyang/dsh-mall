@@ -21,4 +21,4 @@ export interface MarketHost {
     webServer: WebServerService;
     effect?(callback: () => void | (() => void), label?: string): void;
 }
-export declare function mountMarketRoutes(host: MarketHost, config: MarketConfig): () => void;
+export declare function mountMarketRoutes(host: MarketHost, config: MarketConfig, loaderIds?: Set<string>): () => void;

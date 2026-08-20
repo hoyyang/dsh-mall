@@ -16,6 +16,8 @@ export declare function readState(profile: string): MarketState;
 export declare function writeState(profile: string, state: MarketState): void;
 export declare function verdictsOf(profile: string): Record<string, boolean>;
 export declare function readFavorites(profile: string): string[];
+export declare function readSkipUpdates(profile: string): Set<string>;
+export declare function setSkipUpdate(profile: string, name: string, skip: boolean): string[];
 export declare function toggleFavorite(profile: string, key: string): string[];
 export declare function applyVerdicts(profile: string, updates: Record<string, boolean>): void;
 /** 可更新插件：已装依赖 spec 里的版本 vs 索引 npm_version（npm registry latest）。 */
@@ -35,8 +37,9 @@ export interface PluginUpdate {
 export declare function extractVersion(spec: string): string | null;
 /** 语义化三段版本比较：a<b → 负数；相等 → 0；a>b → 正数。 */
 export declare function compareVersions(a: string, b: string): number;
-/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；无版本 spec 跳过。 */
-export declare function computeUpdates(registry: Registry, deps: Record<string, string>): PluginUpdate[];
+/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；
+ *  无版本 spec 跳过；「不参与一键更新」名单与商店自身（dsh-store）排除。 */
+export declare function computeUpdates(registry: Registry, deps: Record<string, string>, skip?: Set<string>): PluginUpdate[];
 export declare function heuristicIsPlugin(repo: {
     name: string;
     description: string | null;

@@ -319,6 +319,19 @@ export function readFavorites(profile: string): string[] {
   return readState(profile).favorites ?? []
 }
 
+export function readSkipUpdates(profile: string): Set<string> {
+  return new Set((readState(profile).skipUpdates ?? []).map(n => n.toLowerCase()))
+}
+
+export function setSkipUpdate(profile: string, name: string, skip: boolean): string[] {
+  const state = readState(profile)
+  const list = (state.skipUpdates ?? []).filter(n => n !== name)
+  if (skip) list.push(name)
+  state.skipUpdates = list
+  writeState(profile, state)
+  return list
+}
+
 export function toggleFavorite(profile: string, key: string): string[] {
   const state = readState(profile)
   const list = state.favorites ?? []
@@ -371,16 +384,19 @@ export function compareVersions(a: string, b: string): number {
   return 0
 }
 
-/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；无版本 spec 跳过。 */
-export function computeUpdates(registry: Registry, deps: Record<string, string>): PluginUpdate[] {
+/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；
+ *  无版本 spec 跳过；「不参与一键更新」名单与商店自身（dsh-store）排除。 */
+export function computeUpdates(registry: Registry, deps: Record<string, string>, skip?: Set<string>): PluginUpdate[] {
   const out: PluginUpdate[] = []
   const seen = new Set<string>()
   for (const [name, spec] of Object.entries(deps)) {
     const s = String(spec).trim()
     if (s.startsWith('link:') || s.startsWith('file:')) continue
+    const lower = name.toLowerCase()
+    if (lower === 'dsh-store') continue // 商店自身走独立的「更新 DSH 商店」按钮
+    if (skip?.has(lower) === true) continue
     const from = extractVersion(s)
     if (from === null) continue
-    const lower = name.toLowerCase()
     let hit: MarketEntry | null = null
     for (const p of registry.plugins) {
       if (p.npm !== null && p.npm.toLowerCase() === lower) { hit = p; break }

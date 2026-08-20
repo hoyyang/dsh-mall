@@ -135,6 +135,7 @@ const en = {
 	justNow: "just now",
 	minsAgo: "{0} min ago",
 	hoursAgo: "{0} h ago",
+	hoursMinsAgo: "{0}h {1}m ago",
 	daysAgo: "{0} d ago",
 	monthsAgo: "{0} mo ago",
 	yearsAgo: "{0} y ago",
@@ -182,7 +183,22 @@ const en = {
 	discOffline: "Offline capable",
 	discApiKeys: "API keys",
 	discJurisdiction: "Jurisdiction",
-	discRetention: "Data retention"
+	discRetention: "Data retention",
+	stateLive: "· Active",
+	stateDisabled: "· Disabled",
+	stateRestart: "· Restart to apply",
+	toggleHint: "Enable / disable this plugin",
+	toggleDone: "Toggled. Changes apply via the profile watcher.",
+	toggleFailed: "Toggle failed",
+	rollbackBtn: "Rollback",
+	rollbackDone: "Rolled back.",
+	rollbackFailed: "Rollback failed",
+	skipUpdate: "Skip in Update All",
+	skipHint: "Exclude from \"Update plugins\" — the button will not count it.",
+	selfUpdateBtn: "Update \"DSH Store\" {0} → {1}",
+	selfUpdateDone: "DSH Store updated.",
+	selfUpdateFailed: "DSH Store update failed",
+	restartNeeded: "Restart dsh to apply."
 };
 const zh = {
 	nav: "DSH 商店",
@@ -290,6 +306,7 @@ const zh = {
 	justNow: "刚刚",
 	minsAgo: "{0} 分钟前",
 	hoursAgo: "{0} 小时前",
+	hoursMinsAgo: "{0} 小时 {1} 分前",
 	daysAgo: "{0} 天前",
 	monthsAgo: "{0} 个月前",
 	yearsAgo: "{0} 年前",
@@ -337,7 +354,22 @@ const zh = {
 	discOffline: "可离线运行",
 	discApiKeys: "API Key",
 	discJurisdiction: "法域",
-	discRetention: "数据留存"
+	discRetention: "数据留存",
+	stateLive: "· 启用中",
+	stateDisabled: "· 未启用",
+	stateRestart: "· 重启后生效",
+	toggleHint: "启用 / 停用该插件",
+	toggleDone: "已切换，profile 监听器会自动应用。",
+	toggleFailed: "切换失败",
+	rollbackBtn: "回退",
+	rollbackDone: "已回退。",
+	rollbackFailed: "回退失败",
+	skipUpdate: "不参与一键更新",
+	skipHint: "排除在「一键更新插件」之外——该按钮不再为它计数。",
+	selfUpdateBtn: "更新「DSH 商店」 {0} → {1}",
+	selfUpdateDone: "DSH 商店已更新。",
+	selfUpdateFailed: "DSH 商店更新失败",
+	restartNeeded: "需重启 dsh 生效。"
 };
 //#endregion
 //#region src/client/market-data.ts
@@ -392,7 +424,7 @@ function relativeFromNow(iso, t) {
 	if (minutes < 1) return t("justNow");
 	if (minutes < 60) return t("minsAgo").replace("{0}", String(minutes));
 	const hours = Math.floor(minutes / 60);
-	if (hours < 24) return t("hoursAgo").replace("{0}", String(hours));
+	if (hours < 24) return t("hoursMinsAgo").replace("{0}", String(hours)).replace("{1}", String(minutes % 60));
 	const days = Math.floor(hours / 24);
 	if (days < 30) return t("daysAgo").replace("{0}", String(days));
 	const months = Math.floor(days / 30);
@@ -921,6 +953,7 @@ function MarketSection(props) {
 	const [sortOpen, setSortOpen] = (0, react.useState)(false);
 	const [sizeOpen, setSizeOpen] = (0, react.useState)(false);
 	const [confirming, setConfirming] = (0, react.useState)(null);
+	const [rollbacking, setRollbacking] = (0, react.useState)(null);
 	const [removing, setRemoving] = (0, react.useState)(null);
 	const [removingLocal, setRemovingLocal] = (0, react.useState)(null);
 	const [publishOpen, setPublishOpen] = (0, react.useState)(false);
@@ -929,6 +962,10 @@ function MarketSection(props) {
 	const [detail, setDetail] = (0, react.useState)(null);
 	const [updateBusy, setUpdateBusy] = (0, react.useState)(false);
 	const [updatingNames, setUpdatingNames] = (0, react.useState)(/* @__PURE__ */ new Set());
+	const [selfUpdateBusy, setSelfUpdateBusy] = (0, react.useState)(false);
+	const [selfUpdateDone, setSelfUpdateDone] = (0, react.useState)(false);
+	const [toggling, setToggling] = (0, react.useState)(/* @__PURE__ */ new Set());
+	const scrollRef = (0, react.useRef)(null);
 	const refreshing = status?.refreshing === true;
 	const installing = status?.install?.active === true;
 	const fetchRegistry = (0, react.useCallback)((force) => {
@@ -1299,6 +1336,9 @@ function MarketSection(props) {
 	const currentPage = Math.min(page, totalPages);
 	const pageList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 	(0, react.useEffect)(() => {
+		scrollRef.current?.scrollTo({ top: 0 });
+	}, [currentPage]);
+	(0, react.useEffect)(() => {
 		verifyPage(pageList);
 	}, [pageList, verifyPage]);
 	const doInstall = (0, react.useCallback)((entry) => {
@@ -1389,6 +1429,136 @@ function MarketSection(props) {
 		runUpdateRequest,
 		t
 	]);
+	const skipSet = (0, react.useMemo)(() => new Set((status?.skipUpdates ?? []).map((n) => n.toLowerCase())), [status]);
+	const rollbacks = status?.rollbacks ?? {};
+	const stateOf = (0, react.useCallback)((e) => {
+		const deps = status?.installed ?? {};
+		let depName = null;
+		for (const n of Object.keys(deps)) {
+			if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) {
+				depName = n;
+				break;
+			}
+			if (n.toLowerCase() === e.name.toLowerCase()) {
+				depName = n;
+				break;
+			}
+		}
+		if (depName === null) return null;
+		return status?.pluginStates?.[depName] ?? null;
+	}, [status]);
+	const doToggle = (0, react.useCallback)((e) => {
+		const deps = status?.installed ?? {};
+		let depName = null;
+		for (const n of Object.keys(deps)) {
+			if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) {
+				depName = n;
+				break;
+			}
+			if (n.toLowerCase() === e.name.toLowerCase()) {
+				depName = n;
+				break;
+			}
+		}
+		if (depName === null || toggling.has(depName)) return;
+		const next = stateOf(e) === "disabled";
+		setToggling((prev) => new Set(prev).add(depName));
+		fetch("/dsh-store/toggle", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				name: depName,
+				enabled: next
+			})
+		}).then((res) => res.json()).then((body) => {
+			setToast(body.ok === true ? t("toggleDone") : t("toggleFailed") + ": " + (body.message ?? body.error ?? ""));
+			fetchStatus();
+		}).catch(() => setToast(t("toggleFailed"))).finally(() => setToggling((prev) => {
+			const s = new Set(prev);
+			s.delete(depName);
+			return s;
+		}));
+	}, [
+		status,
+		stateOf,
+		toggling,
+		fetchStatus,
+		t
+	]);
+	const doRollback = (0, react.useCallback)((e) => {
+		const deps = status?.installed ?? {};
+		let depName = null;
+		for (const n of Object.keys(deps)) {
+			if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) {
+				depName = n;
+				break;
+			}
+			if (n.toLowerCase() === e.name.toLowerCase()) {
+				depName = n;
+				break;
+			}
+		}
+		if (depName === null || rollbacks[depName] === void 0) return;
+		setRollbacking(e.name);
+		fetch("/dsh-store/rollback", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ name: depName })
+		}).then((res) => res.json()).then((body) => {
+			setToast(body.ok === true ? t("rollbackDone") + " " + (body.message ?? "") : t("rollbackFailed") + ": " + (body.message ?? body.error ?? ""));
+			fetchStatus();
+		}).catch(() => setToast(t("rollbackFailed"))).finally(() => setRollbacking(null));
+	}, [
+		status,
+		rollbacks,
+		fetchStatus,
+		t
+	]);
+	const doToggleSkip = (0, react.useCallback)((e) => {
+		const deps = status?.installed ?? {};
+		let depName = null;
+		for (const n of Object.keys(deps)) {
+			if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) {
+				depName = n;
+				break;
+			}
+			if (n.toLowerCase() === e.name.toLowerCase()) {
+				depName = n;
+				break;
+			}
+		}
+		if (depName === null) return;
+		const next = !skipSet.has(depName.toLowerCase());
+		fetch("/dsh-store/skip", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				name: depName,
+				skip: next
+			})
+		}).then(() => fetchStatus()).catch(() => setToast(t("toggleFailed")));
+	}, [
+		status,
+		skipSet,
+		fetchStatus,
+		t
+	]);
+	const doSelfUpdate = (0, react.useCallback)(() => {
+		if (selfUpdateBusy || status?.selfUpdate?.to == null) return;
+		setSelfUpdateBusy(true);
+		fetch("/dsh-store/self-update", { method: "POST" }).then((res) => res.json()).then((body) => {
+			if (body.ok === true) {
+				setSelfUpdateDone(true);
+				setToast(t("selfUpdateDone") + (body.needRestart === true ? " " + t("restartNeeded") : ""));
+			} else setToast(t("selfUpdateFailed") + ": " + (body.message ?? body.error ?? ""));
+			fetchStatus();
+		}).catch(() => setToast(t("selfUpdateFailed"))).finally(() => setSelfUpdateBusy(false));
+	}, [
+		selfUpdateBusy,
+		status,
+		fetchStatus,
+		t
+	]);
 	const sortItems = (0, react.useMemo)(() => [
 		{
 			type: "label",
@@ -1435,11 +1605,6 @@ function MarketSection(props) {
 		const synced = fetchAt !== null ? relativeFromNow(fetchAt, t) : relativeFromNow(data.updated, t);
 		return t("syncedAt").replace("{0}", synced);
 	})();
-	const progressLabel = (() => {
-		const p = status?.progress;
-		if (p === void 0 || p.shards === void 0 || p.shards === 0) return "";
-		return t("shardProgress").replace("{0}", String(p.repos ?? 0)).replace("{1}", String(p.shard ?? 0)).replace("{2}", String(p.shards));
-	})();
 	const rateNote = (() => {
 		const r = status?.rateLimit;
 		if (r === null || r === void 0 || r.remaining === void 0 || r.remaining > 0) return null;
@@ -1456,108 +1621,108 @@ function MarketSection(props) {
 				children: [
 					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: "pcm-brand-card",
-						children: [
-							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-								className: "pcm-header",
+						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+							className: "pcm-header",
+							children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+								style: {
+									display: "flex",
+									flexDirection: "column",
+									gap: 3,
+									flex: "1 1 auto",
+									minWidth: 200
+								},
 								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									style: {
 										display: "flex",
-										flexDirection: "column",
-										gap: 3,
-										flex: "1 1 auto",
-										minWidth: 200
+										alignItems: "center",
+										gap: 8
 									},
-									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										style: {
-											display: "flex",
-											alignItems: "center",
-											gap: 8
-										},
-										children: [
-											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
-												className: "pcm-icon",
-												src: ICON_DATA,
-												alt: "",
-												width: 22,
-												height: 22
-											}),
-											/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-												style: {
-													display: "inline-flex",
-													alignItems: "center",
-													gap: 5
-												},
-												children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("h2", {
-													className: "pcm-title",
-													children: t("title")
-												}), status?.version !== void 0 && status.version !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-													className: "pcm-version",
-													title: t("versionHint").replace("{0}", status.version),
-													children: ["v", status.version]
-												})]
-											}),
-											status?.tokenConfigured === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: "pcm-token-badge",
-												children: t("tokenConfigured")
-											})
-										]
-									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-										className: "pcm-subtitle",
-										children: t("subtitle")
-									})]
-								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+									children: [
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
+											className: "pcm-icon",
+											src: ICON_DATA,
+											alt: "",
+											width: 22,
+											height: 22
+										}),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+											style: {
+												display: "inline-flex",
+												alignItems: "center",
+												gap: 5
+											},
+											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("h2", {
+												className: "pcm-title",
+												children: t("title")
+											}), status?.version !== void 0 && status.version !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+												className: "pcm-version",
+												title: t("versionHint").replace("{0}", status.version),
+												children: ["v", status.version]
+											})]
+										}),
+										status?.tokenConfigured === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-token-badge",
+											children: t("tokenConfigured")
+										})
+									]
+								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+									className: "pcm-subtitle",
+									children: t("subtitle")
+								})]
+							}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+								variant: "outline",
+								size: "sm",
+								icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconSendOutline16, { size: 14 }),
+								onClick: () => setPublishOpen(true),
+								className: "pcm-publish-btn",
+								style: { marginLeft: "auto" },
+								children: t("publish")
+							})]
+						}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+							className: "pcm-header-row2",
+							children: [
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-subtitle",
+									children: t("autoRefresh")
+								}),
+								data !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-source",
+									children: sourceLabel
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-divider" }),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
 									variant: "outline",
 									size: "sm",
-									icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconSendOutline16, { size: 14 }),
-									onClick: () => setPublishOpen(true),
-									className: "pcm-publish-btn",
-									style: { marginLeft: "auto" },
-									children: t("publish")
-								})]
-							}),
-							updates.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-								className: "pcm-update-all-row",
-								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+									icon: refreshing ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "pcm-spin",
+										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+									}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconRefreshOutline14, { size: 14 }),
+									onClick: () => {
+										fetchRegistry(true);
+										fetchStatus();
+									},
+									disabled: refreshing,
+									className: "pcm-brand-btn",
+									children: refreshing ? t("refreshing") : t("refresh")
+								}),
+								updates.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
 									className: "pcm-update-all-btn",
 									onClick: doUpdateAll,
 									disabled: updateBusy,
 									children: updateBusy ? t("updatingAll") : t("updateAllBtn").replace("{0}", String(updates.length))
+								}),
+								status?.selfUpdate?.to != null && !selfUpdateDone && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+									className: "pcm-self-update-btn",
+									onClick: doSelfUpdate,
+									disabled: selfUpdateBusy,
+									children: selfUpdateBusy ? t("updatingAll") : t("selfUpdateBtn").replace("{0}", status.selfUpdate.from).replace("{1}", status.selfUpdate.to)
+								}),
+								selfUpdateDone && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-self-update-warn",
+									children: t("restartNeeded")
 								})
-							}),
-							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-								className: "pcm-header-row2",
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-subtitle",
-										children: t("autoRefresh")
-									}),
-									data !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-source",
-										children: sourceLabel
-									}),
-									progressLabel !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-progress",
-										children: progressLabel
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-divider" }),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-										variant: "outline",
-										size: "sm",
-										icon: refreshing ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-spin",
-											children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
-										}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconRefreshOutline14, { size: 14 }),
-										onClick: () => {
-											fetchRegistry(true);
-											fetchStatus();
-										},
-										disabled: refreshing,
-										className: "pcm-brand-btn",
-										children: refreshing ? t("refreshing") : t("refresh")
-									})
-								]
-							})
-						]
+							]
+						})]
 					}),
 					rateNote !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: "pcm-rate",
@@ -1638,36 +1803,6 @@ function MarketSection(props) {
 									setPage(1);
 								},
 								children: t("favOnly")
-							}),
-							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
-								open: langOpen,
-								onClose: () => setLangOpen(false),
-								onSelect: (id) => {
-									setLangChoice(id);
-									setPage(1);
-								},
-								align: "end",
-								anchor: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
-									type: "button",
-									className: "pcm-lang-btn" + (langOpen ? " pcm-lang-btn-open" : ""),
-									onClick: () => setLangOpen((o) => !o),
-									children: [
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-lang-flag",
-											children: "🌐"
-										}),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-lang-label",
-											children: LANG_SHORT[langChoice] ?? langChoice.toUpperCase()
-										}),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-lang-caret",
-											"aria-hidden": "true"
-										})
-									]
-								}),
-								items: langItems,
-								selectedId: langChoice
 							})
 						]
 					}),
@@ -1675,9 +1810,39 @@ function MarketSection(props) {
 						className: catsClamped ? "pcm-chips pcm-chips-clamped" : "pcm-chips",
 						ref: chipsRef,
 						children: [
-							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 								className: "pcm-sort-slot",
-								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
+								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
+									open: langOpen,
+									onClose: () => setLangOpen(false),
+									onSelect: (id) => {
+										setLangChoice(id);
+										setPage(1);
+									},
+									align: "end",
+									portal: true,
+									anchor: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
+										type: "button",
+										className: "pcm-lang-btn" + (langOpen ? " pcm-lang-btn-open" : ""),
+										onClick: () => setLangOpen((o) => !o),
+										children: [
+											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-lang-flag",
+												children: "🌐"
+											}),
+											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-lang-label",
+												children: LANG_SHORT[langChoice] ?? langChoice.toUpperCase()
+											}),
+											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-lang-caret",
+												"aria-hidden": "true"
+											})
+										]
+									}),
+									items: langItems,
+									selectedId: langChoice
+								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
 									open: sortOpen,
 									onClose: () => setSortOpen(false),
 									onSelect: (id) => {
@@ -1696,7 +1861,7 @@ function MarketSection(props) {
 									}),
 									items: sortItems,
 									selectedIds: [sortDim, sortDir]
-								})
+								})]
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
 								active: cat === "all",
@@ -1733,6 +1898,7 @@ function MarketSection(props) {
 			}),
 			/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 				className: "pcm-scroll",
+				ref: scrollRef,
 				children: list.length === 0 ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-empty",
 					children: data === null ? t("loading") : t("empty")
@@ -1856,8 +2022,9 @@ function MarketSection(props) {
 													children: t("uninstall")
 												}),
 												entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "ghost",
+													variant: "outline",
 													size: "sm",
+													icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLinkOutline16, { size: 14 }),
 													className: "pcm-source-btn",
 													onClick: () => window.open(entry.url, "_blank", "noopener"),
 													children: t("sourceBtn")
@@ -1866,28 +2033,57 @@ function MarketSection(props) {
 										})
 									]
 								}),
-								(entry.verified != null || disclosure != null || entry.installable != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-safety-row",
+								installed && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-state-row",
+									onClick: (e) => e.stopPropagation(),
 									children: [
-										entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-safety pcm-safety-verified",
-											title: t("verifiedHintTitle").replace("{0}", entry.verified.by),
-											children: ["✓ ", t("verifiedBadge")]
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
+											children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
 										}),
-										disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-safety pcm-safety-disclosure",
-											title: t("disclosureBadge"),
-											children: ["🛡 ", t("disclosureBadge")]
+										!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+											className: "pcm-switch",
+											title: t("toggleHint"),
+											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+												type: "checkbox",
+												checked: stateOf(entry) !== "disabled",
+												disabled: toggling.has(entry.npm ?? entry.name),
+												onChange: () => doToggle(entry)
+											}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-switch-track" })]
 										}),
-										entry.installable === "manual" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-safety pcm-safety-manual",
-											children: ["⚙ ", t("manualInstall")]
+										entry.local !== true && rollbacks[entry.npm ?? entry.name] !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "ghost",
+											size: "sm",
+											className: "pcm-rollback-btn",
+											disabled: rollbacking === entry.name,
+											onClick: () => doRollback(entry),
+											children: rollbacking === entry.name ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-spin",
+												children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+											}) : t("rollbackBtn")
 										}),
-										entry.installable === "non-plugin" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-safety pcm-safety-nonplugin",
-											children: ["⊘ ", t("nonpluginBadge")]
+										entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+											className: "pcm-skip-row",
+											title: t("skipHint"),
+											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+												type: "checkbox",
+												checked: skipSet.has((entry.npm ?? entry.name).toLowerCase()),
+												onChange: () => doToggleSkip(entry)
+											}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
 										})
 									]
+								}),
+								(entry.verified != null || disclosure != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-safety-row",
+									children: [entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+										className: "pcm-safety pcm-safety-verified",
+										title: t("verifiedHintTitle").replace("{0}", entry.verified.by),
+										children: ["✓ ", t("verifiedBadge")]
+									}), disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+										className: "pcm-safety pcm-safety-disclosure",
+										title: t("disclosureBadge"),
+										children: ["🛡 ", t("disclosureBadge")]
+									})]
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 									className: "pcm-desc",
@@ -1946,10 +2142,6 @@ function MarketSection(props) {
 											entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-local",
 												children: t("localBadge")
-											}),
-											installed && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: "pcm-badge pcm-badge-installed",
-												children: t("installed")
 											})
 										]
 									})]
@@ -1974,6 +2166,7 @@ function MarketSection(props) {
 						children: "…"
 					}, "e" + i) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
 						className: "pcm-page" + (item === currentPage ? " on" : ""),
+						"aria-current": item === currentPage ? "page" : void 0,
 						onClick: () => setPage(item),
 						children: item
 					}, item)),
@@ -2473,7 +2666,7 @@ function SettingsCard(props) {
 //#endregion
 //#region src/client/styles.ts
 /** Inline stylesheet: injected once with a data-plugin tag; hot reloads replace its content in place. */
-const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:hidden}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff)}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{color:#040506 !important;font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap}.pcm-safety{font-size:9.5px;padding:0 6px;border-radius:999px;line-height:15px;white-space:nowrap;font-weight:500}.pcm-safety-verified{background:rgba(34,197,94,.12);color:#15803d;border:1px solid rgba(34,197,94,.35)}.pcm-safety-disclosure{background:rgba(37,99,235,.08);color:#1d4ed8;border:1px solid rgba(37,99,235,.3)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-detail-modal{width:min(880px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:52vh;overflow-y:scroll}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
+const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:hidden}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff)}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap}.pcm-safety{font-size:9.5px;padding:1px 7px;border-radius:4px;line-height:15px;white-space:nowrap;font-weight:600;letter-spacing:.2px}.pcm-safety-verified{color:#15803d;background:linear-gradient(180deg,rgba(34,197,94,.18),rgba(34,197,94,.07));border:1px solid rgba(34,197,94,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(34,197,94,.12)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-detail-modal{width:min(880px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:52vh;overflow-y:scroll}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
 function injectStyles() {
 	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-store\"]");
 	stale.forEach((tag, index) => {
