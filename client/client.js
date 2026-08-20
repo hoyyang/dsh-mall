@@ -410,7 +410,7 @@ function MarketSection(props) {
 		"ru"
 	];
 	const LANG_LABELS = {
-		en: "EN",
+		en: "English",
 		zh: "中文",
 		ja: "日本語",
 		ko: "한국어",
@@ -420,7 +420,23 @@ function MarketSection(props) {
 		pt: "Português",
 		ru: "Русский"
 	};
+	const LANG_SHORT = {
+		en: "EN",
+		zh: "中文",
+		ja: "日本語",
+		ko: "한국어",
+		es: "ES",
+		fr: "FR",
+		de: "DE",
+		pt: "PT",
+		ru: "RU"
+	};
+	const langItems = (0, react.useMemo)(() => LANGS.map((l) => ({
+		id: l,
+		label: LANG_LABELS[l] ?? l
+	})), []);
 	const [langChoice, setLangChoice] = (0, react.useState)("en");
+	const [langOpen, setLangOpen] = (0, react.useState)(false);
 	const [page, setPage] = (0, react.useState)(1);
 	const [pageSize, setPageSize] = (0, react.useState)(24);
 	const [sortOpen, setSortOpen] = (0, react.useState)(false);
@@ -491,7 +507,7 @@ function MarketSection(props) {
 		const wrap = chipsRef.current;
 		if (wrap === null) return;
 		const measure = () => {
-			const pills = Array.from(wrap.querySelectorAll("button:not(.pcm-chip-more-btn)"));
+			const pills = Array.from(wrap.querySelectorAll("button:not(.pcm-chip-more-btn):not(.pcm-sort-btn)"));
 			if (pills.length === 0) return;
 			for (const p of pills) p.style.marginRight = "";
 			const wrapRect = wrap.getBoundingClientRect();
@@ -1055,12 +1071,23 @@ function MarketSection(props) {
 								},
 								children: t("favOnly")
 							}),
-							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-								variant: "outline",
-								size: "sm",
-								className: "pcm-lang-btn",
-								onClick: () => setLangChoice((v) => LANGS[(LANGS.indexOf(v) + 1) % LANGS.length] ?? "en"),
-								children: "🌐 " + (LANG_LABELS[langChoice] ?? langChoice.toUpperCase())
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
+								open: langOpen,
+								onClose: () => setLangOpen(false),
+								onSelect: (id) => {
+									setLangChoice(id);
+									setPage(1);
+								},
+								align: "end",
+								anchor: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+									variant: "outline",
+									size: "sm",
+									className: "pcm-lang-btn",
+									onClick: () => setLangOpen((o) => !o),
+									children: "🌐 " + (LANG_SHORT[langChoice] ?? langChoice.toUpperCase())
+								}),
+								items: langItems,
+								selectedId: langChoice
 							})
 						]
 					}),
@@ -1181,7 +1208,7 @@ function MarketSection(props) {
 														"aria-hidden": "true",
 														children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
 															d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z",
-															fill: isFav(entry) ? "#f59e0b" : "#3a3d42",
+															fill: isFav(entry) ? "#f59e0b" : "transparent",
 															stroke: "#d99a1f",
 															strokeWidth: "1.6",
 															strokeLinejoin: "round"

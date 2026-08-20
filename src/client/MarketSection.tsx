@@ -79,8 +79,11 @@ export function MarketSection(props: SectionProps) {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const sort = (sortDim + '-' + sortDir) as SortKey
   const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
-  const LANG_LABELS: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
+  const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
+  const LANG_SHORT: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', ru: 'RU' }
+  const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
   const [langChoice, setLangChoice] = useState<string>('en')
+  const [langOpen, setLangOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(24)
   const [sortOpen, setSortOpen] = useState(false)
@@ -170,7 +173,8 @@ export function MarketSection(props: SectionProps) {
     if (wrap === null) return
     const measure = () => {
       // 展开/收起按钮也在 chips 容器内，pill 计数必须排除它
-      const pills = Array.from(wrap.querySelectorAll<HTMLElement>('button:not(.pcm-chip-more-btn)'))
+      // 排序按钮也住在 chips 容器里，pill 计数必须排除它（否则高度公式按 28px 算）
+      const pills = Array.from(wrap.querySelectorAll<HTMLElement>('button:not(.pcm-chip-more-btn):not(.pcm-sort-btn)'))
       if (pills.length === 0) return
       for (const p of pills) p.style.marginRight = ''
       const wrapRect = wrap.getBoundingClientRect()
@@ -602,14 +606,24 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        <Button
-          variant="outline"
-          size="sm"
-          className="pcm-lang-btn"
-          onClick={() => setLangChoice(v => LANGS[(LANGS.indexOf(v as typeof LANGS[number]) + 1) % LANGS.length] ?? 'en')}
-        >
-          {'🌐 ' + (LANG_LABELS[langChoice] ?? langChoice.toUpperCase())}
-        </Button>
+        <Menu
+          open={langOpen}
+          onClose={() => setLangOpen(false)}
+          onSelect={id => { setLangChoice(id); setPage(1) }}
+          align="end"
+          anchor={(
+            <Button
+              variant="outline"
+              size="sm"
+              className="pcm-lang-btn"
+              onClick={() => setLangOpen(o => !o)}
+            >
+              {'🌐 ' + (LANG_SHORT[langChoice] ?? langChoice.toUpperCase())}
+            </Button>
+          )}
+          items={langItems}
+          selectedId={langChoice}
+        />
       </div>
       <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
         <div className="pcm-sort-slot">
@@ -686,7 +700,7 @@ export function MarketSection(props: SectionProps) {
                         <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
                           <path
                             d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                            fill={isFav(entry) ? '#f59e0b' : '#3a3d42'}
+                            fill={isFav(entry) ? '#f59e0b' : 'transparent'}
                             stroke="#d99a1f"
                             strokeWidth="1.6"
                             strokeLinejoin="round"
