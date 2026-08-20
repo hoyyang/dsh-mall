@@ -18,6 +18,8 @@ export interface MarketEntry {
   npm: string | null
   avatar: string
   language: string | null
+  /** 本地已装但不在市场索引里的包（合成卡片，非 GitHub 仓库条目）。 */
+  local?: boolean
 }
 
 export interface Registry {

@@ -59,6 +59,9 @@ const en = {
 	kindNonplugin: "Non-plugins",
 	curatedOnly: "Awesome only",
 	installedOnly: "Installed",
+	localBadge: "local",
+	localOwner: "local install",
+	catInstalled: "Installed (local)",
 	since: "Active",
 	sinceAll: "Any time",
 	sinceDay: "24 hours",
@@ -167,6 +170,9 @@ const zh = {
 	kindNonplugin: "非插件",
 	curatedOnly: "仅精选",
 	installedOnly: "已安装",
+	localBadge: "本地",
+	localOwner: "本地安装",
+	catInstalled: "本地已装",
 	since: "最近活跃",
 	sinceAll: "不限",
 	sinceDay: "24 小时",
@@ -447,15 +453,28 @@ function MarketSection(props) {
 		const measure = () => {
 			const pills = Array.from(wrap.querySelectorAll("button:not(.pcm-chip-more-btn)"));
 			if (pills.length === 0) return;
+			for (const p of pills) p.style.marginRight = "";
 			const wrapRect = wrap.getBoundingClientRect();
-			let visible = 0;
-			for (const pill of pills) {
+			const rowOf = (pill) => {
 				const top = pill.getBoundingClientRect().top - wrapRect.top;
-				if (Math.round(top / (pill.offsetHeight + 6)) < CATS_CLAMPED_ROWS) visible += 1;
-			}
+				return Math.round(top / (pill.offsetHeight + 6));
+			};
+			let visible = 0;
+			for (const pill of pills) if (rowOf(pill) < CATS_CLAMPED_ROWS) visible += 1;
 			if (catsClamped) {
 				wrap.style.maxHeight = "none";
-				const probe = pills[Math.max(0, visible - 1)];
+				const hasHidden = visible < pills.length;
+				let lastVisible = visible - 1;
+				if (hasHidden && lastVisible >= 0) {
+					const btnW = (wrap.querySelector(".pcm-chip-more-btn")?.offsetWidth ?? 104) + 8;
+					const pill = pills[lastVisible];
+					pill.style.marginRight = btnW + "px";
+					if (rowOf(pill) >= CATS_CLAMPED_ROWS) {
+						pill.style.marginRight = "";
+						lastVisible -= 1;
+					}
+				}
+				const probe = pills[Math.max(0, lastVisible)];
 				const maxH = probe !== void 0 ? probe.getBoundingClientRect().bottom - wrapRect.top + 1 : 96;
 				wrap.style.maxHeight = maxH + "px";
 			} else wrap.style.maxHeight = "none";
@@ -525,10 +544,49 @@ function MarketSection(props) {
 			});
 		}).catch(() => {}).finally(() => setVerifyBusy(false));
 	}, [verifyBusy]);
-	const plugins = data?.plugins ?? [];
-	const categories = data === null ? [] : Object.keys(data.categories);
+	const catalogPlugins = data?.plugins ?? [];
+	const represented = (0, react.useMemo)(() => {
+		const set = /* @__PURE__ */ new Set();
+		for (const p of catalogPlugins) {
+			set.add(p.name.toLowerCase());
+			if (p.npm !== null) set.add(p.npm.toLowerCase());
+		}
+		return set;
+	}, [data]);
+	const localEntries = (0, react.useMemo)(() => Object.entries(status?.installed ?? {}).filter(([name, spec]) => {
+		const s = String(spec).trim();
+		if (s.startsWith("link:") || s.startsWith("file:")) return true;
+		return !represented.has(name.toLowerCase());
+	}).map(([name, spec]) => ({
+		name,
+		owner: lang === "zh" ? "本地安装" : "local install",
+		url: "",
+		category: "installed",
+		description: String(spec),
+		stars: null,
+		todayStars: null,
+		created: null,
+		pushed: null,
+		isPlugin: true,
+		curated: false,
+		npm: name,
+		avatar: "",
+		language: null,
+		local: true
+	})), [
+		status,
+		represented,
+		lang
+	]);
+	const plugins = (0, react.useMemo)(() => data === null ? [] : [...data.plugins, ...localEntries], [data, localEntries]);
+	const categories = (0, react.useMemo)(() => {
+		const base = data === null ? [] : Object.keys(data.categories);
+		if (localEntries.length > 0 && !base.includes("installed")) return [...base, "installed"];
+		return base;
+	}, [data, localEntries.length]);
 	categoriesRef.current = categories;
 	const catLabel = (0, react.useCallback)((id) => {
+		if (id === "installed") return lang === "zh" ? "本地已装" : "Installed (local)";
 		if (data === null) return id;
 		const c = data.categories[id];
 		return c === void 0 ? id : c[lang] ?? c.en;
@@ -571,7 +629,14 @@ function MarketSection(props) {
 			npms
 		};
 	}, [plugins]);
+	/** 全部已装包名（含本地 link 安装），只用于本地合成卡片的已装判定。 */
+	const installedAll = (0, react.useMemo)(() => {
+		const set = /* @__PURE__ */ new Set();
+		for (const k of Object.keys(status?.installed ?? {})) set.add(k.toLowerCase());
+		return set;
+	}, [status]);
 	const isInstalled = (0, react.useCallback)((e) => {
+		if (e.local === true) return installedAll.has(e.name.toLowerCase());
 		if (installedInfo.repos.has((e.owner + "/" + e.name).toLowerCase())) return true;
 		const nm = e.name.toLowerCase();
 		if (installedInfo.names.has(nm) && (identityCounts.names.get(nm) === 1 || e.curated)) return true;
@@ -580,7 +645,11 @@ function MarketSection(props) {
 			if (installedInfo.names.has(pn) && (identityCounts.npms.get(pn) === 1 || e.curated)) return true;
 		}
 		return false;
-	}, [installedInfo, identityCounts]);
+	}, [
+		installedInfo,
+		identityCounts,
+		installedAll
+	]);
 	/** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
 	const categoryCounts = (0, react.useMemo)(() => {
 		const per = /* @__PURE__ */ new Map();
@@ -944,8 +1013,10 @@ function MarketSection(props) {
 						const installed = isInstalled(entry);
 						const today = entry.todayStars;
 						return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-							className: "pcm-card",
-							onClick: () => window.open(entry.url, "_blank", "noopener"),
+							className: entry.local === true ? "pcm-card pcm-card-local" : "pcm-card",
+							onClick: () => {
+								if (entry.local !== true && entry.url !== "") window.open(entry.url, "_blank", "noopener");
+							},
 							children: [
 								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: "pcm-card-top",
@@ -986,6 +1057,10 @@ function MarketSection(props) {
 										entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 											className: "pcm-badge pcm-badge-curated",
 											children: t("curatedBadge")
+										}),
+										entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-badge pcm-badge-local",
+											children: t("localBadge")
 										}),
 										installed && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 											className: "pcm-badge pcm-badge-installed",
@@ -1038,7 +1113,7 @@ function MarketSection(props) {
 										size: "sm",
 										onClick: () => setConfirming(entry),
 										children: t("install")
-									}), installed && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+									}), installed && entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
 										variant: "ghost",
 										size: "sm",
 										className: "pcm-uninstall-btn",
@@ -1047,7 +1122,7 @@ function MarketSection(props) {
 									})]
 								})
 							]
-						}, entry.owner + "/" + entry.name);
+						}, (entry.local === true ? "local:" : "") + entry.owner + "/" + entry.name);
 					})
 				}) })
 			}),
@@ -1487,7 +1562,7 @@ function SettingsCard(props) {
 //#endregion
 //#region src/client/styles.ts
 /** Inline stylesheet: injected once with a data-plugin tag; hot reloads replace its content in place. */
-const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips-clamped{overflow:hidden;padding-right:128px}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff)}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 6px;line-height:15px;display:inline-block}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border-color:rgba(245,158,11,.55) !important;color:#b45309 !important;background:rgba(245,158,11,.08) !important}.pcm-toolbar .pcm-pill-curated::before{content:'★';margin-right:4px;font-size:11px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#f59e0b !important;background:rgba(245,158,11,.18) !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#f59e0b !important;color:#fff !important;background:#f59e0b !important}.pcm-toolbar .pcm-pill-curated-on:hover{background:#d97706 !important;border-color:#d97706 !important}.pcm-toolbar .pcm-pill-installed{border-color:rgba(77,107,254,.55) !important;color:#4d6bfe !important;background:rgba(77,107,254,.08) !important}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#4d6bfe !important;background:rgba(77,107,254,.18) !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#4d6bfe !important;color:#fff !important;background:#4d6bfe !important}.pcm-toolbar .pcm-pill-installed-on:hover{background:#3b5bdb !important;border-color:#3b5bdb !important}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-av{width:26px;height:26px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:600}.pcm-name{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-owner{font-size:11px;opacity:.65}.pcm-desc{font-size:12px;opacity:.85;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.9em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10.5px;padding:0 6px;border-radius:999px;line-height:18px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-stats{display:flex;gap:12px;font-size:12px;align-items:baseline;flex-wrap:wrap}.pcm-stars{font-weight:600}.pcm-today-up{color:#22c55e}.pcm-today-down{color:#ef4444}.pcm-meta{display:flex;gap:12px;font-size:11px;opacity:.7;flex-wrap:wrap}.pcm-actions{display:flex;gap:6px}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
+const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips-clamped{overflow:hidden}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff)}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 6px;line-height:15px;display:inline-block}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border-color:rgba(245,158,11,.55) !important;color:#b45309 !important;background:rgba(245,158,11,.08) !important}.pcm-toolbar .pcm-pill-curated::before{content:'★';margin-right:4px;font-size:11px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#f59e0b !important;background:rgba(245,158,11,.18) !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#f59e0b !important;color:#fff !important;background:#f59e0b !important}.pcm-toolbar .pcm-pill-curated-on:hover{background:#d97706 !important;border-color:#d97706 !important}.pcm-toolbar .pcm-pill-installed{border-color:rgba(77,107,254,.55) !important;color:#4d6bfe !important;background:rgba(77,107,254,.08) !important}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#4d6bfe !important;background:rgba(77,107,254,.18) !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#4d6bfe !important;color:#fff !important;background:#4d6bfe !important}.pcm-toolbar .pcm-pill-installed-on:hover{background:#3b5bdb !important;border-color:#3b5bdb !important}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-av{width:26px;height:26px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:600}.pcm-name{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-owner{font-size:11px;opacity:.65}.pcm-desc{font-size:12px;opacity:.85;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.9em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10.5px;padding:0 6px;border-radius:999px;line-height:18px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-stats{display:flex;gap:12px;font-size:12px;align-items:baseline;flex-wrap:wrap}.pcm-stars{font-weight:600}.pcm-today-up{color:#22c55e}.pcm-today-down{color:#ef4444}.pcm-meta{display:flex;gap:12px;font-size:11px;opacity:.7;flex-wrap:wrap}.pcm-actions{display:flex;gap:6px}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
 function injectStyles() {
 	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-store\"]");
 	stale.forEach((tag, index) => {

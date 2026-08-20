@@ -157,16 +157,32 @@ export function MarketSection(props: SectionProps) {
       // 展开/收起按钮也在 chips 容器内，pill 计数必须排除它
       const pills = Array.from(wrap.querySelectorAll<HTMLElement>('button:not(.pcm-chip-more-btn)'))
       if (pills.length === 0) return
+      for (const p of pills) p.style.marginRight = ''
       const wrapRect = wrap.getBoundingClientRect()
+      const rowOf = (pill: HTMLElement): number => {
+        const top = pill.getBoundingClientRect().top - wrapRect.top
+        return Math.round(top / (pill.offsetHeight + 6))
+      }
       let visible = 0
       for (const pill of pills) {
-        const top = pill.getBoundingClientRect().top - wrapRect.top
-        const row = Math.round(top / (pill.offsetHeight + 6))
-        if (row < CATS_CLAMPED_ROWS) visible += 1
+        if (rowOf(pill) < CATS_CLAMPED_ROWS) visible += 1
       }
       if (catsClamped) {
         wrap.style.maxHeight = 'none'
-        const probe = pills[Math.max(0, visible - 1)]
+        const hasHidden = visible < pills.length
+        let lastVisible = visible - 1
+        if (hasHidden && lastVisible >= 0) {
+          // 只给第三行末尾预留按钮宽度（前两行填满整行），
+          // 而不是整列预留空白；加边距后若掉到第 4 行则撤销并改用前一个做锚点。
+          const btnW = (wrap.querySelector<HTMLElement>('.pcm-chip-more-btn')?.offsetWidth ?? 104) + 8
+          const pill = pills[lastVisible]
+          pill.style.marginRight = btnW + 'px'
+          if (rowOf(pill) >= CATS_CLAMPED_ROWS) {
+            pill.style.marginRight = ''
+            lastVisible -= 1
+          }
+        }
+        const probe = pills[Math.max(0, lastVisible)]
         const maxH = probe !== undefined
           ? probe.getBoundingClientRect().bottom - wrapRect.top + 1
           : 96
@@ -232,10 +248,51 @@ export function MarketSection(props: SectionProps) {
       .finally(() => setVerifyBusy(false))
   }, [verifyBusy])
 
-  const plugins = data?.plugins ?? []
-  const categories = data === null ? [] : Object.keys(data.categories)
+  // 已安装但市场索引里没有的包：合成「本地已装」条目（特殊卡片样式），
+  // 与 GitHub 条目同列展示，并计入总数与类别计数。
+  const catalogPlugins = data?.plugins ?? []
+  const represented = useMemo(() => {
+    const set = new Set<string>()
+    for (const p of catalogPlugins) {
+      set.add(p.name.toLowerCase())
+      if (p.npm !== null) set.add(p.npm.toLowerCase())
+    }
+    return set
+  }, [data])
+  const localEntries = useMemo<MarketEntry[]>(() => Object.entries(status?.installed ?? {})
+    .filter(([name, spec]) => {
+      const s = String(spec).trim()
+      // 本地 link/file 安装没有市场身份，任何目录条目都无法对应 → 必合成本地卡
+      if (s.startsWith('link:') || s.startsWith('file:')) return true
+      return !represented.has(name.toLowerCase())
+    })
+    .map(([name, spec]) => ({
+      name,
+      owner: lang === 'zh' ? '本地安装' : 'local install',
+      url: '',
+      category: 'installed',
+      description: String(spec),
+      stars: null,
+      todayStars: null,
+      created: null,
+      pushed: null,
+      isPlugin: true,
+      curated: false,
+      npm: name,
+      avatar: '',
+      language: null,
+      local: true,
+    })), [status, represented, lang])
+
+  const plugins = useMemo(() => (data === null ? [] : [...data.plugins, ...localEntries]), [data, localEntries])
+  const categories = useMemo(() => {
+    const base = data === null ? [] : Object.keys(data.categories)
+    if (localEntries.length > 0 && !base.includes('installed')) return [...base, 'installed']
+    return base
+  }, [data, localEntries.length])
   categoriesRef.current = categories
   const catLabel = useCallback((id: string) => {
+    if (id === 'installed') return lang === 'zh' ? '本地已装' : 'Installed (local)'
     if (data === null) return id
     const c = data.categories[id]
     return c === undefined ? id : c[lang] ?? c.en
@@ -277,7 +334,15 @@ export function MarketSection(props: SectionProps) {
     return { names, npms }
   }, [plugins])
 
+  /** 全部已装包名（含本地 link 安装），只用于本地合成卡片的已装判定。 */
+  const installedAll = useMemo(() => {
+    const set = new Set<string>()
+    for (const k of Object.keys(status?.installed ?? {})) set.add(k.toLowerCase())
+    return set
+  }, [status])
+
   const isInstalled = useCallback((e: MarketEntry): boolean => {
+    if (e.local === true) return installedAll.has(e.name.toLowerCase())
     if (installedInfo.repos.has((e.owner + '/' + e.name).toLowerCase())) return true
     const nm = e.name.toLowerCase()
     if (installedInfo.names.has(nm) && (identityCounts.names.get(nm) === 1 || e.curated)) return true
@@ -286,7 +351,7 @@ export function MarketSection(props: SectionProps) {
       if (installedInfo.names.has(pn) && (identityCounts.npms.get(pn) === 1 || e.curated)) return true
     }
     return false
-  }, [installedInfo, identityCounts])
+  }, [installedInfo, identityCounts, installedAll])
 
   /** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
   const categoryCounts = useMemo(() => {
@@ -503,9 +568,9 @@ export function MarketSection(props: SectionProps) {
               const today = entry.todayStars
               return (
                 <div
-                  key={entry.owner + '/' + entry.name}
-                  className="pcm-card"
-                  onClick={() => window.open(entry.url, '_blank', 'noopener')}
+                  key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}
+                  className={entry.local === true ? 'pcm-card pcm-card-local' : 'pcm-card'}
+                  onClick={() => { if (entry.local !== true && entry.url !== '') window.open(entry.url, '_blank', 'noopener') }}
                 >
                   <div className="pcm-card-top">
                     <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>{(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}</div>
@@ -520,6 +585,7 @@ export function MarketSection(props: SectionProps) {
                     {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                     {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                     {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
+                    {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
                     {installed && <span className="pcm-badge pcm-badge-installed">{t('installed')}</span>}
                   </div>
                   <div className="pcm-stats">
@@ -540,7 +606,7 @@ export function MarketSection(props: SectionProps) {
                     ) : (
                       <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
                     )}
-                    {installed && (
+                    {installed && entry.local !== true && (
                       <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                     )}
                   </div>
