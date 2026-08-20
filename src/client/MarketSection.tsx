@@ -615,6 +615,12 @@ export function MarketSection(props: SectionProps) {
                   </div>
                   <div className="pcm-desc">{entry.description === '' ? '—' : entry.description}</div>
                   <div className="pcm-foot">
+                    <div className="pcm-stats">
+                      <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
+                      <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
+                      <span className="pcm-cat">{catLabel(entry.category)}</span>
+                      <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
+                    </div>
                     <div className="pcm-badges">
                       {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin">{t('pluginBadge')}</span>}
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
@@ -622,15 +628,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
                       {installed && <span className="pcm-badge pcm-badge-installed">{t('installed')}</span>}
-                    </div>
-                    <div className="pcm-stats">
-                      <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
-                      <span title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
-                      <span>{catLabel(entry.category)}</span>
-                      <span title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
-                      {entry.created !== null && (
-                        <span title={t('publishAgeHint')}>{t('publishAge') + ' ' + durationBetween(entry.created, new Date().toISOString())}</span>
-                      )}
                     </div>
                   </div>
                 </div>
