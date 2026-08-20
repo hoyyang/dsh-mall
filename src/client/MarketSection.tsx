@@ -139,7 +139,8 @@ export function MarketSection(props: SectionProps) {
     const wrap = chipsRef.current
     if (wrap === null) return
     const measure = () => {
-      const pills = Array.from(wrap.querySelectorAll('button'))
+      // 展开/收起按钮也在 chips 容器内，pill 计数必须排除它
+      const pills = Array.from(wrap.querySelectorAll<HTMLElement>('button:not(.pcm-chip-more-btn)'))
       if (pills.length === 0) return
       const wrapRect = wrap.getBoundingClientRect()
       let visible = 0
@@ -333,14 +334,6 @@ export function MarketSection(props: SectionProps) {
     return t('syncedAt').replace('{0}', synced)
   })()
 
-  /** The index itself is rebuilt by CI every 2h; warn when it is stale. */
-  const indexAgeNote = (() => {
-    if (data === null || data.source === 'snapshot') return null
-    const age = Date.now() - Date.parse(data.updated)
-    if (!Number.isFinite(age) || age < 3 * 3600_000) return null
-    return t('indexAge').replace('{0}', relativeFromNow(data.updated, t))
-  })()
-
   const progressLabel = (() => {
     const p = status?.progress
     if (p === undefined || p.shards === undefined || p.shards === 0) return ''
@@ -404,23 +397,17 @@ export function MarketSection(props: SectionProps) {
       </div>
 
       {rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
-      {indexAgeNote !== null && <div className="pcm-rate">{indexAgeNote}</div>}
       {loadError && <div className="pcm-rate">{t('loadError')}</div>}
 
-      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
-        <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
-        {chipCats.map((id: string) => (
-          <Pill key={id} active={cat === id} onClick={() => { setCat(id); setPage(1) }}>{catLabel(id)}<span className="pcm-count">{categoryCounts.per.get(id) ?? 0}</span></Pill>
-        ))}
+      <div className="pcm-toolbar pcm-toolbar-search">
+        <Input
+          className="pcm-search"
+          icon={<IconSearchOutline16 size={14} />}
+          value={q}
+          placeholder={t('searchPlaceholder')}
+          onChange={e => { setQ(e.target.value); setPage(1) }}
+        />
       </div>
-      {hiddenCatCount > 0 && (
-        <div className="pcm-chip-more">
-          <Button variant="ghost" size="sm" onClick={() => setCatsClamped(v => !v)}>
-            {catsClamped ? t('expandCats').replace('{0}', String(hiddenCatCount)) : t('collapseCats')}
-          </Button>
-        </div>
-      )}
-
       <div className="pcm-toolbar">
         <div className="pcm-seg">
           <button className={kind === 'all' ? 'on' : ''} onClick={() => { setKind('all'); setPage(1) }}>{t('kindAll')}</button>
@@ -441,14 +428,21 @@ export function MarketSection(props: SectionProps) {
           selectedId={sort}
         />
       </div>
-      <div className="pcm-toolbar pcm-toolbar-search">
-        <Input
-          className="pcm-search"
-          icon={<IconSearchOutline16 size={14} />}
-          value={q}
-          placeholder={t('searchPlaceholder')}
-          onChange={e => { setQ(e.target.value); setPage(1) }}
-        />
+      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
+        <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
+        {chipCats.map((id: string) => (
+          <Pill key={id} active={cat === id} onClick={() => { setCat(id); setPage(1) }}>{catLabel(id)}<span className="pcm-count">{categoryCounts.per.get(id) ?? 0}</span></Pill>
+        ))}
+        {hiddenCatCount > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="pcm-chip-more-btn"
+            onClick={() => setCatsClamped(v => !v)}
+          >
+            {catsClamped ? t('expandCats').replace('{0}', String(hiddenCatCount)) : t('collapseCats')}
+          </Button>
+        )}
       </div>
       </div>
 
