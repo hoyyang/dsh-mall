@@ -28,6 +28,7 @@ import {
   relativeFromNow, visiblePlugins,
   type MarketEntry, type PluginKind, type Registry, type SortKey,
 } from './market-data.ts'
+import { DetailPanel } from './DetailPanel.tsx'
 import { ICON_DATA } from './icon.ts'
 
 const PAGE_SIZES = [24, 48, 96]
@@ -49,6 +50,7 @@ interface StatusBody {
   bundles?: string[]
   tokenConfigured?: boolean
   rateLimit?: { remaining?: number; reset?: number } | null
+  updates?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
 }
 
 export function MarketSection(props: SectionProps) {
@@ -94,6 +96,9 @@ export function MarketSection(props: SectionProps) {
   const [publishOpen, setPublishOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [verifyBusy, setVerifyBusy] = useState(false)
+  const [detail, setDetail] = useState<MarketEntry | null>(null)
+  const [updateBusy, setUpdateBusy] = useState(false)
+  const [updatingNames, setUpdatingNames] = useState<Set<string>>(new Set())
 
   const refreshing = status?.refreshing === true
   const installing = status?.install?.active === true
@@ -243,7 +248,11 @@ export function MarketSection(props: SectionProps) {
     void fonts?.ready.then(measure).catch(() => {})
     const timer = setTimeout(measure, 600)
     return () => { ro.disconnect(); clearTimeout(timer) }
-  }, [catsClamped, data])
+    // status/q/kind/curatedOnly/installedOnly/favOnly/favorites 入依赖：
+    // 点「已安装/仅精选/已收藏」等筛选后 pill 内的计数文本变化、pill 宽度
+    // 随之变化，必须重算强制换行与裁剪高度，否则分类区行归属/裁剪错乱
+    // （v1.6 修复「已安装」点击后分类区排布变化）。
+  }, [catsClamped, data, status, q, kind, curatedOnly, installedOnly, favOnly, favorites])
 
   // Quiet refresh on every filter change (cheap: host TTL cache answers it).
   useEffect(() => {
@@ -321,6 +330,14 @@ export function MarketSection(props: SectionProps) {
       avatar: '',
       language: null,
       local: true,
+      npmVersion: null,
+      version: null,
+      defaultBranch: null,
+      license: null,
+      verified: null,
+      disclosure: null,
+      installable: null,
+      topics: [],
     })), [status, represented, lang])
 
   const plugins = useMemo(() => (data === null ? [] : [...data.plugins, ...localEntries]), [data, localEntries])
@@ -391,6 +408,16 @@ export function MarketSection(props: SectionProps) {
     }
     return false
   }, [installedInfo, identityCounts, installedAll])
+
+  /** 条目对应的已装依赖 spec（详情面板展示已装版本）。 */
+  const installedSpecOf = useCallback((e: MarketEntry): string | null => {
+    const deps = status?.installed ?? {}
+    for (const [n, s] of Object.entries(deps)) {
+      if (e.npm !== null && n.toLowerCase() === e.npm.toLowerCase()) return String(s)
+      if (n.toLowerCase() === e.name.toLowerCase()) return String(s)
+    }
+    return null
+  }, [status])
 
   const favKey = (e: MarketEntry): string => (e.local === true ? 'local:' + e.name : e.owner + '/' + e.name).toLowerCase()
   const isFav = useCallback((e: MarketEntry): boolean => favorites.has(favKey(e)), [favorites])
@@ -491,6 +518,51 @@ export function MarketSection(props: SectionProps) {
     return () => clearTimeout(timer)
   }, [toast])
 
+  // ---- 更新检测：status.updates（host 侧比对已装 spec × 索引 npm_version）----
+  const updates = status?.updates ?? []
+  const updateFor = useCallback((e: MarketEntry): { name: string; from: string; to: string } | null => {
+    const keys = new Set<string>()
+    if (e.npm !== null) keys.add(e.npm.toLowerCase())
+    keys.add(e.name.toLowerCase())
+    for (const u of updates) {
+      if (keys.has(u.name.toLowerCase()) || (e.owner !== '' && u.repo.toLowerCase() === (e.owner + '/' + e.name).toLowerCase())) return u
+    }
+    return null
+  }, [updates])
+
+  const runUpdateRequest = useCallback((names: string[], toastDone: string) => {
+    fetch('/dsh-store/update', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ names }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+        setToast(body.ok === true ? toastDone + ' — ' + (body.message ?? '') : t('updateFailed') + ': ' + (body.message ?? body.error ?? ''))
+        fetchStatus()
+        fetchRegistry(false)
+      })
+      .catch(() => setToast(t('updateFailed')))
+      .finally(() => {
+        setUpdateBusy(false)
+        setUpdatingNames(new Set())
+      })
+  }, [t, fetchStatus, fetchRegistry])
+
+  const doUpdateAll = useCallback(() => {
+    if (updateBusy || updates.length === 0) return
+    setUpdateBusy(true)
+    setUpdatingNames(new Set(updates.map(u => u.name.toLowerCase())))
+    runUpdateRequest(updates.map(u => u.name), t('updateDone'))
+  }, [updateBusy, updates, runUpdateRequest, t])
+
+  const doUpdateOne = useCallback((u: { name: string; from: string; to: string }) => {
+    if (updateBusy) return
+    setUpdateBusy(true)
+    setUpdatingNames(new Set([u.name.toLowerCase()]))
+    runUpdateRequest([u.name], t('updateDone'))
+  }, [updateBusy, runUpdateRequest, t])
+
   const sortItems = useMemo<MenuEntry[]>(() => [
     { type: 'label', id: 'dim-label', text: t('sortDim') },
     { id: 'stars', label: t('sortStars') },
@@ -555,6 +627,13 @@ export function MarketSection(props: SectionProps) {
           {t('publish')}
         </Button>
       </div>
+      {updates.length > 0 && (
+        <div className="pcm-update-all-row">
+          <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
+            {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
+          </button>
+        </div>
+      )}
       <div className="pcm-header-row2">
         <span className="pcm-subtitle">{t('autoRefresh')}</span>
         {data !== null && <span className="pcm-source">{sourceLabel}</span>}
@@ -612,14 +691,11 @@ export function MarketSection(props: SectionProps) {
           onSelect={id => { setLangChoice(id); setPage(1) }}
           align="end"
           anchor={(
-            <Button
-              variant="outline"
-              size="sm"
-              className="pcm-lang-btn"
-              onClick={() => setLangOpen(o => !o)}
-            >
-              {'🌐 ' + (LANG_SHORT[langChoice] ?? langChoice.toUpperCase())}
-            </Button>
+            <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
+              <span className="pcm-lang-flag">🌐</span>
+              <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
+              <span className="pcm-lang-caret" aria-hidden="true" />
+            </button>
           )}
           items={langItems}
           selectedId={langChoice}
@@ -670,11 +746,13 @@ export function MarketSection(props: SectionProps) {
             {pageList.map((entry: MarketEntry) => {
               const installed = isInstalled(entry)
               const today = entry.todayStars
+              const upd = updateFor(entry)
+              const disclosure = entry.disclosure
               return (
                 <div
                   key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}
                   className={entry.local === true ? 'pcm-card pcm-card-local' : 'pcm-card'}
-                  onClick={() => { if (entry.local !== true && entry.url !== '') window.open(entry.url, '_blank', 'noopener') }}
+                  onClick={() => { if (entry.local !== true) setDetail(entry) }}
                 >
                   <div className="pcm-card-top">
                     <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>
@@ -709,6 +787,16 @@ export function MarketSection(props: SectionProps) {
                       </button>
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
+                      {installed && upd !== null && (
+                        <>
+                          <span className="pcm-update-versions" title={t('updateHint')}>
+                            {upd.from} <span className="pcm-update-arrow">→</span> <span className="pcm-update-new">{upd.to}</span>
+                          </span>
+                          <Button variant="primary" size="sm" className="pcm-update-btn" disabled={updateBusy} onClick={() => doUpdateOne(upd)}>
+                            {updatingNames.has(upd.name.toLowerCase()) ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
+                          </Button>
+                        </>
+                      )}
                       {installed ? (
                         <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
                       ) : (
@@ -720,8 +808,21 @@ export function MarketSection(props: SectionProps) {
                       {installed && entry.local !== true && (
                         <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                       )}
+                      {entry.local !== true && (
+                        <Button variant="ghost" size="sm" className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+                          {t('sourceBtn')}
+                        </Button>
+                      )}
                     </div>
                   </div>
+                  {(entry.verified != null || disclosure != null || entry.installable != null) && (
+                    <div className="pcm-safety-row">
+                      {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by)}>✓ {t('verifiedBadge')}</span>}
+                      {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
+                      {entry.installable === 'manual' && <span className="pcm-safety pcm-safety-manual">⚙ {t('manualInstall')}</span>}
+                      {entry.installable === 'non-plugin' && <span className="pcm-safety pcm-safety-nonplugin">⊘ {t('nonpluginBadge')}</span>}
+                    </div>
+                  )}
                   <div className="pcm-desc">{(() => {
                     const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
                     return d === '' ? '—' : d
@@ -773,6 +874,28 @@ export function MarketSection(props: SectionProps) {
           selectedId={String(pageSize)}
         />
       </div>
+
+      {detail !== null && (
+        <DetailPanel
+          t={t}
+          entry={detail}
+          langChoice={langChoice}
+          isFav={isFav(detail)}
+          isInstalled={isInstalled(detail)}
+          installedSpec={installedSpecOf(detail)}
+          installing={installing}
+          update={updateFor(detail)}
+          updating={(() => {
+            const u = updateFor(detail)
+            return u !== null && updatingNames.has(u.name.toLowerCase())
+          })()}
+          onToggleFav={() => toggleFav(detail)}
+          onInstall={() => setConfirming(detail)}
+          onUninstall={() => { if (detail.local === true) setRemovingLocal(detail); else setRemoving(detail) }}
+          onUpdate={() => { const u = updateFor(detail); if (u !== null) doUpdateOne(u) }}
+          onClose={() => setDetail(null)}
+        />
+      )}
 
       {confirming !== null && (
         <InstallModal

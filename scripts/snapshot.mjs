@@ -104,6 +104,36 @@ async function fetchAllRepos(token) {
   return [...repos.values()]
 }
 
+/** CDN-first snapshot: 从自有索引（registry.json，gzip 变体优先）直接生成快照，
+ *  零 API 额度、秒级完成，快照数据与运行时 CDN 通道同源一致。
+ *  失败时回退到下面的 GitHub Search 全量爬取。 */
+async function fetchCdnRepos() {
+  const urls = [
+    'https://raw.githubusercontent.com/hoyyang/dsh-market-index/main/registry.json.gz',
+    'https://raw.githubusercontent.com/hoyyang/dsh-market-index/main/registry.json',
+    'https://cdn.jsdelivr.net/gh/hoyyang/dsh-market-index@main/registry.json.gz',
+    'https://cdn.jsdelivr.net/gh/hoyyang/dsh-market-index@main/registry.json',
+  ]
+  let lastError = ''
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { headers: { 'user-agent': UA, 'accept-encoding': 'gzip' }, signal: AbortSignal.timeout(60_000) })
+      if (!res.ok) throw new Error('HTTP ' + res.status)
+      let raw = await res.text()
+      if (url.endsWith('.gz') && raw.charCodeAt(0) === 0x1f) {
+        const buf = await res.arrayBuffer()
+        raw = await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text()
+      }
+      const body = JSON.parse(raw)
+      if (!Array.isArray(body.repos) || body.repos.length === 0) throw new Error('empty index')
+      return body
+    } catch (err) {
+      lastError = err instanceof Error ? err.message : String(err)
+    }
+  }
+  throw new Error('CDN unavailable: ' + lastError)
+}
+
 async function main() {
   mkdirSync(DATA, { recursive: true })
 
@@ -131,41 +161,94 @@ async function main() {
     try { known = JSON.parse(readFileSync(join(DATA, 'awesome-known.json'), 'utf8')) } catch { /* keep {} */ }
   }
 
-  // 2. GitHub repo snapshot.
+  // 2. Repo snapshot: CDN index first (fresh, quota-free), Search crawl as fallback.
+  const toEntry = (repo) => {
+    const key = String(repo.full_name ?? '').toLowerCase()
+    const knownEntry = known[key]
+    const description = knownEntry?.description?.en ?? knownEntry?.description?.zh ?? repo.description ?? ''
+    const topics = Array.isArray(repo.topics) ? repo.topics : []
+    const npmName = knownEntry?.npm ?? (typeof repo.pkg_name === 'string' && repo.pkg_name !== '' && repo.installable !== 'non-plugin' ? repo.pkg_name : null)
+    const descriptions = {}
+    for (const [k, v] of Object.entries(repo)) {
+      if (k.startsWith('description_') && typeof v === 'string' && v !== '') descriptions[k.slice('description_'.length)] = v
+    }
+    return {
+      name: repo.name,
+      owner: String(repo.full_name ?? '').split('/')[0] ?? '',
+      url: repo.html_url,
+      category: knownEntry?.category ?? ruleCategory(String(repo.name ?? ''), String(repo.description ?? ''), topics),
+      description: (description.length > 200 ? description.slice(0, 200) + '…' : description) || '',
+      ...(Object.keys(descriptions).length > 0 ? { descriptions } : {}),
+      stars: repo.stargazers_count ?? null,
+      todayStars: null,
+      created: knownEntry?.added ?? null,
+      pushed: repo.updated_at ?? null,
+      isPlugin: repo.installable === 'non-plugin' ? false : (knownEntry !== undefined || npmName !== null ? true : heuristicIsPlugin(String(repo.name ?? ''), String(repo.description ?? ''), topics)),
+      curated: knownEntry !== undefined,
+      npm: npmName,
+      avatar: 'https://github.com/' + String(repo.full_name ?? '').split('/')[0] + '.png?size=96',
+      language: null,
+      ...(typeof repo.npm_version === 'string' && repo.npm_version !== '' ? { npmVersion: repo.npm_version } : { npmVersion: null }),
+      ...(typeof repo.version === 'string' && repo.version !== '' ? { version: repo.version } : { version: null }),
+      defaultBranch: typeof repo.default_branch === 'string' ? repo.default_branch : null,
+      license: typeof repo.license === 'string' ? repo.license : null,
+      verified: typeof repo.verdict === 'string' && repo.verdict !== ''
+        ? { by: repo.verifiedBy ?? '', at: repo.verifiedAt ?? '', reportUrl: repo.reportUrl ?? null }
+        : null,
+      disclosure: null,
+      installable: repo.installable === 'non-plugin' || repo.installable === 'manual' ? repo.installable : null,
+      topics,
+    }
+  }
   try {
-    const repos = await fetchAllRepos(TOKEN)
-    const plugins = repos.map((repo) => {
-      const key = repo.full_name.toLowerCase()
-      const knownEntry = known[key]
-      const description = knownEntry?.description?.en ?? knownEntry?.description?.zh ?? repo.description ?? ''
-      return {
-        name: repo.name,
-        owner: repo.owner.login,
-        url: repo.html_url,
-        category: knownEntry?.category ?? ruleCategory(repo.name, repo.description ?? '', repo.topics ?? []),
-        description: (description.length > 200 ? description.slice(0, 200) + '…' : description) || '',
-        stars: repo.stargazers_count,
-        todayStars: null,
-        created: repo.created_at,
-        pushed: repo.pushed_at,
-        isPlugin: knownEntry !== undefined ? true : heuristicIsPlugin(repo.name, repo.description, repo.topics ?? []),
-        curated: knownEntry !== undefined,
-        npm: knownEntry?.npm ?? null,
-        avatar: repo.owner.avatar_url,
-        language: repo.language ?? null,
-      }
-    })
+    const body = await fetchCdnRepos()
+    const plugins = body.repos.map(toEntry)
     const registry = {
-      updated: new Date().toISOString(),
+      updated: body.generated_at ?? new Date().toISOString(),
       count: plugins.length,
       source: 'snapshot',
       categories: CATEGORIES,
       plugins,
     }
     writeFileSync(join(DATA, 'registry-snapshot.json'), JSON.stringify(registry))
-    console.log('registry-snapshot.json:', plugins.length, 'repos')
+    console.log('registry-snapshot.json (from CDN index):', plugins.length, 'repos')
   } catch (err) {
-    console.warn('repo snapshot failed:', err.message)
+    console.warn('CDN snapshot failed (' + err.message + '); falling back to GitHub Search crawl')
+    try {
+      const repos = await fetchAllRepos(TOKEN)
+      const plugins = repos.map((repo) => {
+        const key = repo.full_name.toLowerCase()
+        const knownEntry = known[key]
+        const description = knownEntry?.description?.en ?? knownEntry?.description?.zh ?? repo.description ?? ''
+        return {
+          name: repo.name,
+          owner: repo.owner.login,
+          url: repo.html_url,
+          category: knownEntry?.category ?? ruleCategory(repo.name, repo.description ?? '', repo.topics ?? []),
+          description: (description.length > 200 ? description.slice(0, 200) + '…' : description) || '',
+          stars: repo.stargazers_count,
+          todayStars: null,
+          created: repo.created_at,
+          pushed: repo.pushed_at,
+          isPlugin: knownEntry !== undefined ? true : heuristicIsPlugin(repo.name, repo.description, repo.topics ?? []),
+          curated: knownEntry !== undefined,
+          npm: knownEntry?.npm ?? null,
+          avatar: repo.owner.avatar_url,
+          language: repo.language ?? null,
+        }
+      })
+      const registry = {
+        updated: new Date().toISOString(),
+        count: plugins.length,
+        source: 'snapshot',
+        categories: CATEGORIES,
+        plugins,
+      }
+      writeFileSync(join(DATA, 'registry-snapshot.json'), JSON.stringify(registry))
+      console.log('registry-snapshot.json (from Search):', plugins.length, 'repos')
+    } catch (err2) {
+      console.warn('repo snapshot failed:', err2.message)
+    }
   }
 }
 

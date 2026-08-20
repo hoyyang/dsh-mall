@@ -18,6 +18,25 @@ export declare function verdictsOf(profile: string): Record<string, boolean>;
 export declare function readFavorites(profile: string): string[];
 export declare function toggleFavorite(profile: string, key: string): string[];
 export declare function applyVerdicts(profile: string, updates: Record<string, boolean>): void;
+/** 可更新插件：已装依赖 spec 里的版本 vs 索引 npm_version（npm registry latest）。 */
+export interface PluginUpdate {
+    /** profile 依赖键名（npm 包名） */
+    name: string;
+    /** 已装版本 */
+    from: string;
+    /** npm 最新版本 */
+    to: string;
+    /** 对应 GitHub 仓库 owner/repo（可能为空） */
+    repo: string;
+    /** 索引里的 npm 发布名 */
+    npm: string;
+}
+/** 从依赖 spec（^1.2.3 / 1.2.3 / npm:x@1.2.3 / github:...#semver:1.2.3）提取 x.y.z。 */
+export declare function extractVersion(spec: string): string | null;
+/** 语义化三段版本比较：a<b → 负数；相等 → 0；a>b → 正数。 */
+export declare function compareVersions(a: string, b: string): number;
+/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；无版本 spec 跳过。 */
+export declare function computeUpdates(registry: Registry, deps: Record<string, string>): PluginUpdate[];
 export declare function heuristicIsPlugin(repo: {
     name: string;
     description: string | null;

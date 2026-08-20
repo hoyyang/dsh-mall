@@ -40,6 +40,23 @@ interface CdnRepo {
   pkg_name?: string | null
   installable?: 'non-plugin' | 'manual' | undefined
   market_tags?: string[]
+  npm_version?: string | null
+  npm_pkg_name?: string | null
+  version?: string | null
+  default_branch?: string | null
+  size?: number | null
+  verdict?: string | null
+  verifiedBy?: string | null
+  verifiedAt?: string | null
+  reportUrl?: string | null
+  disclosure?: {
+    cloud?: string | null
+    network?: string | null
+    offlineMode?: boolean | null
+    apiKeys?: string[] | null
+    jurisdiction?: string | null
+    retention?: string | null
+  } | null
 }
 
 /** 从索引条目收集 description_<lang> 富化字段为 { lang: 文本 } 映射。 */
@@ -101,6 +118,10 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     else if (repo.market_tags?.includes('verified-install') === true || (repo.pkg_name ?? null) !== null) isPlugin = true
   }
   const npm = knownEntry?.npm ?? NPM_OVERRIDES[key] ?? (typeof repo.pkg_name === 'string' && repo.pkg_name !== '' && repo.installable !== 'non-plugin' ? repo.pkg_name : null)
+  const verified = typeof repo.verdict === 'string' && repo.verdict !== ''
+    ? { by: repo.verifiedBy ?? '', at: repo.verifiedAt ?? '', reportUrl: repo.reportUrl ?? null }
+    : null
+  const d = repo.disclosure
   return {
     name: name ?? key,
     owner: owner ?? '',
@@ -117,7 +138,59 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     npm,
     avatar: 'https://github.com/' + owner + '.png?size=96',
     language: null,
+    npmVersion: typeof repo.npm_version === 'string' && repo.npm_version !== '' ? repo.npm_version : null,
+    version: typeof repo.version === 'string' && repo.version !== '' ? repo.version : null,
+    defaultBranch: typeof repo.default_branch === 'string' && repo.default_branch !== '' ? repo.default_branch : null,
+    license: typeof repo.license === 'string' && repo.license !== '' ? repo.license : null,
+    verified,
+    disclosure: d !== undefined && d !== null
+      ? {
+          cloud: d.cloud ?? null,
+          network: d.network ?? null,
+          offlineMode: d.offlineMode ?? null,
+          apiKeys: Array.isArray(d.apiKeys) ? d.apiKeys : null,
+          jurisdiction: d.jurisdiction ?? null,
+          retention: d.retention ?? null,
+        }
+      : null,
+    installable: repo.installable === 'non-plugin' || repo.installable === 'manual' ? repo.installable : null,
+    topics: Array.isArray(repo.topics) ? repo.topics.map(String) : [],
   }
+}
+
+/** Decompress a gzip response body (registry.json.gz via jsDelivr/raw). */
+async function gunzipText(res: Response): Promise<string> {
+  const body = res.body
+  if (body === null) throw new Error('empty body')
+  const stream = body.pipeThrough(new DecompressionStream('gzip'))
+  return new Response(stream).text()
+}
+
+/** Fetch one index URL. The .gz variant (6.3MB -> ~1MB) and the plain JSON are
+ *  tried IN PARALLEL — whichever answers first wins. This matters on diverse
+ *  networks: raw can be fast where jsDelivr times out and vice versa, and the
+ *  gz path is dramatically cheaper on slow links. 30s per attempt keeps the
+ *  CDN channel budget small so the crawl/snapshot fallbacks engage quickly. */
+async function fetchIndexUrl(url: string): Promise<{ generated_at?: string; repos?: CdnRepo[] }> {
+  const variants = url.endsWith('.json') ? [url + '.gz', url] : [url]
+  const attempt = async (variant: string): Promise<{ generated_at?: string; repos?: CdnRepo[] }> => {
+    const res = await fetch(variant, {
+      headers: { accept: 'application/json', 'accept-encoding': 'gzip', 'user-agent': 'dsh-store' },
+      signal: AbortSignal.timeout(30_000),
+    })
+    if (!res.ok) throw new Error('HTTP ' + res.status)
+    const contentEncoding = (res.headers.get('content-encoding') ?? '').toLowerCase()
+    const raw = contentEncoding.includes('gzip') || variant.endsWith('.gz')
+      ? await gunzipText(res)
+      : await res.text()
+    return JSON.parse(raw) as { generated_at?: string; repos?: CdnRepo[] }
+  }
+  const results = await Promise.allSettled(variants.map(attempt))
+  for (const result of results) {
+    if (result.status === 'fulfilled') return result.value
+  }
+  const reason = results.find((r): r is PromiseRejectedResult => r.status === 'rejected')?.reason
+  throw new Error('index fetch failed: ' + (reason instanceof Error ? reason.message : String(reason)))
 }
 
 async function fetchCdnRegistry(profile: string, customUrl: string): Promise<Registry> {
@@ -127,9 +200,7 @@ async function fetchCdnRegistry(profile: string, customUrl: string): Promise<Reg
   const urls = customUrl.trim() !== '' ? [customUrl.trim(), ...CDN_URLS] : CDN_URLS
   for (const url of urls) {
     try {
-      const res = await fetch(url, { headers: { accept: 'application/json', 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(25_000) })
-      if (!res.ok) throw new Error('HTTP ' + res.status)
-      const body = (await res.json()) as { generated_at?: string; repos?: CdnRepo[] }
+      const body = await fetchIndexUrl(url)
       if (!Array.isArray(body.repos) || body.repos.length === 0) throw new Error('empty index')
       const age = Date.now() - Date.parse(body.generated_at ?? '')
       if (Number.isFinite(age) && age > CDN_MAX_AGE_MS) throw new Error('index too old (' + Math.round(age / 3600_000) + 'h)')
@@ -265,6 +336,66 @@ export function applyVerdicts(profile: string, updates: Record<string, boolean>)
   writeState(profile, state)
 }
 
+// ------------------------------------------------------- update detection
+
+/** 可更新插件：已装依赖 spec 里的版本 vs 索引 npm_version（npm registry latest）。 */
+export interface PluginUpdate {
+  /** profile 依赖键名（npm 包名） */
+  name: string
+  /** 已装版本 */
+  from: string
+  /** npm 最新版本 */
+  to: string
+  /** 对应 GitHub 仓库 owner/repo（可能为空） */
+  repo: string
+  /** 索引里的 npm 发布名 */
+  npm: string
+}
+
+const VERSION_RE = /v?(\d+)\.(\d+)\.(\d+)(?:[-+][0-9A-Za-z.-]+)?/
+
+/** 从依赖 spec（^1.2.3 / 1.2.3 / npm:x@1.2.3 / github:...#semver:1.2.3）提取 x.y.z。 */
+export function extractVersion(spec: string): string | null {
+  const m = VERSION_RE.exec(String(spec))
+  return m === null ? null : m[1] + '.' + m[2] + '.' + m[3]
+}
+
+/** 语义化三段版本比较：a<b → 负数；相等 → 0；a>b → 正数。 */
+export function compareVersions(a: string, b: string): number {
+  const pa = a.split('.').map(Number)
+  const pb = b.split('.').map(Number)
+  for (let i = 0; i < 3; i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0)
+    if (d !== 0) return d
+  }
+  return 0
+}
+
+/** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；无版本 spec 跳过。 */
+export function computeUpdates(registry: Registry, deps: Record<string, string>): PluginUpdate[] {
+  const out: PluginUpdate[] = []
+  const seen = new Set<string>()
+  for (const [name, spec] of Object.entries(deps)) {
+    const s = String(spec).trim()
+    if (s.startsWith('link:') || s.startsWith('file:')) continue
+    const from = extractVersion(s)
+    if (from === null) continue
+    const lower = name.toLowerCase()
+    let hit: MarketEntry | null = null
+    for (const p of registry.plugins) {
+      if (p.npm !== null && p.npm.toLowerCase() === lower) { hit = p; break }
+      if (p.name.toLowerCase() === lower) { hit = p; break }
+    }
+    if (hit === null || hit.npmVersion === null) continue
+    if (compareVersions(hit.npmVersion, from) <= 0) continue
+    if (seen.has(lower)) continue
+    seen.add(lower)
+    out.push({ name, from, to: hit.npmVersion, repo: hit.owner + '/' + hit.name, npm: hit.npm ?? name })
+  }
+  out.sort((a, b) => a.name.localeCompare(b.name))
+  return out
+}
+
 // ------------------------------------------------------------- classification
 
 const CATEGORY_RULES: Array<{ category: string; re: RegExp }> = [
@@ -341,6 +472,14 @@ function buildEntry(
     npm: knownEntry?.npm ?? NPM_OVERRIDES[key] ?? null,
     avatar: search?.owner.avatar_url ?? 'https://github.com/' + owner + '.png?size=96',
     language: search?.language ?? html?.language ?? null,
+    npmVersion: null,
+    version: null,
+    defaultBranch: null,
+    license: null,
+    verified: null,
+    disclosure: null,
+    installable: null,
+    topics: search?.topics ?? [],
   }
 }
 

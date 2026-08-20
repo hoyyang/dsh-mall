@@ -30,6 +30,20 @@ export declare function runInstall(config: MarketConfig, repo: string, npmName: 
     ok: boolean;
     message: string;
 }>;
+/** 批量更新：对每个 npm 包名跑 dsh plugin add <name>（不带版本 = 装 latest），
+ *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
+export declare function runUpdate(config: MarketConfig, targets: Array<{
+    name: string;
+    to: string;
+}>): Promise<{
+    ok: boolean;
+    message: string;
+    results: Array<{
+        name: string;
+        ok: boolean;
+        message: string;
+    }>;
+}>;
 export declare function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{
     ok: boolean;
     message: string;

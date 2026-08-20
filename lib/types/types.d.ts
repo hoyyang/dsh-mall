@@ -51,6 +51,33 @@ export interface MarketEntry {
     npm: string | null;
     avatar: string;
     language: string | null;
+    /** npm registry latest version (索引 npm_version)；更新检测数据源。 */
+    npmVersion: string | null;
+    /** repo 根 package.json 的 version（索引 version 字段）。 */
+    version: string | null;
+    /** 仓库默认分支；详情面板拉取 README 用。 */
+    defaultBranch: string | null;
+    /** SPDX license id（索引 license 字段）。 */
+    license: string | null;
+    /** qing3a/dsh-plugin-verify 验证证据；null = 未验证。 */
+    verified: {
+        by: string;
+        at: string;
+        reportUrl: string | null;
+    } | null;
+    /** 合规披露（cloud/network/offlineMode/apiKeys/jurisdiction/retention）；null = 未披露。 */
+    disclosure: {
+        cloud: string | null;
+        network: string | null;
+        offlineMode: boolean | null;
+        apiKeys: string[] | null;
+        jurisdiction: string | null;
+        retention: string | null;
+    } | null;
+    /** 可安装性判定：non-plugin / manual（手工安装）/ null（未判定）。 */
+    installable: 'non-plugin' | 'manual' | null;
+    /** GitHub topics（详情面板展示）。 */
+    topics: string[];
 }
 export interface Registry {
     updated: string;
@@ -75,7 +102,7 @@ export interface MarketState {
 }
 export interface InstallState {
     active: boolean;
-    kind: 'install' | 'uninstall' | null;
+    kind: 'install' | 'uninstall' | 'update' | null;
     phase: string | null;
     target: string | null;
     line: string | null;

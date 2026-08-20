@@ -9,9 +9,9 @@
 
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { loadRegistry, progress, readFavorites, toggleFavorite, verifyRepos } from './catalog.ts'
+import { computeUpdates, loadRegistry, progress, readFavorites, toggleFavorite, verifyRepos } from './catalog.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
-import { installState, readManifest as readProfileManifest, runInstall, runUninstall, withMutationLock } from './install.ts'
+import { installState, readManifest as readProfileManifest, runInstall, runUninstall, runUpdate, withMutationLock } from './install.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -110,13 +110,19 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
   disposers.push(host.webServer.register({
     kind: 'exact',
     path: '/dsh-store/status',
-    handler: (request, response) => {
+    handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
         response.end()
         return
       }
       const manifest = readProfileManifest(config.profile)
+      // 可更新检测随 status 一起下发——与商店所有刷新时机天然对齐。
+      let updates: Array<{ name: string; from: string; to: string; repo: string; npm: string }> = []
+      try {
+        const { registry } = await loadRegistry(config.profile, config.githubToken, {})
+        updates = computeUpdates(registry, manifest.dependencies)
+      } catch { /* registry 不可用时 updates 留空，不阻塞状态 */ }
       sendJson(response, 200, {
         version: marketVersion(),
         refreshing: progress.running,
@@ -127,6 +133,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
         tokenConfigured: config.githubToken !== '',
         registryUrl: config.registryUrl,
         rateLimit: lastRateInfo(),
+        updates,
       })
     },
   }))
@@ -187,6 +194,47 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
         return
       }
       const locked = await withMutationLock(async () => runUninstall(config, repo ?? pkgName ?? '', pkgName ?? undefined))
+      if (locked.busy) {
+        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+        return
+      }
+      sendJson(response, 200, locked.value)
+    },
+  }))
+
+  // Updates: POST {names?: string[]} — 更新全部可更新插件（或指定列表），
+  // 串行执行 dsh plugin add <name>（不带版本即 latest）。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/update',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const wanted = Array.isArray(body.names)
+        ? body.names.filter((n): n is string => typeof n === 'string' && n !== '').slice(0, 50)
+        : null
+      const manifest = readProfileManifest(config.profile)
+      const { registry } = await loadRegistry(config.profile, config.githubToken, {})
+      let targets = computeUpdates(registry, manifest.dependencies)
+      if (wanted !== null) {
+        const want = new Set(wanted.map(n => n.toLowerCase()))
+        targets = targets.filter(u => want.has(u.name.toLowerCase()))
+      }
+      if (targets.length === 0) {
+        sendJson(response, 200, { ok: true, message: 'No updates.', results: [] })
+        return
+      }
+      const locked = await withMutationLock(async () => runUpdate(config, targets))
       if (locked.busy) {
         sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
         return
