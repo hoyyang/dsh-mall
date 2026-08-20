@@ -23,7 +23,7 @@ export function SettingsCard(props: { t: (key: string) => string }) {
 
   useEffect(() => {
     if (!open) return
-    fetch('/dsh-plugin-market/status', { cache: 'no-store' })
+    fetch('/dsh-store/status', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { tokenConfigured?: boolean; version?: string }) => {
         setStatus({ tokenConfigured: body.tokenConfigured === true, version: body.version ?? null })
@@ -35,7 +35,7 @@ export function SettingsCard(props: { t: (key: string) => string }) {
     if (token.trim() === '') return
     setSaving(true)
     setSaved(false)
-    fetch('/dsh-plugin-market/token', {
+    fetch('/dsh-store/token', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: token.trim() }),

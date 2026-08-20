@@ -1304,7 +1304,7 @@ function SettingsCard(props) {
 	const [saved, setSaved] = (0, react.useState)(false);
 	(0, react.useEffect)(() => {
 		if (!open) return;
-		fetch("/dsh-plugin-market/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-store/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			setStatus({
 				tokenConfigured: body.tokenConfigured === true,
 				version: body.version ?? null
@@ -1315,7 +1315,7 @@ function SettingsCard(props) {
 		if (token.trim() === "") return;
 		setSaving(true);
 		setSaved(false);
-		fetch("/dsh-plugin-market/token", {
+		fetch("/dsh-store/token", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ token: token.trim() })
