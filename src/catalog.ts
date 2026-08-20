@@ -103,9 +103,12 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
   }
 }
 
-async function fetchCdnRegistry(profile: string): Promise<Registry> {
+async function fetchCdnRegistry(profile: string, customUrl: string): Promise<Registry> {
   let lastError = ''
-  for (const url of CDN_URLS) {
+  // A user-configured source (settings card or DSH_STORE_REGISTRY_URL env) is
+  // tried first; the default CDN index remains the fallback when it fails.
+  const urls = customUrl.trim() !== '' ? [customUrl.trim(), ...CDN_URLS] : CDN_URLS
+  for (const url of urls) {
     try {
       const res = await fetch(url, { headers: { accept: 'application/json', 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(25_000) })
       if (!res.ok) throw new Error('HTTP ' + res.status)
@@ -362,10 +365,10 @@ function makeRegistry(profile: string, htmlByKey: Map<string, { pushed_at: strin
   })
 }
 
-async function fetchLive(profile: string, token: string): Promise<Registry> {
+async function fetchLive(profile: string, token: string, registryUrl: string): Promise<Registry> {
   // Pass 0: the community CDN index — complete catalog, no API quota.
   try {
-    return await fetchCdnRegistry(profile)
+    return await fetchCdnRegistry(profile, registryUrl)
   } catch (err) {
     progress.lastError = 'CDN channel failed (' + (err instanceof Error ? err.message : String(err)) + '); falling back to direct crawl'
   }
@@ -419,7 +422,7 @@ async function fetchLive(profile: string, token: string): Promise<Registry> {
   return cache.data
 }
 
-export async function loadRegistry(profile: string, token: string, opts: { force?: boolean } = {}): Promise<LoadResult> {
+export async function loadRegistry(profile: string, token: string, opts: { force?: boolean; registryUrl?: string } = {}): Promise<LoadResult> {
   if (cache !== null && Date.now() - cache.at < TTL_MS && opts.force !== true) {
     return { registry: cache.data, refreshing: progress.running }
   }
@@ -435,7 +438,7 @@ export async function loadRegistry(profile: string, token: string, opts: { force
   const immediate = cache?.data ?? snapshot()
   void (async () => {
     try {
-      const live = await fetchLive(profile, token)
+      const live = await fetchLive(profile, token, opts.registryUrl ?? '')
       cache = { at: Date.now(), data: live }
     } catch (err) {
       // Keep the previous cache (or fall back to the bundled snapshot).

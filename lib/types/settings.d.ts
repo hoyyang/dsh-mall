@@ -9,8 +9,10 @@ import z from '@deepseek-ai/schemastery';
 export declare const MARKET_SETTINGS_NS: import("@deepseek-ai/dsh-settings").SettingsNamespace;
 export interface MarketSettings {
     githubToken: string;
+    registryUrl: string;
 }
 export declare const MarketSettings: z<MarketSettings>;
 export declare function installMarketSettings(ctx: Context, resolved: {
     githubToken?: string;
+    registryUrl?: string;
 }): void;

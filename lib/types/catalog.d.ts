@@ -29,6 +29,7 @@ export interface LoadResult {
 export declare const progress: RefreshProgress;
 export declare function loadRegistry(profile: string, token: string, opts?: {
     force?: boolean;
+    registryUrl?: string;
 }): Promise<LoadResult>;
 /** Deep verdict batch: returns verdicts for the given repos (only true/false). */
 export declare function verifyRepos(profile: string, token: string, repos: string[]): Promise<Record<string, boolean>>;

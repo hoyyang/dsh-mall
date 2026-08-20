@@ -89,4 +89,6 @@ export interface RefreshProgress {
 export interface MarketConfig {
     profile: string;
     githubToken: string;
+    /** Custom registry source URL (registry.json format); empty = default CDN index. */
+    registryUrl: string;
 }

@@ -13,14 +13,16 @@ export const MARKET_SETTINGS_NS = settingsNamespace('dsh-store')
 
 export interface MarketSettings {
   githubToken: string
+  registryUrl: string
 }
 
 export const MarketSettings: z<MarketSettings> = z.object({
   githubToken: z.string().default(''),
+  registryUrl: z.string().default(''),
 })
 
-export function installMarketSettings(ctx: Context, resolved: { githubToken?: string }): void {
-  const entry = { githubToken: resolved.githubToken ?? '' }
+export function installMarketSettings(ctx: Context, resolved: { githubToken?: string; registryUrl?: string }): void {
+  const entry = { githubToken: resolved.githubToken ?? '', registryUrl: resolved.registryUrl ?? '' }
   let source = (): MarketSettings => entry
   installSettingsSection(
     ctx,
@@ -29,7 +31,10 @@ export function installMarketSettings(ctx: Context, resolved: { githubToken?: st
     entry,
     {
       setSource: (current) => { source = current },
-      onChange: () => { resolved.githubToken = source().githubToken },
+      onChange: () => {
+        resolved.githubToken = source().githubToken
+        resolved.registryUrl = source().registryUrl
+      },
     },
   )
 }

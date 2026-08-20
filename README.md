@@ -9,6 +9,11 @@ your own plugin by adding the topic.
 标签的仓库，搜索、排序、筛选（是否插件 / awesome 精选 / 已安装），一键安装卸载，
 并可一键为自己的仓库打上标签上架。
 
+Custom data source: the settings card accepts any registry.json URL
+(DSH_STORE_REGISTRY_URL env persists it); the official index
+(hoyyang/dsh-market-index, refreshed every 30 min) stays the fallback.
+Fork dsh-market-index to run your own index.
+
 ## Install
 
     dsh plugin --profile web add github:YOUR/dsh-store

@@ -129,6 +129,11 @@ const en = {
 	tokenField: "GitHub token (optional)",
 	tokenHint: "Boosts GitHub API limits (search 10→30/min, core 60→5000/h) and enables the plugin-verification batch. Memory only — never written to disk or logs, cleared on restart.",
 	tokenPlaceholder: "ghp_… (repo scope is enough)",
+	sourcePlaceholder: "Registry source URL (optional, e.g. https://…/registry.json)",
+	sourceSave: "Save source",
+	sourceSaved: "Saved",
+	sourceCurrent: "Current source",
+	sourceHint: "Custom market data source in registry.json format. Leave empty to use the default index (hoyyang/dsh-market-index). Persists via the DSH_STORE_REGISTRY_URL environment variable.",
 	tokenSave: "Save",
 	tokenSaved: "Token saved for this session.",
 	tokenMissingSettings: "Set the token in Settings → Plugins → plugin configuration (dsh ≥ rc.7), or via cordis.yml / DSHM_GITHUB_TOKEN."
@@ -233,6 +238,11 @@ const zh = {
 	tokenField: "GitHub token（可选）",
 	tokenHint: "提升 GitHub API 限额（search 10→30/分钟、core 60→5000/小时）并启用插件判定批处理。仅存内存 — 不落盘、不进日志，重启即清空。",
 	tokenPlaceholder: "ghp_…（repo 权限即可）",
+	sourcePlaceholder: "数据源 URL（可选，如 https://…/registry.json）",
+	sourceSave: "保存数据源",
+	sourceSaved: "已保存",
+	sourceCurrent: "当前数据源",
+	sourceHint: "自定义市场数据源（registry.json 格式）。留空使用默认索引（hoyyang/dsh-market-index）。重启后保留请用 DSH_STORE_REGISTRY_URL 环境变量。",
 	tokenSave: "保存",
 	tokenSaved: "Token 已保存（仅本次会话）。",
 	tokenMissingSettings: "在 设置 → 插件 → 插件配置 里填写 token（dsh ≥ rc.7），或通过 cordis.yml / DSHM_GITHUB_TOKEN 环境变量配置。"
@@ -1302,15 +1312,36 @@ function SettingsCard(props) {
 	const [token, setToken] = (0, react.useState)("");
 	const [saving, setSaving] = (0, react.useState)(false);
 	const [saved, setSaved] = (0, react.useState)(false);
+	const [registryUrl, setRegistryUrl] = (0, react.useState)("");
+	const [sourceSaving, setSourceSaving] = (0, react.useState)(false);
+	const [sourceSaved, setSourceSaved] = (0, react.useState)(false);
 	(0, react.useEffect)(() => {
 		if (!open) return;
 		fetch("/dsh-store/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			setStatus({
 				tokenConfigured: body.tokenConfigured === true,
-				version: body.version ?? null
+				version: body.version ?? null,
+				registryUrl: body.registryUrl ?? ""
 			});
 		}).catch(() => {});
 	}, [open, saved]);
+	const saveSource = () => {
+		setSourceSaving(true);
+		setSourceSaved(false);
+		fetch("/dsh-store/source", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ url: registryUrl.trim() })
+		}).then((res) => res.json()).then((body) => {
+			if (body.ok === true) {
+				setStatus((s) => s === null ? null : {
+					...s,
+					registryUrl: body.registryUrl ?? ""
+				});
+				setSourceSaved(true);
+			}
+		}).catch(() => {}).finally(() => setSourceSaving(false));
+	};
 	const save = () => {
 		if (token.trim() === "") return;
 		setSaving(true);
@@ -1374,6 +1405,52 @@ function SettingsCard(props) {
 						lineHeight: 1.5
 					},
 					children: t("tokenHint")
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { style: {
+					borderTop: "1px solid rgba(128,128,128,.2)",
+					margin: "2px 0"
+				} }),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Input, {
+					autoComplete: "off",
+					value: registryUrl,
+					placeholder: t("sourcePlaceholder"),
+					onChange: (e) => setRegistryUrl(e.target.value)
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					style: {
+						display: "flex",
+						gap: 8,
+						alignItems: "center"
+					},
+					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "primary",
+						size: "sm",
+						disabled: sourceSaving,
+						onClick: saveSource,
+						children: t("sourceSave")
+					}), sourceSaved && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+						style: {
+							fontSize: 12,
+							color: "#22c55e"
+						},
+						children: t("sourceSaved")
+					})]
+				}),
+				status !== null && status.registryUrl !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					style: {
+						fontSize: 12,
+						opacity: .75,
+						wordBreak: "break-all"
+					},
+					children: t("sourceCurrent") + ": " + status.registryUrl
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					style: {
+						fontSize: 12,
+						opacity: .75,
+						lineHeight: 1.5
+					},
+					children: t("sourceHint")
 				})
 			]
 		})

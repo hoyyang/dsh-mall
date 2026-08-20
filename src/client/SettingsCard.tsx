@@ -11,6 +11,7 @@ import { Button, DisclosureRow, Input, IconSettingsOutline16 } from '@deepseek-a
 interface CardStatus {
   tokenConfigured: boolean
   version: string | null
+  registryUrl: string
 }
 
 export function SettingsCard(props: { t: (key: string) => string }) {
@@ -20,16 +21,38 @@ export function SettingsCard(props: { t: (key: string) => string }) {
   const [token, setToken] = useState('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [registryUrl, setRegistryUrl] = useState('')
+  const [sourceSaving, setSourceSaving] = useState(false)
+  const [sourceSaved, setSourceSaved] = useState(false)
 
   useEffect(() => {
     if (!open) return
     fetch('/dsh-store/status', { cache: 'no-store' })
       .then(res => res.json())
-      .then((body: { tokenConfigured?: boolean; version?: string }) => {
-        setStatus({ tokenConfigured: body.tokenConfigured === true, version: body.version ?? null })
+      .then((body: { tokenConfigured?: boolean; version?: string; registryUrl?: string }) => {
+        setStatus({ tokenConfigured: body.tokenConfigured === true, version: body.version ?? null, registryUrl: body.registryUrl ?? '' })
       })
       .catch(() => {})
   }, [open, saved])
+
+  const saveSource = () => {
+    setSourceSaving(true)
+    setSourceSaved(false)
+    fetch('/dsh-store/source', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ url: registryUrl.trim() }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; registryUrl?: string }) => {
+        if (body.ok === true) {
+          setStatus(s => s === null ? null : { ...s, registryUrl: body.registryUrl ?? '' })
+          setSourceSaved(true)
+        }
+      })
+      .catch(() => {})
+      .finally(() => setSourceSaving(false))
+  }
 
   const save = () => {
     if (token.trim() === '') return
@@ -74,6 +97,23 @@ export function SettingsCard(props: { t: (key: string) => string }) {
           {saved && <span style={{ fontSize: 12, color: '#22c55e' }}>{t('tokenSaved')}</span>}
         </div>
         <div style={{ fontSize: 12, opacity: 0.75, lineHeight: 1.5 }}>{t('tokenHint')}</div>
+        <div style={{ borderTop: '1px solid rgba(128,128,128,.2)', margin: '2px 0' }} />
+        <Input
+          autoComplete="off"
+          value={registryUrl}
+          placeholder={t('sourcePlaceholder')}
+          onChange={e => setRegistryUrl(e.target.value)}
+        />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Button variant="primary" size="sm" disabled={sourceSaving} onClick={saveSource}>
+            {t('sourceSave')}
+          </Button>
+          {sourceSaved && <span style={{ fontSize: 12, color: '#22c55e' }}>{t('sourceSaved')}</span>}
+        </div>
+        {status !== null && status.registryUrl !== '' && (
+          <div style={{ fontSize: 12, opacity: 0.75, wordBreak: 'break-all' }}>{t('sourceCurrent') + ': ' + status.registryUrl}</div>
+        )}
+        <div style={{ fontSize: 12, opacity: 0.75, lineHeight: 1.5 }}>{t('sourceHint')}</div>
       </div>
     </DisclosureRow>
   )

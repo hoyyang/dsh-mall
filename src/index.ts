@@ -12,7 +12,7 @@ import type { MarketConfig } from './types.ts'
 export const name = 'dsh-store'
 
 /** Optional cordis.yml configuration; the profile defaults to \`web\`. */
-export type Config = Partial<Pick<MarketConfig, 'profile' | 'githubToken'>>
+export type Config = Partial<Pick<MarketConfig, 'profile' | 'githubToken' | 'registryUrl'>>
 
 function argvProfile(): string | undefined {
   const argv = process.argv
@@ -27,6 +27,7 @@ export function apply(ctx: Context, config?: Config): void {
     const resolved: MarketConfig = {
       profile: config?.profile ?? argvProfile() ?? 'web',
       githubToken: config?.githubToken ?? process.env.DSHM_GITHUB_TOKEN ?? '',
+      registryUrl: config?.registryUrl ?? process.env.DSH_STORE_REGISTRY_URL ?? '',
     }
     installMarketSettings(ctx, resolved)
     host.effect?.(() => mountMarketRoutes(host, resolved), 'dsh-store: http routes')

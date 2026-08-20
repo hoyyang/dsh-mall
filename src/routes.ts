@@ -102,7 +102,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
       }
       const url = new URL(request.url ?? '/', 'http://localhost')
       const force = url.searchParams.get('force') === '1'
-      const { registry, refreshing } = await loadRegistry(config.profile, config.githubToken, { force })
+      const { registry, refreshing } = await loadRegistry(config.profile, config.githubToken, { force, registryUrl: config.registryUrl })
       sendJson(response, 200, { registry, refreshing, fetchAt: new Date().toISOString(), progress: { ...progress } })
     },
   }))
@@ -125,6 +125,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
         installed: manifest.dependencies,
         bundles: manifest.bundles,
         tokenConfigured: config.githubToken !== '',
+        registryUrl: config.registryUrl,
         rateLimit: lastRateInfo(),
       })
     },
@@ -217,6 +218,44 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
       } catch (err) {
         sendJson(response, 200, { ok: false, error: err instanceof Error ? err.message : String(err) })
       }
+    },
+  }))
+
+  // Data source: custom registry URL (registry.json format). Empty resets to
+  // the default CDN index. Not a secret; still same-origin POST only, and only
+  // http(s) URLs are accepted (no file:// or javascript: scheme injection).
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/source',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const url = typeof body.url === 'string' ? body.url.trim() : ''
+      if (url !== '') {
+        let parsed: URL
+        try {
+          parsed = new URL(url)
+        } catch {
+          sendJson(response, 400, { ok: false, error: 'invalid url' })
+          return
+        }
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+          sendJson(response, 400, { ok: false, error: 'only http(s) urls are allowed' })
+          return
+        }
+      }
+      config.registryUrl = url
+      sendJson(response, 200, { ok: true, registryUrl: config.registryUrl })
     },
   }))
 

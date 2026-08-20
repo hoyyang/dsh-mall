@@ -22,6 +22,7 @@ DeepSeek Harness 里的 GitHub 全量插件市场：收录所有带 #dsh-plugin 
 - 安装/卸载：风险分级确认（精选绿 / 社区黄 / 疑似非插件红）+ 进度轮询 + 已安装徽标；经 dsh CLI 写入 profile 依赖与 bundles，卸载同步清理。
 - 上传我的插件：为自己的仓库一键添加 dsh-plugin 标签（需 GitHub token，repo 权限）——GitHub 索引后几分钟即可在市场搜到；无 token 可复制 gh 命令或手动在 About 添加标签。
 - GitHub token：设置 → 插件 → 插件配置 的卡片（dsh ≥ rc.7）或 POST /dsh-store/token、DSHM_GITHUB_TOKEN 环境变量；提升限额（search 10→30/分钟、core 60→5000/小时）并启用判定批处理。token 仅存内存。
+- 自定义数据源：设置卡片可填任意 registry.json 格式的 URL（DSH_STORE_REGISTRY_URL 环境变量可持久化）；自定义源优先，官方索引（hoyyang/dsh-market-index，每 30 分钟增量更新）兜底。想自建市场：fork dsh-market-index 仓库即得自己的索引。
 
 ## 数据刷新时机
 
