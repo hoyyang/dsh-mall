@@ -429,23 +429,25 @@ export function MarketSection(props: SectionProps) {
         </div>
         <Pill active={curatedOnly} onClick={() => { setCuratedOnly(v => !v); setPage(1) }}>{t('curatedOnly')}</Pill>
         <Pill active={installedOnly} onClick={() => { setInstalledOnly(v => !v); setPage(1) }}>{t('installedOnly')}</Pill>
-        <Input
-          className="pcm-search"
-          icon={<IconSearchOutline16 size={14} />}
-          value={q}
-          placeholder={t('searchPlaceholder')}
-          onChange={e => { setQ(e.target.value); setPage(1) }}
-        />
         <Menu
           open={sortOpen}
           onClose={() => setSortOpen(false)}
           onSelect={id => { setSort(id as SortKey); setPage(1) }}
           align="end"
           anchor={(
-            <Button variant="outline" size="sm" onClick={() => setSortOpen(o => !o)}>{t('sort')}</Button>
+            <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort')}</Button>
           )}
           items={sortItems}
           selectedId={sort}
+        />
+      </div>
+      <div className="pcm-toolbar pcm-toolbar-search">
+        <Input
+          className="pcm-search"
+          icon={<IconSearchOutline16 size={14} />}
+          value={q}
+          placeholder={t('searchPlaceholder')}
+          onChange={e => { setQ(e.target.value); setPage(1) }}
         />
       </div>
       </div>
@@ -499,7 +501,7 @@ export function MarketSection(props: SectionProps) {
                       <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
                     )}
                     {installed && (
-                      <Button variant="ghost" size="sm" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
+                      <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                     )}
                   </div>
                 </div>
