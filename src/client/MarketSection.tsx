@@ -128,8 +128,17 @@ export function MarketSection(props: SectionProps) {
       const parentH = el.getBoundingClientRect().height
       const top = root.getBoundingClientRect().top
       const viewportH = window.innerHeight - top - 16
-      const h = Math.max(240, Math.min(parentH, viewportH))
+      let h = Math.max(240, Math.min(parentH, viewportH))
       root.style.height = Math.round(h) + 'px'
+      // 宿主的滚动容器除了我们还可能有内边距/边框，root 撑满后会出现几像素
+      // 溢出，导致整个面板在宿主容器里上下滚动（用户看到的"页面级滚动"）。
+      // 逐次把溢出量扣掉，直到宿主容器 scrollHeight == clientHeight。
+      for (let i = 0; i < 4; i++) {
+        const overflow = el.scrollHeight - el.clientHeight
+        if (overflow <= 1) break
+        h = Math.max(240, h - overflow - 1)
+        root.style.height = Math.round(h) + 'px'
+      }
     }
     update()
     const ro = new ResizeObserver(update)
