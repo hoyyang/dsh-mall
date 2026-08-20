@@ -42,6 +42,15 @@ interface CdnRepo {
   market_tags?: string[]
 }
 
+/** 从索引条目收集 description_<lang> 富化字段为 { lang: 文本 } 映射。 */
+function collectDescriptions(repo: Record<string, unknown>): Record<string, string> | null {
+  const out: Record<string, string> = {}
+  for (const [k, v] of Object.entries(repo)) {
+    if (k.startsWith('description_') && typeof v === 'string' && v !== '') out[k.slice('description_'.length)] = v
+  }
+  return Object.keys(out).length > 0 ? out : null
+}
+
 /** GitHub 仓库 → npm 发布名人工对照表：仓库根没有 package.json（monorepo 等）
  *  导致索引 pkg_name 富化失败时，用这里补上真实发布名（如 tt-a1i/archify 的
  *  DSH 集成发布为 @tt-a1i/archify-dsh），使本地安装能与 GitHub 卡正确关联。 */
@@ -98,7 +107,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     url: repo.html_url,
     category,
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
-    descriptionZh: (repo as CdnRepo & { description_zh?: string | null }).description_zh ?? null,
+    descriptions: collectDescriptions(repo as unknown as Record<string, unknown>),
     stars: repo.stargazers_count ?? null,
     todayStars: null,
     created: knownEntry?.added ?? null,
@@ -322,7 +331,7 @@ function buildEntry(
     url: search?.html_url ?? 'https://github.com/' + fullName,
     category: knownEntry?.category ?? ruleCategory(name, description, topics),
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
-    descriptionZh: search?.description_zh ?? null,
+    descriptions: search !== undefined ? collectDescriptions(search as unknown as Record<string, unknown>) : null,
     stars: search?.stargazers_count ?? null,
     todayStars: null,
     created: search?.created_at ?? null,

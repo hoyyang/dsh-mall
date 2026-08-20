@@ -78,7 +78,9 @@ export function MarketSection(props: SectionProps) {
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const sort = (sortDim + '-' + sortDir) as SortKey
-  const [langChoice, setLangChoice] = useState<'en' | 'zh'>('en')
+  const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
+  const LANG_LABELS: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
+  const [langChoice, setLangChoice] = useState<string>('en')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(24)
   const [sortOpen, setSortOpen] = useState(false)
@@ -175,6 +177,21 @@ export function MarketSection(props: SectionProps) {
       const rowOf = (pill: HTMLElement): number => {
         const top = pill.getBoundingClientRect().top - wrapRect.top
         return Math.round(top / (pill.offsetHeight + 6))
+      }
+      // 排序按钮占据第一行右端：伸进其区域的第 0 行 pill 强制换行（两态都处理）
+      const sortSlot = wrap.querySelector<HTMLElement>('.pcm-sort-slot')
+      if (sortSlot !== null) {
+        const zoneStart = wrapRect.width - (sortSlot.offsetWidth + 8)
+        let lastRow0 = -1
+        for (let i = 0; i < pills.length; i++) {
+          if (rowOf(pills[i]!) === 0) lastRow0 = i
+        }
+        while (lastRow0 >= 0) {
+          const pr = pills[lastRow0]!.getBoundingClientRect()
+          if (pr.right - wrapRect.left <= zoneStart) break
+          pills[lastRow0]!.style.marginRight = wrapRect.width + 'px'
+          lastRow0 -= 1
+        }
       }
       let visible = 0
       for (const pill of pills) {
@@ -585,31 +602,34 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        <Menu
-          open={sortOpen}
-          onClose={() => setSortOpen(false)}
-          onSelect={id => {
-            if (id === 'stars' || id === 'today' || id === 'created') setSortDim(id)
-            else if (id === 'asc' || id === 'desc') setSortDir(id)
-            setPage(1)
-          }}
-          align="end"
-          anchor={(
-            <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort') + ' ' + (sortDir === 'desc' ? '↓' : '↑')}</Button>
-          )}
-          items={sortItems}
-          selectedIds={[sortDim, sortDir]}
-        />
         <Button
           variant="outline"
           size="sm"
           className="pcm-lang-btn"
-          onClick={() => setLangChoice(v => (v === 'zh' ? 'en' : 'zh'))}
+          onClick={() => setLangChoice(v => LANGS[(LANGS.indexOf(v as typeof LANGS[number]) + 1) % LANGS.length] ?? 'en')}
         >
-          {langChoice === 'zh' ? '🌐 中文' : '🌐 EN'}
+          {'🌐 ' + (LANG_LABELS[langChoice] ?? langChoice.toUpperCase())}
         </Button>
       </div>
       <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
+        <div className="pcm-sort-slot">
+          <Menu
+            open={sortOpen}
+            onClose={() => setSortOpen(false)}
+            onSelect={id => {
+              if (id === 'stars' || id === 'today' || id === 'created') setSortDim(id)
+              else if (id === 'asc' || id === 'desc') setSortDir(id)
+              setPage(1)
+            }}
+            align="end"
+            portal
+            anchor={(
+              <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort') + ' ' + (sortDir === 'desc' ? '↓' : '↑')}</Button>
+            )}
+            items={sortItems}
+            selectedIds={[sortDim, sortDir]}
+          />
+        </div>
         <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
         {chipCats.map((id: string) => (
           <Pill key={id} active={cat === id} onClick={() => { setCat(id); setPage(1) }}>{catLabel(id)}<span className="pcm-count">{categoryCounts.per.get(id) ?? 0}</span></Pill>
@@ -658,15 +678,23 @@ export function MarketSection(props: SectionProps) {
                     <div className="pcm-card-title">
                       <span className="pcm-name">{entry.name}</span>
                       <span className="pcm-owner">{entry.owner}</span>
+                      <button
+                        className={isFav(entry) ? 'pcm-fav-star pcm-fav-on' : 'pcm-fav-star'}
+                        title={t('favAdd')}
+                        onClick={e => { e.stopPropagation(); toggleFav(entry) }}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                            fill={isFav(entry) ? '#f59e0b' : '#3a3d42'}
+                            stroke="#d99a1f"
+                            strokeWidth="1.6"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={isFav(entry) ? 'pcm-fav-btn pcm-fav-on' : 'pcm-fav-btn'}
-                        title={t('favAdd')}
-                        onClick={() => toggleFav(entry)}
-                      >★</Button>
                       {installed ? (
                         <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
                       ) : (
@@ -681,7 +709,7 @@ export function MarketSection(props: SectionProps) {
                     </div>
                   </div>
                   <div className="pcm-desc">{(() => {
-                    const d = langChoice === 'zh' && entry.descriptionZh !== null && entry.descriptionZh !== undefined && entry.descriptionZh !== '' ? entry.descriptionZh : entry.description
+                    const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
                     return d === '' ? '—' : d
                   })()}</div>
                   <div className="pcm-foot">

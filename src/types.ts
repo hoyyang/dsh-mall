@@ -34,8 +34,8 @@ export interface MarketEntry {
   url: string
   category: string
   description: string
-  /** 中文简介（README.zh 首段，索引富化）；缺失时前端回退英文。 */
-  descriptionZh?: string | null
+  /** 各语言简介（索引富化的 README.<lang> 首段）；缺失语言回退英文。 */
+  descriptions?: Record<string, string> | null
   /** null when the repo came from the HTML crawl and search never covered it. */
   stars: number | null
   /** Star delta since the last snapshot; null when no baseline exists. */
