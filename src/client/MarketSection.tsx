@@ -845,7 +845,7 @@ export function MarketSection(props: SectionProps) {
           <Menu
             open={langOpen}
             onClose={() => setLangOpen(false)}
-            onSelect={id => { setLangChoice(id); setPage(1) }}
+            onSelect={id => { setLangChoice(id); setLangOpen(false); setPage(1) }}
             align="end"
             anchor={(
               <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -961,15 +961,17 @@ export function MarketSection(props: SectionProps) {
                         </>
                       )}
                       {installed ? (
-                        <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
+                        <>
+                          {entry.local === true && (
+                            <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
+                          )}
+                          {entry.local !== true && (
+                            <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
+                          )}
+                          <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
+                        </>
                       ) : (
                         <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
-                      )}
-                      {installed && entry.local === true && (
-                        <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
-                      )}
-                      {installed && entry.local !== true && (
-                        <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                       )}
                       {entry.local !== true && (
                         <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
@@ -980,7 +982,7 @@ export function MarketSection(props: SectionProps) {
                   </div>
                   {(entry.curated || entry.verified != null || disclosure != null || installed) && (
                     <div className="pcm-safety-row">
-                      {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>★ {t('curatedBadge')}</span>}
+                      {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>⚑ {t('curatedBadge')}</span>}
                       {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>✓ {t('verifiedBadge')}</span>}
                       {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
                       {installed && (

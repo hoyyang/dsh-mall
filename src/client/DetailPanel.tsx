@@ -24,11 +24,19 @@ const readmeCache = new Map<string, { status: 'ok' | 'error'; text: string }>()
 const LANG_PROBE = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
 const langProbeCache = new Map<string, string[]>()
 
-/** 某语言 README 的候选文件名（与 host 富化同表：zh 优先 zh-CN 变体）。 */
+/** 某语言 README 的候选文件名（与 host 富化同表：zh 优先 zh-CN 变体；
+ *  常见子目录约定 docs/ 一并探测）。 */
 function readmeCandidates(lang: string): string[] {
-  if (lang === 'en') return ['README.md']
-  if (lang === 'zh') return ['README.zh-CN.md', 'README.zh.md', 'README.zh_CN.md', 'README.cn.md']
-  return ['README.' + lang + '.md']
+  const base: string[] = []
+  if (lang === 'en') base.push('README.md')
+  else if (lang === 'zh') base.push('README.zh-CN.md', 'README.zh.md', 'README.zh_CN.md', 'README.cn.md')
+  else base.push('README.' + lang + '.md')
+  const out: string[] = []
+  for (const f of base) {
+    out.push(f)
+    out.push('docs/' + f)
+  }
+  return out
 }
 
 async function probeReadmeLangs(entry: MarketEntry): Promise<string[]> {
@@ -56,25 +64,42 @@ async function probeReadmeLangs(entry: MarketEntry): Promise<string[]> {
   return langs
 }
 
-/** 把 README 里常见的原始 HTML 结构转为等价 Markdown，其余保持原样——
- *  MarkdownText 的 untrusted 策略会把一切 HTML 当字面文本显示（安全优先），
- *  常见 <h1 align=...>/<p>/<br>/<hr>/<img>/<a> 转成 MD 后即可正常排版。 */
-function preprocessReadme(md: string): string {
+/** 把 README 里常见的原始 HTML 结构转为等价 Markdown，并把相对路径
+ *  图片/链接改写为 raw.githubusercontent 绝对地址（MarkdownText 的
+ *  untrusted 策略只渲染 absolute http(s) 图片——相对路径会整张消失）。 */
+function preprocessReadme(md: string, entry: MarketEntry): string {
+  const branch = entry.defaultBranch ?? 'main'
+  const base = 'https://raw.githubusercontent.com/' + entry.owner + '/' + entry.name + '/' + branch + '/'
+  const absolutize = (url: string): string => {
+    if (/^(https?:|data:|#)/i.test(url)) return url
+    if (url.startsWith('/')) return base + url.replace(/^\//, '')
+    return base + url
+  }
   return md
     .replace(/<(h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi, (_m: string, tag: string, inner: string) => '#'.repeat(Number(tag[1])) + ' ' + inner.replace(/\s+/g, ' ').trim())
     .replace(/<p\b[^>]*>/gi, '\n\n')
     .replace(/<\/p>/gi, '\n')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<hr\s*\/?>/gi, '\n\n---\n\n')
-    .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, '![image]($1)')
-    .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, '[$2]($1)')
+    .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, (_m: string, src: string) => '![image](' + absolutize(src) + ')')
+    .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => '[' + label + '](' + absolutize(href) + ')')
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) => '![' + alt + '](' + absolutize(src) + ')')
     .replace(/<(?:strong|b)\b[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '**$1**')
     .replace(/<(?:em|i)\b[^>]*>([\s\S]*?)<\/(?:em|i)>/gi, '*$1*')
     .replace(/<code\b[^>]*>([\s\S]*?)<\/code>/gi, '\`$1\`')
     .replace(/<td\b[^>]*>([\s\S]*?)<\/td>/gi, ' $1 |')
+    .replace(/<th\b[^>]*>([\s\S]*?)<\/th>/gi, ' **$1** |')
     .replace(/<tr\b[^>]*>/gi, '\n|')
     .replace(/<(?:table|thead|tbody)\b[^>]*>/gi, '')
     .replace(/<\/(?:tr|table|thead|tbody)>/gi, '\n')
+    .replace(/<picture\b[^>]*>/gi, '')
+    .replace(/<\/picture>/gi, '')
+    .replace(/<source\b[^>]*>/gi, '')
+    .replace(/<details\b[^>]*>/gi, '\n\n')
+    .replace(/<\/details>/gi, '\n')
+    .replace(/<summary\b[^>]*>([\s\S]*?)<\/summary>/gi, '**$1**')
+    .replace(/<kbd\b[^>]*>([\s\S]*?)<\/kbd>/gi, '\`$1\`')
+    .replace(/<a\b(?=[^>]*\bid=["'])[^>]*>([\s\S]*?)<\/a>/gi, '$1')
     .replace(/<\/(?:div|span|center|font|sub|sup|small|del|ins|u|s)>/gi, '')
     .replace(/<(?:div|span|center|font|sub|sup|small|del|ins|u|s)\b[^>]*>/gi, '')
 }
@@ -89,7 +114,7 @@ async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 
       const res = await fetch(url, { signal: AbortSignal.timeout(12_000), headers: { accept: 'text/plain' } })
       if (res.ok) {
         const text = await res.text()
-        return { status: 'ok', text: preprocessReadme(text.slice(0, 200_000)) }
+        return { status: 'ok', text: preprocessReadme(text.slice(0, 200_000), entry) }
       }
       lastError = 'HTTP ' + res.status
     } catch (err) {
