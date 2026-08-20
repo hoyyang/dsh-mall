@@ -188,11 +188,10 @@ export function MarketSection(props: SectionProps) {
         for (const pill of pills) {
           if (rowOf(pill) < CATS_CLAMPED_ROWS) visibleFinal += 1
         }
-        const probe = pills[Math.max(0, lastVisible)]
-        const maxH = probe !== undefined
-          ? probe.getBoundingClientRect().bottom - wrapRect.top + 1
-          : 96
-        wrap.style.maxHeight = maxH + 'px'
+        // 裁剪高度用固定公式（3 行 pill + 2 个 gap），不依赖任何 pill 的位置，
+        // 避免测量往返（RO 高度变化）之间 maxHeight 在 85/115 之间震荡。
+        const ph = pills[0]!.offsetHeight
+        wrap.style.maxHeight = (ph * CATS_CLAMPED_ROWS + 6 * (CATS_CLAMPED_ROWS - 1) + 1) + 'px'
         visible = visibleFinal
       } else {
         wrap.style.maxHeight = 'none'
@@ -596,44 +595,43 @@ export function MarketSection(props: SectionProps) {
                 >
                   <div className="pcm-card-top">
                     <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>{(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}</div>
-                    <div style={{ overflow: 'hidden' }}>
-                      <div className="pcm-name">{entry.name}</div>
-                      <div className="pcm-owner">{entry.owner}</div>
+                    <div className="pcm-card-title">
+                      <span className="pcm-name">{entry.name}</span>
+                      <span className="pcm-owner">{entry.owner}</span>
+                    </div>
+                    <div className="pcm-actions" onClick={e => e.stopPropagation()}>
+                      {installed ? (
+                        <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
+                      ) : (
+                        <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
+                      )}
+                      {installed && entry.local === true && (
+                        <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
+                      )}
+                      {installed && entry.local !== true && (
+                        <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
+                      )}
                     </div>
                   </div>
                   <div className="pcm-desc">{entry.description === '' ? '—' : entry.description}</div>
-                  <div className="pcm-badges">
-                    {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin">{t('pluginBadge')}</span>}
-                    {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
-                    {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
-                    {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
-                    {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
-                    {installed && <span className="pcm-badge pcm-badge-installed">{t('installed')}</span>}
-                  </div>
-                  <div className="pcm-stats">
-                    <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
-                    <span title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
-                    {entry.created !== null && (
-                      <span title={t('publishAgeHint')}>{t('publishAge') + ' ' + durationBetween(entry.created, new Date().toISOString())}</span>
-                    )}
-                  </div>
-                  <div className="pcm-meta">
-                    <span>{catLabel(entry.category)}</span>
-                    <span title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
-                    {entry.language !== null && <span>{entry.language}</span>}
-                  </div>
-                  <div className="pcm-actions" onClick={e => e.stopPropagation()}>
-                    {installed ? (
-                      <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
-                    ) : (
-                      <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
-                    )}
-                    {installed && entry.local === true && (
-                      <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
-                    )}
-                    {installed && entry.local !== true && (
-                      <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
-                    )}
+                  <div className="pcm-foot">
+                    <div className="pcm-badges">
+                      {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin">{t('pluginBadge')}</span>}
+                      {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
+                      {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
+                      {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
+                      {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
+                      {installed && <span className="pcm-badge pcm-badge-installed">{t('installed')}</span>}
+                    </div>
+                    <div className="pcm-stats">
+                      <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
+                      <span title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
+                      <span>{catLabel(entry.category)}</span>
+                      <span title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
+                      {entry.created !== null && (
+                        <span title={t('publishAgeHint')}>{t('publishAge') + ' ' + durationBetween(entry.created, new Date().toISOString())}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )

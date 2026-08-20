@@ -42,6 +42,13 @@ interface CdnRepo {
   market_tags?: string[]
 }
 
+/** GitHub 仓库 → npm 发布名人工对照表：仓库根没有 package.json（monorepo 等）
+ *  导致索引 pkg_name 富化失败时，用这里补上真实发布名（如 tt-a1i/archify 的
+ *  DSH 集成发布为 @tt-a1i/archify-dsh），使本地安装能与 GitHub 卡正确关联。 */
+const NPM_OVERRIDES: Record<string, string> = {
+  'tt-a1i/archify': '@tt-a1i/archify-dsh',
+}
+
 /** Map the community index's 12 categories onto the dshmarket category set. */
 const CDN_CATEGORY_MAP: Record<string, string> = {
   'web-ui': 'ui',
@@ -84,7 +91,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     if (repo.installable === 'non-plugin') isPlugin = false
     else if (repo.market_tags?.includes('verified-install') === true || (repo.pkg_name ?? null) !== null) isPlugin = true
   }
-  const npm = knownEntry?.npm ?? (typeof repo.pkg_name === 'string' && repo.pkg_name !== '' && repo.installable !== 'non-plugin' ? repo.pkg_name : null)
+  const npm = knownEntry?.npm ?? NPM_OVERRIDES[key] ?? (typeof repo.pkg_name === 'string' && repo.pkg_name !== '' && repo.installable !== 'non-plugin' ? repo.pkg_name : null)
   return {
     name: name ?? key,
     owner: owner ?? '',
@@ -305,7 +312,7 @@ function buildEntry(
     pushed: search?.pushed_at ?? html?.pushed_at ?? null,
     isPlugin,
     curated: knownEntry !== undefined,
-    npm: knownEntry?.npm ?? null,
+    npm: knownEntry?.npm ?? NPM_OVERRIDES[key] ?? null,
     avatar: search?.owner.avatar_url ?? 'https://github.com/' + owner + '.png?size=96',
     language: search?.language ?? html?.language ?? null,
   }
