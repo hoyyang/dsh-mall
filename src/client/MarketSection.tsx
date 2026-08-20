@@ -594,7 +594,18 @@ export function MarketSection(props: SectionProps) {
                   onClick={() => { if (entry.local !== true && entry.url !== '') window.open(entry.url, '_blank', 'noopener') }}
                 >
                   <div className="pcm-card-top">
-                    <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>{(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}</div>
+                    <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>
+                      {(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}
+                      {entry.avatar !== '' && (
+                        <img
+                          className="pcm-av-img"
+                          src={entry.avatar}
+                          alt=""
+                          loading="lazy"
+                          onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                        />
+                      )}
+                    </div>
                     <div className="pcm-card-title">
                       <span className="pcm-name">{entry.name}</span>
                       <span className="pcm-owner">{entry.owner}</span>
