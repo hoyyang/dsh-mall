@@ -515,25 +515,31 @@ function MarketSection(props) {
 		const c = data.categories[id];
 		return c === void 0 ? id : c[lang] ?? c.en;
 	}, [data, lang]);
-	/** Which repos are installed in the current profile (from /status). */
-	const installedSet = (0, react.useMemo)(() => {
-		const set = /* @__PURE__ */ new Set();
+	/** Which repos are installed in the current profile (from /status).
+	*  Exact matching only — name / unscoped name / npm name / github: spec.
+	*  (Substring matching used to mark dsh-context-doctor & co. as installed.) */
+	const installedInfo = (0, react.useMemo)(() => {
+		const names = /* @__PURE__ */ new Set();
+		const repos = /* @__PURE__ */ new Set();
 		const deps = status?.installed ?? {};
 		for (const [name, spec] of Object.entries(deps)) {
-			set.add(name.toLowerCase());
-			set.add(spec.toLowerCase());
+			const n = name.toLowerCase();
+			names.add(n);
+			if (n.startsWith("@") && n.includes("/")) names.add(n.slice(n.indexOf("/") + 1));
+			const m = /^github:([\w.-]+\/[\w.-]+)/i.exec(spec);
+			if (m !== null) repos.add(m[1].toLowerCase());
 		}
-		return set;
+		return {
+			names,
+			repos
+		};
 	}, [status]);
 	const isInstalled = (0, react.useCallback)((e) => {
-		const key = (e.owner + "/" + e.name).toLowerCase();
-		if (installedSet.has(key)) return true;
-		for (const id of installedSet) {
-			if (id !== "" && key.includes(id)) return true;
-			if (id.includes(key) && id.length > key.length && id.includes("github:")) return true;
-		}
+		if (installedInfo.repos.has((e.owner + "/" + e.name).toLowerCase())) return true;
+		if (installedInfo.names.has(e.name.toLowerCase())) return true;
+		if (e.npm !== null && installedInfo.names.has(e.npm.toLowerCase())) return true;
 		return false;
-	}, [installedSet]);
+	}, [installedInfo]);
 	/** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
 	const categoryCounts = (0, react.useMemo)(() => {
 		const per = /* @__PURE__ */ new Map();
