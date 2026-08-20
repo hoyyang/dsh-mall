@@ -80,6 +80,7 @@ export function MarketSection(props: SectionProps) {
   const [cat, setCat] = useState('all')
   const [kind, setKind] = useState<PluginKind>('all')
   const [curatedOnly, setCuratedOnly] = useState(false)
+  const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
@@ -269,7 +270,7 @@ export function MarketSection(props: SectionProps) {
   useEffect(() => {
     const timer = setTimeout(() => { fetchRegistry(false); fetchStatus() }, 150)
     return () => clearTimeout(timer)
-  }, [cat, kind, curatedOnly, sort, fetchRegistry, fetchStatus])
+  }, [cat, kind, curatedOnly, verifiedOnly, sort, fetchRegistry, fetchStatus])
 
   // Poll while a refresh or an install runs.
   useEffect(() => {
@@ -454,6 +455,7 @@ export function MarketSection(props: SectionProps) {
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
+      if (verifiedOnly && p.verified == null) continue
       if (installedOnly && !isInstalled(p)) continue
       if (favOnly && !isFav(p)) continue
       if (needle !== '') {
@@ -464,11 +466,11 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, q, installedOnly, isInstalled, favOnly, isFav])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav])
 
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -483,6 +485,44 @@ export function MarketSection(props: SectionProps) {
   useEffect(() => {
     verifyPage(pageList)
   }, [pageList, verifyPage])
+
+  // 多语言简介按需富化：语言切换/翻页后，当前页缺少 description_<lang>
+  // 的条目交给 host 抓 README.<lang>.md 首段，返回后即时替换卡片简介。
+  const descRequested = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (langChoice === 'en' || data === null) return
+    const todo: MarketEntry[] = []
+    for (const e of pageList) {
+      if (e.local === true || e.owner === '') continue
+      const key = e.owner + '/' + e.name
+      if (descRequested.current.has(langChoice + ':' + key)) continue
+      if (e.descriptions?.[langChoice] != null && e.descriptions[langChoice] !== '') continue
+      todo.push(e)
+    }
+    if (todo.length === 0) return
+    for (const e of todo) descRequested.current.add(langChoice + ':' + e.owner + '/' + e.name)
+    fetch('/dsh-store/descriptions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ lang: langChoice, repos: todo.map(e => e.owner + '/' + e.name) }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; descriptions?: Record<string, string> }) => {
+        const descs = body.descriptions ?? {}
+        setData((prev: Registry | null) => {
+          if (prev === null) return prev
+          return {
+            ...prev,
+            plugins: prev.plugins.map((e: MarketEntry) => {
+              const hit = descs[(e.owner + '/' + e.name).toLowerCase()]
+              if (hit === undefined) return e
+              return { ...e, descriptions: { ...(e.descriptions ?? {}), [langChoice]: hit } }
+            }),
+          }
+        })
+      })
+      .catch(() => {})
+  }, [langChoice, pageList, data])
 
   const doInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
@@ -787,6 +827,11 @@ export function MarketSection(props: SectionProps) {
           onClick={() => { setCuratedOnly(v => !v); setPage(1) }}
         >{t('curatedOnly')}</Pill>
         <Pill
+          className={verifiedOnly ? 'pcm-pill-verified pcm-pill-verified-on' : 'pcm-pill-verified'}
+          active={verifiedOnly}
+          onClick={() => { setVerifiedOnly(v => !v); setPage(1) }}
+        >{t('verifiedOnly')}</Pill>
+        <Pill
           className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
           active={installedOnly}
           onClick={() => { setInstalledOnly(v => !v); setPage(1) }}
@@ -796,15 +841,12 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-      </div>
-      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
-        <div className="pcm-sort-slot">
+        <div className="pcm-lang-wrap">
           <Menu
             open={langOpen}
             onClose={() => setLangOpen(false)}
             onSelect={id => { setLangChoice(id); setPage(1) }}
             align="end"
-            portal
             anchor={(
               <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
                 <span className="pcm-lang-flag">🌐</span>
@@ -815,6 +857,10 @@ export function MarketSection(props: SectionProps) {
             items={langItems}
             selectedId={langChoice}
           />
+        </div>
+      </div>
+      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
+        <div className="pcm-sort-slot">
           <Menu
             open={sortOpen}
             onClose={() => setSortOpen(false)}
@@ -897,6 +943,11 @@ export function MarketSection(props: SectionProps) {
                           />
                         </svg>
                       </button>
+                      {installed && (
+                        <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')} title={t('toggleHint')}>
+                          {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
+                        </span>
+                      )}
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
                       {installed && upd !== null && (
@@ -927,39 +978,37 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                   </div>
-                  {installed && (
-                    <div className="pcm-state-row" onClick={e => e.stopPropagation()}>
-                      <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')}>
-                        {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
-                      </span>
-                      {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
-                        <label className="pcm-switch" title={t('toggleHint')}>
-                          <input
-                            type="checkbox"
-                            checked={stateOf(entry) !== 'disabled'}
-                            disabled={toggling.has(entry.npm ?? entry.name)}
-                            onChange={() => doToggle(entry)}
-                          />
-                          <span className="pcm-switch-track" />
-                        </label>
-                      )}
-                      {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
-                        <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
-                          {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
-                        </Button>
-                      )}
-                      {entry.local !== true && (
-                        <label className="pcm-skip-row" title={t('skipHint')}>
-                          <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
-                          <span>{t('skipUpdate')}</span>
-                        </label>
-                      )}
-                    </div>
-                  )}
-                  {(entry.verified != null || disclosure != null) && (
+                  {(entry.curated || entry.verified != null || disclosure != null || installed) && (
                     <div className="pcm-safety-row">
-                      {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by)}>✓ {t('verifiedBadge')}</span>}
+                      {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>★ {t('curatedBadge')}</span>}
+                      {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>✓ {t('verifiedBadge')}</span>}
                       {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
+                      {installed && (
+                        <div className="pcm-safety-controls" onClick={e => e.stopPropagation()}>
+                          {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
+                            <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
+                              {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
+                            </Button>
+                          )}
+                          {entry.local !== true && (
+                            <label className="pcm-skip-row" title={t('skipHint')}>
+                              <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
+                              <span>{t('skipUpdate')}</span>
+                            </label>
+                          )}
+                          {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
+                            <label className="pcm-switch" title={t('toggleHint')}>
+                              <input
+                                type="checkbox"
+                                checked={stateOf(entry) !== 'disabled'}
+                                disabled={toggling.has(entry.npm ?? entry.name)}
+                                onChange={() => doToggle(entry)}
+                              />
+                              <span className="pcm-switch-track" />
+                            </label>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                   <div className="pcm-desc">{(() => {
@@ -977,7 +1026,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin">{t('pluginBadge')}</span>}
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
-                      {entry.curated && <span className="pcm-badge pcm-badge-curated">{t('curatedBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
                     </div>
                   </div>

@@ -28,6 +28,7 @@ let react = require("react");
 let _deepseek_ai_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 _deepseek_ai_dsh_client_ui_primitives = __toESM(_deepseek_ai_dsh_client_ui_primitives, 1);
 let react_jsx_runtime = require("react/jsx-runtime");
+let react_dom = require("react-dom");
 //#region src/client/locales.ts
 const en = {
 	nav: "DSH Store",
@@ -63,7 +64,7 @@ const en = {
 	kindAll: "All repos",
 	kindPlugin: "Plugins only",
 	kindNonplugin: "Non-plugins",
-	curatedOnly: "Awesome only",
+	curatedOnly: "Curated",
 	installedOnly: "Installed",
 	localBadge: "local",
 	localOwner: "local install",
@@ -187,10 +188,14 @@ const en = {
 	stateLive: "· Active",
 	stateDisabled: "· Disabled",
 	stateRestart: "· Restart to apply",
+	verifiedOnly: "Verified",
+	curatedBadgeTitle: "Listed in awesome-dsh-plugin",
+	verifiedBadgeHint: "Verified install (qing3a/dsh-plugin-verify)",
+	descLoading: "…",
 	toggleHint: "Enable / disable this plugin",
 	toggleDone: "Toggled. Changes apply via the profile watcher.",
 	toggleFailed: "Toggle failed",
-	rollbackBtn: "Rollback",
+	rollbackBtn: "Rollback to previous",
 	rollbackDone: "Rolled back.",
 	rollbackFailed: "Rollback failed",
 	skipUpdate: "Skip in Update All",
@@ -234,7 +239,7 @@ const zh = {
 	kindAll: "全部项目",
 	kindPlugin: "仅插件",
 	kindNonplugin: "非插件",
-	curatedOnly: "仅精选",
+	curatedOnly: "精选",
 	installedOnly: "已安装",
 	localBadge: "本地",
 	localOwner: "本地安装",
@@ -358,10 +363,14 @@ const zh = {
 	stateLive: "· 启用中",
 	stateDisabled: "· 未启用",
 	stateRestart: "· 重启后生效",
+	verifiedOnly: "已验证",
+	curatedBadgeTitle: "awesome-dsh-plugin 精选收录",
+	verifiedBadgeHint: "实测可装（qing3a/dsh-plugin-verify 验证）",
+	descLoading: "…",
 	toggleHint: "启用 / 停用该插件",
 	toggleDone: "已切换，profile 监听器会自动应用。",
 	toggleFailed: "切换失败",
-	rollbackBtn: "回退",
+	rollbackBtn: "回退到上一版本",
 	rollbackDone: "已回退。",
 	rollbackFailed: "回退失败",
 	skipUpdate: "不参与一键更新",
@@ -381,6 +390,7 @@ function visiblePlugins(plugins, options, isInstalled, isFav) {
 		if (options.kind === "plugin" && p.isPlugin !== true) return false;
 		if (options.kind === "nonplugin" && p.isPlugin === true) return false;
 		if (options.curatedOnly && !p.curated) return false;
+		if (options.verifiedOnly && p.verified == null) return false;
 		if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false;
 		if (options.favOnly && !(isFav?.(p) ?? false)) return false;
 		if (options.sinceDays > 0) {
@@ -467,6 +477,50 @@ function avatarColor(name) {
 * raw.githubusercontent.com (CORS-enabled) and are cached per repo+lang.
 */
 const readmeCache = /* @__PURE__ */ new Map();
+/** 探测仓库实际提供的 README 语言（Range 请求只要 64 字节，零 API 额度）。 */
+const LANG_PROBE = [
+	"en",
+	"zh",
+	"ja",
+	"ko",
+	"es",
+	"fr",
+	"de",
+	"pt",
+	"ru"
+];
+const langProbeCache = /* @__PURE__ */ new Map();
+/** 某语言 README 的候选文件名（与 host 富化同表：zh 优先 zh-CN 变体）。 */
+function readmeCandidates(lang) {
+	if (lang === "en") return ["README.md"];
+	if (lang === "zh") return [
+		"README.zh-CN.md",
+		"README.zh.md",
+		"README.zh_CN.md",
+		"README.cn.md"
+	];
+	return ["README." + lang + ".md"];
+}
+async function probeReadmeLangs(entry) {
+	const key = entry.owner + "/" + entry.name;
+	const hit = langProbeCache.get(key);
+	if (hit !== void 0) return hit;
+	const branch = entry.defaultBranch ?? "main";
+	const checks = await Promise.all(LANG_PROBE.map(async (lang) => {
+		for (const file of readmeCandidates(lang)) try {
+			const res = await fetch("https://raw.githubusercontent.com/" + entry.owner + "/" + entry.name + "/" + branch + "/" + file, {
+				headers: { range: "bytes=0-63" },
+				signal: AbortSignal.timeout(8e3)
+			});
+			if (res.status === 200 || res.status === 206) return lang;
+		} catch {}
+		return null;
+	}));
+	const langs = [];
+	for (const l of checks) if (l !== null) langs.push(l);
+	langProbeCache.set(key, langs);
+	return langs;
+}
 /** 把 README 里常见的原始 HTML 结构转为等价 Markdown，其余保持原样——
 *  MarkdownText 的 untrusted 策略会把一切 HTML 当字面文本显示（安全优先），
 *  常见 <h1 align=...>/<p>/<br>/<hr>/<img>/<a> 转成 MD 后即可正常排版。 */
@@ -475,7 +529,7 @@ function preprocessReadme(md) {
 }
 async function fetchReadme(entry, lang) {
 	const branch = entry.defaultBranch ?? "main";
-	const candidates = lang !== "en" ? ["README." + lang + ".md", "README.md"] : ["README.md"];
+	const candidates = [...readmeCandidates(lang), "README.md"];
 	let lastError = "";
 	for (const file of candidates) {
 		const url = "https://raw.githubusercontent.com/" + entry.owner + "/" + entry.name + "/" + branch + "/" + file;
@@ -542,11 +596,39 @@ function disclosureSummary(d, t) {
 }
 function DetailPanel(props) {
 	const { t, entry, langChoice } = props;
-	const readme = useReadme(entry, langChoice);
-	const desc = langChoice !== "en" && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description;
+	const [readmeLangs, setReadmeLangs] = (0, react.useState)([]);
+	const [readmeLang, setReadmeLang] = (0, react.useState)(langChoice);
+	(0, react.useEffect)(() => {
+		let alive = true;
+		probeReadmeLangs(entry).then((langs) => {
+			if (!alive) return;
+			setReadmeLangs(langs);
+			if (langs.length > 0 && !langs.includes(readmeLang)) setReadmeLang(langs.includes(langChoice) ? langChoice : "en");
+		});
+		return () => {
+			alive = false;
+		};
+	}, [
+		entry,
+		langChoice,
+		readmeLang
+	]);
+	const readme = useReadme(entry, readmeLang);
+	const desc = readmeLang !== "en" && entry.descriptions?.[readmeLang] ? entry.descriptions[readmeLang] : entry.description;
 	const disclosure = entry.disclosure;
 	const discLines = (0, react.useMemo)(() => disclosure == null ? [] : disclosureSummary(disclosure, t), [disclosure, t]);
 	const [copied, setCopied] = (0, react.useState)(false);
+	const LANG_LABELS = {
+		en: "English",
+		zh: "中文",
+		ja: "日本語",
+		ko: "한국어",
+		es: "Español",
+		fr: "Français",
+		de: "Deutsch",
+		pt: "Português",
+		ru: "Русский"
+	};
 	const copyCmd = () => {
 		const cmd = entry.npm !== null ? "dsh plugin add " + entry.npm : "dsh plugin add github:" + entry.owner + "/" + entry.name;
 		navigator.clipboard?.writeText(cmd);
@@ -622,6 +704,22 @@ function DetailPanel(props) {
 											strokeLinejoin: "round"
 										})
 									})
+								}),
+								readmeLangs.length > 1 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+									className: "pcm-lang-select-wrap",
+									title: t("langToggle"),
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "pcm-lang-flag",
+										children: "🌐"
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("select", {
+										className: "pcm-lang-select",
+										value: readmeLang,
+										onChange: (e) => setReadmeLang(e.target.value),
+										children: readmeLangs.map((l) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
+											value: l,
+											children: LANG_LABELS[l] ?? l
+										}, l))
+									})]
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: "pcm-detail-actions",
@@ -903,6 +1001,7 @@ function MarketSection(props) {
 	const [cat, setCat] = (0, react.useState)("all");
 	const [kind, setKind] = (0, react.useState)("all");
 	const [curatedOnly, setCuratedOnly] = (0, react.useState)(false);
+	const [verifiedOnly, setVerifiedOnly] = (0, react.useState)(false);
 	const [installedOnly, setInstalledOnly] = (0, react.useState)(false);
 	const [favOnly, setFavOnly] = (0, react.useState)(false);
 	const [favorites, setFavorites] = (0, react.useState)(/* @__PURE__ */ new Set());
@@ -1098,6 +1197,7 @@ function MarketSection(props) {
 		cat,
 		kind,
 		curatedOnly,
+		verifiedOnly,
 		sort,
 		fetchRegistry,
 		fetchStatus
@@ -1287,6 +1387,7 @@ function MarketSection(props) {
 			if (kind === "plugin" && p.isPlugin !== true) continue;
 			if (kind === "nonplugin" && p.isPlugin === true) continue;
 			if (curatedOnly && !p.curated) continue;
+			if (verifiedOnly && p.verified == null) continue;
 			if (installedOnly && !isInstalled(p)) continue;
 			if (favOnly && !isFav(p)) continue;
 			if (needle !== "") {
@@ -1303,6 +1404,7 @@ function MarketSection(props) {
 		plugins,
 		kind,
 		curatedOnly,
+		verifiedOnly,
 		q,
 		installedOnly,
 		isInstalled,
@@ -1313,6 +1415,7 @@ function MarketSection(props) {
 		category: cat,
 		kind,
 		curatedOnly,
+		verifiedOnly,
 		installedOnly,
 		favOnly,
 		query: q,
@@ -1324,6 +1427,7 @@ function MarketSection(props) {
 		cat,
 		kind,
 		curatedOnly,
+		verifiedOnly,
 		installedOnly,
 		favOnly,
 		q,
@@ -1341,6 +1445,51 @@ function MarketSection(props) {
 	(0, react.useEffect)(() => {
 		verifyPage(pageList);
 	}, [pageList, verifyPage]);
+	const descRequested = (0, react.useRef)(/* @__PURE__ */ new Set());
+	(0, react.useEffect)(() => {
+		if (langChoice === "en" || data === null) return;
+		const todo = [];
+		for (const e of pageList) {
+			if (e.local === true || e.owner === "") continue;
+			const key = e.owner + "/" + e.name;
+			if (descRequested.current.has(langChoice + ":" + key)) continue;
+			if (e.descriptions?.[langChoice] != null && e.descriptions[langChoice] !== "") continue;
+			todo.push(e);
+		}
+		if (todo.length === 0) return;
+		for (const e of todo) descRequested.current.add(langChoice + ":" + e.owner + "/" + e.name);
+		fetch("/dsh-store/descriptions", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				lang: langChoice,
+				repos: todo.map((e) => e.owner + "/" + e.name)
+			})
+		}).then((res) => res.json()).then((body) => {
+			const descs = body.descriptions ?? {};
+			setData((prev) => {
+				if (prev === null) return prev;
+				return {
+					...prev,
+					plugins: prev.plugins.map((e) => {
+						const hit = descs[(e.owner + "/" + e.name).toLowerCase()];
+						if (hit === void 0) return e;
+						return {
+							...e,
+							descriptions: {
+								...e.descriptions ?? {},
+								[langChoice]: hit
+							}
+						};
+					})
+				};
+			});
+		}).catch(() => {});
+	}, [
+		langChoice,
+		pageList,
+		data
+	]);
 	const doInstall = (0, react.useCallback)((entry) => {
 		setConfirming(null);
 		fetch("/dsh-store/install", {
@@ -1787,6 +1936,15 @@ function MarketSection(props) {
 								children: t("curatedOnly")
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
+								className: verifiedOnly ? "pcm-pill-verified pcm-pill-verified-on" : "pcm-pill-verified",
+								active: verifiedOnly,
+								onClick: () => {
+									setVerifiedOnly((v) => !v);
+									setPage(1);
+								},
+								children: t("verifiedOnly")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
 								className: installedOnly ? "pcm-pill-installed pcm-pill-installed-on" : "pcm-pill-installed",
 								active: installedOnly,
 								onClick: () => {
@@ -1803,16 +1961,10 @@ function MarketSection(props) {
 									setPage(1);
 								},
 								children: t("favOnly")
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						className: catsClamped ? "pcm-chips pcm-chips-clamped" : "pcm-chips",
-						ref: chipsRef,
-						children: [
-							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-								className: "pcm-sort-slot",
-								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+								className: "pcm-lang-wrap",
+								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
 									open: langOpen,
 									onClose: () => setLangOpen(false),
 									onSelect: (id) => {
@@ -1820,7 +1972,6 @@ function MarketSection(props) {
 										setPage(1);
 									},
 									align: "end",
-									portal: true,
 									anchor: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
 										type: "button",
 										className: "pcm-lang-btn" + (langOpen ? " pcm-lang-btn-open" : ""),
@@ -1842,7 +1993,17 @@ function MarketSection(props) {
 									}),
 									items: langItems,
 									selectedId: langChoice
-								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
+								})
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						className: catsClamped ? "pcm-chips pcm-chips-clamped" : "pcm-chips",
+						ref: chipsRef,
+						children: [
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+								className: "pcm-sort-slot",
+								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Menu, {
 									open: sortOpen,
 									onClose: () => setSortOpen(false),
 									onSelect: (id) => {
@@ -1861,7 +2022,7 @@ function MarketSection(props) {
 									}),
 									items: sortItems,
 									selectedIds: [sortDim, sortDir]
-								})]
+								})
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
 								active: cat === "all",
@@ -1962,6 +2123,11 @@ function MarketSection(props) {
 															strokeLinejoin: "round"
 														})
 													})
+												}),
+												installed && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
+													title: t("toggleHint"),
+													children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
 												})
 											]
 										}),
@@ -2033,57 +2199,61 @@ function MarketSection(props) {
 										})
 									]
 								}),
-								installed && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-state-row",
-									onClick: (e) => e.stopPropagation(),
+								(entry.curated || entry.verified != null || disclosure != null || installed) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-safety-row",
 									children: [
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
-											children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
+										entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+											className: "pcm-safety pcm-safety-curated",
+											title: t("curatedBadgeTitle"),
+											children: ["★ ", t("curatedBadge")]
 										}),
-										!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
-											className: "pcm-switch",
-											title: t("toggleHint"),
-											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: stateOf(entry) !== "disabled",
-												disabled: toggling.has(entry.npm ?? entry.name),
-												onChange: () => doToggle(entry)
-											}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-switch-track" })]
+										entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+											className: "pcm-safety pcm-safety-verified",
+											title: t("verifiedBadgeHint") + " · " + entry.verified.by,
+											children: ["✓ ", t("verifiedBadge")]
 										}),
-										entry.local !== true && rollbacks[entry.npm ?? entry.name] !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-											variant: "ghost",
-											size: "sm",
-											className: "pcm-rollback-btn",
-											disabled: rollbacking === entry.name,
-											onClick: () => doRollback(entry),
-											children: rollbacking === entry.name ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: "pcm-spin",
-												children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
-											}) : t("rollbackBtn")
+										disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+											className: "pcm-safety pcm-safety-disclosure",
+											title: t("disclosureBadge"),
+											children: ["🛡 ", t("disclosureBadge")]
 										}),
-										entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
-											className: "pcm-skip-row",
-											title: t("skipHint"),
-											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: skipSet.has((entry.npm ?? entry.name).toLowerCase()),
-												onChange: () => doToggleSkip(entry)
-											}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
+										installed && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+											className: "pcm-safety-controls",
+											onClick: (e) => e.stopPropagation(),
+											children: [
+												entry.local !== true && rollbacks[entry.npm ?? entry.name] !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+													variant: "ghost",
+													size: "sm",
+													className: "pcm-rollback-btn",
+													disabled: rollbacking === entry.name,
+													onClick: () => doRollback(entry),
+													children: rollbacking === entry.name ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+														className: "pcm-spin",
+														children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+													}) : t("rollbackBtn")
+												}),
+												entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+													className: "pcm-skip-row",
+													title: t("skipHint"),
+													children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+														type: "checkbox",
+														checked: skipSet.has((entry.npm ?? entry.name).toLowerCase()),
+														onChange: () => doToggleSkip(entry)
+													}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
+												}),
+												!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+													className: "pcm-switch",
+													title: t("toggleHint"),
+													children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+														type: "checkbox",
+														checked: stateOf(entry) !== "disabled",
+														disabled: toggling.has(entry.npm ?? entry.name),
+														onChange: () => doToggle(entry)
+													}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-switch-track" })]
+												})
+											]
 										})
 									]
-								}),
-								(entry.verified != null || disclosure != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-safety-row",
-									children: [entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-										className: "pcm-safety pcm-safety-verified",
-										title: t("verifiedHintTitle").replace("{0}", entry.verified.by),
-										children: ["✓ ", t("verifiedBadge")]
-									}), disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-										className: "pcm-safety pcm-safety-disclosure",
-										title: t("disclosureBadge"),
-										children: ["🛡 ", t("disclosureBadge")]
-									})]
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 									className: "pcm-desc",
@@ -2134,10 +2304,6 @@ function MarketSection(props) {
 											entry.isPlugin === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-pending",
 												children: t("pendingBadge")
-											}),
-											entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: "pcm-badge pcm-badge-curated",
-												children: t("curatedBadge")
 											}),
 											entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-local",
@@ -2664,9 +2830,90 @@ function SettingsCard(props) {
 	});
 }
 //#endregion
+//#region src/client/StoreWindow.tsx
+/**
+* 独立浮窗入口：sidebar 底部「DSH 商店」按钮 → 与设置浮窗同款
+* （居中圆角卡片 + 毛玻璃遮罩）的全尺寸商店浮窗，MarketSection 占满整个
+* 浮窗内容区。Escape / 遮罩点击 / 关闭按钮均可关闭。
+*/
+function SidebarStoreButton(props) {
+	const [open, setOpen] = (0, react.useState)(false);
+	return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
+		type: "button",
+		className: "pcm-sidebar-btn" + (props.wide ? "" : " pcm-sidebar-rail"),
+		title: props.t("nav"),
+		onClick: () => setOpen(true),
+		children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
+			className: "pcm-sidebar-icon",
+			src: ICON_DATA,
+			alt: "",
+			width: 18,
+			height: 18
+		}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+			className: "pcm-sidebar-label",
+			children: props.t("nav")
+		})]
+	}), open && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(StoreWindow, {
+		t: props.t,
+		locale: props.locale,
+		onClose: () => setOpen(false)
+	})] });
+}
+function StoreWindow(props) {
+	(0, react.useEffect)(() => {
+		const onKey = (e) => {
+			if (e.key === "Escape") props.onClose();
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [props]);
+	return (0, react_dom.createPortal)(/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+		className: "pcm-store-overlay",
+		children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+			className: "pcm-store-mask",
+			onClick: props.onClose
+		}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+			className: "pcm-store-window",
+			role: "dialog",
+			"aria-label": props.t("nav"),
+			"aria-modal": "true",
+			children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				className: "pcm-store-head",
+				children: [
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
+						className: "pcm-sidebar-icon",
+						src: ICON_DATA,
+						alt: "",
+						width: 18,
+						height: 18
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+						className: "pcm-store-head-title",
+						children: props.t("nav")
+					}),
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "ghost",
+						size: "sm",
+						icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCheckOutline16, { size: 14 }),
+						onClick: props.onClose,
+						className: "pcm-store-close",
+						title: props.t("close")
+					})
+				]
+			}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				className: "pcm-store-body",
+				children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(MarketSection, {
+					t: props.t,
+					locale: props.locale
+				})
+			})]
+		})]
+	}), document.body);
+}
+//#endregion
 //#region src/client/styles.ts
 /** Inline stylesheet: injected once with a data-plugin tag; hot reloads replace its content in place. */
-const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:hidden}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff)}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap}.pcm-safety{font-size:9.5px;padding:1px 7px;border-radius:4px;line-height:15px;white-space:nowrap;font-weight:600;letter-spacing:.2px}.pcm-safety-verified{color:#15803d;background:linear-gradient(180deg,rgba(34,197,94,.18),rgba(34,197,94,.07));border:1px solid rgba(34,197,94,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(34,197,94,.12)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-detail-modal{width:min(880px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:52vh;overflow-y:scroll}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
+const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:hidden}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);min-width:112px;justify-content:center}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{margin-left:-2px}.pcm-toolbar-search .pcm-search{width:100%}.pcm-search,.pcm-search input,.pcm-search > div,.pcm-search > span{border:1.5px solid rgba(4,5,6,.72) !important}.pcm-search{border:1.5px solid rgba(4,5,6,.72) !important;border-radius:8px !important;box-shadow:0 0 0 1px rgba(4,5,6,.72) !important;background:var(--dsw-alias-bg-base,#fff) !important}.pcm-search input{color:rgba(15,17,21,.92) !important}.pcm-search input::placeholder{color:rgba(15,17,21,.5) !important}.pcm-search svg{color:#040506 !important;opacity:.85}.pcm-search{flex:1 1 220px;min-width:180px}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:#dc2626 !important;color:#fff !important;border-radius:8px !important;border:none}.pcm-uninstall-btn:hover{background:#b91c1c !important;color:#fff !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-verified{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-verified::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-verified:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-verified-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-verified-on::before{color:#fff}.pcm-toolbar .pcm-pill-verified-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-wrap{margin-left:auto;margin-right:8px;display:inline-flex;align-items:center}.pcm-toolbar .pcm-lang-btn{margin-left:auto;margin-right:8px}.pcm-lang-select-wrap{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(4,5,6,.7);color:#040506;background:transparent;border-radius:0;font-weight:600;padding:3px 7px;font-size:12px;line-height:1}.pcm-lang-select{border:none;background:transparent;color:inherit;font-weight:600;font-size:12px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:10px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 5px) 50%;background-size:3px 3px,3px 3px;background-repeat:no-repeat}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap;align-items:center}.pcm-safety-controls{display:inline-flex;align-items:center;gap:8px;margin-left:auto}.pcm-safety{font-size:9.5px;padding:1px 7px;border-radius:4px;line-height:15px;white-space:nowrap;font-weight:600;letter-spacing:.2px}.pcm-safety-verified{color:#15803d;background:linear-gradient(180deg,rgba(34,197,94,.18),rgba(34,197,94,.07));border:1px solid rgba(34,197,94,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(34,197,94,.12)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-curated{color:#a62b21;background:linear-gradient(180deg,rgba(200,58,47,.16),rgba(200,58,47,.06));border:1px solid rgba(200,58,47,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(200,58,47,.12)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-detail-modal{width:min(880px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:52vh;overflow-y:scroll}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}.pcm-store-overlay{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center}.pcm-store-mask{position:absolute;inset:0;background:rgba(15,17,21,.45);backdrop-filter:blur(6px)}.pcm-store-window{position:relative;width:min(940px,94vw);height:min(680px,92vh);background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.25);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}.pcm-store-window .pcm-root{flex:1 1 auto;height:auto !important;max-height:none;overflow:hidden;display:flex}.pcm-store-window .pcm-sticky-top{position:relative}.pcm-store-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 16px 0}.pcm-store-head-title{font-size:13.5px;font-weight:700;flex:1 1 auto}.pcm-store-close{flex:none}.pcm-store-body{flex:1 1 auto;min-height:0;padding:0 16px 14px;display:flex;flex-direction:column}.pcm-store-body .pcm-root{height:100% !important;flex:1 1 auto;min-height:0}.pcm-sidebar-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;background:transparent;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px;font-weight:600;color:inherit;width:100%}.pcm-sidebar-btn:hover{background:rgba(128,128,128,.12)}.pcm-sidebar-icon{width:18px;height:18px;flex:none}.pcm-sidebar-rail{justify-content:center;padding:5px 0}.pcm-sidebar-rail .pcm-sidebar-label{display:none}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
 function injectStyles() {
 	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-store\"]");
 	stale.forEach((tag, index) => {
@@ -2729,6 +2976,16 @@ function apply(ctx) {
 		t,
 		locale: ctx.locale
 	})));
+	ctx.slots.inject("sidebar.footer.action", () => ctx.slots.register({
+		name: "sidebar.footer.action",
+		id: "dsh-store",
+		order: 10,
+		locale: NS
+	}, ((props) => (0, react.createElement)(SidebarStoreButton, {
+		wide: props?.wide === true,
+		t,
+		locale: ctx.locale
+	}))));
 	ctx.inject(["settingsScope"], (scoped) => {
 		scoped.slots.inject("settings.plugin.item", () => scoped.slots.register({
 			name: "settings.plugin.item",

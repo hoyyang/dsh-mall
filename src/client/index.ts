@@ -10,6 +10,7 @@ import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh } from './locales.ts'
 import { MarketSection } from './MarketSection.tsx'
 import { SettingsCard } from './SettingsCard.tsx'
+import { SidebarStoreButton } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
 
 const NS = 'dsh-store'
@@ -63,6 +64,20 @@ export function apply(ctx: MarketClientContext): void {
     t,
     locale: ctx.locale,
   })))
+
+  // 首页侧边栏底部（设置按钮上方）：「DSH 商店」入口按钮 → 独立浮窗。
+  // sidebar.footer.action 是 list slot（官方 sidebar 契约，owner props 带
+  // wide）；注册失败（老宿主没有该 slot）时静默跳过，不影响设置内入口。
+  ctx.slots.inject('sidebar.footer.action', () => ctx.slots.register({
+    name: 'sidebar.footer.action',
+    id: 'dsh-store',
+    order: 10,
+    locale: NS,
+  }, ((props?: { wide?: boolean }) => h(SidebarStoreButton, {
+    wide: props?.wide === true,
+    t,
+    locale: ctx.locale,
+  })) as unknown as () => unknown))
 
   // Settings card (dsh >= rc.7): nested inject so older hosts simply skip it.
   const settingsCtx = ctx as unknown as {

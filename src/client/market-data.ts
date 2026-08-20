@@ -63,6 +63,7 @@ export interface ListQuery {
   category: string
   kind: PluginKind
   curatedOnly: boolean
+  verifiedOnly: boolean
   installedOnly: boolean
   favOnly: boolean
   query: string
@@ -79,6 +80,7 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     if (options.kind === 'plugin' && p.isPlugin !== true) return false
     if (options.kind === 'nonplugin' && p.isPlugin === true) return false
     if (options.curatedOnly && !p.curated) return false
+    if (options.verifiedOnly && p.verified == null) return false
     if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false
     if (options.favOnly && !(isFav?.(p) ?? false)) return false
     if (options.sinceDays > 0) {

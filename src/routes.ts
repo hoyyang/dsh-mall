@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { computeUpdates, compareVersions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
+import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
@@ -230,6 +230,34 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       sendJson(response, 200, locked.value)
+    },
+  }))
+
+  // 多语言简介按需富化：POST {lang, repos[]} — 抓 README.<lang>.md 首段。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/descriptions',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const lang = typeof body.lang === 'string' && /^[a-z]{2}$/i.test(body.lang) ? body.lang.toLowerCase() : null
+      const repos = Array.isArray(body.repos) ? body.repos.filter(parseRepo).slice(0, 48) : []
+      if (lang === null || repos.length === 0) {
+        sendJson(response, 200, { ok: true, descriptions: {} })
+        return
+      }
+      const descriptions = await fetchLocalizedDescriptions(lang, repos)
+      sendJson(response, 200, { ok: true, descriptions })
     },
   }))
 

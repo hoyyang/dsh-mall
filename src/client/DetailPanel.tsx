@@ -20,6 +20,42 @@ import { formatStars, relativeFromNow, type MarketEntry } from './market-data.ts
 
 const readmeCache = new Map<string, { status: 'ok' | 'error'; text: string }>()
 
+/** 探测仓库实际提供的 README 语言（Range 请求只要 64 字节，零 API 额度）。 */
+const LANG_PROBE = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
+const langProbeCache = new Map<string, string[]>()
+
+/** 某语言 README 的候选文件名（与 host 富化同表：zh 优先 zh-CN 变体）。 */
+function readmeCandidates(lang: string): string[] {
+  if (lang === 'en') return ['README.md']
+  if (lang === 'zh') return ['README.zh-CN.md', 'README.zh.md', 'README.zh_CN.md', 'README.cn.md']
+  return ['README.' + lang + '.md']
+}
+
+async function probeReadmeLangs(entry: MarketEntry): Promise<string[]> {
+  const key = entry.owner + '/' + entry.name
+  const hit = langProbeCache.get(key)
+  if (hit !== undefined) return hit
+  const branch = entry.defaultBranch ?? 'main'
+  const checks = await Promise.all(LANG_PROBE.map(async lang => {
+    for (const file of readmeCandidates(lang)) {
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/' + entry.owner + '/' + entry.name + '/' + branch + '/' + file, {
+          headers: { range: 'bytes=0-63' },
+          signal: AbortSignal.timeout(8_000),
+        })
+        if (res.status === 200 || res.status === 206) return lang as string
+      } catch {
+        /* 尝试下一个候选 */
+      }
+    }
+    return null
+  }))
+  const langs: string[] = []
+  for (const l of checks) if (l !== null) langs.push(l)
+  langProbeCache.set(key, langs)
+  return langs
+}
+
 /** 把 README 里常见的原始 HTML 结构转为等价 Markdown，其余保持原样——
  *  MarkdownText 的 untrusted 策略会把一切 HTML 当字面文本显示（安全优先），
  *  常见 <h1 align=...>/<p>/<br>/<hr>/<img>/<a> 转成 MD 后即可正常排版。 */
@@ -45,9 +81,7 @@ function preprocessReadme(md: string): string {
 
 async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 'ok' | 'error'; text: string }> {
   const branch = entry.defaultBranch ?? 'main'
-  const candidates = lang !== 'en'
-    ? ['README.' + lang + '.md', 'README.md']
-    : ['README.md']
+  const candidates = [...readmeCandidates(lang), 'README.md']
   let lastError = ''
   for (const file of candidates) {
     const url = 'https://raw.githubusercontent.com/' + entry.owner + '/' + entry.name + '/' + branch + '/' + file
@@ -119,11 +153,23 @@ export function DetailPanel(props: {
   onClose: () => void
 }) {
   const { t, entry, langChoice } = props
-  const readme = useReadme(entry, langChoice)
-  const desc = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
+  const [readmeLangs, setReadmeLangs] = useState<string[]>([])
+  const [readmeLang, setReadmeLang] = useState<string>(langChoice)
+  useEffect(() => {
+    let alive = true
+    void probeReadmeLangs(entry).then(langs => {
+      if (!alive) return
+      setReadmeLangs(langs)
+      if (langs.length > 0 && !langs.includes(readmeLang)) setReadmeLang(langs.includes(langChoice) ? langChoice : 'en')
+    })
+    return () => { alive = false }
+  }, [entry, langChoice, readmeLang])
+  const readme = useReadme(entry, readmeLang)
+  const desc = readmeLang !== 'en' && entry.descriptions?.[readmeLang] ? entry.descriptions[readmeLang] : entry.description
   const disclosure = entry.disclosure
   const discLines = useMemo(() => (disclosure == null ? [] : disclosureSummary(disclosure, t)), [disclosure, t])
   const [copied, setCopied] = useState(false)
+  const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
   const copyCmd = () => {
     const cmd = entry.npm !== null ? 'dsh plugin add ' + entry.npm : 'dsh plugin add github:' + entry.owner + '/' + entry.name
     void navigator.clipboard?.writeText(cmd)
@@ -178,6 +224,20 @@ export function DetailPanel(props: {
                 />
               </svg>
             </button>
+            {readmeLangs.length > 1 && (
+              <label className="pcm-lang-select-wrap" title={t('langToggle')}>
+                <span className="pcm-lang-flag">🌐</span>
+                <select
+                  className="pcm-lang-select"
+                  value={readmeLang}
+                  onChange={e => setReadmeLang(e.target.value)}
+                >
+                  {readmeLangs.map(l => (
+                    <option key={l} value={l}>{LANG_LABELS[l] ?? l}</option>
+                  ))}
+                </select>
+              </label>
+            )}
             <div className="pcm-detail-actions">
               {props.isInstalled ? (
                 <>

@@ -20,6 +20,7 @@ export declare function readSkipUpdates(profile: string): Set<string>;
 export declare function setSkipUpdate(profile: string, name: string, skip: boolean): string[];
 export declare function toggleFavorite(profile: string, key: string): string[];
 export declare function applyVerdicts(profile: string, updates: Record<string, boolean>): void;
+export declare function fetchLocalizedDescriptions(lang: string, repos: string[]): Promise<Record<string, string>>;
 /** 可更新插件：已装依赖 spec 里的版本 vs 索引 npm_version（npm registry latest）。 */
 export interface PluginUpdate {
     /** profile 依赖键名（npm 包名） */
