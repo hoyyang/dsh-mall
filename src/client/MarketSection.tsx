@@ -234,10 +234,14 @@ export function MarketSection(props: SectionProps) {
     const repos = new Set<string>()
     const deps = status?.installed ?? {}
     for (const [name, spec] of Object.entries(deps)) {
+      const s = String(spec).trim()
+      // 本地 link:/file: 安装没有市场身份（无 owner/repo 可对应），跳过，
+      // 否则同名仓库会被误标已安装（如别人的 dsh-store 撞名本地包）。
+      if (s.startsWith('link:') || s.startsWith('file:')) continue
       const n = name.toLowerCase()
       names.add(n)
       if (n.startsWith('@') && n.includes('/')) names.add(n.slice(n.indexOf('/') + 1))
-      const m = /^github:([\w.-]+\/[\w.-]+)/i.exec(spec)
+      const m = /^github:([\w.-]+\/[\w.-]+)/i.exec(s)
       if (m !== null) repos.add(m[1].toLowerCase())
     }
     return { names, repos }
@@ -414,8 +418,16 @@ export function MarketSection(props: SectionProps) {
           <button className={kind === 'plugin' ? 'on' : ''} onClick={() => { setKind('plugin'); setPage(1) }}>{t('kindPlugin')}</button>
           <button className={kind === 'nonplugin' ? 'on' : ''} onClick={() => { setKind('nonplugin'); setPage(1) }}>{t('kindNonplugin')}</button>
         </div>
-        <Pill active={curatedOnly} onClick={() => { setCuratedOnly(v => !v); setPage(1) }}>{t('curatedOnly')}</Pill>
-        <Pill active={installedOnly} onClick={() => { setInstalledOnly(v => !v); setPage(1) }}>{t('installedOnly')}</Pill>
+        <Pill
+          className={curatedOnly ? 'pcm-pill-curated pcm-pill-curated-on' : 'pcm-pill-curated'}
+          active={curatedOnly}
+          onClick={() => { setCuratedOnly(v => !v); setPage(1) }}
+        >{t('curatedOnly')}</Pill>
+        <Pill
+          className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
+          active={installedOnly}
+          onClick={() => { setInstalledOnly(v => !v); setPage(1) }}
+        >{t('installedOnly')}</Pill>
         <Menu
           open={sortOpen}
           onClose={() => setSortOpen(false)}
