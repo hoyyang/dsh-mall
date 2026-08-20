@@ -116,6 +116,8 @@ export function MarketSection(props: SectionProps) {
   // Panel-height lock: the root fills the settings panel's visible area so
   // the catalog list scrolls INSIDE the section (header and pager stay put,
   // and the scrollbar covers exactly the scrollable list region).
+  // v1.2.5: also capped to the viewport (innerHeight - root top - margin) so
+  // the page never scrolls on any screen size — everything fits at once.
   useLayoutEffect(() => {
     const root = rootRef.current
     if (root === null) return
@@ -123,7 +125,11 @@ export function MarketSection(props: SectionProps) {
       let el: HTMLElement | null = root.parentElement
       while (el !== null && el.getBoundingClientRect().height < 100) el = el.parentElement
       if (el === null) return
-      root.style.height = el.getBoundingClientRect().height + 'px'
+      const parentH = el.getBoundingClientRect().height
+      const top = root.getBoundingClientRect().top
+      const viewportH = window.innerHeight - top - 16
+      const h = Math.max(240, Math.min(parentH, viewportH))
+      root.style.height = Math.round(h) + 'px'
     }
     update()
     const ro = new ResizeObserver(update)
@@ -240,19 +246,38 @@ export function MarketSection(props: SectionProps) {
       if (s.startsWith('link:') || s.startsWith('file:')) continue
       const n = name.toLowerCase()
       names.add(n)
-      if (n.startsWith('@') && n.includes('/')) names.add(n.slice(n.indexOf('/') + 1))
       const m = /^github:([\w.-]+\/[\w.-]+)/i.exec(s)
       if (m !== null) repos.add(m[1].toLowerCase())
     }
     return { names, repos }
   }, [status])
 
+  /** Name collisions across the catalog:同名/同 npm 仓库不止一个时，
+   *  只有精选（人工核实）条目才允许按名字判已安装，其余视为撞名不放行。 */
+  const identityCounts = useMemo(() => {
+    const names = new Map<string, number>()
+    const npms = new Map<string, number>()
+    for (const p of plugins) {
+      const n = p.name.toLowerCase()
+      names.set(n, (names.get(n) ?? 0) + 1)
+      if (p.npm !== null) {
+        const pn = p.npm.toLowerCase()
+        npms.set(pn, (npms.get(pn) ?? 0) + 1)
+      }
+    }
+    return { names, npms }
+  }, [plugins])
+
   const isInstalled = useCallback((e: MarketEntry): boolean => {
     if (installedInfo.repos.has((e.owner + '/' + e.name).toLowerCase())) return true
-    if (installedInfo.names.has(e.name.toLowerCase())) return true
-    if (e.npm !== null && installedInfo.names.has(e.npm.toLowerCase())) return true
+    const nm = e.name.toLowerCase()
+    if (installedInfo.names.has(nm) && (identityCounts.names.get(nm) === 1 || e.curated)) return true
+    if (e.npm !== null) {
+      const pn = e.npm.toLowerCase()
+      if (installedInfo.names.has(pn) && (identityCounts.npms.get(pn) === 1 || e.curated)) return true
+    }
     return false
-  }, [installedInfo])
+  }, [installedInfo, identityCounts])
 
   /** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
   const categoryCounts = useMemo(() => {
