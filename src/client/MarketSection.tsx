@@ -73,7 +73,12 @@ export function MarketSection(props: SectionProps) {
   const [kind, setKind] = useState<PluginKind>('all')
   const [curatedOnly, setCuratedOnly] = useState(false)
   const [installedOnly, setInstalledOnly] = useState(false)
-  const [sort, setSort] = useState<SortKey>('stars-desc')
+  const [favOnly, setFavOnly] = useState(false)
+  const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created'>('stars')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+  const sort = (sortDim + '-' + sortDir) as SortKey
+  const [langChoice, setLangChoice] = useState<'en' | 'zh'>('en')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(24)
   const [sortOpen, setSortOpen] = useState(false)
@@ -103,6 +108,13 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/status', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: StatusBody) => setStatus(body))
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    fetch('/dsh-store/favorites', { cache: 'no-store' })
+      .then(res => res.json())
+      .then((body: { favorites?: string[] }) => setFavorites(new Set(body.favorites ?? [])))
       .catch(() => {})
   }, [])
 
@@ -359,6 +371,21 @@ export function MarketSection(props: SectionProps) {
     return false
   }, [installedInfo, identityCounts, installedAll])
 
+  const favKey = (e: MarketEntry): string => (e.local === true ? 'local:' + e.name : e.owner + '/' + e.name).toLowerCase()
+  const isFav = useCallback((e: MarketEntry): boolean => favorites.has(favKey(e)), [favorites])
+  const toggleFav = useCallback((e: MarketEntry) => {
+    const key = favKey(e)
+    const next = new Set(favorites)
+    if (next.has(key)) next.delete(key)
+    else next.add(key)
+    setFavorites(next)
+    fetch('/dsh-store/favorites', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ key }),
+    }).catch(() => {})
+  }, [favorites])
+
   /** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
   const categoryCounts = useMemo(() => {
     const per = new Map<string, number>()
@@ -369,6 +396,7 @@ export function MarketSection(props: SectionProps) {
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
       if (installedOnly && !isInstalled(p)) continue
+      if (favOnly && !isFav(p)) continue
       if (needle !== '') {
         const hay = (p.name + ' ' + p.owner + ' ' + p.description).toLowerCase()
         if (!hay.includes(needle)) continue
@@ -377,11 +405,11 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, q, installedOnly, isInstalled])
+  }, [plugins, kind, curatedOnly, q, installedOnly, isInstalled, favOnly, isFav])
 
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, installedOnly, query: q, sort, sinceDays: 0, lang }, isInstalled),
-    [plugins, cat, kind, curatedOnly, installedOnly, q, sort, lang, isInstalled],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -443,10 +471,14 @@ export function MarketSection(props: SectionProps) {
   }, [toast])
 
   const sortItems = useMemo<MenuEntry[]>(() => [
-    { id: 'stars-desc', label: t('sortStarsDesc') },
-    { id: 'stars-asc', label: t('sortStarsAsc') },
-    { id: 'today-desc', label: t('sortTodayDesc') },
-    { id: 'today-asc', label: t('sortTodayAsc') },
+    { type: 'label', id: 'dim-label', text: t('sortDim') },
+    { id: 'stars', label: t('sortStars') },
+    { id: 'today', label: t('sortToday') },
+    { id: 'created', label: t('sortCreated') },
+    { type: 'separator', id: 'dim-sep' },
+    { type: 'label', id: 'dir-label', text: t('sortDir') },
+    { id: 'desc', label: t('sortDesc') },
+    { id: 'asc', label: t('sortAsc') },
   ], [t])
 
   const sizeItems = useMemo<MenuEntry[]>(() => PAGE_SIZES.map(n => ({ id: String(n), label: String(n) })), [])
@@ -548,17 +580,34 @@ export function MarketSection(props: SectionProps) {
           active={installedOnly}
           onClick={() => { setInstalledOnly(v => !v); setPage(1) }}
         >{t('installedOnly')}</Pill>
+        <Pill
+          className={favOnly ? 'pcm-pill-fav pcm-pill-fav-on' : 'pcm-pill-fav'}
+          active={favOnly}
+          onClick={() => { setFavOnly(v => !v); setPage(1) }}
+        >{t('favOnly')}</Pill>
         <Menu
           open={sortOpen}
           onClose={() => setSortOpen(false)}
-          onSelect={id => { setSort(id as SortKey); setPage(1) }}
+          onSelect={id => {
+            if (id === 'stars' || id === 'today' || id === 'created') setSortDim(id)
+            else if (id === 'asc' || id === 'desc') setSortDir(id)
+            setPage(1)
+          }}
           align="end"
           anchor={(
-            <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort')}</Button>
+            <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort') + ' ' + (sortDir === 'desc' ? '↓' : '↑')}</Button>
           )}
           items={sortItems}
-          selectedId={sort}
+          selectedIds={[sortDim, sortDir]}
         />
+        <Button
+          variant="outline"
+          size="sm"
+          className="pcm-lang-btn"
+          onClick={() => setLangChoice(v => (v === 'zh' ? 'en' : 'zh'))}
+        >
+          {langChoice === 'zh' ? '🌐 中文' : '🌐 EN'}
+        </Button>
       </div>
       <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
         <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
@@ -611,6 +660,13 @@ export function MarketSection(props: SectionProps) {
                       <span className="pcm-owner">{entry.owner}</span>
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={isFav(entry) ? 'pcm-fav-btn pcm-fav-on' : 'pcm-fav-btn'}
+                        title={t('favAdd')}
+                        onClick={() => toggleFav(entry)}
+                      >★</Button>
                       {installed ? (
                         <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
                       ) : (
@@ -624,7 +680,10 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                   </div>
-                  <div className="pcm-desc">{entry.description === '' ? '—' : entry.description}</div>
+                  <div className="pcm-desc">{(() => {
+                    const d = langChoice === 'zh' && entry.descriptionZh !== null && entry.descriptionZh !== undefined && entry.descriptionZh !== '' ? entry.descriptionZh : entry.description
+                    return d === '' ? '—' : d
+                  })()}</div>
                   <div className="pcm-foot">
                     <div className="pcm-stats">
                       <span className="pcm-stars">★ {formatStars(entry.stars)}</span>

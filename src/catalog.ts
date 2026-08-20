@@ -98,6 +98,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     url: repo.html_url,
     category,
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
+    descriptionZh: (repo as CdnRepo & { description_zh?: string | null }).description_zh ?? null,
     stars: repo.stargazers_count ?? null,
     todayStars: null,
     created: knownEntry?.added ?? null,
@@ -234,6 +235,21 @@ export function verdictsOf(profile: string): Record<string, boolean> {
   return readState(profile).verdicts ?? {}
 }
 
+export function readFavorites(profile: string): string[] {
+  return readState(profile).favorites ?? []
+}
+
+export function toggleFavorite(profile: string, key: string): string[] {
+  const state = readState(profile)
+  const list = state.favorites ?? []
+  const hit = list.findIndex((k) => k === key)
+  if (hit >= 0) list.splice(hit, 1)
+  else list.push(key)
+  state.favorites = list
+  writeState(profile, state)
+  return list
+}
+
 export function applyVerdicts(profile: string, updates: Record<string, boolean>): void {
   const state = readState(profile)
   state.verdicts = { ...(state.verdicts ?? {}), ...updates }
@@ -306,6 +322,7 @@ function buildEntry(
     url: search?.html_url ?? 'https://github.com/' + fullName,
     category: knownEntry?.category ?? ruleCategory(name, description, topics),
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
+    descriptionZh: search?.description_zh ?? null,
     stars: search?.stargazers_count ?? null,
     todayStars: null,
     created: search?.created_at ?? null,

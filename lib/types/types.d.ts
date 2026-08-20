@@ -16,6 +16,8 @@ export interface GhRepo {
         login: string;
         avatar_url: string;
     };
+    /** 索引富化出的中文简介（README.zh 首段），可能缺失。 */
+    description_zh?: string | null;
 }
 export interface KnownEntry {
     name: string;
@@ -34,6 +36,8 @@ export interface MarketEntry {
     url: string;
     category: string;
     description: string;
+    /** 中文简介（README.zh 首段，索引富化）；缺失时前端回退英文。 */
+    descriptionZh?: string | null;
     /** null when the repo came from the HTML crawl and search never covered it. */
     stars: number | null;
     /** Star delta since the last snapshot; null when no baseline exists. */
@@ -66,6 +70,8 @@ export interface MarketState {
     starsSnapshot?: StarsSnapshot;
     /** owner/repo -> verdict from package.json deep-check. */
     verdicts: Record<string, boolean>;
+    /** 收藏条目（小写 owner/repo 或 local:包名），持久化在 profile 的 dsh-store/state.json。 */
+    favorites?: string[];
 }
 export interface InstallState {
     active: boolean;

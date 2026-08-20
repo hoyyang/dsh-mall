@@ -15,6 +15,8 @@ export declare function stateFile(profile: string): string;
 export declare function readState(profile: string): MarketState;
 export declare function writeState(profile: string, state: MarketState): void;
 export declare function verdictsOf(profile: string): Record<string, boolean>;
+export declare function readFavorites(profile: string): string[];
+export declare function toggleFavorite(profile: string, key: string): string[];
 export declare function applyVerdicts(profile: string, updates: Record<string, boolean>): void;
 export declare function heuristicIsPlugin(repo: {
     name: string;

@@ -9,6 +9,8 @@ export interface MarketEntry {
   url: string
   category: string
   description: string
+  /** 中文简介（README.zh 首段，索引富化）；缺失时前端回退英文。 */
+  descriptionZh?: string | null
   stars: number | null
   todayStars: number | null
   created: string | null
@@ -30,7 +32,7 @@ export interface Registry {
   plugins: MarketEntry[]
 }
 
-export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc'
+export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc'
 export type PluginKind = 'all' | 'plugin' | 'nonplugin'
 export type SinceDays = 0 | 1 | 7 | 30 | 365
 
@@ -39,13 +41,14 @@ export interface ListQuery {
   kind: PluginKind
   curatedOnly: boolean
   installedOnly: boolean
+  favOnly: boolean
   query: string
   sort: SortKey
   sinceDays: SinceDays
   lang: string
 }
 
-export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isInstalled?: (p: MarketEntry) => boolean): MarketEntry[] {
+export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isInstalled?: (p: MarketEntry) => boolean, isFav?: (p: MarketEntry) => boolean): MarketEntry[] {
   const needle = options.query.trim().toLowerCase()
   const now = Date.now()
   const list = plugins.filter((p) => {
@@ -54,6 +57,7 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     if (options.kind === 'nonplugin' && p.isPlugin === true) return false
     if (options.curatedOnly && !p.curated) return false
     if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false
+    if (options.favOnly && !(isFav?.(p) ?? false)) return false
     if (options.sinceDays > 0) {
       if (p.pushed === null) return false
       const pushed = Date.parse(p.pushed)
@@ -67,11 +71,14 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
   })
   const todayRank = (v: number | null): number => (v === null ? Number.NEGATIVE_INFINITY : v)
   const starRank = (v: number | null): number => (v === null ? Number.NEGATIVE_INFINITY : v)
+  const createdRank = (v: string | null): number => (v === null ? Number.NEGATIVE_INFINITY : Date.parse(v))
   const sorted = [...list]
   if (options.sort === 'stars-desc') sorted.sort((a, b) => starRank(b.stars) - starRank(a.stars))
   else if (options.sort === 'stars-asc') sorted.sort((a, b) => starRank(a.stars) - starRank(b.stars))
   else if (options.sort === 'today-desc') sorted.sort((a, b) => todayRank(b.todayStars) - todayRank(a.todayStars))
   else if (options.sort === 'today-asc') sorted.sort((a, b) => todayRank(a.todayStars) - todayRank(b.todayStars))
+  else if (options.sort === 'created-desc') sorted.sort((a, b) => createdRank(b.created) - createdRank(a.created))
+  else if (options.sort === 'created-asc') sorted.sort((a, b) => createdRank(a.created) - createdRank(b.created))
   return sorted
 }
 

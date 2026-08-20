@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { loadRegistry, progress, verifyRepos } from './catalog.ts'
+import { loadRegistry, progress, readFavorites, toggleFavorite, verifyRepos } from './catalog.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, readManifest as readProfileManifest, runInstall, runUninstall, withMutationLock } from './install.ts'
 
@@ -221,6 +221,38 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig): () =>
       } catch (err) {
         sendJson(response, 200, { ok: false, error: err instanceof Error ? err.message : String(err) })
       }
+    },
+  }))
+
+  // Favorites: persisted in the profile's dsh-store/state.json (next to the
+  // plugin's other local state), keyed by lowercase owner/repo (or local:name).
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/favorites',
+    handler: async (request, response) => {
+      if (request.method === 'GET') {
+        sendJson(response, 200, { favorites: readFavorites(config.profile) })
+        return
+      }
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const key = typeof body.key === 'string' ? body.key.trim().toLowerCase() : ''
+      if (key === '' || key.length > 160) {
+        sendJson(response, 400, { ok: false, error: 'invalid key' })
+        return
+      }
+      const favorites = toggleFavorite(config.profile, key)
+      sendJson(response, 200, { ok: true, favorites })
     },
   }))
 
