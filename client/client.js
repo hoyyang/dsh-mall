@@ -59,6 +59,7 @@ const en = {
 	kindPlugin: "Plugins only",
 	kindNonplugin: "Non-plugins",
 	curatedOnly: "Awesome only",
+	installedOnly: "Installed",
 	since: "Active",
 	sinceAll: "Any time",
 	sinceDay: "24 hours",
@@ -162,6 +163,7 @@ const zh = {
 	kindPlugin: "仅插件",
 	kindNonplugin: "非插件",
 	curatedOnly: "仅精选",
+	installedOnly: "已安装",
 	since: "最近活跃",
 	sinceAll: "不限",
 	sinceDay: "24 小时",
@@ -237,7 +239,7 @@ const zh = {
 };
 //#endregion
 //#region src/client/market-data.ts
-function visiblePlugins(plugins, options) {
+function visiblePlugins(plugins, options, isInstalled) {
 	const needle = options.query.trim().toLowerCase();
 	const now = Date.now();
 	const list = plugins.filter((p) => {
@@ -245,6 +247,7 @@ function visiblePlugins(plugins, options) {
 		if (options.kind === "plugin" && p.isPlugin !== true) return false;
 		if (options.kind === "nonplugin" && p.isPlugin === true) return false;
 		if (options.curatedOnly && !p.curated) return false;
+		if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false;
 		if (options.sinceDays > 0) {
 			if (p.pushed === null) return false;
 			const pushed = Date.parse(p.pushed);
@@ -366,6 +369,7 @@ function MarketSection(props) {
 	const [cat, setCat] = (0, react.useState)("all");
 	const [kind, setKind] = (0, react.useState)("all");
 	const [curatedOnly, setCuratedOnly] = (0, react.useState)(false);
+	const [installedOnly, setInstalledOnly] = (0, react.useState)(false);
 	const [sort, setSort] = (0, react.useState)("stars-desc");
 	const [page, setPage] = (0, react.useState)(1);
 	const [pageSize, setPageSize] = (0, react.useState)(24);
@@ -511,54 +515,7 @@ function MarketSection(props) {
 		const c = data.categories[id];
 		return c === void 0 ? id : c[lang] ?? c.en;
 	}, [data, lang]);
-	/** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/search), excluding the category filter itself. */
-	const categoryCounts = (0, react.useMemo)(() => {
-		const per = /* @__PURE__ */ new Map();
-		let all = 0;
-		const needle = q.trim().toLowerCase();
-		for (const p of plugins) {
-			if (kind === "plugin" && p.isPlugin !== true) continue;
-			if (kind === "nonplugin" && p.isPlugin === true) continue;
-			if (curatedOnly && !p.curated) continue;
-			if (needle !== "") {
-				if (!(p.name + " " + p.owner + " " + p.description).toLowerCase().includes(needle)) continue;
-			}
-			all += 1;
-			per.set(p.category, (per.get(p.category) ?? 0) + 1);
-		}
-		return {
-			all,
-			per
-		};
-	}, [
-		plugins,
-		kind,
-		curatedOnly,
-		q
-	]);
-	const list = (0, react.useMemo)(() => visiblePlugins(plugins, {
-		category: cat,
-		kind,
-		curatedOnly,
-		query: q,
-		sort,
-		sinceDays: 0,
-		lang
-	}), [
-		plugins,
-		cat,
-		kind,
-		curatedOnly,
-		q,
-		sort,
-		lang
-	]);
-	const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
-	const currentPage = Math.min(page, totalPages);
-	const pageList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-	(0, react.useEffect)(() => {
-		verifyPage(pageList);
-	}, [pageList, verifyPage]);
+	/** Which repos are installed in the current profile (from /status). */
 	const installedSet = (0, react.useMemo)(() => {
 		const set = /* @__PURE__ */ new Set();
 		const deps = status?.installed ?? {};
@@ -577,6 +534,60 @@ function MarketSection(props) {
 		}
 		return false;
 	}, [installedSet]);
+	/** Per-category counts under the CURRENT filter conditions (kind/curatedOnly/installedOnly/search), excluding the category filter itself. */
+	const categoryCounts = (0, react.useMemo)(() => {
+		const per = /* @__PURE__ */ new Map();
+		let all = 0;
+		const needle = q.trim().toLowerCase();
+		for (const p of plugins) {
+			if (kind === "plugin" && p.isPlugin !== true) continue;
+			if (kind === "nonplugin" && p.isPlugin === true) continue;
+			if (curatedOnly && !p.curated) continue;
+			if (installedOnly && !isInstalled(p)) continue;
+			if (needle !== "") {
+				if (!(p.name + " " + p.owner + " " + p.description).toLowerCase().includes(needle)) continue;
+			}
+			all += 1;
+			per.set(p.category, (per.get(p.category) ?? 0) + 1);
+		}
+		return {
+			all,
+			per
+		};
+	}, [
+		plugins,
+		kind,
+		curatedOnly,
+		q,
+		installedOnly,
+		isInstalled
+	]);
+	const list = (0, react.useMemo)(() => visiblePlugins(plugins, {
+		category: cat,
+		kind,
+		curatedOnly,
+		installedOnly,
+		query: q,
+		sort,
+		sinceDays: 0,
+		lang
+	}, isInstalled), [
+		plugins,
+		cat,
+		kind,
+		curatedOnly,
+		installedOnly,
+		q,
+		sort,
+		lang,
+		isInstalled
+	]);
+	const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+	const currentPage = Math.min(page, totalPages);
+	const pageList = list.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+	(0, react.useEffect)(() => {
+		verifyPage(pageList);
+	}, [pageList, verifyPage]);
 	const doInstall = (0, react.useCallback)((entry) => {
 		setConfirming(null);
 		fetch("/dsh-store/install", {
@@ -839,6 +850,14 @@ function MarketSection(props) {
 									setPage(1);
 								},
 								children: t("curatedOnly")
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
+								active: installedOnly,
+								onClick: () => {
+									setInstalledOnly((v) => !v);
+									setPage(1);
+								},
+								children: t("installedOnly")
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Input, {
 								className: "pcm-search",

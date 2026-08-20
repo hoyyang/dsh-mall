@@ -2,11 +2,11 @@
 
 The complete GitHub #dsh-plugin catalog inside DeepSeek Harness: browse
 every repo tagged dsh-plugin, search, sort, filter (plugin / non-plugin /
-awesome-curated), one-click install & uninstall, and publish your own plugin
-by adding the topic.
+awesome-curated / installed), one-click install & uninstall, and publish
+your own plugin by adding the topic.
 
 装在 DeepSeek Harness 里的 GitHub 全量插件目录：浏览所有带 #dsh-plugin
-标签的仓库，搜索、排序、筛选（是否插件 / awesome 精选），一键安装卸载，
+标签的仓库，搜索、排序、筛选（是否插件 / awesome 精选 / 已安装），一键安装卸载，
 并可一键为自己的仓库打上标签上架。
 
 ## Install
