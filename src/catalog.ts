@@ -265,7 +265,13 @@ function dataPath(name: string): string {
 
 /** Bundled curated catalog: owner/repo -> category/npm/localized text. */
 let knownCache: KnownMap | null = null
+/** v1.7.2：awesome 自动刷新模块的覆盖（plugins.json 拉取成功即生效）。 */
+let knownOverride: KnownMap | null = null
+export function setKnownOverride(map: KnownMap | null): void {
+  knownOverride = map
+}
 export function loadKnown(): KnownMap {
+  if (knownOverride !== null) return knownOverride
   if (knownCache !== null) return knownCache
   try {
     knownCache = JSON.parse(readFileSync(dataPath('awesome-known.json'), 'utf8')) as KnownMap

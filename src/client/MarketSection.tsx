@@ -17,7 +17,6 @@ import {
   IconLoadingOutline16,
   IconRefreshOutline14,
   IconSearchOutline16,
-  IconSendOutline16,
   Input,
   Menu,
   Modal,
@@ -220,88 +219,54 @@ export function MarketSection(props: SectionProps) {
     return () => { ro.disconnect(); window.removeEventListener('resize', update) }
   }, [])
 
-  // Category collapse: measure how many chips fit the first 3 rows; the
-  // "expand N categories" badge updates live with container width changes.
+  // Category collapse (v1.7.2 重写，根治窄窗残影/错位复发)：
+  // 手动按实测宽度分行（行 0 让出排序按钮区，收起态第 3 行让出展开按钮区），
+  // 收起态把第 4 行起的 pill 直接 display:none——容器高度自然收缩，
+  // 不再依赖 maxHeight 裁剪公式，任何窗口宽度下都不会露出半行残影。
   const CATS_CLAMPED_ROWS = 3
   useLayoutEffect(() => {
     const wrap = chipsRef.current
     if (wrap === null) return
+    const GAP = 6
     const measure = () => {
-      // 展开/收起按钮也在 chips 容器内，pill 计数必须排除它
-      // 排序按钮也住在 chips 容器里，pill 计数必须排除它（否则高度公式按 28px 算）
       const pills = Array.from(wrap.querySelectorAll<HTMLElement>('button:not(.pcm-chip-more-btn):not(.pcm-sort-btn)'))
       if (pills.length === 0) return
-      for (const p of pills) p.style.marginRight = ''
-      const wrapRect = wrap.getBoundingClientRect()
-      const rowOf = (pill: HTMLElement): number => {
-        const top = pill.getBoundingClientRect().top - wrapRect.top
-        return Math.round(top / (pill.offsetHeight + 6))
-      }
-      // 排序按钮占据第一行右端：伸进其区域的第 0 行 pill 强制换行（两态都处理）
+      for (const p of pills) { p.style.marginRight = ''; p.style.display = '' }
+      const wrapW = wrap.clientWidth
       const sortSlot = wrap.querySelector<HTMLElement>('.pcm-sort-slot')
-      if (sortSlot !== null) {
-        const zoneStart = wrapRect.width - (sortSlot.offsetWidth + 8)
-        let lastRow0 = -1
-        for (let i = 0; i < pills.length; i++) {
-          if (rowOf(pills[i]!) === 0) lastRow0 = i
-        }
-        while (lastRow0 >= 0) {
-          const pr = pills[lastRow0]!.getBoundingClientRect()
-          if (pr.right - wrapRect.left <= zoneStart) break
-          pills[lastRow0]!.style.marginRight = wrapRect.width + 'px'
-          lastRow0 -= 1
-        }
-      }
-      let visible = 0
+      const moreBtn = wrap.querySelector<HTMLElement>('.pcm-chip-more-btn')
+      const sortZone = sortSlot !== null ? sortSlot.offsetWidth + 8 : 0
+      const moreZone = catsClamped && moreBtn !== null ? moreBtn.offsetWidth + 8 : 0
+      let row = 0
+      let rowW = 0
       for (const pill of pills) {
-        if (rowOf(pill) < CATS_CLAMPED_ROWS) visible += 1
-      }
-      if (catsClamped) {
-        wrap.style.maxHeight = 'none'
-        // 展开按钮占据第三行右端：凡是伸进按钮区的可见 pill 一律强制换行到
-        // 第 4 行（被裁掉），行尾给按钮留出位置，杜绝遮挡（v1.4.0 修复
-        // 「文档与渲染」被「展开 N 个类别」压住的问题）。
-        let lastVisible = visible - 1
-        if (visible < pills.length) {
-          const btnW = (wrap.querySelector<HTMLElement>('.pcm-chip-more-btn')?.offsetWidth ?? 104) + 8
-          const zoneStart = wrapRect.width - btnW
-          while (lastVisible >= 0) {
-            const pr = pills[lastVisible]!.getBoundingClientRect()
-            if (pr.right - wrapRect.left <= zoneStart) break
-            pills[lastVisible]!.style.marginRight = wrapRect.width + 'px'
-            lastVisible -= 1
-          }
+        const zone = row === 0 ? sortZone : catsClamped && row >= CATS_CLAMPED_ROWS - 1 ? moreZone : 0
+        const avail = wrapW - zone
+        if (rowW > 0 && rowW + pill.offsetWidth > avail) {
+          row += 1
+          rowW = 0
         }
-        let visibleFinal = 0
-        for (const pill of pills) {
-          if (rowOf(pill) < CATS_CLAMPED_ROWS) visibleFinal += 1
+        if (catsClamped && row > CATS_CLAMPED_ROWS - 1) {
+          pill.style.display = 'none'
+        } else {
+          pill.style.display = ''
         }
-        // 裁剪高度用固定公式（3 行 pill + 2 个 gap），不依赖任何 pill 的位置，
-        // 避免测量往返（RO 高度变化）之间 maxHeight 在 85/115 之间震荡。
-        const ph = pills[0]!.offsetHeight
-        wrap.style.maxHeight = (ph * CATS_CLAMPED_ROWS + 6 * (CATS_CLAMPED_ROWS - 1) + 1) + 'px'
-        visible = visibleFinal
-      } else {
-        wrap.style.maxHeight = 'none'
+        rowW += pill.offsetWidth + GAP
       }
+      const visiblePills = pills.filter(p => p.style.display !== 'none').length
       const totalCats = categoriesRef.current.length
-      setHiddenCatCount(Math.max(0, totalCats - (visible - 1)))
+      setHiddenCatCount(Math.max(0, totalCats - (visiblePills - 1)))
     }
     const ro = new ResizeObserver(measure)
     ro.observe(wrap)
     measure()
-    // Pill widths change after the webfont swap, which a ResizeObserver on
-    // the wrap cannot see (the wrap width is constant). Re-measure once the
-    // fonts settle and once more shortly after, so the "expand N categories"
-    // count and the clamp height always match what is actually rendered.
+    // Pill widths change after the webfont swap; re-measure once fonts settle.
     const fonts = document.fonts
     void fonts?.ready.then(measure).catch(() => {})
     const timer = setTimeout(measure, 600)
     return () => { ro.disconnect(); clearTimeout(timer) }
     // status/q/kind/curatedOnly/installedOnly/favOnly/favorites 入依赖：
-    // 点「已安装/仅精选/已收藏」等筛选后 pill 内的计数文本变化、pill 宽度
-    // 随之变化，必须重算强制换行与裁剪高度，否则分类区行归属/裁剪错乱
-    // （v1.6 修复「已安装」点击后分类区排布变化）。
+    // 筛选后 pill 内计数文本变化、宽度随之变化，必须重算分行。
   }, [catsClamped, data, status, q, kind, curatedOnly, installedOnly, favOnly, favorites])
 
   // Quiet refresh on every filter change (cheap: host TTL cache answers it).
@@ -574,16 +539,22 @@ export function MarketSection(props: SectionProps) {
       body: JSON.stringify({ names: todo.slice(0, 1500) }),
     })
       .then(res => res.json())
-      .then((body: { downloads?: Record<string, number | null> }) => {
+      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null> }) => {
         const got = body.downloads ?? {}
+        const totals = body.totals ?? {}
         setData((prev: Registry | null) => {
           if (prev === null) return prev
           return {
             ...prev,
             plugins: prev.plugins.map((e: MarketEntry) => {
               const hit = e.npm !== null ? got[e.npm] : undefined
-              if (hit === undefined) return e
-              return { ...e, downloads: hit }
+              const tot = e.npm !== null ? totals[e.npm] : undefined
+              if (hit === undefined && tot === undefined) return e
+              return {
+                ...e,
+                downloads: hit === undefined ? e.downloads : hit,
+                totalDownloads: tot === undefined ? e.totalDownloads : tot,
+              }
             }),
           }
         })
@@ -606,6 +577,46 @@ export function MarketSection(props: SectionProps) {
     const step = 1500
     for (let i = 0; i < all.length; i += step) downloadsEnrich(all.slice(i, i + step))
   }, [sortDim, data, downloadsEnrich])
+
+  // ---- 智能安装：AI 审查 + 安装 + 装后诊断（进度进任务面板）----
+  const doSmartInstall = useCallback((entry: MarketEntry) => {
+    setConfirming(null)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'smart-install',
+      name: entry.npm ?? entry.owner + '/' + entry.name,
+      state: 'running',
+      detail: t('smartInstallHint'),
+      reason: null,
+      at: Date.now(),
+    }))
+    setTasksOpen(true)
+    fetch('/dsh-store/smart-install', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; installMessage?: string; error?: string }) => {
+        if (body.verdict === 'refuse') {
+          setToast(t('smartRefused') + ': ' + (body.report ?? ''))
+          finishTask(id, { ok: false, error: t('smartRefused') + ' · ' + (body.report ?? '') }, '')
+        } else if (body.ok === true) {
+          const verdictNote = body.verdict === 'caution' ? ' ⚠ ' + ((body.risks ?? []).slice(0, 3).join('；') || 'AI 提示需注意') : body.verdict === 'unavailable' ? ' · AI 审查不可用，已按常规安装' : ''
+          setToast(t('installDone') + verdictNote)
+          finishTask(id, { ok: true, message: (body.installMessage ?? '') + ' ' + (body.report ?? '') + verdictNote }, t('installDone'))
+          fetchStatus()
+        } else {
+          setToast(t('installFailed') + ': ' + (body.installMessage ?? body.error ?? ''))
+          finishTask(id, { ok: false, error: (body.installMessage ?? body.error ?? t('installFailed')) + (body.report !== undefined && body.report !== '' ? ' · ' + body.report : '') }, '')
+        }
+      })
+      .catch(() => {
+        setToast(t('installFailed'))
+        finishTask(id, { ok: false, error: t('installFailed') }, '')
+      })
+  }, [t, fetchStatus, finishTask])
 
   const doInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
@@ -941,16 +952,8 @@ export function MarketSection(props: SectionProps) {
             </button>
           )}
           {selfUpdateDone && <span className="pcm-self-update-warn">{t('restartNeeded')}</span>}
-          <Button
-            variant="outline"
-            size="sm"
-            icon={<IconSendOutline16 size={14} />}
-            onClick={() => setPublishOpen(true)}
-            className="pcm-publish-btn"
-            title={t('publishHint')}
-          >
-            {t('publish')}
-          </Button>
+          {/* v1.7.2：「上传我的插件」暂时隐藏（用户准备调整该功能，见 STATE 待办）；
+              PublishModal 与 /dsh-store/publish 路由保留，恢复时解注释即可。 */}
           <button
             type="button"
             ref={tasksAnchorRef}
@@ -1222,6 +1225,9 @@ export function MarketSection(props: SectionProps) {
                       {typeof entry.downloads === 'number' && (
                         <span className="pcm-downloads" title={t('downloadsHint')}>↓ {formatDownloads(entry.downloads)}</span>
                       )}
+                      {typeof entry.totalDownloads === 'number' && (
+                        <span className="pcm-downloads pcm-downloads-total" title={t('totalDownloadsHint')}>Σ {formatDownloads(entry.totalDownloads)}</span>
+                      )}
                       <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
                       <span className="pcm-cat">{catLabel(entry.category)}</span>
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
@@ -1295,6 +1301,7 @@ export function MarketSection(props: SectionProps) {
           statusLine={status?.install?.line ?? null}
           onClose={() => setConfirming(null)}
           onConfirm={() => doInstall(confirming)}
+          onSmartInstall={() => doSmartInstall(confirming)}
         />
       )}
 
@@ -1361,6 +1368,7 @@ function InstallModal(props: {
   statusLine: string | null
   onClose: () => void
   onConfirm: () => void
+  onSmartInstall: () => void
 }) {
   const { t, entry, installing, statusLine } = props
   const target = entry.npm ?? 'github:' + entry.owner + '/' + entry.name
@@ -1375,6 +1383,9 @@ function InstallModal(props: {
       footer={(
         <>
           <Button variant="ghost" onClick={props.onClose}>{t('cancel')}</Button>
+          <Button variant="outline" onClick={props.onSmartInstall} disabled={installing} title={t('smartInstallHint')}>
+            {t('smartInstall')}
+          </Button>
           <Button variant="primary" onClick={props.onConfirm} disabled={installing}>
             {installing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('confirm')}
           </Button>

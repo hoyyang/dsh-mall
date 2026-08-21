@@ -15,7 +15,8 @@ import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './githu
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
-import { ensureDownloads } from './downloads.ts'
+import { ensureDownloads, ensureTotals } from './downloads.ts'
+import { runSmartInstall } from './smart.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -409,7 +410,40 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const downloads = await ensureDownloads(config.profile, names)
-      sendJson(response, 200, { ok: true, downloads })
+      const totals = await ensureTotals(config.profile, names)
+      sendJson(response, 200, { ok: true, downloads, totals })
+    },
+  }))
+
+  // 智能安装：AI 装前审查（refuse 终止）+ dsh plugin add + 装后 AI 诊断。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/smart-install',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const repo = parseRepo(body.repo)
+      if (repo === null) {
+        sendJson(response, 400, { ok: false, error: 'invalid repo' })
+        return
+      }
+      const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
+      const locked = await withMutationLock(async () => runSmartInstall(config, repo, npm))
+      if (locked.busy) {
+        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+        return
+      }
+      sendJson(response, 200, locked.value)
     },
   }))
 

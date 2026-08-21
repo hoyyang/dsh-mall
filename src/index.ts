@@ -12,6 +12,7 @@ import { mountMarketRoutes, type MarketHost } from './routes.ts'
 import { installFindTool } from './find.ts'
 import { installMarketSettings } from './settings.ts'
 import { startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
+import { startAwesomeRefresh, stopAwesomeRefresh } from './awesome.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-store'
@@ -83,10 +84,13 @@ export function apply(ctx: Context, config?: Config): void {
       const disposeRoutes = mountMarketRoutes(host, resolved)
       // 自动一键更新：开关为开时进程启动即重排每日定时器。
       startAutoUpdate(resolved)
+      // awesome 人工目录自动保持最新（启动拉取 + 24h 周期）。
+      startAwesomeRefresh(resolved.profile)
       return () => {
         disposeRoutes()
         removeSkill()
         stopAutoUpdate()
+        stopAwesomeRefresh()
       }
     }, 'dsh-store: http routes + skill + auto-update timer')
   })

@@ -74,6 +74,8 @@ export interface MarketEntry {
   topics: string[]
   /** npm 下载量（近 30 天，npm API 按需富化）；undefined=未拉取，null=未发布。 */
   downloads?: number | null
+  /** npm 总下载量（2019 起累计，按需富化）。 */
+  totalDownloads?: number | null
 }
 
 export interface Registry {

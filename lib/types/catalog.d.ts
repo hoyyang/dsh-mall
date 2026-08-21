@@ -10,6 +10,7 @@ export declare const CATEGORIES: Record<string, {
     en: string;
     zh: string;
 }>;
+export declare function setKnownOverride(map: KnownMap | null): void;
 export declare function loadKnown(): KnownMap;
 export declare function stateFile(profile: string): string;
 export declare function readState(profile: string): MarketState;

@@ -16,6 +16,17 @@ const FETCH_TIMEOUT_MS = 20_000
 
 const PKG_RE = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/i
 
+/** 总下载量：npm range 端点（单包才支持任意区间，bulk 上限 365 天）。 */
+async function fetchTotal(name: string): Promise<number | null> {
+  const res = await fetch('https://api.npmjs.org/downloads/point/2019-01-01:2030-01-01/' + name, {
+    headers: { 'user-agent': 'dsh-store', accept: 'application/json' },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  })
+  if (!res.ok) throw new Error('npm downloads API HTTP ' + res.status)
+  const body = (await res.json()) as { downloads?: number; error?: string }
+  return typeof body.downloads === 'number' ? body.downloads : null
+}
+
 async function fetchBulk(names: string[]): Promise<Record<string, number | null>> {
   const res = await fetch('https://api.npmjs.org/downloads/point/last-month/' + names.join(','), {
     headers: { 'user-agent': 'dsh-store', accept: 'application/json' },
@@ -80,5 +91,32 @@ export async function ensureDownloads(profile: string, rawNames: string[]): Prom
     state.downloads = cache
     writeState(profile, state)
   }
+  return out
+}
+
+/** 总下载量（2019-01-01 起累计）：单包逐个查（range bulk 上限 365 天），
+ *  缓存 key 为 'total:<name>'。单次上限 96 个包（防止一次刷爆 npm API）。 */
+export async function ensureTotals(profile: string, rawNames: string[]): Promise<Record<string, number | null>> {
+  const names = [...new Set(rawNames.filter(n => typeof n === 'string' && PKG_RE.test(n) && n.length < 214))].slice(0, 96)
+  const out: Record<string, number | null> = {}
+  if (names.length === 0) return out
+  const state = readState(profile)
+  const cache = state.downloads ?? {}
+  const now = Date.now()
+  for (const name of names) {
+    const key = 'total:' + name
+    const hit = cache[key]
+    if (hit !== undefined && now - hit.at < (hit.value === null ? TTL_NULL_MS : TTL_MS)) {
+      out[name] = hit.value
+      continue
+    }
+    try {
+      const value = await fetchTotal(name)
+      cache[key] = { at: Date.now(), value }
+      out[name] = value
+    } catch { /* 网络失败：下次再试 */ }
+  }
+  state.downloads = cache
+  writeState(profile, state)
   return out
 }

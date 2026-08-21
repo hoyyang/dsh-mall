@@ -7,3 +7,6 @@
  */
 /** 补齐缓存：返回全部请求过的包名 → 下载量（null=未发布）。 */
 export declare function ensureDownloads(profile: string, rawNames: string[]): Promise<Record<string, number | null>>;
+/** 总下载量（2019-01-01 起累计）：单包逐个查（range bulk 上限 365 天），
+ *  缓存 key 为 'total:<name>'。单次上限 96 个包（防止一次刷爆 npm API）。 */
+export declare function ensureTotals(profile: string, rawNames: string[]): Promise<Record<string, number | null>>;

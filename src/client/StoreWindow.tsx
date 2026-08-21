@@ -27,13 +27,15 @@ export function SidebarStoreButton(props: {
   // v1.7.1 布局纠正：首页侧边栏（设置按钮上方、平级对齐）就是
   // 「DSH 商店」入口 → 点击直接打开商店浮窗；「DSH 商店设置」入口
   // 在官方设置浮窗里（settings.section，见 client/index.ts）。
+  // v1.7.2：窗口 keep-mounted——关闭只是隐藏，再打开恢复页面状态。
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const button = (
     <button
       type="button"
       className={'pcm-sidebar-btn' + (props.wide ? '' : ' pcm-sidebar-rail')}
       title={props.t('nav')}
-      onClick={() => setOpen(true)}
+      onClick={() => { setMounted(true); setOpen(true) }}
     >
       <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
       <span className="pcm-sidebar-label">{props.t('nav')}</span>
@@ -42,8 +44,8 @@ export function SidebarStoreButton(props: {
   return (
     <>
       {button}
-      {open && (
-        <StoreWindow t={props.t} locale={props.locale} onClose={() => setOpen(false)} />
+      {mounted && (
+        <StoreWindow t={props.t} locale={props.locale} open={open} onClose={() => setOpen(false)} />
       )}
     </>
   )
@@ -55,11 +57,12 @@ export function SettingsSection(props: {
   locale: LocaleLike
 }) {
   const [storeOpen, setStoreOpen] = useState(false)
+  const [storeMounted, setStoreMounted] = useState(false)
   return (
     <>
-      <SettingsContent t={props.t} onOpenStore={() => setStoreOpen(true)} />
-      {storeOpen && (
-        <StoreWindow t={props.t} locale={props.locale} onClose={() => setStoreOpen(false)} />
+      <SettingsContent t={props.t} onOpenStore={() => { setStoreMounted(true); setStoreOpen(true) }} />
+      {storeMounted && (
+        <StoreWindow t={props.t} locale={props.locale} open={storeOpen} onClose={() => setStoreOpen(false)} />
       )}
     </>
   )
@@ -217,17 +220,20 @@ function ResultCard(props: { t: (key: string) => string; entry: MarketEntry }) {
 function StoreWindow(props: {
   t: (key: string) => string
   locale: LocaleLike
+  /** false = 隐藏但保持挂载（保留页面状态），true = 显示。 */
+  open: boolean
   onClose: () => void
 }) {
   useEffect(() => {
+    if (!props.open) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') props.onClose()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [props])
+  }, [props.open, props])
   return createPortal(
-    <div className="pcm-store-overlay">
+    <div className="pcm-store-overlay" style={props.open ? undefined : { display: 'none' }}>
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window" role="dialog" aria-label={props.t('nav')} aria-modal="true">
         <div className="pcm-store-head">

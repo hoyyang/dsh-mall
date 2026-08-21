@@ -60,7 +60,10 @@ export function TaskPanel(props: {
   const summary = taskSummary(records)
   const busy = summary.running > 0
   const verb = (record: TaskRecord): string =>
-    record.kind === 'install' ? t('taskKindInstall') : record.kind === 'update' ? t('taskKindUpdate') : t('taskKindUninstall')
+    record.kind === 'install' ? t('taskKindInstall')
+      : record.kind === 'update' ? t('taskKindUpdate')
+        : record.kind === 'uninstall' ? t('taskKindUninstall')
+          : t('taskKindSmartInstall')
 
   return createPortal(
     <div
