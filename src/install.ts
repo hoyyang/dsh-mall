@@ -280,6 +280,23 @@ export function patchDisables(profile: string): string[] {
   }
 }
 
+/** 清理旧版误写的顶层条目（id=包名但真实 loader id 不同，如 dshmarket）。 */
+export function removeLegacyPatchEntry(profile: string, legacyId: string): void {
+  try {
+    const file = patchFilePath(profile)
+    const lines = readFileSync(file, 'utf8').split(/\r?\n/)
+    let row = -1
+    for (let i = 0; i < lines.length; i++) {
+      const m = /^- id:\s*(.+)$/.exec(lines[i] ?? '')
+      if (m !== null && String(m[1]).trim() === legacyId) { row = i; break }
+    }
+    if (row < 0) return
+    lines.splice(row, 1)
+    if (/^\s*disabled:/.test(lines[row] ?? '')) lines.splice(row, 1)
+    writeFileSync(file, lines.join('\n').replace(/\n+$/, '\n'))
+  } catch { /* 忽略 */ }
+}
+
 /** 停用（enabled=false）或重新启用（enabled=true）一个 loader 条目。 */
 export function setPluginEnabled(profile: string, loaderId: string, enabled: boolean): { ok: boolean; message: string } {
   if (PROTECTED_MODULE_RE.some(re => re.test(loaderId))) {
@@ -329,9 +346,10 @@ export function pluginStatesOf(profile: string, manifest: { dependencies: Record
   const bundleSet = new Set(manifest.bundles)
   const out: Record<string, 'live' | 'disabled' | 'restart'> = {}
   for (const name of Object.keys(manifest.dependencies)) {
-    // v1.7.10：按真实 loader id 判定停用（dshmarket→dsh-market），否则开关静默失效。
+    // v1.7.10：只按真实 loader id 判定停用（dshmarket→dsh-market）。
+    // 旧版误写的「- id: dshmarket」条目不匹配任何 loader，忽略之（无效条目）。
     const loaderId = loaderIdOf(profile, name)
-    if (disables.has(loaderId) || disables.has(name)) {
+    if (disables.has(loaderId)) {
       out[name] = 'disabled'
     } else if (bundleSet.has(name) || name.startsWith('@deepseek-ai/')) {
       out[name] = 'live'

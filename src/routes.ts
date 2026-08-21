@@ -12,7 +12,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
 import { smartSearch, takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
-import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
+import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest as readProfileManifest, removeLegacyPatchEntry, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
@@ -346,8 +346,10 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid name or enabled' })
         return
       }
-      // v1.7.10：开关按真实 loader id 写 patch（dshmarket→dsh-market）。
+      // v1.7.10：开关按真实 loader id 写 patch（dshmarket→dsh-market）；
+      // 顺带清理旧版误写的同名条目（无效 id，留着会误导状态）。
       const loaderId = loaderIdOf(config.profile, name)
+      if (loaderId !== name) removeLegacyPatchEntry(config.profile, name)
       const result = setPluginEnabled(config.profile, loaderId, body.enabled)
       sendJson(response, result.ok ? 200 : 400, result)
     },

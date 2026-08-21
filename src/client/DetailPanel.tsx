@@ -79,14 +79,16 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
     // 先剥掉 HTML 布局容器标签（align=center 等）遗留的行首缩进——
     // 否则整段会被 Markdown 判成缩进代码块（图片/粗体全部变成原文）。
     .replace(/^[ \t]{1,6}(?=\S)/gm, '')
-    // 徽章类 svg 图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文。
-    .replace(/!\[[^\]]*\]\([^)\s]*\.svg[^)]*\)/gi, '')
     .replace(/<(h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi, (_m: string, tag: string, inner: string) => '#'.repeat(Number(tag[1])) + ' ' + inner.replace(/\s+/g, ' ').trim())
     .replace(/<p\b[^>]*>/gi, '\n\n')
     .replace(/<\/p>/gi, '\n')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<hr\s*\/?>/gi, '\n\n---\n\n')
     .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, (_m: string, src: string) => '![image](' + absolutize(src) + ')')
+    // 徽章类 svg 图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文——
+    // 必须在 img 转换之后执行（徽章常以 <img> 出现）。
+    .replace(/!\[[^\]]*\]\([^)\s]*\.svg[^)]*\)/gi, '')
+    .replace(/!\[[^\]]*\]\([^)\s]*(?:shields\.io|trendshift|badge)[^)]*\)/gi, '')
     .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => '[' + label + '](' + absolutize(href) + ')')
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) => '![' + alt + '](' + absolutize(src) + ')')
     .replace(/<(?:strong|b)\b[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '**$1**')

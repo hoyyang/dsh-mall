@@ -65,6 +65,8 @@ export declare function patchFilePath(profile: string): string;
 export declare function loaderIdOf(profile: string, depName: string): string;
 /** 用户 patch 层当前停用的 loader id 列表。 */
 export declare function patchDisables(profile: string): string[];
+/** 清理旧版误写的顶层条目（id=包名但真实 loader id 不同，如 dshmarket）。 */
+export declare function removeLegacyPatchEntry(profile: string, legacyId: string): void;
 /** 停用（enabled=false）或重新启用（enabled=true）一个 loader 条目。 */
 export declare function setPluginEnabled(profile: string, loaderId: string, enabled: boolean): {
     ok: boolean;
