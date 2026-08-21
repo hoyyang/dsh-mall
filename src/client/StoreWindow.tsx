@@ -6,9 +6,9 @@
  *   卡片样式与商店主页面一致（安装/源码/收藏星可用）。
  */
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
-import { Button, IconCloseOutline16, IconLoadingOutline16, IconSettingsOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import { Button, IconCloseOutline16, IconGlobeOutline14, IconLoadingOutline16, IconSettingsOutline16, Menu, type MenuEntry } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
 import { SettingsContent } from './SettingsWindow.tsx'
 import type { MarketEntry } from './market-data.ts'
@@ -27,16 +27,22 @@ interface StoreState {
   open: boolean
   /** 浮窗来源：sidebar=首页入口；settings=设置页「打开 DSH 商店」。 */
   source: 'sidebar' | 'settings' | null
+  /** true=官方设置浮窗临时盖在商店浮窗上面（主浮窗不关闭，点「打开 DSH 商店」=关设置浮窗）。 */
+  settingsOnTop: boolean
 }
-let storeState: StoreState = { mounted: false, open: false, source: null }
+let storeState: StoreState = { mounted: false, open: false, source: null, settingsOnTop: false }
 const storeListeners = new Set<() => void>()
 function emitStore(): void { for (const l of storeListeners) l() }
 export function openStoreFrom(source: 'sidebar' | 'settings'): void {
-  storeState = { mounted: true, open: true, source }
+  storeState = { mounted: true, open: true, source, settingsOnTop: false }
   emitStore()
 }
 export function setStoreOpen(open: boolean): void {
   storeState = { ...storeState, open }
+  emitStore()
+}
+export function setSettingsOnTop(onTop: boolean): void {
+  storeState = { ...storeState, settingsOnTop: onTop }
   emitStore()
 }
 export function getStoreState(): StoreState { return storeState }
@@ -79,6 +85,7 @@ export function StoreSingleton(props: { t: (key: string) => string; locale: Loca
       t={props.t}
       locale={props.locale}
       open={state.open}
+      settingsOnTop={state.settingsOnTop}
       onClose={() => setStoreOpen(false)}
     />
   )
@@ -112,8 +119,10 @@ export function SettingsSection(props: {
   const openStore = useCallback(() => {
     const st = getStoreState()
     if (st.mounted && st.source === 'sidebar') {
-      // 首页路径：商店浮窗就在设置浮窗下面——关掉设置浮窗露出它。
+      // 首页路径（主浮窗先开、设置浮窗盖在上面）：「打开 DSH 商店」=关闭设置浮窗，
+      // 商店浮窗恢复置顶（主浮窗从未关闭）。
       closeSettingsWindow()
+      setSettingsOnTop(false)
       setStoreOpen(true)
     } else {
       openStoreFrom('settings')
@@ -184,8 +193,26 @@ function ResultsWindow(props: {
   initialPayload: ResultsPayload | null
   onClose: () => void
 }) {
+  const headActionsRef = useRef<HTMLDivElement | null>(null)
   const [payload, setPayload] = useState<ResultsPayload | null>(props.initialPayload)
   const [failed, setFailed] = useState(false)
+  // 语言按钮与主浮窗同款（样式/交互/持久化同 key），父组件控制并下传 langOverride。
+  const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
+  const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
+  const LANG_SHORT: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', ru: 'RU' }
+  const [lang, setLang] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('dsh-store-lang')
+      if (saved !== null && (LANGS as readonly string[]).includes(saved)) return saved
+    } catch { /* ignore */ }
+    return 'en'
+  })
+  const [langOpen, setLangOpen] = useState(false)
+  const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
+  const setLangPersist = (l: string) => {
+    setLang(l)
+    try { localStorage.setItem('dsh-store-lang', l) } catch { /* ignore */ }
+  }
   const token = props.token
   useEffect(() => {
     if (token === null || props.initialPayload !== null) return
@@ -214,6 +241,23 @@ function ResultsWindow(props: {
         <div className="pcm-store-head">
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{t('resultsTitle')}{payload !== null ? ' · ' + payload.query : ''}</span>
+          <div className="pcm-store-head-actions" ref={headActionsRef}>
+            <Menu
+              open={langOpen}
+              onClose={() => setLangOpen(false)}
+              onSelect={id => { setLangPersist(id); setLangOpen(false) }}
+              align="end"
+              anchor={(
+                <button type="button" className={'pcm-lang-btn pcm-lang-btn-head' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
+                  <span className="pcm-lang-flag"><IconGlobeOutline14 size={12} /></span>
+                  <span className="pcm-lang-label">{LANG_SHORT[lang] ?? lang.toUpperCase()}</span>
+                  <span className="pcm-lang-caret" aria-hidden="true" />
+                </button>
+              )}
+              items={langItems}
+              selectedId={lang}
+            />
+          </div>
           <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-store-close" title={t('close')} />
         </div>
         <div className="pcm-store-body">
@@ -225,6 +269,9 @@ function ResultsWindow(props: {
             <MarketSection
               t={t}
               locale={props.locale}
+              floating
+              headRef={headActionsRef}
+              langOverride={lang}
               seed={{
                 plugins: [...payload.recommended, ...payload.related],
                 categories: payload.categories ?? {},
@@ -243,8 +290,11 @@ function StoreWindow(props: {
   locale: LocaleLike
   /** false = 隐藏但保持挂载（保留页面状态），true = 显示。 */
   open: boolean
+  /** true=设置浮窗临时在上层（商店浮窗降到 z900 让位，但保持显示）。 */
+  settingsOnTop: boolean
   onClose: () => void
 }) {
+  const headActionsRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     if (!props.open) return
     const onKey = (e: KeyboardEvent) => {
@@ -253,25 +303,28 @@ function StoreWindow(props: {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [props.open, props])
-  // v1.7.5：#3 头行设置按钮——来源为设置页时直接关浮窗（露出设置浮窗）；
-  // 首页来源时隐藏浮窗并打开官方设置浮窗定位到「DSH商店-设置」。
+  // v1.7.6：#2 交互修正——来源为设置页：设置按钮=关闭浮窗（设置浮窗在下面）；
+  // 首页来源：主浮窗保持打开，设置浮窗盖到上面（商店浮窗 z 降到 900）。
   const onHeadSettings = useCallback(() => {
     const st = getStoreState()
     if (st.source === 'settings') {
       setStoreOpen(false)
     } else {
-      setStoreOpen(false)
+      setSettingsOnTop(true)
       openSettingsAtStoreSection()
     }
   }, [])
   return createPortal(
-    <div className="pcm-store-overlay" style={props.open ? undefined : { display: 'none' }}>
+    <div
+      className="pcm-store-overlay"
+      style={props.open ? { zIndex: props.settingsOnTop ? 900 : 1100 } : { display: 'none' }}
+    >
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window" role="dialog" aria-label={props.t('nav')} aria-modal="true">
         <div className="pcm-store-head">
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{props.t('nav')}</span>
-          <div className="pcm-store-head-actions" />
+          <div className="pcm-store-head-actions" ref={headActionsRef} />
           <Button
             variant="ghost"
             size="sm"
@@ -283,7 +336,7 @@ function StoreWindow(props: {
           <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-store-close" title={props.t('close')} />
         </div>
         <div className="pcm-store-body">
-          <MarketSection t={props.t} locale={props.locale} floating />
+          <MarketSection t={props.t} locale={props.locale} floating headRef={headActionsRef} />
         </div>
       </div>
     </div>,

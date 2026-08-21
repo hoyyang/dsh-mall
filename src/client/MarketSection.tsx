@@ -47,6 +47,10 @@ interface SectionProps {
   floating?: boolean
   /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商店完全一致。 */
   seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }> } | null
+  /** 浮窗模式下头行容器的 ref（由窗口组件直传，避免多窗口 querySelector 歧义）。 */
+  headRef?: { current: HTMLDivElement | null }
+  /** 语言选择覆盖（结果浮窗头行自渲染语言按钮时由父组件控制）。 */
+  langOverride?: string
 }
 
 interface StatusBody {
@@ -112,12 +116,17 @@ export function MarketSection(props: SectionProps) {
   const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
   // 语言选择持久化：切走/关窗再回来保持上次选择（v1.7.1 修复"切了又变回英文"）。
   const [langChoice, setLangChoice] = useState<string>(() => {
+    if (props.langOverride !== undefined) return props.langOverride
     try {
       const saved = localStorage.getItem('dsh-store-lang')
       if (saved !== null && (LANGS as readonly string[]).includes(saved)) return saved
     } catch { /* localStorage 不可用 */ }
     return 'en'
   })
+  useEffect(() => {
+    if (props.langOverride !== undefined && props.langOverride !== langChoice) setLangChoice(props.langOverride)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.langOverride])
   const setLangPersist = useCallback((l: string) => {
     setLangChoice(l)
     try { localStorage.setItem('dsh-store-lang', l) } catch { /* 忽略 */ }
@@ -175,6 +184,12 @@ export function MarketSection(props: SectionProps) {
   const tasksSummary = taskSummary(tasks)
   // 浮窗模式：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。
   const [headHost, setHeadHost] = useState<HTMLElement | null>(null)
+  useLayoutEffect(() => {
+    if (!floating) return
+    // 优先用窗口组件直传的 ref（多窗口下无歧义）；兜底查询本窗口容器。
+    const el = props.headRef?.current ?? rootRef.current?.closest('.pcm-store-window')?.querySelector<HTMLElement>('.pcm-store-head-actions') ?? null
+    setHeadHost(el)
+  }, [floating, seedMode, props.headRef])
   useEffect(() => {
     if (!floating) return
     const el = document.querySelector<HTMLElement>('.pcm-store-head-actions')
@@ -968,7 +983,7 @@ export function MarketSection(props: SectionProps) {
   return (
     <div className="pcm-root" ref={rootRef}>
       <div className="pcm-sticky-top">
-      <div className="pcm-brand-card">
+      {!seedMode && <div className="pcm-brand-card">
       <div className="pcm-header">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: '1 1 auto', minWidth: 200 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1009,7 +1024,8 @@ export function MarketSection(props: SectionProps) {
           </button>
         </div>
       </div>
-      {floating ? (
+      </div>}
+      {floating && !seedMode ? (
         headHost !== null && createPortal(
           <div className="pcm-header-row2 pcm-head-actions-row">
             <span className="pcm-subtitle">{t('autoRefresh')}</span>
@@ -1043,7 +1059,7 @@ export function MarketSection(props: SectionProps) {
           </div>,
           headHost,
         )
-      ) : (
+      ) : !seedMode ? (
         <div className="pcm-header-row2">
           <span className="pcm-subtitle">{t('autoRefresh')}</span>
           {data !== null && <span className="pcm-source">{sourceLabel}</span>}
@@ -1059,11 +1075,10 @@ export function MarketSection(props: SectionProps) {
             {refreshing ? t('refreshing') : t('refresh')}
           </Button>
         </div>
-      )}
-      </div>
+      ) : null}
 
-      {rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
-      {loadError && <div className="pcm-rate">{t('loadError')}</div>}
+      {!seedMode && rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
+      {!seedMode && loadError && <div className="pcm-rate">{t('loadError')}</div>}
 
       <div className="pcm-toolbar">
         <div className="pcm-seg">
@@ -1091,26 +1106,30 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        <div className="pcm-search-wrap">
-          <Input
-            className="pcm-search"
-            icon={<IconSearchOutline16 size={14} />}
-            value={q}
-            placeholder={t('searchPlaceholder')}
-            onChange={e => { setQ(e.target.value); setPage(1) }}
-          />
-        </div>
-        {/* v1.7.4：#5 智能搜索按钮——用户主模型理解需求 → 目录推荐 → 结果浮窗。 */}
-        <button
-          type="button"
-          className="pcm-smart-search-btn"
-          title={t('smartSearchHint')}
-          disabled={smartSearchBusy}
-          onClick={doSmartSearch}
-        >
-          <span className="pcm-smart-star">✦</span>
-          {smartSearchBusy ? t('smartSearching') : t('smartSearch')}
-        </button>
+        {!seedMode && (
+          <div className="pcm-search-wrap">
+            <Input
+              className="pcm-search"
+              icon={<IconSearchOutline16 size={14} />}
+              value={q}
+              placeholder={t('searchPlaceholder')}
+              onChange={e => { setQ(e.target.value); setPage(1) }}
+            />
+          </div>
+        )}
+        {/* v1.7.4：#5 智能搜索按钮——用户主模型理解需求 → 目录推荐 → 结果浮窗（结果浮窗内不再重复渲染）。 */}
+        {!seedMode && (
+          <button
+            type="button"
+            className="pcm-smart-search-btn"
+            title={t('smartSearchHint')}
+            disabled={smartSearchBusy}
+            onClick={doSmartSearch}
+          >
+            <span className="pcm-smart-star">✦</span>
+            {smartSearchBusy ? t('smartSearching') : t('smartSearch')}
+          </button>
+        )}
         {/* v1.7.3：#5 排序按钮移到搜索框右侧（原语言按钮位置）。 */}
         <div className="pcm-sort-wrap">
           <Menu
