@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Button, IconCloseOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
-import { SettingsWindow } from './SettingsWindow.tsx'
+import { SettingsContent } from './SettingsWindow.tsx'
 import { avatarColor, formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
 import { ICON_DATA } from './icon.ts'
 
@@ -24,32 +24,42 @@ export function SidebarStoreButton(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  // v1.7：侧边栏按钮改为「DSH 商店设置」→ 设置页浮窗；设置页顶部
-  // 「打开 DSH 商店」按钮 → 商店浮窗（与原入口效果一致）。
-  const [open, setOpen] = useState<'settings' | 'store' | null>(null)
+  // v1.7.1 布局纠正：首页侧边栏（设置按钮上方、平级对齐）就是
+  // 「DSH 商店」入口 → 点击直接打开商店浮窗；「DSH 商店设置」入口
+  // 在官方设置浮窗里（settings.section，见 client/index.ts）。
+  const [open, setOpen] = useState(false)
   const button = (
     <button
       type="button"
       className={'pcm-sidebar-btn' + (props.wide ? '' : ' pcm-sidebar-rail')}
-      title={props.t('settingsNav')}
-      onClick={() => setOpen('settings')}
+      title={props.t('nav')}
+      onClick={() => setOpen(true)}
     >
       <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
-      <span className="pcm-sidebar-label">{props.t('settingsNav')}</span>
+      <span className="pcm-sidebar-label">{props.t('nav')}</span>
     </button>
   )
   return (
     <>
       {button}
-      {open === 'settings' && (
-        <SettingsWindow
-          t={props.t}
-          onClose={() => setOpen(null)}
-          onOpenStore={() => setOpen('store')}
-        />
+      {open && (
+        <StoreWindow t={props.t} locale={props.locale} onClose={() => setOpen(false)} />
       )}
-      {open === 'store' && (
-        <StoreWindow t={props.t} locale={props.locale} onClose={() => setOpen(null)} />
+    </>
+  )
+}
+
+/** 设置浮窗里的「DSH 商店设置」section：设置内容 + 顶部大按钮打开商店浮窗。 */
+export function SettingsSection(props: {
+  t: (key: string) => string
+  locale: LocaleLike
+}) {
+  const [storeOpen, setStoreOpen] = useState(false)
+  return (
+    <>
+      <SettingsContent t={props.t} onOpenStore={() => setStoreOpen(true)} />
+      {storeOpen && (
+        <StoreWindow t={props.t} locale={props.locale} onClose={() => setStoreOpen(false)} />
       )}
     </>
   )
@@ -223,10 +233,11 @@ function StoreWindow(props: {
         <div className="pcm-store-head">
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{props.t('nav')}</span>
+          <div className="pcm-store-head-actions" />
           <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-store-close" title={props.t('close')} />
         </div>
         <div className="pcm-store-body">
-          <MarketSection t={props.t} locale={props.locale} />
+          <MarketSection t={props.t} locale={props.locale} floating />
         </div>
       </div>
     </div>,

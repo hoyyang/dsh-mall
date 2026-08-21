@@ -15,6 +15,7 @@ import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './githu
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
+import { ensureDownloads } from './downloads.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -381,6 +382,34 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const list = setSkipUpdate(config.profile, name, body.skip)
       sendJson(response, 200, { ok: true, skipUpdates: list })
+    },
+  }))
+
+  // npm 下载量（近 30 天）按需富化：POST {names[]} —— 批量查 npm API，
+  // 24h 缓存（未发布 6h），单次最多 2000 个包名。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/downloads',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const names = Array.isArray(body.names) ? body.names.filter((n): n is string => typeof n === 'string' && n !== '') : []
+      if (names.length === 0) {
+        sendJson(response, 200, { ok: true, downloads: {} })
+        return
+      }
+      const downloads = await ensureDownloads(config.profile, names)
+      sendJson(response, 200, { ok: true, downloads })
     },
   }))
 

@@ -9,9 +9,8 @@ import { createElement as h } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh } from './locales.ts'
-import { MarketSection } from './MarketSection.tsx'
 import { SettingsCard } from './SettingsCard.tsx'
-import { SidebarStoreButton, StoreResultsLauncher } from './StoreWindow.tsx'
+import { SettingsSection, SidebarStoreButton, StoreResultsLauncher } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
 
 const NS = 'dsh-store'
@@ -67,14 +66,16 @@ export function apply(ctx: MarketClientContext): void {
     }
   }, NS + ': results launcher')
 
+  // 官方设置浮窗里的「DSH 商店设置」section（v1.7.1 布局纠正）：
+  // 点击显示 DSH 商店设置页（顶部大按钮可打开商店浮窗），不再直接渲染商店。
   ctx.slots.inject('settings.section', () => ctx.slots.register({
     name: 'settings.section',
     id: 'plugin-market',
     order: 45,
-    label: () => t('nav'),
+    label: () => t('settingsNav'),
     locale: NS,
     inject: () => ({ t }),
-  }, () => h(MarketSection, {
+  }, () => h(SettingsSection, {
     t,
     locale: ctx.locale,
   })))

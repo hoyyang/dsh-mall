@@ -78,6 +78,8 @@ export interface MarketEntry {
     installable: 'non-plugin' | 'manual' | null;
     /** GitHub topics（详情面板展示）。 */
     topics: string[];
+    /** npm 下载量（近 30 天，npm API 按需富化）；undefined=未拉取，null=未发布。 */
+    downloads?: number | null;
 }
 export interface Registry {
     updated: string;
@@ -110,6 +112,11 @@ export interface MarketState {
         lastUpdated: number;
         lastMessage: string | null;
     };
+    /** npm 下载量缓存：包名 → {at, value}（value null = 未发布）。 */
+    downloads?: Record<string, {
+        at: number;
+        value: number | null;
+    }>;
 }
 export interface InstallState {
     active: boolean;

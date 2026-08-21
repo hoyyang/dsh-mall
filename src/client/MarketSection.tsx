@@ -8,6 +8,7 @@
 import {
   useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore,
 } from 'react'
+import { createPortal } from 'react-dom'
 import {
   Button,
   IconCheckOutline16,
@@ -25,7 +26,7 @@ import {
   type MenuEntry,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import {
-  avatarColor, durationBetween, formatStars, orderedCategories, pageItems,
+  avatarColor, durationBetween, formatDownloads, formatStars, orderedCategories, pageItems,
   relativeFromNow, visiblePlugins,
   type MarketEntry, type PluginKind, type Registry, type SortKey,
 } from './market-data.ts'
@@ -42,6 +43,8 @@ interface SectionProps {
     subscribe(callback: () => void): () => void
     getSnapshot(): { active: string }
   }
+  /** true = 渲染在独立商店浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
+  floating?: boolean
 }
 
 interface StatusBody {
@@ -63,6 +66,7 @@ interface StatusBody {
 
 export function MarketSection(props: SectionProps) {
   const t = props.t
+  const floating = props.floating === true
   const localeSnap = useSyncExternalStore(
     cb => props.locale.subscribe(cb),
     () => props.locale.getSnapshot(),
@@ -86,14 +90,25 @@ export function MarketSection(props: SectionProps) {
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
-  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created'>('stars')
+  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const sort = (sortDim + '-' + sortDir) as SortKey
   const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
   const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
   const LANG_SHORT: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', ru: 'RU' }
   const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
-  const [langChoice, setLangChoice] = useState<string>('en')
+  // 语言选择持久化：切走/关窗再回来保持上次选择（v1.7.1 修复"切了又变回英文"）。
+  const [langChoice, setLangChoice] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('dsh-store-lang')
+      if (saved !== null && (LANGS as readonly string[]).includes(saved)) return saved
+    } catch { /* localStorage 不可用 */ }
+    return 'en'
+  })
+  const setLangPersist = useCallback((l: string) => {
+    setLangChoice(l)
+    try { localStorage.setItem('dsh-store-lang', l) } catch { /* 忽略 */ }
+  }, [])
   const [langOpen, setLangOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(24)
@@ -120,6 +135,13 @@ export function MarketSection(props: SectionProps) {
   const taskSeq = useRef(0)
   const nextTaskId = () => 'task-' + String(++taskSeq.current) + '-' + String(Date.now() % 100000)
   const tasksSummary = taskSummary(tasks)
+  // 浮窗模式：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。
+  const [headHost, setHeadHost] = useState<HTMLElement | null>(null)
+  useEffect(() => {
+    if (!floating) return
+    const el = document.querySelector<HTMLElement>('.pcm-store-head-actions')
+    setHeadHost(el)
+  }, [floating])
   /** 任务收尾：ok→done（附 host 消息），否则→failed（附原因）并自动打开面板。 */
   const finishTask = useCallback((id: string, body: { ok?: boolean; message?: string; error?: string }, doneText: string) => {
     setTasks(list => patchTask(list, id, body.ok === true
@@ -540,6 +562,51 @@ export function MarketSection(props: SectionProps) {
       .catch(() => {})
   }, [langChoice, pageList, data])
 
+  // ---- npm 下载量按需富化（卡片徽章 + 下载量排序）----
+  const downloadsRequested = useRef<Set<string>>(new Set())
+  const downloadsEnrich = useCallback((names: string[]) => {
+    const todo = [...new Set(names.filter(n => n !== '' && !downloadsRequested.current.has(n)))]
+    if (todo.length === 0) return
+    for (const n of todo) downloadsRequested.current.add(n)
+    fetch('/dsh-store/downloads', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ names: todo.slice(0, 1500) }),
+    })
+      .then(res => res.json())
+      .then((body: { downloads?: Record<string, number | null> }) => {
+        const got = body.downloads ?? {}
+        setData((prev: Registry | null) => {
+          if (prev === null) return prev
+          return {
+            ...prev,
+            plugins: prev.plugins.map((e: MarketEntry) => {
+              const hit = e.npm !== null ? got[e.npm] : undefined
+              if (hit === undefined) return e
+              return { ...e, downloads: hit }
+            }),
+          }
+        })
+      })
+      .catch(() => {})
+  }, [])
+
+  // 当前页条目富化（卡片徽章数据源）。
+  useEffect(() => {
+    if (data === null) return
+    downloadsEnrich(pageList.filter(e => e.npm !== null && e.downloads === undefined).map(e => e.npm as string).slice(0, 48))
+  }, [pageList, data, downloadsEnrich])
+
+  // 选「下载量」排序时，全量补一次下载数据（缓存 24h，一次性成本）。
+  const fullDownloadsFetched = useRef(false)
+  useEffect(() => {
+    if (sortDim !== 'downloads' || data === null || fullDownloadsFetched.current) return
+    fullDownloadsFetched.current = true
+    const all = [...new Set(data.plugins.filter(e => e.npm !== null && e.downloads === undefined).map(e => e.npm as string))]
+    const step = 1500
+    for (let i = 0; i < all.length; i += step) downloadsEnrich(all.slice(i, i + step))
+  }, [sortDim, data, downloadsEnrich])
+
   const doInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
     const id = nextTaskId()
@@ -818,6 +885,7 @@ export function MarketSection(props: SectionProps) {
     { type: 'label', id: 'dim-label', text: t('sortDim') },
     { id: 'stars', label: t('sortStars') },
     { id: 'today', label: t('sortToday') },
+    { id: 'downloads', label: t('sortDownloads') },
     { id: 'created', label: t('sortCreated') },
     { type: 'separator', id: 'dim-sep' },
     { type: 'label', id: 'dir-label', text: t('sortDir') },
@@ -861,54 +929,77 @@ export function MarketSection(props: SectionProps) {
           </div>
           <div className="pcm-subtitle">{t('subtitle')}</div>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          icon={<IconSendOutline16 size={14} />}
-          onClick={() => setPublishOpen(true)}
-          className="pcm-publish-btn"
-          style={{ marginLeft: 'auto' }}
-        >
-          {t('publish')}
-        </Button>
-      </div>
-      <div className="pcm-header-row2">
-        <span className="pcm-subtitle">{t('autoRefresh')}</span>
-        {data !== null && <span className="pcm-source">{sourceLabel}</span>}
-        <span className="pcm-divider" />
-        <Button
-          variant="outline"
-          size="sm"
-          icon={refreshing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : <IconRefreshOutline14 size={14} />}
-          onClick={() => { fetchRegistry(true); fetchStatus() }}
-          disabled={refreshing}
-          className="pcm-brand-btn"
-        >
-          {refreshing ? t('refreshing') : t('refresh')}
-        </Button>
-        <button
-          type="button"
-          ref={tasksAnchorRef}
-          className="pcm-tasks-btn"
-          aria-expanded={tasksOpen}
-          onClick={() => setTasksOpen(o => !o)}
-        >
-          {tasksSummary.running > 0 && <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>}
-          {t('tasksBtn')}
-          {tasksSummary.running > 0 && <span className="pcm-tasks-count">{tasksSummary.settled}/{tasksSummary.total}</span>}
-        </button>
-        {updates.length > 0 && (
-          <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
-            {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
+        <div className="pcm-header-actions">
+          {updates.length > 0 && (
+            <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
+              {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
+            </button>
+          )}
+          {status?.selfUpdate?.to != null && !selfUpdateDone && (
+            <button className="pcm-self-update-btn" onClick={doSelfUpdate} disabled={selfUpdateBusy}>
+              {selfUpdateBusy ? t('updatingAll') : t('selfUpdateBtn').replace('{0}', status.selfUpdate.from).replace('{1}', status.selfUpdate.to)}
+            </button>
+          )}
+          {selfUpdateDone && <span className="pcm-self-update-warn">{t('restartNeeded')}</span>}
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<IconSendOutline16 size={14} />}
+            onClick={() => setPublishOpen(true)}
+            className="pcm-publish-btn"
+            title={t('publishHint')}
+          >
+            {t('publish')}
+          </Button>
+          <button
+            type="button"
+            ref={tasksAnchorRef}
+            className="pcm-tasks-btn"
+            aria-expanded={tasksOpen}
+            onClick={() => setTasksOpen(o => !o)}
+          >
+            {tasksSummary.running > 0 && <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>}
+            {t('tasksBtn')}
+            {tasksSummary.running > 0 && <span className="pcm-tasks-count">{tasksSummary.settled}/{tasksSummary.total}</span>}
           </button>
-        )}
-        {status?.selfUpdate?.to != null && !selfUpdateDone && (
-          <button className="pcm-self-update-btn" onClick={doSelfUpdate} disabled={selfUpdateBusy}>
-            {selfUpdateBusy ? t('updatingAll') : t('selfUpdateBtn').replace('{0}', status.selfUpdate.from).replace('{1}', status.selfUpdate.to)}
-          </button>
-        )}
-        {selfUpdateDone && <span className="pcm-self-update-warn">{t('restartNeeded')}</span>}
+        </div>
       </div>
+      {floating ? (
+        headHost !== null && createPortal(
+          <div className="pcm-header-row2 pcm-head-actions-row">
+            <span className="pcm-subtitle">{t('autoRefresh')}</span>
+            {data !== null && <span className="pcm-source">{sourceLabel}</span>}
+            <span className="pcm-divider" />
+            <Button
+              variant="outline"
+              size="sm"
+              icon={refreshing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : <IconRefreshOutline14 size={14} />}
+              onClick={() => { fetchRegistry(true); fetchStatus() }}
+              disabled={refreshing}
+              className="pcm-brand-btn pcm-brand-btn-sm"
+            >
+              {refreshing ? t('refreshing') : t('refresh')}
+            </Button>
+          </div>,
+          headHost,
+        )
+      ) : (
+        <div className="pcm-header-row2">
+          <span className="pcm-subtitle">{t('autoRefresh')}</span>
+          {data !== null && <span className="pcm-source">{sourceLabel}</span>}
+          <span className="pcm-divider" />
+          <Button
+            variant="outline"
+            size="sm"
+            icon={refreshing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : <IconRefreshOutline14 size={14} />}
+            onClick={() => { fetchRegistry(true); fetchStatus() }}
+            disabled={refreshing}
+            className="pcm-brand-btn"
+          >
+            {refreshing ? t('refreshing') : t('refresh')}
+          </Button>
+        </div>
+      )}
       </div>
 
       {rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
@@ -953,7 +1044,7 @@ export function MarketSection(props: SectionProps) {
           <Menu
             open={langOpen}
             onClose={() => setLangOpen(false)}
-            onSelect={id => { setLangChoice(id); setLangOpen(false); setPage(1) }}
+            onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
             align="end"
             anchor={(
               <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -973,7 +1064,7 @@ export function MarketSection(props: SectionProps) {
             open={sortOpen}
             onClose={() => setSortOpen(false)}
             onSelect={id => {
-              if (id === 'stars' || id === 'today' || id === 'created') setSortDim(id)
+              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads') setSortDim(id)
               else if (id === 'asc' || id === 'desc') setSortDir(id)
               setPage(1)
             }}
@@ -1128,6 +1219,9 @@ export function MarketSection(props: SectionProps) {
                   <div className="pcm-foot">
                     <div className="pcm-stats">
                       <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
+                      {typeof entry.downloads === 'number' && (
+                        <span className="pcm-downloads" title={t('downloadsHint')}>↓ {formatDownloads(entry.downloads)}</span>
+                      )}
                       <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
                       <span className="pcm-cat">{catLabel(entry.category)}</span>
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>

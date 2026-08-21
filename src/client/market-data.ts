@@ -45,6 +45,8 @@ export interface MarketEntry {
   installable: 'non-plugin' | 'manual' | null
   /** GitHub topics（详情面板展示）。 */
   topics: string[]
+  /** npm 下载量（近 30 天，按需富化）；undefined=未拉取，null=未发布。 */
+  downloads?: number | null
 }
 
 export interface Registry {
@@ -55,7 +57,7 @@ export interface Registry {
   plugins: MarketEntry[]
 }
 
-export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc'
+export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc' | 'downloads-asc' | 'downloads-desc'
 export type PluginKind = 'all' | 'plugin' | 'nonplugin'
 export type SinceDays = 0 | 1 | 7 | 30 | 365
 
@@ -104,7 +106,24 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
   else if (options.sort === 'today-asc') sorted.sort((a, b) => todayRank(a.todayStars) - todayRank(b.todayStars))
   else if (options.sort === 'created-desc') sorted.sort((a, b) => createdRank(b.created) - createdRank(a.created))
   else if (options.sort === 'created-asc') sorted.sort((a, b) => createdRank(a.created) - createdRank(b.created))
+  else if (options.sort === 'downloads-desc' || options.sort === 'downloads-asc') {
+    // 下载量排序：null/undefined（未发布/未拉取）恒排尾，之后按 star 兜底（dshmarket 同款语义）
+    const dl = (v: number | null | undefined): number => (typeof v === 'number' ? v : Number.NEGATIVE_INFINITY)
+    const dir = options.sort === 'downloads-desc' ? 1 : -1
+    sorted.sort((a, b) => {
+      const da = dl(a.downloads)
+      const db = dl(b.downloads)
+      if (da !== db) return (db - da) * dir
+      return ((b.stars ?? -1) - (a.stars ?? -1)) * dir
+    })
+  }
   return sorted
+}
+
+export function formatDownloads(n: number): string {
+  if (n >= 1_000_000) return Math.round(n / 100_000) / 10 + 'M'
+  if (n >= 1000) return Math.round(n / 100) / 10 + 'k'
+  return String(n)
 }
 
 export function formatStars(n: number | null): string {

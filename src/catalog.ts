@@ -68,6 +68,15 @@ function collectDescriptions(repo: Record<string, unknown>): Record<string, stri
   return Object.keys(out).length > 0 ? out : null
 }
 
+/** 多语言简介合并：awesome 人工目录的 en/zh 兜底 + 索引 README.<lang>.md 富化覆盖。 */
+function mergeDescriptions(known: { en?: string; zh?: string } | undefined | null, enriched: Record<string, string> | null): Record<string, string> | null {
+  const out: Record<string, string> = {}
+  if (known?.en !== undefined && known.en !== '') out.en = known.en
+  if (known?.zh !== undefined && known.zh !== '') out.zh = known.zh
+  if (enriched !== null) Object.assign(out, enriched)
+  return Object.keys(out).length > 0 ? out : null
+}
+
 /** GitHub 仓库 → npm 发布名人工对照表：仓库根没有 package.json（monorepo 等）
  *  导致索引 pkg_name 富化失败时，用这里补上真实发布名（如 tt-a1i/archify 的
  *  DSH 集成发布为 @tt-a1i/archify-dsh），使本地安装能与 GitHub 卡正确关联。 */
@@ -128,7 +137,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     url: repo.html_url,
     category,
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
-    descriptions: collectDescriptions(repo as unknown as Record<string, unknown>),
+    descriptions: mergeDescriptions(knownEntry?.description, collectDescriptions(repo as unknown as Record<string, unknown>)),
     stars: repo.stargazers_count ?? null,
     todayStars: null,
     created: knownEntry?.added ?? null,
@@ -576,7 +585,7 @@ function buildEntry(
     url: search?.html_url ?? 'https://github.com/' + fullName,
     category: knownEntry?.category ?? ruleCategory(name, description, topics),
     description: description.length > 200 ? description.slice(0, 200) + '…' : description,
-    descriptions: search !== undefined ? collectDescriptions(search as unknown as Record<string, unknown>) : null,
+    descriptions: mergeDescriptions(knownEntry?.description, search !== undefined ? collectDescriptions(search as unknown as Record<string, unknown>) : null),
     stars: search?.stargazers_count ?? null,
     todayStars: null,
     created: search?.created_at ?? null,
