@@ -4,7 +4,7 @@
  * 不会把进行中的操作带出视野。批量一键更新记为一条聚合记录。
  */
 
-export type TaskKind = 'install' | 'update' | 'uninstall' | 'smart-install'
+export type TaskKind = 'install' | 'update' | 'uninstall' | 'smart-install' | 'smart-uninstall'
 export type TaskState = 'running' | 'done' | 'failed'
 
 export interface TaskRecord {

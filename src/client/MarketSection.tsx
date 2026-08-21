@@ -762,6 +762,70 @@ export function MarketSection(props: SectionProps) {
       })
   }, [t, fetchStatus, finishTask])
 
+  // ---- 智能卸载：AI 先审查风险（有风险→弹报告待确认；无风险→直接删）+ 装后残留检查 ----
+  const [smartUninstallBusy, setSmartUninstallBusy] = useState(false)
+  const [smartUninstallRisk, setSmartUninstallRisk] = useState<{ name: string; verdict: string; report: string } | null>(null)
+  const [smartUninstallPending, setSmartUninstallPending] = useState<{ name: string; taskId: string } | null>(null)
+  const runSmartUninstallRequest = useCallback((name: string, taskId: string, confirm: boolean) => {
+    fetch('/dsh-store/smart-uninstall', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name, confirm }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; stage?: string; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; error?: string }) => {
+        if (body.stage === 'review') {
+          setSmartUninstallRisk({ name, verdict: body.verdict ?? 'caution', report: body.report ?? '' })
+          setSmartUninstallPending({ name, taskId })
+          finishTask(taskId, { ok: true, message: t('smartUninstallReview') + ' · ' + (body.report ?? '') }, t('smartUninstallReview'))
+        } else if (body.stage === 'done') {
+          if (body.verdict === 'refuse') {
+            setToast(t('smartUninstallRefused') + ': ' + (body.report ?? ''))
+            finishTask(taskId, { ok: false, error: t('smartUninstallRefused') + ' · ' + (body.report ?? '') }, '')
+          } else if (body.ok === true) {
+            setToast(t('uninstallDone') + ' ' + (body.report ?? ''))
+            finishTask(taskId, { ok: true, message: (body.report ?? '') }, t('uninstallDone'))
+          } else {
+            setToast(t('installFailed') + ': ' + (body.report ?? body.error ?? ''))
+            finishTask(taskId, { ok: false, error: body.report ?? body.error ?? t('installFailed') }, '')
+          }
+          fetchStatus()
+        }
+      })
+      .catch(() => {
+        setToast(t('installFailed'))
+        finishTask(taskId, { ok: false, error: t('installFailed') }, '')
+      })
+      .finally(() => setSmartUninstallBusy(false))
+  }, [t, fetchStatus, finishTask])
+  const doSmartUninstall = useCallback((entry: MarketEntry) => {
+    if (smartUninstallBusy) return
+    const name = entry.npm ?? entry.name
+    setRemoving(null)
+    setSmartUninstallBusy(true)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'smart-uninstall',
+      name,
+      state: 'running',
+      detail: t('smartUninstallHint'),
+      reason: null,
+      at: Date.now(),
+    }))
+    setTasksOpen(true)
+    runSmartUninstallRequest(name, id, false)
+  }, [smartUninstallBusy, t, runSmartUninstallRequest])
+  const confirmSmartUninstall = useCallback(() => {
+    const pending = smartUninstallPending
+    setSmartUninstallRisk(null)
+    setSmartUninstallPending(null)
+    if (pending === null) return
+    setSmartUninstallBusy(true)
+    setTasks(list => patchTask(list, pending.taskId, { state: 'running', detail: t('uninstalling').replace('{0}', pending.name) }))
+    runSmartUninstallRequest(pending.name, pending.taskId, true)
+  }, [smartUninstallPending, t, runSmartUninstallRequest])
+
   useEffect(() => {
     if (toast === null) return
     const timer = setTimeout(() => setToast(null), 6000)
@@ -1115,6 +1179,16 @@ export function MarketSection(props: SectionProps) {
               placeholder={t('searchPlaceholder')}
               onChange={e => { setQ(e.target.value); setPage(1) }}
             />
+            {q !== '' && (
+              <button
+                type="button"
+                className="pcm-search-clear"
+                title={t('searchClear')}
+                onClick={() => { setQ(''); setPage(1) }}
+              >
+                ✕
+              </button>
+            )}
           </div>
         )}
         {/* v1.7.4：#5 智能搜索按钮——用户主模型理解需求 → 目录推荐 → 结果浮窗（结果浮窗内不再重复渲染）。 */}
@@ -1242,27 +1316,7 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
-                      {installed && upd !== null && (
-                        <>
-                          <span className="pcm-update-versions" title={t('updateHint')}>
-                            {upd.from} <span className="pcm-update-arrow">→</span> <span className="pcm-update-new">{upd.to}</span>
-                          </span>
-                          <Button variant="primary" size="sm" className="pcm-update-btn" disabled={updateBusy} onClick={() => doUpdateOne(upd)}>
-                            {updatingNames.has(upd.name.toLowerCase()) ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
-                          </Button>
-                        </>
-                      )}
-                      {installed ? (
-                        <>
-                          {entry.local === true && (
-                            <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
-                          )}
-                          {entry.local !== true && (
-                            <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
-                          )}
-                          <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
-                        </>
-                      ) : (
+                      {!installed && (
                         <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
                       )}
                       {entry.local !== true && (
@@ -1272,37 +1326,11 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                   </div>
-                  {(entry.curated || entry.verified != null || disclosure != null || installed) && (
+                  {(entry.curated || entry.verified != null || disclosure != null) && (
                     <div className="pcm-safety-row">
                       {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>⚑ {t('curatedBadge')}</span>}
                       {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>✓ {t('verifiedBadge')}</span>}
                       {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
-                      {installed && (
-                        <div className="pcm-safety-controls" onClick={e => e.stopPropagation()}>
-                          {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
-                            <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
-                              {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
-                            </Button>
-                          )}
-                          {entry.local !== true && (
-                            <label className="pcm-skip-row" title={t('skipHint')}>
-                              <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
-                              <span>{t('skipUpdate')}</span>
-                            </label>
-                          )}
-                          {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
-                            <label className="pcm-switch" title={t('toggleHint')}>
-                              <input
-                                type="checkbox"
-                                checked={stateOf(entry) !== 'disabled'}
-                                disabled={toggling.has(entry.npm ?? entry.name)}
-                                onChange={() => doToggle(entry)}
-                              />
-                              <span className="pcm-switch-track" />
-                            </label>
-                          )}
-                        </div>
-                      )}
                     </div>
                   )}
                   <div className="pcm-desc">{(() => {
@@ -1332,6 +1360,50 @@ export function MarketSection(props: SectionProps) {
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
                     </div>
                   </div>
+                  {/* v1.7.10：#3 已安装功能区（★ 行下方浅色圆角面板）——更新/卸载/回退/skip/开关全部收纳 */}
+                  {installed && (
+                    <div className="pcm-installed-panel" onClick={e => e.stopPropagation()}>
+                      {upd !== null && (
+                        <div className="pcm-installed-update">
+                          <span className="pcm-update-versions" title={t('updateHint')}>
+                            {upd.from} <span className="pcm-update-arrow">→</span> <span className="pcm-update-new">{upd.to}</span>
+                          </span>
+                          <Button variant="primary" size="sm" className="pcm-update-btn" disabled={updateBusy} onClick={() => doUpdateOne(upd)}>
+                            {updatingNames.has(upd.name.toLowerCase()) ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
+                          </Button>
+                        </div>
+                      )}
+                      <div className="pcm-installed-actions">
+                        {entry.local === true ? (
+                          <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
+                        ) : (
+                          <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
+                        )}
+                        {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
+                          <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
+                            {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
+                          </Button>
+                        )}
+                        {entry.local !== true && (
+                          <label className="pcm-skip-row" title={t('skipHint')}>
+                            <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
+                            <span>{t('skipUpdate')}</span>
+                          </label>
+                        )}
+                        {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
+                          <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
+                            <input
+                              type="checkbox"
+                              checked={stateOf(entry) !== 'disabled'}
+                              disabled={toggling.has(entry.npm ?? entry.name)}
+                              onChange={() => doToggle(entry)}
+                            />
+                            <span className="pcm-switch-track" />
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -1418,12 +1490,41 @@ export function MarketSection(props: SectionProps) {
           footer={(
             <>
               <Button variant="ghost" onClick={() => setRemoving(null)}>{t('cancel')}</Button>
-              <Button variant="primary" onClick={() => doUninstall(removing)}>{t('uninstall')}</Button>
+              <button type="button" className="pcm-smart-install-btn" onClick={() => doSmartUninstall(removing)} title={t('smartUninstallHint')}>
+                <span className="pcm-smart-star">✦</span>
+                {smartUninstallBusy ? t('smartSearching') : t('smartUninstall')}
+              </button>
+              <button type="button" className="pcm-install-plain-btn" onClick={() => doUninstall(removing)}>
+                {t('uninstall')}
+              </button>
             </>
           )}
         >
           <div className="pcm-modal-body">
             <div className="pcm-cmd">{removing.owner + '/' + removing.name}</div>
+          </div>
+        </Modal>
+      )}
+
+      {smartUninstallRisk !== null && (
+        <Modal
+          open
+          onClose={() => setSmartUninstallRisk(null)}
+          title={t('smartUninstallReview') + ': ' + smartUninstallRisk.name}
+          description={t('smartUninstallHint')}
+          footer={(
+            <>
+              <Button variant="ghost" onClick={() => setSmartUninstallRisk(null)}>{t('cancel')}</Button>
+              {smartUninstallRisk.verdict !== 'refuse' && (
+                <button type="button" className="pcm-install-plain-btn" onClick={() => confirmSmartUninstall()}>
+                  {t('uninstallAnyway')}
+                </button>
+              )}
+            </>
+          )}
+        >
+          <div className="pcm-modal-body">
+            <div className="pcm-risk pcm-risk-community">{smartUninstallRisk.report}</div>
           </div>
         </Modal>
       )}

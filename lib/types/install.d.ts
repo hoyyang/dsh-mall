@@ -59,6 +59,10 @@ export declare function runUpdate(config: MarketConfig, targets: Array<{
     }>;
 }>;
 export declare function patchFilePath(profile: string): string;
+/** 从包的 cordis.patch.yml 解析它的 loader entry id（dshmarket 的 entry id 是
+ *  'dsh-market' 而非包名 'dshmarket'——开关若写错 id 会静默失效）。
+ *  解析失败回退包名。 */
+export declare function loaderIdOf(profile: string, depName: string): string;
 /** 用户 patch 层当前停用的 loader id 列表。 */
 export declare function patchDisables(profile: string): string[];
 /** 停用（enabled=false）或重新启用（enabled=true）一个 loader 条目。 */

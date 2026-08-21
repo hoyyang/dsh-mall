@@ -63,7 +63,8 @@ export function TaskPanel(props: {
     record.kind === 'install' ? t('taskKindInstall')
       : record.kind === 'update' ? t('taskKindUpdate')
         : record.kind === 'uninstall' ? t('taskKindUninstall')
-          : t('taskKindSmartInstall')
+          : record.kind === 'smart-install' ? t('taskKindSmartInstall')
+            : t('taskKindSmartUninstall')
 
   return createPortal(
     <div

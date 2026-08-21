@@ -12,11 +12,11 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
 import { smartSearch, takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
-import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
+import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
-import { runSmartInstall } from './smart.ts'
+import { runSmartInstall, runSmartUninstall } from './smart.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -346,7 +346,9 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid name or enabled' })
         return
       }
-      const result = setPluginEnabled(config.profile, name, body.enabled)
+      // v1.7.10：开关按真实 loader id 写 patch（dshmarket→dsh-market）。
+      const loaderId = loaderIdOf(config.profile, name)
+      const result = setPluginEnabled(config.profile, loaderId, body.enabled)
       sendJson(response, result.ok ? 200 : 400, result)
     },
   }))
@@ -445,6 +447,39 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       const downloads = await ensureDownloads(config.profile, names)
       const totals = await ensureTotals(config.profile, names)
       sendJson(response, 200, { ok: true, downloads, totals })
+    },
+  }))
+
+  // 智能卸载：AI 审查（有风险先 review 报告、确认后才执行）+ dsh plugin remove + 残留检查。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/smart-uninstall',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const name = typeof body.name === 'string' && /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/i.test(body.name) && body.name.length < 214
+        ? body.name
+        : null
+      if (name === null) {
+        sendJson(response, 400, { ok: false, error: 'invalid name' })
+        return
+      }
+      const locked = await withMutationLock(async () => runSmartUninstall(config, name, body.confirm === true))
+      if (locked.busy) {
+        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+        return
+      }
+      sendJson(response, 200, locked.value)
     },
   }))
 

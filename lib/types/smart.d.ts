@@ -25,3 +25,18 @@ export interface SmartInstallResult {
     report: string;
 }
 export declare function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<SmartInstallResult>;
+export interface SmartUninstallResult {
+    ok: boolean;
+    stage: 'review' | 'done' | 'error';
+    verdict: 'proceed' | 'caution' | 'refuse' | 'unavailable';
+    risks: string[];
+    reasons: string[];
+    report: string;
+    uninstalled: boolean;
+}
+/**
+ * 智能卸载（v1.7.10）：AI 介入，安全且纯净地删除插件。
+ * - confirm=false 且 AI 判定有风险（caution/refuse）→ 只返回审查报告（stage review），不删除；
+ * - verdict=proceed 或用户确认后 → 执行 dsh plugin remove + 装后残留检查。
+ */
+export declare function runSmartUninstall(config: MarketConfig, depName: string, confirm: boolean): Promise<SmartUninstallResult>;
