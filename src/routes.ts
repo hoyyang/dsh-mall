@@ -14,6 +14,7 @@ import { takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
+import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -166,6 +167,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         skipUpdates: state.skipUpdates ?? [],
         patchDisables: patchDisables(config.profile),
         selfUpdate: await selfUpdateInfo(),
+        autoUpdate: autoUpdateStateOf(config.profile),
       })
     },
   }))
@@ -379,6 +381,38 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const list = setSkipUpdate(config.profile, name, body.skip)
       sendJson(response, 200, { ok: true, skipUpdates: list })
+    },
+  }))
+
+  // 自动一键更新开关：GET 读状态，POST {enabled} 切换并重排每日定时器。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/auto-update',
+    handler: async (request, response) => {
+      if (request.method === 'GET') {
+        sendJson(response, 200, { ok: true, autoUpdate: autoUpdateStateOf(config.profile) })
+        return
+      }
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST, GET' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      if (typeof body.enabled !== 'boolean') {
+        sendJson(response, 400, { ok: false, error: 'invalid enabled' })
+        return
+      }
+      const state = setAutoUpdateEnabled(config.profile, body.enabled)
+      if (state.enabled) startAutoUpdate(config)
+      else stopAutoUpdate()
+      sendJson(response, 200, { ok: true, autoUpdate: state })
     },
   }))
 

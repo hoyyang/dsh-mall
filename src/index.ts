@@ -11,6 +11,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import { mountMarketRoutes, type MarketHost } from './routes.ts'
 import { installFindTool } from './find.ts'
 import { installMarketSettings } from './settings.ts'
+import { startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-store'
@@ -80,10 +81,13 @@ export function apply(ctx: Context, config?: Config): void {
     host.effect?.(() => {
       const removeSkill = ensureSkill(resolved.profile)
       const disposeRoutes = mountMarketRoutes(host, resolved)
+      // 自动一键更新：开关为开时进程启动即重排每日定时器。
+      startAutoUpdate(resolved)
       return () => {
         disposeRoutes()
         removeSkill()
+        stopAutoUpdate()
       }
-    }, 'dsh-store: http routes + skill')
+    }, 'dsh-store: http routes + skill + auto-update timer')
   })
 }

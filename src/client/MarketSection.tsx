@@ -31,6 +31,8 @@ import {
 } from './market-data.ts'
 import { DetailPanel } from './DetailPanel.tsx'
 import { ICON_DATA } from './icon.ts'
+import { TaskPanel } from './TaskPanel.tsx'
+import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
 
 const PAGE_SIZES = [24, 48, 96]
 
@@ -111,6 +113,20 @@ export function MarketSection(props: SectionProps) {
   const [selfUpdateDone, setSelfUpdateDone] = useState(false)
   const [toggling, setToggling] = useState<Set<string>>(new Set())
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  // 进行中任务（安装/更新/卸载进度面板，参考 dshmarket）。
+  const [tasks, setTasks] = useState<TaskRecord[]>([])
+  const [tasksOpen, setTasksOpen] = useState(false)
+  const tasksAnchorRef = useRef<HTMLButtonElement | null>(null)
+  const taskSeq = useRef(0)
+  const nextTaskId = () => 'task-' + String(++taskSeq.current) + '-' + String(Date.now() % 100000)
+  const tasksSummary = taskSummary(tasks)
+  /** 任务收尾：ok→done（附 host 消息），否则→failed（附原因）并自动打开面板。 */
+  const finishTask = useCallback((id: string, body: { ok?: boolean; message?: string; error?: string }, doneText: string) => {
+    setTasks(list => patchTask(list, id, body.ok === true
+      ? { state: 'done', detail: (body.message ?? '') !== '' ? body.message : doneText, reason: null }
+      : { state: 'failed', reason: body.message ?? body.error ?? t('taskFailed'), detail: null }))
+    if (body.ok !== true) setTasksOpen(true)
+  }, [t])
 
   const refreshing = status?.refreshing === true
   const installing = status?.install?.active === true
@@ -526,6 +542,16 @@ export function MarketSection(props: SectionProps) {
 
   const doInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'install',
+      name: entry.npm ?? entry.owner + '/' + entry.name,
+      state: 'running',
+      detail: entry.owner + '/' + entry.name,
+      reason: null,
+      at: Date.now(),
+    }))
     fetch('/dsh-store/install', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -534,13 +560,27 @@ export function MarketSection(props: SectionProps) {
       .then(res => res.json())
       .then((body: { ok?: boolean; message?: string; error?: string }) => {
         setToast(body.ok === true ? t('installDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
+        finishTask(id, body, t('installDone'))
         fetchStatus()
       })
-      .catch(() => setToast(t('installFailed')))
-  }, [t, fetchStatus])
+      .catch(() => {
+        setToast(t('installFailed'))
+        finishTask(id, { ok: false, error: t('installFailed') }, '')
+      })
+  }, [t, fetchStatus, finishTask])
 
   const doUninstallLocal = useCallback((entry: MarketEntry) => {
     setRemovingLocal(null)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'uninstall',
+      name: entry.name,
+      state: 'running',
+      detail: null,
+      reason: null,
+      at: Date.now(),
+    }))
     fetch('/dsh-store/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -549,13 +589,27 @@ export function MarketSection(props: SectionProps) {
       .then(res => res.json())
       .then((body: { ok?: boolean; message?: string; error?: string }) => {
         setToast(body.ok === true ? t('uninstallDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
+        finishTask(id, body, t('uninstallDone'))
         fetchStatus()
       })
-      .catch(() => setToast(t('installFailed')))
-  }, [t, fetchStatus])
+      .catch(() => {
+        setToast(t('installFailed'))
+        finishTask(id, { ok: false, error: t('installFailed') }, '')
+      })
+  }, [t, fetchStatus, finishTask])
 
   const doUninstall = useCallback((entry: MarketEntry) => {
     setRemoving(null)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'uninstall',
+      name: entry.npm ?? entry.owner + '/' + entry.name,
+      state: 'running',
+      detail: entry.owner + '/' + entry.name,
+      reason: null,
+      at: Date.now(),
+    }))
     fetch('/dsh-store/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -564,10 +618,14 @@ export function MarketSection(props: SectionProps) {
       .then(res => res.json())
       .then((body: { ok?: boolean; message?: string; error?: string }) => {
         setToast(body.ok === true ? t('uninstallDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
+        finishTask(id, body, t('uninstallDone'))
         fetchStatus()
       })
-      .catch(() => setToast(t('installFailed')))
-  }, [t, fetchStatus])
+      .catch(() => {
+        setToast(t('installFailed'))
+        finishTask(id, { ok: false, error: t('installFailed') }, '')
+      })
+  }, [t, fetchStatus, finishTask])
 
   useEffect(() => {
     if (toast === null) return
@@ -587,7 +645,7 @@ export function MarketSection(props: SectionProps) {
     return null
   }, [updates])
 
-  const runUpdateRequest = useCallback((names: string[], toastDone: string) => {
+  const runUpdateRequest = useCallback((names: string[], toastDone: string, taskId: string | null) => {
     fetch('/dsh-store/update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -596,28 +654,52 @@ export function MarketSection(props: SectionProps) {
       .then(res => res.json())
       .then((body: { ok?: boolean; message?: string; error?: string }) => {
         setToast(body.ok === true ? toastDone + ' — ' + (body.message ?? '') : t('updateFailed') + ': ' + (body.message ?? body.error ?? ''))
+        if (taskId !== null) finishTask(taskId, body, toastDone)
         fetchStatus()
         fetchRegistry(false)
       })
-      .catch(() => setToast(t('updateFailed')))
+      .catch(() => {
+        setToast(t('updateFailed'))
+        if (taskId !== null) finishTask(taskId, { ok: false, error: t('updateFailed') }, '')
+      })
       .finally(() => {
         setUpdateBusy(false)
         setUpdatingNames(new Set())
       })
-  }, [t, fetchStatus, fetchRegistry])
+  }, [t, fetchStatus, fetchRegistry, finishTask])
 
   const doUpdateAll = useCallback(() => {
     if (updateBusy || updates.length === 0) return
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'update',
+      name: t('updateAllShort').replace('{0}', String(updates.length)),
+      state: 'running',
+      detail: updates.map(u => u.name).join('、'),
+      reason: null,
+      at: Date.now(),
+    }))
     setUpdateBusy(true)
     setUpdatingNames(new Set(updates.map(u => u.name.toLowerCase())))
-    runUpdateRequest(updates.map(u => u.name), t('updateDone'))
+    runUpdateRequest(updates.map(u => u.name), t('updateDone'), id)
   }, [updateBusy, updates, runUpdateRequest, t])
 
   const doUpdateOne = useCallback((u: { name: string; from: string; to: string }) => {
     if (updateBusy) return
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'update',
+      name: u.name,
+      state: 'running',
+      detail: u.from + ' → ' + u.to,
+      reason: null,
+      at: Date.now(),
+    }))
     setUpdateBusy(true)
     setUpdatingNames(new Set([u.name.toLowerCase()]))
-    runUpdateRequest([u.name], t('updateDone'))
+    runUpdateRequest([u.name], t('updateDone'), id)
   }, [updateBusy, runUpdateRequest, t])
 
   // ---- 启用/停用、回退、不参与一键更新、商店自身更新 ----
@@ -700,8 +782,19 @@ export function MarketSection(props: SectionProps) {
   }, [status, skipSet, fetchStatus, t])
 
   const doSelfUpdate = useCallback(() => {
-    if (selfUpdateBusy || status?.selfUpdate?.to == null) return
+    const selfUpdate = status?.selfUpdate
+    if (selfUpdateBusy || selfUpdate?.to == null) return
     setSelfUpdateBusy(true)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'update',
+      name: 'dsh-store',
+      state: 'running',
+      detail: selfUpdate.from + ' → ' + selfUpdate.to,
+      reason: null,
+      at: Date.now(),
+    }))
     fetch('/dsh-store/self-update', { method: 'POST' })
       .then(res => res.json())
       .then((body: { ok?: boolean; needRestart?: boolean; message?: string; error?: string }) => {
@@ -711,11 +804,15 @@ export function MarketSection(props: SectionProps) {
         } else {
           setToast(t('selfUpdateFailed') + ': ' + (body.message ?? body.error ?? ''))
         }
+        finishTask(id, body, t('selfUpdateDone'))
         fetchStatus()
       })
-      .catch(() => setToast(t('selfUpdateFailed')))
+      .catch(() => {
+        setToast(t('selfUpdateFailed'))
+        finishTask(id, { ok: false, error: t('selfUpdateFailed') }, '')
+      })
       .finally(() => setSelfUpdateBusy(false))
-  }, [selfUpdateBusy, status, fetchStatus, t])
+  }, [selfUpdateBusy, status, fetchStatus, t, finishTask])
 
   const sortItems = useMemo<MenuEntry[]>(() => [
     { type: 'label', id: 'dim-label', text: t('sortDim') },
@@ -789,6 +886,17 @@ export function MarketSection(props: SectionProps) {
         >
           {refreshing ? t('refreshing') : t('refresh')}
         </Button>
+        <button
+          type="button"
+          ref={tasksAnchorRef}
+          className="pcm-tasks-btn"
+          aria-expanded={tasksOpen}
+          onClick={() => setTasksOpen(o => !o)}
+        >
+          {tasksSummary.running > 0 && <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>}
+          {t('tasksBtn')}
+          {tasksSummary.running > 0 && <span className="pcm-tasks-count">{tasksSummary.settled}/{tasksSummary.total}</span>}
+        </button>
         {updates.length > 0 && (
           <button className="pcm-update-all-btn" onClick={doUpdateAll} disabled={updateBusy}>
             {updateBusy ? t('updatingAll') : t('updateAllBtn').replace('{0}', String(updates.length))}
@@ -806,15 +914,6 @@ export function MarketSection(props: SectionProps) {
       {rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
       {loadError && <div className="pcm-rate">{t('loadError')}</div>}
 
-      <div className="pcm-toolbar pcm-toolbar-search">
-        <Input
-          className="pcm-search"
-          icon={<IconSearchOutline16 size={14} />}
-          value={q}
-          placeholder={t('searchPlaceholder')}
-          onChange={e => { setQ(e.target.value); setPage(1) }}
-        />
-      </div>
       <div className="pcm-toolbar">
         <div className="pcm-seg">
           <button className={kind === 'all' ? 'on' : ''} onClick={() => { setKind('all'); setPage(1) }}>{t('kindAll')}</button>
@@ -841,6 +940,15 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
+        <div className="pcm-search-wrap">
+          <Input
+            className="pcm-search"
+            icon={<IconSearchOutline16 size={14} />}
+            value={q}
+            placeholder={t('searchPlaceholder')}
+            onChange={e => { setQ(e.target.value); setPage(1) }}
+          />
+        </div>
         <div className="pcm-lang-wrap">
           <Menu
             open={langOpen}
@@ -1127,6 +1235,16 @@ export function MarketSection(props: SectionProps) {
       {publishOpen && (
         <PublishModal t={t} onClose={() => setPublishOpen(false)} />
       )}
+
+      <TaskPanel
+        t={t}
+        records={tasks}
+        open={tasksOpen}
+        anchor={tasksAnchorRef.current}
+        onClose={() => setTasksOpen(false)}
+        onClearSettled={() => setTasks(clearSettledTasks)}
+        onDismiss={id => setTasks(list => dismissTask(list, id))}
+      />
 
       {toast !== null && (
         <div style={{

@@ -288,6 +288,13 @@ function snapshot(): Registry {
   }
 }
 
+/** 快照通道同样套用「今日新增」基线（与 live/CDN 通道同一份基线）。 */
+function snapshotWithDeltas(profile: string): Registry {
+  const snap = snapshot()
+  snap.plugins = computeTodayStars(profile, snap.plugins)
+  return snap
+}
+
 // ---------------------------------------------------------------- state I/O
 
 export function stateFile(profile: string): string {
@@ -600,12 +607,23 @@ export function computeTodayStars(profile: string, entries: MarketEntry[]): Mark
     if (entry.stars === null) continue
     current[(entry.owner + '/' + entry.name).toLowerCase()] = entry.stars
   }
+  if (Object.keys(current).length === 0) {
+    // 本次抓取没有任何 star 数据（HTML 兜底通道全 null）：不落基线，
+    // 否则会用空表覆盖当天已记录的真实基线，导致「今日新增」全为「—」。
+    return entries
+  }
   if (snap === undefined || snap.date !== todayKey()) {
     // First successful fetch of the day: record the baseline, deltas unknown.
     writeState(profile, { ...state, starsSnapshot: { date: todayKey(), stars: current } })
     return entries
   }
   const baseline = snap.stars
+  if (Object.keys(baseline).length === 0) {
+    // 当天基线曾被无 star 通道污染（stars: {}）：用当前数据重录基线。
+    // 今日增量从下一次刷新开始显示，而不是永远「—」。
+    writeState(profile, { ...state, starsSnapshot: { date: todayKey(), stars: current } })
+    return entries
+  }
   for (const entry of entries) {
     if (entry.stars === null) { entry.todayStars = null; continue }
     const prev = baseline[(entry.owner + '/' + entry.name).toLowerCase()]
@@ -707,14 +725,14 @@ export async function loadRegistry(profile: string, token: string, opts: { force
   }
   if (progress.running) {
     // A refresh is already in flight: serve what we have while it finishes.
-    return { registry: cache?.data ?? snapshot(), refreshing: true }
+    return { registry: cache?.data ?? snapshotWithDeltas(profile), refreshing: true }
   }
   progress.running = true
   progress.lastError = null
   progress.shard = 0
   progress.shards = 0
   progress.repos = 0
-  const immediate = cache?.data ?? snapshot()
+  const immediate = cache?.data ?? snapshotWithDeltas(profile)
   void (async () => {
     try {
       const live = await fetchLive(profile, token, opts.registryUrl ?? '')

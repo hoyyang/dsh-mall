@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Button, IconCloseOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
+import { SettingsWindow } from './SettingsWindow.tsx'
 import { avatarColor, formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
 import { ICON_DATA } from './icon.ts'
 
@@ -23,23 +24,32 @@ export function SidebarStoreButton(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  const [open, setOpen] = useState(false)
+  // v1.7：侧边栏按钮改为「DSH 商店设置」→ 设置页浮窗；设置页顶部
+  // 「打开 DSH 商店」按钮 → 商店浮窗（与原入口效果一致）。
+  const [open, setOpen] = useState<'settings' | 'store' | null>(null)
   const button = (
     <button
       type="button"
       className={'pcm-sidebar-btn' + (props.wide ? '' : ' pcm-sidebar-rail')}
-      title={props.t('nav')}
-      onClick={() => setOpen(true)}
+      title={props.t('settingsNav')}
+      onClick={() => setOpen('settings')}
     >
       <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
-      <span className="pcm-sidebar-label">{props.t('nav')}</span>
+      <span className="pcm-sidebar-label">{props.t('settingsNav')}</span>
     </button>
   )
   return (
     <>
       {button}
-      {open && (
-        <StoreWindow t={props.t} locale={props.locale} onClose={() => setOpen(false)} />
+      {open === 'settings' && (
+        <SettingsWindow
+          t={props.t}
+          onClose={() => setOpen(null)}
+          onOpenStore={() => setOpen('store')}
+        />
+      )}
+      {open === 'store' && (
+        <StoreWindow t={props.t} locale={props.locale} onClose={() => setOpen(null)} />
       )}
     </>
   )

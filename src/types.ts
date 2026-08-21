@@ -97,6 +97,8 @@ export interface MarketState {
   rollbacks?: Record<string, RollbackEntry>
   /** 「不参与一键更新」的包名列表。 */
   skipUpdates?: string[]
+  /** 自动一键更新（开关 + 最近一次运行结果），持久化在 state.json。 */
+  autoUpdate?: { enabled: boolean; lastRunAt: string | null; lastUpdated: number; lastMessage: string | null }
 }
 
 export interface InstallState {
