@@ -44,6 +44,8 @@ interface SectionProps {
   }
   /** true = 渲染在独立商店浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
   floating?: boolean
+  /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商店完全一致。 */
+  seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }> } | null
 }
 
 interface StatusBody {
@@ -72,8 +74,18 @@ export function MarketSection(props: SectionProps) {
     () => props.locale.getSnapshot(),
   )
   const lang = String(localeSnap.active).toLowerCase().startsWith('zh') ? 'zh' : 'en'
+  const seedMode = props.seed != null
+  const seedRegistry = useMemo<Registry | null>(() => (props.seed == null
+    ? null
+    : {
+        updated: new Date().toISOString(),
+        count: props.seed.plugins.length,
+        source: 'cdn',
+        categories: props.seed.categories,
+        plugins: props.seed.plugins,
+      }), [props.seed])
 
-  const [data, setData] = useState<Registry | null>(null)
+  const [data, setData] = useState<Registry | null>(seedRegistry)
   const [fetchAt, setFetchAt] = useState<string | null>(null)
   const rootRef = useRef<HTMLDivElement | null>(null)
   const chipsRef = useRef<HTMLDivElement | null>(null)
@@ -128,6 +140,31 @@ export function MarketSection(props: SectionProps) {
   const [selfUpdateDone, setSelfUpdateDone] = useState(false)
   const [toggling, setToggling] = useState<Set<string>>(new Set())
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const [smartSearchBusy, setSmartSearchBusy] = useState(false)
+  const doSmartSearch = useCallback(() => {
+    if (smartSearchBusy) return
+    const query = q.trim()
+    if (query === '') {
+      setToast(t('smartSearchEmpty'))
+      return
+    }
+    setSmartSearchBusy(true)
+    fetch('/dsh-store/smart-search', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ query }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; payload?: unknown; error?: string }) => {
+        if (body.ok === true && body.payload !== undefined) {
+          window.dispatchEvent(new CustomEvent('dsh-store-open-results', { detail: { payload: body.payload } }))
+        } else {
+          setToast(t('installFailed') + ': ' + (body.error ?? ''))
+        }
+      })
+      .catch(() => setToast(t('installFailed')))
+      .finally(() => setSmartSearchBusy(false))
+  }, [smartSearchBusy, q, t])
   // 进行中任务（安装/更新/卸载进度面板，参考 dshmarket）。
   const [tasks, setTasks] = useState<TaskRecord[]>([])
   const [tasksOpen, setTasksOpen] = useState(false)
@@ -154,6 +191,8 @@ export function MarketSection(props: SectionProps) {
   const installing = status?.install?.active === true
 
   const fetchRegistry = useCallback((force: boolean) => {
+    // 结果浮窗（seed）模式：目录固定为推荐条目，不拉 registry。
+    if (seedMode) return
     fetch('/dsh-store/registry' + (force ? '?force=1' : ''), { cache: 'no-store' })
       .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json() })
       .then((body: { registry?: Registry; refreshing?: boolean; fetchAt?: string }) => {
@@ -179,12 +218,13 @@ export function MarketSection(props: SectionProps) {
   }, [])
 
   // Mount: refresh immediately, then every 30 minutes while the section is open.
+  // seed 模式跳过目录拉取（固定条目），status 仍拉（已装/更新状态用于卡片交互）。
   useEffect(() => {
-    fetchRegistry(true)
+    if (!seedMode) fetchRegistry(true)
     fetchStatus()
-    const timer = setInterval(() => { fetchRegistry(true); fetchStatus() }, 30 * 60 * 1000)
+    const timer = setInterval(() => { if (!seedMode) fetchRegistry(true); fetchStatus() }, 30 * 60 * 1000)
     return () => clearInterval(timer)
-  }, [fetchRegistry, fetchStatus])
+  }, [fetchRegistry, fetchStatus, seedMode])
 
   // Panel-height lock: the root fills the settings panel's visible area so
   // the catalog list scrolls INSIDE the section (header and pager stay put,
@@ -964,8 +1004,7 @@ export function MarketSection(props: SectionProps) {
             onClick={() => setTasksOpen(o => !o)}
           >
             {tasksSummary.running > 0 && <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>}
-            {t('tasksBtn')}
-            {tasksSummary.running > 0 && <span className="pcm-tasks-count">{tasksSummary.settled}/{tasksSummary.total}</span>}
+            {tasksSummary.running > 0 ? t('tasksBtn') + '（' + String(tasksSummary.running) + '）' : t('tasksBtn')}
           </button>
         </div>
       </div>
@@ -1060,6 +1099,17 @@ export function MarketSection(props: SectionProps) {
             onChange={e => { setQ(e.target.value); setPage(1) }}
           />
         </div>
+        {/* v1.7.4：#5 智能搜索按钮——用户主模型理解需求 → 目录推荐 → 结果浮窗。 */}
+        <button
+          type="button"
+          className="pcm-smart-search-btn"
+          title={t('smartSearchHint')}
+          disabled={smartSearchBusy}
+          onClick={doSmartSearch}
+        >
+          <span className="pcm-smart-star">✦</span>
+          {smartSearchBusy ? t('smartSearching') : t('smartSearch')}
+        </button>
         {/* v1.7.3：#5 排序按钮移到搜索框右侧（原语言按钮位置）。 */}
         <div className="pcm-sort-wrap">
           <Menu
@@ -1286,6 +1336,8 @@ export function MarketSection(props: SectionProps) {
           onClose={() => setSizeOpen(false)}
           onSelect={id => { setPageSize(Number(id)); setPage(1) }}
           align="end"
+          side="top"
+          portal
           anchor={(
             <Button variant="outline" size="sm" onClick={() => setSizeOpen(o => !o)}>{t('pageSize') + ' ' + pageSize}</Button>
           )}

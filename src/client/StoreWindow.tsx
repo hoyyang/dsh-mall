@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom'
 import { Button, IconCloseOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
 import { SettingsContent } from './SettingsWindow.tsx'
-import { avatarColor, formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
+import type { MarketEntry } from './market-data.ts'
 import { ICON_DATA } from './icon.ts'
 
 interface LocaleLike {
@@ -68,9 +68,11 @@ export function SettingsSection(props: {
   )
 }
 
-/** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗。 */
+/** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗；
+ *  也监听 window 事件 'dsh-store-open-results'（智能搜索直接带 payload 弹窗）。 */
 export function StoreResultsLauncher(props: { t: (key: string) => string; locale: LocaleLike }) {
   const [token, setToken] = useState<string | null>(null)
+  const [direct, setDirect] = useState<ResultsPayload | null>(null)
   const onClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement | null
     const anchor = target?.closest?.('a[href]') as HTMLAnchorElement | null
@@ -86,17 +88,55 @@ export function StoreResultsLauncher(props: { t: (key: string) => string; locale
     document.addEventListener('click', onClick, true)
     return () => document.removeEventListener('click', onClick, true)
   }, [onClick])
-  return token !== null ? <ResultsWindow t={props.t} token={token} onClose={() => setToken(null)} /> : null
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { payload?: ResultsPayload } | undefined
+      if (detail?.payload !== undefined && detail.payload !== null) {
+        setToken(null)
+        setDirect(detail.payload)
+      }
+    }
+    window.addEventListener('dsh-store-open-results', onOpen)
+    return () => window.removeEventListener('dsh-store-open-results', onOpen)
+  }, [])
+  const open = token !== null || direct !== null
+  if (!open) return null
+  return (
+    <ResultsWindow
+      t={props.t}
+      locale={props.locale}
+      token={token}
+      initialPayload={direct}
+      onClose={() => { setToken(null); setDirect(null) }}
+    />
+  )
 }
 
-function ResultsWindow(props: { t: (key: string) => string; token: string; onClose: () => void }) {
-  const [payload, setPayload] = useState<{ query: string; recommended: MarketEntry[]; related: MarketEntry[] } | null>(null)
+export interface ResultsPayload {
+  query: string
+  recommended: MarketEntry[]
+  related: MarketEntry[]
+  categories?: Record<string, { en: string; zh: string }>
+}
+
+/** v1.7.4：#9 结果浮窗内嵌完整 MarketSection（seed=推荐+相关条目）——
+ *  卡片内容/交互/功能与主商店浮窗完全一致（安装/卸载/更新/收藏/详情/任务）。 */
+function ResultsWindow(props: {
+  t: (key: string) => string
+  locale: LocaleLike
+  token: string | null
+  initialPayload: ResultsPayload | null
+  onClose: () => void
+}) {
+  const [payload, setPayload] = useState<ResultsPayload | null>(props.initialPayload)
   const [failed, setFailed] = useState(false)
+  const token = props.token
   useEffect(() => {
+    if (token === null || props.initialPayload !== null) return
     let alive = true
-    fetch('/dsh-store/query-result?id=' + encodeURIComponent(props.token), { cache: 'no-store' })
+    fetch('/dsh-store/query-result?id=' + encodeURIComponent(token), { cache: 'no-store' })
       .then(res => res.json())
-      .then((body: { ok?: boolean; payload?: { query: string; recommended: MarketEntry[]; related: MarketEntry[] } }) => {
+      .then((body: { ok?: boolean; payload?: ResultsPayload }) => {
         if (alive) {
           if (body.payload !== undefined) setPayload(body.payload)
           else setFailed(true)
@@ -104,7 +144,7 @@ function ResultsWindow(props: { t: (key: string) => string; token: string; onClo
       })
       .catch(() => { if (alive) setFailed(true) })
     return () => { alive = false }
-  }, [props.token])
+  }, [token, props.initialPayload])
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') props.onClose() }
     document.addEventListener('keydown', onKey)
@@ -114,106 +154,31 @@ function ResultsWindow(props: { t: (key: string) => string; token: string; onClo
   return createPortal(
     <div className="pcm-store-overlay">
       <div className="pcm-store-mask" onClick={props.onClose} />
-      <div className="pcm-store-window pcm-results-window" role="dialog" aria-modal="true" aria-label={t('nav')}>
+      <div className="pcm-store-window" role="dialog" aria-modal="true" aria-label={t('resultsTitle')}>
         <div className="pcm-store-head">
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{t('resultsTitle')}{payload !== null ? ' · ' + payload.query : ''}</span>
           <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-store-close" title={t('close')} />
         </div>
-        <div className="pcm-store-body pcm-results-body">
+        <div className="pcm-store-body">
           {failed && <div className="pcm-empty">{t('resultsExpired')}</div>}
           {payload === null && !failed && (
             <div className="pcm-empty"><span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> {t('loading')}</div>
           )}
           {payload !== null && (
-            <div className="pcm-results-scroll">
-              <div className="pcm-results-sec-title">{t('resultsRecommended')}</div>
-              <div className="pcm-grid">
-                {payload.recommended.map((entry, i) => <ResultCard key={'rec' + i} t={t} entry={entry} />)}
-              </div>
-              {payload.related.length > 0 && (
-                <>
-                  <div className="pcm-results-sec-title">{t('resultsRelated')}</div>
-                  <div className="pcm-grid">
-                    {payload.related.map((entry, i) => <ResultCard key={'rel' + i} t={t} entry={entry} />)}
-                  </div>
-                </>
-              )}
-            </div>
+            <MarketSection
+              t={t}
+              locale={props.locale}
+              seed={{
+                plugins: [...payload.recommended, ...payload.related],
+                categories: payload.categories ?? {},
+              }}
+            />
           )}
         </div>
       </div>
     </div>,
     document.body,
-  )
-}
-
-/** 与主页面卡片同款的结果卡片（安装/源码可用）。 */
-function ResultCard(props: { t: (key: string) => string; entry: MarketEntry }) {
-  const t = props.t
-  const entry = props.entry
-  const [busy, setBusy] = useState(false)
-  const [toast, setToast] = useState<string | null>(null)
-  useEffect(() => {
-    if (toast === null) return
-    const timer = setTimeout(() => setToast(null), 5000)
-    return () => clearTimeout(timer)
-  }, [toast])
-  const install = () => {
-    if (busy) return
-    setBusy(true)
-    fetch('/dsh-store/install', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm }),
-    })
-      .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
-        setToast(body.ok === true ? t('installDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
-      })
-      .catch(() => setToast(t('installFailed')))
-      .finally(() => setBusy(false))
-  }
-  return (
-    <div className="pcm-card">
-      <div className="pcm-card-top">
-        <div className="pcm-av" style={{ background: avatarColor(entry.name) }}>
-          {(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}
-          {entry.avatar !== '' && (
-            <img className="pcm-av-img" src={entry.avatar} alt="" loading="lazy" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
-          )}
-        </div>
-        <div className="pcm-card-title">
-          <span className="pcm-name">{entry.name}</span>
-          <span className="pcm-owner">{entry.owner}</span>
-        </div>
-        <div className="pcm-actions" onClick={e => e.stopPropagation()}>
-          <Button variant="primary" size="sm" disabled={busy} onClick={install}>
-            {busy ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('install')}
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
-            {t('sourceBtn')}
-          </Button>
-        </div>
-      </div>
-      {(entry.curated || entry.verified != null) && (
-        <div className="pcm-safety-row">
-          {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>⚑ {t('curatedBadge')}</span>}
-          {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>✓ {t('verifiedBadge')}</span>}
-        </div>
-      )}
-      <div className="pcm-desc">{entry.description === '' ? '—' : entry.description}</div>
-      <div className="pcm-foot">
-        <div className="pcm-stats">
-          <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
-          <span className="pcm-cat">{entry.category}</span>
-          <span className="pcm-updated">{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
-        </div>
-      </div>
-      {toast !== null && (
-        <div className="pcm-toast">{toast}</div>
-      )}
-    </div>
   )
 }
 

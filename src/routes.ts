@@ -10,7 +10,7 @@
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
-import { takeResults } from './find.ts'
+import { smartSearch, takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
@@ -264,6 +264,34 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 404, { ok: false, error: 'results expired — re-run /dsh-store' })
         return
       }
+      sendJson(response, 200, { ok: true, payload })
+    },
+  }))
+
+  // 智能搜索：用户主模型（dsh --profile headless）改写需求 → 目录评分推荐。
+  // 返回 payload 与 /query-result 同构（含 categories），客户端直接弹结果浮窗。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/smart-search',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const query = typeof body.query === 'string' ? body.query.trim().slice(0, 300) : ''
+      if (query === '') {
+        sendJson(response, 400, { ok: false, error: 'empty query' })
+        return
+      }
+      const payload = await smartSearch(config.profile, config.githubToken, query, 5)
       sendJson(response, 200, { ok: true, payload })
     },
   }))

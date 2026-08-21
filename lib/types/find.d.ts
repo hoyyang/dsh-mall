@@ -13,11 +13,21 @@ interface FindPayload {
     query: string;
     recommended: MarketEntry[];
     related: MarketEntry[];
+    /** 结果条目的分类表（与主商店同款 catLabel 数据源）。 */
+    categories?: Record<string, {
+        en: string;
+        zh: string;
+    }>;
 }
 export declare function stageResults(payload: FindPayload): string;
 export declare function takeResults(token: string): FindPayload | null;
 /** Search the in-memory catalog for a natural-language requirement. */
 export declare function findPlugins(profile: string, token: string, query: string, limit: number): Promise<FindPayload>;
+/** 智能搜索：用用户主模型（dsh --profile headless）把需求解析成
+ *  英文检索词（JSON {query}），再跑目录评分推荐；模型不可用直接原词。 */
+export declare function smartSearch(profile: string, token: string, rawQuery: string, limit: number): Promise<FindPayload & {
+    aiUsed: boolean;
+}>;
 export declare function installFindTool(ctx: {
     tools: {
         register(tool: unknown): void;
