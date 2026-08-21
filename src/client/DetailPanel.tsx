@@ -91,7 +91,11 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
       if (/\.svg(?:\?|#|$)|shields\.io|trendshift|badge/i.test(url)) return ''
       return _m
     })
-    .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => '[' + label + '](' + absolutize(href) + ')')
+    .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => {
+      // 非 http(s) 链接（#锚点/mailto 等）MarkdownText 不渲染，直接保留文字避免孤立括号。
+      if (!/^https?:/i.test(href)) return label
+      return '[' + label + '](' + absolutize(href) + ')'
+    })
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) => '![' + alt + '](' + absolutize(src) + ')')
     .replace(/<(?:strong|b)\b[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '**$1**')
     .replace(/<(?:em|i)\b[^>]*>([\s\S]*?)<\/(?:em|i)>/gi, '*$1*')
