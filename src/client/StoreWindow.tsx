@@ -242,7 +242,7 @@ function ResultsWindow(props: {
   }, [props])
   const t = props.t
   return createPortal(
-    <div className="pcm-store-overlay">
+    <div className="pcm-store-overlay" style={{ zIndex: 1200 }}>
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window pcm-results-window" role="dialog" aria-modal="true" aria-label={t('resultsTitle')}>
         <div className="pcm-store-head">
@@ -324,7 +324,10 @@ function StoreWindow(props: {
   return createPortal(
     <div
       className="pcm-store-overlay"
-      style={props.open ? { zIndex: props.settingsOnTop ? 900 : 1100 } : { display: 'none' }}
+      // 默认 1000：与官方设置浮窗同级但 DOM 在其后（商店浮窗显示在上）；
+      // settingsOnTop 时降到 900 让位。绝不高于 1000——否则 primitives Modal
+      // （z1000）等弹层会被主浮窗盖住（“弹窗跑浮窗后面”的根因）。
+      style={props.open ? { zIndex: props.settingsOnTop ? 900 : 1000 } : { display: 'none' }}
     >
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window" role="dialog" aria-label={props.t('nav')} aria-modal="true">

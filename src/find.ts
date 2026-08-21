@@ -44,17 +44,28 @@ export function takeResults(token: string): FindPayload | null {
   return hit.payload
 }
 
-/** 中文查询串按 2-4 字滑动窗口拆 token（"应用市场"能命中中文简介/分类名）。 */
+/** 通用词：每条目都命中、零区分度，命中不加分（防大 star 目录霸榜）。 */
+const STOP_TOKENS = new Set([
+  'dsh', 'harness', 'deepseek', 'deep', 'seek', 'plugin', 'plugins', 'plug', 'ins',
+  '插件', '商店', '最受欢迎', '受欢迎', '最好用的', '好用', '帮我', '找到', '找', '的', '一个', '什么', '推荐',
+])
+
+/** 中文查询串按 2-4 字滑动窗口拆 token（"应用市场"能命中中文简介/分类名）；
+ *  停用词直接剔除，避免通用词拉平所有条目后 star 权重主导、结果跑题。 */
 function tokensOf(needle: string): Array<{ t: string; w: number }> {
   const out: Array<{ t: string; w: number }> = []
   for (const w of needle.split(/\s+/)) {
     if (w === '') continue
+    const lw = w.toLowerCase()
+    if (STOP_TOKENS.has(lw)) continue
     if (/[\u4e00-\u9fff]/.test(w)) {
       for (let len = 4; len >= 2; len--) {
-        for (let i = 0; i + len <= w.length; i++) out.push({ t: w.slice(i, i + len), w: len === 4 ? 6 : len === 3 ? 3 : 1 })
+        for (let i = 0; i + len <= w.length; i++) {
+          const t = w.slice(i, i + len)
+          if (!STOP_TOKENS.has(t)) out.push({ t, w: len === 4 ? 6 : len === 3 ? 3 : 1 })
+        }
       }
     } else {
-      const lw = w.toLowerCase()
       out.push({ t: lw, w: 6 })
       // 英文长词加词干子串（marketplace → market）：dsh-market 这类命名也能命中。
       if (lw.length >= 5) {
@@ -88,7 +99,8 @@ function scoreEntry(e: MarketEntry, needle: string): number {
   // 恰好带"市场"字样）不该挤掉真正的插件。
   if (needle.trim() !== '' && kw < 3) return Number.NEGATIVE_INFINITY
   // star 取对数（1k≈3 分、10k≈4 分）：口碑信号，但不霸榜。
-  let score = kw + Math.log10(1 + (e.stars ?? 0))
+  // star 权重 ×2：关键词命中相同时「最受欢迎」语义生效（高星在前）。
+  let score = kw * 0.8 + Math.log10(1 + (e.stars ?? 0)) * 2
   if (e.curated) score += 2
   if (e.verified != null) score += 3
   // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
@@ -126,7 +138,8 @@ export async function smartSearch(profile: string, token: string, rawQuery: stri
   let aiUsed = false
   if (original !== '') {
     const prompt = [
-      '你是 DSH 插件搜索助手。把用户的需求改写/翻译成适合检索 GitHub 插件仓库的英文关键词（空格分隔，8 个以内，包含核心功能词）。只输出 JSON：{"query": "..."}',
+      '你是 DSH 插件搜索助手。把用户的需求改写/翻译成适合检索 GitHub 插件仓库的英文关键词（空格分隔，3-6 个，只保留核心功能词，例如"视觉"→vision）。',
+      '规则：不要输出 dsh/deepseek/harness/plugin/popular/best 这类通用词；保留功能语义词（vision、market、memory、wechat、pdf 等）。只输出 JSON：{"query": "..."}',
       '用户需求：' + original,
     ].join('\n')
     try {
