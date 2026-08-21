@@ -196,6 +196,13 @@ function ResultsWindow(props: {
   const headActionsRef = useRef<HTMLDivElement | null>(null)
   const [payload, setPayload] = useState<ResultsPayload | null>(props.initialPayload)
   const [failed, setFailed] = useState(false)
+  useEffect(() => {
+    // 新的 direct payload（再次智能搜索）到达时刷新结果。
+    if (props.initialPayload !== null) {
+      setPayload(props.initialPayload)
+      setFailed(false)
+    }
+  }, [props.initialPayload])
   // 语言按钮与主浮窗同款（样式/交互/持久化同 key），父组件控制并下传 langOverride。
   const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
   const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }

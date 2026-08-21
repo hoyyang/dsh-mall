@@ -41,7 +41,7 @@ const en = {
 	nav: "DSH Store",
 	versionHint: "dsh-store v{0}",
 	title: "DSH Store",
-	subtitle: "Full coverage of DeepSeek Harness plugins — smart install, smart search, rich filters, and a built-in SKILLS tool.",
+	subtitle: "The most complete DeepSeek Harness plugin catalog — smart install, smart search, built-in Skills tool.",
 	refresh: "Refresh",
 	autoRefresh: "auto-refresh every 30 min",
 	refreshing: "Refreshing…",
@@ -262,7 +262,7 @@ const zh = {
 	nav: "DSH 商店",
 	versionHint: "dsh-store v{0}",
 	title: "DSH 商店",
-	subtitle: "DeepSeek Harness 插件全量收录，让你轻松找到并装上需要的插件：支持智能安装、智能搜索、丰富筛选模式等功能，自带 SKILLS 工具。",
+	subtitle: "全网最强-DeepSeek Harness 插件全量收录，支持智能安装、智能搜索，自带 Skills 工具。",
 	refresh: "刷新",
 	autoRefresh: "每 30 分钟刷新一次",
 	refreshing: "刷新中…",
@@ -3963,6 +3963,12 @@ function ResultsWindow(props) {
 	const headActionsRef = (0, react.useRef)(null);
 	const [payload, setPayload] = (0, react.useState)(props.initialPayload);
 	const [failed, setFailed] = (0, react.useState)(false);
+	(0, react.useEffect)(() => {
+		if (props.initialPayload !== null) {
+			setPayload(props.initialPayload);
+			setFailed(false);
+		}
+	}, [props.initialPayload]);
 	const LANGS = [
 		"en",
 		"zh",
@@ -4255,6 +4261,19 @@ function missingPrimitives(mod, required = REQUIRED_PRIMITIVES) {
 }
 const name = NS;
 const inject = ["slots", "locale"];
+/** 防御：任一浮窗子组件崩溃只影响自身子树，绝不整树卸载（否则「浮窗消失且再也打不开」）。 */
+var Guard = class extends react.Component {
+	state = { failed: false };
+	static getDerivedStateFromError() {
+		return { failed: true };
+	}
+	componentDidCatch(error) {
+		console.error("[dsh-store] component crashed (isolated):", error);
+	}
+	render() {
+		return this.state.failed ? null : this.props.children;
+	}
+};
 function apply(ctx) {
 	const gaps = missingPrimitives(_deepseek_ai_dsh_client_ui_primitives);
 	if (gaps.length > 0) {
@@ -4271,17 +4290,24 @@ function apply(ctx) {
 		const mount = document.createElement("div");
 		mount.id = "dsh-store-launcher";
 		document.body.appendChild(mount);
-		const root = (0, import_client.createRoot)(mount);
-		root.render((0, react.createElement)("div", null, (0, react.createElement)(StoreResultsLauncher, {
+		const resultsRoot = (0, import_client.createRoot)(mount);
+		resultsRoot.render((0, react.createElement)(Guard, null, (0, react.createElement)(StoreResultsLauncher, {
 			t,
 			locale: ctx.locale
-		}), (0, react.createElement)(StoreSingleton, {
+		})));
+		const storeMount = document.createElement("div");
+		storeMount.id = "dsh-store-singleton";
+		document.body.appendChild(storeMount);
+		const storeRoot = (0, import_client.createRoot)(storeMount);
+		storeRoot.render((0, react.createElement)(Guard, null, (0, react.createElement)(StoreSingleton, {
 			t,
 			locale: ctx.locale
 		})));
 		return () => {
-			root.unmount();
+			resultsRoot.unmount();
+			storeRoot.unmount();
 			mount.remove();
+			storeMount.remove();
 		};
 	}, "dsh-store: results launcher + store singleton");
 	ctx.slots.inject("settings.section", () => ctx.slots.register({

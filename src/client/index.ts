@@ -5,7 +5,7 @@
  * resolved through the loader module table at runtime.
  */
 
-import { createElement as h } from 'react'
+import { Component, createElement as h, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh } from './locales.ts'
@@ -42,6 +42,16 @@ interface MarketClientContext {
 export const name = NS
 export const inject = ['slots', 'locale']
 
+/** 防御：任一浮窗子组件崩溃只影响自身子树，绝不整树卸载（否则「浮窗消失且再也打不开」）。 */
+class Guard extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  componentDidCatch(error: unknown) {
+    console.error('[dsh-store] component crashed (isolated):', error)
+  }
+  render() { return this.state.failed ? null : this.props.children }
+}
+
 export function apply(ctx: MarketClientContext): void {
   const gaps = missingPrimitives(primitives as unknown as Record<string, unknown>)
   if (gaps.length > 0) {
@@ -54,18 +64,24 @@ export function apply(ctx: MarketClientContext): void {
   injectStyles()
 
   // find 工具结果浮窗（智能搜索/按钮链接共用）+ 唯一商店浮窗单例。
+  // v1.7.7：两个独立 React root + ErrorBoundary——任一崩溃互不影响，
+  // 主商店浮窗绝不会因为结果浮窗异常而“消失且打不开”。
   ctx.effect(() => {
     const mount = document.createElement('div')
     mount.id = 'dsh-store-launcher'
     document.body.appendChild(mount)
-    const root = createRoot(mount)
-    root.render(h('div', null,
-      h(StoreResultsLauncher, { t, locale: ctx.locale }),
-      h(StoreSingleton, { t, locale: ctx.locale }),
-    ))
+    const resultsRoot = createRoot(mount)
+    resultsRoot.render(h(Guard, null, h(StoreResultsLauncher, { t, locale: ctx.locale })))
+    const storeMount = document.createElement('div')
+    storeMount.id = 'dsh-store-singleton'
+    document.body.appendChild(storeMount)
+    const storeRoot = createRoot(storeMount)
+    storeRoot.render(h(Guard, null, h(StoreSingleton, { t, locale: ctx.locale })))
     return () => {
-      root.unmount()
+      resultsRoot.unmount()
+      storeRoot.unmount()
       mount.remove()
+      storeMount.remove()
     }
   }, NS + ': results launcher + store singleton')
 
