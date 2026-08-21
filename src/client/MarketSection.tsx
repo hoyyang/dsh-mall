@@ -56,6 +56,7 @@ interface StatusBody {
   tokenConfigured?: boolean
   rateLimit?: { remaining?: number; reset?: number } | null
   updates?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
+  updatesAll?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
   pluginStates?: Record<string, 'live' | 'disabled' | 'restart'>
   rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }>
   skipUpdates?: string[]
@@ -711,17 +712,18 @@ export function MarketSection(props: SectionProps) {
     return () => clearTimeout(timer)
   }, [toast])
 
-  // ---- 更新检测：status.updates（host 侧比对已装 spec × 索引 npm_version）----
+  // ---- 更新检测：updatesAll（不排 skip）供卡片「更新」按钮；updates（排 skip）供一键更新 ----
   const updates = status?.updates ?? []
+  const updatesAll = status?.updatesAll ?? []
   const updateFor = useCallback((e: MarketEntry): { name: string; from: string; to: string } | null => {
     const keys = new Set<string>()
     if (e.npm !== null) keys.add(e.npm.toLowerCase())
     keys.add(e.name.toLowerCase())
-    for (const u of updates) {
+    for (const u of updatesAll) {
       if (keys.has(u.name.toLowerCase()) || (e.owner !== '' && u.repo.toLowerCase() === (e.owner + '/' + e.name).toLowerCase())) return u
     }
     return null
-  }, [updates])
+  }, [updatesAll])
 
   const runUpdateRequest = useCallback((names: string[], toastDone: string, taskId: string | null) => {
     fetch('/dsh-store/update', {
@@ -983,6 +985,21 @@ export function MarketSection(props: SectionProps) {
             >
               {refreshing ? t('refreshing') : t('refresh')}
             </Button>
+            <Menu
+              open={langOpen}
+              onClose={() => setLangOpen(false)}
+              onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
+              align="end"
+              anchor={(
+                <button type="button" className={'pcm-lang-btn pcm-lang-btn-head' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
+                  <span className="pcm-lang-flag">🌐</span>
+                  <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
+                  <span className="pcm-lang-caret" aria-hidden="true" />
+                </button>
+              )}
+              items={langItems}
+              selectedId={langChoice}
+            />
           </div>,
           headHost,
         )
@@ -1043,26 +1060,8 @@ export function MarketSection(props: SectionProps) {
             onChange={e => { setQ(e.target.value); setPage(1) }}
           />
         </div>
-        <div className="pcm-lang-wrap">
-          <Menu
-            open={langOpen}
-            onClose={() => setLangOpen(false)}
-            onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
-            align="end"
-            anchor={(
-              <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
-                <span className="pcm-lang-flag">🌐</span>
-                <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
-                <span className="pcm-lang-caret" aria-hidden="true" />
-              </button>
-            )}
-            items={langItems}
-            selectedId={langChoice}
-          />
-        </div>
-      </div>
-      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
-        <div className="pcm-sort-slot">
+        {/* v1.7.3：#5 排序按钮移到搜索框右侧（原语言按钮位置）。 */}
+        <div className="pcm-sort-wrap">
           <Menu
             open={sortOpen}
             onClose={() => setSortOpen(false)}
@@ -1080,6 +1079,27 @@ export function MarketSection(props: SectionProps) {
             selectedIds={[sortDim, sortDir]}
           />
         </div>
+        {!floating && (
+          <div className="pcm-lang-wrap">
+            <Menu
+              open={langOpen}
+              onClose={() => setLangOpen(false)}
+              onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
+              align="end"
+              anchor={(
+                <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
+                  <span className="pcm-lang-flag">🌐</span>
+                  <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
+                  <span className="pcm-lang-caret" aria-hidden="true" />
+                </button>
+              )}
+              items={langItems}
+              selectedId={langChoice}
+            />
+          </div>
+        )}
+      </div>
+      <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
         <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
         {chipCats.map((id: string) => (
           <Pill key={id} active={cat === id} onClick={() => { setCat(id); setPage(1) }}>{catLabel(id)}<span className="pcm-count">{categoryCounts.per.get(id) ?? 0}</span></Pill>
@@ -1219,16 +1239,19 @@ export function MarketSection(props: SectionProps) {
                     const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
                     return d === '' ? '—' : d
                   })()}</div>
+                  {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
+                  <div className="pcm-stats2">
+                    <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>
+                    {typeof entry.downloads === 'number' && (
+                      <span className="pcm-dl-30" title={t('downloadsHint')}>{t('downloads30Label')} {formatDownloads(entry.downloads)}</span>
+                    )}
+                    {typeof entry.totalDownloads === 'number' && (
+                      <span className="pcm-dl-total" title={t('totalDownloadsHint')}>{t('totalDownloadsLabel')} {formatDownloads(entry.totalDownloads)}</span>
+                    )}
+                  </div>
                   <div className="pcm-foot">
                     <div className="pcm-stats">
                       <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
-                      {typeof entry.downloads === 'number' && (
-                        <span className="pcm-downloads" title={t('downloadsHint')}>↓ {formatDownloads(entry.downloads)}</span>
-                      )}
-                      {typeof entry.totalDownloads === 'number' && (
-                        <span className="pcm-downloads pcm-downloads-total" title={t('totalDownloadsHint')}>Σ {formatDownloads(entry.totalDownloads)}</span>
-                      )}
-                      <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')} {today === null ? '—' : (today >= 0 ? '+' : '') + today}</span>
                       <span className="pcm-cat">{catLabel(entry.category)}</span>
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
                     </div>
