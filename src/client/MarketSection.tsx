@@ -584,6 +584,39 @@ export function MarketSection(props: SectionProps) {
       .catch(() => {})
   }, [langChoice, pageList, data])
 
+  // ---- 仓库版本号按需富化（npm 未发布且索引无 version 的条目 → GitHub Releases）----
+  const versionsRequested = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (data === null) return
+    const todo = pageList
+      .filter(e => e.local !== true && e.owner !== '' && e.npmVersion == null && e.version == null && e.repoVersion === undefined && !versionsRequested.current.has(e.owner + '/' + e.name))
+      .map(e => e.owner + '/' + e.name)
+      .slice(0, 24)
+    if (todo.length === 0) return
+    for (const r of todo) versionsRequested.current.add(r.toLowerCase())
+    fetch('/dsh-store/versions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ repos: todo }),
+    })
+      .then(res => res.json())
+      .then((body: { versions?: Record<string, string | null> }) => {
+        const got = body.versions ?? {}
+        setData((prev: Registry | null) => {
+          if (prev === null) return prev
+          return {
+            ...prev,
+            plugins: prev.plugins.map((entry: MarketEntry) => {
+              const hit = got[entry.owner + '/' + entry.name] ?? got[(entry.owner + '/' + entry.name).toLowerCase()]
+              if (hit === undefined) return entry
+              return { ...entry, repoVersion: hit }
+            }),
+          }
+        })
+      })
+      .catch(() => {})
+  }, [pageList, data])
+
   // ---- npm 下载量按需富化（卡片徽章 + 下载量排序）----
   const downloadsRequested = useRef<Set<string>>(new Set())
   const downloadsEnrich = useCallback((names: string[]) => {
@@ -1362,8 +1395,8 @@ export function MarketSection(props: SectionProps) {
                     <div className="pcm-stats">
                       <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
                       <span className="pcm-cat">{catLabel(entry.category)}</span>
-                      {(entry.npmVersion ?? entry.version) !== null && (entry.npmVersion ?? entry.version) !== undefined && (
-                        <span className="pcm-card-version" title={entry.npmVersion !== null ? t('detailNpmVer') : t('detailRepoVer')}>v{(entry.npmVersion ?? entry.version) as string}</span>
+                      {(entry.npmVersion ?? entry.version ?? entry.repoVersion) != null && (
+                        <span className="pcm-card-version" title={entry.npmVersion != null ? t('detailNpmVer') : entry.version != null ? t('detailRepoVer') : t('repoVersionHint')}>{((value: string) => /^v/i.test(value) ? value : 'v' + value)((entry.npmVersion ?? entry.version ?? entry.repoVersion) as string)}</span>
                       )}
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
                     </div>
@@ -1387,6 +1420,7 @@ export function MarketSection(props: SectionProps) {
                           </Button>
                         </div>
                       )}
+                      {/* v1.7.12：卸载/不参与一键更新/启用插件一行排布，短竖线分隔 */}
                       <div className="pcm-installed-actions">
                         {entry.local === true ? (
                           <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemovingLocal(entry)}>{t('uninstall')}</Button>
@@ -1394,31 +1428,36 @@ export function MarketSection(props: SectionProps) {
                           <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={() => setRemoving(entry)}>{t('uninstall')}</Button>
                         )}
                         {entry.local !== true && rollbacks[entry.npm ?? entry.name] !== undefined && (
-                          <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
-                            {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
-                          </Button>
+                          <>
+                            <span className="pcm-vsep" />
+                            <Button variant="ghost" size="sm" className="pcm-rollback-btn" disabled={rollbacking === entry.name} onClick={() => doRollback(entry)}>
+                              {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
+                            </Button>
+                          </>
                         )}
-                      </div>
-                      {/* v1.7.11：两个开关分两行、各带文字，一眼区分 */}
-                      <div className="pcm-installed-switches">
                         {entry.local !== true && (
-                          <label className="pcm-skip-row" title={t('skipHint')}>
-                            <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
-                            <span>{t('skipUpdate')}</span>
-                          </label>
+                          <>
+                            <span className="pcm-vsep" />
+                            <label className="pcm-skip-row" title={t('skipHint')}>
+                              <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
+                              <span>{t('skipUpdate')}</span>
+                            </label>
+                          </>
                         )}
                         {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
-                          <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
-                            <span className="pcm-switch-label">{t('enableSwitch')}</span>
-                            <input
-                              type="checkbox"
-                              checked={stateOf(entry) !== 'disabled'}
-                              disabled={toggling.has(entry.npm ?? entry.name)}
-                              onChange={() => doToggle(entry)}
-                            />
-                            <span className="pcm-switch-track" />
-                            <span className="pcm-switch-state">{stateOf(entry) === 'disabled' ? t('stateDisabled') : t('stateLive')}</span>
-                          </label>
+                          <>
+                            <span className="pcm-vsep" />
+                            <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
+                              <span className="pcm-switch-label">{t('enableSwitch')}</span>
+                              <input
+                                type="checkbox"
+                                checked={stateOf(entry) !== 'disabled'}
+                                disabled={toggling.has(entry.npm ?? entry.name)}
+                                onChange={() => doToggle(entry)}
+                              />
+                              <span className="pcm-switch-track" />
+                            </label>
+                          </>
                         )}
                       </div>
                     </div>

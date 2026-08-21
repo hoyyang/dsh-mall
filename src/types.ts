@@ -76,6 +76,8 @@ export interface MarketEntry {
   downloads?: number | null
   /** npm 总下载量（2019 起累计，按需富化）。 */
   totalDownloads?: number | null
+  /** GitHub Releases latest 版本号（按需富化；npm 未发布的仓库用）。 */
+  repoVersion?: string | null
 }
 
 export interface Registry {
@@ -105,6 +107,8 @@ export interface MarketState {
   autoUpdate?: { enabled: boolean; lastRunAt: string | null; lastUpdated: number; lastMessage: string | null }
   /** npm 下载量缓存：包名 → {at, value}（value null = 未发布）。 */
   downloads?: Record<string, { at: number; value: number | null }>
+  /** GitHub Releases latest 版本缓存：owner/repo → {at, value}。 */
+  repoVersions?: Record<string, { at: number; value: string | null }>
 }
 
 export interface InstallState {

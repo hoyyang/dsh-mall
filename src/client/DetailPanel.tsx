@@ -87,15 +87,25 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
     .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, (_m: string, src: string) => '![image](' + absolutize(src) + ')')
     // 徽章类图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文——
     // 必须在 img 转换之后执行；URL 可能含空格（shields.io 徽章常见）。
+    // 徽章常被链接包裹（HTML <a><img badge></a> 或 md [![badge](badge-url)](site-url)）——
+    // 必须在 <a> 转换之前整块删除，否则会残留「](url)」与孤立括号。
+    .replace(/<a\b[^>]*>\s*(!\[[^\]]*\]\([^)]*\))\s*<\/a>/gi, (_m: string, inner: string) => {
+      const url = (inner.match(/\(([^)]*)\)/) ?? ['', ''])[1] ?? ''
+      if (/\.svg(?:\?|#|$)|shields\.io|trendshift|badge/i.test(url)) return ''
+      return _m
+    })
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m: string, _alt: string, url: string) => {
       if (/\.svg(?:\?|#|$)|shields\.io|trendshift|badge/i.test(url)) return ''
       return _m
     })
+    // <a> 转换：非 http(s)（#锚点/mailto）保留文字避免孤立括号。
     .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => {
-      // 非 http(s) 链接（#锚点/mailto 等）MarkdownText 不渲染，直接保留文字避免孤立括号。
       if (!/^https?:/i.test(href)) return label
       return '[' + label + '](' + absolutize(href) + ')'
     })
+    // 最后清理遗留空链接与残留图片语法。
+    .replace(/\[\s*\]\([^)]+\)/g, '')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, (_m: string) => (/shields\.io|trendshift|badge|\.svg/i.test(_m) ? '' : _m))
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) => '![' + alt + '](' + absolutize(src) + ')')
     .replace(/<(?:strong|b)\b[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '**$1**')
     .replace(/<(?:em|i)\b[^>]*>([\s\S]*?)<\/(?:em|i)>/gi, '*$1*')

@@ -16,6 +16,7 @@ import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest a
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
+import { ensureRepoVersions } from './versions.ts'
 import { runSmartInstall, runSmartUninstall } from './smart.ts'
 
 let cachedVersion: string | null = null
@@ -514,6 +515,29 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       sendJson(response, 200, locked.value)
+    },
+  }))
+
+  // 仓库版本号按需富化：POST {repos[]} —— GitHub Releases latest（npm 未发布的仓库用）。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/versions',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const repos = Array.isArray(body.repos) ? body.repos.filter((r): r is string => typeof r === 'string' && r !== '') : []
+      const versions = await ensureRepoVersions(config.profile, config.githubToken, repos)
+      sendJson(response, 200, { ok: true, versions })
     },
   }))
 
