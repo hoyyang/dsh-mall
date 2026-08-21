@@ -43,6 +43,8 @@ interface CdnRepo {
   npm_version?: string | null
   npm_pkg_name?: string | null
   version?: string | null
+  /** 索引 v1.10：GitHub tags 最新 tag（npm 未发布仓库的版本号展示）。 */
+  latest_tag?: string | null
   default_branch?: string | null
   size?: number | null
   verdict?: string | null
@@ -71,16 +73,30 @@ function collectDescriptions(repo: Record<string, unknown>): Record<string, stri
 /** 简介清洗：剥 HTML 标签再截断——避免「<img」这类标签被 200 字符截断
  *  成半截残留（v1.7.13 修复卡片简介 HTML 残留 bug）。 */
 function cleanDescription(raw: string, max: number): string {
-  const text = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  // 先截掉未闭合的残缺标签（如被截断的「<img」——无 > 时 <[^>]*> 匹配不到），
+  // 再剥完整标签、压空白、截断。
+  const text = raw.replace(/<[^>]*$/g, '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
   return text.length > max ? text.slice(0, max).trimEnd() + '…' : text
 }
 
-/** 多语言简介合并：awesome 人工目录的 en/zh 兜底 + 索引 README.<lang>.md 富化覆盖。 */
+/** 多语言简介合并：awesome 人工目录的 en/zh 兜底 + 索引 README.<lang>.md 富化覆盖；
+ *  每个语言值同样过 cleanDescription（v1.7.14：awesome 缓存/README 首段可能含 HTML，
+ *  语言切换后简介曾显示「<img」残留）。 */
 function mergeDescriptions(known: { en?: string; zh?: string } | undefined | null, enriched: Record<string, string> | null): Record<string, string> | null {
   const out: Record<string, string> = {}
-  if (known?.en !== undefined && known.en !== '') out.en = known.en
-  if (known?.zh !== undefined && known.zh !== '') out.zh = known.zh
-  if (enriched !== null) Object.assign(out, enriched)
+  const put = (lang: string, raw: string) => {
+    if (raw !== undefined && raw !== '') {
+      const cleaned = cleanDescription(raw, 200)
+      if (cleaned !== '') out[lang] = cleaned
+    }
+  }
+  if (known !== undefined && known !== null) {
+    put('en', known.en ?? '')
+    put('zh', known.zh ?? '')
+  }
+  if (enriched !== null) {
+    for (const [lang, raw] of Object.entries(enriched)) put(lang, raw)
+  }
   return Object.keys(out).length > 0 ? out : null
 }
 
@@ -155,7 +171,8 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     avatar: 'https://github.com/' + owner + '.png?size=96',
     language: null,
     npmVersion: typeof repo.npm_version === 'string' && repo.npm_version !== '' ? repo.npm_version : null,
-    version: typeof repo.version === 'string' && repo.version !== '' ? repo.version : null,
+    version: (typeof repo.version === 'string' && repo.version !== '' ? repo.version : null)
+      ?? (typeof repo.latest_tag === 'string' && repo.latest_tag !== '' ? repo.latest_tag : null),
     defaultBranch: typeof repo.default_branch === 'string' && repo.default_branch !== '' ? repo.default_branch : null,
     license: typeof repo.license === 'string' && repo.license !== '' ? repo.license : null,
     verified,
