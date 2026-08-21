@@ -91,8 +91,8 @@ function scoreEntry(e: MarketEntry, needle: string): number {
   let score = kw + Math.log10(1 + (e.stars ?? 0))
   if (e.curated) score += 2
   if (e.verified != null) score += 3
-  if (e.isPlugin !== true) score -= 2
-  // 查询"应用市场/插件市场"类需求时，市场分类本身就是强命中。
+  // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
+  // 结果条目自带 isPlugin 标记（卡片有「插件/非插件」徽章区分）。
   if (e.category === 'market') score += 4
   return score
 }
@@ -162,9 +162,10 @@ export function installFindTool(ctx: { tools: { register(tool: unknown): void } 
   ctx.tools.register(defineTool({
     name: FIND_TOOL_NAME,
     description:
-      'Search the local DSH Store plugin catalog (a full index of every GitHub repo tagged ' +
-      'dsh-plugin, refreshed daily) for plugins matching the user\'s requirement. Returns a ' +
-      'recommended list plus other related plugins with stars, descriptions and install commands. ' +
+      'Search the local DSH Store catalog (a full index of every GitHub repo tagged ' +
+      'dsh-plugin, refreshed daily) for plugins AND related non-plugin tools matching the user\'s requirement. ' +
+      'Both kinds are returned and labeled (plugin vs non-plugin). Returns a recommended list plus ' +
+      'other related entries with stars, descriptions and install commands. ' +
       'Use whenever the user asks for a plugin, capability, or tool they might install. ' +
       'Always end your reply with the button link returned in the tool output so the user can ' +
       'open the visual store window.',
@@ -209,7 +210,8 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
     lines.push('**推荐**')
     value.recommended.forEach((p, i) => {
       const install = p.npm !== null ? 'dsh plugin add ' + p.npm : 'dsh plugin add github:' + p.owner + '/' + p.name
-      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + (p.verified != null ? ' ✓已验证' : '') + (p.curated ? ' ⚑精选' : ''))
+      const kindMark = p.isPlugin === true ? '' : p.isPlugin === false ? ' 〔非插件〕' : ' 〔待判定〕'
+      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + (p.verified != null ? ' ✓已验证' : '') + (p.curated ? ' ⚑精选' : '') + kindMark)
       lines.push('   ' + (desc(p) || '—').slice(0, 200))
       lines.push('   ' + install)
     })
@@ -218,7 +220,8 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
     lines.push('')
     lines.push('**其他相关**')
     value.related.forEach((p, i) => {
-      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + ' — ' + (desc(p) || '—').slice(0, 120))
+      const kindMark = p.isPlugin === true ? '' : p.isPlugin === false ? ' 〔非插件〕' : ' 〔待判定〕'
+      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + kindMark + ' — ' + (desc(p) || '—').slice(0, 120))
     })
   }
   if (value.recommended.length === 0 && value.related.length === 0) {

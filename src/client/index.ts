@@ -10,7 +10,7 @@ import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh } from './locales.ts'
 import { SettingsCard } from './SettingsCard.tsx'
-import { SettingsSection, SidebarStoreButton, StoreResultsLauncher } from './StoreWindow.tsx'
+import { SettingsSection, SidebarStoreButton, StoreResultsLauncher, StoreSingleton } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
 
 const NS = 'dsh-store'
@@ -53,18 +53,21 @@ export function apply(ctx: MarketClientContext): void {
   const t = ctx.locale.bind(NS)
   injectStyles()
 
-  // find 工具结果浮窗：全局 React 根 + 点击拦截（按钮链接 → 结果浮窗）。
+  // find 工具结果浮窗（智能搜索/按钮链接共用）+ 唯一商店浮窗单例。
   ctx.effect(() => {
     const mount = document.createElement('div')
     mount.id = 'dsh-store-launcher'
     document.body.appendChild(mount)
     const root = createRoot(mount)
-    root.render(h(StoreResultsLauncher, { t, locale: ctx.locale }))
+    root.render(h('div', null,
+      h(StoreResultsLauncher, { t, locale: ctx.locale }),
+      h(StoreSingleton, { t, locale: ctx.locale }),
+    ))
     return () => {
       root.unmount()
       mount.remove()
     }
-  }, NS + ': results launcher')
+  }, NS + ': results launcher + store singleton')
 
   // 官方设置浮窗里的「DSH 商店设置」section（v1.7.1 布局纠正）：
   // 点击显示 DSH 商店设置页（顶部大按钮可打开商店浮窗），不再直接渲染商店。

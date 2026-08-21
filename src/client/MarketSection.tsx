@@ -13,6 +13,7 @@ import {
   Button,
   IconCheckOutline16,
   IconCopyOutline16,
+  IconGlobeOutline14,
   IconLinkOutline16,
   IconLoadingOutline16,
   IconRefreshOutline14,
@@ -363,7 +364,7 @@ export function MarketSection(props: SectionProps) {
     }
     return set
   }, [data])
-  const localEntries = useMemo<MarketEntry[]>(() => Object.entries(status?.installed ?? {})
+  const localEntries = useMemo<MarketEntry[]>(() => seedMode ? [] : Object.entries(status?.installed ?? {})
     .filter(([name, spec]) => {
       const s = String(spec).trim()
       // 本地 link/file 安装没有市场身份，任何目录条目都无法对应 → 必合成本地卡
@@ -1031,7 +1032,7 @@ export function MarketSection(props: SectionProps) {
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn pcm-lang-btn-head' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
-                  <span className="pcm-lang-flag">🌐</span>
+                  <span className="pcm-lang-flag"><IconGlobeOutline14 size={12} /></span>
                   <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
                   <span className="pcm-lang-caret" aria-hidden="true" />
                 </button>
@@ -1138,7 +1139,7 @@ export function MarketSection(props: SectionProps) {
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
-                  <span className="pcm-lang-flag">🌐</span>
+                  <span className="pcm-lang-flag"><IconGlobeOutline14 size={12} /></span>
                   <span className="pcm-lang-label">{LANG_SHORT[langChoice] ?? langChoice.toUpperCase()}</span>
                   <span className="pcm-lang-caret" aria-hidden="true" />
                 </button>
@@ -1458,12 +1459,15 @@ function InstallModal(props: {
       footer={(
         <>
           <Button variant="ghost" onClick={props.onClose}>{t('cancel')}</Button>
-          <Button variant="outline" onClick={props.onSmartInstall} disabled={installing} title={t('smartInstallHint')}>
-            {t('smartInstall')}
-          </Button>
-          <Button variant="primary" onClick={props.onConfirm} disabled={installing}>
+          {/* v1.7.5：#2 智能安装按钮与智能搜索按钮同款 UI（深色圆角+白✦+光扫动画），尺寸保持原按钮 */}
+          <button type="button" className="pcm-smart-install-btn" onClick={props.onSmartInstall} disabled={installing} title={t('smartInstallHint')}>
+            <span className="pcm-smart-star">✦</span>
+            {installing ? t('smartSearching') : t('smartInstall')}
+          </button>
+          {/* 「安装」改白色填充 + 深色文字 + 深色边框 */}
+          <button type="button" className="pcm-install-plain-btn" onClick={props.onConfirm} disabled={installing}>
             {installing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('confirm')}
-          </Button>
+          </button>
         </>
       )}
     >

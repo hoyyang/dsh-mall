@@ -6,9 +6,9 @@
  *   卡片样式与商店主页面一致（安装/源码/收藏星可用）。
  */
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
-import { Button, IconCloseOutline16, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import { Button, IconCloseOutline16, IconLoadingOutline16, IconSettingsOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
 import { SettingsContent } from './SettingsWindow.tsx'
 import type { MarketEntry } from './market-data.ts'
@@ -19,52 +19,108 @@ interface LocaleLike {
   getSnapshot(): { active: string }
 }
 
+// ---------------------------------------------------------------- 单例商店浮窗
+// v1.7.5：无论从首页「DSH 商店」、设置页「打开 DSH 商店」还是结果浮窗进入，
+// 商店浮窗都是同一个实例（StoreSingleton 挂载一次，keep-mounted）。
+interface StoreState {
+  mounted: boolean
+  open: boolean
+  /** 浮窗来源：sidebar=首页入口；settings=设置页「打开 DSH 商店」。 */
+  source: 'sidebar' | 'settings' | null
+}
+let storeState: StoreState = { mounted: false, open: false, source: null }
+const storeListeners = new Set<() => void>()
+function emitStore(): void { for (const l of storeListeners) l() }
+export function openStoreFrom(source: 'sidebar' | 'settings'): void {
+  storeState = { mounted: true, open: true, source }
+  emitStore()
+}
+export function setStoreOpen(open: boolean): void {
+  storeState = { ...storeState, open }
+  emitStore()
+}
+export function getStoreState(): StoreState { return storeState }
+export function subscribeStore(fn: () => void): () => void {
+  storeListeners.add(fn)
+  return () => { storeListeners.delete(fn) }
+}
+
+/** 打开官方设置浮窗并自动定位到「DSH商店-设置」section（DOM 触发）。 */
+function openSettingsAtStoreSection(): void {
+  window.setTimeout(() => {
+    const trigger = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').trim() === '设置')
+    trigger?.click()
+    let tries = 0
+    const timer = window.setInterval(() => {
+      tries += 1
+      const nav = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').includes('DSH商店'))
+      if (nav !== undefined) {
+        nav.click()
+        window.clearInterval(timer)
+      } else if (tries > 25) {
+        window.clearInterval(timer)
+      }
+    }, 200)
+  }, 80)
+}
+
+/** 关闭官方设置浮窗（.VOzbGW_close）。 */
+export function closeSettingsWindow(): void {
+  const close = document.querySelector<HTMLElement>('.VOzbGW_close')
+  if (close !== null) close.click()
+}
+
+/** 唯一商店浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
+export function StoreSingleton(props: { t: (key: string) => string; locale: LocaleLike }) {
+  const state = useSyncExternalStore(subscribeStore, () => storeState)
+  if (!state.mounted) return null
+  return (
+    <StoreWindow
+      t={props.t}
+      locale={props.locale}
+      open={state.open}
+      onClose={() => setStoreOpen(false)}
+    />
+  )
+}
+
 export function SidebarStoreButton(props: {
   wide: boolean
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  // v1.7.1 布局纠正：首页侧边栏（设置按钮上方、平级对齐）就是
-  // 「DSH 商店」入口 → 点击直接打开商店浮窗；「DSH 商店设置」入口
-  // 在官方设置浮窗里（settings.section，见 client/index.ts）。
-  // v1.7.2：窗口 keep-mounted——关闭只是隐藏，再打开恢复页面状态。
-  const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const button = (
+  // 首页侧边栏（设置按钮上方、平级对齐）「DSH 商店」→ 打开唯一商店浮窗。
+  // 渲染由 StoreSingleton 统一承担（单例、keep-mounted）。
+  return (
     <button
       type="button"
       className={'pcm-sidebar-btn' + (props.wide ? '' : ' pcm-sidebar-rail')}
       title={props.t('nav')}
-      onClick={() => { setMounted(true); setOpen(true) }}
+      onClick={() => openStoreFrom('sidebar')}
     >
       <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
       <span className="pcm-sidebar-label">{props.t('nav')}</span>
     </button>
   )
-  return (
-    <>
-      {button}
-      {mounted && (
-        <StoreWindow t={props.t} locale={props.locale} open={open} onClose={() => setOpen(false)} />
-      )}
-    </>
-  )
 }
 
-/** 设置浮窗里的「DSH 商店设置」section：设置内容 + 顶部大按钮打开商店浮窗。 */
+/** 设置浮窗里的「DSH商店-设置」section：设置内容 + 顶部大按钮打开商店浮窗。 */
 export function SettingsSection(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  const [storeOpen, setStoreOpen] = useState(false)
-  const [storeMounted, setStoreMounted] = useState(false)
+  const openStore = useCallback(() => {
+    const st = getStoreState()
+    if (st.mounted && st.source === 'sidebar') {
+      // 首页路径：商店浮窗就在设置浮窗下面——关掉设置浮窗露出它。
+      closeSettingsWindow()
+      setStoreOpen(true)
+    } else {
+      openStoreFrom('settings')
+    }
+  }, [])
   return (
-    <>
-      <SettingsContent t={props.t} onOpenStore={() => { setStoreMounted(true); setStoreOpen(true) }} />
-      {storeMounted && (
-        <StoreWindow t={props.t} locale={props.locale} open={storeOpen} onClose={() => setStoreOpen(false)} />
-      )}
-    </>
+    <SettingsContent t={props.t} onOpenStore={openStore} />
   )
 }
 
@@ -154,7 +210,7 @@ function ResultsWindow(props: {
   return createPortal(
     <div className="pcm-store-overlay">
       <div className="pcm-store-mask" onClick={props.onClose} />
-      <div className="pcm-store-window" role="dialog" aria-modal="true" aria-label={t('resultsTitle')}>
+      <div className="pcm-store-window pcm-results-window" role="dialog" aria-modal="true" aria-label={t('resultsTitle')}>
         <div className="pcm-store-head">
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{t('resultsTitle')}{payload !== null ? ' · ' + payload.query : ''}</span>
@@ -197,6 +253,17 @@ function StoreWindow(props: {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [props.open, props])
+  // v1.7.5：#3 头行设置按钮——来源为设置页时直接关浮窗（露出设置浮窗）；
+  // 首页来源时隐藏浮窗并打开官方设置浮窗定位到「DSH商店-设置」。
+  const onHeadSettings = useCallback(() => {
+    const st = getStoreState()
+    if (st.source === 'settings') {
+      setStoreOpen(false)
+    } else {
+      setStoreOpen(false)
+      openSettingsAtStoreSection()
+    }
+  }, [])
   return createPortal(
     <div className="pcm-store-overlay" style={props.open ? undefined : { display: 'none' }}>
       <div className="pcm-store-mask" onClick={props.onClose} />
@@ -205,6 +272,14 @@ function StoreWindow(props: {
           <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={16} height={16} />
           <span className="pcm-store-head-title">{props.t('nav')}</span>
           <div className="pcm-store-head-actions" />
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={<IconSettingsOutline16 size={15} />}
+            onClick={onHeadSettings}
+            className="pcm-store-head-settings"
+            title={props.t('settingsNav')}
+          />
           <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-store-close" title={props.t('close')} />
         </div>
         <div className="pcm-store-body">
