@@ -68,6 +68,13 @@ function collectDescriptions(repo: Record<string, unknown>): Record<string, stri
   return Object.keys(out).length > 0 ? out : null
 }
 
+/** 简介清洗：剥 HTML 标签再截断——避免「<img」这类标签被 200 字符截断
+ *  成半截残留（v1.7.13 修复卡片简介 HTML 残留 bug）。 */
+function cleanDescription(raw: string, max: number): string {
+  const text = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  return text.length > max ? text.slice(0, max).trimEnd() + '…' : text
+}
+
 /** 多语言简介合并：awesome 人工目录的 en/zh 兜底 + 索引 README.<lang>.md 富化覆盖。 */
 function mergeDescriptions(known: { en?: string; zh?: string } | undefined | null, enriched: Record<string, string> | null): Record<string, string> | null {
   const out: Record<string, string> = {}
@@ -136,7 +143,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     owner: owner ?? '',
     url: repo.html_url,
     category,
-    description: description.length > 200 ? description.slice(0, 200) + '…' : description,
+    description: cleanDescription(description, 200),
     descriptions: mergeDescriptions(knownEntry?.description, collectDescriptions(repo as unknown as Record<string, unknown>)),
     stars: repo.stargazers_count ?? null,
     todayStars: null,
@@ -590,7 +597,7 @@ function buildEntry(
     owner,
     url: search?.html_url ?? 'https://github.com/' + fullName,
     category: knownEntry?.category ?? ruleCategory(name, description, topics),
-    description: description.length > 200 ? description.slice(0, 200) + '…' : description,
+    description: cleanDescription(description, 200),
     descriptions: mergeDescriptions(knownEntry?.description, search !== undefined ? collectDescriptions(search as unknown as Record<string, unknown>) : null),
     stars: search?.stargazers_count ?? null,
     todayStars: null,

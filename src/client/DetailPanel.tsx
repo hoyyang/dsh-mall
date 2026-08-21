@@ -301,7 +301,7 @@ export function DetailPanel(props: {
                   {props.installing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('install')}
                 </Button>
               )}
-              <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+              <Button variant="outline" size="sm" className="pcm-source-btn" icon={<IconLinkOutline16 size={14} />} onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                 {t('sourceBtn')}
               </Button>
               <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-detail-close" title={t('close')} />

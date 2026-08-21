@@ -1351,7 +1351,7 @@ export function MarketSection(props: SectionProps) {
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
                       {installed ? (
                         <>
-                          <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
+                          <Button variant="outline" size="sm" disabled className="pcm-installed-tag">{t('installed')}</Button>
                           {entry.local !== true && (
                             <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                               {t('sourceBtn')}

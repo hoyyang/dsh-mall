@@ -11,6 +11,7 @@
 import { readState, writeState } from './catalog.ts'
 
 const TTL_MS = 24 * 60 * 60 * 1000
+const TTL_NULL_MS = 60 * 60 * 1000
 const FETCH_TIMEOUT_MS = 12_000
 const MAX_REPOS = 24
 
@@ -26,12 +27,14 @@ export async function ensureRepoVersions(profile: string, token: string, rawRepo
   for (const repo of repos) {
     const key = repo.toLowerCase()
     const hit = cache[key]
-    if (hit !== undefined && now - hit.at < TTL_MS) {
+    if (hit !== undefined && now - hit.at < (hit.value === null ? TTL_NULL_MS : TTL_MS)) {
       out[repo] = hit.value
       continue
     }
     try {
-      const res = await fetch('https://api.github.com/repos/' + repo + '/releases/latest', {
+      // tags 端点（per_page=1 最新 tag）：覆盖 releases 与纯 tag 两类仓库
+      // （colleague-skill 这类只打 tag 不发 release 的也能拿到版本号）。
+      const res = await fetch('https://api.github.com/repos/' + repo + '/tags?per_page=1', {
         headers: {
           'user-agent': 'dsh-store',
           accept: 'application/vnd.github+json',
@@ -41,12 +44,14 @@ export async function ensureRepoVersions(profile: string, token: string, rawRepo
       })
       let value: string | null = null
       if (res.ok) {
-        const body = (await res.json()) as { tag_name?: string }
-        if (typeof body.tag_name === 'string' && body.tag_name !== '') value = body.tag_name
+        const body = (await res.json()) as Array<{ name?: string }>
+        if (Array.isArray(body) && body.length > 0 && typeof body[0]?.name === 'string' && body[0].name !== '') value = body[0].name
       } else if (res.status === 404) {
-        value = null // 无 release
+        value = null // 无 tag
       } else {
-        continue // 限流/网络：本次跳过不缓存
+        // 限流（403/429）或网络错误：缓存 null 1 小时，避免每次翻页重复打爆额度。
+        cache[key] = { at: Date.now(), value: null }
+        continue
       }
       cache[key] = { at: Date.now(), value }
       out[repo] = value
