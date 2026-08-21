@@ -85,10 +85,12 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<hr\s*\/?>/gi, '\n\n---\n\n')
     .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, (_m: string, src: string) => '![image](' + absolutize(src) + ')')
-    // 徽章类 svg 图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文——
-    // 必须在 img 转换之后执行（徽章常以 <img> 出现）。
-    .replace(/!\[[^\]]*\]\([^)\s]*\.svg[^)]*\)/gi, '')
-    .replace(/!\[[^\]]*\]\([^)\s]*(?:shields\.io|trendshift|badge)[^)]*\)/gi, '')
+    // 徽章类图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文——
+    // 必须在 img 转换之后执行；URL 可能含空格（shields.io 徽章常见）。
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m: string, _alt: string, url: string) => {
+      if (/\.svg(?:\?|#|$)|shields\.io|trendshift|badge/i.test(url)) return ''
+      return _m
+    })
     .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_m: string, href: string, label: string) => '[' + label + '](' + absolutize(href) + ')')
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, src: string) => '![' + alt + '](' + absolutize(src) + ')')
     .replace(/<(?:strong|b)\b[^>]*>([\s\S]*?)<\/(?:strong|b)>/gi, '**$1**')

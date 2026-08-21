@@ -1316,13 +1316,24 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
-                      {!installed && (
-                        <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
-                      )}
-                      {entry.local !== true && (
-                        <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
-                          {t('sourceBtn')}
-                        </Button>
+                      {installed ? (
+                        <>
+                          <Button variant="outline" size="sm" disabled>{t('installed')}</Button>
+                          {entry.local !== true && (
+                            <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+                              {t('sourceBtn')}
+                            </Button>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="primary" size="sm" onClick={() => setConfirming(entry)}>{t('install')}</Button>
+                          {entry.local !== true && (
+                            <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+                              {t('sourceBtn')}
+                            </Button>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -1351,6 +1362,9 @@ export function MarketSection(props: SectionProps) {
                     <div className="pcm-stats">
                       <span className="pcm-stars">★ {formatStars(entry.stars)}</span>
                       <span className="pcm-cat">{catLabel(entry.category)}</span>
+                      {(entry.npmVersion ?? entry.version) !== null && (entry.npmVersion ?? entry.version) !== undefined && (
+                        <span className="pcm-card-version" title={entry.npmVersion !== null ? t('detailNpmVer') : t('detailRepoVer')}>v{(entry.npmVersion ?? entry.version) as string}</span>
+                      )}
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
                     </div>
                     <div className="pcm-badges">
@@ -1384,6 +1398,9 @@ export function MarketSection(props: SectionProps) {
                             {rollbacking === entry.name ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('rollbackBtn')}
                           </Button>
                         )}
+                      </div>
+                      {/* v1.7.11：两个开关分两行、各带文字，一眼区分 */}
+                      <div className="pcm-installed-switches">
                         {entry.local !== true && (
                           <label className="pcm-skip-row" title={t('skipHint')}>
                             <input type="checkbox" checked={skipSet.has((entry.npm ?? entry.name).toLowerCase())} onChange={() => doToggleSkip(entry)} />
@@ -1392,6 +1409,7 @@ export function MarketSection(props: SectionProps) {
                         )}
                         {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
                           <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
+                            <span className="pcm-switch-label">{t('enableSwitch')}</span>
                             <input
                               type="checkbox"
                               checked={stateOf(entry) !== 'disabled'}
@@ -1399,6 +1417,7 @@ export function MarketSection(props: SectionProps) {
                               onChange={() => doToggle(entry)}
                             />
                             <span className="pcm-switch-track" />
+                            <span className="pcm-switch-state">{stateOf(entry) === 'disabled' ? t('stateDisabled') : t('stateLive')}</span>
                           </label>
                         )}
                       </div>
@@ -1490,11 +1509,11 @@ export function MarketSection(props: SectionProps) {
           footer={(
             <>
               <Button variant="ghost" onClick={() => setRemoving(null)}>{t('cancel')}</Button>
-              <button type="button" className="pcm-smart-install-btn" onClick={() => doSmartUninstall(removing)} title={t('smartUninstallHint')}>
+              <button type="button" className="pcm-smart-install-btn pcm-smart-uninstall-btn" onClick={() => doSmartUninstall(removing)} title={t('smartUninstallHint')}>
                 <span className="pcm-smart-star">✦</span>
                 {smartUninstallBusy ? t('smartSearching') : t('smartUninstall')}
               </button>
-              <button type="button" className="pcm-install-plain-btn" onClick={() => doUninstall(removing)}>
+              <button type="button" className="pcm-install-plain-btn pcm-uninstall-plain-btn" onClick={() => doUninstall(removing)}>
                 {t('uninstall')}
               </button>
             </>
