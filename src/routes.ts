@@ -244,7 +244,8 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
     },
   }))
 
-  // find 工具结果暂存读取：GET ?id=<token> — 结果浮窗数据源（30 分钟有效）。
+  // find 工具结果暂存读取：GET ?id=<token> — 结果浮窗数据源（跟随 session
+  // 生命周期，持久化 state.json；v1.7.15 起不再 30 分钟过期）。
   disposers.push(host.webServer.register({
     kind: 'exact',
     path: '/dsh-store/query-result',
@@ -260,7 +261,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid id' })
         return
       }
-      const payload = takeResults(id)
+      const payload = takeResults(config.profile, id)
       if (payload === null) {
         sendJson(response, 404, { ok: false, error: 'results expired — re-run /dsh-store' })
         return

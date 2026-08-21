@@ -109,6 +109,9 @@ export interface MarketState {
   downloads?: Record<string, { at: number; value: number | null }>
   /** GitHub Releases latest 版本缓存：owner/repo → {at, value}。 */
   repoVersions?: Record<string, { at: number; value: string | null }>
+  /** find 工具结果暂存（token → payload）：跟随 session 生命周期（不再 30 分钟过期），
+   *  持久化在 state.json，宿主重启不丢；上限 20 条（超出丢最旧）。 */
+  findResults?: Record<string, { at: number; payload: unknown }>
 }
 
 export interface InstallState {

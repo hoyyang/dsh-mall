@@ -19,8 +19,8 @@ interface FindPayload {
         zh: string;
     }>;
 }
-export declare function stageResults(payload: FindPayload): string;
-export declare function takeResults(token: string): FindPayload | null;
+export declare function stageResults(profile: string, payload: FindPayload): string;
+export declare function takeResults(profile: string, token: string): FindPayload | null;
 /** Search the in-memory catalog for a natural-language requirement. */
 export declare function findPlugins(profile: string, token: string, query: string, limit: number): Promise<FindPayload>;
 /** 智能搜索：用用户主模型（dsh --profile headless）把需求解析成

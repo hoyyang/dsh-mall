@@ -680,6 +680,9 @@ export interface LoadResult {
 
 export const progress: RefreshProgress = { running: false, shard: 0, shards: 0, repos: 0, lastError: null }
 
+/** 在飞刷新的完成 Promise（v1.7.15：冷启动时让并发调用方能等待首刷完成）。 */
+let refreshPromise: Promise<void> | null = null
+
 let lastSearchFailAt = 0
 let htmlCache: { at: number; byKey: Map<string, { pushed_at: string | null; language: string | null }> } | null = null
 
@@ -764,7 +767,15 @@ export async function loadRegistry(profile: string, token: string, opts: { force
   }
   if (progress.running) {
     // A refresh is already in flight: serve what we have while it finishes.
-    return { registry: cache?.data ?? snapshotWithDeltas(profile), refreshing: true }
+    // v1.7.15：冷启动（cache 尚未建立）时短暂等待在飞刷新（最多 8s），避免
+    // find 工具/接口在启动窗口期拿到空目录（快照缺失时整批空结果）。
+    if (cache === null && refreshPromise !== null) {
+      await Promise.race([refreshPromise, new Promise<void>(resolve => { setTimeout(resolve, 8_000) })])
+      const afterWait = cache as { at: number; data: Registry } | null
+      if (afterWait !== null) return { registry: afterWait.data, refreshing: progress.running }
+    }
+    const cached = cache
+    return { registry: cached?.data ?? snapshotWithDeltas(profile), refreshing: true }
   }
   progress.running = true
   progress.lastError = null
@@ -772,7 +783,7 @@ export async function loadRegistry(profile: string, token: string, opts: { force
   progress.shards = 0
   progress.repos = 0
   const immediate = cache?.data ?? snapshotWithDeltas(profile)
-  void (async () => {
+  refreshPromise = (async () => {
     try {
       const live = await fetchLive(profile, token, opts.registryUrl ?? '')
       cache = { at: Date.now(), data: live }
@@ -781,6 +792,7 @@ export async function loadRegistry(profile: string, token: string, opts: { force
       progress.lastError = err instanceof Error ? err.message : String(err)
     } finally {
       progress.running = false
+      refreshPromise = null
     }
   })()
   return { registry: immediate, refreshing: true }

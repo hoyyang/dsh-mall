@@ -9,8 +9,8 @@
  */
 
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import { CATEGORIES, loadRegistry } from './catalog.ts'
-import type { MarketEntry } from './types.ts'
+import { CATEGORIES, loadRegistry, readState, writeState } from './catalog.ts'
+import type { MarketEntry, MarketState } from './types.ts'
 
 export const FIND_TOOL_NAME = 'find_dsh_store_plugin'
 
@@ -22,26 +22,36 @@ interface FindPayload {
   categories?: Record<string, { en: string; zh: string }>
 }
 
-/** Staged results: token -> payload (memory only, TTL 30 min). */
-const staged = new Map<string, { at: number; payload: FindPayload }>()
+/** Staged results: token -> payload. 跟随 session 生命周期（v1.7.15：不再 30 分钟
+ *  过期——用户会话未归档/删除前按钮都应可用），持久化在 profile state.json
+ *  里，宿主重启不丢；上限 20 条，超出丢最旧。 */
+const MAX_STAGED = 20
 
-export function stageResults(payload: FindPayload): string {
+function readStaged(profile: string): Record<string, { at: number; payload: unknown }> {
+  const state: MarketState = readState(profile)
+  return state.findResults ?? {}
+}
+
+export function stageResults(profile: string, payload: FindPayload): string {
   const token = Math.random().toString(36).slice(2, 10) + Date.now().toString(36)
-  staged.set(token, { at: Date.now(), payload })
-  for (const [key, value] of staged) {
-    if (Date.now() - value.at > 30 * 60_000) staged.delete(key)
+  const staged = readStaged(profile)
+  staged[token] = { at: Date.now(), payload: payload as unknown }
+  const keys = Object.keys(staged)
+  if (keys.length > MAX_STAGED) {
+    keys.sort((a, b) => staged[a].at - staged[b].at)
+    for (const key of keys.slice(0, keys.length - MAX_STAGED)) delete staged[key]
   }
+  const state: MarketState = readState(profile)
+  state.findResults = staged
+  writeState(profile, state)
   return token
 }
 
-export function takeResults(token: string): FindPayload | null {
-  const hit = staged.get(token)
-  if (hit === undefined) return null
-  if (Date.now() - hit.at > 30 * 60_000) {
-    staged.delete(token)
-    return null
-  }
-  return hit.payload
+export function takeResults(profile: string, token: string): FindPayload | null {
+  const staged = readStaged(profile)
+  const hit = staged[token]
+  if (hit === undefined || hit.payload === undefined || hit.payload === null) return null
+  return hit.payload as FindPayload
 }
 
 /** 通用词：每条目都命中、零区分度，命中不加分（防大 star 目录霸榜）。 */
@@ -62,7 +72,10 @@ function tokensOf(needle: string): Array<{ t: string; w: number }> {
       for (let len = 4; len >= 2; len--) {
         for (let i = 0; i + len <= w.length; i++) {
           const t = w.slice(i, i + len)
-          if (!STOP_TOKENS.has(t)) out.push({ t, w: len === 4 ? 6 : len === 3 ? 3 : 1 })
+          // v1.7.15：中文 2 字词权重 1→3（"应用市场"的"市场"这类双字功能词
+          // 是有效命中，不该被 kw<3 弱命中门槛整批拒掉——此前中文查询几乎
+          // 全军覆没的回归根因）。
+          if (!STOP_TOKENS.has(t)) out.push({ t, w: len === 4 ? 6 : len === 3 ? 4 : 3 })
         }
       }
     } else {
@@ -204,7 +217,7 @@ export function installFindTool(ctx: { tools: { register(tool: unknown): void } 
     execute: async args => {
       const limit = Math.max(1, Math.min(args.limit ?? 3, 5))
       const payload = await findPlugins(profile, githubToken(), String(args.query ?? ''), limit)
-      const buttonUrl = stageResults(payload)
+      const buttonUrl = stageResults(profile, payload)
       const result = { ...payload, lang: String(args.lang ?? 'en'), buttonUrl }
       return JSON.parse(JSON.stringify(result)) as unknown as Record<string, import('@deepseek-ai/dsh-tools').JsonValue>
     },

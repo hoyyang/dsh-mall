@@ -212,7 +212,29 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/registry' + (force ? '?force=1' : ''), { cache: 'no-store' })
       .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json() })
       .then((body: { registry?: Registry; refreshing?: boolean; fetchAt?: string }) => {
-        if (body.registry !== undefined) setData(body.registry)
+        if (body.registry !== undefined) {
+          // v1.7.15：刷新轮询（refreshing 期间每 5s）会全量覆盖目录，把刚
+          // 富化的 downloads/totalDownloads/repoVersion 冲掉（"大多卡片没
+          // 下载数据"的另一半根因）。合并时按 owner/name 保留旧富化字段。
+          setData((prev: Registry | null) => {
+            const next = body.registry as Registry
+            if (prev === null) return next
+            const byKey = new Map<string, MarketEntry>()
+            for (const e of prev.plugins) byKey.set(e.owner.toLowerCase() + "/" + e.name.toLowerCase(), e)
+            return {
+              ...next,
+              plugins: next.plugins.map(e => {
+                const old = byKey.get(e.owner.toLowerCase() + "/" + e.name.toLowerCase())
+                if (old === undefined) return e
+                const merged = { ...e }
+                if (old.downloads !== undefined) merged.downloads = old.downloads
+                if (old.totalDownloads !== undefined) merged.totalDownloads = old.totalDownloads
+                if (old.repoVersion !== undefined) merged.repoVersion = old.repoVersion
+                return merged
+              }),
+            }
+          })
+        }
         if (body.fetchAt !== undefined) setFetchAt(body.fetchAt)
         setLoadError(false)
       })
@@ -1342,11 +1364,6 @@ export function MarketSection(props: SectionProps) {
                           />
                         </svg>
                       </button>
-                      {installed && (
-                        <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')} title={t('toggleHint')}>
-                          {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
-                        </span>
-                      )}
                     </div>
                     <div className="pcm-actions" onClick={e => e.stopPropagation()}>
                       {installed ? (
@@ -1384,16 +1401,12 @@ export function MarketSection(props: SectionProps) {
                   {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
                   <div className="pcm-stats2">
                     <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>
-                    {typeof entry.downloads === 'number' ? (
+                    {typeof entry.downloads === 'number' && (
                       <span className="pcm-dl-30" title={t('downloadsHint')}>{t('downloads30Label')} {formatDownloads(entry.downloads)}</span>
-                    ) : entry.npm === null ? (
-                      <span className="pcm-dl-30 pcm-dl-none" title={t('noNpmHint')}>{t('noNpmLabel')}</span>
-                    ) : null}
-                    {typeof entry.totalDownloads === 'number' ? (
+                    )}
+                    {typeof entry.totalDownloads === 'number' && (
                       <span className="pcm-dl-total" title={t('totalDownloadsHint')}>{t('totalDownloadsLabel')} {formatDownloads(entry.totalDownloads)}</span>
-                    ) : entry.npm === null ? (
-                      <span className="pcm-dl-total pcm-dl-none" title={t('noNpmHint')}>{t('noNpmLabel')}</span>
-                    ) : null}
+                    )}
                   </div>
                   <div className="pcm-foot">
                     <div className="pcm-stats">
@@ -1448,7 +1461,7 @@ export function MarketSection(props: SectionProps) {
                             </label>
                           </>
                         )}
-                        {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' && (
+                        {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' ? (
                           <>
                             <span className="pcm-vsep" />
                             <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
@@ -1460,8 +1473,15 @@ export function MarketSection(props: SectionProps) {
                                 onChange={() => doToggle(entry)}
                               />
                               <span className="pcm-switch-track" />
+                              <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')} title={t('toggleHint')}>
+                                {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
+                              </span>
                             </label>
                           </>
+                        ) : (
+                          <span className={'pcm-state-chip pcm-state-' + (stateOf(entry) ?? 'restart')} title={t('toggleHint')}>
+                            {stateOf(entry) === 'disabled' ? t('stateDisabled') : stateOf(entry) === 'restart' ? t('stateRestart') : t('stateLive')}
+                          </span>
                         )}
                       </div>
                     </div>
