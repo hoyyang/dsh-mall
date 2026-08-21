@@ -6,11 +6,12 @@
  */
 
 import { createElement as h } from 'react'
+import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh } from './locales.ts'
 import { MarketSection } from './MarketSection.tsx'
 import { SettingsCard } from './SettingsCard.tsx'
-import { SidebarStoreButton } from './StoreWindow.tsx'
+import { SidebarStoreButton, StoreResultsLauncher } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
 
 const NS = 'dsh-store'
@@ -52,6 +53,19 @@ export function apply(ctx: MarketClientContext): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), NS + ': dictionaries')
   const t = ctx.locale.bind(NS)
   injectStyles()
+
+  // find 工具结果浮窗：全局 React 根 + 点击拦截（按钮链接 → 结果浮窗）。
+  ctx.effect(() => {
+    const mount = document.createElement('div')
+    mount.id = 'dsh-store-launcher'
+    document.body.appendChild(mount)
+    const root = createRoot(mount)
+    root.render(h(StoreResultsLauncher, { t, locale: ctx.locale }))
+    return () => {
+      root.unmount()
+      mount.remove()
+    }
+  }, NS + ': results launcher')
 
   ctx.slots.inject('settings.section', () => ctx.slots.register({
     name: 'settings.section',

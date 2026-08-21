@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
-  IconCheckOutline16,
+  IconCloseOutline16,
   IconCopyOutline16,
   IconLinkOutline16,
   IconLoadingOutline16,
@@ -281,7 +281,7 @@ export function DetailPanel(props: {
               <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                 {t('sourceBtn')}
               </Button>
-              <Button variant="ghost" size="sm" icon={<IconCheckOutline16 size={14} />} onClick={props.onClose} className="pcm-detail-close" title={t('close')} />
+              <Button variant="ghost" size="sm" icon={<IconCloseOutline16 size={14} />} onClick={props.onClose} className="pcm-detail-close" title={t('close')} />
             </div>
           </div>
 

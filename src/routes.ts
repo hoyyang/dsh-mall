@@ -10,6 +10,7 @@
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
+import { takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, patchDisables, pluginStatesOf, readManifest as readProfileManifest, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
@@ -230,6 +231,31 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       sendJson(response, 200, locked.value)
+    },
+  }))
+
+  // find 工具结果暂存读取：GET ?id=<token> — 结果浮窗数据源（30 分钟有效）。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/query-result',
+    handler: (request, response) => {
+      if (request.method !== 'GET') {
+        response.writeHead(405, { allow: 'GET' })
+        response.end()
+        return
+      }
+      const url = new URL(request.url ?? '/', 'http://localhost')
+      const id = url.searchParams.get('id') ?? ''
+      if (!/^[a-z0-9]{10,24}$/i.test(id)) {
+        sendJson(response, 400, { ok: false, error: 'invalid id' })
+        return
+      }
+      const payload = takeResults(id)
+      if (payload === null) {
+        sendJson(response, 404, { ok: false, error: 'results expired — re-run /dsh-store' })
+        return
+      }
+      sendJson(response, 200, { ok: true, payload })
     },
   }))
 
