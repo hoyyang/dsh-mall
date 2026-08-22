@@ -17,7 +17,7 @@ import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, wit
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
-import { runSmartInstall, runSmartUninstall } from './smart.ts'
+import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -511,6 +511,41 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
       const locked = await withMutationLock(async () => runSmartInstall(config, repo, npm))
+      if (locked.busy) {
+        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+        return
+      }
+      sendJson(response, 200, locked.value)
+    },
+  }))
+
+  // 智能更新（v1.7.16）：AI 装前审查 → 快照旧版本 → runUpdate → 装后 AI 诊断。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/smart-update',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const name = typeof body.name === 'string' && body.name.length > 0 && body.name.length < 214 ? body.name : null
+      const from = typeof body.from === 'string' && body.from !== '' ? body.from : ''
+      const to = typeof body.to === 'string' && body.to !== '' ? body.to : ''
+      if (name === null || to === '') {
+        sendJson(response, 400, { ok: false, error: 'invalid name or version' })
+        return
+      }
+      const repo = parseRepo(body.repo)
+      const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
+      const locked = await withMutationLock(async () => runSmartUpdate(config, { name, from, to, repo, npm }))
       if (locked.busy) {
         sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
         return

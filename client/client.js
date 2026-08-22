@@ -118,6 +118,12 @@ const en = {
 	installDone: "Installed. Refresh the page to activate.",
 	smartInstall: "Smart install",
 	smartInstallHint: "AI reviews the repo, installs it, then diagnoses the result.",
+	updateTitle: "Update {0}?",
+	updateFrom: "Source: {0}",
+	updateVia: "Update target: {0}",
+	updateRange: "Version: {0} → {1}",
+	smartUpdate: "Smart update",
+	smartUpdateHint: "AI reviews the repo, updates the plugin, then diagnoses the result.",
 	smartRefused: "AI review refused this install",
 	installFailed: "Install failed",
 	uninstallTitle: "Uninstall {0}?",
@@ -131,7 +137,6 @@ const en = {
 	empty: "No matching repos.",
 	loading: "Loading catalog…",
 	loadError: "Could not load the catalog. Showing the bundled snapshot.",
-	rateLimitNote: "GitHub rate limit hit — resets in {0}s. Data may be stale.",
 	tokenConfigured: "GitHub token active",
 	publish: "Publish my plugin",
 	publishHint: "Tag your GitHub repo with the dsh-plugin topic and the store indexes it — no code is uploaded.",
@@ -237,6 +242,7 @@ const en = {
 	taskKindUninstall: "Uninstall",
 	taskKindSmartInstall: "Smart install",
 	taskKindSmartUninstall: "Smart uninstall",
+	taskKindSmartUpdate: "Smart update",
 	smartUninstall: "Smart uninstall",
 	smartUninstallHint: "AI reviews the risks before uninstalling and removes leftovers.",
 	smartUninstallReview: "AI review before uninstall",
@@ -348,6 +354,12 @@ const zh = {
 	installDone: "安装完成。刷新页面即可生效。",
 	smartInstall: "智能安装",
 	smartInstallHint: "AI 先审查仓库，再安装，装后做检查诊断。",
+	updateTitle: "更新 {0}？",
+	updateFrom: "来源：{0}",
+	updateVia: "更新目标：{0}",
+	updateRange: "版本：{0} → {1}",
+	smartUpdate: "智能更新",
+	smartUpdateHint: "AI 先审查仓库，再更新插件，更新后做检查诊断。",
 	smartRefused: "AI 审查判定拒绝安装",
 	installFailed: "安装失败",
 	uninstallTitle: "卸载 {0}？",
@@ -361,7 +373,6 @@ const zh = {
 	empty: "没有匹配的项目。",
 	loading: "正在加载目录…",
 	loadError: "目录加载失败，已回退内置快照。",
-	rateLimitNote: "GitHub 限流 — {0} 秒后恢复。数据可能不是最新。",
 	tokenConfigured: "GitHub token 已启用",
 	publish: "上传我的插件",
 	publishHint: "给你的 GitHub 仓库打上 dsh-plugin 标签即可上架——市场只收录索引，不会上传任何代码。",
@@ -467,6 +478,7 @@ const zh = {
 	taskKindUninstall: "卸载",
 	taskKindSmartInstall: "智能安装",
 	taskKindSmartUninstall: "智能卸载",
+	taskKindSmartUpdate: "智能更新",
 	smartUninstall: "智能卸载",
 	smartUninstallHint: "卸载前先由 AI 审查风险，卸载后自动检查残留。",
 	smartUninstallReview: "卸载前 AI 审查",
@@ -1362,7 +1374,7 @@ function TaskPanel(props) {
 	if (!open) return null;
 	const summary = taskSummary(records);
 	const busy = summary.running > 0;
-	const verb = (record) => record.kind === "install" ? t("taskKindInstall") : record.kind === "update" ? t("taskKindUpdate") : record.kind === "uninstall" ? t("taskKindUninstall") : record.kind === "smart-install" ? t("taskKindSmartInstall") : t("taskKindSmartUninstall");
+	const verb = (record) => record.kind === "install" ? t("taskKindInstall") : record.kind === "update" ? t("taskKindUpdate") : record.kind === "uninstall" ? t("taskKindUninstall") : record.kind === "smart-install" ? t("taskKindSmartInstall") : record.kind === "smart-uninstall" ? t("taskKindSmartUninstall") : t("taskKindSmartUpdate");
 	return (0, react_dom.createPortal)(/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 		ref: popRef,
 		className: "pcm-tasks-pop",
@@ -1565,6 +1577,7 @@ function MarketSection(props) {
 	const [sortOpen, setSortOpen] = (0, react.useState)(false);
 	const [sizeOpen, setSizeOpen] = (0, react.useState)(false);
 	const [confirming, setConfirming] = (0, react.useState)(null);
+	const [updatingConfirm, setUpdatingConfirm] = (0, react.useState)(null);
 	const [rollbacking, setRollbacking] = (0, react.useState)(null);
 	const [removing, setRemoving] = (0, react.useState)(null);
 	const [removingLocal, setRemovingLocal] = (0, react.useState)(null);
@@ -2458,6 +2471,7 @@ function MarketSection(props) {
 		t
 	]);
 	const doUpdateOne = (0, react.useCallback)((u) => {
+		setUpdatingConfirm(null);
 		if (updateBusy) return;
 		const id = nextTaskId();
 		setTasks((list) => enqueueTask(list, {
@@ -2476,6 +2490,65 @@ function MarketSection(props) {
 		updateBusy,
 		runUpdateRequest,
 		t
+	]);
+	const doSmartUpdate = (0, react.useCallback)((entry, u) => {
+		setUpdatingConfirm(null);
+		const id = nextTaskId();
+		setTasks((list) => enqueueTask(list, {
+			id,
+			kind: "smart-update",
+			name: u.name,
+			state: "running",
+			detail: u.from + " → " + u.to,
+			reason: null,
+			at: Date.now()
+		}));
+		setTasksOpen(true);
+		fetch("/dsh-store/smart-update", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				name: u.name,
+				from: u.from,
+				to: u.to,
+				repo: entry.owner + "/" + entry.name,
+				npm: entry.npm
+			})
+		}).then((res) => res.json()).then((body) => {
+			if (body.verdict === "refuse") {
+				setToast(t("smartRefused") + ": " + (body.report ?? ""));
+				finishTask(id, {
+					ok: false,
+					error: t("smartRefused") + " · " + (body.report ?? "")
+				}, "");
+			} else if (body.ok === true) {
+				const verdictNote = body.verdict === "caution" ? " ⚠ " + ((body.risks ?? []).slice(0, 3).join("；") || "AI 提示需注意") : body.verdict === "unavailable" ? " · AI 审查不可用，已按常规更新" : "";
+				setToast(t("updateDone") + verdictNote);
+				finishTask(id, {
+					ok: true,
+					message: (body.message ?? "") + " " + (body.report ?? "") + verdictNote
+				}, t("updateDone"));
+				fetchStatus();
+				fetchRegistry(false);
+			} else {
+				setToast(t("updateFailed") + ": " + (body.message ?? body.error ?? ""));
+				finishTask(id, {
+					ok: false,
+					error: (body.message ?? body.error ?? t("updateFailed")) + (body.report !== void 0 && body.report !== "" ? " · " + body.report : "")
+				}, "");
+			}
+		}).catch(() => {
+			setToast(t("updateFailed"));
+			finishTask(id, {
+				ok: false,
+				error: t("updateFailed")
+			}, "");
+		});
+	}, [
+		t,
+		fetchStatus,
+		fetchRegistry,
+		finishTask
 	]);
 	const skipSet = (0, react.useMemo)(() => new Set((status?.skipUpdates ?? []).map((n) => n.toLowerCase())), [status]);
 	const rollbacks = status?.rollbacks ?? {};
@@ -2676,12 +2749,6 @@ function MarketSection(props) {
 		const synced = fetchAt !== null ? relativeFromNow(fetchAt, t) : relativeFromNow(data.updated, t);
 		return t("syncedAt").replace("{0}", synced);
 	})();
-	const rateNote = (() => {
-		const r = status?.rateLimit;
-		if (r === null || r === void 0 || r.remaining === void 0 || r.remaining > 0) return null;
-		const reset = r.reset ?? 0;
-		return t("rateLimitNote").replace("{0}", String(Math.max(0, Math.round(reset - Date.now() / 1e3))));
-	})();
 	const chipCats = orderedCategories(categories, cat, false);
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 		className: "pcm-root",
@@ -2862,10 +2929,6 @@ function MarketSection(props) {
 							})
 						]
 					}) : null,
-					!seedMode && rateNote !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-rate",
-						children: rateNote
-					}),
 					!seedMode && loadError && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: "pcm-rate",
 						children: t("loadError")
@@ -3299,7 +3362,10 @@ function MarketSection(props) {
 											size: "sm",
 											className: "pcm-update-btn",
 											disabled: updateBusy,
-											onClick: () => doUpdateOne(upd),
+											onClick: () => setUpdatingConfirm({
+												entry,
+												upd
+											}),
 											children: updatingNames.has(upd.name.toLowerCase()) ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-spin",
 												children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
@@ -3456,6 +3522,16 @@ function MarketSection(props) {
 				onConfirm: () => doInstall(confirming),
 				onSmartInstall: () => doSmartInstall(confirming)
 			}),
+			updatingConfirm !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(UpdateModal, {
+				t,
+				entry: updatingConfirm.entry,
+				upd: updatingConfirm.upd,
+				busy: updateBusy,
+				statusLine: updateBusy ? status?.install?.line ?? null : null,
+				onClose: () => setUpdatingConfirm(null),
+				onConfirm: () => doUpdateOne(updatingConfirm.upd),
+				onSmartUpdate: () => doSmartUpdate(updatingConfirm.entry, updatingConfirm.upd)
+			}),
 			removingLocal !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(LocalUninstallModal, {
 				t,
 				entry: removingLocal,
@@ -3604,6 +3680,65 @@ function InstallModal(props) {
 					children: t("installVia").replace("{0}", target)
 				}),
 				installing && statusLine !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-cmd",
+					children: statusLine
+				})
+			]
+		})
+	});
+}
+function UpdateModal(props) {
+	const { t, entry, upd, busy, statusLine } = props;
+	const target = entry.npm ?? "github:" + entry.owner + "/" + entry.name;
+	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.isPlugin === true ? "pcm-risk pcm-risk-community" : "pcm-risk pcm-risk-nonplugin";
+	const riskText = entry.curated ? t("riskCurated") : entry.isPlugin === true ? t("riskCommunity") : t("riskNonplugin");
+	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
+		open: true,
+		onClose: props.onClose,
+		title: t("updateTitle").replace("{0}", entry.owner + "/" + entry.name),
+		description: entry.description,
+		footer: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+				variant: "ghost",
+				onClick: props.onClose,
+				children: t("cancel")
+			}),
+			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
+				type: "button",
+				className: "pcm-smart-install-btn",
+				onClick: props.onSmartUpdate,
+				disabled: busy,
+				title: t("smartUpdateHint"),
+				children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+					className: "pcm-smart-star",
+					children: "✦"
+				}), busy ? t("smartSearching") : t("smartUpdate")]
+			}),
+			/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+				type: "button",
+				className: "pcm-install-plain-btn",
+				onClick: props.onConfirm,
+				disabled: busy,
+				children: busy ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+					className: "pcm-spin",
+					children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+				}) : t("updateBtn")
+			})
+		] }),
+		children: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+			className: "pcm-modal-body",
+			children: [
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("updateFrom").replace("{0}", entry.url) }),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("updateRange").replace("{0}", upd.from).replace("{1}", upd.to) }),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: riskClass,
+					children: riskText
+				}),
+				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-cmd",
+					children: t("updateVia").replace("{0}", target + "@latest")
+				}),
+				busy && statusLine !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-cmd",
 					children: statusLine
 				})

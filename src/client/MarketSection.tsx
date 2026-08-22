@@ -137,6 +137,7 @@ export function MarketSection(props: SectionProps) {
   const [sortOpen, setSortOpen] = useState(false)
   const [sizeOpen, setSizeOpen] = useState(false)
   const [confirming, setConfirming] = useState<MarketEntry | null>(null)
+  const [updatingConfirm, setUpdatingConfirm] = useState<{ entry: MarketEntry; upd: { name: string; from: string; to: string } } | null>(null)
   const [rollbacking, setRollbacking] = useState<string | null>(null)
   const [removing, setRemoving] = useState<MarketEntry | null>(null)
   const [removingLocal, setRemovingLocal] = useState<MarketEntry | null>(null)
@@ -941,6 +942,7 @@ export function MarketSection(props: SectionProps) {
   }, [updateBusy, updates, runUpdateRequest, t])
 
   const doUpdateOne = useCallback((u: { name: string; from: string; to: string }) => {
+    setUpdatingConfirm(null)
     if (updateBusy) return
     const id = nextTaskId()
     setTasks(list => enqueueTask(list, {
@@ -956,6 +958,47 @@ export function MarketSection(props: SectionProps) {
     setUpdatingNames(new Set([u.name.toLowerCase()]))
     runUpdateRequest([u.name], t('updateDone'), id)
   }, [updateBusy, runUpdateRequest, t])
+
+  // ---- 智能更新（v1.7.16）：与智能安装同构——AI 装前审查 → 更新 → 装后 AI 诊断 ----
+  const doSmartUpdate = useCallback((entry: MarketEntry, u: { name: string; from: string; to: string }) => {
+    setUpdatingConfirm(null)
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'smart-update',
+      name: u.name,
+      state: 'running',
+      detail: u.from + ' → ' + u.to,
+      reason: null,
+      at: Date.now(),
+    }))
+    setTasksOpen(true)
+    fetch('/dsh-store/smart-update', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: u.name, from: u.from, to: u.to, repo: entry.owner + '/' + entry.name, npm: entry.npm }),
+    })
+      .then(res => res.json())
+      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; message?: string; error?: string }) => {
+        if (body.verdict === 'refuse') {
+          setToast(t('smartRefused') + ': ' + (body.report ?? ''))
+          finishTask(id, { ok: false, error: t('smartRefused') + ' · ' + (body.report ?? '') }, '')
+        } else if (body.ok === true) {
+          const verdictNote = body.verdict === 'caution' ? ' ⚠ ' + ((body.risks ?? []).slice(0, 3).join('；') || 'AI 提示需注意') : body.verdict === 'unavailable' ? ' · AI 审查不可用，已按常规更新' : ''
+          setToast(t('updateDone') + verdictNote)
+          finishTask(id, { ok: true, message: (body.message ?? '') + ' ' + (body.report ?? '') + verdictNote }, t('updateDone'))
+          fetchStatus()
+          fetchRegistry(false)
+        } else {
+          setToast(t('updateFailed') + ': ' + (body.message ?? body.error ?? ''))
+          finishTask(id, { ok: false, error: (body.message ?? body.error ?? t('updateFailed')) + (body.report !== undefined && body.report !== '' ? ' · ' + body.report : '') }, '')
+        }
+      })
+      .catch(() => {
+        setToast(t('updateFailed'))
+        finishTask(id, { ok: false, error: t('updateFailed') }, '')
+      })
+  }, [t, fetchStatus, fetchRegistry, finishTask])
 
   // ---- 启用/停用、回退、不参与一键更新、商店自身更新 ----
   const skipSet = useMemo(() => new Set((status?.skipUpdates ?? []).map(n => n.toLowerCase())), [status])
@@ -1090,13 +1133,6 @@ export function MarketSection(props: SectionProps) {
     return t('syncedAt').replace('{0}', synced)
   })()
 
-  const rateNote = (() => {
-    const r = status?.rateLimit
-    if (r === null || r === undefined || r.remaining === undefined || r.remaining > 0) return null
-    const reset = r.reset ?? 0
-    return t('rateLimitNote').replace('{0}', String(Math.max(0, Math.round(reset - Date.now() / 1000))))
-  })()
-
   const chipCats = orderedCategories(categories, cat, false)
 
   return (
@@ -1196,7 +1232,6 @@ export function MarketSection(props: SectionProps) {
         </div>
       ) : null}
 
-      {!seedMode && rateNote !== null && <div className="pcm-rate">{rateNote}</div>}
       {!seedMode && loadError && <div className="pcm-rate">{t('loadError')}</div>}
 
       <div className="pcm-toolbar">
@@ -1432,7 +1467,7 @@ export function MarketSection(props: SectionProps) {
                           <span className="pcm-update-versions" title={t('updateHint')}>
                             {upd.from} <span className="pcm-update-arrow">→</span> <span className="pcm-update-new">{upd.to}</span>
                           </span>
-                          <Button variant="primary" size="sm" className="pcm-update-btn" disabled={updateBusy} onClick={() => doUpdateOne(upd)}>
+                          <Button variant="primary" size="sm" className="pcm-update-btn" disabled={updateBusy} onClick={() => setUpdatingConfirm({ entry, upd })}>
                             {updatingNames.has(upd.name.toLowerCase()) ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
                           </Button>
                         </div>
@@ -1551,6 +1586,19 @@ export function MarketSection(props: SectionProps) {
           onClose={() => setConfirming(null)}
           onConfirm={() => doInstall(confirming)}
           onSmartInstall={() => doSmartInstall(confirming)}
+        />
+      )}
+
+      {updatingConfirm !== null && (
+        <UpdateModal
+          t={t}
+          entry={updatingConfirm.entry}
+          upd={updatingConfirm.upd}
+          busy={updateBusy}
+          statusLine={updateBusy ? (status?.install?.line ?? null) : null}
+          onClose={() => setUpdatingConfirm(null)}
+          onConfirm={() => doUpdateOne(updatingConfirm.upd)}
+          onSmartUpdate={() => doSmartUpdate(updatingConfirm.entry, updatingConfirm.upd)}
         />
       )}
 
@@ -1678,6 +1726,51 @@ function InstallModal(props: {
         <div className={riskClass}>{riskText}</div>
         <div className="pcm-cmd">{t('installVia').replace('{0}', target)}</div>
         {installing && statusLine !== null && <div className="pcm-cmd">{statusLine}</div>}
+      </div>
+    </Modal>
+  )
+}
+
+function UpdateModal(props: {
+  t: (key: string) => string
+  entry: MarketEntry
+  upd: { name: string; from: string; to: string }
+  busy: boolean
+  statusLine: string | null
+  onClose: () => void
+  onConfirm: () => void
+  onSmartUpdate: () => void
+}) {
+  const { t, entry, upd, busy, statusLine } = props
+  const target = entry.npm ?? 'github:' + entry.owner + '/' + entry.name
+  const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
+  const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
+  return (
+    <Modal
+      open
+      onClose={props.onClose}
+      title={t('updateTitle').replace('{0}', entry.owner + '/' + entry.name)}
+      description={entry.description}
+      footer={(
+        <>
+          <Button variant="ghost" onClick={props.onClose}>{t('cancel')}</Button>
+          {/* v1.7.16：与安装提示弹窗同款——智能更新（深色圆角+白✦+光扫动画）+ 更新（白底深字深边框） */}
+          <button type="button" className="pcm-smart-install-btn" onClick={props.onSmartUpdate} disabled={busy} title={t('smartUpdateHint')}>
+            <span className="pcm-smart-star">✦</span>
+            {busy ? t('smartSearching') : t('smartUpdate')}
+          </button>
+          <button type="button" className="pcm-install-plain-btn" onClick={props.onConfirm} disabled={busy}>
+            {busy ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
+          </button>
+        </>
+      )}
+    >
+      <div className="pcm-modal-body">
+        <div>{t('updateFrom').replace('{0}', entry.url)}</div>
+        <div>{t('updateRange').replace('{0}', upd.from).replace('{1}', upd.to)}</div>
+        <div className={riskClass}>{riskText}</div>
+        <div className="pcm-cmd">{t('updateVia').replace('{0}', target + '@latest')}</div>
+        {busy && statusLine !== null && <div className="pcm-cmd">{statusLine}</div>}
       </div>
     </Modal>
   )

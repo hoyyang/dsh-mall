@@ -539,11 +539,16 @@ export function computeUpdates(registry: Registry, deps: Record<string, string>,
       if (p.npm !== null && p.npm.toLowerCase() === lower) { hit = p; break }
       if (p.name.toLowerCase() === lower) { hit = p; break }
     }
-    if (hit === null || hit.npmVersion === null) continue
-    if (compareVersions(hit.npmVersion, from) <= 0) continue
+    if (hit === null) continue
+    // v1.7.16：npm_version 缺失时回退 repo version（含 CI latest_tag 富化值）——
+    // 增量索引重新抓取的仓库会短暂丢失 npm_version（npm 富化只在每日全量跑），
+    // 纯靠 npm_version 会让「更新」按钮与回退后的更新提示一起消失（dshmarket 实测）。
+    const to = hit.npmVersion ?? hit.version
+    if (to === null) continue
+    if (compareVersions(to, from) <= 0) continue
     if (seen.has(lower)) continue
     seen.add(lower)
-    out.push({ name, from, to: hit.npmVersion, repo: hit.owner + '/' + hit.name, npm: hit.npm ?? name })
+    out.push({ name, from, to, repo: hit.owner + '/' + hit.name, npm: hit.npm ?? name })
   }
   out.sort((a, b) => a.name.localeCompare(b.name))
   return out

@@ -25,6 +25,27 @@ export interface SmartInstallResult {
     report: string;
 }
 export declare function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<SmartInstallResult>;
+export interface SmartUpdateResult {
+    ok: boolean;
+    stage: 'review' | 'done';
+    verdict: 'install' | 'caution' | 'refuse' | 'unavailable';
+    risks: string[];
+    reasons: string[];
+    message: string;
+    postState: string | null;
+    report: string;
+}
+/**
+ * 智能更新：与智能安装同构——AI 装前审查（refuse 终止）→ 快照旧版本 →
+ * runUpdate（@latest）→ 装后 AI 诊断；AI 不可用降级常规更新并注明。
+ */
+export declare function runSmartUpdate(config: MarketConfig, target: {
+    name: string;
+    from: string;
+    to: string;
+    repo: string | null;
+    npm: string | null;
+}): Promise<SmartUpdateResult>;
 export interface SmartUninstallResult {
     ok: boolean;
     stage: 'review' | 'done' | 'error';
