@@ -25,7 +25,10 @@ const CDN_URLS = [
   'https://raw.githubusercontent.com/bradeGithub/DSH-Plugins-Marketplace/main/registry.json',
   'https://cdn.jsdelivr.net/gh/bradeGithub/DSH-Plugins-Marketplace@main/registry.json',
 ]
-const CDN_MAX_AGE_MS = 6 * 3600 * 1000
+// v1.7.33：6h→24h。索引增量「无变化不提交」，generated_at 可能数小时不更新；
+// 6h 门槛会把健康数据误判过期并回落直爬。24h 与每日全量重建节奏匹配，
+// 超过一天未更新才视为异常（CDN 通道另有条目数/覆盖率校验）。
+const CDN_MAX_AGE_MS = 24 * 3600 * 1000
 
 /** 黑名单数据源（exclusions.json，索引仓库维护；种子=bruc3van curated.json，MIT）。 */
 const EXCLUSION_URLS = [
