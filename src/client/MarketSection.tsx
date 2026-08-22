@@ -108,6 +108,7 @@ export function MarketSection(props: SectionProps) {
   const [favOnly, setFavOnly] = useState(false)
   const [showBlacklist, setShowBlacklist] = useState(false)
   const [scannedOnly, setScannedOnly] = useState(false)
+  const [recent30, setRecent30] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -539,6 +540,11 @@ export function MarketSection(props: SectionProps) {
     for (const p of plugins) {
       if (!showBlacklist && p.excluded != null) continue
       if (scannedOnly && p.bundled !== true) continue
+      if (recent30) {
+        if (p.created === null) continue
+        const created = Date.parse(p.created)
+        if (Number.isNaN(created) || Date.now() - created > 30 * 86_400_000) continue
+      }
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
@@ -553,13 +559,13 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist, scannedOnly])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist, scannedOnly, recent30])
 
   const excludedCount = useMemo(() => plugins.filter(p => p.excluded != null).length, [plugins])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, excludedOnly: showBlacklist, scannedOnly }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist, scannedOnly],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: recent30 ? 30 : 0, lang, excludedOnly: showBlacklist, scannedOnly }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist, scannedOnly, recent30],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -1338,6 +1344,13 @@ export function MarketSection(props: SectionProps) {
           onClick={() => { setScannedOnly(v => !v); setPage(1) }}
           title={t('scannedHint')}
         >{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
+        {/* v1.7.28：近 30 天收录（created 已回退索引 created_at，数据可信） */}
+        <Pill
+          className={recent30 ? 'pcm-pill-recent pcm-pill-recent-on' : 'pcm-pill-recent'}
+          active={recent30}
+          onClick={() => { setRecent30(v => !v); setPage(1) }}
+          title={t('recent30Hint')}
+        >{t('recent30')}</Pill>
         {!seedMode && (
           <div className="pcm-search-wrap">
             <Input

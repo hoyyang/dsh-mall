@@ -72,6 +72,7 @@ interface CdnRepo {
   market_tags?: string[]
   npm_version?: string | null
   npm_pkg_name?: string | null
+  created_at?: string | null
   bundled?: boolean | null
   bundled_at?: string | null
   npm_linked?: boolean | null
@@ -197,7 +198,8 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     descriptions: mergeDescriptions(knownEntry?.description, collectDescriptions(repo as unknown as Record<string, unknown>)),
     stars: repo.stargazers_count ?? null,
     todayStars: null,
-    created: knownEntry?.added ?? null,
+    // v1.7.28：收录日补全——awesome known 的 added 优先，否则回退索引 created_at。
+    created: knownEntry?.added ?? (typeof repo.created_at === 'string' && repo.created_at !== '' ? repo.created_at : null),
     pushed: repo.updated_at ?? null,
     isPlugin,
     curated: knownEntry !== undefined,
