@@ -119,7 +119,12 @@ function scoreEntry(e: MarketEntry, needle: string): number {
   if (e.verified != null) score += 3
   // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
   // 结果条目自带 isPlugin 标记（卡片有「插件/非插件」徽章区分）。
-  if (e.category === 'market') score += 4
+  // v1.7.27：market 类条件加分——只有查询本身是「市场/商店」语义时才给 +4，
+  // 否则市场目录不再靠无条件加分霸榜（与「市场不能包含市场」原则对齐）。
+  if (e.category === 'market' && /market|store|商店|市场|目录|hub|marketplace/i.test(needle)) score += 4
+  // v1.7.27：榜单豁免——星数与 DSH 无关的仓库（leaderboard 豁免）star 权重置 0，
+  // 靠关键词/精选/验证排名，不再借大星数霸榜。
+  if (e.excluded?.kind === 'leaderboard') score -= Math.log10(1 + (e.stars ?? 0)) * 2
   return score
 }
 
@@ -129,6 +134,7 @@ export async function findPlugins(profile: string, token: string, query: string,
   const { registry } = await loadRegistry(profile, token, {})
   const ranked = registry.plugins
     .filter(p => (p as MarketEntry & { local?: boolean }).local !== true)
+    .filter(p => p.excluded == null || p.excluded.kind === 'leaderboard') // 黑名单不进搜索结果
     .map(p => ({ p, score: scoreEntry(p, needle) }))
     .sort((a, b) => b.score - a.score)
   const recommended = ranked.filter(r => r.score > 0).slice(0, Math.min(limit, 5)).map(r => r.p)

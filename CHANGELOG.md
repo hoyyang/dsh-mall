@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.27 — 2026-08-22
+
+- **榜单豁免与条件加分（R8）**：find 评分——黑名单条目（excluded/market）不进搜索结果；leaderboard 豁免条目 star 权重置 0（靠关键词/精选/验证排名）；market 类 +4 只在查询语义为「市场/商店」时生效（不再无条件霸榜）。实测「应用市场」仍返回市场工具、「视觉插件」返回视觉插件且无剔除条目混入。
 ## 1.7.26 — 2026-08-22
 
 - **README 安全预渲染（R7）**：新增 GET /dsh-store/readme 端点（host 清洗：图片域名白名单 raw/camo/user-images/avatars/github、script/style 剥离、HTML 标题/段落/换行转 Markdown、H1 起整体降一级、相对链接图片改 absolute、24h 缓存、路径白名单防穿越）；详情面板改走端点（客户端再做一层 MarkdownText 徽章清理）。实测 dsh-market README 标题降级+链接绝对化正确。
