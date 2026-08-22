@@ -1303,6 +1303,41 @@ export function MarketSection(props: SectionProps) {
 
       {!seedMode && loadError && <div className="pcm-rate">{t('loadError')}</div>}
 
+      {/* v1.7.35：搜索框+智能搜索独占一行（深色卡与筛选行之间，填满整行、适当加大） */}
+      {!seedMode && (
+        <div className="pcm-search-row">
+          <div className="pcm-search-wrap pcm-search-wrap-full">
+            <Input
+              className="pcm-search pcm-search-big"
+              icon={<IconSearchOutline16 size={16} />}
+              value={q}
+              placeholder={t('searchPlaceholder')}
+              onChange={e => { setQ(e.target.value); setPage(1) }}
+            />
+            {q !== '' && (
+              <button
+                type="button"
+                className="pcm-search-clear"
+                title={t('searchClear')}
+                onClick={() => { setQ(''); setPage(1) }}
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            className="pcm-smart-search-btn pcm-smart-search-btn-big"
+            title={t('smartSearchHint')}
+            disabled={smartSearchBusy}
+            onClick={doSmartSearch}
+          >
+            <span className="pcm-smart-star">✦</span>
+            {smartSearchBusy ? t('smartSearching') : t('smartSearch')}
+          </button>
+        </div>
+      )}
+
       <div className="pcm-toolbar">
         <div className="pcm-seg">
           <button className={kind === 'all' ? 'on' : ''} onClick={() => { setKind('all'); setPage(1) }}>{t('kindAll')}</button>
@@ -1336,59 +1371,6 @@ export function MarketSection(props: SectionProps) {
           onClick={() => { setScannedOnly(v => !v); setPage(1) }}
           title={t('scannedHint')}
         >{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
-        {!seedMode && (
-          <div className="pcm-search-wrap">
-            <Input
-              className="pcm-search"
-              icon={<IconSearchOutline16 size={14} />}
-              value={q}
-              placeholder={t('searchPlaceholder')}
-              onChange={e => { setQ(e.target.value); setPage(1) }}
-            />
-            {q !== '' && (
-              <button
-                type="button"
-                className="pcm-search-clear"
-                title={t('searchClear')}
-                onClick={() => { setQ(''); setPage(1) }}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        )}
-        {/* v1.7.4：#5 智能搜索按钮——用户主模型理解需求 → 目录推荐 → 结果浮窗（结果浮窗内不再重复渲染）。 */}
-        {!seedMode && (
-          <button
-            type="button"
-            className="pcm-smart-search-btn"
-            title={t('smartSearchHint')}
-            disabled={smartSearchBusy}
-            onClick={doSmartSearch}
-          >
-            <span className="pcm-smart-star">✦</span>
-            {smartSearchBusy ? t('smartSearching') : t('smartSearch')}
-          </button>
-        )}
-        {/* v1.7.3：#5 排序按钮移到搜索框右侧（原语言按钮位置）。 */}
-        <div className="pcm-sort-wrap">
-          <Menu
-            open={sortOpen}
-            onClose={() => setSortOpen(false)}
-            onSelect={id => {
-              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads') setSortDim(id)
-              else if (id === 'asc' || id === 'desc') setSortDir(id)
-              setPage(1)
-            }}
-            align="end"
-            portal
-            anchor={(
-              <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort') + ' ' + (sortDir === 'desc' ? '↓' : '↑')}</Button>
-            )}
-            items={sortItems}
-            selectedIds={[sortDim, sortDir]}
-          />
-        </div>
         {!floating && (
           <div className="pcm-lang-wrap">
             <Menu
@@ -1408,6 +1390,25 @@ export function MarketSection(props: SectionProps) {
             />
           </div>
         )}
+        {/* v1.7.35：排序按钮移到「全部项目」这行最右侧 */}
+        <div className="pcm-sort-wrap">
+          <Menu
+            open={sortOpen}
+            onClose={() => setSortOpen(false)}
+            onSelect={id => {
+              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads') setSortDim(id)
+              else if (id === 'asc' || id === 'desc') setSortDir(id)
+              setPage(1)
+            }}
+            align="end"
+            portal
+            anchor={(
+              <Button variant="outline" size="sm" className="pcm-sort-btn" onClick={() => setSortOpen(o => !o)}>{t('sort') + ' ' + (sortDir === 'desc' ? '↓' : '↑')}</Button>
+            )}
+            items={sortItems}
+            selectedIds={[sortDim, sortDir]}
+          />
+        </div>
       </div>
       <div className={catsClamped ? 'pcm-chips pcm-chips-clamped' : 'pcm-chips'} ref={chipsRef}>
         <Pill active={cat === 'all'} onClick={() => { setCat('all'); setPage(1) }}>{t('all')}<span className="pcm-count">{categoryCounts.all}</span></Pill>
