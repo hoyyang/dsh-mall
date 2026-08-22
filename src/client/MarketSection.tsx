@@ -1811,7 +1811,7 @@ function InstallModal(props: {
   onSmartInstall: () => void
 }) {
   const { t, entry, installing, statusLine } = props
-  const target = entry.npm ?? 'github:' + entry.owner + '/' + entry.name
+  const target = entry.npmLinked === false ? 'github:' + entry.owner + '/' + entry.name : (entry.npm ?? 'github:' + entry.owner + '/' + entry.name)
   const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
   const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
   return (
@@ -1856,7 +1856,7 @@ function UpdateModal(props: {
   onSmartUpdate: () => void
 }) {
   const { t, entry, upd, busy, statusLine } = props
-  const target = entry.npm ?? 'github:' + entry.owner + '/' + entry.name
+  const target = entry.npmLinked === false ? 'github:' + entry.owner + '/' + entry.name : (entry.npm ?? 'github:' + entry.owner + '/' + entry.name)
   const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
   const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
   return (

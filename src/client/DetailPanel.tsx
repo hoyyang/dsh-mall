@@ -219,7 +219,7 @@ export function DetailPanel(props: {
   const [copied, setCopied] = useState(false)
   const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
   const copyCmd = () => {
-    const cmd = entry.npm !== null ? 'dsh plugin add ' + entry.npm : 'dsh plugin add github:' + entry.owner + '/' + entry.name
+    const cmd = entry.npmLinked === false || entry.npm === null ? 'dsh plugin add github:' + entry.owner + '/' + entry.name : 'dsh plugin add ' + entry.npm
     void navigator.clipboard?.writeText(cmd)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)

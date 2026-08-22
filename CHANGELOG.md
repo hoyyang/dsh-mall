@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.25 — 2026-08-22
+
+- **npm 防抢注落地（R6）**：npmLinked===false 的条目不再参与一键更新（computeUpdates 跳过）；安装路由自动降级 `dsh plugin add github:owner/repo` 源码安装；安装/更新弹窗与详情面板的命令展示同步降级并提示「npm 包未回指本仓库」。
 ## 1.7.24 — 2026-08-22
 
 - **运行时 top-up 扫描（R5）**：新增 POST /dsh-store/scan——对 bundled 未知或「CI 扫描后又有 push」的条目页级抽查（≤24 仓、raw 优先零额度、GitHub API 树兜底、24h 缓存、匿名额度耗尽自动停）；客户端翻页/刷新后按需补扫并把结论合入卡片徽章。实测：colleague-skill→false（skill 仓库无 bundle）、archify→true。

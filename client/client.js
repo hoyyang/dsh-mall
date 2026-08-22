@@ -990,7 +990,7 @@ function DetailPanel(props) {
 		ru: "Русский"
 	};
 	const copyCmd = () => {
-		const cmd = entry.npm !== null ? "dsh plugin add " + entry.npm : "dsh plugin add github:" + entry.owner + "/" + entry.name;
+		const cmd = entry.npmLinked === false || entry.npm === null ? "dsh plugin add github:" + entry.owner + "/" + entry.name : "dsh plugin add " + entry.npm;
 		navigator.clipboard?.writeText(cmd);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2e3);
@@ -3905,7 +3905,7 @@ function MarketSection(props) {
 }
 function InstallModal(props) {
 	const { t, entry, installing, statusLine } = props;
-	const target = entry.npm ?? "github:" + entry.owner + "/" + entry.name;
+	const target = entry.npmLinked === false ? "github:" + entry.owner + "/" + entry.name : entry.npm ?? "github:" + entry.owner + "/" + entry.name;
 	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.isPlugin === true ? "pcm-risk pcm-risk-community" : "pcm-risk pcm-risk-nonplugin";
 	const riskText = entry.curated ? t("riskCurated") : entry.isPlugin === true ? t("riskCommunity") : t("riskNonplugin");
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
@@ -3963,7 +3963,7 @@ function InstallModal(props) {
 }
 function UpdateModal(props) {
 	const { t, entry, upd, busy, statusLine } = props;
-	const target = entry.npm ?? "github:" + entry.owner + "/" + entry.name;
+	const target = entry.npmLinked === false ? "github:" + entry.owner + "/" + entry.name : entry.npm ?? "github:" + entry.owner + "/" + entry.name;
 	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.isPlugin === true ? "pcm-risk pcm-risk-community" : "pcm-risk pcm-risk-nonplugin";
 	const riskText = entry.curated ? t("riskCurated") : entry.isPlugin === true ? t("riskCommunity") : t("riskNonplugin");
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {

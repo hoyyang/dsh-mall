@@ -288,10 +288,17 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
+      // v1.7.25：npm 未回指本仓库（防抢注）→ 降级 github: 源码安装。
+      let effectiveNpm = npm
+      if (npm !== null) {
+        const { registry } = await loadRegistry(config.profile, config.githubToken, {})
+        const entry = registry.plugins.find(p => (p.npm !== null && p.npm.toLowerCase() === npm.toLowerCase()) || (p.owner + '/' + p.name).toLowerCase() === repo.toLowerCase())
+        if (entry?.npmLinked === false) effectiveNpm = null
+      }
       const taskId = body.id
       const signal = beginTask(taskId)
       try {
-        const locked = await withMutationLock(async () => runInstall(config, repo, npm, signal))
+        const locked = await withMutationLock(async () => runInstall(config, repo, effectiveNpm, signal))
         if (locked.busy) {
           sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
           return

@@ -579,6 +579,8 @@ export function computeUpdates(registry: Registry, deps: Record<string, string>,
       if (p.name.toLowerCase() === lower) { hit = p; break }
     }
     if (hit === null) continue
+    // v1.7.25：npm 包未回指本仓库（防抢注判定）→ 不提供 npm 更新（防装错包）。
+    if (hit.npmLinked === false) continue
     // v1.7.16：npm_version 缺失时回退 repo version（含 CI latest_tag 富化值）——
     // 增量索引重新抓取的仓库会短暂丢失 npm_version（npm 富化只在每日全量跑），
     // 纯靠 npm_version 会让「更新」按钮与回退后的更新提示一起消失（dshmarket 实测）。
