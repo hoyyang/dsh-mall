@@ -697,6 +697,45 @@ export function MarketSection(props: SectionProps) {
     for (let i = 0; i < all.length; i += step) downloadsEnrich(all.slice(i, i + step))
   }, [sortDim, data, downloadsEnrich])
 
+  // ---- 运行时 bundle top-up 扫描（v1.7.24：CI 之后有 push 或 bundled 未知的条目页级抽查）----
+  const scansRequested = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (data === null) return
+    const todo = pageList
+      .filter(e => e.local !== true && e.excluded == null && !scansRequested.current.has((e.owner + '/' + e.name).toLowerCase()))
+      .filter(e => {
+        if (e.bundled === null || e.bundled === undefined) return true
+        if (e.bundledAt === null || e.bundledAt === undefined || e.pushed === null) return false
+        return Date.parse(e.pushed) > Date.parse(e.bundledAt)
+      })
+      .slice(0, 24)
+    if (todo.length === 0) return
+    for (const e of todo) scansRequested.current.add((e.owner + '/' + e.name).toLowerCase())
+    fetch('/dsh-store/scan', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ repos: todo.map(e => e.owner + '/' + e.name) }),
+    })
+      .then(res => res.json())
+      .then((body: { bundles?: Record<string, boolean | null> }) => {
+        const got = body.bundles ?? {}
+        const keys = Object.keys(got)
+        if (keys.length === 0) return
+        setData((prev: Registry | null) => {
+          if (prev === null) return prev
+          return {
+            ...prev,
+            plugins: prev.plugins.map((e: MarketEntry) => {
+              const hit = got[e.owner + '/' + e.name]
+              if (hit === undefined) return e
+              return { ...e, bundled: hit, bundledAt: new Date().toISOString().slice(0, 10) }
+            }),
+          }
+        })
+      })
+      .catch(() => {})
+  }, [pageList, data])
+
   // ---- 智能安装：AI 审查 + 安装 + 装后诊断（进度进任务面板）----
   const doSmartInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)

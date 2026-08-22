@@ -17,6 +17,7 @@ import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, wit
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
+import { ensureBundleScans } from './scan.ts'
 import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
 
 let cachedVersion: string | null = null
@@ -673,6 +674,29 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       } finally {
         endTask(taskId)
       }
+    },
+  }))
+
+  // 运行时 bundle top-up 扫描（v1.7.24）：POST {repos[]} —— 页级抽查，24h 缓存。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/scan',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const repos = Array.isArray(body.repos) ? body.repos.filter((r): r is string => typeof r === 'string' && r !== '') : []
+      const bundles = await ensureBundleScans(config.profile, config.githubToken, repos)
+      sendJson(response, 200, { ok: true, bundles })
     },
   }))
 

@@ -2233,6 +2233,40 @@ function MarketSection(props) {
 		data,
 		downloadsEnrich
 	]);
+	const scansRequested = (0, react.useRef)(/* @__PURE__ */ new Set());
+	(0, react.useEffect)(() => {
+		if (data === null) return;
+		const todo = pageList.filter((e) => e.local !== true && e.excluded == null && !scansRequested.current.has((e.owner + "/" + e.name).toLowerCase())).filter((e) => {
+			if (e.bundled === null || e.bundled === void 0) return true;
+			if (e.bundledAt === null || e.bundledAt === void 0 || e.pushed === null) return false;
+			return Date.parse(e.pushed) > Date.parse(e.bundledAt);
+		}).slice(0, 24);
+		if (todo.length === 0) return;
+		for (const e of todo) scansRequested.current.add((e.owner + "/" + e.name).toLowerCase());
+		fetch("/dsh-store/scan", {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ repos: todo.map((e) => e.owner + "/" + e.name) })
+		}).then((res) => res.json()).then((body) => {
+			const got = body.bundles ?? {};
+			if (Object.keys(got).length === 0) return;
+			setData((prev) => {
+				if (prev === null) return prev;
+				return {
+					...prev,
+					plugins: prev.plugins.map((e) => {
+						const hit = got[e.owner + "/" + e.name];
+						if (hit === void 0) return e;
+						return {
+							...e,
+							bundled: hit,
+							bundledAt: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10)
+						};
+					})
+				};
+			});
+		}).catch(() => {});
+	}, [pageList, data]);
 	const doSmartInstall = (0, react.useCallback)((entry) => {
 		setConfirming(null);
 		const id = nextTaskId();

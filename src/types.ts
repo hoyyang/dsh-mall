@@ -123,6 +123,8 @@ export interface MarketState {
   /** find 工具结果暂存（token → payload）：跟随 session 生命周期（不再 30 分钟过期），
    *  持久化在 state.json，宿主重启不丢；上限 20 条（超出丢最旧）。 */
   findResults?: Record<string, { at: number; payload: unknown }>
+  /** 运行时 bundle top-up 扫描缓存：owner/repo → {at, value}（24h TTL）。 */
+  bundleScans?: Record<string, { at: number; value: boolean | null }>
 }
 
 export interface InstallState {

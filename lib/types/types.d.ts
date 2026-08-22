@@ -146,6 +146,11 @@ export interface MarketState {
         at: number;
         payload: unknown;
     }>;
+    /** 运行时 bundle top-up 扫描缓存：owner/repo → {at, value}（24h TTL）。 */
+    bundleScans?: Record<string, {
+        at: number;
+        value: boolean | null;
+    }>;
 }
 export interface InstallState {
     active: boolean;

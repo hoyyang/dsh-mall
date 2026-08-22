@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.24 — 2026-08-22
+
+- **运行时 top-up 扫描（R5）**：新增 POST /dsh-store/scan——对 bundled 未知或「CI 扫描后又有 push」的条目页级抽查（≤24 仓、raw 优先零额度、GitHub API 树兜底、24h 缓存、匿名额度耗尽自动停）；客户端翻页/刷新后按需补扫并把结论合入卡片徽章。实测：colleague-skill→false（skill 仓库无 bundle）、archify→true。
 ## 1.7.23 — 2026-08-22
 
 - **「已扫描」筛选按钮（R4）**：工具栏新增「已扫描」chip（bundled===true 计数联动）；卡片徽章三态：已扫描 ✓（绿）/未通过扫描（红）/疑似废弃（橙，pushed>180d）；详情面板展示扫描结论+扫描日期+dormant+npm 未回指警告。数据由索引 v1.15（CI bundle 全树扫描）逐轮填充，缺省 0 直到数据到位。
