@@ -17,10 +17,14 @@ interface RunResult {
   stdout: string
   stderr: string
   timedOut: boolean
+  cancelled: boolean
 }
 
-export function runDsh(profile: string, args: string[]): Promise<RunResult> {
+export function runDsh(profile: string, args: string[], signal?: AbortSignal): Promise<RunResult> {
   return new Promise((resolve) => {
+    let cancelled = false
+    let settled = false
+    const settle = (value: RunResult) => { if (settled) return; settled = true; resolve(value) }
     const child = spawn('dsh', ['plugin', '--profile', profile, ...args], {
       env: { ...process.env },
       stdio: ['ignore', 'pipe', 'pipe'],
@@ -32,6 +36,16 @@ export function runDsh(profile: string, args: string[]): Promise<RunResult> {
       timedOut = true
       child.kill('SIGKILL')
     }, INSTALL_TIMEOUT_MS)
+    const onAbort = () => {
+      cancelled = true
+      try { child.kill('SIGKILL') } catch { /* 忽略 */ }
+      clearTimeout(timer)
+      settle({ exitCode: -1, stdout, stderr, timedOut: false, cancelled: true })
+    }
+    if (signal !== undefined) {
+      if (signal.aborted) { onAbort(); return }
+      signal.addEventListener('abort', onAbort, { once: true })
+    }
     child.stdout.on('data', (chunk: Buffer) => {
       stdout += chunk.toString()
       const tail = stdout.slice(-200).trim()
@@ -40,11 +54,12 @@ export function runDsh(profile: string, args: string[]): Promise<RunResult> {
     child.stderr.on('data', (chunk: Buffer) => { stderr += chunk.toString() })
     child.on('close', (code) => {
       clearTimeout(timer)
-      resolve({ exitCode: code ?? -1, stdout, stderr, timedOut })
+      if (signal !== undefined) signal.removeEventListener('abort', onAbort)
+      settle({ exitCode: code ?? -1, stdout, stderr, timedOut, cancelled: cancelled })
     })
     child.on('error', () => {
       clearTimeout(timer)
-      resolve({ exitCode: -1, stdout, stderr: 'failed to spawn dsh CLI (is it on PATH?)', timedOut })
+      settle({ exitCode: -1, stdout, stderr: 'failed to spawn dsh CLI (is it on PATH?)', timedOut, cancelled: cancelled })
     })
   })
 }
@@ -115,6 +130,7 @@ export function installedDepForProfile(profile: string, repo: string): { name: s
 }
 
 function resultMessage(result: RunResult): string {
+  if (result.cancelled) return 'Cancelled by user'
   const tail = (result.stderr || result.stdout || '').trim().split('\n').slice(-8).join('\n')
   return (tail || 'no output').slice(-800)
 }
@@ -136,7 +152,7 @@ export async function withMutationLock<T>(fn: () => Promise<T> | T): Promise<{ b
   }
 }
 
-export async function runInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<{ ok: boolean; message: string }> {
+export async function runInstall(config: MarketConfig, repo: string, npmName: string | null, signal?: AbortSignal): Promise<{ ok: boolean; message: string }> {
   installState.active = true
   installState.kind = 'install'
   installState.target = repo
@@ -146,7 +162,8 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
   try {
     const target = npmName !== null && npmName !== '' ? npmName : 'github:' + repo
     installState.line = 'dsh plugin add ' + target
-    const result = await runDsh(config.profile, ['add', target])
+    const result = await runDsh(config.profile, ['add', target], signal)
+    if (signal?.aborted === true) return { ok: false, message: 'Cancelled by user' }
     installState.phase = result.exitCode === 0 && !result.timedOut ? 'finalizing' : 'failed'
     if (result.exitCode === 0 && !result.timedOut) {
       // The CLI reconciles bundles; double-check and add if it was missed.
@@ -171,7 +188,7 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
  *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
 /** 商店自身更新：dsh plugin add dsh-store@latest。host 代码更新后需要重启
  *  dsh 才生效（bundle 层的 JS 已经加载），返回值固定带 needRestart。 */
-export async function runSelfUpdate(config: MarketConfig): Promise<{ ok: boolean; message: string; needRestart: boolean }> {
+export async function runSelfUpdate(config: MarketConfig, signal?: AbortSignal): Promise<{ ok: boolean; message: string; needRestart: boolean }> {
   installState.active = true
   installState.kind = 'update'
   installState.target = 'dsh-store'
@@ -179,7 +196,8 @@ export async function runSelfUpdate(config: MarketConfig): Promise<{ ok: boolean
   installState.line = 'dsh plugin add dsh-store@latest'
   installState.startedAt = Date.now()
   try {
-    const result = await runDsh(config.profile, ['add', 'dsh-store@latest'])
+    const result = await runDsh(config.profile, ['add', 'dsh-store@latest'], signal)
+    if (signal?.aborted === true) return { ok: false, message: 'Cancelled by user', needRestart: false }
     const ok = result.exitCode === 0 && !result.timedOut
     const message = ok ? 'Updated dsh-store.' : (result.timedOut ? 'Update timed out (10 min)' : resultMessage(result))
     installState.lastResult = { ok, message }
@@ -193,7 +211,7 @@ export async function runSelfUpdate(config: MarketConfig): Promise<{ ok: boolean
   }
 }
 
-export async function runUpdate(config: MarketConfig, targets: Array<{ name: string; to: string }>): Promise<{ ok: boolean; message: string; results: Array<{ name: string; ok: boolean; message: string }> }> {
+export async function runUpdate(config: MarketConfig, targets: Array<{ name: string; to: string }>, signal?: AbortSignal): Promise<{ ok: boolean; message: string; results: Array<{ name: string; ok: boolean; message: string }> }> {
   installState.active = true
   installState.kind = 'update'
   installState.phase = 'updating'
@@ -206,7 +224,11 @@ export async function runUpdate(config: MarketConfig, targets: Array<{ name: str
       // pnpm 11：裸名 add 对已存在依赖保持现有 spec 不动（实测 ^0.19.0 不升级），
       // 必须显式 @latest 才真正升到 registry latest。
       installState.line = 'dsh plugin add ' + target.name + '@latest'
-      const result = await runDsh(config.profile, ['add', target.name + '@latest'])
+      const result = await runDsh(config.profile, ['add', target.name + '@latest'], signal)
+      if (signal?.aborted === true) {
+        results.push({ name: target.name, ok: false, message: 'Cancelled by user' })
+        break
+      }
       const ok = result.exitCode === 0 && !result.timedOut
       results.push({
         name: target.name,
@@ -393,7 +415,7 @@ export function rollbackDep(profile: string, name: string, state: { rollbacks?: 
   return { ok: true, message: 'restored ' + name + ' spec to ' + entry.spec }
 }
 
-export async function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{ ok: boolean; message: string }> {
+export async function runUninstall(config: MarketConfig, repo: string, name?: string, signal?: AbortSignal): Promise<{ ok: boolean; message: string }> {
   installState.active = true
   installState.kind = 'uninstall'
   installState.target = name ?? repo
@@ -415,7 +437,8 @@ export async function runUninstall(config: MarketConfig, repo: string, name?: st
       installState.lastResult = { ok: false, message }
       return { ok: false, message }
     }
-    const result = await runDsh(config.profile, ['remove', dep.name])
+    const result = await runDsh(config.profile, ['remove', dep.name], signal)
+    if (signal?.aborted === true) return { ok: false, message: 'Cancelled by user' }
     if (result.exitCode === 0 && !result.timedOut) {
       const message = 'Uninstalled ' + dep.name + '.'
       installState.lastResult = { ok: true, message }

@@ -19,6 +19,7 @@ export function TaskPanel(props: {
   onClose: () => void
   onClearSettled: () => void
   onDismiss: (id: string) => void
+  onCancelTask: (id: string) => void
 }) {
   const { t, records, open } = props
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
@@ -63,9 +64,10 @@ export function TaskPanel(props: {
     record.kind === 'install' ? t('taskKindInstall')
       : record.kind === 'update' ? t('taskKindUpdate')
         : record.kind === 'uninstall' ? t('taskKindUninstall')
-          : record.kind === 'smart-install' ? t('taskKindSmartInstall')
-            : record.kind === 'smart-uninstall' ? t('taskKindSmartUninstall')
-              : t('taskKindSmartUpdate')
+          : record.kind === 'rollback' ? t('taskKindRollback')
+            : record.kind === 'smart-install' ? t('taskKindSmartInstall')
+              : record.kind === 'smart-uninstall' ? t('taskKindSmartUninstall')
+                : t('taskKindSmartUpdate')
 
   return createPortal(
     <div
@@ -124,7 +126,9 @@ export function TaskPanel(props: {
                     : (record.reason ?? t('taskFailed'))}
               </div>
             </div>
-            {record.state !== 'running' && (
+            {record.state === 'running' ? (
+              <button type="button" className="pcm-task-cancel" title={t('cancelBtn')} onClick={() => props.onCancelTask(record.id)}>{t('cancelBtn')}</button>
+            ) : (
               <button type="button" className="pcm-task-x" title={t('tasksDismiss')} onClick={() => props.onDismiss(record.id)}>✕</button>
             )}
           </div>

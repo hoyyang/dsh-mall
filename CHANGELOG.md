@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.18 — 2026-08-22
+
+- **「刷新中」卡住 + 条目数跳变修复**：根因 = CDN 通道失败时回落「直爬兜底」（HTML 分页 + Search API，耗时数分钟且只爬到 9k 级条目）。改为：有可用缓存时直接继续服务缓存（progress.lastError 记录原因），冷启动（无缓存）才保留直爬；实测 force 刷新 19s 完成、count 10434 稳定。
+- **任务取消按钮**：「查看进行中的任务」面板里进行中的任务（安装/智能安装/更新/智能更新/卸载/智能卸载/回退）新增红色「取消」按钮——宿主按任务 id 注册 AbortController，取消即 SIGKILL 对应的 dsh 子进程与 AI 审查调用；实测 AI 审查中途取消立即返回 cancelled 结果。
+- **智能功能兼容性（多用户）**：headless 通道解析 dsh CLI 绝对路径（PATH + /opt/homebrew/bin 等常见目录，找不到直接降级常规路径）；NO_ADAPTER 降级从单一 deepseek-official 扩展为候选 provider 列表（deepseek-official + llm-pi-ai 配置里的第一个 provider），任一可用即用；所有智能功能在 AI 不可用/CLI 缺失时均自动降级常规安装/更新/卸载并注明。
+- **超时保障明确**：智能搜索 150s、AI 装前审查 300s、装后诊断 180s、安装/更新/卸载 10min；取消按钮可随时中断（不再只能等超时）。
 ## 1.7.17 — 2026-08-22
 
 - **智能更新/智能搜索/智能安装 AI 调用失败修复**：根因 = headless profile 的 agent-default-model 指向 `deepseek-vision`（只在 web 运行时由 vision-router 注册的 provider），headless 里无此适配器，dsh 报 NO_ADAPTER 且退出码仍为 0，被误报为「模型调用失败/超时」。修复 = 新增共享 headless 通道（`src/headless.ts`）：检测到 NO_ADAPTER 时自动降级——复制 settings.yaml 到临时文件、把 agent-default-model 指向 headless 可用的 `deepseek-official`（取 llm-deepseek.models 里的 pro/末位模型），经 `--patch` 覆盖 settings 路径重试一次，用完即删；用户原配置可用时不受影响。实测：智能搜索「视觉插件」返回 AI 改写词；智能更新对 1.0.0→9.9.9 假版本给出完整 refuse 审查报告。

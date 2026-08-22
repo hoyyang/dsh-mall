@@ -10,8 +10,9 @@ interface RunResult {
     stdout: string;
     stderr: string;
     timedOut: boolean;
+    cancelled: boolean;
 }
-export declare function runDsh(profile: string, args: string[]): Promise<RunResult>;
+export declare function runDsh(profile: string, args: string[], signal?: AbortSignal): Promise<RunResult>;
 export declare const installState: InstallState;
 export declare function profileDir(profile: string): string;
 export declare function readManifest(profile: string): {
@@ -33,7 +34,7 @@ export declare function withMutationLock<T>(fn: () => Promise<T> | T): Promise<{
     busy: false;
     value: T;
 }>;
-export declare function runInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<{
+export declare function runInstall(config: MarketConfig, repo: string, npmName: string | null, signal?: AbortSignal): Promise<{
     ok: boolean;
     message: string;
 }>;
@@ -41,7 +42,7 @@ export declare function runInstall(config: MarketConfig, repo: string, npmName: 
  *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
 /** 商店自身更新：dsh plugin add dsh-store@latest。host 代码更新后需要重启
  *  dsh 才生效（bundle 层的 JS 已经加载），返回值固定带 needRestart。 */
-export declare function runSelfUpdate(config: MarketConfig): Promise<{
+export declare function runSelfUpdate(config: MarketConfig, signal?: AbortSignal): Promise<{
     ok: boolean;
     message: string;
     needRestart: boolean;
@@ -49,7 +50,7 @@ export declare function runSelfUpdate(config: MarketConfig): Promise<{
 export declare function runUpdate(config: MarketConfig, targets: Array<{
     name: string;
     to: string;
-}>): Promise<{
+}>, signal?: AbortSignal): Promise<{
     ok: boolean;
     message: string;
     results: Array<{
@@ -107,7 +108,7 @@ export declare function rollbackDep(profile: string, name: string, state: {
     ok: boolean;
     message: string;
 } | null;
-export declare function runUninstall(config: MarketConfig, repo: string, name?: string): Promise<{
+export declare function runUninstall(config: MarketConfig, repo: string, name?: string, signal?: AbortSignal): Promise<{
     ok: boolean;
     message: string;
 }>;

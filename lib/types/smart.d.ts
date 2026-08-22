@@ -24,7 +24,7 @@ export interface SmartInstallResult {
     postState: string | null;
     report: string;
 }
-export declare function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<SmartInstallResult>;
+export declare function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null, signal?: AbortSignal): Promise<SmartInstallResult>;
 export interface SmartUpdateResult {
     ok: boolean;
     stage: 'review' | 'done';
@@ -45,7 +45,7 @@ export declare function runSmartUpdate(config: MarketConfig, target: {
     to: string;
     repo: string | null;
     npm: string | null;
-}): Promise<SmartUpdateResult>;
+}, signal?: AbortSignal): Promise<SmartUpdateResult>;
 export interface SmartUninstallResult {
     ok: boolean;
     stage: 'review' | 'done' | 'error';
@@ -60,4 +60,4 @@ export interface SmartUninstallResult {
  * - confirm=false 且 AI 判定有风险（caution/refuse）→ 只返回审查报告（stage review），不删除；
  * - verdict=proceed 或用户确认后 → 执行 dsh plugin remove + 装后残留检查。
  */
-export declare function runSmartUninstall(config: MarketConfig, depName: string, confirm: boolean): Promise<SmartUninstallResult>;
+export declare function runSmartUninstall(config: MarketConfig, depName: string, confirm: boolean, signal?: AbortSignal): Promise<SmartUninstallResult>;

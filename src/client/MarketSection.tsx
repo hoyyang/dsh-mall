@@ -708,10 +708,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/smart-install', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm }),
+      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; installMessage?: string; error?: string }) => {
+      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; installMessage?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         if (body.verdict === 'refuse') {
           setToast(t('smartRefused') + ': ' + (body.report ?? ''))
           finishTask(id, { ok: false, error: t('smartRefused') + ' · ' + (body.report ?? '') }, '')
@@ -746,10 +747,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/install', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm }),
+      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         setToast(body.ok === true ? t('installDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
         finishTask(id, body, t('installDone'))
         fetchStatus()
@@ -775,10 +777,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name: entry.name }),
+      body: JSON.stringify({ name: entry.name, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         setToast(body.ok === true ? t('uninstallDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
         finishTask(id, body, t('uninstallDone'))
         fetchStatus()
@@ -804,10 +807,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ repo: entry.owner + '/' + entry.name }),
+      body: JSON.stringify({ repo: entry.owner + '/' + entry.name, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         setToast(body.ok === true ? t('uninstallDone') : t('installFailed') + ': ' + (body.message ?? body.error ?? ''))
         finishTask(id, body, t('uninstallDone'))
         fetchStatus()
@@ -826,10 +830,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/smart-uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, confirm }),
+      body: JSON.stringify({ name, confirm, id: taskId }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; stage?: string; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; error?: string }) => {
+      .then((body: { ok?: boolean; stage?: string; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(taskId, { ok: false, error: t('taskCancelled') }, ''); return }
         if (body.stage === 'review') {
           setSmartUninstallRisk({ name, verdict: body.verdict ?? 'caution', report: body.report ?? '' })
           setSmartUninstallPending({ name, taskId })
@@ -905,10 +910,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ names }),
+      body: JSON.stringify({ names, id: taskId ?? undefined }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true && taskId !== null) { setToast(t('taskCancelled')); finishTask(taskId, { ok: false, error: t('taskCancelled') }, ''); return }
         setToast(body.ok === true ? toastDone + ' — ' + (body.message ?? '') : t('updateFailed') + ': ' + (body.message ?? body.error ?? ''))
         if (taskId !== null) finishTask(taskId, body, toastDone)
         fetchStatus()
@@ -976,10 +982,11 @@ export function MarketSection(props: SectionProps) {
     fetch('/dsh-store/smart-update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name: u.name, from: u.from, to: u.to, repo: entry.owner + '/' + entry.name, npm: entry.npm }),
+      body: JSON.stringify({ name: u.name, from: u.from, to: u.to, repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; verdict?: string; risks?: string[]; reasons?: string[]; report?: string; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         if (body.verdict === 'refuse') {
           setToast(t('smartRefused') + ': ' + (body.report ?? ''))
           finishTask(id, { ok: false, error: t('smartRefused') + ' · ' + (body.report ?? '') }, '')
@@ -1046,20 +1053,32 @@ export function MarketSection(props: SectionProps) {
       if (n.toLowerCase() === e.name.toLowerCase()) { depName = n; break }
     }
     if (depName === null || rollbacks[depName] === undefined) return
+    const id = nextTaskId()
+    setTasks(list => enqueueTask(list, {
+      id,
+      kind: 'rollback',
+      name: depName,
+      state: 'running',
+      detail: t('rollbackBtn'),
+      reason: null,
+      at: Date.now(),
+    }))
     setRollbacking(e.name)
     fetch('/dsh-store/rollback', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name: depName }),
+      body: JSON.stringify({ name: depName, id }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; message?: string; error?: string }) => {
+      .then((body: { ok?: boolean; message?: string; error?: string; cancelled?: boolean }) => {
+        if (body.cancelled === true) { setToast(t('taskCancelled')); finishTask(id, { ok: false, error: t('taskCancelled') }, ''); return }
         setToast(body.ok === true ? t('rollbackDone') + ' ' + (body.message ?? '') : t('rollbackFailed') + ': ' + (body.message ?? body.error ?? ''))
+        finishTask(id, body, t('rollbackDone'))
         fetchStatus()
       })
-      .catch(() => setToast(t('rollbackFailed')))
+      .catch(() => { setToast(t('rollbackFailed')); finishTask(id, { ok: false, error: t('rollbackFailed') }, '') })
       .finally(() => setRollbacking(null))
-  }, [status, rollbacks, fetchStatus, t])
+  }, [status, rollbacks, fetchStatus, finishTask, t])
 
   const doToggleSkip = useCallback((e: MarketEntry) => {
     const deps = status?.installed ?? {}
@@ -1671,6 +1690,19 @@ export function MarketSection(props: SectionProps) {
         onClose={() => setTasksOpen(false)}
         onClearSettled={() => setTasks(clearSettledTasks)}
         onDismiss={id => setTasks(list => dismissTask(list, id))}
+        onCancelTask={id => {
+          fetch('/dsh-store/cancel', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ id }),
+          })
+            .then(res => res.json())
+            .then((body: { ok?: boolean; error?: string }) => {
+              if (body.ok === true) setToast(t('taskCancelled') + '…')
+              else setToast(t('updateFailed') + ': ' + (body.error ?? ''))
+            })
+            .catch(() => setToast(t('updateFailed')))
+        }}
       />
 
       {toast !== null && (

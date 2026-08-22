@@ -115,6 +115,28 @@ function parseRepo(value: unknown): string | null {
   return value
 }
 
+// ---- 任务取消（v1.7.18）：客户端把 taskId 带进 POST body，宿主按 id 注册
+// AbortController；「查看进行中的任务」面板的取消按钮 → /dsh-store/cancel → abort。
+// runDsh / headless 子进程监听 signal 后 SIGKILL，操作返回 cancelled 结果。 ----
+const activeOps = new Map<string, AbortController>()
+
+function beginTask(id: unknown): AbortSignal | undefined {
+  if (typeof id !== 'string' || id === '' || id.length > 64) return undefined
+  const ctrl = new AbortController()
+  activeOps.set(id, ctrl)
+  return ctrl.signal
+}
+
+function endTask(id: unknown): void {
+  if (typeof id === 'string') activeOps.delete(id)
+}
+
+function isCancelled(id: unknown): boolean {
+  if (typeof id !== 'string') return false
+  const ctrl = activeOps.get(id)
+  return ctrl !== undefined && ctrl.signal.aborted
+}
+
 export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loaderIds?: Set<string>): () => void {
   const disposers: Array<() => void> = []
 
@@ -182,6 +204,33 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
+    path: '/dsh-store/cancel',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const id = typeof body.id === 'string' ? body.id : ''
+      const ctrl = activeOps.get(id)
+      if (ctrl === undefined) {
+        sendJson(response, 404, { ok: false, error: 'task not running' })
+        return
+      }
+      ctrl.abort()
+      sendJson(response, 200, { ok: true, cancelled: true })
+    },
+  }))
+
+  disposers.push(host.webServer.register({
+    kind: 'exact',
     path: '/dsh-store/install',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
@@ -202,12 +251,18 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
-      const locked = await withMutationLock(async () => runInstall(config, repo, npm))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runInstall(config, repo, npm, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 
@@ -235,12 +290,18 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid repo or name' })
         return
       }
-      const locked = await withMutationLock(async () => runUninstall(config, repo ?? pkgName ?? '', pkgName ?? undefined))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runUninstall(config, repo ?? pkgName ?? '', pkgName ?? undefined, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 
@@ -379,22 +440,29 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid name' })
         return
       }
-      const locked = await withMutationLock(async () => {
-        const state = readState(config.profile)
-        const restored = rollbackDep(config.profile, name, state)
-        writeState(config.profile, state)
-        if (restored === null) return { ok: false, message: 'no rollback snapshot for ' + name }
-        if (!restored.ok) return restored
-        // pnpm install 按恢复后的 spec 装回旧版
-        const install = await runDsh(config.profile, ['install'])
-        const ok = install.exitCode === 0 && !install.timedOut
-        return { ok, message: ok ? restored.message + '. Refresh to activate.' : restored.message + ' — pnpm install failed' }
-      })
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => {
+          const state = readState(config.profile)
+          const restored = rollbackDep(config.profile, name, state)
+          writeState(config.profile, state)
+          if (restored === null) return { ok: false, message: 'no rollback snapshot for ' + name }
+          if (!restored.ok) return restored
+          // pnpm install 按恢复后的 spec 装回旧版
+          const install = await runDsh(config.profile, ['install'], signal)
+          if (signal?.aborted === true) return { ok: false, message: 'Cancelled by user' }
+          const ok = install.exitCode === 0 && !install.timedOut
+          return { ok, message: ok ? restored.message + '. Refresh to activate.' : restored.message + ' — pnpm install failed' }
+        })
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, locked.value.ok ? 200 : 400, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, locked.value.ok ? 200 : 400, locked.value)
     },
   }))
 
@@ -478,12 +546,18 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 400, { ok: false, error: 'invalid name' })
         return
       }
-      const locked = await withMutationLock(async () => runSmartUninstall(config, name, body.confirm === true))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runSmartUninstall(config, name, body.confirm === true, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 
@@ -510,12 +584,18 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
-      const locked = await withMutationLock(async () => runSmartInstall(config, repo, npm))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runSmartInstall(config, repo, npm, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 
@@ -545,12 +625,18 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const repo = parseRepo(body.repo)
       const npm = typeof body.npm === 'string' && body.npm !== '' ? body.npm : null
-      const locked = await withMutationLock(async () => runSmartUpdate(config, { name, from, to, repo, npm }))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runSmartUpdate(config, { name, from, to, repo, npm }, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 
@@ -623,12 +709,24 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         response.end()
         return
       }
-      const locked = await withMutationLock(async () => runSelfUpdate(config))
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        body = {}
       }
-      sendJson(response, locked.value.ok ? 200 : 400, locked.value)
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => runSelfUpdate(config, signal))
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
+        }
+        sendJson(response, locked.value.ok ? 200 : 400, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
+      }
     },
   }))
 
@@ -665,20 +763,26 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 200, { ok: true, message: 'No updates.', results: [] })
         return
       }
-      const locked = await withMutationLock(async () => {
-        // 更新前快照旧 spec —— 「回退到上个版本」数据源（落盘持久化）。
-        const state = readState(config.profile)
-        for (const target of targets) {
-          snapshotDep(config.profile, target.name, String(manifest.dependencies[target.name] ?? target.from), target.to, state)
+      const taskId = body.id
+      const signal = beginTask(taskId)
+      try {
+        const locked = await withMutationLock(async () => {
+          // 更新前快照旧 spec —— 「回退到上个版本」数据源（落盘持久化）。
+          const state = readState(config.profile)
+          for (const target of targets) {
+            snapshotDep(config.profile, target.name, String(manifest.dependencies[target.name] ?? target.from), target.to, state)
+          }
+          writeState(config.profile, state)
+          return runUpdate(config, targets, signal)
+        })
+        if (locked.busy) {
+          sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
+          return
         }
-        writeState(config.profile, state)
-        return runUpdate(config, targets)
-      })
-      if (locked.busy) {
-        sendJson(response, 409, { ok: false, error: 'another plugin operation is running' })
-        return
+        sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
+      } finally {
+        endTask(taskId)
       }
-      sendJson(response, 200, locked.value)
     },
   }))
 

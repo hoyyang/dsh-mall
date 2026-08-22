@@ -41,13 +41,13 @@ export interface SmartInstallResult {
 // deepseek-official provider 的临时 settings + --patch 重试）。
 
 /** 抓仓库摘要（README + package.json + scripts）；失败返回 null（跳过审查）。 */
-async function fetchRepoDigest(repo: string): Promise<string | null> {
+async function fetchRepoDigest(repo: string, signal?: AbortSignal): Promise<string | null> {
   const base = 'https://raw.githubusercontent.com/' + repo + '/HEAD/'
   const pick = async (name: string, max: number): Promise<string> => {
     try {
       const res = await fetch(base + name, {
         headers: { 'user-agent': 'dsh-store' },
-        signal: AbortSignal.timeout(20_000),
+        signal: signal ?? AbortSignal.timeout(20_000),
       })
       if (!res.ok) return ''
       const text = await res.text()
@@ -82,13 +82,14 @@ function parseVerdict(output: string): { verdict: 'install' | 'caution' | 'refus
   }
 }
 
-export async function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null): Promise<SmartInstallResult> {
+export async function runSmartInstall(config: MarketConfig, repo: string, npmName: string | null, signal?: AbortSignal): Promise<SmartInstallResult> {
   const noReview = (): SmartInstallResult => ({
     ok: true, stage: 'install', verdict: 'unavailable', risks: [], reasons: [],
     installMessage: '', postState: null, report: '',
   })
   // ---- 1) 装前 AI 审查 ----
-  const digest = await fetchRepoDigest(repo).catch(() => null)
+  if (signal?.aborted === true) return { ...noReview(), ok: false, report: 'Cancelled by user' }
+  const digest = await fetchRepoDigest(repo, signal).catch(() => null)
   let verdict: 'install' | 'caution' | 'refuse' | 'unavailable' = 'unavailable'
   let risks: string[] = []
   let reasons: string[] = []
@@ -103,7 +104,8 @@ export async function runSmartInstall(config: MarketConfig, repo: string, npmNam
       digest,
       '---仓库内容结束---',
     ].join('\n')
-    const ai = await runHeadless(prompt, HEADLESS_TIMEOUT_REVIEW)
+    const ai = await runHeadless(prompt, HEADLESS_TIMEOUT_REVIEW, signal)
+    if (signal !== undefined && signal.aborted) return { ...noReview(), ok: false, report: 'Cancelled by user' }
     const parsed = ai.ok ? parseVerdict(ai.output) : null
     if (parsed !== null) {
       verdict = parsed.verdict
@@ -124,7 +126,8 @@ export async function runSmartInstall(config: MarketConfig, repo: string, npmNam
     }
   }
   // ---- 2) 安装 ----
-  const install = await runInstall(config, repo, npmName)
+  if (signal !== undefined && signal.aborted) return { ...noReview(), ok: false, report: 'Cancelled by user' }
+  const install = await runInstall(config, repo, npmName, signal)
   // ---- 3) 装后诊断 ----
   let postState: string | null = null
   let postReport = ''
@@ -141,7 +144,7 @@ export async function runSmartInstall(config: MarketConfig, repo: string, npmNam
       '---安装输出开始---',
       install.message,
       '---安装输出结束---',
-    ].join('\n'), HEADLESS_TIMEOUT_POST)
+    ].join('\n'), HEADLESS_TIMEOUT_POST, signal)
     if (post.ok && post.output.trim() !== '') aiPost = post.output.trim().slice(0, 500)
   } catch { /* 装后 AI 不可用：跳过 */ }
   postReport = (postState !== null ? '激活状态: ' + postState + '。' : '') + (aiPost !== '' ? aiPost : '')
@@ -175,10 +178,11 @@ export interface SmartUpdateResult {
  * 智能更新：与智能安装同构——AI 装前审查（refuse 终止）→ 快照旧版本 →
  * runUpdate（@latest）→ 装后 AI 诊断；AI 不可用降级常规更新并注明。
  */
-export async function runSmartUpdate(config: MarketConfig, target: { name: string; from: string; to: string; repo: string | null; npm: string | null }): Promise<SmartUpdateResult> {
+export async function runSmartUpdate(config: MarketConfig, target: { name: string; from: string; to: string; repo: string | null; npm: string | null }, signal?: AbortSignal): Promise<SmartUpdateResult> {
   // ---- 1) 装前 AI 审查 ----
   const repo = target.repo ?? ''
-  const digest = repo !== '' ? await fetchRepoDigest(repo).catch(() => null) : null
+  if (signal !== undefined && signal.aborted) return { ok: false, stage: 'review', verdict: 'unavailable', risks: [], reasons: [], message: 'Cancelled by user', postState: null, report: 'Cancelled by user' }
+  const digest = repo !== '' ? await fetchRepoDigest(repo, signal).catch(() => null) : null
   let verdict: 'install' | 'caution' | 'refuse' | 'unavailable' = 'unavailable'
   let risks: string[] = []
   let reasons: string[] = []
@@ -193,7 +197,8 @@ export async function runSmartUpdate(config: MarketConfig, target: { name: strin
       digest,
       '---仓库内容结束---',
     ].join('\n')
-    const ai = await runHeadless(prompt, HEADLESS_TIMEOUT_REVIEW)
+    const ai = await runHeadless(prompt, HEADLESS_TIMEOUT_REVIEW, signal)
+    if (signal !== undefined && signal.aborted) return { ok: false, stage: 'review', verdict: 'unavailable', risks: [], reasons: [], message: 'Cancelled by user', postState: null, report: 'Cancelled by user' }
     const parsed = ai.ok ? parseVerdict(ai.output) : null
     if (parsed !== null) {
       verdict = parsed.verdict
@@ -218,7 +223,9 @@ export async function runSmartUpdate(config: MarketConfig, target: { name: strin
   const state = readState(config.profile)
   snapshotDep(config.profile, target.name, String(manifest.dependencies[target.name] ?? target.from), target.to, state)
   writeState(config.profile, state)
-  const update = await runUpdate(config, [{ name: target.name, to: target.to }])
+  if (signal?.aborted === true) return { ok: false, stage: 'done', verdict, risks, reasons, message: 'Cancelled by user', postState: null, report: 'Cancelled by user' }
+  if (signal !== undefined && signal.aborted) return { ok: false, stage: 'done', verdict, risks, reasons, message: 'Cancelled by user', postState: null, report: 'Cancelled by user' }
+  const update = await runUpdate(config, [{ name: target.name, to: target.to }], signal)
   // ---- 3) 装后诊断 ----
   let postState: string | null = null
   const states = pluginStatesOf(config.profile, manifest)
@@ -230,7 +237,7 @@ export async function runSmartUpdate(config: MarketConfig, target: { name: strin
       '---更新输出开始---',
       update.message,
       '---更新输出结束---',
-    ].join('\n'), HEADLESS_TIMEOUT_POST)
+    ].join('\n'), HEADLESS_TIMEOUT_POST, signal)
     if (post.ok && post.output.trim() !== '') aiPost = post.output.trim().slice(0, 500)
   } catch { /* 装后 AI 不可用：跳过 */ }
   const postReport = (postState !== null ? '激活状态: ' + postState + '。' : '') + (aiPost !== '' ? aiPost : '')
@@ -285,7 +292,7 @@ function dependentsOf(profile: string, depName: string): string[] {
  * - confirm=false 且 AI 判定有风险（caution/refuse）→ 只返回审查报告（stage review），不删除；
  * - verdict=proceed 或用户确认后 → 执行 dsh plugin remove + 装后残留检查。
  */
-export async function runSmartUninstall(config: MarketConfig, depName: string, confirm: boolean): Promise<SmartUninstallResult> {
+export async function runSmartUninstall(config: MarketConfig, depName: string, confirm: boolean, signal?: AbortSignal): Promise<SmartUninstallResult> {
   const manifest = readManifest(config.profile)
   const hit = Object.entries(manifest.dependencies).find(([n]) => n.toLowerCase() === depName.toLowerCase())
   if (hit === undefined) {
@@ -318,7 +325,8 @@ export async function runSmartUninstall(config: MarketConfig, depName: string, c
       '请输出 JSON（不要输出其他内容）：{"verdict": "proceed"|"caution"|"refuse", "risks": ["风险1", ...], "reasons": ["理由1", ...]}',
       '判定：proceed=可以安全卸载；caution=有风险，需提醒用户后才能卸载；refuse=卸载会破坏环境，禁止。',
     ].join('\n')
-    const ai = await runHeadless(prompt, 180_000)
+    const ai = await runHeadless(prompt, 180_000, signal)
+    if (signal?.aborted === true) return { ok: false, stage: 'error', verdict: 'unavailable', risks: [], reasons: [], report: 'Cancelled by user', uninstalled: false }
     const parsed = ai.ok ? parseVerdict(ai.output) : null
     if (parsed !== null) {
       // 把 AI 的 install/caution/refuse 映射为 uninstall 语义
@@ -336,7 +344,8 @@ export async function runSmartUninstall(config: MarketConfig, depName: string, c
     return { ok: true, stage: 'review', verdict, risks, reasons, report, uninstalled: false }
   }
   // 执行卸载
-  const res = await runUninstall(config, name, name)
+  if (signal?.aborted === true) return { ok: false, stage: 'error', verdict, risks, reasons, report: 'Cancelled by user', uninstalled: false }
+  const res = await runUninstall(config, name, name, signal)
   // 装后残留检查
   const after = readManifest(config.profile)
   const depGone = after.dependencies[name] === undefined
