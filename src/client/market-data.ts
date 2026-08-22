@@ -101,9 +101,8 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     if (options.verifiedOnly && p.verified == null) return false
     if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false
     if (options.favOnly && !(isFav?.(p) ?? false)) return false
-    // v1.7.22：黑名单默认隐藏；excludedOnly=true 时只保留被剔除条目。
+    // v1.7.32：被剔除条目默认照常显示（带红卡+公开理由），chip 打开时只看被剔除条目。
     if (options.excludedOnly && p.excluded == null) return false
-    if (!options.excludedOnly && p.excluded != null) return false
     // v1.7.23：已扫描筛选（bundled===true 为机器校验通过）。
     if (options.scannedOnly && p.bundled !== true) return false
     if (options.sinceDays > 0) {

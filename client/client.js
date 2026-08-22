@@ -72,7 +72,7 @@ const en = {
 	sortDesc: "Descending ↓",
 	favOnly: "Favorites",
 	blacklistChip: "Blacklist",
-	blacklistHint: "Show excluded entries with their public reasons",
+	blacklistHint: "Only show excluded entries with their public reasons (they stay in the catalog by default)",
 	excludedBadge: "Excluded",
 	marketDirBadge: "Market dir",
 	excludedHint: "Excluded: {0}",
@@ -334,7 +334,7 @@ const zh = {
 	sortDesc: "降序 ↓",
 	favOnly: "已收藏",
 	blacklistChip: "黑名单",
-	blacklistHint: "显示被剔除条目（附公开理由）",
+	blacklistHint: "只看被剔除条目（附公开理由；默认仍在目录里正常显示）",
 	excludedBadge: "已剔除",
 	marketDirBadge: "市场目录",
 	excludedHint: "剔除理由：{0}",
@@ -734,7 +734,6 @@ function visiblePlugins(plugins, options, isInstalled, isFav) {
 		if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false;
 		if (options.favOnly && !(isFav?.(p) ?? false)) return false;
 		if (options.excludedOnly && p.excluded == null) return false;
-		if (!options.excludedOnly && p.excluded != null) return false;
 		if (options.scannedOnly && p.bundled !== true) return false;
 		if (options.sinceDays > 0) {
 			if (p.pushed === null) return false;
@@ -2092,7 +2091,7 @@ function MarketSection(props) {
 		let all = 0;
 		const needle = q.trim().toLowerCase();
 		for (const p of plugins) {
-			if (!showBlacklist && p.excluded != null) continue;
+			if (showBlacklist && p.excluded == null) continue;
 			if (scannedOnly && p.bundled !== true) continue;
 			if (recent30) {
 				if (p.created === null) continue;

@@ -538,7 +538,7 @@ export function MarketSection(props: SectionProps) {
     let all = 0
     const needle = q.trim().toLowerCase()
     for (const p of plugins) {
-      if (!showBlacklist && p.excluded != null) continue
+      if (showBlacklist && p.excluded == null) continue
       if (scannedOnly && p.bundled !== true) continue
       if (recent30) {
         if (p.created === null) continue
