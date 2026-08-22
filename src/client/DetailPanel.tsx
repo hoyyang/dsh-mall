@@ -132,14 +132,19 @@ async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 
   const candidates = [...readmeCandidates(lang), 'README.md']
   let lastError = ''
   for (const file of candidates) {
-    const url = 'https://raw.githubusercontent.com/' + entry.owner + '/' + entry.name + '/' + branch + '/' + file
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(12_000), headers: { accept: 'text/plain' } })
+      // v1.7.26：README 走 host 安全预渲染端点（图片白名单/HTML 剥离/标题降级/
+      // 相对链接绝对化），客户端再做一次针对 MarkdownText 的徽章清理。
+      const res = await fetch('/dsh-store/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=' + encodeURIComponent(file) + '&branch=' + encodeURIComponent(branch))
       if (res.ok) {
-        const text = await res.text()
-        return { status: 'ok', text: preprocessReadme(text.slice(0, 200_000), entry) }
+        const body = await res.json() as { ok?: boolean; text?: string }
+        if (body.ok === true && typeof body.text === 'string') {
+          return { status: 'ok', text: preprocessReadme(body.text.slice(0, 200_000), entry) }
+        }
+        lastError = body.text ?? 'readme unavailable'
+      } else {
+        lastError = 'HTTP ' + res.status
       }
-      lastError = 'HTTP ' + res.status
     } catch (err) {
       lastError = err instanceof Error ? err.message : String(err)
     }

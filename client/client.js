@@ -891,21 +891,18 @@ async function fetchReadme(entry, lang) {
 	const branch = entry.defaultBranch ?? "main";
 	const candidates = [...readmeCandidates(lang), "README.md"];
 	let lastError = "";
-	for (const file of candidates) {
-		const url = "https://raw.githubusercontent.com/" + entry.owner + "/" + entry.name + "/" + branch + "/" + file;
-		try {
-			const res = await fetch(url, {
-				signal: AbortSignal.timeout(12e3),
-				headers: { accept: "text/plain" }
-			});
-			if (res.ok) return {
+	for (const file of candidates) try {
+		const res = await fetch("/dsh-store/readme?repo=" + encodeURIComponent(entry.owner + "/" + entry.name) + "&file=" + encodeURIComponent(file) + "&branch=" + encodeURIComponent(branch));
+		if (res.ok) {
+			const body = await res.json();
+			if (body.ok === true && typeof body.text === "string") return {
 				status: "ok",
-				text: preprocessReadme((await res.text()).slice(0, 2e5), entry)
+				text: preprocessReadme(body.text.slice(0, 2e5), entry)
 			};
-			lastError = "HTTP " + res.status;
-		} catch (err) {
-			lastError = err instanceof Error ? err.message : String(err);
-		}
+			lastError = body.text ?? "readme unavailable";
+		} else lastError = "HTTP " + res.status;
+	} catch (err) {
+		lastError = err instanceof Error ? err.message : String(err);
 	}
 	return {
 		status: "error",

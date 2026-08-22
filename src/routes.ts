@@ -18,6 +18,7 @@ import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdat
 import { ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
 import { ensureBundleScans } from './scan.ts'
+import { fetchSanitizedReadme } from './readme.ts'
 import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
 
 let cachedVersion: string | null = null
@@ -681,6 +682,25 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       } finally {
         endTask(taskId)
       }
+    },
+  }))
+
+  // README 安全预渲染（v1.7.26）：GET ?repo=&file=&branch= —— host 清洗后下发。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/readme',
+    handler: async (request, response) => {
+      if (request.method !== 'GET') {
+        response.writeHead(405, { allow: 'GET' })
+        response.end()
+        return
+      }
+      const url = new URL(request.url ?? '/', 'http://localhost')
+      const repo = url.searchParams.get('repo') ?? ''
+      const file = url.searchParams.get('file') ?? ''
+      const branch = url.searchParams.get('branch') ?? 'main'
+      const value = await fetchSanitizedReadme(repo, file, branch)
+      sendJson(response, value.ok ? 200 : 404, value)
     },
   }))
 

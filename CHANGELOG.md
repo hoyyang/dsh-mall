@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.26 — 2026-08-22
+
+- **README 安全预渲染（R7）**：新增 GET /dsh-store/readme 端点（host 清洗：图片域名白名单 raw/camo/user-images/avatars/github、script/style 剥离、HTML 标题/段落/换行转 Markdown、H1 起整体降一级、相对链接图片改 absolute、24h 缓存、路径白名单防穿越）；详情面板改走端点（客户端再做一层 MarkdownText 徽章清理）。实测 dsh-market README 标题降级+链接绝对化正确。
 ## 1.7.25 — 2026-08-22
 
 - **npm 防抢注落地（R6）**：npmLinked===false 的条目不再参与一键更新（computeUpdates 跳过）；安装路由自动降级 `dsh plugin add github:owner/repo` 源码安装；安装/更新弹窗与详情面板的命令展示同步降级并提示「npm 包未回指本仓库」。
