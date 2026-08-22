@@ -199,6 +199,8 @@ export function DetailPanel(props: {
   installing: boolean
   update: { name: string; from: string; to: string } | null
   updating: boolean
+  related: MarketEntry[]
+  onOpenEntry: (e: MarketEntry) => void
   onToggleFav: () => void
   onInstall: () => void
   onUninstall: () => void
@@ -414,6 +416,19 @@ export function DetailPanel(props: {
             </div>
           )}
 
+          {props.related.length > 0 && (
+            <div className="pcm-detail-sec">
+              <div className="pcm-detail-sec-title">{t('detailRelated')}</div>
+              {props.related.map(r => (
+                <button key={r.owner + '/' + r.name} type="button" className="pcm-detail-related" onClick={() => props.onOpenEntry(r)}>
+                  <span className="pcm-name">{r.name}</span>
+                  <span className="pcm-owner">{r.owner}</span>
+                  <span className="pcm-stars">★ {formatStars(r.stars)}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="pcm-detail-sec">
             <div className="pcm-detail-sec-title">{t('detailInstall')}</div>
             <div className="pcm-detail-cmdrow">
@@ -422,6 +437,15 @@ export function DetailPanel(props: {
                 <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={copyCmd} />
               </Tooltip>
             </div>
+            {/* v1.7.29：安装三通道注释 + 收录日 */}
+            <div className="pcm-detail-channels">
+              <div>{t('channelNpm')}</div>
+              <div>{t('channelTarball')}</div>
+              <div>{t('channelSource')}</div>
+            </div>
+            {entry.created !== null && (
+              <div className="pcm-detail-added">{t('detailAdded').replace('{0}', entry.created.slice(0, 10))}</div>
+            )}
             <div className="pcm-detail-linkrow">
               <a className="pcm-detail-link" href={entry.url} target="_blank" rel="noopener noreferrer">{t('openRepo')} ↗</a>
               {entry.verified != null && entry.verified.reportUrl != null && entry.verified.reportUrl !== '' && (

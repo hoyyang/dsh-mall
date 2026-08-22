@@ -1683,6 +1683,14 @@ export function MarketSection(props: SectionProps) {
             const u = updateFor(detail)
             return u !== null && updatingNames.has(u.name.toLowerCase())
           })()}
+          related={(() => {
+            const self = (detail.owner + '/' + detail.name).toLowerCase()
+            return data === null ? [] : data.plugins
+              .filter(p => p.category === detail.category && p.excluded == null && (p.owner + '/' + p.name).toLowerCase() !== self)
+              .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
+              .slice(0, 6)
+          })()}
+          onOpenEntry={e => setDetail(e)}
           onToggleFav={() => toggleFav(detail)}
           onInstall={() => setConfirming(detail)}
           onUninstall={() => { if (detail.local === true) setRemovingLocal(detail); else setRemoving(detail) }}
