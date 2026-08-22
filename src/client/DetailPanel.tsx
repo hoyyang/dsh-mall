@@ -314,6 +314,17 @@ export function DetailPanel(props: {
               {props.t('excludedHint').replace('{0}', entry.excluded.reason)}
             </div>
           )}
+          {(entry.bundled !== undefined && entry.bundled !== null) && (
+            <div className={entry.bundled ? 'pcm-risk pcm-risk-curated' : 'pcm-risk pcm-risk-nonplugin'}>
+              {entry.bundled ? props.t('scannedBadgeHint') + (entry.bundledAt !== undefined && entry.bundledAt !== null ? ' · ' + entry.bundledAt : '') : props.t('scanFailHint')}
+            </div>
+          )}
+          {entry.dormant === true && (
+            <div className="pcm-risk pcm-risk-community">{props.t('dormantHint')}</div>
+          )}
+          {entry.npmLinked === false && (
+            <div className="pcm-risk pcm-risk-community">{props.t('npmUnlinkedHint')}</div>
+          )}
 
           {(entry.verified != null || disclosure != null || entry.installable != null) && (
             <div className="pcm-detail-safety">

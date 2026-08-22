@@ -87,6 +87,7 @@ export interface ListQuery {
   sinceDays: SinceDays
   lang: string
   excludedOnly: boolean
+  scannedOnly: boolean
 }
 
 export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isInstalled?: (p: MarketEntry) => boolean, isFav?: (p: MarketEntry) => boolean): MarketEntry[] {
@@ -103,6 +104,8 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     // v1.7.22：黑名单默认隐藏；excludedOnly=true 时只保留被剔除条目。
     if (options.excludedOnly && p.excluded == null) return false
     if (!options.excludedOnly && p.excluded != null) return false
+    // v1.7.23：已扫描筛选（bundled===true 为机器校验通过）。
+    if (options.scannedOnly && p.bundled !== true) return false
     if (options.sinceDays > 0) {
       if (p.pushed === null) return false
       const pushed = Date.parse(p.pushed)

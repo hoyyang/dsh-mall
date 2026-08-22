@@ -107,6 +107,7 @@ export function MarketSection(props: SectionProps) {
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
   const [showBlacklist, setShowBlacklist] = useState(false)
+  const [scannedOnly, setScannedOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -537,6 +538,7 @@ export function MarketSection(props: SectionProps) {
     const needle = q.trim().toLowerCase()
     for (const p of plugins) {
       if (!showBlacklist && p.excluded != null) continue
+      if (scannedOnly && p.bundled !== true) continue
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
@@ -551,12 +553,13 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist, scannedOnly])
 
   const excludedCount = useMemo(() => plugins.filter(p => p.excluded != null).length, [plugins])
+  const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, excludedOnly: showBlacklist }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, excludedOnly: showBlacklist, scannedOnly }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist, scannedOnly],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -1289,6 +1292,13 @@ export function MarketSection(props: SectionProps) {
           onClick={() => { setShowBlacklist(v => !v); setPage(1) }}
           title={t('blacklistHint')}
         >{t('blacklistChip')}<span className="pcm-count">{excludedCount}</span></Pill>
+        {/* v1.7.23：已扫描筛选（机器 dsh.bundle 校验通过；与「已验证」人工实测区分） */}
+        <Pill
+          className={scannedOnly ? 'pcm-pill-scanned pcm-pill-scanned-on' : 'pcm-pill-scanned'}
+          active={scannedOnly}
+          onClick={() => { setScannedOnly(v => !v); setPage(1) }}
+          title={t('scannedHint')}
+        >{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
         {!seedMode && (
           <div className="pcm-search-wrap">
             <Input
@@ -1499,6 +1509,15 @@ export function MarketSection(props: SectionProps) {
                         <span className="pcm-badge pcm-badge-excluded" title={t('excludedHint').replace('{0}', entry.excluded.reason)}>
                           {entry.excluded.kind === 'market' ? t('marketDirBadge') : t('excludedBadge')}
                         </span>
+                      )}
+                      {entry.bundled === true && (
+                        <span className="pcm-badge pcm-badge-scanned" title={t('scannedBadgeHint')}>{t('scannedBadge')}</span>
+                      )}
+                      {entry.bundled === false && (
+                        <span className="pcm-badge pcm-badge-scanfail" title={t('scanFailHint')}>{t('scanFailBadge')}</span>
+                      )}
+                      {entry.dormant === true && (
+                        <span className="pcm-badge pcm-badge-dormant" title={t('dormantHint')}>{t('dormantBadge')}</span>
                       )}
                     </div>
                   </div>
