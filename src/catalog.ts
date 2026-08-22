@@ -27,6 +27,36 @@ const CDN_URLS = [
 ]
 const CDN_MAX_AGE_MS = 6 * 3600 * 1000
 
+/** 黑名单数据源（exclusions.json，索引仓库维护；种子=bruc3van curated.json，MIT）。 */
+const EXCLUSION_URLS = [
+  'https://raw.githubusercontent.com/hoyyang/dsh-market-index/main/exclusions.json',
+  'https://cdn.jsdelivr.net/gh/hoyyang/dsh-market-index@main/exclusions.json',
+]
+let exclusionsMap: Record<string, { kind: 'excluded' | 'market' | 'leaderboard'; reason: string }> = {}
+
+/** 拉取黑名单（失败保留旧值，fail-open 不阻塞目录）。 */
+async function fetchExclusions(): Promise<void> {
+  for (const url of EXCLUSION_URLS) {
+    try {
+      const res = await fetch(url, {
+        headers: { accept: 'application/json', 'user-agent': 'dsh-store' },
+        signal: AbortSignal.timeout(20_000),
+      })
+      if (!res.ok) continue
+      const body = await res.json() as { entries?: Record<string, { kind?: string; reason?: string }> }
+      if (body.entries === undefined || typeof body.entries !== 'object') continue
+      const next: Record<string, { kind: 'excluded' | 'market' | 'leaderboard'; reason: string }> = {}
+      for (const [key, value] of Object.entries(body.entries)) {
+        if (value === null || typeof value !== 'object') continue
+        const kind = value.kind === 'market' || value.kind === 'leaderboard' ? value.kind : 'excluded'
+        next[key.toLowerCase()] = { kind, reason: typeof value.reason === 'string' && value.reason !== '' ? value.reason : 'listed for review' }
+      }
+      exclusionsMap = next
+      return
+    } catch { /* 下一通道 */ }
+  }
+}
+
 interface CdnRepo {
   full_name: string
   name: string
@@ -42,6 +72,10 @@ interface CdnRepo {
   market_tags?: string[]
   npm_version?: string | null
   npm_pkg_name?: string | null
+  bundled?: boolean | null
+  bundled_at?: string | null
+  npm_linked?: boolean | null
+  dormant?: boolean | null
   version?: string | null
   /** 索引 v1.10：GitHub tags 最新 tag（npm 未发布仓库的版本号展示）。 */
   latest_tag?: string | null
@@ -188,6 +222,11 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
       : null,
     installable: repo.installable === 'non-plugin' || repo.installable === 'manual' ? repo.installable : null,
     topics: Array.isArray(repo.topics) ? repo.topics.map(String) : [],
+    excluded: exclusionsMap[key] ?? null,
+    bundled: typeof repo.bundled === 'boolean' ? repo.bundled : null,
+    bundledAt: typeof repo.bundled_at === 'string' ? repo.bundled_at : null,
+    npmLinked: typeof repo.npm_linked === 'boolean' ? repo.npm_linked : null,
+    dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
   }
 }
 
@@ -710,6 +749,8 @@ function makeRegistry(profile: string, htmlByKey: Map<string, { pushed_at: strin
 }
 
 async function fetchLive(profile: string, token: string, registryUrl: string): Promise<Registry> {
+  // 黑名单并行拉取（失败保留旧值，不阻塞目录）。
+  void fetchExclusions()
   // Pass 0: the community CDN index — complete catalog, no API quota.
   try {
     return await fetchCdnRegistry(profile, registryUrl)

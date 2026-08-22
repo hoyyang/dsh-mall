@@ -106,6 +106,7 @@ export function MarketSection(props: SectionProps) {
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
+  const [showBlacklist, setShowBlacklist] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -535,6 +536,7 @@ export function MarketSection(props: SectionProps) {
     let all = 0
     const needle = q.trim().toLowerCase()
     for (const p of plugins) {
+      if (!showBlacklist && p.excluded != null) continue
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
@@ -549,11 +551,12 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist])
 
+  const excludedCount = useMemo(() => plugins.filter(p => p.excluded != null).length, [plugins])
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, excludedOnly: showBlacklist }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -1279,6 +1282,13 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
+        {/* v1.7.22：黑名单开关——默认隐藏被剔除条目，打开后带理由展示 */}
+        <Pill
+          className={showBlacklist ? 'pcm-pill-blacklist pcm-pill-blacklist-on' : 'pcm-pill-blacklist'}
+          active={showBlacklist}
+          onClick={() => { setShowBlacklist(v => !v); setPage(1) }}
+          title={t('blacklistHint')}
+        >{t('blacklistChip')}<span className="pcm-count">{excludedCount}</span></Pill>
         {!seedMode && (
           <div className="pcm-search-wrap">
             <Input
@@ -1384,7 +1394,7 @@ export function MarketSection(props: SectionProps) {
               return (
                 <div
                   key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}
-                  className={entry.local === true ? 'pcm-card pcm-card-local' : 'pcm-card'}
+                  className={entry.local === true ? 'pcm-card pcm-card-local' : entry.excluded != null && entry.excluded.kind !== 'leaderboard' ? 'pcm-card pcm-card-excluded' : 'pcm-card'}
                   onClick={() => { if (entry.local !== true) setDetail(entry) }}
                 >
                   <div className="pcm-card-top">
@@ -1423,6 +1433,15 @@ export function MarketSection(props: SectionProps) {
                       {installed ? (
                         <>
                           <Button variant="outline" size="sm" disabled className="pcm-installed-tag">{t('installed')}</Button>
+                          {entry.local !== true && (
+                            <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
+                              {t('sourceBtn')}
+                            </Button>
+                          )}
+                        </>
+                      ) : entry.excluded != null && entry.excluded.kind !== 'leaderboard' ? (
+                        <>
+                          <span className="pcm-excluded-note" title={entry.excluded.reason}>{entry.excluded.kind === 'market' ? t('marketDirBadge') : t('excludedBadge')}</span>
                           {entry.local !== true && (
                             <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                               {t('sourceBtn')}
@@ -1476,6 +1495,11 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
+                      {entry.excluded != null && (
+                        <span className="pcm-badge pcm-badge-excluded" title={t('excludedHint').replace('{0}', entry.excluded.reason)}>
+                          {entry.excluded.kind === 'market' ? t('marketDirBadge') : t('excludedBadge')}
+                        </span>
+                      )}
                     </div>
                   </div>
                   {/* v1.7.10：#3 已安装功能区（★ 行下方浅色圆角面板）——更新/卸载/回退/skip/开关全部收纳 */}

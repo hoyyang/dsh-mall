@@ -84,6 +84,20 @@ export interface MarketEntry {
     totalDownloads?: number | null;
     /** GitHub Releases latest 版本号（按需富化；npm 未发布的仓库用）。 */
     repoVersion?: string | null;
+    /** 黑名单/剔除条目（v1.7.22，exclusions.json）：kind=excluded 非插件或蹭 topic、
+     *  market=市场目录本身、leaderboard=不进榜单但可见；reason=公开剔除理由。 */
+    excluded?: {
+        kind: 'excluded' | 'market' | 'leaderboard';
+        reason: string;
+    } | null;
+    /** v1.7.23+：dsh.bundle 全树扫描结论（机器可安装性）；null=未扫描。 */
+    bundled?: boolean | null;
+    /** v1.7.23+：扫描批次时间（ISO）。 */
+    bundledAt?: string | null;
+    /** v1.7.23+：registry 包 repository 字段是否回指本仓库（防抢注）；null=未校验。 */
+    npmLinked?: boolean | null;
+    /** v1.7.23+：pushed_at 距今超过 180 天（腐烂信号）。 */
+    dormant?: boolean | null;
 }
 export interface Registry {
     updated: string;

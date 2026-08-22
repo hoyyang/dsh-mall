@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.22 — 2026-08-22
+
+- **「黑名单」筛选按钮（R2）**：目录接入 exclusions.json（索引 v1.14，991 条带理由，种子=bruc3van curated.json MIT）；被剔除条目默认从「全部」与分类计数中隐藏，点「黑名单」chip 打开后以红色虚线卡片展示公开剔除理由，不提供安装按钮；详情面板同步展示理由。实测：chip 计数 901、默认隐藏、开关后 23 张剔除卡带理由。
 ## 1.7.21 — 2026-08-22
 
 - **文档阅读按钮**：新增 GET /dsh-store/doc?f=plan|report，把仓库 docs 里的方案与调研报告渲染成可点击的 HTML 阅读页（深色等宽字体、原样排版），聊天里直接点按钮即可看文件；docs/awesome-dsh-plugin-gap-analysis.md 一并入库。

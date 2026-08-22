@@ -51,6 +51,16 @@ export interface MarketEntry {
   totalDownloads?: number | null
   /** GitHub Releases latest 版本号（按需富化；npm 未发布的仓库用）。 */
   repoVersion?: string | null
+  /** 黑名单/剔除条目（exclusions.json）；null=正常条目。 */
+  excluded?: { kind: 'excluded' | 'market' | 'leaderboard'; reason: string } | null
+  /** dsh.bundle 全树扫描结论（机器可安装性）；null=未扫描。 */
+  bundled?: boolean | null
+  /** 扫描批次时间（ISO）。 */
+  bundledAt?: string | null
+  /** registry 包 repository 字段是否回指本仓库（防抢注）。 */
+  npmLinked?: boolean | null
+  /** pushed_at 距今超过 180 天（腐烂信号）。 */
+  dormant?: boolean | null
 }
 
 export interface Registry {
@@ -76,6 +86,7 @@ export interface ListQuery {
   sort: SortKey
   sinceDays: SinceDays
   lang: string
+  excludedOnly: boolean
 }
 
 export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isInstalled?: (p: MarketEntry) => boolean, isFav?: (p: MarketEntry) => boolean): MarketEntry[] {
@@ -89,6 +100,9 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     if (options.verifiedOnly && p.verified == null) return false
     if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false
     if (options.favOnly && !(isFav?.(p) ?? false)) return false
+    // v1.7.22：黑名单默认隐藏；excludedOnly=true 时只保留被剔除条目。
+    if (options.excludedOnly && p.excluded == null) return false
+    if (!options.excludedOnly && p.excluded != null) return false
     if (options.sinceDays > 0) {
       if (p.pushed === null) return false
       const pushed = Date.parse(p.pushed)
