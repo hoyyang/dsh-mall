@@ -1550,7 +1550,7 @@ export function MarketSection(props: SectionProps) {
                       {entry.bundled === true && (
                         <span className="pcm-badge pcm-badge-scanned" title={t('scannedBadgeHint')}>{t('scannedBadge')}</span>
                       )}
-                      {entry.bundled === false && (
+                      {entry.bundled === false && entry.isPlugin !== false && (
                         <span className="pcm-badge pcm-badge-scanfail" title={t('scanFailHint')}>{t('scanFailBadge')}</span>
                       )}
                       {entry.dormant === true && (

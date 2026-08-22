@@ -316,7 +316,7 @@ export function DetailPanel(props: {
           </div>
 
           <div className="pcm-detail-desc">{desc === '' ? '—' : desc}</div>
-          {(entry.bundled !== undefined && entry.bundled !== null) && (
+          {(entry.bundled !== undefined && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false)) && (
             <div className={entry.bundled ? 'pcm-risk pcm-risk-curated' : 'pcm-risk pcm-risk-nonplugin'}>
               {entry.bundled ? props.t('scannedBadgeHint') + (entry.bundledAt !== undefined && entry.bundledAt !== null ? ' · ' + entry.bundledAt : '') : props.t('scanFailHint')}
             </div>

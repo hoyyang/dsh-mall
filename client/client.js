@@ -1133,7 +1133,7 @@ function DetailPanel(props) {
 							className: "pcm-detail-desc",
 							children: desc === "" ? "—" : desc
 						}),
-						entry.bundled !== void 0 && entry.bundled !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+						entry.bundled !== void 0 && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false) && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 							className: entry.bundled ? "pcm-risk pcm-risk-curated" : "pcm-risk pcm-risk-nonplugin",
 							children: entry.bundled ? props.t("scannedBadgeHint") + (entry.bundledAt !== void 0 && entry.bundledAt !== null ? " · " + entry.bundledAt : "") : props.t("scanFailHint")
 						}),
@@ -3620,7 +3620,7 @@ function MarketSection(props) {
 												title: t("scannedBadgeHint"),
 												children: t("scannedBadge")
 											}),
-											entry.bundled === false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											entry.bundled === false && entry.isPlugin !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-scanfail",
 												title: t("scanFailHint"),
 												children: t("scanFailBadge")
