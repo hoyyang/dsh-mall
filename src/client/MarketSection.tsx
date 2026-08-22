@@ -562,6 +562,11 @@ export function MarketSection(props: SectionProps) {
   }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist, scannedOnly, recent30])
 
   const excludedCount = useMemo(() => plugins.filter(p => p.excluded != null).length, [plugins])
+  // v1.7.30：编辑精选位（awesome curated 且未剔除，按 star 取前 8）
+  const picks = useMemo(() => (data === null ? [] : data.plugins
+    .filter(p => p.curated && p.excluded == null)
+    .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
+    .slice(0, 8)), [data])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: recent30 ? 30 : 0, lang, excludedOnly: showBlacklist, scannedOnly }, isInstalled, isFav),
@@ -1443,6 +1448,19 @@ export function MarketSection(props: SectionProps) {
       </div>
 
       <div className="pcm-scroll" ref={scrollRef}>
+      {!seedMode && picks.length > 0 && (
+        <div className="pcm-picks">
+          <span className="pcm-picks-title">{t('picksTitle')}</span>
+          {picks.map(p => (
+            <button key={p.owner + '/' + p.name} type="button" className="pcm-pick" title={p.description} onClick={() => setDetail(p)}>
+              <span className="pcm-pick-name">{p.name}</span>
+              <span className="pcm-pick-owner">{p.owner}</span>
+              <span className="pcm-pick-star">★ {formatStars(p.stars)}</span>
+              <span className="pcm-pick-cat">{catLabel(p.category)}</span>
+            </button>
+          ))}
+        </div>
+      )}
       {list.length === 0 ? (
         <div className="pcm-empty">{data === null ? t('loading') : t('empty')}</div>
       ) : (
