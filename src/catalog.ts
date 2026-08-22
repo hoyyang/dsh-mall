@@ -169,6 +169,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
   const topics = repo.topics ?? []
   const hay = (name + ' ' + description + ' ' + topics.join(' ')).toLowerCase()
   let category = knownEntry?.category
+  if (category === undefined) category = CATEGORY_OVERRIDES[(key).toLowerCase()]
   if (category === undefined) {
     // Refine the CDN index's coarse buckets into the dshmarket category set:
     // web-ui splits into theme when skin/theme words hit; fun/workflow have no
@@ -319,6 +320,24 @@ export const CATEGORIES: Record<string, { en: string; zh: string }> = {
   market: { en: 'Plugin Markets & Managers', zh: '插件市场与管理' },
   fun: { en: 'Just for Fun', zh: '娱乐' },
   other: { en: 'Others', zh: '其他' },
+}
+
+/** v1.7.31：人工分类修正（种子=bruc3van curated.json category_overrides，映射到本店 21 类）。 */
+const CATEGORY_OVERRIDES: Record<string, string> = {
+  'han-1413141/dsh-cost-meter': 'ui',
+  'kingao294/dsh-skin': 'ui',
+  'nwflower/dsh-chat-import': 'workflow',
+  'zseven-w/dsh-openpencil': 'vision',
+  'bpc-oss/dsh-web-billing': 'ui',
+  'ccch1mneyyy/dsh-tui': 'ui',
+  'flymysql/dsh-remote': 'workflow',
+  'fuhefei/dsh-sentinel': 'workflow',
+  'howlma/dsh-desktop': 'ui',
+  'lamost423/dsh-trace-compare': 'tools',
+  'omdsh-dev/dsh-genui': 'ui',
+  'vlln/dsh-loop': 'workflow',
+  'vlln/plugin-registry': 'market',
+  'vlln/whale-girl': 'ui',
 }
 
 const TTL_MS = 30 * 60 * 1000
