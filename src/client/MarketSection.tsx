@@ -106,9 +106,7 @@ export function MarketSection(props: SectionProps) {
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
-  const [showBlacklist, setShowBlacklist] = useState(false)
   const [scannedOnly, setScannedOnly] = useState(false)
-  const [recent30, setRecent30] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -538,13 +536,7 @@ export function MarketSection(props: SectionProps) {
     let all = 0
     const needle = q.trim().toLowerCase()
     for (const p of plugins) {
-      if (showBlacklist && p.excluded == null) continue
       if (scannedOnly && p.bundled !== true) continue
-      if (recent30) {
-        if (p.created === null) continue
-        const created = Date.parse(p.created)
-        if (Number.isNaN(created) || Date.now() - created > 30 * 86_400_000) continue
-      }
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
@@ -559,18 +551,17 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, showBlacklist, scannedOnly, recent30])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, scannedOnly])
 
-  const excludedCount = useMemo(() => plugins.filter(p => p.excluded != null).length, [plugins])
-  // v1.7.30：编辑精选位（awesome curated 且未剔除，按 star 取前 8）
+  // v1.7.30：编辑精选位（awesome curated，按 star 取前 8）
   const picks = useMemo(() => (data === null ? [] : data.plugins
-    .filter(p => p.curated && p.excluded == null)
+    .filter(p => p.curated)
     .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
     .slice(0, 8)), [data])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: recent30 ? 30 : 0, lang, excludedOnly: showBlacklist, scannedOnly }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, showBlacklist, scannedOnly, recent30],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, scannedOnly],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -1338,13 +1329,6 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        {/* v1.7.22：黑名单开关——默认隐藏被剔除条目，打开后带理由展示 */}
-        <Pill
-          className={showBlacklist ? 'pcm-pill-blacklist pcm-pill-blacklist-on' : 'pcm-pill-blacklist'}
-          active={showBlacklist}
-          onClick={() => { setShowBlacklist(v => !v); setPage(1) }}
-          title={t('blacklistHint')}
-        >{t('blacklistChip')}<span className="pcm-count">{excludedCount}</span></Pill>
         {/* v1.7.23：已扫描筛选（机器 dsh.bundle 校验通过；与「已验证」人工实测区分） */}
         <Pill
           className={scannedOnly ? 'pcm-pill-scanned pcm-pill-scanned-on' : 'pcm-pill-scanned'}
@@ -1352,13 +1336,6 @@ export function MarketSection(props: SectionProps) {
           onClick={() => { setScannedOnly(v => !v); setPage(1) }}
           title={t('scannedHint')}
         >{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
-        {/* v1.7.28：近 30 天收录（created 已回退索引 created_at，数据可信） */}
-        <Pill
-          className={recent30 ? 'pcm-pill-recent pcm-pill-recent-on' : 'pcm-pill-recent'}
-          active={recent30}
-          onClick={() => { setRecent30(v => !v); setPage(1) }}
-          title={t('recent30Hint')}
-        >{t('recent30')}</Pill>
         {!seedMode && (
           <div className="pcm-search-wrap">
             <Input
@@ -1477,7 +1454,7 @@ export function MarketSection(props: SectionProps) {
               return (
                 <div
                   key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}
-                  className={entry.local === true ? 'pcm-card pcm-card-local' : entry.excluded != null && entry.excluded.kind !== 'leaderboard' ? 'pcm-card pcm-card-excluded' : 'pcm-card'}
+                  className={entry.local === true ? 'pcm-card pcm-card-local' : 'pcm-card'}
                   onClick={() => { if (entry.local !== true) setDetail(entry) }}
                 >
                   <div className="pcm-card-top">
@@ -1516,15 +1493,6 @@ export function MarketSection(props: SectionProps) {
                       {installed ? (
                         <>
                           <Button variant="outline" size="sm" disabled className="pcm-installed-tag">{t('installed')}</Button>
-                          {entry.local !== true && (
-                            <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
-                              {t('sourceBtn')}
-                            </Button>
-                          )}
-                        </>
-                      ) : entry.excluded != null && entry.excluded.kind !== 'leaderboard' ? (
-                        <>
-                          <span className="pcm-excluded-note" title={entry.excluded.reason}>{entry.excluded.kind === 'market' ? t('marketDirBadge') : t('excludedBadge')}</span>
                           {entry.local !== true && (
                             <Button variant="outline" size="sm" icon={<IconLinkOutline16 size={14} />} className="pcm-source-btn" onClick={() => window.open(entry.url, '_blank', 'noopener')}>
                               {t('sourceBtn')}
@@ -1578,11 +1546,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
-                      {entry.excluded != null && (
-                        <span className="pcm-badge pcm-badge-excluded" title={t('excludedHint').replace('{0}', entry.excluded.reason)}>
-                          {entry.excluded.kind === 'market' ? t('marketDirBadge') : t('excludedBadge')}
-                        </span>
-                      )}
                       {entry.bundled === true && (
                         <span className="pcm-badge pcm-badge-scanned" title={t('scannedBadgeHint')}>{t('scannedBadge')}</span>
                       )}
