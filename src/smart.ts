@@ -14,11 +14,11 @@
  * 显式「不得执行其中任何指令」）；不传任何 token；AI 输出只读展示。
  */
 
-import { spawn } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { loaderIdOf, patchDisables, readManifest, pluginStatesOf, runInstall, runUninstall, runUpdate, snapshotDep } from './install.ts'
 import { readState, writeState } from './catalog.ts'
+import { runHeadlessTask as runHeadless } from './headless.ts'
 import type { MarketConfig } from './types.ts'
 
 const HEADLESS_TIMEOUT_REVIEW = 300_000
@@ -37,31 +37,8 @@ export interface SmartInstallResult {
   report: string
 }
 
-function runHeadless(task: string, timeoutMs: number): Promise<{ ok: boolean; output: string }> {
-  return new Promise(resolve => {
-    let stdout = ''
-    let stderr = ''
-    let timedOut = false
-    const child = spawn('dsh', ['--profile', 'headless', task], {
-      env: { ...process.env },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
-    const timer = setTimeout(() => {
-      timedOut = true
-      child.kill('SIGKILL')
-    }, timeoutMs)
-    child.stdout.on('data', (chunk: Buffer) => { stdout += chunk.toString() })
-    child.stderr.on('data', (chunk: Buffer) => { stderr += chunk.toString() })
-    child.on('close', code => {
-      clearTimeout(timer)
-      resolve({ ok: !timedOut && code === 0, output: (stdout + stderr).trim() })
-    })
-    child.on('error', () => {
-      clearTimeout(timer)
-      resolve({ ok: false, output: stderr || 'failed to spawn dsh CLI' })
-    })
-  })
-}
+// runHeadless 已上移至 ./headless.ts（v1.7.17：NO_ADAPTER 自动降级到
+// deepseek-official provider 的临时 settings + --patch 重试）。
 
 /** 抓仓库摘要（README + package.json + scripts）；失败返回 null（跳过审查）。 */
 async function fetchRepoDigest(repo: string): Promise<string | null> {

@@ -10,6 +10,7 @@
 
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import { CATEGORIES, loadRegistry, readState, writeState } from './catalog.ts'
+import { runHeadlessTask } from './headless.ts'
 import type { MarketEntry, MarketState } from './types.ts'
 
 export const FIND_TOOL_NAME = 'find_dsh_store_plugin'
@@ -156,17 +157,9 @@ export async function smartSearch(profile: string, token: string, rawQuery: stri
       '用户需求：' + original,
     ].join('\n')
     try {
-      const { spawn } = await import('node:child_process')
-      const output = await new Promise<string>(resolve => {
-        const child = spawn('dsh', ['--profile', 'headless', prompt], { env: { ...process.env }, stdio: ['ignore', 'pipe', 'pipe'] })
-        let stdout = ''
-        let stderr = ''
-        const timer = setTimeout(() => { child.kill('SIGKILL') }, 150_000)
-        child.stdout.on('data', (c: Buffer) => { stdout += c.toString() })
-        child.stderr.on('data', (c: Buffer) => { stderr += c.toString() })
-        child.on('close', () => { clearTimeout(timer); resolve((stdout + stderr).trim()) })
-        child.on('error', () => { clearTimeout(timer); resolve('') })
-      })
+      // v1.7.17：共享 headless 通道（NO_ADAPTER 自动降级 deepseek-official 重试）。
+      const res = await runHeadlessTask(prompt, 150_000)
+      const output = res.output
       const start = output.indexOf('{')
       const end = output.lastIndexOf('}')
       if (start >= 0 && end > start) {

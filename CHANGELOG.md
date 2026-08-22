@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.17 — 2026-08-22
+
+- **智能更新/智能搜索/智能安装 AI 调用失败修复**：根因 = headless profile 的 agent-default-model 指向 `deepseek-vision`（只在 web 运行时由 vision-router 注册的 provider），headless 里无此适配器，dsh 报 NO_ADAPTER 且退出码仍为 0，被误报为「模型调用失败/超时」。修复 = 新增共享 headless 通道（`src/headless.ts`）：检测到 NO_ADAPTER 时自动降级——复制 settings.yaml 到临时文件、把 agent-default-model 指向 headless 可用的 `deepseek-official`（取 llm-deepseek.models 里的 pro/末位模型），经 `--patch` 覆盖 settings 路径重试一次，用完即删；用户原配置可用时不受影响。实测：智能搜索「视觉插件」返回 AI 改写词；智能更新对 1.0.0→9.9.9 假版本给出完整 refuse 审查报告。
 ## 1.7.16 — 2026-08-22
 
 - **移除「GitHub 限流」提示**：限流提示文案与渲染全部删除（数据新鲜度改由同步行「同步于 xx」承担）。
