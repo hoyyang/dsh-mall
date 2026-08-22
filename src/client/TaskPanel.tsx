@@ -60,6 +60,13 @@ export function TaskPanel(props: {
   if (!open) return null
   const summary = taskSummary(records)
   const busy = summary.running > 0
+  // v1.7.19：进行中任务排最上，其余按开始时间由新到旧。
+  const sorted = [...records].sort((a, b) => {
+    const ar = a.state === 'running' ? 0 : 1
+    const br = b.state === 'running' ? 0 : 1
+    if (ar !== br) return ar - br
+    return (b.at ?? 0) - (a.at ?? 0)
+  })
   const verb = (record: TaskRecord): string =>
     record.kind === 'install' ? t('taskKindInstall')
       : record.kind === 'update' ? t('taskKindUpdate')
@@ -88,7 +95,6 @@ export function TaskPanel(props: {
         {busy && (
           <>
             <div className="pcm-tasks-agg">
-              <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>
               {t('tasksAggregate').replace('{0}', String(summary.settled)).replace('{1}', String(summary.total))}
             </div>
             <div className="pcm-tasks-bar">
@@ -102,7 +108,7 @@ export function TaskPanel(props: {
             <div className="pcm-tasks-empty-hint">{t('tasksEmptyHint')}</div>
           </div>
         )}
-        {records.map(record => (
+        {sorted.map(record => (
           <div key={record.id} className="pcm-task-row">
             <span className={'pcm-task-icon ' + (record.state === 'done' ? 'pcm-task-ok' : record.state === 'failed' ? 'pcm-task-bad' : '')}>
               {record.state === 'running' ? (

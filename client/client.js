@@ -1380,6 +1380,12 @@ function TaskPanel(props) {
 	if (!open) return null;
 	const summary = taskSummary(records);
 	const busy = summary.running > 0;
+	const sorted = [...records].sort((a, b) => {
+		const ar = a.state === "running" ? 0 : 1;
+		const br = b.state === "running" ? 0 : 1;
+		if (ar !== br) return ar - br;
+		return (b.at ?? 0) - (a.at ?? 0);
+	});
 	const verb = (record) => record.kind === "install" ? t("taskKindInstall") : record.kind === "update" ? t("taskKindUpdate") : record.kind === "uninstall" ? t("taskKindUninstall") : record.kind === "rollback" ? t("taskKindRollback") : record.kind === "smart-install" ? t("taskKindSmartInstall") : record.kind === "smart-uninstall" ? t("taskKindSmartUninstall") : t("taskKindSmartUpdate");
 	return (0, react_dom.createPortal)(/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 		ref: popRef,
@@ -1418,12 +1424,9 @@ function TaskPanel(props) {
 		}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 			className: "pcm-tasks-body",
 			children: [
-				busy && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				busy && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-tasks-agg",
-					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-						className: "pcm-spin",
-						children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 13 })
-					}), t("tasksAggregate").replace("{0}", String(summary.settled)).replace("{1}", String(summary.total))]
+					children: t("tasksAggregate").replace("{0}", String(summary.settled)).replace("{1}", String(summary.total))
 				}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-tasks-bar",
 					children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
@@ -1438,7 +1441,7 @@ function TaskPanel(props) {
 						children: t("tasksEmptyHint")
 					})]
 				}),
-				records.map((record) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				sorted.map((record) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 					className: "pcm-task-row",
 					children: [
 						/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
