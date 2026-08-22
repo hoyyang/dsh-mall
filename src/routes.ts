@@ -137,8 +137,44 @@ function isCancelled(id: unknown): boolean {
   return ctrl !== undefined && ctrl.signal.aborted
 }
 
+/** 文档阅读按钮（v1.7.21）：把仓库 docs/*.md 以可点击 HTML 页暴露给浏览器。 */
+const DOC_FILES: Record<string, string> = {
+  plan: '../docs/plans/2026-08-22-data-governance-plan.md',
+  report: '../docs/awesome-dsh-plugin-gap-analysis.md',
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loaderIds?: Set<string>): () => void {
   const disposers: Array<() => void> = []
+
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/doc',
+    handler: async (request, response) => {
+      if (request.method !== 'GET') {
+        response.writeHead(405, { allow: 'GET' })
+        response.end()
+        return
+      }
+      const url = new URL(request.url ?? '/', 'http://localhost')
+      const key = url.searchParams.get('f') ?? ''
+      const rel = DOC_FILES[key]
+      if (rel === undefined) {
+        response.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' })
+        response.end('doc not found')
+        return
+      }
+      const text = readFileSync(new URL(rel, import.meta.url), 'utf8')
+      const html = '<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>' + escapeHtml(key) + '</title>' +
+        '<style>body{margin:0;background:#0d1117;color:#e6edf3;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;padding:24px 28px}pre{white-space:pre-wrap;word-break:break-word}</style></head>' +
+        '<body><pre>' + escapeHtml(text) + '</pre></body></html>'
+      response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' })
+      response.end(html)
+    },
+  }))
 
   disposers.push(host.webServer.register({
     kind: 'exact',

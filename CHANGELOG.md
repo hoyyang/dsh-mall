@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.7.21 — 2026-08-22
+
+- **文档阅读按钮**：新增 GET /dsh-store/doc?f=plan|report，把仓库 docs 里的方案与调研报告渲染成可点击的 HTML 阅读页（深色等宽字体、原样排版），聊天里直接点按钮即可看文件；docs/awesome-dsh-plugin-gap-analysis.md 一并入库。
 ## 1.7.20 — 2026-08-22
 
 - **数据治理实施规划落库**：新增 docs/plans/2026-08-22-data-governance-plan.md——基于 awesome-dsh-plugin 调研的 P0/P1/P2 全量技术方案：CI 层批量扫描（bundle 全树校验/npm 回指/dormant/质量门）+ 运行时段 top-up 扫描 + exclusions.json 黑名单数据契约 +「已扫描」「黑名单」筛选按钮设计 + R1-R12 轮次拆解（每轮版本号与验证方式）。等用户审阅后按轮执行。
