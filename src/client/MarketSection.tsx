@@ -1349,6 +1349,13 @@ export function MarketSection(props: SectionProps) {
           active={curatedOnly}
           onClick={() => { setCuratedOnly(v => !v); setPage(1) }}
         >{t('curatedOnly')}</Pill>
+        {/* v1.7.44：已扫描移到精选与已验证之间 */}
+        <Pill
+          className={scannedOnly ? 'pcm-pill-scanned pcm-pill-scanned-on' : 'pcm-pill-scanned'}
+          active={scannedOnly}
+          onClick={() => { setScannedOnly(v => !v); setPage(1) }}
+          title={t('scannedHint')}
+        ><svg className="pcm-pill-shield" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z" /><path d="M9 12l2 2 4-4" /></svg>{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
         <Pill
           className={verifiedOnly ? 'pcm-pill-verified pcm-pill-verified-on' : 'pcm-pill-verified'}
           active={verifiedOnly}
@@ -1364,13 +1371,6 @@ export function MarketSection(props: SectionProps) {
           active={favOnly}
           onClick={() => { setFavOnly(v => !v); setPage(1) }}
         >{t('favOnly')}</Pill>
-        {/* v1.7.23：已扫描筛选（机器 dsh.bundle 校验通过；与「已验证」人工实测区分） */}
-        <Pill
-          className={scannedOnly ? 'pcm-pill-scanned pcm-pill-scanned-on' : 'pcm-pill-scanned'}
-          active={scannedOnly}
-          onClick={() => { setScannedOnly(v => !v); setPage(1) }}
-          title={t('scannedHint')}
-        ><svg className="pcm-pill-shield" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z" /><path d="M9 12l2 2 4-4" /></svg>{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
         {!floating && (
           <div className="pcm-lang-wrap">
             <Menu

@@ -3252,6 +3252,35 @@ function MarketSection(props) {
 								children: t("curatedOnly")
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
+								className: scannedOnly ? "pcm-pill-scanned pcm-pill-scanned-on" : "pcm-pill-scanned",
+								active: scannedOnly,
+								onClick: () => {
+									setScannedOnly((v) => !v);
+									setPage(1);
+								},
+								title: t("scannedHint"),
+								children: [
+									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
+										className: "pcm-pill-shield",
+										width: "12",
+										height: "12",
+										viewBox: "0 0 24 24",
+										fill: "none",
+										stroke: "currentColor",
+										strokeWidth: "2",
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										"aria-hidden": "true",
+										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M9 12l2 2 4-4" })]
+									}),
+									t("scannedChip"),
+									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "pcm-count",
+										children: scannedCount
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
 								className: verifiedOnly ? "pcm-pill-verified pcm-pill-verified-on" : "pcm-pill-verified",
 								active: verifiedOnly,
 								onClick: () => {
@@ -3289,35 +3318,6 @@ function MarketSection(props) {
 									setPage(1);
 								},
 								children: t("favOnly")
-							}),
-							/* @__PURE__ */ (0, react_jsx_runtime.jsxs)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
-								className: scannedOnly ? "pcm-pill-scanned pcm-pill-scanned-on" : "pcm-pill-scanned",
-								active: scannedOnly,
-								onClick: () => {
-									setScannedOnly((v) => !v);
-									setPage(1);
-								},
-								title: t("scannedHint"),
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
-										className: "pcm-pill-shield",
-										width: "12",
-										height: "12",
-										viewBox: "0 0 24 24",
-										fill: "none",
-										stroke: "currentColor",
-										strokeWidth: "2",
-										strokeLinecap: "round",
-										strokeLinejoin: "round",
-										"aria-hidden": "true",
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M9 12l2 2 4-4" })]
-									}),
-									t("scannedChip"),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-count",
-										children: scannedCount
-									})
-								]
 							}),
 							!floating && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 								className: "pcm-lang-wrap",
