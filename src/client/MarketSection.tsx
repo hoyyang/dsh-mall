@@ -38,7 +38,7 @@ import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
 import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
 
-const PAGE_SIZES = [24, 48, 96]
+const PAGE_SIZES = [25, 50, 100]
 
 interface SectionProps {
   t: (key: string) => string
@@ -136,7 +136,7 @@ export function MarketSection(props: SectionProps) {
   }, [])
   const [langOpen, setLangOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(24)
+  const [pageSize, setPageSize] = useState(25)
   const [sortOpen, setSortOpen] = useState(false)
   const [sizeOpen, setSizeOpen] = useState(false)
   const [confirming, setConfirming] = useState<MarketEntry | null>(null)
@@ -457,7 +457,7 @@ export function MarketSection(props: SectionProps) {
     if (id === 'installed') return lang === 'zh' ? '本地已装' : 'Installed (local)'
     if (data === null) return id
     const c = data.categories[id]
-    return c === undefined ? id : c[lang] ?? c.en
+    return c === undefined ? id : c[(lang === 'zh' ? 'zh' : 'en')] ?? c.en
   }, [data, lang])
 
   /** Which repos are installed in the current profile (from /status).
@@ -600,6 +600,14 @@ export function MarketSection(props: SectionProps) {
       })
       .catch(() => {})
   }
+  // v1.7.55：编辑精选 = awesome 人工策展条目按综合分取前 6（与「为你推荐」左右分栏）
+  const editorPicks = useMemo<MarketEntry[]>(() => {
+    if (data === null) return []
+    return data.plugins
+      .filter(p => p.curated === true && p.excluded == null && p.isPlugin !== false)
+      .sort((a, b) => (b.score?.total ?? 0) - (a.score?.total ?? 0))
+      .slice(0, 6)
+  }, [data])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
@@ -1356,7 +1364,7 @@ export function MarketSection(props: SectionProps) {
             <Menu
               open={langOpen}
               onClose={() => setLangOpen(false)}
-              onSelect={id => { setLangPersist(id); storeLang.set(id === 'zh' ? 'zh' : 'en'); setLangOpen(false); setPage(1) }}
+              onSelect={id => { setLangPersist(id); storeLang.set((['zh', 'en', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const).includes(id as 'zh') ? (id as 'zh' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'pt' | 'ru') : 'en'); setLangOpen(false); setPage(1) }}
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn pcm-lang-btn-head' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -1455,7 +1463,7 @@ export function MarketSection(props: SectionProps) {
           active={skillOnly}
           onClick={() => { setSkillOnly(v => !v); setPage(1) }}
           title={t('skillChipHint')}
-        ><svg className="pcm-pill-skill-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>{t('skillChip')}</Pill>
+        ><svg className="pcm-pill-skill-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3.6 2.8 9.3l9.2 5.7 9.2-5.7z" /><path d="M6.6 12.3v4.2c0 1.6 2.4 2.9 5.4 2.9s5.4-1.3 5.4-2.9v-4.2" /><path d="M21.2 9.3v5.4" /></svg>{t('skillChip')}</Pill>
         <Pill
           className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
           active={installedOnly}
@@ -1471,7 +1479,7 @@ export function MarketSection(props: SectionProps) {
             <Menu
               open={langOpen}
               onClose={() => setLangOpen(false)}
-              onSelect={id => { setLangPersist(id); storeLang.set(id === 'zh' ? 'zh' : 'en'); setLangOpen(false); setPage(1) }}
+              onSelect={id => { setLangPersist(id); storeLang.set((['zh', 'en', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const).includes(id as 'zh') ? (id as 'zh' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'pt' | 'ru') : 'en'); setLangOpen(false); setPage(1) }}
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -1524,45 +1532,70 @@ export function MarketSection(props: SectionProps) {
       </div>
 
       <div className="pcm-scroll" ref={scrollRef}>
-      {/* v1.7.52：为你推荐——本地已装画像的被动推荐（v1.7.53：编辑精选移除，推荐置顶） */}
-      {!seedMode && q.trim() === '' && ((recommend?.length ?? 0) > 0 || profileStats?.showQuiz === true) && (
-        <div className="pcm-picks pcm-recommend">
-          <div className="pcm-picks-head">
-            <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" stroke="#4d6bfe" strokeWidth="1.8" strokeLinejoin="round" />
-            </svg>
-            <span className="pcm-picks-title">{t('recommendTitle')}</span>
-            {profileStats != null && profileStats.days > 0 && (
-              <span className="pcm-rec-chip" title={t('recProfileChip').replace('{0}', String(profileStats.days))}>
-                {t('recProfileChip').replace('{0}', String(profileStats.days))}
-              </span>
-            )}
-            {profileStats?.hasQuiz === true && (
-              <button type="button" className="pcm-rec-retake" onClick={() => setQuizOpen(true)}>{t('recRetakeQuiz')}</button>
-            )}
-          </div>
-          {profileStats?.showQuiz === true && (
-            <div className="pcm-rec-quiz">
-              <span className="pcm-rec-quiz-emoji">🧭</span>
-              <div className="pcm-rec-quiz-body">
-                <div className="pcm-rec-quiz-title">{t('recQuizCtaTitle')}</div>
-                <div className="pcm-rec-quiz-sub">{t('recQuizCtaSub')}</div>
-              </div>
-              <Button variant="primary" size="sm" className="pcm-rec-quiz-btn" onClick={() => setQuizOpen(true)}>{t('recQuizCtaBtn')}</Button>
+      {/* v1.7.55：编辑精选（左 6 卡，人工策展）+ 为你推荐（右 4 卡，画像/问卷个性化，每日更新）——两栏视觉区分 */}
+      {!seedMode && q.trim() === '' && ((recommend?.length ?? 0) > 0 || editorPicks.length > 0 || profileStats?.showQuiz === true) && (
+        <div className="pcm-featured">
+          <div className="pcm-picks pcm-editor-picks">
+            <div className="pcm-picks-head">
+              <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" stroke="#d99a1f" strokeWidth="1.8" strokeLinejoin="round" />
+              </svg>
+              <span className="pcm-picks-title">{t('picksTitle')}</span>
+              <span className="pcm-picks-sub">{t('curatedBadgeTitle')}</span>
             </div>
-          )}
-          <div className="pcm-picks-grid">
-            {(recommend ?? []).map(r => (
-              <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
-                <span className="pcm-pick-name">{r.entry.name}</span>
-                <span className="pcm-pick-owner">{r.entry.owner}</span>
-                <span className="pcm-pick-meta">
-                  <span className="pcm-pick-star">★ {formatStars(r.entry.stars)}</span>
-                  {r.entry.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.entry.score.total}</span>}
+            <div className="pcm-picks-grid">
+              {editorPicks.map(r => (
+                <button key={'pick-' + r.owner + '/' + r.name} type="button" className="pcm-pick" onClick={() => setDetail(r)}>
+                  <span className="pcm-pick-name">{r.name}</span>
+                  <span className="pcm-pick-owner">{r.owner}</span>
+                  <span className="pcm-pick-meta">
+                    <span className="pcm-pick-star">★ {formatStars(r.stars)}</span>
+                    {r.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.score.total}</span>}
+                  </span>
+                  <span className="pcm-pick-reason">{t('curatedBadgeTitle')}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="pcm-picks pcm-recommend">
+            <div className="pcm-picks-head">
+              <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" stroke="#4d6bfe" strokeWidth="1.8" strokeLinejoin="round" />
+              </svg>
+              <span className="pcm-picks-title">{t('recommendTitle')}</span>
+              <span className="pcm-rec-daily">{t('recDaily')}</span>
+              {profileStats != null && profileStats.days > 0 && (
+                <span className="pcm-rec-chip" title={t('recProfileChip').replace('{0}', String(profileStats.days))}>
+                  {t('recProfileChip').replace('{0}', String(profileStats.days))}
                 </span>
-                {r.reasons.length > 0 && <span className="pcm-pick-reason">{r.reasons[0]}</span>}
-              </button>
-            ))}
+              )}
+              {profileStats?.hasQuiz === true && (
+                <button type="button" className="pcm-rec-retake" onClick={() => setQuizOpen(true)}>{t('recRetakeQuiz')}</button>
+              )}
+            </div>
+            {profileStats?.showQuiz === true && (
+              <div className="pcm-rec-quiz">
+                <span className="pcm-rec-quiz-emoji">🧭</span>
+                <div className="pcm-rec-quiz-body">
+                  <div className="pcm-rec-quiz-title">{t('recQuizCtaTitle')}</div>
+                  <div className="pcm-rec-quiz-sub">{t('recQuizCtaSub')}</div>
+                </div>
+                <Button variant="primary" size="sm" className="pcm-rec-quiz-btn" onClick={() => setQuizOpen(true)}>{t('recQuizCtaBtn')}</Button>
+              </div>
+            )}
+            <div className="pcm-rec-list">
+              {(recommend ?? []).slice(0, 4).map(r => (
+                <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick pcm-pick-rec" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
+                  <span className="pcm-pick-name">{r.entry.name}</span>
+                  <span className="pcm-pick-owner">{r.entry.owner}</span>
+                  <span className="pcm-pick-meta">
+                    <span className="pcm-pick-star">★ {formatStars(r.entry.stars)}</span>
+                    {r.entry.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.entry.score.total}</span>}
+                  </span>
+                  {r.reasons.length > 0 && <span className="pcm-pick-reason">{r.reasons[0]}</span>}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -1673,7 +1706,7 @@ export function MarketSection(props: SectionProps) {
                           {/* v1.7.45：含 skill 徽章——主题深色系，不含则不显示 */}
                           {entry.hasSkill === true && (
                             <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
-                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3.6 2.8 9.3l9.2 5.7 9.2-5.7z" /><path d="M6.6 12.3v4.2c0 1.6 2.4 2.9 5.4 2.9s5.4-1.3 5.4-2.9v-4.2" /><path d="M21.2 9.3v5.4" /></svg>
                               {t('skillBadge')}
                             </span>
                           )}

@@ -15,19 +15,30 @@ const FETCH_TIMEOUT_MS = 10_000
 const REPO_RE = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/
 
 async function manifestHasBundle(repo: string, token: string): Promise<boolean | null> {
-  // 1) raw 根 package.json（零额度）
+  // v1.7.55：monorepo 误判修复——根 manifest 存在但无 dsh.bundle 时不再直接判 false
+  // （如 dsh-web-ui：插件清单在 packages/* 子包），改走全树抽查；
+  // 树抽查失败（限流/网络）→ null 下轮重试，绝不误判。
+  const hasBundle = (pkg: unknown): boolean => {
+    const p = pkg as { dsh?: { bundle?: unknown } } | null
+    return p !== null && typeof p === 'object' && p.dsh !== undefined && typeof p.dsh === 'object' && (p.dsh as { bundle?: unknown }).bundle !== undefined
+  }
+  // 1) raw 根 package.json（零额度）——命中即 true；未命中继续全树抽查
+  let rootMissing = false
   try {
     const res = await fetch('https://raw.githubusercontent.com/' + repo + '/HEAD/package.json', {
       headers: { 'user-agent': 'dsh-store', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     })
     if (res.ok) {
-      const pkg = JSON.parse((await res.text()).slice(0, 200_000)) as { dsh?: { bundle?: unknown } }
-      return pkg.dsh !== undefined && typeof pkg.dsh === 'object' && (pkg.dsh as { bundle?: unknown }).bundle !== undefined
+      const pkg = JSON.parse((await res.text()).slice(0, 200_000))
+      if (hasBundle(pkg)) return true
+    } else if (res.status === 404) {
+      rootMissing = true
+    } else {
+      return null // 限流/网络：本次不判定
     }
-    if (res.status !== 404) return null // 限流/网络：本次不判定
   } catch { return null }
-  // 2) 无根 manifest：GitHub API 树抽查（有限预算，匿名额度耗尽即停）
+  // 2) GitHub API 树抽查（子包 monorepo 判定；有限预算，额度耗尽即停）
   try {
     const res = await fetch('https://api.github.com/repos/' + repo + '/git/trees/HEAD?recursive=1', {
       headers: { 'user-agent': 'dsh-store', accept: 'application/vnd.github+json', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
@@ -36,18 +47,24 @@ async function manifestHasBundle(repo: string, token: string): Promise<boolean |
     if (!res.ok) return null
     const body = await res.json() as { truncated?: boolean; tree?: Array<{ path?: string; type?: string }> }
     if (body.truncated === true) return null
-    const pkgs = (body.tree ?? []).filter(t => t.type === 'blob' && (t.path ?? '').endsWith('package.json') && !/node_modules/.test(t.path ?? '')).slice(0, 8)
-    if (pkgs.length === 0) return false
+    const pkgs = (body.tree ?? [])
+      .filter(t => t.type === 'blob' && (t.path ?? '').endsWith('package.json') && !/node_modules/.test(t.path ?? ''))
+      .sort((a, b) => ((a.path ?? '').split('/').length - (b.path ?? '').split('/').length))
+      .slice(0, 20)
+    if (pkgs.length === 0) return rootMissing ? false : null
+    let checked = 0
     for (const pkg of pkgs) {
       const raw = await fetch('https://raw.githubusercontent.com/' + repo + '/HEAD/' + pkg.path, {
         headers: { 'user-agent': 'dsh-store', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       })
       if (!raw.ok) continue
-      const parsed = JSON.parse((await raw.text()).slice(0, 200_000)) as { dsh?: { bundle?: unknown } }
-      if (parsed.dsh !== undefined && typeof parsed.dsh === 'object' && (parsed.dsh as { bundle?: unknown }).bundle !== undefined) return true
+      checked++
+      const parsed = JSON.parse((await raw.text()).slice(0, 200_000))
+      if (hasBundle(parsed)) return true
     }
-    return false
+    // 全树抽查到 package.json 但没有一个带 bundle → 才可判 false
+    return checked > 0 ? false : null
   } catch { return null }
 }
 

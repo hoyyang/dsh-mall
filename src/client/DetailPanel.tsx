@@ -190,18 +190,15 @@ function BackToTop(props: { target: RefObject<HTMLDivElement | null>; label: str
   useEffect(() => {
     const el = props.target.current
     if (!el) return
-    let raf = 0
-    const onScroll = () => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
-        setShow(el.scrollTop > 400)
-      })
-    }
-    el.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
+    // v1.7.55：滚动事件+定时兜底双通道——后台标签里滚动事件与 rAF 都会被浏览器
+    // 冻结（按钮永不浮现）；setInterval 在后台仍以 ≥1s 节拍触发，保证任何场景可用。
+    const update = () => setShow(el.scrollTop > 400)
+    el.addEventListener('scroll', update, { passive: true })
+    update()
+    const timer = window.setInterval(update, 1200)
     return () => {
-      cancelAnimationFrame(raf)
-      el.removeEventListener('scroll', onScroll)
+      el.removeEventListener('scroll', update)
+      window.clearInterval(timer)
     }
   }, [props.target])
   return (
@@ -210,7 +207,7 @@ function BackToTop(props: { target: RefObject<HTMLDivElement | null>; label: str
       className={show ? 'pcm-backtop pcm-backtop-show' : 'pcm-backtop'}
       title={props.label}
       aria-label={props.label}
-      onClick={() => { props.target.current?.scrollTo({ top: 0, behavior: 'smooth' }) }}
+      onClick={() => { const el = props.target.current; if (el !== null && el !== undefined) { el.scrollTo({ top: 0, behavior: 'auto' }); el.scrollTop = 0 } }}
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M12 19V5M5 12l7-7 7 7" />
@@ -367,7 +364,7 @@ export function DetailPanel(props: {
                       {props.updating ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
                     </Button>
                   )}
-                  <Button variant="ghost" size="sm" className="pcm-uninstall-btn" onClick={props.onUninstall}>{t('uninstall')}</Button>
+                  <Button variant="outline" size="sm" className="pcm-uninstall-btn" onClick={props.onUninstall}>{t('uninstall')}</Button>
                 </>
               ) : (
                 <Button variant="primary" size="sm" disabled={props.installing} onClick={props.onInstall}>
@@ -388,7 +385,7 @@ export function DetailPanel(props: {
             <div className="pcm-detail-safety">
               {entry.hasSkill === true && (
                 <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3.6 2.8 9.3l9.2 5.7 9.2-5.7z" /><path d="M6.6 12.3v4.2c0 1.6 2.4 2.9 5.4 2.9s5.4-1.3 5.4-2.9v-4.2" /><path d="M21.2 9.3v5.4" /></svg>
                   {t('skillBadge')}
                 </span>
               )}
@@ -417,19 +414,6 @@ export function DetailPanel(props: {
                   <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={copyCmd} />
                 </Tooltip>
               </div>
-              {props.isInstalled ? (
-                props.update != null ? (
-                  <Button variant="primary" size="sm" className="pcm-install-cta" disabled={props.updating} onClick={props.onUpdate}>
-                    {props.updating ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
-                  </Button>
-                ) : (
-                  <Button variant="ghost" size="sm" className="pcm-install-cta" onClick={props.onUninstall}>{t('uninstall')}</Button>
-                )
-              ) : (
-                <Button variant="primary" size="sm" className="pcm-install-cta" disabled={props.installing} onClick={props.onInstall}>
-                  {props.installing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('install')}
-                </Button>
-              )}
             </div>
             {/* v1.7.45：README 安装命令（host 解析，展示-only，可复制） */}
             {(readme.installCmds ?? []).length > 0 ? (
