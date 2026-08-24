@@ -1370,7 +1370,7 @@ export function MarketSection(props: SectionProps) {
           active={scannedOnly}
           onClick={() => { setScannedOnly(v => !v); setPage(1) }}
           title={t('scannedHint')}
-        >{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
+        ><svg className="pcm-pill-shield" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z" /><path d="M9 12l2 2 4-4" /></svg>{t('scannedChip')}<span className="pcm-count">{scannedCount}</span></Pill>
         {!floating && (
           <div className="pcm-lang-wrap">
             <Menu
@@ -1431,15 +1431,22 @@ export function MarketSection(props: SectionProps) {
       <div className="pcm-scroll" ref={scrollRef}>
       {!seedMode && q.trim() === '' && picks.length > 0 && (
         <div className="pcm-picks">
-          <span className="pcm-picks-title">{t('picksTitle')}</span>
-          {picks.map(p => (
-            <button key={p.owner + '/' + p.name} type="button" className="pcm-pick" title={p.description} onClick={() => setDetail(p)}>
-              <span className="pcm-pick-name">{p.name}</span>
-              <span className="pcm-pick-owner">{p.owner}</span>
-              <span className="pcm-pick-star">★ {formatStars(p.stars)}</span>
-              <span className="pcm-pick-cat">{catLabel(p.category)}</span>
-            </button>
-          ))}
+          <div className="pcm-picks-head">
+            <span className="pcm-picks-title">⚑ {t('picksTitle')}</span>
+            <span className="pcm-picks-note">{t('picksNote')}</span>
+          </div>
+          <div className="pcm-picks-grid">
+            {picks.map(p => (
+              <button key={p.owner + '/' + p.name} type="button" className="pcm-pick" title={p.description} onClick={() => setDetail(p)}>
+                <span className="pcm-pick-name">{p.name}</span>
+                <span className="pcm-pick-owner">{p.owner}</span>
+                <span className="pcm-pick-meta">
+                  <span className="pcm-pick-star">★ {formatStars(p.stars)}</span>
+                  <span className="pcm-pick-cat">{catLabel(p.category)}</span>
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
       {list.length === 0 ? (
