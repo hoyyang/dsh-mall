@@ -3,9 +3,19 @@
  * — raw HTML disabled, protocol allowlist) plus an info sidebar with versions,
  * metadata, topics, safety badges and actions. README fetches go straight to
  * raw.githubusercontent.com (CORS-enabled) and are cached per repo+lang.
+ *
+ * v1.7.54 重设计（image-prompt ui-screenshot-system 出稿）：
+ * - 删除详情页语言按钮：readmeLang/desc/tags 一律跟随全店 storeLang（langChoice）
+ * - 安装区紫色高亮（pcm-install-sec）：渐变底 + 3px 紫左边线 + 圆角，内置主 CTA
+ * - 同类相关两行式迷你卡：第 1 行标题、第 2 行 ★star · 开发者
+ * - 回到顶部 FAB：.pcm-detail-scroll 滚动 >400px 浮现（业界标准 Material FAB 模式）
+ * - 元数据 star 单元格与首页卡片同款样式（pcm-meta-star）
+ * - 信息补齐：分类恒显（other 本地化）、近30天下载/总下载、含 skill 徽章；
+ *   详情打开时对缺失下载量的条目做一次性富化（/dsh-store/downloads）
+ * - 排版重设计：信任徽章行上移与简介相邻；单滚动容器（无子滚动）保持不变
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import {
   Button,
   IconCloseOutline16,
@@ -29,10 +39,6 @@ interface ReadmeHit {
 
 const readmeCache = new Map<string, ReadmeHit>()
 
-/** 探测仓库实际提供的 README 语言（Range 请求只要 64 字节，零 API 额度）。 */
-const LANG_PROBE = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
-const langProbeCache = new Map<string, string[]>()
-
 /** 某语言 README 的候选文件名（与 host 富化同表：zh 优先 zh-CN 变体；
  *  常见子目录约定 docs/ 一并探测）。 */
 function readmeCandidates(lang: string): string[] {
@@ -46,31 +52,6 @@ function readmeCandidates(lang: string): string[] {
     out.push('docs/' + f)
   }
   return out
-}
-
-async function probeReadmeLangs(entry: MarketEntry): Promise<string[]> {
-  const key = entry.owner + '/' + entry.name
-  const hit = langProbeCache.get(key)
-  if (hit !== undefined) return hit
-  const branch = entry.defaultBranch ?? 'main'
-  const checks = await Promise.all(LANG_PROBE.map(async lang => {
-    for (const file of readmeCandidates(lang)) {
-      try {
-        const res = await fetch('https://raw.githubusercontent.com/' + entry.owner + '/' + entry.name + '/' + branch + '/' + file, {
-          headers: { range: 'bytes=0-63' },
-          signal: AbortSignal.timeout(8_000),
-        })
-        if (res.status === 200 || res.status === 206) return lang as string
-      } catch {
-        /* 尝试下一个候选 */
-      }
-    }
-    return null
-  }))
-  const langs: string[] = []
-  for (const l of checks) if (l !== null) langs.push(l)
-  langProbeCache.set(key, langs)
-  return langs
 }
 
 /** 把 README 里常见的原始 HTML 结构转为等价 Markdown，并把相对路径
@@ -96,8 +77,6 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
     .replace(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*\/?>/gi, (_m: string, src: string) => '![image](' + absolutize(src) + ')')
     // 徽章类图片（MarkdownText 不渲染）直接移除，避免显示丑陋原文——
     // 必须在 img 转换之后执行；URL 可能含空格（shields.io 徽章常见）。
-    // 徽章常被链接包裹（HTML <a><img badge></a> 或 md [![badge](badge-url)](site-url)）——
-    // 必须在 <a> 转换之前整块删除，否则会残留「](url)」与孤立括号。
     .replace(/<a\b[^>]*>\s*(!\[[^\]]*\]\([^)]*\))\s*<\/a>/gi, (_m: string, inner: string) => {
       const url = (inner.match(/\(([^)]*)\)/) ?? ['', ''])[1] ?? ''
       if (/\.svg(?:\?|#|$)|shields\.io|trendshift|badge/i.test(url)) return ''
@@ -204,10 +183,48 @@ function disclosureSummary(d: NonNullable<MarketEntry['disclosure']>, t: (key: s
   return out
 }
 
+/** 回到顶部 FAB：业界标准 Material FAB 模式——容器滚动 >400px 才浮现，
+ *  opacity + translateY 过渡，点击 smooth 回顶。 */
+function BackToTop(props: { target: RefObject<HTMLDivElement | null>; label: string }) {
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    const el = props.target.current
+    if (!el) return
+    let raf = 0
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        setShow(el.scrollTop > 400)
+      })
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => {
+      cancelAnimationFrame(raf)
+      el.removeEventListener('scroll', onScroll)
+    }
+  }, [props.target])
+  return (
+    <button
+      type="button"
+      className={show ? 'pcm-backtop pcm-backtop-show' : 'pcm-backtop'}
+      title={props.label}
+      aria-label={props.label}
+      onClick={() => { props.target.current?.scrollTo({ top: 0, behavior: 'smooth' }) }}
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+  )
+}
+
 export function DetailPanel(props: {
   t: (key: string) => string
   entry: MarketEntry
   langChoice: string
+  /** v1.7.54：分类显示名（registry.categories 本地化；首页卡片同款）。 */
+  categoryLabel: (cat: string) => string
   isFav: boolean
   isInstalled: boolean
   installedSpec: string | null
@@ -223,22 +240,12 @@ export function DetailPanel(props: {
   onClose: () => void
 }) {
   const { t, entry, langChoice } = props
-  const [readmeLangs, setReadmeLangs] = useState<string[]>([])
-  const [readmeLang, setReadmeLang] = useState<string>(langChoice)
-  useEffect(() => {
-    let alive = true
-    void probeReadmeLangs(entry).then(langs => {
-      if (!alive) return
-      setReadmeLangs(langs)
-      if (langs.length > 0 && !langs.includes(readmeLang)) setReadmeLang(langs.includes(langChoice) ? langChoice : 'en')
-    })
-    return () => { alive = false }
-  }, [entry, langChoice, readmeLang])
-  const readme = useReadme(entry, readmeLang)
+  // v1.7.54：删除详情页语言按钮——readmeLang 一律跟随全店语言 langChoice
+  const readme = useReadme(entry, langChoice)
   // v1.7.53：打标简介优先（LLM 多语言一句话），其次索引 README.<lang> 首段，最后英文兜底
-  const desc = (entry.tagDescriptions?.[readmeLang] && entry.tagDescriptions[readmeLang] !== '')
-    ? entry.tagDescriptions[readmeLang]
-    : (readmeLang !== 'en' && entry.descriptions?.[readmeLang] ? entry.descriptions[readmeLang] : entry.description)
+  const desc = (entry.tagDescriptions?.[langChoice] && entry.tagDescriptions[langChoice] !== '')
+    ? entry.tagDescriptions[langChoice]
+    : (langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description)
   const disclosure = entry.disclosure
   const discLines = useMemo(() => (disclosure == null ? [] : disclosureSummary(disclosure, t)), [disclosure, t])
   const [copied, setCopied] = useState(false)
@@ -264,26 +271,55 @@ export function DetailPanel(props: {
     return () => { alive = false }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entry.owner, entry.name, entry.defaultBranch, entry.score])
-  const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
+
+  // v1.7.54：详情打开时对缺失下载量的条目做一次性富化（home 富化按页，
+  // 详情入口独立补拉，保证「信息补齐 ≥ 卡片」）。
+  const [downloadsHit, setDownloadsHit] = useState<{ d: number | null; t: number | null } | null>(null)
+  useEffect(() => {
+    if (entry.downloads !== null && entry.downloads !== undefined) return
+    if (entry.npm === null || entry.npmLinked === false) return
+    let alive = true
+    fetch('/dsh-store/downloads', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ names: [entry.npm] }),
+    })
+      .then(res => res.json())
+      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null> }) => {
+        const got = body.downloads ?? {}
+        const totals = body.totals ?? {}
+        const d = got[entry.npm as string]
+        const t = totals[entry.npm as string]
+        if (alive && (d !== undefined || t !== undefined)) setDownloadsHit({ d: d ?? null, t: t ?? null })
+      })
+      .catch(() => {})
+    return () => { alive = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entry.owner, entry.name, entry.npm, entry.npmLinked, entry.downloads])
+
+  const scrollRef = useRef<HTMLDivElement | null>(null)
   const copyCmd = () => {
     const cmd = entry.npmLinked === false || entry.npm === null ? 'dsh plugin add github:' + entry.owner + '/' + entry.name : 'dsh plugin add ' + entry.npm
     void navigator.clipboard?.writeText(cmd)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+  const d30 = downloadsHit?.d ?? (typeof entry.downloads === 'number' ? entry.downloads : null)
+  const dTotal = downloadsHit?.t ?? (typeof entry.totalDownloads === 'number' ? entry.totalDownloads : null)
+  // v1.7.54：元数据——分类恒显（other 本地化）；下载量缺失时显示占位
   const meta: Array<[string, string | null]> = [
     [t('detailStars'), formatStars(entry.stars)],
     [t('todayGain'), entry.todayStars === null ? '—' : (entry.todayStars >= 0 ? '+' : '') + String(entry.todayStars)],
+    [t('detailCategory'), entry.category === '' ? null : props.categoryLabel(entry.category)],
+    [t('downloads30Label'), d30 !== null ? formatDownloads(d30) : (entry.npm !== null && entry.npmLinked !== false ? '—' : null)],
+    [t('totalDownloadsLabel'), dTotal !== null ? formatDownloads(dTotal) : (entry.npm !== null && entry.npmLinked !== false ? '—' : null)],
     [t('detailCreated'), entry.created === null ? null : relativeFromNow(entry.created, t)],
     [t('updatedShort'), entry.pushed === null ? null : relativeFromNow(entry.pushed, t)],
     [t('detailLanguage'), entry.language],
-    // v1.7.53：详情页信息 ≥ 卡片——补分类与下载量
-    [t('detailCategory'), entry.category === 'other' ? null : entry.category],
-    [t('downloads30Label'), typeof entry.downloads === 'number' ? formatDownloads(entry.downloads) : null],
-    [t('totalDownloadsLabel'), typeof entry.totalDownloads === 'number' ? formatDownloads(entry.totalDownloads) : null],
     [t('detailLicense'), entry.license],
   ]
   const targets: Array<[string, string | null]> = meta.filter(([, v]) => v !== null && v !== '') as Array<[string, string | null]>
+  const tags = langChoice === 'zh' ? (entry.tagsZh ?? []) : ((entry.tagsEn ?? []).length > 0 ? (entry.tagsEn ?? []) : (entry.tagsZh ?? []))
 
   return (
     <Modal
@@ -294,7 +330,7 @@ export function DetailPanel(props: {
       headless
       className="pcm-detail-modal"
     >
-      <div className="pcm-detail-scroll">
+      <div className="pcm-detail-scroll" ref={scrollRef}>
       <div className="pcm-detail">
         <div className="pcm-detail-main">
           <div className="pcm-detail-head">
@@ -323,22 +359,6 @@ export function DetailPanel(props: {
                 />
               </svg>
             </button>
-            {readmeLangs.length > 1 && (
-              /* v1.7.53：详情页语言按钮样式与首页商店浮窗语言按钮一致 */
-              <label className="pcm-lang-btn pcm-lang-btn-detail" title={t('langToggle')}>
-                <span className="pcm-lang-flag">🌐</span>
-                <select
-                  className="pcm-lang-select"
-                  value={readmeLang}
-                  onChange={e => setReadmeLang(e.target.value)}
-                >
-                  {readmeLangs.map(l => (
-                    <option key={l} value={l}>{LANG_LABELS[l] ?? l}</option>
-                  ))}
-                </select>
-                <span className="pcm-lang-caret" aria-hidden="true" />
-              </label>
-            )}
             <div className="pcm-detail-actions">
               {props.isInstalled ? (
                 <>
@@ -362,6 +382,90 @@ export function DetailPanel(props: {
           </div>
 
           <div className="pcm-detail-desc">{desc === '' ? '—' : desc}</div>
+
+          {/* v1.7.54：信任徽章行上移，与简介相邻（重点=信任+行动） */}
+          {(entry.verified != null || disclosure != null || entry.installable != null || entry.hasSkill === true) && (
+            <div className="pcm-detail-safety">
+              {entry.hasSkill === true && (
+                <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>
+                  {t('skillBadge')}
+                </span>
+              )}
+              {entry.verified != null && (
+                <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by + (entry.verified.at !== '' ? ' · ' + entry.verified.at.slice(0, 10) : ''))}>
+                  ✓ {t('verifiedBadge')}
+                </span>
+              )}
+              {disclosure != null && (
+                <span className="pcm-safety pcm-safety-disclosure" title={discLines.length > 0 ? discLines.join('\n') : t('disclosureBadge')}>
+                  🛡 {t('disclosureBadge')}
+                </span>
+              )}
+              {entry.installable === 'manual' && <span className="pcm-safety pcm-safety-manual">⚙ {t('manualInstall')}</span>}
+              {entry.installable === 'non-plugin' && <span className="pcm-safety pcm-safety-nonplugin">⊘ {t('nonpluginBadge')}</span>}
+            </div>
+          )}
+
+          {/* v1.7.54：安装区紫色高亮——整块重点行动区 */}
+          <div className="pcm-detail-sec pcm-install-sec">
+            <div className="pcm-detail-sec-title pcm-install-sec-title">{t('detailInstall')}</div>
+            <div className="pcm-install-cmdrow">
+              <div className="pcm-detail-cmdrow">
+                <div className="pcm-cmd">{entry.npm !== null ? 'dsh plugin add ' + entry.npm : 'dsh plugin add github:' + entry.owner + '/' + entry.name}</div>
+                <Tooltip label={copied ? t('publishCopied') : t('detailCopy')}>
+                  <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={copyCmd} />
+                </Tooltip>
+              </div>
+              {props.isInstalled ? (
+                props.update != null ? (
+                  <Button variant="primary" size="sm" className="pcm-install-cta" disabled={props.updating} onClick={props.onUpdate}>
+                    {props.updating ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="sm" className="pcm-install-cta" onClick={props.onUninstall}>{t('uninstall')}</Button>
+                )
+              ) : (
+                <Button variant="primary" size="sm" className="pcm-install-cta" disabled={props.installing} onClick={props.onInstall}>
+                  {props.installing ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('install')}
+                </Button>
+              )}
+            </div>
+            {/* v1.7.45：README 安装命令（host 解析，展示-only，可复制） */}
+            {(readme.installCmds ?? []).length > 0 ? (
+              <div className="pcm-readme-cmds">
+                <div className="pcm-readme-cmds-title">
+                  {t('readmeCmdsTitle')}
+                  <span className="pcm-readme-cmds-src">{readme.cmdSource === 'readme-section' ? t('readmeCmdsFromSection') : t('readmeCmdsFromReadme')}</span>
+                </div>
+                {(readme.installCmds ?? []).map(cmd => (
+                  <div key={cmd} className="pcm-cmdrow">
+                    <div className="pcm-cmd pcm-readme-cmd">{cmd}</div>
+                    <Tooltip label={t('detailCopy')}>
+                      <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={() => { void navigator.clipboard?.writeText(cmd) }} />
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            ) : readme.status === 'ok' && (
+              <div className="pcm-readme-cmds-note">{t('readmeCmdsNone')}</div>
+            )}
+            {/* v1.7.29：安装三通道注释 + 收录日 */}
+            <div className="pcm-detail-channels">
+              <div>{t('channelNpm')}</div>
+              <div>{t('channelTarball')}</div>
+              <div>{t('channelSource')}</div>
+            </div>
+            {entry.created !== null && (
+              <div className="pcm-detail-added">{t('detailAdded').replace('{0}', entry.created.slice(0, 10))}</div>
+            )}
+            <div className="pcm-detail-linkrow">
+              <a className="pcm-detail-link" href={entry.url} target="_blank" rel="noopener noreferrer">{t('openRepo')} ↗</a>
+              {entry.verified != null && entry.verified.reportUrl != null && entry.verified.reportUrl !== '' && (
+                <a className="pcm-detail-link" href={entry.verified.reportUrl} target="_blank" rel="noopener noreferrer">{t('verifiedReport')} ↗</a>
+              )}
+            </div>
+          </div>
 
           {/* v1.7.45：实用评分卡片——总分+置信度+五维条+为什么推荐+雷达图 */}
           {score != null && score.total !== null && (
@@ -413,51 +517,6 @@ export function DetailPanel(props: {
             </div>
           )}
 
-                    {/* v1.7.53：安装方式移到「综合评分」区域下方（主栏） */}
-          <div className="pcm-detail-sec">
-            <div className="pcm-detail-sec-title">{t('detailInstall')}</div>
-            <div className="pcm-detail-cmdrow">
-              <div className="pcm-cmd">{entry.npm !== null ? 'dsh plugin add ' + entry.npm : 'dsh plugin add github:' + entry.owner + '/' + entry.name}</div>
-              <Tooltip label={copied ? t('publishCopied') : t('detailCopy')}>
-                <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={copyCmd} />
-              </Tooltip>
-            </div>
-            {/* v1.7.45：README 安装命令（host 解析，展示-only，可复制） */}
-            {(readme.installCmds ?? []).length > 0 ? (
-              <div className="pcm-readme-cmds">
-                <div className="pcm-readme-cmds-title">
-                  {t('readmeCmdsTitle')}
-                  <span className="pcm-readme-cmds-src">{readme.cmdSource === 'readme-section' ? t('readmeCmdsFromSection') : t('readmeCmdsFromReadme')}</span>
-                </div>
-                {(readme.installCmds ?? []).map(cmd => (
-                  <div key={cmd} className="pcm-cmdrow">
-                    <div className="pcm-cmd pcm-readme-cmd">{cmd}</div>
-                    <Tooltip label={t('detailCopy')}>
-                      <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={() => { void navigator.clipboard?.writeText(cmd) }} />
-                    </Tooltip>
-                  </div>
-                ))}
-              </div>
-            ) : readme.status === 'ok' && (
-              <div className="pcm-readme-cmds-note">{t('readmeCmdsNone')}</div>
-            )}
-            {/* v1.7.29：安装三通道注释 + 收录日 */}
-            <div className="pcm-detail-channels">
-              <div>{t('channelNpm')}</div>
-              <div>{t('channelTarball')}</div>
-              <div>{t('channelSource')}</div>
-            </div>
-            {entry.created !== null && (
-              <div className="pcm-detail-added">{t('detailAdded').replace('{0}', entry.created.slice(0, 10))}</div>
-            )}
-            <div className="pcm-detail-linkrow">
-              <a className="pcm-detail-link" href={entry.url} target="_blank" rel="noopener noreferrer">{t('openRepo')} ↗</a>
-              {entry.verified != null && entry.verified.reportUrl != null && entry.verified.reportUrl !== '' && (
-                <a className="pcm-detail-link" href={entry.verified.reportUrl} target="_blank" rel="noopener noreferrer">{t('verifiedReport')} ↗</a>
-              )}
-            </div>
-          </div>
-
           {(entry.bundled !== undefined && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false)) && (
             <div className={entry.bundled ? 'pcm-risk pcm-risk-curated' : 'pcm-risk pcm-risk-nonplugin'}>
               {entry.bundled ? props.t('scannedBadgeHint') + (entry.bundledAt !== undefined && entry.bundledAt !== null ? ' · ' + entry.bundledAt : '') : props.t('scanFailHint')}
@@ -468,29 +527,6 @@ export function DetailPanel(props: {
           )}
           {entry.npmLinked === false && (
             <div className="pcm-risk pcm-risk-community">{props.t('npmUnlinkedHint')}</div>
-          )}
-
-          {(entry.verified != null || disclosure != null || entry.installable != null || entry.hasSkill === true) && (
-            <div className="pcm-detail-safety">
-              {entry.hasSkill === true && (
-                <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>
-                  {t('skillBadge')}
-                </span>
-              )}
-              {entry.verified != null && (
-                <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by + (entry.verified.at !== '' ? ' · ' + entry.verified.at.slice(0, 10) : ''))}>
-                  ✓ {t('verifiedBadge')}
-                </span>
-              )}
-              {disclosure != null && (
-                <span className="pcm-safety pcm-safety-disclosure" title={discLines.length > 0 ? discLines.join('\n') : t('disclosureBadge')}>
-                  🛡 {t('disclosureBadge')}
-                </span>
-              )}
-              {entry.installable === 'manual' && <span className="pcm-safety pcm-safety-manual">⚙ {t('manualInstall')}</span>}
-              {entry.installable === 'non-plugin' && <span className="pcm-safety pcm-safety-nonplugin">⊘ {t('nonpluginBadge')}</span>}
-            </div>
           )}
 
           <div className="pcm-detail-readme">
@@ -543,21 +579,19 @@ export function DetailPanel(props: {
                 {targets.map(([k, v]) => (
                   <div className="pcm-detail-cell" key={k}>
                     <span className="pcm-detail-cellk">{k}</span>
-                    <span className="pcm-detail-cellv">{v}</span>
+                    {/* v1.7.54：star 单元格与首页卡片同款样式 */}
+                    <span className={k === t('detailStars') ? 'pcm-detail-cellv pcm-meta-star' : 'pcm-detail-cellv'}>{k === t('detailStars') ? '★ ' + v : v}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {((entry.topics ?? []).length > 0 || (entry.tagsZh ?? []).length > 0) && (
+          {((entry.topics ?? []).length > 0 || tags.length > 0) && (
             <div className="pcm-detail-sec">
               <div className="pcm-detail-sec-title">{t('detailTopics')}</div>
               <div className="pcm-detail-topics">
-                {(() => {
-                  const tags = readmeLang === 'zh' ? (entry.tagsZh ?? []) : ((entry.tagsEn ?? []).length > 0 ? entry.tagsEn : entry.tagsZh)
-                  return (tags ?? []).map(tp => <span key={'tag-' + tp} className="pcm-detail-topic pcm-detail-tag">{tp}</span>)
-                })()}
+                {tags.map(tp => <span key={'tag-' + tp} className="pcm-detail-topic pcm-detail-tag">{tp}</span>)}
                 {(entry.topics ?? []).map(tp => <span key={tp} className="pcm-detail-topic">{tp}</span>)}
               </div>
             </div>
@@ -566,19 +600,24 @@ export function DetailPanel(props: {
           {props.related.length > 0 && (
             <div className="pcm-detail-sec">
               <div className="pcm-detail-sec-title">{t('detailRelated')}</div>
-              {props.related.map(r => (
-                <button key={r.owner + '/' + r.name} type="button" className="pcm-detail-related" onClick={() => props.onOpenEntry(r)}>
-                  <span className="pcm-name">{r.name}</span>
-                  <span className="pcm-owner">{r.owner}</span>
-                  <span className="pcm-stars">★ {formatStars(r.stars)}</span>
-                </button>
-              ))}
+              <div className="pcm-related-list">
+                {props.related.map(r => (
+                  <button key={r.owner + '/' + r.name} type="button" className="pcm-detail-related" onClick={() => props.onOpenEntry(r)}>
+                    <span className="pcm-related-title">{r.name}</span>
+                    <span className="pcm-related-sub">
+                      <span className="pcm-related-stars">★ {formatStars(r.stars)}</span>
+                      <span className="pcm-related-dev">{r.owner}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
         </div>
       </div>
       </div>
+      <BackToTop target={scrollRef} label={t('backTop')} />
     </Modal>
   )
 }

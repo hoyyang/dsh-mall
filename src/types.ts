@@ -168,6 +168,11 @@ export interface MarketState {
   bundleScans?: Record<string, { at: number; value: boolean | null }>
   /** v1.7.45：运行时 skill 检测缓存：owner/repo → {at, value}（24h TTL）。 */
   skillScans?: Record<string, { at: number; value: boolean | null }>
+  /** v1.7.55：推荐画像持久化——跨天历史快照（同日覆盖/60天上限/半衰期14天聚合）+ 冷启动问卷答案。 */
+  recommendProfile?: {
+    history?: Array<{ date: string; cats: Record<string, number>; topics: Record<string, number>; tags: Record<string, number>; installs: number }>
+    quiz?: { answers: string[]; at: string }
+  }
 }
 
 export interface InstallState {

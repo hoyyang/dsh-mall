@@ -32,6 +32,7 @@ import {
 } from './market-data.ts'
 import { storeLang } from './locales.ts'
 import { DetailPanel } from './DetailPanel.tsx'
+import { QuizView } from './QuizView.tsx'
 import RadarChart from './RadarChart.tsx'
 import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
@@ -566,20 +567,39 @@ export function MarketSection(props: SectionProps) {
   // v1.7.53：编辑精选已移除（用户决定不需要该功能）。
 
   // v1.7.52：为你推荐（本地已装画像 → 相似推荐，host /dsh-store/recommend）
+  // v1.7.55：profileStats（跨天画像统计）+ 冷启动问卷（画像薄弱且未答卷 → CTA 卡）
   const [recommend, setRecommend] = useState<Array<{ entry: MarketEntry; reasons: string[] }> | null>(null)
+  const [profileStats, setProfileStats] = useState<{ days: number; installs: number; hasQuiz: boolean; quizAt: string | null; showQuiz: boolean } | null>(null)
+  const [quizOpen, setQuizOpen] = useState(false)
   const lastInstalledRef = useRef<string>('')
   useEffect(() => {
     if (seedMode) return
     const installedKey = JSON.stringify(status?.installed ?? {})
     fetch('/dsh-store/recommend', { cache: 'no-store' })
       .then(res => res.json())
-      .then((body: { items?: Array<{ entry: MarketEntry; reasons: string[] }> }) => {
+      .then((body: { items?: Array<{ entry: MarketEntry; reasons: string[] }>; stats?: { days: number; installs: number; hasQuiz: boolean; quizAt: string | null; showQuiz: boolean } | null }) => {
         setRecommend(Array.isArray(body.items) ? body.items : [])
+        setProfileStats(body.stats ?? null)
       })
       .catch(() => setRecommend([]))
     lastInstalledRef.current = installedKey
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status?.installed, seedMode])
+  // v1.7.55：问卷提交 → host 持久化 + 立即重算推荐
+  const submitQuiz = (answers: string[]) => {
+    setQuizOpen(false)
+    fetch('/dsh-store/recommend', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ quiz: answers }),
+    })
+      .then(res => res.json())
+      .then((body: { items?: Array<{ entry: MarketEntry; reasons: string[] }>; stats?: { days: number; installs: number; hasQuiz: boolean; quizAt: string | null; showQuiz: boolean } | null }) => {
+        setRecommend(Array.isArray(body.items) ? body.items : [])
+        setProfileStats(body.stats ?? null)
+      })
+      .catch(() => {})
+  }
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
@@ -1505,14 +1525,32 @@ export function MarketSection(props: SectionProps) {
 
       <div className="pcm-scroll" ref={scrollRef}>
       {/* v1.7.52：为你推荐——本地已装画像的被动推荐（v1.7.53：编辑精选移除，推荐置顶） */}
-      {!seedMode && q.trim() === '' && (recommend?.length ?? 0) > 0 && (
+      {!seedMode && q.trim() === '' && ((recommend?.length ?? 0) > 0 || profileStats?.showQuiz === true) && (
         <div className="pcm-picks pcm-recommend">
           <div className="pcm-picks-head">
             <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" stroke="#4d6bfe" strokeWidth="1.8" strokeLinejoin="round" />
             </svg>
             <span className="pcm-picks-title">{t('recommendTitle')}</span>
+            {profileStats != null && profileStats.days > 0 && (
+              <span className="pcm-rec-chip" title={t('recProfileChip').replace('{0}', String(profileStats.days))}>
+                {t('recProfileChip').replace('{0}', String(profileStats.days))}
+              </span>
+            )}
+            {profileStats?.hasQuiz === true && (
+              <button type="button" className="pcm-rec-retake" onClick={() => setQuizOpen(true)}>{t('recRetakeQuiz')}</button>
+            )}
           </div>
+          {profileStats?.showQuiz === true && (
+            <div className="pcm-rec-quiz">
+              <span className="pcm-rec-quiz-emoji">🧭</span>
+              <div className="pcm-rec-quiz-body">
+                <div className="pcm-rec-quiz-title">{t('recQuizCtaTitle')}</div>
+                <div className="pcm-rec-quiz-sub">{t('recQuizCtaSub')}</div>
+              </div>
+              <Button variant="primary" size="sm" className="pcm-rec-quiz-btn" onClick={() => setQuizOpen(true)}>{t('recQuizCtaBtn')}</Button>
+            </div>
+          )}
           <div className="pcm-picks-grid">
             {(recommend ?? []).map(r => (
               <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
@@ -1810,6 +1848,7 @@ export function MarketSection(props: SectionProps) {
           t={t}
           entry={detail}
           langChoice={langChoice}
+          categoryLabel={(cat: string) => data?.categories?.[cat]?.[(langChoice === 'zh' ? 'zh' : 'en')] ?? cat}
           isFav={isFav(detail)}
           isInstalled={isInstalled(detail)}
           installedSpec={installedSpecOf(detail)}
@@ -1832,6 +1871,16 @@ export function MarketSection(props: SectionProps) {
           onUninstall={() => { if (detail.local === true) setRemovingLocal(detail); else setRemoving(detail) }}
           onUpdate={() => { const u = updateFor(detail); if (u !== null) doUpdateOne(u) }}
           onClose={() => setDetail(null)}
+        />
+      )}
+
+      {quizOpen && (
+        <QuizView
+          open={quizOpen}
+          lang={langChoice}
+          t={t}
+          onClose={() => setQuizOpen(false)}
+          onComplete={submitQuiz}
         />
       )}
 
