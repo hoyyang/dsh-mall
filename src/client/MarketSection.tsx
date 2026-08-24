@@ -1429,7 +1429,7 @@ export function MarketSection(props: SectionProps) {
       </div>
 
       <div className="pcm-scroll" ref={scrollRef}>
-      {!seedMode && picks.length > 0 && (
+      {!seedMode && q.trim() === '' && picks.length > 0 && (
         <div className="pcm-picks">
           <span className="pcm-picks-title">{t('picksTitle')}</span>
           {picks.map(p => (
@@ -1443,7 +1443,18 @@ export function MarketSection(props: SectionProps) {
         </div>
       )}
       {list.length === 0 ? (
-        <div className="pcm-empty">{data === null ? t('loading') : t('empty')}</div>
+        data === null ? (
+          <div className="pcm-empty">{t('loading')}</div>
+        ) : (q.trim() !== '' || scannedOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== 'all' || kind !== 'all') ? (
+          <div className="pcm-empty">
+            <div>{t('emptyFiltered')}</div>
+            <Button variant="outline" size="sm" onClick={() => { setQ(''); setCat('all'); setKind('all'); setCuratedOnly(false); setVerifiedOnly(false); setInstalledOnly(false); setFavOnly(false); setScannedOnly(false); setPage(1) }}>
+              {t('clearFilters')}
+            </Button>
+          </div>
+        ) : (
+          <div className="pcm-empty">{t('empty')}</div>
+        )
       ) : (
         <>
           <div className="pcm-grid">

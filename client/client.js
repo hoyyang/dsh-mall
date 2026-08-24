@@ -145,6 +145,8 @@ const en = {
 	uninstalling: "Uninstalling {0}…",
 	uninstallDone: "Uninstalled.",
 	empty: "No matching repos.",
+	emptyFiltered: "No results match the current filters or search.",
+	clearFilters: "Clear filters",
 	loading: "Loading catalog…",
 	loadError: "Could not load the catalog. Showing the bundled snapshot.",
 	indexDegraded: "Index update failed — showing cached data",
@@ -400,6 +402,8 @@ const zh = {
 	uninstalling: "正在卸载 {0}…",
 	uninstallDone: "已卸载。",
 	empty: "没有匹配的项目。",
+	emptyFiltered: "没有符合当前筛选/搜索条件的结果。",
+	clearFilters: "清除筛选",
 	loading: "正在加载目录…",
 	loadError: "目录加载失败，已回退内置快照。",
 	indexDegraded: "索引更新失败——当前显示缓存数据",
@@ -3386,7 +3390,7 @@ function MarketSection(props) {
 			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: "pcm-scroll",
 				ref: scrollRef,
-				children: [!seedMode && picks.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				children: [!seedMode && q.trim() === "" && picks.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 					className: "pcm-picks",
 					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 						className: "pcm-picks-title",
@@ -3415,9 +3419,30 @@ function MarketSection(props) {
 							})
 						]
 					}, p.owner + "/" + p.name))]
-				}), list.length === 0 ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				}), list.length === 0 ? data === null ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-empty",
-					children: data === null ? t("loading") : t("empty")
+					children: t("loading")
+				}) : q.trim() !== "" || scannedOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== "all" || kind !== "all" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: "pcm-empty",
+					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("emptyFiltered") }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "outline",
+						size: "sm",
+						onClick: () => {
+							setQ("");
+							setCat("all");
+							setKind("all");
+							setCuratedOnly(false);
+							setVerifiedOnly(false);
+							setInstalledOnly(false);
+							setFavOnly(false);
+							setScannedOnly(false);
+							setPage(1);
+						},
+						children: t("clearFilters")
+					})]
+				}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-empty",
+					children: t("empty")
 				}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(react_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 					className: "pcm-grid",
 					children: pageList.map((entry) => {
