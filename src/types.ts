@@ -101,7 +101,10 @@ export interface Registry {
 
 export interface StarsSnapshot {
   date: string
+  /** 最新一次成功抓取的星数（滚动更新，跨天时作为下一天的基线来源）。 */
   stars: Record<string, number>
+  /** 今日基线（v1.7.43：跨天时用昨日 stars 作为今日基线，今日=相对昨日末次）。 */
+  base?: Record<string, number>
 }
 
 export interface MarketState {
