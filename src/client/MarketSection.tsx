@@ -1353,7 +1353,7 @@ export function MarketSection(props: SectionProps) {
           className={verifiedOnly ? 'pcm-pill-verified pcm-pill-verified-on' : 'pcm-pill-verified'}
           active={verifiedOnly}
           onClick={() => { setVerifiedOnly(v => !v); setPage(1) }}
-        >{t('verifiedOnly')}</Pill>
+        ><svg className="pcm-pill-person" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>{t('verifiedOnly')}</Pill>
         <Pill
           className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
           active={installedOnly}
@@ -1538,8 +1538,24 @@ export function MarketSection(props: SectionProps) {
                   </div>
                   {(entry.curated || entry.verified != null || disclosure != null) && (
                     <div className="pcm-safety-row">
-                      {entry.curated && <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>⚑ {t('curatedBadge')}</span>}
-                      {entry.verified != null && <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>✓ {t('verifiedBadge')}</span>}
+                      {entry.curated && (
+                        <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" /></svg>
+                          {t('curatedBadge')}
+                        </span>
+                      )}
+                      {entry.verified != null && (
+                        <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>
+                          {t('verifiedBadge')}
+                        </span>
+                      )}
+                      {entry.bundled === true && (
+                        <span className="pcm-safety pcm-safety-scanned" title={t('scannedBadgeHint')}>
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" /><path d="M9 11.6l2 2 4-4.2" /></svg>
+                          {t('scannedBadge')}
+                        </span>
+                      )}
                       {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
                     </div>
                   )}
@@ -1571,9 +1587,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
-                      {entry.bundled === true && (
-                        <span className="pcm-badge pcm-badge-scanned" title={t('scannedBadgeHint')}>{t('scannedBadge')}</span>
-                      )}
                       {entry.bundled === false && entry.isPlugin !== false && (
                         <span className="pcm-badge pcm-badge-scanfail" title={t('scanFailHint')}>{t('scanFailBadge')}</span>
                       )}
