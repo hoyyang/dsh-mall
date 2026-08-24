@@ -2393,7 +2393,6 @@ function MarketSection(props) {
 	]);
 	const picks = (0, react.useMemo)(() => data === null ? [] : data.plugins.filter((p) => p.curated).sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0)).slice(0, 8), [data]);
 	const scannedCount = (0, react.useMemo)(() => plugins.filter((p) => p.bundled === true).length, [plugins]);
-	const skillCount = (0, react.useMemo)(() => plugins.filter((p) => p.hasSkill === true).length, [plugins]);
 	const list = (0, react.useMemo)(() => visiblePlugins(plugins, {
 		category: cat,
 		kind,
@@ -3647,26 +3646,19 @@ function MarketSection(props) {
 									setPage(1);
 								},
 								title: t("skillChipHint"),
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
-										className: "pcm-pill-skill-icon",
-										width: "12",
-										height: "12",
-										viewBox: "0 0 24 24",
-										fill: "none",
-										stroke: "currentColor",
-										strokeWidth: "2",
-										strokeLinecap: "round",
-										strokeLinejoin: "round",
-										"aria-hidden": "true",
-										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" })
-									}),
-									t("skillChip"),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-count",
-										children: skillCount
-									})
-								]
+								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+									className: "pcm-pill-skill-icon",
+									width: "12",
+									height: "12",
+									viewBox: "0 0 24 24",
+									fill: "none",
+									stroke: "currentColor",
+									strokeWidth: "2",
+									strokeLinecap: "round",
+									strokeLinejoin: "round",
+									"aria-hidden": "true",
+									children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" })
+								}), t("skillChip")]
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Pill, {
 								className: installedOnly ? "pcm-pill-installed pcm-pill-installed-on" : "pcm-pill-installed",

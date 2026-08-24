@@ -209,20 +209,34 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
   }
 }
 
-/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。 */
-export function enrichScore(base: ScoreView, readme: string | null, needsConfig: boolean, extras: { stars?: number | null; pushedAt?: string | null; curated?: boolean; verified?: boolean; bundled?: boolean } = {}): ScoreView {
+/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
+ *  v1.7.46：signal 重算必须沿用原始字段（description/license/topics）——
+ *  此前传空 topics/license 会把信号分算低（dsh-web-ui 65 vs 应有的 85）。 */
+export function enrichScore(base: ScoreView, readme: string | null, needsConfig: boolean, extras: {
+  stars?: number | null
+  pushedAt?: string | null
+  curated?: boolean
+  verified?: boolean
+  bundled?: boolean
+  description?: string
+  license?: string | null
+  topics?: string[]
+} = {}): ScoreView {
   const practical = scorePractical(readme)
   const ease = scoreEase(readme, needsConfig)
+  const description = extras.description ?? ''
+  const license = extras.license ?? null
+  const topics = extras.topics ?? []
   const signal = readme === null ? base.breakdown.signal : scoreSignal({
-    hasDescription: true,
-    descriptionLen: 0,
-    hasLicense: true,
-    topics: [],
+    hasDescription: description !== '',
+    descriptionLen: description.length,
+    hasLicense: typeof license === 'string' && license !== '',
+    topics,
     readme,
   })
   const breakdown: ScoreBreakdown = { ...base.breakdown, practical, ease, signal }
   const total = weightedGeometricMean(breakdown)
-  const confidence = confidenceOf({ hasDescription: true, hasLicense: true, readme, topics: [] })
+  const confidence = confidenceOf({ hasDescription: description !== '', hasLicense: typeof license === 'string' && license !== '', readme, topics })
   const complete = breakdown.maintain !== null && breakdown.practical !== null && breakdown.popularity !== null && breakdown.ease !== null
   return {
     total: total === null ? null : Math.round(clip(total * confidence)),

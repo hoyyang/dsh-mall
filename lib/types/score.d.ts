@@ -63,13 +63,18 @@ export interface ScoreInput {
 }
 /** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。 */
 export declare function computeBaseScore(input: ScoreInput): ScoreView;
-/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。 */
+/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
+ *  v1.7.46：signal 重算必须沿用原始字段（description/license/topics）——
+ *  此前传空 topics/license 会把信号分算低（dsh-web-ui 65 vs 应有的 85）。 */
 export declare function enrichScore(base: ScoreView, readme: string | null, needsConfig: boolean, extras?: {
     stars?: number | null;
     pushedAt?: string | null;
     curated?: boolean;
     verified?: boolean;
     bundled?: boolean;
+    description?: string;
+    license?: string | null;
+    topics?: string[];
 }): ScoreView;
 /** 全量 stars 的 p99（动态基准，避免硬编码）。 */
 export declare function computeP99Stars(starsList: Array<number | null>): number;

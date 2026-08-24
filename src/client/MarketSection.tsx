@@ -570,7 +570,6 @@ export function MarketSection(props: SectionProps) {
     .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
     .slice(0, 8)), [data])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
-  const skillCount = useMemo(() => plugins.filter(p => p.hasSkill === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
     [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, scannedOnly, skillOnly],
@@ -1424,7 +1423,7 @@ export function MarketSection(props: SectionProps) {
           active={skillOnly}
           onClick={() => { setSkillOnly(v => !v); setPage(1) }}
           title={t('skillChipHint')}
-        ><svg className="pcm-pill-skill-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>{t('skillChip')}<span className="pcm-count">{skillCount}</span></Pill>
+        ><svg className="pcm-pill-skill-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>{t('skillChip')}</Pill>
         <Pill
           className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
           active={installedOnly}
