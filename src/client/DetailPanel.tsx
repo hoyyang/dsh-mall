@@ -390,7 +390,7 @@ export function DetailPanel(props: {
                 <RadarChart
                   breakdown={score.breakdown}
                   total={score.total}
-                  size={140}
+                  size={184}
                   labels={{
                     maintain: t('scoreDimMaintain'),
                     practical: t('scoreDimPractical'),

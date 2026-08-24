@@ -1653,7 +1653,7 @@ export function MarketSection(props: SectionProps) {
                         <RadarChart
                           breakdown={entry.score.breakdown}
                           total={entry.score.total}
-                          size={120}
+                          size={140}
                           labels={{
                             maintain: t('scoreDimMaintain'),
                             practical: t('scoreDimPractical'),
