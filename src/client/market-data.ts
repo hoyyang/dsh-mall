@@ -94,7 +94,7 @@ export interface Registry {
   plugins: MarketEntry[]
 }
 
-export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc' | 'downloads-asc' | 'downloads-desc'
+export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc' | 'downloads-asc' | 'downloads-desc' | 'score-asc' | 'score-desc'
 export type PluginKind = 'all' | 'plugin' | 'nonplugin'
 export type SinceDays = 0 | 1 | 7 | 30 | 365
 
@@ -157,6 +157,16 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     sorted.sort((a, b) => {
       const da = dl(a.downloads)
       const db = dl(b.downloads)
+      if (da !== db) return (db - da) * dir
+      return ((b.stars ?? -1) - (a.stars ?? -1)) * dir
+    })
+  } else if (options.sort === 'score-desc' || options.sort === 'score-asc') {
+    // v1.7.47：按五维评分排序——总分 null/缺失恒排尾，之后按 star 兜底。
+    const sc = (v: MarketEntry): number => (v.score?.total != null ? v.score.total : Number.NEGATIVE_INFINITY)
+    const dir = options.sort === 'score-desc' ? 1 : -1
+    sorted.sort((a, b) => {
+      const da = sc(a)
+      const db = sc(b)
       if (da !== db) return (db - da) * dir
       return ((b.stars ?? -1) - (a.stars ?? -1)) * dir
     })

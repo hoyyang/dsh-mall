@@ -777,7 +777,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         const needsConfig = detectNeedsConfig(readmeText)
         const parsed = parseInstallCommands(readmeText)
         const score = base !== null
-          ? enrichScore(base, readmeText, needsConfig, { stars: entry?.stars ?? null, pushedAt: entry?.pushed ?? null, curated: entry?.curated === true, verified: entry?.verified != null, bundled: entry?.bundled === true, description: entry?.description ?? '', license: entry?.license ?? null, topics: entry?.topics ?? [] })
+          ? enrichScore(base, readmeText, needsConfig, { stars: entry?.stars ?? null, pushedAt: entry?.pushed ?? null, curated: entry?.curated === true, verified: entry?.verified != null, bundled: entry?.bundled === true, description: entry?.description ?? '', license: entry?.license ?? null, topics: entry?.topics ?? [], hasHomepage: typeof entry?.homepage === 'string' && entry.homepage !== '' })
           : null
         out[repo] = { score, needsConfig, installCmds: parsed.commands, cmdSource: parsed.source }
       }

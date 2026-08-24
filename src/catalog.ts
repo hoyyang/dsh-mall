@@ -67,6 +67,9 @@ interface CdnRepo {
   description: string | null
   html_url: string
   stargazers_count: number
+  forks_count?: number | null
+  open_issues_count?: number | null
+  homepage?: string | null
   updated_at: string
   topics?: string[]
   license?: string | null
@@ -207,6 +210,9 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     descriptions: mergeDescriptions(knownEntry?.description, collectDescriptions(repo as unknown as Record<string, unknown>)),
     stars: repo.stargazers_count ?? null,
     todayStars: null,
+    forks: typeof repo.forks_count === 'number' ? repo.forks_count : null,
+    openIssues: typeof repo.open_issues_count === 'number' ? repo.open_issues_count : null,
+    homepage: typeof repo.homepage === 'string' && repo.homepage !== '' ? repo.homepage : null,
     // v1.7.28：收录日补全——awesome known 的 added 优先，否则回退索引 created_at。
     created: knownEntry?.added ?? (typeof repo.created_at === 'string' && repo.created_at !== '' ? repo.created_at : null),
     pushed: repo.updated_at ?? null,

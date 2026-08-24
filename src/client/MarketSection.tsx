@@ -110,7 +110,7 @@ export function MarketSection(props: SectionProps) {
   const [scannedOnly, setScannedOnly] = useState(false)
   const [skillOnly, setSkillOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
-  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
+  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads' | 'score'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const sort = (sortDim + '-' + sortDir) as SortKey
   const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
@@ -1239,6 +1239,7 @@ export function MarketSection(props: SectionProps) {
     { id: 'stars', label: t('sortStars') },
     { id: 'today', label: t('sortToday') },
     { id: 'downloads', label: t('sortDownloads') },
+    { id: 'score', label: t('sortScore') },
     { id: 'created', label: t('sortCreated') },
     { type: 'separator', id: 'dim-sep' },
     { type: 'label', id: 'dir-label', text: t('sortDir') },
@@ -1459,7 +1460,7 @@ export function MarketSection(props: SectionProps) {
             open={sortOpen}
             onClose={() => setSortOpen(false)}
             onSelect={id => {
-              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads') setSortDim(id)
+              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads' || id === 'score') setSortDim(id)
               else if (id === 'asc' || id === 'desc') setSortDir(id)
               setPage(1)
             }}
@@ -1652,7 +1653,7 @@ export function MarketSection(props: SectionProps) {
                         <RadarChart
                           breakdown={entry.score.breakdown}
                           total={entry.score.total}
-                          size={92}
+                          size={100}
                           labels={{
                             maintain: t('scoreDimMaintain'),
                             practical: t('scoreDimPractical'),

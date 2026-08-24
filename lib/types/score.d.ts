@@ -28,19 +28,24 @@ export interface ScoreView {
     /** 五维全部可得（卡片雷达图渲染门槛）。 */
     complete: boolean;
 }
-/** 1. 维护活跃：pushed 新鲜度（无 open_issues 数据，issue 健康度降级）。 */
-export declare function scoreMaintain(pushedAt: string | null): number | null;
+/** Wilson Score 置信区间下界（小样本比例的稳健估计，dsh.market 同款）。 */
+export declare function wilsonLowerBound(positives: number, total: number, z?: number): number;
+/** 1. 维护活跃：pushed 新鲜度×0.6 + issue 健康度×0.4。
+ *  openIssues 缺失（索引 v1.17 前无此字段）时 issue 健康度取中性 0.5 降级。 */
+export declare function scoreMaintain(pushedAt: string | null, stars: number | null, openIssues: number | null): number | null;
 /** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
 export declare function scorePractical(readme: string | null): number | null;
-/** 3. 生态热度：stars 对数归一化（p99 动态基准；无 forks 数据，fork 参与率降级）。 */
-export declare function scorePopularity(stars: number | null, p99Stars: number): number | null;
+/** 3. 生态热度：stars 对数归一化×0.6 + fork 参与率×0.4（理想区间 0.05-0.3，
+ *  过高(刷 fork)/过低(无人参与)都扣分）。forks 缺失时仅 star 分降级。 */
+export declare function scorePopularity(stars: number | null, forks: number | null, p99Stars: number): number | null;
 /** 4. 便捷度：README 有明确安装命令 + 无需额外配置（README 缺失时 null）。 */
 export declare function scoreEase(readme: string | null, needsConfig: boolean): number | null;
-/** 5. 信号质量：description/license/topics/README 完备度。 */
+/** 5. 信号质量：description/license/homepage/topics/README 完备度。 */
 export declare function scoreSignal(input: {
     hasDescription: boolean;
     descriptionLen: number;
     hasLicense: boolean;
+    hasHomepage: boolean;
     topics: string[];
     readme: string | null;
 }): number;
@@ -55,13 +60,18 @@ export declare function buildExplanation(breakdown: ScoreBreakdown, stars: numbe
 export interface ScoreInput {
     pushedAt: string | null;
     stars: number | null;
+    openIssues: number | null;
+    forks: number | null;
     hasDescription: boolean;
     descriptionLen: number;
     hasLicense: boolean;
+    hasHomepage: boolean;
     topics: string[];
     p99Stars: number;
 }
-/** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。 */
+/** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
+ *  v1.7.47：forks/open_issues/homepage 字段存在时按 dsh.market 全公式计算
+ *  （索引 v1.18 起提供；缺失时自动降级，不编造数据）。 */
 export declare function computeBaseScore(input: ScoreInput): ScoreView;
 /** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
  *  v1.7.46：signal 重算必须沿用原始字段（description/license/topics）——
@@ -75,6 +85,7 @@ export declare function enrichScore(base: ScoreView, readme: string | null, need
     description?: string;
     license?: string | null;
     topics?: string[];
+    hasHomepage?: boolean;
 }): ScoreView;
 /** 全量 stars 的 p99（动态基准，避免硬编码）。 */
 export declare function computeP99Stars(starsList: Array<number | null>): number;
@@ -85,5 +96,8 @@ export declare function attachScores(entries: Array<{
     license: string | null;
     description: string;
     topics: string[];
+    openIssues?: number | null;
+    forks?: number | null;
+    homepage?: string | null;
     score?: ScoreView | null;
 }>): void;

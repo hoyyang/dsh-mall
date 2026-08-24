@@ -38,14 +38,27 @@ function log1p(x: number): number {
   return Math.log(1 + x)
 }
 
-/** 1. 维护活跃：pushed 新鲜度（无 open_issues 数据，issue 健康度降级）。 */
-export function scoreMaintain(pushedAt: string | null): number | null {
+/** Wilson Score 置信区间下界（小样本比例的稳健估计，dsh.market 同款）。 */
+export function wilsonLowerBound(positives: number, total: number, z = 1.96): number {
+  if (total <= 0) return 0
+  const p = positives / total
+  const z2 = z * z
+  return (p + z2 / (2 * total) - z * Math.sqrt((p * (1 - p)) / total + z2 / (4 * total * total))) / (1 + z2 / total)
+}
+
+/** 1. 维护活跃：pushed 新鲜度×0.6 + issue 健康度×0.4。
+ *  openIssues 缺失（索引 v1.17 前无此字段）时 issue 健康度取中性 0.5 降级。 */
+export function scoreMaintain(pushedAt: string | null, stars: number | null, openIssues: number | null): number | null {
   if (pushedAt === null || pushedAt === '') return null
   const t = Date.parse(pushedAt)
   if (Number.isNaN(t)) return null
   const days = Math.max(0, (Date.now() - t) / 86_400_000)
   const commitActivity = days < 7 ? 1.0 : days < 30 ? 0.8 : days < 90 ? 0.5 : days < 180 ? 0.3 : 0.1
-  return Math.round(commitActivity * 100)
+  // issue 健康度：问题率越低越健康（小样本用 Wilson）
+  const issueHealth = openIssues === null || openIssues === undefined
+    ? 0.5
+    : 1 - Math.min(wilsonLowerBound(openIssues, Math.max(stars ?? 0, 1)) * 10, 1)
+  return Math.round(clip(commitActivity * 0.6 + issueHealth * 0.4) * 100)
 }
 
 /** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
@@ -64,11 +77,21 @@ export function scorePractical(readme: string | null): number | null {
   return Math.round(clip(s))
 }
 
-/** 3. 生态热度：stars 对数归一化（p99 动态基准；无 forks 数据，fork 参与率降级）。 */
-export function scorePopularity(stars: number | null, p99Stars: number): number | null {
+/** 3. 生态热度：stars 对数归一化×0.6 + fork 参与率×0.4（理想区间 0.05-0.3，
+ *  过高(刷 fork)/过低(无人参与)都扣分）。forks 缺失时仅 star 分降级。 */
+export function scorePopularity(stars: number | null, forks: number | null, p99Stars: number): number | null {
   if (stars === null || stars === undefined) return null
   const p99 = Math.max(p99Stars, 1)
-  return Math.round(clip(100 * (log1p(stars) / log1p(p99))))
+  const starScore = 100 * (log1p(stars) / log1p(p99))
+  if (forks === null || forks === undefined) return Math.round(clip(starScore))
+  const rate = forks / Math.max(stars, 1)
+  let forkScore: number
+  if (stars === 0) forkScore = 0
+  else if (rate <= 0.05) forkScore = (rate / 0.05) * 40
+  else if (rate <= 0.3) forkScore = 40 + ((rate - 0.05) / 0.25) * 50
+  else if (rate <= 0.5) forkScore = 90 - ((rate - 0.3) / 0.2) * 40
+  else forkScore = Math.max(10, 50 - (rate - 0.5) * 50)
+  return Math.round(clip(starScore * 0.6 + forkScore * 0.4))
 }
 
 /** 4. 便捷度：README 有明确安装命令 + 无需额外配置（README 缺失时 null）。 */
@@ -83,11 +106,12 @@ export function scoreEase(readme: string | null, needsConfig: boolean): number |
   return Math.round(clip(s))
 }
 
-/** 5. 信号质量：description/license/topics/README 完备度。 */
+/** 5. 信号质量：description/license/homepage/topics/README 完备度。 */
 export function scoreSignal(input: {
   hasDescription: boolean
   descriptionLen: number
   hasLicense: boolean
+  hasHomepage: boolean
   topics: string[]
   readme: string | null
 }): number {
@@ -95,6 +119,7 @@ export function scoreSignal(input: {
   if (input.hasDescription) s += 20
   if (input.descriptionLen > 60) s += 15
   if (input.hasLicense) s += 25
+  if (input.hasHomepage) s += 15
   if (input.topics.length > 0) s += 20
   if (input.readme !== null && input.readme.length > 100) s += 20
   return Math.round(clip(s))
@@ -185,18 +210,23 @@ export function buildExplanation(
 export interface ScoreInput {
   pushedAt: string | null
   stars: number | null
+  openIssues: number | null
+  forks: number | null
   hasDescription: boolean
   descriptionLen: number
   hasLicense: boolean
+  hasHomepage: boolean
   topics: string[]
   p99Stars: number
 }
 
-/** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。 */
+/** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
+ *  v1.7.47：forks/open_issues/homepage 字段存在时按 dsh.market 全公式计算
+ *  （索引 v1.18 起提供；缺失时自动降级，不编造数据）。 */
 export function computeBaseScore(input: ScoreInput): ScoreView {
-  const maintain = scoreMaintain(input.pushedAt)
-  const popularity = scorePopularity(input.stars, input.p99Stars)
-  const signal = scoreSignal({ hasDescription: input.hasDescription, descriptionLen: input.descriptionLen, hasLicense: input.hasLicense, topics: input.topics, readme: null })
+  const maintain = scoreMaintain(input.pushedAt, input.stars, input.openIssues)
+  const popularity = scorePopularity(input.stars, input.forks, input.p99Stars)
+  const signal = scoreSignal({ hasDescription: input.hasDescription, descriptionLen: input.descriptionLen, hasLicense: input.hasLicense, hasHomepage: input.hasHomepage, topics: input.topics, readme: null })
   const breakdown: ScoreBreakdown = { maintain, practical: null, popularity, ease: null, signal }
   const total = weightedGeometricMean(breakdown)
   const confidence = confidenceOf({ hasDescription: input.hasDescription, hasLicense: input.hasLicense, readme: null, topics: input.topics })
@@ -221,6 +251,7 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
   description?: string
   license?: string | null
   topics?: string[]
+  hasHomepage?: boolean
 } = {}): ScoreView {
   const practical = scorePractical(readme)
   const ease = scoreEase(readme, needsConfig)
@@ -231,6 +262,7 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
     hasDescription: description !== '',
     descriptionLen: description.length,
     hasLicense: typeof license === 'string' && license !== '',
+    hasHomepage: extras.hasHomepage === true,
     topics,
     readme,
   })
@@ -257,16 +289,29 @@ export function computeP99Stars(starsList: Array<number | null>): number {
 }
 
 /** 目录加载时为整批条目挂基础分（原地修改，返回同一数组）。 */
-export function attachScores(entries: Array<{ pushed: string | null; stars: number | null; license: string | null; description: string; topics: string[]; score?: ScoreView | null }>): void {
+export function attachScores(entries: Array<{
+  pushed: string | null
+  stars: number | null
+  license: string | null
+  description: string
+  topics: string[]
+  openIssues?: number | null
+  forks?: number | null
+  homepage?: string | null
+  score?: ScoreView | null
+}>): void {
   const p99 = computeP99Stars(entries.map(e => e.stars))
   for (const e of entries) {
     if (e.score !== undefined) continue
     e.score = computeBaseScore({
       pushedAt: e.pushed,
       stars: e.stars,
+      openIssues: typeof e.openIssues === 'number' ? e.openIssues : null,
+      forks: typeof e.forks === 'number' ? e.forks : null,
       hasDescription: typeof e.description === 'string' && e.description !== '',
       descriptionLen: typeof e.description === 'string' ? e.description.length : 0,
       hasLicense: typeof e.license === 'string' && e.license !== '',
+      hasHomepage: typeof e.homepage === 'string' && e.homepage !== '',
       topics: e.topics ?? [],
       p99Stars: p99,
     })

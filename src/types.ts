@@ -57,6 +57,12 @@ export interface MarketEntry {
   defaultBranch: string | null
   /** SPDX license id（索引 license 字段）。 */
   license: string | null
+  /** v1.7.47+：仓库 forks 数（索引 v1.18 起提供；评分热度维度）。 */
+  forks?: number | null
+  /** v1.7.47+：open issues 数（索引 v1.18 起提供；评分维护维度）。 */
+  openIssues?: number | null
+  /** v1.7.47+：仓库 homepage（索引 v1.18 起提供；评分信号维度）。 */
+  homepage?: string | null
   /** qing3a/dsh-plugin-verify 验证证据；null = 未验证。 */
   verified: { by: string; at: string; reportUrl: string | null } | null
   /** 合规披露（cloud/network/offlineMode/apiKeys/jurisdiction/retention）；null = 未披露。 */
