@@ -2,8 +2,8 @@
  * 五边形雷达图（v1.7.45 引入，借鉴 2BingLing/dsh-market RadarChart，MIT）：
  * 卡片右侧紧凑版（100px）+ 详情页评分卡大版（128px）。
  * 只渲染雷达，不渲染条状图。
- * v1.7.47：每个维度的分数直接标在数据顶点旁（清晰可读、深蓝加粗），
- * 轴标签留在外围。
+ * v1.7.48：每个维度的分数固定显示在维度文字旁边（同一条文字，分数加粗深蓝），
+ * 不再放到数据顶点旁（曾与文字重叠）。
  */
 import type { ScoreView } from './market-data.ts'
 
@@ -27,10 +27,6 @@ export default function RadarChart({ breakdown, total, size = 100, labels, total
     const a = (Math.PI * 2 * i) / 5 - Math.PI / 2
     return [cx + r * v * Math.cos(a), cy + r * v * Math.sin(a)]
   }
-  const unit = (i: number): [number, number] => {
-    const a = (Math.PI * 2 * i) / 5 - Math.PI / 2
-    return [Math.cos(a), Math.sin(a)]
-  }
   const poly = (v: number) =>
     ORDER.map((k, i) => pt(v, i).map(n => n.toFixed(1)).join(',')).join(' ')
   const dataPoly = ORDER.map((k, i) =>
@@ -47,28 +43,16 @@ export default function RadarChart({ breakdown, total, size = 100, labels, total
         {ORDER.map((k, i) => {
           const v = Math.max(0, (breakdown[k] ?? 0)) / 100
           const [x, y] = pt(v, i)
-          const [ux, uy] = unit(i)
-          const off = small ? 8 : 10
-          return (
-            <g key={k}>
-              <circle cx={x.toFixed(1)} cy={y.toFixed(1)} r={small ? 1.7 : 2} className="pcm-radar-dot" />
-              <text
-                x={(x + ux * off).toFixed(1)}
-                y={(y + uy * off + (small ? 2 : 2.6)).toFixed(1)}
-                textAnchor="middle"
-                className="pcm-radar-val"
-                fontSize={small ? 6.5 : 8.5}
-              >
-                {breakdown[k] === null ? '—' : String(breakdown[k])}
-              </text>
-            </g>
-          )
+          return <circle key={k} cx={x.toFixed(1)} cy={y.toFixed(1)} r={small ? 1.7 : 2} className="pcm-radar-dot" />
         })}
         {ORDER.map((k, i) => {
-          const [x, y] = pt(1.26, i)
+          // 文字+分数放在轴标签半径（比数据顶点略外），小尺寸/大尺寸分别取 1.18/1.14
+          // 防止左右顶点文字溢出画布。
+          const [x, y] = pt(small ? 1.18 : 1.14, i)
           return (
-            <text key={k} x={x.toFixed(1)} y={(y + (small ? 3 : 3.6)).toFixed(1)} textAnchor="middle" className="pcm-radar-label" fontSize={small ? 8 : 9}>
-              {labels[k]}
+            <text key={k} x={x.toFixed(1)} y={(y + (small ? 3 : 3.6)).toFixed(1)} textAnchor="middle" className="pcm-radar-label" fontSize={small ? 8 : 9.5}>
+              {labels[k] + ' '}
+              <tspan className="pcm-radar-val" fontWeight={700}>{breakdown[k] === null ? '—' : String(breakdown[k])}</tspan>
             </text>
           )
         })}

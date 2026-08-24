@@ -83,8 +83,8 @@ const en = {
 	skillChipHint: "Repos containing SKILL.md (skill-type plugins)",
 	skillBadge: "Skill",
 	skillBadgeHint: "Contains SKILL.md — a skill-type repo.",
-	scoreTitle: "Practical score",
-	scoreTotalLabel: "practical score",
+	scoreTitle: "Composite score",
+	scoreTotalLabel: "Composite",
 	scoreConfidence: "Confidence",
 	scoreDimMaintain: "Maintain",
 	scoreDimPractical: "Practical",
@@ -93,7 +93,7 @@ const en = {
 	scoreDimSignal: "Signal",
 	scoreWhyTitle: "Why recommended",
 	scorePending: "n/a",
-	scoreCardHint: "Five-dimension practical score (maintain/practical/popularity/ease/signal), weighted geometric mean × field confidence",
+	scoreCardHint: "Five-dimension composite score (maintain/practical/popularity/ease/signal), weighted geometric mean × field confidence",
 	readmeCmdsTitle: "README install commands",
 	readmeCmdsFromSection: "from the README install section",
 	readmeCmdsFromReadme: "from README",
@@ -361,8 +361,8 @@ const zh = {
 	skillChipHint: "仓库含 SKILL.md 的技能型插件",
 	skillBadge: "含 skill",
 	skillBadgeHint: "仓库含 SKILL.md，技能型仓库。",
-	scoreTitle: "实用评分",
-	scoreTotalLabel: "实用分",
+	scoreTitle: "综合评分",
+	scoreTotalLabel: "综合分",
 	scoreConfidence: "置信度",
 	scoreDimMaintain: "维护",
 	scoreDimPractical: "实用",
@@ -371,7 +371,7 @@ const zh = {
 	scoreDimSignal: "信号",
 	scoreWhyTitle: "为什么推荐",
 	scorePending: "待定",
-	scoreCardHint: "实用五维评分（维护/实用/热度/便捷/信号），加权几何平均 × 字段置信度",
+	scoreCardHint: "综合五维评分（维护/实用/热度/便捷/信号），加权几何平均 × 字段置信度",
 	readmeCmdsTitle: "README 安装命令",
 	readmeCmdsFromSection: "来自 README 安装章节",
 	readmeCmdsFromReadme: "来自 README 全文",
@@ -884,10 +884,6 @@ function RadarChart({ breakdown, total, size = 100, labels, totalLabel }) {
 		const a = Math.PI * 2 * i / 5 - Math.PI / 2;
 		return [cx + r * v * Math.cos(a), cy + r * v * Math.sin(a)];
 	};
-	const unit = (i) => {
-		const a = Math.PI * 2 * i / 5 - Math.PI / 2;
-		return [Math.cos(a), Math.sin(a)];
-	};
 	const poly = (v) => ORDER.map((k, i) => pt(v, i).map((n) => n.toFixed(1)).join(",")).join(" ");
 	const dataPoly = ORDER.map((k, i) => pt(Math.max(0, breakdown[k] ?? 0) / 100, i).map((n) => n.toFixed(1)).join(",")).join(" ");
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
@@ -919,31 +915,26 @@ function RadarChart({ breakdown, total, size = 100, labels, totalLabel }) {
 				ORDER.map((k, i) => {
 					const v = Math.max(0, breakdown[k] ?? 0) / 100;
 					const [x, y] = pt(v, i);
-					const [ux, uy] = unit(i);
-					const off = small ? 8 : 10;
-					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("circle", {
+					return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("circle", {
 						cx: x.toFixed(1),
 						cy: y.toFixed(1),
 						r: small ? 1.7 : 2,
 						className: "pcm-radar-dot"
-					}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
-						x: (x + ux * off).toFixed(1),
-						y: (y + uy * off + (small ? 2 : 2.6)).toFixed(1),
-						textAnchor: "middle",
-						className: "pcm-radar-val",
-						fontSize: small ? 6.5 : 8.5,
-						children: breakdown[k] === null ? "—" : String(breakdown[k])
-					})] }, k);
+					}, k);
 				}),
 				ORDER.map((k, i) => {
-					const [x, y] = pt(1.26, i);
-					return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
+					const [x, y] = pt(small ? 1.18 : 1.14, i);
+					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("text", {
 						x: x.toFixed(1),
 						y: (y + (small ? 3 : 3.6)).toFixed(1),
 						textAnchor: "middle",
 						className: "pcm-radar-label",
-						fontSize: small ? 8 : 9,
-						children: labels[k]
+						fontSize: small ? 8 : 9.5,
+						children: [labels[k] + " ", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("tspan", {
+							className: "pcm-radar-val",
+							fontWeight: 700,
+							children: breakdown[k] === null ? "—" : String(breakdown[k])
+						})]
 					}, k);
 				}),
 				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
