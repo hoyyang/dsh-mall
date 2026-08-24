@@ -31,7 +31,7 @@ import {
   type MarketEntry, type PluginKind, type Registry, type SortKey,
 } from './market-data.ts'
 import { DetailPanel } from './DetailPanel.tsx'
-import RadarChart from './Radar.tsx'
+import RadarChart from './RadarChart.tsx'
 import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
 import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
@@ -1653,7 +1653,7 @@ export function MarketSection(props: SectionProps) {
                         <RadarChart
                           breakdown={entry.score.breakdown}
                           total={entry.score.total}
-                          size={100}
+                          size={120}
                           labels={{
                             maintain: t('scoreDimMaintain'),
                             practical: t('scoreDimPractical'),

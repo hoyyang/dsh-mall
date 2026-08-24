@@ -867,7 +867,7 @@ function avatarColor(name) {
 	return "hsl(" + (hash % 360 + 360) % 360 + " 55% 52%)";
 }
 //#endregion
-//#region src/client/Radar.tsx
+//#region src/client/RadarChart.tsx
 const ORDER = [
 	"maintain",
 	"practical",
@@ -875,17 +875,21 @@ const ORDER = [
 	"ease",
 	"signal"
 ];
-function RadarChart({ breakdown, total, size = 100, labels, totalLabel }) {
-	const small = size < 110;
+function RadarChart({ breakdown, total, size = 120, labels, totalLabel }) {
+	const small = size < 128;
 	const cx = size / 2;
 	const cy = size / 2;
-	const r = size * .3;
+	const r = size * .28;
 	const pt = (v, i) => {
 		const a = Math.PI * 2 * i / 5 - Math.PI / 2;
 		return [cx + r * v * Math.cos(a), cy + r * v * Math.sin(a)];
 	};
 	const poly = (v) => ORDER.map((k, i) => pt(v, i).map((n) => n.toFixed(1)).join(",")).join(" ");
 	const dataPoly = ORDER.map((k, i) => pt(Math.max(0, breakdown[k] ?? 0) / 100, i).map((n) => n.toFixed(1)).join(",")).join(" ");
+	const nameFont = small ? 7.5 : 9.5;
+	const valFont = small ? 8 : 10.5;
+	const nameR = 1.05;
+	const valR = 1.59;
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 		className: "pcm-radar",
 		style: {
@@ -918,36 +922,40 @@ function RadarChart({ breakdown, total, size = 100, labels, totalLabel }) {
 					return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("circle", {
 						cx: x.toFixed(1),
 						cy: y.toFixed(1),
-						r: small ? 1.7 : 2,
+						r: small ? 1.6 : 2,
 						className: "pcm-radar-dot"
 					}, k);
 				}),
 				ORDER.map((k, i) => {
-					const [x, y] = pt(small ? 1.18 : 1.14, i);
-					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("text", {
-						x: x.toFixed(1),
-						y: (y + (small ? 3 : 3.6)).toFixed(1),
+					const [nx, ny] = pt(nameR, i);
+					const [vx, vy] = pt(valR, i);
+					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
+						x: nx.toFixed(1),
+						y: (ny + (small ? 2.6 : 3.4)).toFixed(1),
 						textAnchor: "middle",
 						className: "pcm-radar-label",
-						fontSize: small ? 8 : 9.5,
-						children: [labels[k] + " ", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("tspan", {
-							className: "pcm-radar-val",
-							fontWeight: 700,
-							children: breakdown[k] === null ? "—" : String(breakdown[k])
-						})]
-					}, k);
+						fontSize: nameFont,
+						children: labels[k]
+					}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
+						x: vx.toFixed(1),
+						y: (vy + (small ? 3 : 3.8)).toFixed(1),
+						textAnchor: "middle",
+						className: "pcm-radar-val",
+						fontSize: valFont,
+						children: breakdown[k] === null ? "—" : String(breakdown[k])
+					})] }, k);
 				}),
 				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
 					x: cx,
-					y: cy - (small ? 2 : 3),
+					y: cy - (small ? 2.5 : 3),
 					textAnchor: "middle",
 					className: "pcm-radar-total",
-					fontSize: small ? 16 : 20,
+					fontSize: small ? 15 : 21,
 					children: total === null ? "—" : String(total)
 				}),
 				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
 					x: cx,
-					y: cy + (small ? 11 : 14),
+					y: cy + (small ? 10.5 : 13.5),
 					textAnchor: "middle",
 					className: "pcm-radar-total-label",
 					fontSize: small ? 7.5 : 9,
@@ -1397,7 +1405,7 @@ function DetailPanel(props) {
 								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(RadarChart, {
 									breakdown: score.breakdown,
 									total: score.total,
-									size: 128,
+									size: 140,
 									labels: {
 										maintain: t("scoreDimMaintain"),
 										practical: t("scoreDimPractical"),
@@ -4118,7 +4126,7 @@ function MarketSection(props) {
 										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(RadarChart, {
 											breakdown: entry.score.breakdown,
 											total: entry.score.total,
-											size: 100,
+											size: 120,
 											labels: {
 												maintain: t("scoreDimMaintain"),
 												practical: t("scoreDimPractical"),

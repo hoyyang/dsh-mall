@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
-import RadarChart from './Radar.tsx'
+import RadarChart from './RadarChart.tsx'
 
 interface ReadmeHit {
   status: 'ok' | 'error' | 'loading'
@@ -390,7 +390,7 @@ export function DetailPanel(props: {
                 <RadarChart
                   breakdown={score.breakdown}
                   total={score.total}
-                  size={128}
+                  size={140}
                   labels={{
                     maintain: t('scoreDimMaintain'),
                     practical: t('scoreDimPractical'),
