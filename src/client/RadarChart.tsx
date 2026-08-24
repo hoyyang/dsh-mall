@@ -1,9 +1,8 @@
 /**
  * 五边形雷达图（v1.7.45 引入，借鉴 2BingLing/dsh-market RadarChart，MIT）：
  * 卡片右侧版（120px）+ 详情页评分卡版（140px）。只渲染雷达，不渲染条状图。
- * v1.7.49：两行式标注——维度名一行（灰）+ 分数一行（深蓝加粗），分数固定在
- * 维度名正下方；标签半径 1.10/1.38 拉开与五边形边线的间距（此前 1.16/1.32
- * 文字贴边线被误读为"被图挡"）；画布 100→120（详情 128→140）增大留白。
+ * v1.7.50：标签单行「名称 分数」，整体外移到 1.26r/1.22r——名称文字内侧
+ * 与五边形边线（1.0r）保持 ≥3.5px 净距（此前 1.05r 文字骑在边线上被挡）。
  */
 import type { ScoreView } from './market-data.ts'
 
@@ -33,10 +32,8 @@ export default function RadarChart({ breakdown, total, size = 120, labels, total
     pt(Math.max(0, (breakdown[k] ?? 0)) / 100, i).map(n => n.toFixed(1)).join(',')
   ).join(' ')
 
-  const nameFont = small ? 7.5 : 9.5
-  const valFont = small ? 8 : 10.5
-  const nameR = 1.05
-  const valR = 1.59
+  const labelR = small ? 1.26 : 1.22
+  const font = small ? 8 : 9.5
 
   return (
     <div className="pcm-radar" style={{ width: size, height: size }}>
@@ -51,20 +48,12 @@ export default function RadarChart({ breakdown, total, size = 120, labels, total
           return <circle key={k} cx={x.toFixed(1)} cy={y.toFixed(1)} r={small ? 1.6 : 2} className="pcm-radar-dot" />
         })}
         {ORDER.map((k, i) => {
-          // 维度名与分数上下两行：名称在内圈（1.10r）、分数在外圈（1.38r），
-          // 两行基线相差约 0.28r ≈ 10px（120px 画布），互不重叠；
-          // 名称与五边形边线（1.0r）间距 0.10r ≈ 3.6px 起，不再贴线。
-          const [nx, ny] = pt(nameR, i)
-          const [vx, vy] = pt(valR, i)
+          const [x, y] = pt(labelR, i)
           return (
-            <g key={k}>
-              <text x={nx.toFixed(1)} y={(ny + (small ? 2.6 : 3.4)).toFixed(1)} textAnchor="middle" className="pcm-radar-label" fontSize={nameFont}>
-                {labels[k]}
-              </text>
-              <text x={vx.toFixed(1)} y={(vy + (small ? 3 : 3.8)).toFixed(1)} textAnchor="middle" className="pcm-radar-val" fontSize={valFont}>
-                {breakdown[k] === null ? '—' : String(breakdown[k])}
-              </text>
-            </g>
+            <text key={k} x={x.toFixed(1)} y={(y + (small ? 2.6 : 3.4)).toFixed(1)} textAnchor="middle" className="pcm-radar-label" fontSize={font}>
+              {labels[k] + ' '}
+              <tspan className="pcm-radar-val" fontWeight={700} fontSize={small ? 8 : 10.5}>{breakdown[k] === null ? '—' : String(breakdown[k])}</tspan>
+            </text>
           )
         })}
         <text x={cx} y={cy - (small ? 2.5 : 3)} textAnchor="middle" className="pcm-radar-total" fontSize={small ? 15 : 21}>

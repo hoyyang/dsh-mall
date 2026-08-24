@@ -65,6 +65,16 @@ export interface MarketEntry {
     openIssues?: number | null;
     /** v1.7.47+：仓库 homepage（索引 v1.18 起提供；评分信号维度）。 */
     homepage?: string | null;
+    /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷两维静态数据源；
+     *  字段齐全时目录加载即可算完整五维，无需运行时拉 README）。 */
+    readmeSig?: {
+        len: number | null;
+        installSection: boolean;
+        codeBlocks: number;
+        heading: boolean;
+        cmds: string[];
+        needsConfig: boolean;
+    } | null;
     /** qing3a/dsh-plugin-verify 验证证据；null = 未验证。 */
     verified: {
         by: string;

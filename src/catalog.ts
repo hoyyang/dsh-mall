@@ -85,6 +85,13 @@ interface CdnRepo {
   npm_linked?: boolean | null
   dormant?: boolean | null
   has_skill?: boolean | null
+  /** v1.19+：README 结构信号（评分实用/便捷静态数据源）。 */
+  readme_len?: number | null
+  readme_install_section?: boolean
+  readme_code_blocks?: number
+  readme_heading?: boolean
+  readme_cmds?: string[]
+  readme_needs_config?: boolean
   version?: string | null
   /** 索引 v1.10：GitHub tags 最新 tag（npm 未发布仓库的版本号展示）。 */
   latest_tag?: string | null
@@ -245,6 +252,16 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     npmLinked: typeof repo.npm_linked === 'boolean' ? repo.npm_linked : null,
     dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
     hasSkill: typeof repo.has_skill === 'boolean' ? repo.has_skill : null,
+    readmeSig: typeof repo.readme_len === 'number'
+      ? {
+          len: repo.readme_len,
+          installSection: repo.readme_install_section === true,
+          codeBlocks: typeof repo.readme_code_blocks === 'number' ? repo.readme_code_blocks : 0,
+          heading: repo.readme_heading === true,
+          cmds: Array.isArray(repo.readme_cmds) ? repo.readme_cmds.slice(0, 3).map(String) : [],
+          needsConfig: repo.readme_needs_config === true,
+        }
+      : null,
   }
 }
 

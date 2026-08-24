@@ -61,6 +61,18 @@ export function scoreMaintain(pushedAt: string | null, stars: number | null, ope
   return Math.round(clip(commitActivity * 0.6 + issueHealth * 0.4) * 100)
 }
 
+/** 2a. 实用度（索引 CI 结构信号版）：len/安装章节/代码块，零网络。 */
+export function scorePracticalFromSig(sig: { len: number | null; installSection: boolean; codeBlocks: number }): number | null {
+  if (sig.len === null) return null
+  let s = 0
+  if (sig.len > 2000) s += 30
+  else if (sig.len > 500) s += 20
+  else if (sig.len > 0) s += 10
+  if (sig.installSection) s += 30
+  if (sig.codeBlocks >= 2) s += 20
+  return Math.round(clip(s))
+}
+
 /** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
 export function scorePractical(readme: string | null): number | null {
   if (readme === null) return null
@@ -92,6 +104,17 @@ export function scorePopularity(stars: number | null, forks: number | null, p99S
   else if (rate <= 0.5) forkScore = 90 - ((rate - 0.3) / 0.2) * 40
   else forkScore = Math.max(10, 50 - (rate - 0.5) * 50)
   return Math.round(clip(starScore * 0.6 + forkScore * 0.4))
+}
+
+/** 4a. 便捷度（索引 CI 结构信号版）：安装命令/无需配置/结构说明，零网络。 */
+export function scoreEaseFromSig(sig: { cmds: string[]; installSection: boolean; heading: boolean; len: number | null; needsConfig: boolean }): number | null {
+  if (sig.len === null) return null
+  let s = 0
+  if (sig.cmds.length > 0) s += 35
+  else if (sig.installSection) s += 15
+  if (!sig.needsConfig) s += 35
+  if (sig.heading && sig.len > 100) s += 30
+  return Math.round(clip(s))
 }
 
 /** 4. 便捷度：README 有明确安装命令 + 无需额外配置（README 缺失时 null）。 */
@@ -218,6 +241,8 @@ export interface ScoreInput {
   hasHomepage: boolean
   topics: string[]
   p99Stars: number
+  /** v1.7.50+：索引 CI README 结构信号（有则实用/便捷两维零网络可算）。 */
+  readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
 }
 
 /** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
@@ -227,15 +252,20 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
   const maintain = scoreMaintain(input.pushedAt, input.stars, input.openIssues)
   const popularity = scorePopularity(input.stars, input.forks, input.p99Stars)
   const signal = scoreSignal({ hasDescription: input.hasDescription, descriptionLen: input.descriptionLen, hasLicense: input.hasLicense, hasHomepage: input.hasHomepage, topics: input.topics, readme: null })
-  const breakdown: ScoreBreakdown = { maintain, practical: null, popularity, ease: null, signal }
+  // v1.7.50：索引 CI README 信号在场时实用/便捷零网络可算，五维当场齐全。
+  const sig = input.readmeSig ?? null
+  const practical = sig !== null ? scorePracticalFromSig(sig) : null
+  const ease = sig !== null ? scoreEaseFromSig(sig) : null
+  const breakdown: ScoreBreakdown = { maintain, practical, popularity, ease, signal }
   const total = weightedGeometricMean(breakdown)
-  const confidence = confidenceOf({ hasDescription: input.hasDescription, hasLicense: input.hasLicense, readme: null, topics: input.topics })
+  const confidence = confidenceOf({ hasDescription: input.hasDescription, hasLicense: input.hasLicense, readme: sig !== null ? 'sig' : null, topics: input.topics })
+  const complete = maintain !== null && practical !== null && popularity !== null && ease !== null
   return {
     total: total === null ? null : Math.round(clip(total * confidence)),
     breakdown,
     confidence: Math.round(confidence * 100) / 100,
     explanation: buildExplanation(breakdown, input.stars, input.pushedAt),
-    complete: false,
+    complete,
   }
 }
 
@@ -298,6 +328,7 @@ export function attachScores(entries: Array<{
   openIssues?: number | null
   forks?: number | null
   homepage?: string | null
+  readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
   score?: ScoreView | null
 }>): void {
   const p99 = computeP99Stars(entries.map(e => e.stars))
@@ -314,6 +345,7 @@ export function attachScores(entries: Array<{
       hasHomepage: typeof e.homepage === 'string' && e.homepage !== '',
       topics: e.topics ?? [],
       p99Stars: p99,
+      readmeSig: e.readmeSig ?? null,
     })
   }
 }

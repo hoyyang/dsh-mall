@@ -886,10 +886,8 @@ function RadarChart({ breakdown, total, size = 120, labels, totalLabel }) {
 	};
 	const poly = (v) => ORDER.map((k, i) => pt(v, i).map((n) => n.toFixed(1)).join(",")).join(" ");
 	const dataPoly = ORDER.map((k, i) => pt(Math.max(0, breakdown[k] ?? 0) / 100, i).map((n) => n.toFixed(1)).join(",")).join(" ");
-	const nameFont = small ? 7.5 : 9.5;
-	const valFont = small ? 8 : 10.5;
-	const nameR = 1.05;
-	const valR = 1.59;
+	const labelR = small ? 1.26 : 1.22;
+	const font = small ? 8 : 9.5;
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 		className: "pcm-radar",
 		style: {
@@ -927,23 +925,20 @@ function RadarChart({ breakdown, total, size = 120, labels, totalLabel }) {
 					}, k);
 				}),
 				ORDER.map((k, i) => {
-					const [nx, ny] = pt(nameR, i);
-					const [vx, vy] = pt(valR, i);
-					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("g", { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
-						x: nx.toFixed(1),
-						y: (ny + (small ? 2.6 : 3.4)).toFixed(1),
+					const [x, y] = pt(labelR, i);
+					return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("text", {
+						x: x.toFixed(1),
+						y: (y + (small ? 2.6 : 3.4)).toFixed(1),
 						textAnchor: "middle",
 						className: "pcm-radar-label",
-						fontSize: nameFont,
-						children: labels[k]
-					}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
-						x: vx.toFixed(1),
-						y: (vy + (small ? 3 : 3.8)).toFixed(1),
-						textAnchor: "middle",
-						className: "pcm-radar-val",
-						fontSize: valFont,
-						children: breakdown[k] === null ? "—" : String(breakdown[k])
-					})] }, k);
+						fontSize: font,
+						children: [labels[k] + " ", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("tspan", {
+							className: "pcm-radar-val",
+							fontWeight: 700,
+							fontSize: small ? 8 : 10.5,
+							children: breakdown[k] === null ? "—" : String(breakdown[k])
+						})]
+					}, k);
 				}),
 				/* @__PURE__ */ (0, react_jsx_runtime.jsx)("text", {
 					x: cx,

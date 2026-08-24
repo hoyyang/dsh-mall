@@ -33,11 +33,25 @@ export declare function wilsonLowerBound(positives: number, total: number, z?: n
 /** 1. 维护活跃：pushed 新鲜度×0.6 + issue 健康度×0.4。
  *  openIssues 缺失（索引 v1.17 前无此字段）时 issue 健康度取中性 0.5 降级。 */
 export declare function scoreMaintain(pushedAt: string | null, stars: number | null, openIssues: number | null): number | null;
+/** 2a. 实用度（索引 CI 结构信号版）：len/安装章节/代码块，零网络。 */
+export declare function scorePracticalFromSig(sig: {
+    len: number | null;
+    installSection: boolean;
+    codeBlocks: number;
+}): number | null;
 /** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
 export declare function scorePractical(readme: string | null): number | null;
 /** 3. 生态热度：stars 对数归一化×0.6 + fork 参与率×0.4（理想区间 0.05-0.3，
  *  过高(刷 fork)/过低(无人参与)都扣分）。forks 缺失时仅 star 分降级。 */
 export declare function scorePopularity(stars: number | null, forks: number | null, p99Stars: number): number | null;
+/** 4a. 便捷度（索引 CI 结构信号版）：安装命令/无需配置/结构说明，零网络。 */
+export declare function scoreEaseFromSig(sig: {
+    cmds: string[];
+    installSection: boolean;
+    heading: boolean;
+    len: number | null;
+    needsConfig: boolean;
+}): number | null;
 /** 4. 便捷度：README 有明确安装命令 + 无需额外配置（README 缺失时 null）。 */
 export declare function scoreEase(readme: string | null, needsConfig: boolean): number | null;
 /** 5. 信号质量：description/license/homepage/topics/README 完备度。 */
@@ -68,6 +82,15 @@ export interface ScoreInput {
     hasHomepage: boolean;
     topics: string[];
     p99Stars: number;
+    /** v1.7.50+：索引 CI README 结构信号（有则实用/便捷两维零网络可算）。 */
+    readmeSig?: {
+        len: number | null;
+        installSection: boolean;
+        codeBlocks: number;
+        heading: boolean;
+        cmds: string[];
+        needsConfig: boolean;
+    } | null;
 }
 /** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
  *  v1.7.47：forks/open_issues/homepage 字段存在时按 dsh.market 全公式计算
@@ -99,5 +122,13 @@ export declare function attachScores(entries: Array<{
     openIssues?: number | null;
     forks?: number | null;
     homepage?: string | null;
+    readmeSig?: {
+        len: number | null;
+        installSection: boolean;
+        codeBlocks: number;
+        heading: boolean;
+        cmds: string[];
+        needsConfig: boolean;
+    } | null;
     score?: ScoreView | null;
 }>): void;

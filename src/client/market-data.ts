@@ -67,6 +67,15 @@ export interface MarketEntry {
   installCmds?: string[] | null
   /** installCmds 来源：readme-section / readme / template。 */
   cmdSource?: string | null
+  /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷静态数据源）。 */
+  readmeSig?: {
+    len: number | null
+    installSection: boolean
+    codeBlocks: number
+    heading: boolean
+    cmds: string[]
+    needsConfig: boolean
+  } | null
   /** v1.7.45+：实用五维评分（目录加载基础分；页级富化后补全并 complete）。 */
   score?: ScoreView | null
 }
