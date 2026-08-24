@@ -65,6 +65,10 @@ export interface MarketEntry {
   homepage?: string | null
   /** v1.7.52+：中文功能标签（tags.json 手动 LLM 打标产物，CDN 分发）。 */
   tagsZh?: string[]
+  /** v1.7.53+：英文功能标签（多语言打标产物）。 */
+  tagsEn?: string[]
+  /** v1.7.53+：多语言打标简介（lang → 一句话简介）。 */
+  tagDescriptions?: Record<string, string>
   /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷两维静态数据源；
    *  字段齐全时目录加载即可算完整五维，无需运行时拉 README）。 */
   readmeSig?: {

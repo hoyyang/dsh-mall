@@ -12,10 +12,13 @@ export declare const CATEGORIES: Record<string, {
 }>;
 export declare function setKnownOverride(map: KnownMap | null): void;
 export declare function setTagsOverride(map: Record<string, {
-    descriptionZh: string;
+    descriptions: Record<string, string>;
     tagsZh: string[];
+    tagsEn: string[];
 }> | null): void;
 export declare function tagsOf(key: string): string[];
+export declare function tagsEnOf(key: string): string[];
+export declare function tagDescriptionsOf(key: string): Record<string, string>;
 export declare function loadKnown(): KnownMap;
 export declare function stateFile(profile: string): string;
 export declare function readState(profile: string): MarketState;

@@ -699,7 +699,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       try {
-        const items = await recommendFor(config.profile, config.githubToken, 8)
+        const items = await recommendFor(config.profile, config.githubToken, 10)
         sendJson(response, 200, { ok: true, items })
       } catch (err) {
         sendJson(response, 200, { ok: true, items: [], error: err instanceof Error ? err.message : 'recommend failed' })

@@ -7,6 +7,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { storeLang } from './locales.ts'
 import { createPortal } from 'react-dom'
 import { Button, IconCloseOutline16, IconGlobeOutline14, IconLoadingOutline16, IconSettingsOutline16, Menu, type MenuEntry } from '@deepseek-ai/dsh-client-ui-primitives'
 import { MarketSection } from './MarketSection.tsx'
@@ -79,6 +80,8 @@ export function closeSettingsWindow(): void {
 /** 唯一商店浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
 export function StoreSingleton(props: { t: (key: string) => string; locale: LocaleLike }) {
   const state = useSyncExternalStore(subscribeStore, () => storeState)
+  // v1.7.53：商店 UI 语言切换时重渲染整个浮窗（含设置页/任务面板）
+  useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   if (!state.mounted) return null
   return (
     <StoreWindow
@@ -136,6 +139,8 @@ export function SettingsSection(props: {
 /** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗；
  *  也监听 window 事件 'dsh-store-open-results'（智能搜索直接带 payload 弹窗）。 */
 export function StoreResultsLauncher(props: { t: (key: string) => string; locale: LocaleLike }) {
+  // v1.7.53：UI 语言切换重渲染结果浮窗
+  useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   const [token, setToken] = useState<string | null>(null)
   const [direct, setDirect] = useState<ResultsPayload | null>(null)
   const onClick = useCallback((e: MouseEvent) => {

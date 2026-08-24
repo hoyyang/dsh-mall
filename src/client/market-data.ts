@@ -69,6 +69,10 @@ export interface MarketEntry {
   cmdSource?: string | null
   /** v1.7.52+：中文功能标签（tags.json 手动 LLM 打标产物）。 */
   tagsZh?: string[]
+  /** v1.7.53+：英文功能标签（多语言打标产物）。 */
+  tagsEn?: string[]
+  /** v1.7.53+：多语言打标简介（lang → 一句话简介，显示优先）。 */
+  tagDescriptions?: Record<string, string>
   /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷静态数据源）。 */
   readmeSig?: {
     len: number | null

@@ -253,6 +253,8 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
     hasSkill: typeof repo.has_skill === 'boolean' ? repo.has_skill : null,
     tagsZh: tagsOf(repo.full_name ?? key),
+    tagsEn: tagsEnOf(repo.full_name ?? key),
+    tagDescriptions: tagDescriptionsOf(repo.full_name ?? key),
     readmeSig: typeof repo.readme_len === 'number'
       ? {
           len: repo.readme_len,
@@ -390,16 +392,26 @@ export function setKnownOverride(map: KnownMap | null): void {
 }
 
 // ------------------------------------------------------------------ tags.ts
-/** 中文打标覆盖（tags.json，手动 LLM 打标产物）：owner/repo → {descriptionZh, tagsZh}。 */
-let tagsOverrideMap: Record<string, { descriptionZh: string; tagsZh: string[] }> | null = null
+/** 打标覆盖（tags.json，手动 LLM 多语言打标产物）：owner/repo → {descriptions, tagsZh, tagsEn}。 */
+let tagsOverrideMap: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> | null = null
 
-export function setTagsOverride(map: Record<string, { descriptionZh: string; tagsZh: string[] }> | null): void {
+export function setTagsOverride(map: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> | null): void {
   tagsOverrideMap = map
 }
 
 export function tagsOf(key: string): string[] {
   const hit = tagsOverrideMap?.[key.toLowerCase()]
   return hit !== undefined ? hit.tagsZh : []
+}
+
+export function tagsEnOf(key: string): string[] {
+  const hit = tagsOverrideMap?.[key.toLowerCase()]
+  return hit !== undefined ? hit.tagsEn : []
+}
+
+export function tagDescriptionsOf(key: string): Record<string, string> {
+  const hit = tagsOverrideMap?.[key.toLowerCase()]
+  return hit !== undefined ? hit.descriptions : {}
 }
 export function loadKnown(): KnownMap {
   if (knownOverride !== null) return knownOverride
@@ -749,6 +761,8 @@ function buildEntry(
     installable: null,
     topics: search?.topics ?? [],
     tagsZh: tagsOf(fullName),
+    tagsEn: tagsEnOf(fullName),
+    tagDescriptions: tagDescriptionsOf(fullName),
   }
 }
 

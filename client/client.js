@@ -228,6 +228,7 @@ const en = {
 	detailStars: "Stars",
 	detailCreated: "Published",
 	detailLanguage: "Language",
+	detailCategory: "Category",
 	detailLicense: "License",
 	detailTopics: "Topics",
 	detailInstall: "Install",
@@ -507,6 +508,7 @@ const zh = {
 	detailStars: "Star",
 	detailCreated: "发布时间",
 	detailLanguage: "语言",
+	detailCategory: "分类",
 	detailLicense: "许可证",
 	detailTopics: "主题标签",
 	detailInstall: "安装",
@@ -595,6 +597,40 @@ const zh = {
 	smartSearching: "搜索中…",
 	smartSearchEmpty: "请先在搜索框里输入你的需求。"
 };
+let uiLang = null;
+const langListeners = /* @__PURE__ */ new Set();
+const storeLang = {
+	init(l) {
+		if (uiLang !== null) return;
+		try {
+			const saved = localStorage.getItem("dsh-store-uilang");
+			uiLang = saved === "zh" || saved === "en" ? saved : l;
+		} catch {
+			uiLang = l;
+		}
+	},
+	get() {
+		return uiLang ?? "zh";
+	},
+	set(l) {
+		if (uiLang === l) return;
+		uiLang = l;
+		try {
+			localStorage.setItem("dsh-store-uilang", l);
+		} catch {}
+		for (const fn of langListeners) fn();
+	},
+	subscribe(fn) {
+		langListeners.add(fn);
+		return () => {
+			langListeners.delete(fn);
+		};
+	}
+};
+/** 按当前商店 UI 语言取词条（缺 zh/en 兜底原 key）。 */
+function storeT(key) {
+	return (storeLang.get() === "zh" ? zh : en)[key] ?? en[key] ?? key;
+}
 //#endregion
 //#region src/client/SettingsCard.tsx
 /**
@@ -1132,7 +1168,7 @@ function DetailPanel(props) {
 		readmeLang
 	]);
 	const readme = useReadme(entry, readmeLang);
-	const desc = readmeLang !== "en" && entry.descriptions?.[readmeLang] ? entry.descriptions[readmeLang] : entry.description;
+	const desc = entry.tagDescriptions?.[readmeLang] && entry.tagDescriptions[readmeLang] !== "" ? entry.tagDescriptions[readmeLang] : readmeLang !== "en" && entry.descriptions?.[readmeLang] ? entry.descriptions[readmeLang] : entry.description;
 	const disclosure = entry.disclosure;
 	const discLines = (0, react.useMemo)(() => disclosure == null ? [] : disclosureSummary(disclosure, t), [disclosure, t]);
 	const [copied, setCopied] = (0, react.useState)(false);
@@ -1186,6 +1222,9 @@ function DetailPanel(props) {
 		[t("detailCreated"), entry.created === null ? null : relativeFromNow(entry.created, t)],
 		[t("updatedShort"), entry.pushed === null ? null : relativeFromNow(entry.pushed, t)],
 		[t("detailLanguage"), entry.language],
+		[t("detailCategory"), entry.category === "other" ? null : entry.category],
+		[t("downloads30Label"), typeof entry.downloads === "number" ? formatDownloads(entry.downloads) : null],
+		[t("totalDownloadsLabel"), typeof entry.totalDownloads === "number" ? formatDownloads(entry.totalDownloads) : null],
 		[t("detailLicense"), entry.license]
 	].filter(([, v]) => v !== null && v !== "");
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
@@ -1251,20 +1290,27 @@ function DetailPanel(props) {
 									})
 								}),
 								readmeLangs.length > 1 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
-									className: "pcm-lang-select-wrap",
+									className: "pcm-lang-btn pcm-lang-btn-detail",
 									title: t("langToggle"),
-									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-lang-flag",
-										children: "🌐"
-									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("select", {
-										className: "pcm-lang-select",
-										value: readmeLang,
-										onChange: (e) => setReadmeLang(e.target.value),
-										children: readmeLangs.map((l) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
-											value: l,
-											children: LANG_LABELS[l] ?? l
-										}, l))
-									})]
+									children: [
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-lang-flag",
+											children: "🌐"
+										}),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("select", {
+											className: "pcm-lang-select",
+											value: readmeLang,
+											onChange: (e) => setReadmeLang(e.target.value),
+											children: readmeLangs.map((l) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
+												value: l,
+												children: LANG_LABELS[l] ?? l
+											}, l))
+										}),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-lang-caret",
+											"aria-hidden": "true"
+										})
+									]
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: "pcm-detail-actions",
@@ -1414,6 +1460,87 @@ function DetailPanel(props) {
 								})
 							})]
 						}),
+						/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+							className: "pcm-detail-sec",
+							children: [
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+									className: "pcm-detail-sec-title",
+									children: t("detailInstall")
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-detail-cmdrow",
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+										className: "pcm-cmd",
+										children: entry.npm !== null ? "dsh plugin add " + entry.npm : "dsh plugin add github:" + entry.owner + "/" + entry.name
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
+										label: copied ? t("publishCopied") : t("detailCopy"),
+										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "ghost",
+											size: "sm",
+											icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutline16, { size: 14 }),
+											onClick: copyCmd
+										})
+									})]
+								}),
+								(readme.installCmds ?? []).length > 0 ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-readme-cmds",
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-readme-cmds-title",
+										children: [t("readmeCmdsTitle"), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+											className: "pcm-readme-cmds-src",
+											children: readme.cmdSource === "readme-section" ? t("readmeCmdsFromSection") : t("readmeCmdsFromReadme")
+										})]
+									}), (readme.installCmds ?? []).map((cmd) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-cmdrow",
+										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+											className: "pcm-cmd pcm-readme-cmd",
+											children: cmd
+										}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
+											label: t("detailCopy"),
+											children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "ghost",
+												size: "sm",
+												icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutline16, { size: 14 }),
+												onClick: () => {
+													navigator.clipboard?.writeText(cmd);
+												}
+											})
+										})]
+									}, cmd))]
+								}) : readme.status === "ok" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+									className: "pcm-readme-cmds-note",
+									children: t("readmeCmdsNone")
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-detail-channels",
+									children: [
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelNpm") }),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelTarball") }),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelSource") })
+									]
+								}),
+								entry.created !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+									className: "pcm-detail-added",
+									children: t("detailAdded").replace("{0}", entry.created.slice(0, 10))
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-detail-linkrow",
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("a", {
+										className: "pcm-detail-link",
+										href: entry.url,
+										target: "_blank",
+										rel: "noopener noreferrer",
+										children: [t("openRepo"), " ↗"]
+									}), entry.verified != null && entry.verified.reportUrl != null && entry.verified.reportUrl !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("a", {
+										className: "pcm-detail-link",
+										href: entry.verified.reportUrl,
+										target: "_blank",
+										rel: "noopener noreferrer",
+										children: [t("verifiedReport"), " ↗"]
+									})]
+								})
+							]
+						}),
 						entry.bundled !== void 0 && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false) && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 							className: entry.bundled ? "pcm-risk pcm-risk-curated" : "pcm-risk pcm-risk-nonplugin",
 							children: entry.bundled ? props.t("scannedBadgeHint") + (entry.bundledAt !== void 0 && entry.bundledAt !== null ? " · " + entry.bundledAt : "") : props.t("scanFailHint")
@@ -1426,9 +1553,25 @@ function DetailPanel(props) {
 							className: "pcm-risk pcm-risk-community",
 							children: props.t("npmUnlinkedHint")
 						}),
-						(entry.verified != null || disclosure != null || entry.installable != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						(entry.verified != null || disclosure != null || entry.installable != null || entry.hasSkill === true) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 							className: "pcm-detail-safety",
 							children: [
+								entry.hasSkill === true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-safety pcm-safety-skill",
+									title: t("skillBadgeHint"),
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+										width: "11",
+										height: "11",
+										viewBox: "0 0 24 24",
+										fill: "none",
+										stroke: "currentColor",
+										strokeWidth: "2.2",
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" })
+									}), t("skillBadge")]
+								}),
 								entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
 									className: "pcm-safety pcm-safety-verified",
 									title: t("verifiedHintTitle").replace("{0}", entry.verified.by + (entry.verified.at !== "" ? " · " + entry.verified.at.slice(0, 10) : "")),
@@ -1568,10 +1711,12 @@ function DetailPanel(props) {
 								children: t("detailTopics")
 							}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 								className: "pcm-detail-topics",
-								children: [(entry.tagsZh ?? []).map((tp) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-									className: "pcm-detail-topic pcm-detail-tag",
-									children: tp
-								}, "tag-" + tp)), (entry.topics ?? []).map((tp) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+								children: [(() => {
+									return ((readmeLang === "zh" ? entry.tagsZh ?? [] : (entry.tagsEn ?? []).length > 0 ? entry.tagsEn : entry.tagsZh) ?? []).map((tp) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "pcm-detail-topic pcm-detail-tag",
+										children: tp
+									}, "tag-" + tp));
+								})(), (entry.topics ?? []).map((tp) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 									className: "pcm-detail-topic",
 									children: tp
 								}, tp))]
@@ -1601,87 +1746,6 @@ function DetailPanel(props) {
 									})
 								]
 							}, r.owner + "/" + r.name))]
-						}),
-						/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-							className: "pcm-detail-sec",
-							children: [
-								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-									className: "pcm-detail-sec-title",
-									children: t("detailInstall")
-								}),
-								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-detail-cmdrow",
-									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-										className: "pcm-cmd",
-										children: entry.npm !== null ? "dsh plugin add " + entry.npm : "dsh plugin add github:" + entry.owner + "/" + entry.name
-									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
-										label: copied ? t("publishCopied") : t("detailCopy"),
-										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-											variant: "ghost",
-											size: "sm",
-											icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutline16, { size: 14 }),
-											onClick: copyCmd
-										})
-									})]
-								}),
-								(readme.installCmds ?? []).length > 0 ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-readme-cmds",
-									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-readme-cmds-title",
-										children: [t("readmeCmdsTitle"), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-readme-cmds-src",
-											children: readme.cmdSource === "readme-section" ? t("readmeCmdsFromSection") : t("readmeCmdsFromReadme")
-										})]
-									}), (readme.installCmds ?? []).map((cmd) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-cmdrow",
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-											className: "pcm-cmd pcm-readme-cmd",
-											children: cmd
-										}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Tooltip, {
-											label: t("detailCopy"),
-											children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-												variant: "ghost",
-												size: "sm",
-												icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconCopyOutline16, { size: 14 }),
-												onClick: () => {
-													navigator.clipboard?.writeText(cmd);
-												}
-											})
-										})]
-									}, cmd))]
-								}) : readme.status === "ok" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-									className: "pcm-readme-cmds-note",
-									children: t("readmeCmdsNone")
-								}),
-								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-detail-channels",
-									children: [
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelNpm") }),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelTarball") }),
-										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("channelSource") })
-									]
-								}),
-								entry.created !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-									className: "pcm-detail-added",
-									children: t("detailAdded").replace("{0}", entry.created.slice(0, 10))
-								}),
-								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-									className: "pcm-detail-linkrow",
-									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("a", {
-										className: "pcm-detail-link",
-										href: entry.url,
-										target: "_blank",
-										rel: "noopener noreferrer",
-										children: [t("openRepo"), " ↗"]
-									}), entry.verified != null && entry.verified.reportUrl != null && entry.verified.reportUrl !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("a", {
-										className: "pcm-detail-link",
-										href: entry.verified.reportUrl,
-										target: "_blank",
-										rel: "noopener noreferrer",
-										children: [t("verifiedReport"), " ↗"]
-									})]
-								})
-							]
 						})
 					]
 				})]
@@ -1895,8 +1959,7 @@ const PAGE_SIZES = [
 function MarketSection(props) {
 	const t = props.t;
 	const floating = props.floating === true;
-	const localeSnap = (0, react.useSyncExternalStore)((cb) => props.locale.subscribe(cb), () => props.locale.getSnapshot());
-	const lang = String(localeSnap.active).toLowerCase().startsWith("zh") ? "zh" : "en";
+	const lang = (0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
 	const seedMode = props.seed != null;
 	const [data, setData] = (0, react.useState)((0, react.useMemo)(() => props.seed == null ? null : {
 		updated: (/* @__PURE__ */ new Date()).toISOString(),
@@ -2420,7 +2483,6 @@ function MarketSection(props) {
 		scannedOnly,
 		skillOnly
 	]);
-	const picks = (0, react.useMemo)(() => data === null ? [] : data.plugins.filter((p) => p.curated).sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0)).slice(0, 8), [data]);
 	const [recommend, setRecommend] = (0, react.useState)(null);
 	const lastInstalledRef = (0, react.useRef)("");
 	(0, react.useEffect)(() => {
@@ -3495,6 +3557,7 @@ function MarketSection(props) {
 								onClose: () => setLangOpen(false),
 								onSelect: (id) => {
 									setLangPersist(id);
+									storeLang.set(id === "zh" ? "zh" : "en");
 									setLangOpen(false);
 									setPage(1);
 								},
@@ -3728,6 +3791,7 @@ function MarketSection(props) {
 									onClose: () => setLangOpen(false),
 									onSelect: (id) => {
 										setLangPersist(id);
+										storeLang.set(id === "zh" ? "zh" : "en");
 										setLangOpen(false);
 										setPage(1);
 									},
@@ -3820,563 +3884,494 @@ function MarketSection(props) {
 			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: "pcm-scroll",
 				ref: scrollRef,
-				children: [
-					!seedMode && q.trim() === "" && picks.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						className: "pcm-picks",
-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-							className: "pcm-picks-head",
-							children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
-								className: "pcm-picks-flag",
-								width: "16",
-								height: "16",
-								viewBox: "0 0 24 24",
-								fill: "none",
-								"aria-hidden": "true",
-								children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
-									d: "M5 3v18",
-									stroke: "#272c36",
-									strokeWidth: "2",
-									strokeLinecap: "round"
-								}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
-									d: "M5 4h12.5l-2.6 3.4 2.6 3.4H5",
-									stroke: "#272c36",
-									strokeWidth: "2",
-									strokeLinejoin: "round",
-									fill: "rgba(39,44,54,.08)"
-								})]
-							}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-								className: "pcm-picks-title",
-								children: t("picksTitle")
-							})]
-						}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-							className: "pcm-picks-grid",
-							children: picks.map((p) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
-								type: "button",
-								className: "pcm-pick",
-								title: p.description,
-								onClick: () => setDetail(p),
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-ribbon",
-										"aria-hidden": "true",
-										children: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
-											width: "10",
-											height: "10",
-											viewBox: "0 0 24 24",
-											fill: "none",
-											stroke: "currentColor",
-											strokeWidth: "2.4",
-											strokeLinejoin: "round",
-											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M5 3v18" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M5 4h12.5l-2.6 3.4 2.6 3.4H5" })]
-										})
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-name",
-										children: p.name
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-owner",
-										children: p.owner
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-										className: "pcm-pick-meta",
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-pick-star",
-											children: ["★ ", formatStars(p.stars)]
-										}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-											className: "pcm-pick-cat",
-											children: catLabel(p.category)
-										})]
-									})
-								]
-							}, p.owner + "/" + p.name))
+				children: [!seedMode && q.trim() === "" && (recommend?.length ?? 0) > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: "pcm-picks pcm-recommend",
+					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						className: "pcm-picks-head",
+						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+							className: "pcm-picks-flag",
+							width: "16",
+							height: "16",
+							viewBox: "0 0 24 24",
+							fill: "none",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
+								d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z",
+								stroke: "#4d6bfe",
+								strokeWidth: "1.8",
+								strokeLinejoin: "round"
+							})
+						}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+							className: "pcm-picks-title",
+							children: t("recommendTitle")
 						})]
-					}),
-					!seedMode && q.trim() === "" && (recommend?.length ?? 0) > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						className: "pcm-picks pcm-recommend",
-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-							className: "pcm-picks-head",
-							children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
-								className: "pcm-picks-flag",
-								width: "16",
-								height: "16",
-								viewBox: "0 0 24 24",
-								fill: "none",
-								"aria-hidden": "true",
-								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
-									d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z",
-									stroke: "#4d6bfe",
-									strokeWidth: "1.8",
-									strokeLinejoin: "round"
-								})
-							}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-								className: "pcm-picks-title",
-								children: t("recommendTitle")
-							})]
-						}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-							className: "pcm-picks-grid",
-							children: (recommend ?? []).map((r) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
-								type: "button",
-								className: "pcm-pick",
-								title: r.reasons.join("；"),
-								onClick: () => setDetail(r.entry),
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-name",
-										children: r.entry.name
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-owner",
-										children: r.entry.owner
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-										className: "pcm-pick-meta",
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-pick-star",
-											children: ["★ ", formatStars(r.entry.stars)]
-										}), r.entry.score?.total != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-											className: "pcm-pick-score",
-											children: [
-												t("scoreTotalLabel"),
-												" ",
-												r.entry.score.total
-											]
-										})]
-									}),
-									r.reasons.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-										className: "pcm-pick-reason",
-										children: r.reasons[0]
-									})
-								]
-							}, r.entry.owner + "/" + r.entry.name))
-						})]
-					}),
-					list.length === 0 ? data === null ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-empty",
-						children: t("loading")
-					}) : q.trim() !== "" || scannedOnly || skillOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== "all" || kind !== "all" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						className: "pcm-empty",
-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("emptyFiltered") }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-							variant: "outline",
-							size: "sm",
-							onClick: () => {
-								setQ("");
-								setCat("all");
-								setKind("all");
-								setCuratedOnly(false);
-								setVerifiedOnly(false);
-								setInstalledOnly(false);
-								setFavOnly(false);
-								setScannedOnly(false);
-								setSkillOnly(false);
-								setPage(1);
-							},
-							children: t("clearFilters")
-						})]
-					}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-empty",
-						children: t("empty")
-					}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(react_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-grid",
-						children: pageList.map((entry) => {
-							const installed = isInstalled(entry);
-							const today = entry.todayStars;
-							const upd = updateFor(entry);
-							const disclosure = entry.disclosure;
-							return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-								className: entry.local === true ? "pcm-card pcm-card-local" : "pcm-card",
-								onClick: () => {
-									if (entry.local !== true) setDetail(entry);
-								},
-								children: [
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-card-top",
+					}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+						className: "pcm-picks-grid",
+						children: (recommend ?? []).map((r) => /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
+							type: "button",
+							className: "pcm-pick",
+							title: r.reasons.join("；"),
+							onClick: () => setDetail(r.entry),
+							children: [
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-pick-name",
+									children: r.entry.name
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-pick-owner",
+									children: r.entry.owner
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-pick-meta",
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+										className: "pcm-pick-star",
+										children: ["★ ", formatStars(r.entry.stars)]
+									}), r.entry.score?.total != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+										className: "pcm-pick-score",
 										children: [
-											/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-												className: "pcm-av",
-												style: { background: avatarColor(entry.name) },
-												children: [(entry.name.replace(/^dsh[-_]/i, "").charAt(0) || "P").toUpperCase(), entry.avatar !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
-													className: "pcm-av-img",
-													src: entry.avatar,
-													alt: "",
-													loading: "lazy",
-													onError: (e) => {
-														e.currentTarget.style.display = "none";
-													}
-												})]
-											}),
-											/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-												className: "pcm-card-title",
-												children: [
-													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-														className: "pcm-name",
-														children: entry.name
-													}),
-													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-														className: "pcm-owner",
-														children: entry.owner
-													}),
-													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
-														className: isFav(entry) ? "pcm-fav-star pcm-fav-on" : "pcm-fav-star",
-														title: t("favAdd"),
-														onClick: (e) => {
-															e.stopPropagation();
-															toggleFav(entry);
-														},
-														children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
-															width: "13",
-															height: "13",
-															viewBox: "0 0 24 24",
-															"aria-hidden": "true",
-															children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
-																d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z",
-																fill: isFav(entry) ? "#f59e0b" : "transparent",
-																stroke: "#d99a1f",
-																strokeWidth: "1.6",
-																strokeLinejoin: "round"
-															})
+											t("scoreTotalLabel"),
+											" ",
+											r.entry.score.total
+										]
+									})]
+								}),
+								r.reasons.length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "pcm-pick-reason",
+									children: r.reasons[0]
+								})
+							]
+						}, r.entry.owner + "/" + r.entry.name))
+					})]
+				}), list.length === 0 ? data === null ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-empty",
+					children: t("loading")
+				}) : q.trim() !== "" || scannedOnly || skillOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== "all" || kind !== "all" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: "pcm-empty",
+					children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", { children: t("emptyFiltered") }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+						variant: "outline",
+						size: "sm",
+						onClick: () => {
+							setQ("");
+							setCat("all");
+							setKind("all");
+							setCuratedOnly(false);
+							setVerifiedOnly(false);
+							setInstalledOnly(false);
+							setFavOnly(false);
+							setScannedOnly(false);
+							setSkillOnly(false);
+							setPage(1);
+						},
+						children: t("clearFilters")
+					})]
+				}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-empty",
+					children: t("empty")
+				}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(react_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: "pcm-grid",
+					children: pageList.map((entry) => {
+						const installed = isInstalled(entry);
+						const today = entry.todayStars;
+						const upd = updateFor(entry);
+						const disclosure = entry.disclosure;
+						return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+							className: entry.local === true ? "pcm-card pcm-card-local" : "pcm-card",
+							onClick: () => {
+								if (entry.local !== true) setDetail(entry);
+							},
+							children: [
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-card-top",
+									children: [
+										/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+											className: "pcm-av",
+											style: { background: avatarColor(entry.name) },
+											children: [(entry.name.replace(/^dsh[-_]/i, "").charAt(0) || "P").toUpperCase(), entry.avatar !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
+												className: "pcm-av-img",
+												src: entry.avatar,
+												alt: "",
+												loading: "lazy",
+												onError: (e) => {
+													e.currentTarget.style.display = "none";
+												}
+											})]
+										}),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+											className: "pcm-card-title",
+											children: [
+												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-name",
+													children: entry.name
+												}),
+												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-owner",
+													children: entry.owner
+												}),
+												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+													className: isFav(entry) ? "pcm-fav-star pcm-fav-on" : "pcm-fav-star",
+													title: t("favAdd"),
+													onClick: (e) => {
+														e.stopPropagation();
+														toggleFav(entry);
+													},
+													children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+														width: "13",
+														height: "13",
+														viewBox: "0 0 24 24",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", {
+															d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z",
+															fill: isFav(entry) ? "#f59e0b" : "transparent",
+															stroke: "#d99a1f",
+															strokeWidth: "1.6",
+															strokeLinejoin: "round"
 														})
+													})
+												})
+											]
+										}),
+										/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+											className: "pcm-actions",
+											onClick: (e) => e.stopPropagation(),
+											children: installed ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "outline",
+												size: "sm",
+												disabled: true,
+												className: "pcm-installed-tag",
+												children: t("installed")
+											}), entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "outline",
+												size: "sm",
+												icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLinkOutline16, { size: 14 }),
+												className: "pcm-source-btn",
+												onClick: () => window.open(entry.url, "_blank", "noopener"),
+												children: t("sourceBtn")
+											})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "primary",
+												size: "sm",
+												onClick: () => setConfirming(entry),
+												children: t("install")
+											}), entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "outline",
+												size: "sm",
+												icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLinkOutline16, { size: 14 }),
+												className: "pcm-source-btn",
+												onClick: () => window.open(entry.url, "_blank", "noopener"),
+												children: t("sourceBtn")
+											})] })
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-card-mid" + (entry.score != null && entry.score.complete ? " pcm-card-mid-radar" : ""),
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-card-left",
+										children: [
+											(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+												className: "pcm-safety-row",
+												children: [
+													entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-safety pcm-safety-curated",
+														title: t("curatedBadgeTitle"),
+														children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+															width: "11",
+															height: "11",
+															viewBox: "0 0 24 24",
+															fill: "none",
+															stroke: "currentColor",
+															strokeWidth: "2.2",
+															strokeLinecap: "round",
+															strokeLinejoin: "round",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" })
+														}), t("curatedBadge")]
+													}),
+													entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-safety pcm-safety-verified",
+														title: t("verifiedBadgeHint") + " · " + entry.verified.by,
+														children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
+															width: "12",
+															height: "12",
+															viewBox: "0 0 24 24",
+															fill: "currentColor",
+															"aria-hidden": "true",
+															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("circle", {
+																cx: "12",
+																cy: "7.6",
+																r: "3.4"
+															}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" })]
+														}), t("verifiedBadge")]
+													}),
+													entry.bundled === true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-safety pcm-safety-scanned",
+														title: t("scannedBadgeHint"),
+														children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
+															width: "11",
+															height: "11",
+															viewBox: "0 0 24 24",
+															fill: "none",
+															stroke: "currentColor",
+															strokeWidth: "2.2",
+															strokeLinecap: "round",
+															strokeLinejoin: "round",
+															"aria-hidden": "true",
+															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M9 11.6l2 2 4-4.2" })]
+														}), t("scannedBadge")]
+													}),
+													entry.hasSkill === true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-safety pcm-safety-skill",
+														title: t("skillBadgeHint"),
+														children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
+															width: "11",
+															height: "11",
+															viewBox: "0 0 24 24",
+															fill: "none",
+															stroke: "currentColor",
+															strokeWidth: "2.2",
+															strokeLinecap: "round",
+															strokeLinejoin: "round",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" })
+														}), t("skillBadge")]
+													}),
+													disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-safety pcm-safety-disclosure",
+														title: t("disclosureBadge"),
+														children: ["🛡 ", t("disclosureBadge")]
 													})
 												]
 											}),
 											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-												className: "pcm-actions",
-												onClick: (e) => e.stopPropagation(),
-												children: installed ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "outline",
-													size: "sm",
-													disabled: true,
-													className: "pcm-installed-tag",
-													children: t("installed")
-												}), entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "outline",
-													size: "sm",
-													icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLinkOutline16, { size: 14 }),
-													className: "pcm-source-btn",
-													onClick: () => window.open(entry.url, "_blank", "noopener"),
-													children: t("sourceBtn")
-												})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "primary",
-													size: "sm",
-													onClick: () => setConfirming(entry),
-													children: t("install")
-												}), entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "outline",
-													size: "sm",
-													icon: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLinkOutline16, { size: 14 }),
-													className: "pcm-source-btn",
-													onClick: () => window.open(entry.url, "_blank", "noopener"),
-													children: t("sourceBtn")
-												})] })
-											})
-										]
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-card-mid" + (entry.score != null && entry.score.complete ? " pcm-card-mid-radar" : ""),
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-											className: "pcm-card-left",
-											children: [
-												(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-													className: "pcm-safety-row",
-													children: [
-														entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-safety pcm-safety-curated",
-															title: t("curatedBadgeTitle"),
-															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
-																width: "11",
-																height: "11",
-																viewBox: "0 0 24 24",
-																fill: "none",
-																stroke: "currentColor",
-																strokeWidth: "2.2",
-																strokeLinecap: "round",
-																strokeLinejoin: "round",
-																"aria-hidden": "true",
-																children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" })
-															}), t("curatedBadge")]
-														}),
-														entry.verified != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-safety pcm-safety-verified",
-															title: t("verifiedBadgeHint") + " · " + entry.verified.by,
-															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
-																width: "12",
-																height: "12",
-																viewBox: "0 0 24 24",
-																fill: "currentColor",
-																"aria-hidden": "true",
-																children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("circle", {
-																	cx: "12",
-																	cy: "7.6",
-																	r: "3.4"
-																}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" })]
-															}), t("verifiedBadge")]
-														}),
-														entry.bundled === true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-safety pcm-safety-scanned",
-															title: t("scannedBadgeHint"),
-															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
-																width: "11",
-																height: "11",
-																viewBox: "0 0 24 24",
-																fill: "none",
-																stroke: "currentColor",
-																strokeWidth: "2.2",
-																strokeLinecap: "round",
-																strokeLinejoin: "round",
-																"aria-hidden": "true",
-																children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M9 11.6l2 2 4-4.2" })]
-															}), t("scannedBadge")]
-														}),
-														entry.hasSkill === true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-safety pcm-safety-skill",
-															title: t("skillBadgeHint"),
-															children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("svg", {
-																width: "11",
-																height: "11",
-																viewBox: "0 0 24 24",
-																fill: "none",
-																stroke: "currentColor",
-																strokeWidth: "2.2",
-																strokeLinecap: "round",
-																strokeLinejoin: "round",
-																"aria-hidden": "true",
-																children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" })
-															}), t("skillBadge")]
-														}),
-														disclosure != null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-safety pcm-safety-disclosure",
-															title: t("disclosureBadge"),
-															children: ["🛡 ", t("disclosureBadge")]
-														})
-													]
-												}),
-												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-													className: "pcm-desc",
-													children: (() => {
-														const d = langChoice !== "en" && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description;
-														return d === "" ? "—" : d;
-													})()
-												}),
-												(entry.tagsZh ?? []).length > 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+												className: "pcm-desc",
+												children: (() => {
+													const tagged = entry.tagDescriptions?.[langChoice];
+													if (tagged !== void 0 && tagged !== "") return tagged;
+													const d = langChoice !== "en" && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description;
+													return d === "" ? "—" : d;
+												})()
+											}),
+											(() => {
+												const tags = langChoice === "zh" ? entry.tagsZh ?? [] : (entry.tagsEn ?? []).length > 0 ? entry.tagsEn : entry.tagsZh;
+												return (tags ?? []).length > 0 ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 													className: "pcm-tags-mini",
-													children: (entry.tagsZh ?? []).slice(0, 3).map((tag) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													children: (tags ?? []).slice(0, 3).map((tag) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 														className: "pcm-tag-mini",
 														children: tag
 													}, tag))
-												}),
-												/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-													className: "pcm-stats2",
-													children: [
-														/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: today === null ? "pcm-today" : today >= 0 ? "pcm-today pcm-today-up" : "pcm-today pcm-today-down",
-															title: t("todayGainHint"),
-															children: [
-																t("todayGain"),
-																today === null ? "—" : (today >= 0 ? "+" : "") + today,
-																" star"
-															]
-														}),
-														typeof entry.downloads === "number" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-dl-30",
-															title: t("downloadsHint"),
-															children: [
-																t("downloads30Label"),
-																" ",
-																formatDownloads(entry.downloads)
-															]
-														}),
-														typeof entry.totalDownloads === "number" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-															className: "pcm-dl-total",
-															title: t("totalDownloadsHint"),
-															children: [
-																t("totalDownloadsLabel"),
-																" ",
-																formatDownloads(entry.totalDownloads)
-															]
-														})
-													]
-												})
-											]
-										}), entry.score != null && entry.score.complete && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-											className: "pcm-radar-wrap",
-											title: t("cardRadarHint"),
-											onClick: (e) => e.stopPropagation(),
-											children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(RadarChart, {
-												breakdown: entry.score.breakdown,
-												total: entry.score.total,
-												size: 140,
-												labels: {
-													maintain: t("scoreDimMaintain"),
-													practical: t("scoreDimPractical"),
-													popularity: t("scoreDimPopularity"),
-													ease: t("scoreDimEase"),
-													signal: t("scoreDimSignal")
-												},
-												totalLabel: t("scoreTotalLabel")
-											})
-										})]
-									}),
-									/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-foot",
-										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-											className: "pcm-stats",
-											children: [
-												/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-													className: "pcm-stars",
-													children: ["★ ", formatStars(entry.stars)]
-												}),
-												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-cat",
-													children: catLabel(entry.category)
-												}),
-												(entry.npmVersion ?? entry.version ?? entry.repoVersion) != null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-card-version",
-													title: entry.npmVersion != null ? t("detailNpmVer") : entry.version != null ? t("detailRepoVer") : t("repoVersionHint"),
-													children: ((value) => /^v/i.test(value) ? value : "v" + value)(entry.npmVersion ?? entry.version ?? entry.repoVersion)
-												}),
-												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-updated",
-													title: entry.pushed ?? void 0,
-													children: t("updatedShort") + " " + relativeFromNow(entry.pushed, t)
-												})
-											]
-										}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-											className: "pcm-badges",
-											children: [
-												entry.isPlugin === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-plugin",
-													children: t("pluginBadge")
-												}),
-												entry.isPlugin === false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-nonplugin",
-													children: t("nonpluginBadge")
-												}),
-												entry.isPlugin === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-pending",
-													children: t("pendingBadge")
-												}),
-												entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-local",
-													children: t("localBadge")
-												}),
-												entry.bundled === false && entry.isPlugin !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-scanfail",
-													title: t("scanFailHint"),
-													children: t("scanFailBadge")
-												}),
-												entry.dormant === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-badge pcm-badge-dormant",
-													title: t("dormantHint"),
-													children: t("dormantBadge")
-												})
-											]
-										})]
-									}),
-									installed && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-										className: "pcm-installed-panel",
-										onClick: (e) => e.stopPropagation(),
-										children: [upd !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-											className: "pcm-installed-update",
-											children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-												className: "pcm-update-versions",
-												title: t("updateHint"),
+												}) : null;
+											})(),
+											/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+												className: "pcm-stats2",
 												children: [
-													upd.from,
-													" ",
-													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-														className: "pcm-update-arrow",
-														children: "→"
+													/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: today === null ? "pcm-today" : today >= 0 ? "pcm-today pcm-today-up" : "pcm-today pcm-today-down",
+														title: t("todayGainHint"),
+														children: [
+															t("todayGain"),
+															today === null ? "—" : (today >= 0 ? "+" : "") + today,
+															" star"
+														]
 													}),
-													" ",
-													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-														className: "pcm-update-new",
-														children: upd.to
+													typeof entry.downloads === "number" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-dl-30",
+														title: t("downloadsHint"),
+														children: [
+															t("downloads30Label"),
+															" ",
+															formatDownloads(entry.downloads)
+														]
+													}),
+													typeof entry.totalDownloads === "number" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+														className: "pcm-dl-total",
+														title: t("totalDownloadsHint"),
+														children: [
+															t("totalDownloadsLabel"),
+															" ",
+															formatDownloads(entry.totalDownloads)
+														]
 													})
 												]
-											}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-												variant: "primary",
-												size: "sm",
-												className: "pcm-update-btn",
-												disabled: updateBusy,
-												onClick: () => setUpdatingConfirm({
-													entry,
-													upd
-												}),
-												children: updatingNames.has(upd.name.toLowerCase()) ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-spin",
-													children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
-												}) : t("updateBtn")
-											})]
-										}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-											className: "pcm-installed-actions",
+											})
+										]
+									}), entry.score != null && entry.score.complete && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+										className: "pcm-radar-wrap",
+										title: t("cardRadarHint"),
+										onClick: (e) => e.stopPropagation(),
+										children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(RadarChart, {
+											breakdown: entry.score.breakdown,
+											total: entry.score.total,
+											size: 140,
+											labels: {
+												maintain: t("scoreDimMaintain"),
+												practical: t("scoreDimPractical"),
+												popularity: t("scoreDimPopularity"),
+												ease: t("scoreDimEase"),
+												signal: t("scoreDimSignal")
+											},
+											totalLabel: t("scoreTotalLabel")
+										})
+									})]
+								}),
+								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-foot",
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-stats",
+										children: [
+											/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+												className: "pcm-stars",
+												children: ["★ ", formatStars(entry.stars)]
+											}),
+											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-cat",
+												children: catLabel(entry.category)
+											}),
+											(entry.npmVersion ?? entry.version ?? entry.repoVersion) != null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-card-version",
+												title: entry.npmVersion != null ? t("detailNpmVer") : entry.version != null ? t("detailRepoVer") : t("repoVersionHint"),
+												children: ((value) => /^v/i.test(value) ? value : "v" + value)(entry.npmVersion ?? entry.version ?? entry.repoVersion)
+											}),
+											/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-updated",
+												title: entry.pushed ?? void 0,
+												children: t("updatedShort") + " " + relativeFromNow(entry.pushed, t)
+											})
+										]
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-badges",
+										children: [
+											entry.isPlugin === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-plugin",
+												children: t("pluginBadge")
+											}),
+											entry.isPlugin === false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-nonplugin",
+												children: t("nonpluginBadge")
+											}),
+											entry.isPlugin === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-pending",
+												children: t("pendingBadge")
+											}),
+											entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-local",
+												children: t("localBadge")
+											}),
+											entry.bundled === false && entry.isPlugin !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-scanfail",
+												title: t("scanFailHint"),
+												children: t("scanFailBadge")
+											}),
+											entry.dormant === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-badge pcm-badge-dormant",
+												title: t("dormantHint"),
+												children: t("dormantBadge")
+											})
+										]
+									})]
+								}),
+								installed && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+									className: "pcm-installed-panel",
+									onClick: (e) => e.stopPropagation(),
+									children: [upd !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-installed-update",
+										children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+											className: "pcm-update-versions",
+											title: t("updateHint"),
 											children: [
-												entry.local === true ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "outline",
-													size: "sm",
-													className: "pcm-uninstall-btn",
-													onClick: () => setRemovingLocal(entry),
-													children: t("uninstall")
-												}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "outline",
-													size: "sm",
-													className: "pcm-uninstall-btn",
-													onClick: () => setRemoving(entry),
-													children: t("uninstall")
+												upd.from,
+												" ",
+												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-update-arrow",
+													children: "→"
 												}),
-												entry.local !== true && rollbacks[entry.npm ?? entry.name] !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-													variant: "ghost",
-													size: "sm",
-													className: "pcm-rollback-btn",
-													disabled: rollbacking === entry.name,
-													onClick: () => doRollback(entry),
-													children: rollbacking === entry.name ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-														className: "pcm-spin",
-														children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
-													}) : t("rollbackBtn")
-												})] }),
-												entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
-													className: "pcm-skip-row",
-													title: t("skipHint"),
-													children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
-														type: "checkbox",
-														checked: skipSet.has((entry.npm ?? entry.name).toLowerCase()),
-														onChange: () => doToggleSkip(entry)
-													}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
-												})] }),
-												!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
-													className: "pcm-switch pcm-switch-inline",
-													title: t("toggleHint"),
-													children: [
-														/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-															className: "pcm-switch-label",
-															children: t("enableSwitch")
-														}),
-														/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
-															type: "checkbox",
-															checked: stateOf(entry) !== "disabled",
-															disabled: toggling.has(entry.npm ?? entry.name),
-															onChange: () => doToggle(entry)
-														}),
-														/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-switch-track" }),
-														/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-															className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
-															title: t("toggleHint"),
-															children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
-														})
-													]
-												})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-													className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
-													title: t("toggleHint"),
-													children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
+												" ",
+												/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-update-new",
+													children: upd.to
 												})
 											]
+										}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+											variant: "primary",
+											size: "sm",
+											className: "pcm-update-btn",
+											disabled: updateBusy,
+											onClick: () => setUpdatingConfirm({
+												entry,
+												upd
+											}),
+											children: updatingNames.has(upd.name.toLowerCase()) ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-spin",
+												children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+											}) : t("updateBtn")
 										})]
-									})
-								]
-							}, (entry.local === true ? "local:" : "") + entry.owner + "/" + entry.name);
-						})
-					}) })
-				]
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+										className: "pcm-installed-actions",
+										children: [
+											entry.local === true ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "outline",
+												size: "sm",
+												className: "pcm-uninstall-btn",
+												onClick: () => setRemovingLocal(entry),
+												children: t("uninstall")
+											}) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "outline",
+												size: "sm",
+												className: "pcm-uninstall-btn",
+												onClick: () => setRemoving(entry),
+												children: t("uninstall")
+											}),
+											entry.local !== true && rollbacks[entry.npm ?? entry.name] !== void 0 && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
+												variant: "ghost",
+												size: "sm",
+												className: "pcm-rollback-btn",
+												disabled: rollbacking === entry.name,
+												onClick: () => doRollback(entry),
+												children: rollbacking === entry.name ? /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-spin",
+													children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.IconLoadingOutline16, { size: 14 })
+												}) : t("rollbackBtn")
+											})] }),
+											entry.local !== true && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+												className: "pcm-skip-row",
+												title: t("skipHint"),
+												children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+													type: "checkbox",
+													checked: skipSet.has((entry.npm ?? entry.name).toLowerCase()),
+													onChange: () => doToggleSkip(entry)
+												}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
+											})] }),
+											!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+												className: "pcm-switch pcm-switch-inline",
+												title: t("toggleHint"),
+												children: [
+													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+														className: "pcm-switch-label",
+														children: t("enableSwitch")
+													}),
+													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("input", {
+														type: "checkbox",
+														checked: stateOf(entry) !== "disabled",
+														disabled: toggling.has(entry.npm ?? entry.name),
+														onChange: () => doToggle(entry)
+													}),
+													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-switch-track" }),
+													/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+														className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
+														title: t("toggleHint"),
+														children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
+													})
+												]
+											})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												className: "pcm-state-chip pcm-state-" + (stateOf(entry) ?? "restart"),
+												title: t("toggleHint"),
+												children: stateOf(entry) === "disabled" ? t("stateDisabled") : stateOf(entry) === "restart" ? t("stateRestart") : t("stateLive")
+											})
+										]
+									})]
+								})
+							]
+						}, (entry.local === true ? "local:" : "") + entry.owner + "/" + entry.name);
+					})
+				}) })]
 			}),
 			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: "pcm-pager",
@@ -5238,6 +5233,7 @@ function closeSettingsWindow() {
 /** 唯一商店浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
 function StoreSingleton(props) {
 	const state = (0, react.useSyncExternalStore)(subscribeStore, () => storeState);
+	(0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
 	if (!state.mounted) return null;
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(StoreWindow, {
 		t: props.t,
@@ -5283,6 +5279,7 @@ function SettingsSection(props) {
 /** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗；
 *  也监听 window 事件 'dsh-store-open-results'（智能搜索直接带 payload 弹窗）。 */
 function StoreResultsLauncher(props) {
+	(0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
 	const [token, setToken] = (0, react.useState)(null);
 	const [direct, setDirect] = (0, react.useState)(null);
 	const onClick = (0, react.useCallback)((e) => {
@@ -5587,7 +5584,7 @@ function StoreWindow(props) {
 //#endregion
 //#region src/client/styles.ts
 /** Inline stylesheet: injected once with a data-plugin tag; hot reloads replace its content in place. */
-const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-degraded{font-size:11px;color:#b45309;border:1px solid rgba(217,119,6,.5);border-radius:999px;padding:1px 7px;background:rgba(217,119,6,.08);white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:visible}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);min-width:112px;justify-content:center}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-badge-scanned{background:rgba(34,197,94,.12);color:#15803d;font-weight:600}.pcm-badge-scanfail{background:rgba(220,38,38,.1);color:#b91c1c}.pcm-badge-dormant{background:rgba(217,119,6,.12);color:#b45309}.pcm-pill-shield{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-scanned{border:1px solid rgba(34,197,94,.6) !important;color:#15803d !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-scanned:hover{border-color:#16a34a !important}.pcm-toolbar .pcm-pill-scanned-on{border-color:#16a34a !important;color:#fff !important;background:#16a34a !important}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{display:none}.pcm-search-row{display:flex;align-items:stretch;gap:10px;padding:2px 0}.pcm-search-wrap-full{margin-left:0;max-width:none;flex:1 1 auto}.pcm-search-row .pcm-search-wrap{max-width:none !important;margin-left:0 !important;flex:1 1 auto !important}.pcm-search-big{height:34px;font-size:14px}.pcm-search-row .pcm-search-big input{font-size:14px}.pcm-search-row .pcm-search-big{height:36px !important}.pcm-search-row .pcm-smart-search-btn{height:auto !important;flex:0 0 240px !important;padding:0 16px !important;font-size:14px !important;justify-content:center}.pcm-sort-wrap{margin-left:auto;display:inline-flex;align-items:center}.pcm-search-wrap{margin-left:auto;flex:1 1 160px;max-width:300px;display:flex;align-items:center;position:relative}.pcm-search-clear{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:none;background:#040506;color:#fff;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}.pcm-search-clear:hover{background:#1a1d22}.pcm-search-wrap .pcm-search input{padding-right:26px}.pcm-toolbar .pcm-search{width:100%;height:26px;box-sizing:border-box}.pcm-search input,.pcm-search > div,.pcm-search > span,.pcm-search [class]{border:none !important;box-shadow:none !important}.pcm-search{border:1px solid rgba(4,5,6,.7) !important;border-radius:8px !important;box-shadow:none !important;background:var(--dsw-alias-bg-base,#fff) !important}.pcm-search input{color:rgba(15,17,21,.92) !important;font-size:12px !important;font-weight:500;height:100%}.pcm-search input::placeholder{color:rgba(15,17,21,.5) !important}.pcm-search svg{color:#040506 !important;opacity:.85}.pcm-search{flex:1 1 auto;min-width:0}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn{height:24px !important;padding:0 8px !important;line-height:24px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:transparent !important;color:#dc2626 !important;border:1px solid rgba(220,38,38,.55) !important;border-radius:8px !important;height:22px;padding:0 8px;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}.pcm-uninstall-btn:hover{border-color:#dc2626 !important;background:rgba(220,38,38,.08) !important;color:#dc2626 !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-verified{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-verified::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-verified:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-verified-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-verified-on::before{color:#fff}.pcm-toolbar .pcm-pill-verified-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'';width:11px;height:11px;margin-right:4px;background:currentColor;-webkit-mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat;mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-wrap{margin-left:8px;margin-right:8px;display:inline-flex;align-items:center}.pcm-toolbar .pcm-lang-btn{margin-left:auto;margin-right:8px}.pcm-lang-select-wrap{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(4,5,6,.7);color:#040506;background:transparent;border-radius:0;font-weight:600;padding:3px 7px;font-size:12px;line-height:1}.pcm-lang-select{border:none;background:transparent;color:inherit;font-weight:600;font-size:12px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:10px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 5px) 50%;background-size:3px 3px,3px 3px;background-repeat:no-repeat}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-picks{border:none;background:transparent;padding:0;margin:0 0 10px;display:flex;flex-direction:column;gap:10px}.pcm-picks-head{display:flex;align-items:center;gap:6px}.pcm-picks-flag{flex:none}.pcm-picks-title{font-size:13.5px;font-weight:700;color:var(--dsw-alias-label-primary,#292d36)}.pcm-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.pcm-pick{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid rgba(128,128,128,.22);background:var(--dsw-alias-bg-base,#fff);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;transition:border-color .12s,box-shadow .12s}.pcm-pick:hover{border-color:rgba(77,107,254,.65);box-shadow:0 2px 8px rgba(77,107,254,.14)}.pcm-pick-ribbon{position:absolute;top:8px;right:8px;color:rgba(180,83,9,.5)}.pcm-pick-name{font-weight:600;font-size:12.5px;color:var(--dsw-alias-label-primary,#292d36);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:calc(100% - 18px)}.pcm-pick-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.pcm-pick-meta{display:flex;align-items:center;gap:6px;margin-top:2px}.pcm-pick-star{color:#b45309;font-weight:700;font-size:11px;background:rgba(245,158,11,.12);border-radius:999px;padding:0 7px;line-height:17px}.pcm-pick-cat{opacity:.68;font-size:10.5px;border:1px solid rgba(128,128,128,.3);border-radius:999px;padding:0 6px;line-height:15px}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none;align-items:center}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap;align-items:center}.pcm-safety-controls{display:inline-flex;align-items:center;gap:8px;margin-left:auto}.pcm-safety{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;padding:1px 8px;border-radius:999px;line-height:16px;white-space:nowrap;font-weight:500}.pcm-safety-verified{color:#7c3aed;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.55)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-curated{color:#8f6a17;background:rgba(163,126,32,.06);border:1px solid rgba(163,126,32,.45)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-safety-scanned{color:#15803d;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.55)}.pcm-pill-person{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-verified::before{content:none !important}.pcm-detail-modal{width:min(980px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:52vh;overflow-y:scroll}.pcm-detail-readme code{word-break:break-all}.pcm-detail-readme pre{overflow-x:auto;max-width:100%}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-channels{display:flex;flex-direction:column;gap:3px;font-size:11px;opacity:.75;margin-top:6px}.pcm-detail-added{font-size:11px;opacity:.65;margin-top:6px}.pcm-detail-related{display:flex;align-items:center;gap:8px;width:100%;border:1px solid rgba(128,128,128,.25);border-radius:8px;background:transparent;padding:5px 8px;margin-bottom:6px;cursor:pointer;text-align:left}.pcm-detail-related:hover{border-color:#4d6bfe}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}.pcm-store-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center}.pcm-store-mask{position:absolute;inset:0;background:rgba(15,17,21,.45);backdrop-filter:blur(6px)}.pcm-store-window{position:relative;width:min(1100px,96vw);height:min(860px,94vh);background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.25);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}.pcm-store-window .pcm-root{flex:1 1 auto;height:auto !important;max-height:none;overflow:hidden;display:flex}.pcm-store-window .pcm-sticky-top{position:relative}.pcm-store-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 16px 0}.pcm-store-head-title{font-size:13.5px;font-weight:700;flex:1 1 auto}.pcm-store-close{flex:none}.pcm-store-body{flex:1 1 auto;min-height:0;padding:0 16px 14px;display:flex;flex-direction:column}.pcm-store-body .pcm-root{height:100% !important;flex:1 1 auto;min-height:0}.pcm-results-body{padding-top:8px}.pcm-results-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.pcm-results-sec-title{font-size:13px;font-weight:700;color:#040506;padding:2px 2px 0}.pcm-toast{position:absolute;top:8px;right:8px;background:rgba(15,17,21,.92);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;z-index:5;max-width:70%}.pcm-sidebar-btn{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;border:none;background:transparent;border-radius:8px;padding:0 10px 0 8px;cursor:pointer;font-size:14px;font-weight:400;color:var(--dsw-alias-label-primary);width:calc(100% + 14px);margin-left:-2px;height:42px;justify-content:flex-start}.pcm-sidebar-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.pcm-sidebar-icon{width:16px;height:16px;flex:none}.pcm-sidebar-rail{border-radius:50%;justify-content:center;gap:0;width:36px;height:36px;margin:8px 0 10px;padding:0}.pcm-sidebar-rail .pcm-sidebar-label{display:none}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}a[href*='/dsh-store/open-results']{display:inline-flex !important;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#4d6bfe,#3a51c4) !important;color:#fff !important;font-size:15px !important;font-weight:700 !important;text-decoration:none !important;padding:11px 26px !important;border-radius:12px !important;box-shadow:0 4px 16px rgba(77,107,254,.4) !important;margin:10px 0 6px !important;line-height:1.25 !important;border:none !important;width:fit-content !important}a[href*='/dsh-store/open-results']::after{content:'›';font-size:18px;line-height:1;margin-left:4px}a[href*='/dsh-store/open-results']:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe) !important;box-shadow:0 6px 20px rgba(77,107,254,.55) !important}.pcm-tasks-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-tasks-btn:hover{background:#eef1ff}.pcm-tasks-count{background:#4d6bfe;color:#fff;border-radius:999px;font-size:10.5px;padding:0 6px;line-height:15px;font-weight:700}.pcm-tasks-pop{position:fixed;z-index:650;width:380px;max-width:92vw;background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.3);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden}.pcm-tasks-head{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-tasks-head-title{font-size:13px;font-weight:700;flex:1 1 auto}.pcm-tasks-body{max-height:320px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.pcm-tasks-empty{padding:14px 6px;text-align:center;font-size:12.5px;opacity:.85}.pcm-tasks-empty-hint{font-size:11.5px;opacity:.6;margin-top:4px}.pcm-task-row{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-radius:8px;background:rgba(128,128,128,.06)}.pcm-task-icon{flex:none;width:16px;height:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}.pcm-task-ok{color:#16a34a}.pcm-task-bad{color:#dc2626}.pcm-task-main{flex:1 1 auto;min-width:0}.pcm-task-top{display:flex;gap:6px;align-items:baseline;min-width:0}.pcm-task-verb{font-size:11px;font-weight:700;color:#4d6bfe;flex:none}.pcm-task-name{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-task-status{font-size:11.5px;opacity:.75;margin-top:2px;word-break:break-all}.pcm-task-x{flex:none;border:none;background:transparent;cursor:pointer;color:inherit;opacity:.45;font-size:13px;padding:2px;border-radius:4px}.pcm-task-cancel{flex:none;border:1px solid rgba(220,38,38,.55);background:transparent;color:#dc2626;cursor:pointer;font-size:11px;padding:1px 8px;border-radius:6px;line-height:16px}.pcm-task-cancel:hover{background:rgba(220,38,38,.08);border-color:#dc2626}.pcm-task-x:hover{opacity:1;background:rgba(128,128,128,.15)}.pcm-tasks-bar{height:5px;border-radius:999px;background:rgba(128,128,128,.2);overflow:hidden;margin:2px 0 4px}.pcm-tasks-bar-fill{height:100%;background:#4d6bfe;border-radius:999px;transition:width .3s}.pcm-tasks-agg{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:4px 6px 0}.pcm-settings-window{width:min(560px,94vw);height:min(640px,92vh)}.pcm-settings-body{display:flex;flex-direction:column;gap:14px;padding:6px 2px 14px}.pcm-settings-open-store{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;background:linear-gradient(135deg,#4d6bfe,#3a51c4);color:#fff;border:none;border-radius:14px;padding:16px 20px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(77,107,254,.4)}.pcm-settings-open-store:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe)}.pcm-settings-body input::placeholder{color:rgba(15,17,21,.55) !important}.pcm-settings-open-store-hint{font-size:12px;font-weight:500;opacity:.85}.pcm-settings-sec{display:flex;flex-direction:column;gap:8px}.pcm-settings-sec-title{font-size:13px;font-weight:700}.pcm-settings-sec-desc{font-size:12px;opacity:.78;line-height:1.55}.pcm-settings-warn{font-size:12px;line-height:1.55;color:#9a3412;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.4);border-radius:8px;padding:8px 10px}.pcm-settings-note{font-size:11.5px;opacity:.65;line-height:1.5}.pcm-auto-row{display:flex;align-items:center;gap:10px}.pcm-auto-label{flex:1 1 auto;font-size:13.5px;font-weight:700}.pcm-auto-switch{position:relative;flex:none;width:36px;height:20px}.pcm-auto-switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}.pcm-auto-switch .pcm-auto-track{position:relative;display:block;width:36px;height:20px;border-radius:999px;background:rgba(128,128,128,.35);transition:background .2s}.pcm-auto-switch .pcm-auto-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}.pcm-auto-switch input:checked + .pcm-auto-track{background:#4d6bfe}.pcm-auto-switch input:checked + .pcm-auto-track::after{left:18px}.pcm-smart-install-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-smart-install-btn:hover{background:#1a1d22}.pcm-smart-install-btn:disabled{opacity:.75;cursor:default}.pcm-smart-install-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}.pcm-smart-uninstall-btn{background:#dc2626}.pcm-smart-uninstall-btn:hover{background:#b91c1c}.pcm-uninstall-plain-btn{color:#dc2626 !important;border-color:#dc2626 !important}.pcm-uninstall-plain-btn:hover{background:rgba(220,38,38,.08)}.pcm-install-plain-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;color:#040506;border:1px solid #040506;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-install-plain-btn:hover{background:#f2f3f5}.pcm-install-plain-btn:disabled{opacity:.7;cursor:default}.pcm-store-head-settings{border-radius:50%;flex:none}.pcm-store-head-settings svg{color:#040506}.pcm-lang-flag{display:inline-flex;align-items:center;color:inherit}.pcm-lang-flag svg{color:currentColor}.pcm-results-window{width:min(920px,92vw);height:min(660px,88vh)}div[role='presentation']:has([class*='pcm-']){z-index:1300 !important}.pcm-switch-inline .pcm-state-chip{margin-left:4px;flex:none}.pcm-card{border:1px solid #040506}.pcm-card:hover{border-color:#4f6ef7}.pcm-brand-card .pcm-version{color:#fff;border:1px solid #fff;background:rgba(255,255,255,.08)}.pcm-store-overlay{z-index:1000}.pcm-tasks-pop{z-index:1100}.pcm-smart-search-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:8px;padding:0 12px;height:26px;font-size:12px;font-weight:600;cursor:pointer;line-height:1;flex:none}.pcm-smart-search-btn:hover{background:#1a1d22}.pcm-smart-search-btn:disabled{opacity:.75;cursor:default}.pcm-smart-star{color:#fff;font-size:12px;line-height:1}.pcm-smart-search-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}@keyframes pcm-shine{0%{left:-40%}12%{left:110%}100%{left:110%}}.pcm-stats2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:rgba(15,17,21,.72);font-weight:500;margin:1px 0}.pcm-stats2 .pcm-dl-30{color:#1d4ed8}.pcm-stats2 .pcm-dl-total{color:#1d4ed8}.pcm-seg{border:1px solid #040506;border-radius:8px;overflow:hidden}.pcm-seg button{border-right:1px solid rgba(4,5,6,.22)}.pcm-seg button:last-child{border-right:none}.pcm-seg button.on{background:#040506;color:#fff}.pcm-store-head-actions .pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;border-radius:14px !important;background:transparent !important;color:#040506 !important;height:28px;font-size:12px;box-sizing:border-box}.pcm-store-head-actions .pcm-lang-btn:hover{background:rgba(4,5,6,.06) !important;color:#040506 !important}.pcm-sort-wrap{display:inline-flex;align-items:center}.pcm-sort-wrap .pcm-sort-btn{border:1px solid rgba(4,5,6,.7);border-radius:8px;color:#040506;background:transparent;font-weight:600}.pcm-pager{position:relative;z-index:3}.pcm-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-left:auto;flex-wrap:wrap}.pcm-header-actions .pcm-tasks-btn{background:#040506;border:1px solid #fff;color:#fff;box-sizing:border-box}.pcm-header-actions .pcm-tasks-btn:hover{background:#1a1d22;border-color:#fff}.pcm-header-actions .pcm-tasks-count{background:#4d6bfe}.pcm-header-actions .pcm-self-update-warn{color:#fbbf24}.pcm-store-head-actions{flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}.pcm-store-head-actions .pcm-header-row2{gap:8px;flex-wrap:nowrap}.pcm-store-head-actions .pcm-subtitle{color:inherit;opacity:.75;font-size:11.5px;white-space:nowrap}.pcm-store-head-actions .pcm-source{color:#040506;border-color:rgba(4,5,6,.45);opacity:.8;font-size:10.5px;white-space:nowrap}.pcm-store-head-actions .pcm-brand-btn{border-color:rgba(4,5,6,.7);color:#040506;background:transparent;font-size:12px}.pcm-store-head-actions .pcm-brand-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-downloads{color:#1d4ed8;background:rgba(77,107,254,.1);border-radius:999px;padding:0 6px;font-size:10.5px;font-weight:700;line-height:16px;white-space:nowrap}.pcm-installed-panel{background:rgba(4,5,6,.045);border:none;border-radius:10px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:7px}.pcm-installed-tag{color:rgba(4,5,6,.62) !important;border-color:rgba(4,5,6,.32) !important;opacity:1 !important;font-weight:500}.pcm-switch input:checked + .pcm-switch-track{background:#16a34a}.pcm-dl-none{color:rgba(15,17,21,.4)}.pcm-card button{font-size:13px}.pcm-source-btn{border-color:#040506 !important;color:#040506 !important}.pcm-installed-switches{display:flex;flex-direction:column;gap:6px}.pcm-installed-actions .pcm-uninstall-btn{background:#dc2626 !important;border-color:#dc2626 !important;color:#fff !important;height:28px !important;border-radius:14px !important;padding:0 14px !important;display:inline-flex;align-items:center;justify-content:center}.pcm-installed-actions .pcm-uninstall-btn:hover{background:#b91c1c !important;border-color:#b91c1c !important;color:#fff !important}.pcm-installed-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-vsep{width:1px;height:16px;background:rgba(4,5,6,.18);flex:none}.pcm-installed-actions .pcm-skip-row,.pcm-installed-actions .pcm-switch-inline{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(15,17,21,.85);cursor:pointer;height:28px}.pcm-installed-actions .pcm-skip-row input,.pcm-installed-actions .pcm-switch-inline input{margin:0}.pcm-switch-label{font-size:11.5px;font-weight:600;color:rgba(15,17,21,.85)}.pcm-switch-state{font-size:11px;opacity:.75;min-width:56px}.pcm-card-version{font-size:10.5px;color:rgba(15,17,21,.62);background:rgba(4,5,6,.06);border-radius:999px;padding:0 6px;line-height:15px;font-weight:500;white-space:nowrap}.pcm-installed-update{display:flex;align-items:center;justify-content:space-between;gap:8px}.pcm-installed-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-av{border:1px solid #040506;box-sizing:border-box}.pcm-downloads-total{color:#0f766e;background:rgba(20,184,166,.12)}.pcm-card-mid{display:flex;gap:8px;align-items:stretch}.pcm-card-left{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-width:0}.pcm-radar-wrap{flex:none;align-self:center;display:flex;align-items:center;justify-content:center}.pcm-radar{position:relative}.pcm-radar-grid{fill:none;stroke:#dbe4f0;stroke-width:.8}.pcm-radar-data{fill:rgba(77,107,254,.22);stroke:#4d6bfe;stroke-width:1.3;stroke-linejoin:round}.pcm-radar-dot{fill:#4d6bfe}.pcm-radar-label{font-size:8.5px;font-weight:500;fill:#6b7785}.pcm-radar-total{font-size:18px;font-weight:700;fill:#1d4ed8}.pcm-radar-total-label{font-size:8.5px;fill:#6b7785}.pcm-safety-skill{color:#040506;background:transparent;border:1px solid rgba(4,5,6,.6)}.pcm-toolbar .pcm-pill-skill{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-skill:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-skill-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-skill-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-pill-skill-icon{flex:none;margin-right:2px}.pcm-score-card{display:flex;gap:14px;border:1px solid rgba(128,128,128,.22);border-radius:12px;padding:10px 12px;background:rgba(77,107,254,.03);align-items:center}.pcm-score-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}.pcm-score-head{display:flex;align-items:center;gap:8px}.pcm-score-title{font-weight:700;font-size:13px}.pcm-score-conf{font-size:10.5px;opacity:.6;border:1px solid rgba(128,128,128,.35);border-radius:999px;padding:0 7px;line-height:16px}.pcm-score-why{font-size:11.5px;line-height:1.45;color:rgba(15,17,21,.78)}.pcm-score-why-label{font-weight:700}.pcm-score-bars{display:flex;flex-direction:column;gap:3px}.pcm-score-bar{display:flex;align-items:center;gap:8px}.pcm-score-dim{width:34px;font-size:10.5px;opacity:.65;flex:none}.pcm-score-track{flex:1 1 auto;height:5px;border-radius:3px;background:rgba(128,128,128,.16);overflow:hidden}.pcm-score-fill{height:100%;border-radius:3px;background:#4d6bfe}.pcm-score-val{width:26px;text-align:right;font-size:10.5px;color:#1d4ed8;font-weight:700;flex:none}.pcm-score-radar{flex:none}.pcm-readme-cmds{display:flex;flex-direction:column;gap:5px;border:1px dashed rgba(4,5,6,.25);border-radius:8px;padding:7px 8px}.pcm-readme-cmds-title{font-size:10.5px;font-weight:700;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-readme-cmds-src{font-weight:400;opacity:.75}.pcm-readme-cmd{background:rgba(4,5,6,.05);font-size:11px}.pcm-readme-cmds-note{font-size:10.5px;opacity:.55}.pcm-radar-val{fill:#1d4ed8;font-weight:700}.pcm-tags-mini{display:flex;gap:4px;flex-wrap:wrap}.pcm-tag-mini{font-size:9.5px;color:#4d6bfe;background:rgba(77,107,254,.09);border:1px solid rgba(77,107,254,.35);border-radius:999px;padding:0 7px;line-height:15px;white-space:nowrap}.pcm-detail-tag{color:#4d6bfe;border-color:rgba(77,107,254,.4)}.pcm-pick-score{font-size:10px;color:#1d4ed8;font-weight:700;border:1px solid rgba(77,107,254,.4);border-radius:999px;padding:0 7px;line-height:16px}.pcm-pick-reason{font-size:10px;color:rgba(15,17,21,.72);line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
+const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-degraded{font-size:11px;color:#b45309;border:1px solid rgba(217,119,6,.5);border-radius:999px;padding:1px 7px;background:rgba(217,119,6,.08);white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:visible}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);min-width:112px;justify-content:center}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-badge-scanned{background:rgba(34,197,94,.12);color:#15803d;font-weight:600}.pcm-badge-scanfail{background:rgba(220,38,38,.1);color:#b91c1c}.pcm-badge-dormant{background:rgba(217,119,6,.12);color:#b45309}.pcm-pill-shield{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-scanned{border:1px solid rgba(21,128,61,.65) !important;color:#15803d !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-scanned:hover{border-color:#15803d !important;background:rgba(21,128,61,.08) !important}.pcm-toolbar .pcm-pill-scanned-on{border-color:#15803d !important;color:#fff !important;background:#15803d !important}.pcm-toolbar .pcm-pill-scanned-on:hover{background:#166534 !important;border-color:#166534 !important}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{display:none}.pcm-search-row{display:flex;align-items:stretch;gap:10px;padding:2px 0}.pcm-search-wrap-full{margin-left:0;max-width:none;flex:1 1 auto}.pcm-search-row .pcm-search-wrap{max-width:none !important;margin-left:0 !important;flex:1 1 auto !important}.pcm-search-big{height:34px;font-size:14px}.pcm-search-row .pcm-search-big input{font-size:14px}.pcm-search-row .pcm-search-big{height:36px !important}.pcm-search-row .pcm-smart-search-btn{height:auto !important;flex:0 0 240px !important;padding:0 16px !important;font-size:14px !important;justify-content:center}.pcm-sort-wrap{margin-left:auto;display:inline-flex;align-items:center}.pcm-search-wrap{margin-left:auto;flex:1 1 160px;max-width:300px;display:flex;align-items:center;position:relative}.pcm-search-clear{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:none;background:#040506;color:#fff;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}.pcm-search-clear:hover{background:#1a1d22}.pcm-search-wrap .pcm-search input{padding-right:26px}.pcm-toolbar .pcm-search{width:100%;height:26px;box-sizing:border-box}.pcm-search input,.pcm-search > div,.pcm-search > span,.pcm-search [class]{border:none !important;box-shadow:none !important}.pcm-search{border:1px solid rgba(4,5,6,.7) !important;border-radius:8px !important;box-shadow:none !important;background:var(--dsw-alias-bg-base,#fff) !important}.pcm-search input{color:rgba(15,17,21,.92) !important;font-size:12px !important;font-weight:500;height:100%}.pcm-search input::placeholder{color:rgba(15,17,21,.5) !important}.pcm-search svg{color:#040506 !important;opacity:.85}.pcm-search{flex:1 1 auto;min-width:0}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn{height:24px !important;padding:0 8px !important;line-height:24px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:transparent !important;color:#dc2626 !important;border:1px solid rgba(220,38,38,.55) !important;border-radius:8px !important;height:22px;padding:0 8px;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}.pcm-uninstall-btn:hover{border-color:#dc2626 !important;background:rgba(220,38,38,.08) !important;color:#dc2626 !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-verified{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-verified::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-verified:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-verified-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-verified-on::before{color:#fff}.pcm-toolbar .pcm-pill-verified-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'';width:11px;height:11px;margin-right:4px;background:currentColor;-webkit-mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat;mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-wrap{margin-left:8px;margin-right:8px;display:inline-flex;align-items:center}.pcm-toolbar .pcm-lang-btn{margin-left:auto;margin-right:8px}.pcm-lang-select-wrap{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(4,5,6,.7);color:#040506;background:transparent;border-radius:0;font-weight:600;padding:3px 7px;font-size:12px;line-height:1}.pcm-lang-select{border:none;background:transparent;color:inherit;font-weight:600;font-size:12px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:10px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 5px) 50%;background-size:3px 3px,3px 3px;background-repeat:no-repeat}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-picks{border:none;background:transparent;padding:0;margin:0 0 10px;display:flex;flex-direction:column;gap:10px}.pcm-picks-head{display:flex;align-items:center;gap:6px}.pcm-picks-flag{flex:none}.pcm-picks-title{font-size:13.5px;font-weight:700;color:var(--dsw-alias-label-primary,#292d36)}.pcm-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.pcm-pick{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid rgba(128,128,128,.22);background:var(--dsw-alias-bg-base,#fff);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;transition:border-color .12s,box-shadow .12s}.pcm-pick:hover{border-color:rgba(77,107,254,.65);box-shadow:0 2px 8px rgba(77,107,254,.14)}.pcm-pick-ribbon{position:absolute;top:8px;right:8px;color:rgba(180,83,9,.5)}.pcm-pick-name{font-weight:600;font-size:12.5px;color:var(--dsw-alias-label-primary,#292d36);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:calc(100% - 18px)}.pcm-pick-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.pcm-pick-meta{display:flex;align-items:center;gap:6px;margin-top:2px}.pcm-pick-star{color:#b45309;font-weight:700;font-size:11px;background:rgba(245,158,11,.12);border-radius:999px;padding:0 7px;line-height:17px}.pcm-pick-cat{opacity:.68;font-size:10.5px;border:1px solid rgba(128,128,128,.3);border-radius:999px;padding:0 6px;line-height:15px}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none;align-items:center}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap;align-items:center}.pcm-safety-controls{display:inline-flex;align-items:center;gap:8px;margin-left:auto}.pcm-safety{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;padding:1px 8px;border-radius:999px;line-height:16px;white-space:nowrap;font-weight:500}.pcm-safety-verified{color:#7c3aed;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.55)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-curated{color:#8f6a17;background:rgba(163,126,32,.06);border:1px solid rgba(163,126,32,.45)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-safety-scanned{color:#15803d;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.55)}.pcm-pill-person{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-verified::before{content:none !important}.pcm-detail-modal{width:min(980px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:none;overflow:visible}.pcm-detail-readme code{word-break:break-all}.pcm-detail-readme pre{overflow-x:auto;max-width:100%}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-channels{display:flex;flex-direction:column;gap:3px;font-size:11px;opacity:.75;margin-top:6px}.pcm-detail-added{font-size:11px;opacity:.65;margin-top:6px}.pcm-detail-related{display:flex;align-items:center;gap:8px;width:100%;border:1px solid rgba(128,128,128,.25);border-radius:8px;background:transparent;padding:5px 8px;margin-bottom:6px;cursor:pointer;text-align:left}.pcm-detail-related:hover{border-color:#4d6bfe}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}.pcm-store-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center}.pcm-store-mask{position:absolute;inset:0;background:rgba(15,17,21,.45);backdrop-filter:blur(6px)}.pcm-store-window{position:relative;width:min(1100px,96vw);height:min(860px,94vh);background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.25);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}.pcm-store-window .pcm-root{flex:1 1 auto;height:auto !important;max-height:none;overflow:hidden;display:flex}.pcm-store-window .pcm-sticky-top{position:relative}.pcm-store-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 16px 0}.pcm-store-head-title{font-size:13.5px;font-weight:700;flex:1 1 auto}.pcm-store-close{flex:none}.pcm-store-body{flex:1 1 auto;min-height:0;padding:0 16px 14px;display:flex;flex-direction:column}.pcm-store-body .pcm-root{height:100% !important;flex:1 1 auto;min-height:0}.pcm-results-body{padding-top:8px}.pcm-results-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.pcm-results-sec-title{font-size:13px;font-weight:700;color:#040506;padding:2px 2px 0}.pcm-toast{position:absolute;top:8px;right:8px;background:rgba(15,17,21,.92);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;z-index:5;max-width:70%}.pcm-sidebar-btn{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;border:none;background:transparent;border-radius:8px;padding:0 10px 0 8px;cursor:pointer;font-size:14px;font-weight:400;color:var(--dsw-alias-label-primary);width:calc(100% + 14px);margin-left:-2px;height:42px;justify-content:flex-start}.pcm-sidebar-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.pcm-sidebar-icon{width:16px;height:16px;flex:none}.pcm-sidebar-rail{border-radius:50%;justify-content:center;gap:0;width:36px;height:36px;margin:8px 0 10px;padding:0}.pcm-sidebar-rail .pcm-sidebar-label{display:none}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}a[href*='/dsh-store/open-results']{display:inline-flex !important;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#4d6bfe,#3a51c4) !important;color:#fff !important;font-size:15px !important;font-weight:700 !important;text-decoration:none !important;padding:11px 26px !important;border-radius:12px !important;box-shadow:0 4px 16px rgba(77,107,254,.4) !important;margin:10px 0 6px !important;line-height:1.25 !important;border:none !important;width:fit-content !important}a[href*='/dsh-store/open-results']::after{content:'›';font-size:18px;line-height:1;margin-left:4px}a[href*='/dsh-store/open-results']:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe) !important;box-shadow:0 6px 20px rgba(77,107,254,.55) !important}.pcm-tasks-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-tasks-btn:hover{background:#eef1ff}.pcm-tasks-count{background:#4d6bfe;color:#fff;border-radius:999px;font-size:10.5px;padding:0 6px;line-height:15px;font-weight:700}.pcm-tasks-pop{position:fixed;z-index:650;width:380px;max-width:92vw;background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.3);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden}.pcm-tasks-head{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-tasks-head-title{font-size:13px;font-weight:700;flex:1 1 auto}.pcm-tasks-body{max-height:320px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.pcm-tasks-empty{padding:14px 6px;text-align:center;font-size:12.5px;opacity:.85}.pcm-tasks-empty-hint{font-size:11.5px;opacity:.6;margin-top:4px}.pcm-task-row{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-radius:8px;background:rgba(128,128,128,.06)}.pcm-task-icon{flex:none;width:16px;height:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}.pcm-task-ok{color:#16a34a}.pcm-task-bad{color:#dc2626}.pcm-task-main{flex:1 1 auto;min-width:0}.pcm-task-top{display:flex;gap:6px;align-items:baseline;min-width:0}.pcm-task-verb{font-size:11px;font-weight:700;color:#4d6bfe;flex:none}.pcm-task-name{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-task-status{font-size:11.5px;opacity:.75;margin-top:2px;word-break:break-all}.pcm-task-x{flex:none;border:none;background:transparent;cursor:pointer;color:inherit;opacity:.45;font-size:13px;padding:2px;border-radius:4px}.pcm-task-cancel{flex:none;border:1px solid rgba(220,38,38,.55);background:transparent;color:#dc2626;cursor:pointer;font-size:11px;padding:1px 8px;border-radius:6px;line-height:16px}.pcm-task-cancel:hover{background:rgba(220,38,38,.08);border-color:#dc2626}.pcm-task-x:hover{opacity:1;background:rgba(128,128,128,.15)}.pcm-tasks-bar{height:5px;border-radius:999px;background:rgba(128,128,128,.2);overflow:hidden;margin:2px 0 4px}.pcm-tasks-bar-fill{height:100%;background:#4d6bfe;border-radius:999px;transition:width .3s}.pcm-tasks-agg{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:4px 6px 0}.pcm-settings-window{width:min(560px,94vw);height:min(640px,92vh)}.pcm-settings-body{display:flex;flex-direction:column;gap:14px;padding:6px 2px 14px}.pcm-settings-open-store{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;background:linear-gradient(135deg,#4d6bfe,#3a51c4);color:#fff;border:none;border-radius:14px;padding:16px 20px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(77,107,254,.4)}.pcm-settings-open-store:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe)}.pcm-settings-body input::placeholder{color:rgba(15,17,21,.55) !important}.pcm-settings-open-store-hint{font-size:12px;font-weight:500;opacity:.85}.pcm-settings-sec{display:flex;flex-direction:column;gap:8px}.pcm-settings-sec-title{font-size:13px;font-weight:700}.pcm-settings-sec-desc{font-size:12px;opacity:.78;line-height:1.55}.pcm-settings-warn{font-size:12px;line-height:1.55;color:#9a3412;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.4);border-radius:8px;padding:8px 10px}.pcm-settings-note{font-size:11.5px;opacity:.65;line-height:1.5}.pcm-auto-row{display:flex;align-items:center;gap:10px}.pcm-auto-label{flex:1 1 auto;font-size:13.5px;font-weight:700}.pcm-auto-switch{position:relative;flex:none;width:36px;height:20px}.pcm-auto-switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}.pcm-auto-switch .pcm-auto-track{position:relative;display:block;width:36px;height:20px;border-radius:999px;background:rgba(128,128,128,.35);transition:background .2s}.pcm-auto-switch .pcm-auto-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}.pcm-auto-switch input:checked + .pcm-auto-track{background:#4d6bfe}.pcm-auto-switch input:checked + .pcm-auto-track::after{left:18px}.pcm-smart-install-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-smart-install-btn:hover{background:#1a1d22}.pcm-smart-install-btn:disabled{opacity:.75;cursor:default}.pcm-smart-install-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}.pcm-smart-uninstall-btn{background:#dc2626}.pcm-smart-uninstall-btn:hover{background:#b91c1c}.pcm-uninstall-plain-btn{color:#dc2626 !important;border-color:#dc2626 !important}.pcm-uninstall-plain-btn:hover{background:rgba(220,38,38,.08)}.pcm-install-plain-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;color:#040506;border:1px solid #040506;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-install-plain-btn:hover{background:#f2f3f5}.pcm-install-plain-btn:disabled{opacity:.7;cursor:default}.pcm-store-head-settings{border-radius:50%;flex:none}.pcm-store-head-settings svg{color:#040506}.pcm-lang-flag{display:inline-flex;align-items:center;color:inherit}.pcm-lang-flag svg{color:currentColor}.pcm-results-window{width:min(920px,92vw);height:min(660px,88vh)}div[role='presentation']:has([class*='pcm-']){z-index:1300 !important}.pcm-switch-inline .pcm-state-chip{margin-left:4px;flex:none}.pcm-card{border:1px solid #040506}.pcm-card:hover{border-color:#4f6ef7}.pcm-brand-card .pcm-version{color:#fff;border:1px solid #fff;background:rgba(255,255,255,.08)}.pcm-store-overlay{z-index:1000}.pcm-tasks-pop{z-index:1100}.pcm-smart-search-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:8px;padding:0 12px;height:26px;font-size:12px;font-weight:600;cursor:pointer;line-height:1;flex:none}.pcm-smart-search-btn:hover{background:#1a1d22}.pcm-smart-search-btn:disabled{opacity:.75;cursor:default}.pcm-smart-star{color:#fff;font-size:12px;line-height:1}.pcm-smart-search-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}@keyframes pcm-shine{0%{left:-40%}12%{left:110%}100%{left:110%}}.pcm-stats2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:rgba(15,17,21,.72);font-weight:500;margin:1px 0}.pcm-stats2 .pcm-dl-30{color:#1d4ed8}.pcm-stats2 .pcm-dl-total{color:#1d4ed8}.pcm-seg{border:1px solid #040506;border-radius:8px;overflow:hidden}.pcm-seg button{border-right:1px solid rgba(4,5,6,.22)}.pcm-seg button:last-child{border-right:none}.pcm-seg button.on{background:#040506;color:#fff}.pcm-store-head-actions .pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;border-radius:14px !important;background:transparent !important;color:#040506 !important;height:28px;font-size:12px;box-sizing:border-box}.pcm-store-head-actions .pcm-lang-btn:hover{background:rgba(4,5,6,.06) !important;color:#040506 !important}.pcm-sort-wrap{display:inline-flex;align-items:center}.pcm-sort-wrap .pcm-sort-btn{border:1px solid rgba(4,5,6,.7);border-radius:8px;color:#040506;background:transparent;font-weight:600}.pcm-pager{position:relative;z-index:3}.pcm-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-left:auto;flex-wrap:wrap}.pcm-header-actions .pcm-tasks-btn{background:#040506;border:1px solid #fff;color:#fff;box-sizing:border-box}.pcm-header-actions .pcm-tasks-btn:hover{background:#1a1d22;border-color:#fff}.pcm-header-actions .pcm-tasks-count{background:#4d6bfe}.pcm-header-actions .pcm-self-update-warn{color:#fbbf24}.pcm-store-head-actions{flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}.pcm-store-head-actions .pcm-header-row2{gap:8px;flex-wrap:nowrap}.pcm-store-head-actions .pcm-subtitle{color:inherit;opacity:.75;font-size:11.5px;white-space:nowrap}.pcm-store-head-actions .pcm-source{color:#040506;border-color:rgba(4,5,6,.45);opacity:.8;font-size:10.5px;white-space:nowrap}.pcm-store-head-actions .pcm-brand-btn{border-color:rgba(4,5,6,.7);color:#040506;background:transparent;font-size:12px}.pcm-store-head-actions .pcm-brand-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-downloads{color:#1d4ed8;background:rgba(77,107,254,.1);border-radius:999px;padding:0 6px;font-size:10.5px;font-weight:700;line-height:16px;white-space:nowrap}.pcm-installed-panel{background:rgba(4,5,6,.045);border:none;border-radius:10px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:7px}.pcm-installed-tag{color:rgba(4,5,6,.62) !important;border-color:rgba(4,5,6,.32) !important;opacity:1 !important;font-weight:500}.pcm-switch input:checked + .pcm-switch-track{background:#16a34a}.pcm-dl-none{color:rgba(15,17,21,.4)}.pcm-card button{font-size:13px}.pcm-source-btn{border-color:#040506 !important;color:#040506 !important}.pcm-installed-switches{display:flex;flex-direction:column;gap:6px}.pcm-installed-actions .pcm-uninstall-btn{background:#dc2626 !important;border-color:#dc2626 !important;color:#fff !important;height:28px !important;border-radius:14px !important;padding:0 14px !important;display:inline-flex;align-items:center;justify-content:center}.pcm-installed-actions .pcm-uninstall-btn:hover{background:#b91c1c !important;border-color:#b91c1c !important;color:#fff !important}.pcm-installed-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-vsep{width:1px;height:16px;background:rgba(4,5,6,.18);flex:none}.pcm-installed-actions .pcm-skip-row,.pcm-installed-actions .pcm-switch-inline{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(15,17,21,.85);cursor:pointer;height:28px}.pcm-installed-actions .pcm-skip-row input,.pcm-installed-actions .pcm-switch-inline input{margin:0}.pcm-switch-label{font-size:11.5px;font-weight:600;color:rgba(15,17,21,.85)}.pcm-switch-state{font-size:11px;opacity:.75;min-width:56px}.pcm-card-version{font-size:10.5px;color:rgba(15,17,21,.62);background:rgba(4,5,6,.06);border-radius:999px;padding:0 6px;line-height:15px;font-weight:500;white-space:nowrap}.pcm-installed-update{display:flex;align-items:center;justify-content:space-between;gap:8px}.pcm-installed-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-av{border:1px solid #040506;box-sizing:border-box}.pcm-downloads-total{color:#0f766e;background:rgba(20,184,166,.12)}.pcm-card-mid{display:flex;gap:8px;align-items:stretch}.pcm-card-left{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-width:0}.pcm-radar-wrap{flex:none;align-self:center;display:flex;align-items:center;justify-content:center}.pcm-radar{position:relative}.pcm-radar-grid{fill:none;stroke:#dbe4f0;stroke-width:.8}.pcm-radar-data{fill:rgba(77,107,254,.22);stroke:#4d6bfe;stroke-width:1.3;stroke-linejoin:round}.pcm-radar-dot{fill:#4d6bfe}.pcm-radar-label{font-size:8.5px;font-weight:500;fill:#6b7785}.pcm-radar-total{font-size:18px;font-weight:700;fill:#1d4ed8}.pcm-radar-total-label{font-size:8.5px;fill:#6b7785}.pcm-safety-skill{color:#040506;background:transparent;border:1px solid rgba(4,5,6,.6)}.pcm-toolbar .pcm-pill-skill{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-skill:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-skill-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-skill-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-pill-skill-icon{flex:none;margin-right:2px}.pcm-score-card{display:flex;gap:14px;border:1px solid rgba(128,128,128,.22);border-radius:12px;padding:10px 12px;background:rgba(77,107,254,.03);align-items:center}.pcm-score-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}.pcm-score-head{display:flex;align-items:center;gap:8px}.pcm-score-title{font-weight:700;font-size:13px}.pcm-score-conf{font-size:10.5px;opacity:.6;border:1px solid rgba(128,128,128,.35);border-radius:999px;padding:0 7px;line-height:16px}.pcm-score-why{font-size:11.5px;line-height:1.45;color:rgba(15,17,21,.78)}.pcm-score-why-label{font-weight:700}.pcm-score-bars{display:flex;flex-direction:column;gap:3px}.pcm-score-bar{display:flex;align-items:center;gap:8px}.pcm-score-dim{width:34px;font-size:10.5px;opacity:.65;flex:none}.pcm-score-track{flex:1 1 auto;height:5px;border-radius:3px;background:rgba(128,128,128,.16);overflow:hidden}.pcm-score-fill{height:100%;border-radius:3px;background:#4d6bfe}.pcm-score-val{width:26px;text-align:right;font-size:10.5px;color:#1d4ed8;font-weight:700;flex:none}.pcm-score-radar{flex:none}.pcm-readme-cmds{display:flex;flex-direction:column;gap:5px;border:1px dashed rgba(4,5,6,.25);border-radius:8px;padding:7px 8px}.pcm-readme-cmds-title{font-size:10.5px;font-weight:700;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-readme-cmds-src{font-weight:400;opacity:.75}.pcm-readme-cmd{background:rgba(4,5,6,.05);font-size:11px}.pcm-readme-cmds-note{font-size:10.5px;opacity:.55}.pcm-radar-val{fill:#1d4ed8;font-weight:700}.pcm-tags-mini{display:flex;gap:4px;flex-wrap:wrap}.pcm-tag-mini{font-size:9.5px;color:#4d6bfe;background:rgba(77,107,254,.09);border:1px solid rgba(77,107,254,.35);border-radius:999px;padding:0 7px;line-height:15px;white-space:nowrap}.pcm-detail-tag{color:#4d6bfe;border-color:rgba(77,107,254,.4)}.pcm-pick-score{font-size:10px;color:#1d4ed8;font-weight:700;border:1px solid rgba(77,107,254,.4);border-radius:999px;padding:0 7px;line-height:16px}.pcm-pick-reason{font-size:10px;color:rgba(15,17,21,.72);line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}\\\\\\\\\\\\\\\"\\\\\\\\n\\\\\\\\nexport function injectStyles(): void {\\\\\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\\\\\\\\\"dsh-store.pcm-icon{border-radius:6px;flex:none;box-shadow:0 0 0 1px rgba(245,247,255,.25)}\\\\\\\"\\\\n\\\\nexport function injectStyles(): void {\\\\n  const existing = document.querySelector('style[data-plugin-css=\\\\\\\"dsh-store\\\"\\n\\nexport function injectStyles(): void {\\n  const stale = document.querySelectorAll('style[data-plugin-css=\\\"dsh-store\"\n\nexport function injectStyles(): void {\n  const stale = document.querySelectorAll('style[data-plugin-css=\"dsh-store";
 function injectStyles() {
 	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-store\"]");
 	stale.forEach((tag, index) => {
@@ -5650,7 +5647,9 @@ function apply(ctx) {
 		zh,
 		en
 	}), "dsh-store: dictionaries");
-	const t = ctx.locale.bind(NS);
+	const hostActive = String(ctx.locale.getSnapshot().active ?? "zh").toLowerCase();
+	storeLang.init(hostActive.startsWith("zh") ? "zh" : "en");
+	const t = storeT;
 	injectStyles();
 	ctx.effect(() => {
 		const mount = document.createElement("div");

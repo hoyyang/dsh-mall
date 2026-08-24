@@ -30,6 +30,7 @@ import {
   relativeFromNow, visiblePlugins,
   type MarketEntry, type PluginKind, type Registry, type SortKey,
 } from './market-data.ts'
+import { storeLang } from './locales.ts'
 import { DetailPanel } from './DetailPanel.tsx'
 import RadarChart from './RadarChart.tsx'
 import { ICON_DATA } from './icon.ts'
@@ -75,11 +76,9 @@ interface StatusBody {
 export function MarketSection(props: SectionProps) {
   const t = props.t
   const floating = props.floating === true
-  const localeSnap = useSyncExternalStore(
-    cb => props.locale.subscribe(cb),
-    () => props.locale.getSnapshot(),
-  )
-  const lang = String(localeSnap.active).toLowerCase().startsWith('zh') ? 'zh' : 'en'
+  // v1.7.53：dsh-store 自身 UI 语言（独立于宿主），语言按钮切换全店
+  const uiLangSnap = useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
+  const lang = uiLangSnap
   const seedMode = props.seed != null
   const seedRegistry = useMemo<Registry | null>(() => (props.seed == null
     ? null
@@ -564,11 +563,7 @@ export function MarketSection(props: SectionProps) {
     return { all, per }
   }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, scannedOnly, skillOnly])
 
-  // v1.7.30：编辑精选位（awesome curated，按 star 取前 8）
-  const picks = useMemo(() => (data === null ? [] : data.plugins
-    .filter(p => p.curated)
-    .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
-    .slice(0, 8)), [data])
+  // v1.7.53：编辑精选已移除（用户决定不需要该功能）。
 
   // v1.7.52：为你推荐（本地已装画像 → 相似推荐，host /dsh-store/recommend）
   const [recommend, setRecommend] = useState<Array<{ entry: MarketEntry; reasons: string[] }> | null>(null)
@@ -1341,7 +1336,7 @@ export function MarketSection(props: SectionProps) {
             <Menu
               open={langOpen}
               onClose={() => setLangOpen(false)}
-              onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
+              onSelect={id => { setLangPersist(id); storeLang.set(id === 'zh' ? 'zh' : 'en'); setLangOpen(false); setPage(1) }}
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn pcm-lang-btn-head' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -1456,7 +1451,7 @@ export function MarketSection(props: SectionProps) {
             <Menu
               open={langOpen}
               onClose={() => setLangOpen(false)}
-              onSelect={id => { setLangPersist(id); setLangOpen(false); setPage(1) }}
+              onSelect={id => { setLangPersist(id); storeLang.set(id === 'zh' ? 'zh' : 'en'); setLangOpen(false); setPage(1) }}
               align="end"
               anchor={(
                 <button type="button" className={'pcm-lang-btn' + (langOpen ? ' pcm-lang-btn-open' : '')} onClick={() => setLangOpen(o => !o)}>
@@ -1509,33 +1504,7 @@ export function MarketSection(props: SectionProps) {
       </div>
 
       <div className="pcm-scroll" ref={scrollRef}>
-      {!seedMode && q.trim() === '' && picks.length > 0 && (
-        <div className="pcm-picks">
-          <div className="pcm-picks-head">
-            <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M5 3v18" stroke="#272c36" strokeWidth="2" strokeLinecap="round" />
-              <path d="M5 4h12.5l-2.6 3.4 2.6 3.4H5" stroke="#272c36" strokeWidth="2" strokeLinejoin="round" fill="rgba(39,44,54,.08)" />
-            </svg>
-            <span className="pcm-picks-title">{t('picksTitle')}</span>
-          </div>
-          <div className="pcm-picks-grid">
-            {picks.map(p => (
-              <button key={p.owner + '/' + p.name} type="button" className="pcm-pick" title={p.description} onClick={() => setDetail(p)}>
-                <span className="pcm-pick-ribbon" aria-hidden="true">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round"><path d="M5 3v18" /><path d="M5 4h12.5l-2.6 3.4 2.6 3.4H5" /></svg>
-                </span>
-                <span className="pcm-pick-name">{p.name}</span>
-                <span className="pcm-pick-owner">{p.owner}</span>
-                <span className="pcm-pick-meta">
-                  <span className="pcm-pick-star">★ {formatStars(p.stars)}</span>
-                  <span className="pcm-pick-cat">{catLabel(p.category)}</span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-      {/* v1.7.52：为你推荐——本地已装画像的被动推荐（编辑精选下方） */}
+      {/* v1.7.52：为你推荐——本地已装画像的被动推荐（v1.7.53：编辑精选移除，推荐置顶） */}
       {!seedMode && q.trim() === '' && (recommend?.length ?? 0) > 0 && (
         <div className="pcm-picks pcm-recommend">
           <div className="pcm-picks-head">
@@ -1674,15 +1643,21 @@ export function MarketSection(props: SectionProps) {
                         </div>
                       )}
                       <div className="pcm-desc">{(() => {
+                        // v1.7.53：打标简介优先（LLM 多语言一句话），其次索引 README.<lang> 首段，最后英文兜底
+                        const tagged = entry.tagDescriptions?.[langChoice]
+                        if (tagged !== undefined && tagged !== '') return tagged
                         const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
                         return d === '' ? '—' : d
                       })()}</div>
-                      {/* v1.7.52：中文功能标签（tags.json 手动 LLM 打标，≤3 个） */}
-                      {(entry.tagsZh ?? []).length > 0 && (
-                        <div className="pcm-tags-mini">
-                          {(entry.tagsZh ?? []).slice(0, 3).map(tag => <span key={tag} className="pcm-tag-mini">{tag}</span>)}
-                        </div>
-                      )}
+                      {/* v1.7.52/53：功能标签（zh 用中文标签、其余语言用英文标签兜底），≤3 个 */}
+                      {(() => {
+                        const tags = langChoice === 'zh' ? (entry.tagsZh ?? []) : ((entry.tagsEn ?? []).length > 0 ? entry.tagsEn : entry.tagsZh)
+                        return (tags ?? []).length > 0 ? (
+                          <div className="pcm-tags-mini">
+                            {(tags ?? []).slice(0, 3).map(tag => <span key={tag} className="pcm-tag-mini">{tag}</span>)}
+                          </div>
+                        ) : null
+                      })()}
                       {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
                       <div className="pcm-stats2">
                         <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>

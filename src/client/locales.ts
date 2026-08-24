@@ -189,6 +189,7 @@ export const en: Record<string, string> = {
   detailStars: 'Stars',
   detailCreated: 'Published',
   detailLanguage: 'Language',
+  detailCategory: 'Category',
   detailLicense: 'License',
   detailTopics: 'Topics',
   detailInstall: 'Install',
@@ -469,6 +470,7 @@ export const zh: Record<string, string> = {
   detailStars: 'Star',
   detailCreated: '发布时间',
   detailLanguage: '语言',
+  detailCategory: '分类',
   detailLicense: '许可证',
   detailTopics: '主题标签',
   detailInstall: '安装',
@@ -557,3 +559,39 @@ export const zh: Record<string, string> = {
   smartSearching: '搜索中…',
   smartSearchEmpty: '请先在搜索框里输入你的需求。',
 };
+
+// ------------------------------------------------------------------ UI 语言
+/** v1.7.53：dsh-store 自身的 UI 语言（独立于宿主全局语言，随商店语言按钮切换）。 */
+export type StoreUiLang = 'zh' | 'en'
+
+let uiLang: StoreUiLang | null = null
+const langListeners = new Set<() => void>()
+
+export const storeLang = {
+  init(l: StoreUiLang): void {
+    if (uiLang !== null) return
+    try {
+      const saved = localStorage.getItem('dsh-store-uilang')
+      uiLang = saved === 'zh' || saved === 'en' ? saved : l
+    } catch { uiLang = l }
+  },
+  get(): StoreUiLang {
+    return uiLang ?? 'zh'
+  },
+  set(l: StoreUiLang): void {
+    if (uiLang === l) return
+    uiLang = l
+    try { localStorage.setItem('dsh-store-uilang', l) } catch { /* 忽略 */ }
+    for (const fn of langListeners) fn()
+  },
+  subscribe(fn: () => void): () => void {
+    langListeners.add(fn)
+    return () => { langListeners.delete(fn) }
+  },
+}
+
+/** 按当前商店 UI 语言取词条（缺 zh/en 兜底原 key）。 */
+export function storeT(key: string): string {
+  const dict = storeLang.get() === 'zh' ? zh : en
+  return dict[key] ?? en[key] ?? key
+}

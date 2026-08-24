@@ -18,7 +18,7 @@ const REFRESH_MS = 24 * 60 * 60 * 1000
 const FETCH_TIMEOUT_MS = 30_000
 
 let timer: NodeJS.Timeout | null = null
-let tagsOverride: Record<string, { descriptionZh: string; tagsZh: string[] }> | null = null
+let tagsOverride: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> | null = null
 
 function cachePath(profile: string): string {
   const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
@@ -35,15 +35,22 @@ export async function refreshTags(profile: string): Promise<{ count: number }> {
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       })
       if (!res.ok) throw new Error('tags HTTP ' + res.status)
-      const body = (await res.json()) as { entries?: Record<string, { descriptionZh?: string; tagsZh?: string[] }> }
+      const body = (await res.json()) as { entries?: Record<string, { descriptions?: Record<string, string>; descriptionZh?: string; tags?: { zh?: string[]; en?: string[] }; tagsZh?: string[] }> }
       if (body.entries === undefined || typeof body.entries !== 'object') throw new Error('tags.json 结构不对')
-      const entries: Record<string, { descriptionZh: string; tagsZh: string[] }> = {}
+      const entries: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> = {}
       for (const [key, value] of Object.entries(body.entries)) {
         if (value === null || typeof value !== 'object') continue
-        const tagsZh = Array.isArray(value.tagsZh) ? value.tagsZh.filter((t): t is string => typeof t === 'string' && t !== '').slice(0, 6) : []
-        const descriptionZh = typeof value.descriptionZh === 'string' ? value.descriptionZh.slice(0, 200) : ''
-        if (tagsZh.length === 0 && descriptionZh === '') continue
-        entries[key.toLowerCase()] = { descriptionZh, tagsZh }
+        // v2 多语言结构；v1（仅 zh）结构兼容
+        const descriptions: Record<string, string> = {}
+        if (value.descriptions !== undefined && typeof value.descriptions === 'object') {
+          for (const [lang, text] of Object.entries(value.descriptions)) {
+            if (typeof text === 'string' && text !== '') descriptions[lang] = text.slice(0, 200)
+          }
+        }
+        const tagsZh = Array.isArray(value.tags?.zh) ? value.tags.zh.filter((t): t is string => typeof t === 'string' && t !== '').slice(0, 6) : []
+        const tagsEn = Array.isArray(value.tags?.en) ? value.tags.en.filter((t): t is string => typeof t === 'string' && t !== '').slice(0, 6) : []
+        if (Object.keys(descriptions).length === 0 && tagsZh.length === 0 && tagsEn.length === 0) continue
+        entries[key.toLowerCase()] = { descriptions, tagsZh, tagsEn }
       }
       const count = Object.keys(entries).length
       if (count < 10) throw new Error('tags.json 可疑地小（' + count + '）')
@@ -61,7 +68,7 @@ export async function refreshTags(profile: string): Promise<{ count: number }> {
 /** 进程启动：先读本地缓存（立即生效），再后台拉最新。 */
 export function startTagsRefresh(profile: string): void {
   try {
-    const cached = JSON.parse(readFileSync(cachePath(profile), 'utf8')) as { entries?: Record<string, { descriptionZh: string; tagsZh: string[] }> }
+    const cached = JSON.parse(readFileSync(cachePath(profile), 'utf8')) as { entries?: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> }
     if (cached.entries !== undefined && Object.keys(cached.entries).length > 0) {
       tagsOverride = cached.entries
       setTagsOverride(cached.entries)

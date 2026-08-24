@@ -8,7 +8,7 @@
 import { Component, createElement as h, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
-import { en, zh } from './locales.ts'
+import { en, zh, storeLang, storeT } from './locales.ts'
 import { SettingsCard } from './SettingsCard.tsx'
 import { SettingsSection, SidebarStoreButton, StoreResultsLauncher, StoreSingleton } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
@@ -60,7 +60,10 @@ export function apply(ctx: MarketClientContext): void {
   }
 
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), NS + ': dictionaries')
-  const t = ctx.locale.bind(NS)
+  // v1.7.53：dsh-store 自身 UI 语言（商店语言按钮切换全店 UI，初始跟随宿主语言）
+  const hostActive = String(ctx.locale.getSnapshot().active ?? 'zh').toLowerCase()
+  storeLang.init(hostActive.startsWith('zh') ? 'zh' : 'en')
+  const t = storeT
   injectStyles()
 
   // find 工具结果浮窗（智能搜索/按钮链接共用）+ 唯一商店浮窗单例。
