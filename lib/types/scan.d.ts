@@ -6,4 +6,5 @@
  * 自动停止）。结果缓存 state.json 24h。发现「曾有 bundle、现在没了」的条目
  * 会返回 false（插件作废信号），由 UI 打失效徽章；数据修正仍走索引 CI。
  */
+export declare function ensureSkillScans(profile: string, token: string, rawRepos: string[]): Promise<Record<string, boolean | null>>;
 export declare function ensureBundleScans(profile: string, token: string, rawRepos: string[]): Promise<Record<string, boolean | null>>;

@@ -31,6 +31,7 @@ import {
   type MarketEntry, type PluginKind, type Registry, type SortKey,
 } from './market-data.ts'
 import { DetailPanel } from './DetailPanel.tsx'
+import RadarChart from './Radar.tsx'
 import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
 import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
@@ -107,6 +108,7 @@ export function MarketSection(props: SectionProps) {
   const [installedOnly, setInstalledOnly] = useState(false)
   const [favOnly, setFavOnly] = useState(false)
   const [scannedOnly, setScannedOnly] = useState(false)
+  const [skillOnly, setSkillOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads'>('stars')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
@@ -232,6 +234,14 @@ export function MarketSection(props: SectionProps) {
                 if (old.downloads !== undefined) merged.downloads = old.downloads
                 if (old.totalDownloads !== undefined) merged.totalDownloads = old.totalDownloads
                 if (old.repoVersion !== undefined) merged.repoVersion = old.repoVersion
+                // v1.7.45：刷新轮询同样会冲掉页级富化——bundled/hasSkill/score/
+                // installCmds 按 owner/name 保留（与下载量同款合并）。
+                if (old.bundled !== undefined && old.bundled !== null) merged.bundled = old.bundled
+                if (old.bundledAt !== undefined) merged.bundledAt = old.bundledAt
+                if (old.hasSkill !== undefined && old.hasSkill !== null) merged.hasSkill = old.hasSkill
+                if (old.score !== undefined) merged.score = old.score
+                if (old.installCmds !== undefined) merged.installCmds = old.installCmds
+                if (old.cmdSource !== undefined) merged.cmdSource = old.cmdSource
                 return merged
               }),
             }
@@ -537,6 +547,7 @@ export function MarketSection(props: SectionProps) {
     const needle = q.trim().toLowerCase()
     for (const p of plugins) {
       if (scannedOnly && p.bundled !== true) continue
+      if (skillOnly && p.hasSkill !== true) continue
       if (kind === 'plugin' && p.isPlugin !== true) continue
       if (kind === 'nonplugin' && p.isPlugin === true) continue
       if (curatedOnly && !p.curated) continue
@@ -551,7 +562,7 @@ export function MarketSection(props: SectionProps) {
       per.set(p.category, (per.get(p.category) ?? 0) + 1)
     }
     return { all, per }
-  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, scannedOnly])
+  }, [plugins, kind, curatedOnly, verifiedOnly, q, installedOnly, isInstalled, favOnly, isFav, scannedOnly, skillOnly])
 
   // v1.7.30：编辑精选位（awesome curated，按 star 取前 8）
   const picks = useMemo(() => (data === null ? [] : data.plugins
@@ -559,9 +570,10 @@ export function MarketSection(props: SectionProps) {
     .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
     .slice(0, 8)), [data])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
+  const skillCount = useMemo(() => plugins.filter(p => p.hasSkill === true).length, [plugins])
   const list = useMemo(
-    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly }, isInstalled, isFav),
-    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, scannedOnly],
+    () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
+    [plugins, cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, q, sort, lang, isInstalled, isFav, scannedOnly, skillOnly],
   )
   const totalPages = Math.max(1, Math.ceil(list.length / pageSize))
   const currentPage = Math.min(page, totalPages)
@@ -699,12 +711,12 @@ export function MarketSection(props: SectionProps) {
     for (let i = 0; i < all.length; i += step) downloadsEnrich(all.slice(i, i + step))
   }, [sortDim, data, downloadsEnrich])
 
-  // ---- 运行时 bundle top-up 扫描（v1.7.24：CI 之后有 push 或 bundled 未知的条目页级抽查）----
+  // ---- 运行时 bundle + skill top-up 扫描（v1.7.24/v1.7.45：bundled/hasSkill 未知的条目页级抽查）----
   const scansRequested = useRef<Set<string>>(new Set())
   useEffect(() => {
     if (data === null) return
     const todo = pageList
-      .filter(e => e.local !== true && e.excluded == null && !scansRequested.current.has((e.owner + '/' + e.name).toLowerCase()))
+      .filter(e => e.local !== true && !scansRequested.current.has((e.owner + '/' + e.name).toLowerCase()))
       .filter(e => {
         if (e.bundled === null || e.bundled === undefined) return true
         if (e.bundledAt === null || e.bundledAt === undefined || e.pushed === null) return false
@@ -719,8 +731,48 @@ export function MarketSection(props: SectionProps) {
       body: JSON.stringify({ repos: todo.map(e => e.owner + '/' + e.name) }),
     })
       .then(res => res.json())
-      .then((body: { bundles?: Record<string, boolean | null> }) => {
-        const got = body.bundles ?? {}
+      .then((body: { bundles?: Record<string, boolean | null>; skills?: Record<string, boolean | null> }) => {
+        const gotB = body.bundles ?? {}
+        const gotS = body.skills ?? {}
+        if (Object.keys(gotB).length === 0 && Object.keys(gotS).length === 0) return
+        setData((prev: Registry | null) => {
+          if (prev === null) return prev
+          return {
+            ...prev,
+            plugins: prev.plugins.map((e: MarketEntry) => {
+              const key = e.owner + '/' + e.name
+              const hitB = gotB[key]
+              const hitS = gotS[key]
+              if (hitB === undefined && hitS === undefined) return e
+              const next: MarketEntry = { ...e }
+              if (hitB !== undefined) { next.bundled = hitB; next.bundledAt = new Date().toISOString().slice(0, 10) }
+              if (hitS !== undefined) next.hasSkill = hitS
+              return next
+            }),
+          }
+        })
+      })
+      .catch(() => {})
+  }, [pageList, data])
+
+  // ---- v1.7.45：页级评分富化——当前页 README（24h 缓存）补全五维 + 安装命令 ----
+  const scoresRequested = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (data === null || seedMode) return
+    const todo = pageList
+      .filter(e => e.local !== true && !scoresRequested.current.has((e.owner + '/' + e.name).toLowerCase()))
+      .filter(e => e.score == null || e.score.complete !== true)
+      .slice(0, 24)
+    if (todo.length === 0) return
+    for (const e of todo) scoresRequested.current.add((e.owner + '/' + e.name).toLowerCase())
+    fetch('/dsh-store/scores', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items: todo.map(e => ({ repo: e.owner + '/' + e.name, branch: e.defaultBranch ?? 'main' })) }),
+    })
+      .then(res => res.json())
+      .then((body: { scores?: Record<string, { score: MarketEntry['score'] | null; needsConfig: boolean; installCmds: string[]; cmdSource: string }> }) => {
+        const got = body.scores ?? {}
         const keys = Object.keys(got)
         if (keys.length === 0) return
         setData((prev: Registry | null) => {
@@ -729,14 +781,19 @@ export function MarketSection(props: SectionProps) {
             ...prev,
             plugins: prev.plugins.map((e: MarketEntry) => {
               const hit = got[e.owner + '/' + e.name]
-              if (hit === undefined) return e
-              return { ...e, bundled: hit, bundledAt: new Date().toISOString().slice(0, 10) }
+              if (hit === undefined || hit.score == null) return e
+              const next: MarketEntry = { ...e, score: hit.score }
+              if (hit.installCmds.length > 0) {
+                next.installCmds = hit.installCmds
+                next.cmdSource = hit.cmdSource
+              }
+              return next
             }),
           }
         })
       })
       .catch(() => {})
-  }, [pageList, data])
+  }, [pageList, data, seedMode])
 
   // ---- 智能安装：AI 审查 + 安装 + 装后诊断（进度进任务面板）----
   const doSmartInstall = useCallback((entry: MarketEntry) => {
@@ -1361,6 +1418,13 @@ export function MarketSection(props: SectionProps) {
           active={verifiedOnly}
           onClick={() => { setVerifiedOnly(v => !v); setPage(1) }}
         ><svg className="pcm-pill-person" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>{t('verifiedOnly')}</Pill>
+        {/* v1.7.45：含 skill 筛选——放在已验证与已安装之间 */}
+        <Pill
+          className={skillOnly ? 'pcm-pill-skill pcm-pill-skill-on' : 'pcm-pill-skill'}
+          active={skillOnly}
+          onClick={() => { setSkillOnly(v => !v); setPage(1) }}
+          title={t('skillChipHint')}
+        ><svg className="pcm-pill-skill-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>{t('skillChip')}<span className="pcm-count">{skillCount}</span></Pill>
         <Pill
           className={installedOnly ? 'pcm-pill-installed pcm-pill-installed-on' : 'pcm-pill-installed'}
           active={installedOnly}
@@ -1458,10 +1522,10 @@ export function MarketSection(props: SectionProps) {
       {list.length === 0 ? (
         data === null ? (
           <div className="pcm-empty">{t('loading')}</div>
-        ) : (q.trim() !== '' || scannedOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== 'all' || kind !== 'all') ? (
+        ) : (q.trim() !== '' || scannedOnly || skillOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== 'all' || kind !== 'all') ? (
           <div className="pcm-empty">
             <div>{t('emptyFiltered')}</div>
-            <Button variant="outline" size="sm" onClick={() => { setQ(''); setCat('all'); setKind('all'); setCuratedOnly(false); setVerifiedOnly(false); setInstalledOnly(false); setFavOnly(false); setScannedOnly(false); setPage(1) }}>
+            <Button variant="outline" size="sm" onClick={() => { setQ(''); setCat('all'); setKind('all'); setCuratedOnly(false); setVerifiedOnly(false); setInstalledOnly(false); setFavOnly(false); setScannedOnly(false); setSkillOnly(false); setPage(1) }}>
               {t('clearFilters')}
             </Button>
           </div>
@@ -1536,41 +1600,70 @@ export function MarketSection(props: SectionProps) {
                       )}
                     </div>
                   </div>
-                  {(entry.curated || entry.verified != null || disclosure != null) && (
-                    <div className="pcm-safety-row">
-                      {entry.curated && (
-                        <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" /></svg>
-                          {t('curatedBadge')}
-                        </span>
+                  {/* v1.7.45：中段两栏——左侧徽章/简介/统计，右侧五维雷达图（仅五维齐全时）；简介宽度随雷达收窄 */}
+                  <div className={'pcm-card-mid' + (entry.score != null && entry.score.complete ? ' pcm-card-mid-radar' : '')}>
+                    <div className="pcm-card-left">
+                      {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true) && (
+                        <div className="pcm-safety-row">
+                          {entry.curated && (
+                            <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" /></svg>
+                              {t('curatedBadge')}
+                            </span>
+                          )}
+                          {entry.verified != null && (
+                            <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>
+                              {t('verifiedBadge')}
+                            </span>
+                          )}
+                          {entry.bundled === true && (
+                            <span className="pcm-safety pcm-safety-scanned" title={t('scannedBadgeHint')}>
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" /><path d="M9 11.6l2 2 4-4.2" /></svg>
+                              {t('scannedBadge')}
+                            </span>
+                          )}
+                          {/* v1.7.45：含 skill 徽章——主题深色系，不含则不显示 */}
+                          {entry.hasSkill === true && (
+                            <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" /></svg>
+                              {t('skillBadge')}
+                            </span>
+                          )}
+                          {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
+                        </div>
                       )}
-                      {entry.verified != null && (
-                        <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>
-                          {t('verifiedBadge')}
-                        </span>
-                      )}
-                      {entry.bundled === true && (
-                        <span className="pcm-safety pcm-safety-scanned" title={t('scannedBadgeHint')}>
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" /><path d="M9 11.6l2 2 4-4.2" /></svg>
-                          {t('scannedBadge')}
-                        </span>
-                      )}
-                      {disclosure != null && <span className="pcm-safety pcm-safety-disclosure" title={t('disclosureBadge')}>🛡 {t('disclosureBadge')}</span>}
+                      <div className="pcm-desc">{(() => {
+                        const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
+                        return d === '' ? '—' : d
+                      })()}</div>
+                      {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
+                      <div className="pcm-stats2">
+                        <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>
+                        {typeof entry.downloads === 'number' && (
+                          <span className="pcm-dl-30" title={t('downloadsHint')}>{t('downloads30Label')} {formatDownloads(entry.downloads)}</span>
+                        )}
+                        {typeof entry.totalDownloads === 'number' && (
+                          <span className="pcm-dl-total" title={t('totalDownloadsHint')}>{t('totalDownloadsLabel')} {formatDownloads(entry.totalDownloads)}</span>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  <div className="pcm-desc">{(() => {
-                    const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
-                    return d === '' ? '—' : d
-                  })()}</div>
-                  {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
-                  <div className="pcm-stats2">
-                    <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>
-                    {typeof entry.downloads === 'number' && (
-                      <span className="pcm-dl-30" title={t('downloadsHint')}>{t('downloads30Label')} {formatDownloads(entry.downloads)}</span>
-                    )}
-                    {typeof entry.totalDownloads === 'number' && (
-                      <span className="pcm-dl-total" title={t('totalDownloadsHint')}>{t('totalDownloadsLabel')} {formatDownloads(entry.totalDownloads)}</span>
+                    {entry.score != null && entry.score.complete && (
+                      <div className="pcm-radar-wrap" title={t('cardRadarHint')} onClick={e => e.stopPropagation()}>
+                        <RadarChart
+                          breakdown={entry.score.breakdown}
+                          total={entry.score.total}
+                          size={92}
+                          labels={{
+                            maintain: t('scoreDimMaintain'),
+                            practical: t('scoreDimPractical'),
+                            popularity: t('scoreDimPopularity'),
+                            ease: t('scoreDimEase'),
+                            signal: t('scoreDimSignal'),
+                          }}
+                          totalLabel={t('scoreTotalLabel')}
+                        />
+                      </div>
                     )}
                   </div>
                   <div className="pcm-foot">
@@ -1857,6 +1950,25 @@ function InstallModal(props: {
   const target = entry.npmLinked === false ? 'github:' + entry.owner + '/' + entry.name : (entry.npm ?? 'github:' + entry.owner + '/' + entry.name)
   const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
   const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
+  // v1.7.45：README 安装命令参考区（展示-only，不执行）——优先用页级富化缓存。
+  const [readmeCmds, setReadmeCmds] = useState<{ commands: string[]; source: string }>(() =>
+    entry.installCmds !== undefined && entry.installCmds !== null
+      ? { commands: entry.installCmds, source: entry.cmdSource ?? 'readme' }
+      : { commands: [], source: 'template' })
+  useEffect(() => {
+    if (readmeCmds.commands.length > 0) return
+    let alive = true
+    fetch('/dsh-store/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=README.md&branch=' + encodeURIComponent(entry.defaultBranch ?? 'main'))
+      .then(res => res.json())
+      .then((body: { ok?: boolean; installCmds?: string[]; cmdSource?: string }) => {
+        if (alive && body.ok === true && Array.isArray(body.installCmds) && body.installCmds.length > 0) {
+          setReadmeCmds({ commands: body.installCmds, source: body.cmdSource ?? 'readme' })
+        }
+      })
+      .catch(() => {})
+    return () => { alive = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entry.owner, entry.name, entry.defaultBranch])
   return (
     <Modal
       open
@@ -1882,6 +1994,16 @@ function InstallModal(props: {
         <div>{t('installFrom').replace('{0}', entry.url)}</div>
         <div className={riskClass}>{riskText}</div>
         <div className="pcm-cmd">{t('installVia').replace('{0}', target)}</div>
+        {readmeCmds.commands.length > 0 && (
+          <div className="pcm-readme-cmds">
+            <div className="pcm-readme-cmds-title">{t('readmeCmdsTitle')}
+              <span className="pcm-readme-cmds-src">{readmeCmds.source === 'readme-section' ? t('readmeCmdsFromSection') : t('readmeCmdsFromReadme')}</span>
+            </div>
+            {readmeCmds.commands.map(cmd => (
+              <div key={cmd} className="pcm-cmd pcm-readme-cmd">{cmd}</div>
+            ))}
+          </div>
+        )}
         {installing && statusLine !== null && <div className="pcm-cmd">{statusLine}</div>}
       </div>
     </Modal>

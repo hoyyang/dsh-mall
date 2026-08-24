@@ -22,6 +22,7 @@ const REPO_RE = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/
 const FILE_RE = /^(docs\/)?[A-Za-z0-9._-]+\.md$/
 
 const cache = new Map<string, { at: number; value: { ok: boolean; text: string } }>()
+const rawCache = new Map<string, { at: number; value: { ok: boolean; text: string } }>()
 
 function imgHostAllowed(url: string): boolean {
   try {
@@ -29,6 +30,33 @@ function imgHostAllowed(url: string): boolean {
     for (const h of ALLOWED_IMG_HOSTS) if (host === h || host.endsWith('.' + h)) return true
     return false
   } catch { return false }
+}
+
+/** 原始 README（不做任何清洗）：评分/安装命令解析用；24h 缓存。 */
+export async function fetchRawReadme(repo: string, file: string, branch: string): Promise<{ ok: boolean; text: string }> {
+  if (!REPO_RE.test(repo) || !FILE_RE.test(file) || file.includes('..')) return { ok: false, text: 'invalid repo or file' }
+  const safeBranch = /^[A-Za-z0-9._/-]+$/.test(branch) && !branch.includes('..') ? branch : 'main'
+  const key = (repo + '@' + safeBranch + '/' + file).toLowerCase()
+  const hit = rawCache.get(key)
+  if (hit !== undefined && Date.now() - hit.at < TTL_MS) return hit.value
+  const rawBase = 'https://raw.githubusercontent.com/' + repo + '/' + safeBranch + '/'
+  let md = ''
+  try {
+    const res = await fetch(rawBase + file, { headers: { 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(15_000) })
+    if (!res.ok) {
+      const value = { ok: false, text: 'HTTP ' + res.status }
+      rawCache.set(key, { at: Date.now(), value })
+      return value
+    }
+    md = (await res.text()).slice(0, README_MAX)
+  } catch (err) {
+    const value = { ok: false, text: err instanceof Error ? err.message : 'fetch failed' }
+    rawCache.set(key, { at: Date.now(), value })
+    return value
+  }
+  const value = { ok: true, text: md }
+  rawCache.set(key, { at: Date.now(), value })
+  return value
 }
 
 export async function fetchSanitizedReadme(repo: string, file: string, branch: string): Promise<{ ok: boolean; text: string }> {
@@ -40,20 +68,13 @@ export async function fetchSanitizedReadme(repo: string, file: string, branch: s
 
   const rawBase = 'https://raw.githubusercontent.com/' + repo + '/' + safeBranch + '/'
   const ghBase = 'https://github.com/' + repo + '/blob/' + safeBranch + '/'
-  let md = ''
-  try {
-    const res = await fetch(rawBase + file, { headers: { 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(15_000) })
-    if (!res.ok) {
-      const value = { ok: false, text: 'HTTP ' + res.status }
-      cache.set(key, { at: Date.now(), value })
-      return value
-    }
-    md = (await res.text()).slice(0, README_MAX)
-  } catch (err) {
-    const value = { ok: false, text: err instanceof Error ? err.message : 'fetch failed' }
+  const raw = await fetchRawReadme(repo, file, safeBranch)
+  if (!raw.ok) {
+    const value = raw
     cache.set(key, { at: Date.now(), value })
     return value
   }
+  let md = raw.text
 
   const absolutize = (url: string, base: string): string => {
     if (/^(https?:|data:|#|mailto:)/i.test(url)) return url

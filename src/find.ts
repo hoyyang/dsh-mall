@@ -11,6 +11,8 @@
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import { CATEGORIES, loadRegistry, readState, writeState } from './catalog.ts'
 import { runHeadlessTask } from './headless.ts'
+import { fetchRawReadme } from './readme.ts'
+import { enrichScore } from './score.ts'
 import type { MarketEntry, MarketState } from './types.ts'
 
 export const FIND_TOOL_NAME = 'find_dsh_store_plugin'
@@ -92,7 +94,8 @@ function tokensOf(needle: string): Array<{ t: string; w: number }> {
   return out
 }
 
-function scoreEntry(e: MarketEntry, needle: string): number {
+/** 关键词+口碑部分（不含质量维度——质量分由 scoreEntry 统一加）。 */
+function keywordScore(e: MarketEntry, needle: string): number {
   const zh = e.descriptions?.zh ?? ''
   const catNames = CATEGORIES[e.category] !== undefined ? (CATEGORIES[e.category]?.en ?? '') + ' ' + (CATEGORIES[e.category]?.zh ?? '') : ''
   const hay = (e.name + ' ' + e.owner + ' ' + e.description + ' ' + zh + ' ' + e.category + ' ' + catNames).toLowerCase()
@@ -125,6 +128,27 @@ function scoreEntry(e: MarketEntry, needle: string): number {
   return score
 }
 
+/** 质量维度加分：五维总分（基础分/富化分）折算 0-8，不喧宾夺主关键词相关性。 */
+function qualityBonus(e: MarketEntry): number {
+  return (e.score?.total ?? 0) / 12.5
+}
+
+function scoreEntry(e: MarketEntry, needle: string): number {
+  const kw = keywordScore(e, needle)
+  if (kw === Number.NEGATIVE_INFINITY) return Number.NEGATIVE_INFINITY
+  return kw + qualityBonus(e)
+}
+
+/** 富化指定条目的评分：拉 README（24h 缓存）补实用/便捷两维（v1.7.45）。 */
+async function enrichEntry(e: MarketEntry): Promise<void> {
+  const repo = e.owner + '/' + e.name
+  const branch = e.defaultBranch ?? 'main'
+  try {
+    const raw = await fetchRawReadme(repo, 'README.md', branch)
+    e.score = enrichScore(e.score ?? { total: null, breakdown: { maintain: null, practical: null, popularity: null, ease: null, signal: 0 }, confidence: 0, explanation: { zh: '', en: '' }, complete: false }, raw.ok ? raw.text : null, false, { stars: e.stars, pushedAt: e.pushed, curated: e.curated, verified: e.verified != null, bundled: e.bundled === true })
+  } catch { /* 富化失败保留基础分 */ }
+}
+
 /** Search the in-memory catalog for a natural-language requirement. */
 export async function findPlugins(profile: string, token: string, query: string, limit: number): Promise<FindPayload> {
   const needle = String(query ?? '').trim().toLowerCase()
@@ -133,6 +157,15 @@ export async function findPlugins(profile: string, token: string, query: string,
     .filter(p => (p as MarketEntry & { local?: boolean }).local !== true)
     .map(p => ({ p, score: scoreEntry(p, needle) }))
     .sort((a, b) => b.score - a.score)
+  // v1.7.45：对入围候选（≤12 仓）拉 README 富化五维评分并重排——
+  // 24h 缓存、并行、失败保留基础分（质量维度只做温和加分）。
+  const candidates = ranked.filter(r => r.score > 0).slice(0, 12).map(r => r.p)
+  await Promise.all(candidates.map(p => enrichEntry(p)))
+  ranked.forEach(r => {
+    const kw = keywordScore(r.p, needle)
+    r.score = kw === Number.NEGATIVE_INFINITY ? Number.NEGATIVE_INFINITY : kw + qualityBonus(r.p)
+  })
+  ranked.sort((a, b) => b.score - a.score)
   const recommended = ranked.filter(r => r.score > 0).slice(0, Math.min(limit, 5)).map(r => r.p)
   const related = ranked
     .filter(r => r.score > 0 && !recommended.includes(r.p))
@@ -186,7 +219,7 @@ export function installFindTool(ctx: { tools: { register(tool: unknown): void } 
       'Search the local DSH Store catalog (a full index of every GitHub repo tagged ' +
       'dsh-plugin, refreshed daily) for plugins AND related non-plugin tools matching the user\'s requirement. ' +
       'Both kinds are returned and labeled (plugin vs non-plugin). Returns a recommended list plus ' +
-      'other related entries with stars, descriptions and install commands. ' +
+      'other related entries with stars, descriptions, five-dimension practical scores, recommendation reasons and install commands. ' +
       'Use whenever the user asks for a plugin, capability, or tool they might install. ' +
       'Always end your reply with the button link returned in the tool output so the user can ' +
       'open the visual store window.',
@@ -232,8 +265,12 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
     value.recommended.forEach((p, i) => {
       const install = p.npm !== null ? 'dsh plugin add ' + p.npm : 'dsh plugin add github:' + p.owner + '/' + p.name
       const kindMark = p.isPlugin === true ? '' : p.isPlugin === false ? ' 〔非插件〕' : ' 〔待判定〕'
+      // v1.7.45：为什么推荐——五维评分解释层（推荐理由，质量信号）。
+      const exp = p.score?.explanation
+      const reason = exp !== undefined && exp !== null ? (lang === 'zh' ? exp.zh : exp.en) : ''
       lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + (p.verified != null ? ' ✓已验证' : '') + (p.curated ? ' ⚑精选' : '') + kindMark)
       lines.push('   ' + (desc(p) || '—').slice(0, 200))
+      if (reason !== '') lines.push('   💡为什么推荐：' + reason + '。')
       lines.push('   ' + install)
     })
   }

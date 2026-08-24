@@ -61,6 +61,29 @@ export interface MarketEntry {
   npmLinked?: boolean | null
   /** pushed_at 距今超过 180 天（腐烂信号）。 */
   dormant?: boolean | null
+  /** v1.7.45+：skill 型检测（根 SKILL.md / skills/ 目录）；null=未扫描。 */
+  hasSkill?: boolean | null
+  /** v1.7.45+：README 解析出的安装命令（页级富化缓存；展示-only）。 */
+  installCmds?: string[] | null
+  /** installCmds 来源：readme-section / readme / template。 */
+  cmdSource?: string | null
+  /** v1.7.45+：实用五维评分（目录加载基础分；页级富化后补全并 complete）。 */
+  score?: ScoreView | null
+}
+
+/** v1.7.45+：实用五维评分视图（host score.ts 同构结构）。 */
+export interface ScoreView {
+  total: number | null
+  breakdown: {
+    maintain: number | null
+    practical: number | null
+    popularity: number | null
+    ease: number | null
+    signal: number
+  }
+  confidence: number
+  explanation: { zh: string; en: string }
+  complete: boolean
 }
 
 export interface Registry {
@@ -87,6 +110,8 @@ export interface ListQuery {
   sinceDays: SinceDays
   lang: string
   scannedOnly: boolean
+  /** v1.7.45：含 skill 筛选（hasSkill===true）。 */
+  skillOnly: boolean
 }
 
 export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isInstalled?: (p: MarketEntry) => boolean, isFav?: (p: MarketEntry) => boolean): MarketEntry[] {
@@ -102,6 +127,8 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
     if (options.favOnly && !(isFav?.(p) ?? false)) return false
     // v1.7.23：已扫描筛选（bundled===true 为机器校验通过）。
     if (options.scannedOnly && p.bundled !== true) return false
+    // v1.7.45：含 skill 筛选（hasSkill===true；未扫描不显示）。
+    if (options.skillOnly && p.hasSkill !== true) return false
     if (options.sinceDays > 0) {
       if (p.pushed === null) return false
       const pushed = Date.parse(p.pushed)

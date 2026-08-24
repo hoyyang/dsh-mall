@@ -17,8 +17,10 @@ import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, wit
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
-import { ensureBundleScans } from './scan.ts'
-import { fetchSanitizedReadme } from './readme.ts'
+import { ensureBundleScans, ensureSkillScans } from './scan.ts'
+import { fetchRawReadme, fetchSanitizedReadme } from './readme.ts'
+import { parseInstallCommands, detectNeedsConfig } from './install-parse.ts'
+import { enrichScore, type ScoreView } from './score.ts'
 import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
 
 let cachedVersion: string | null = null
@@ -700,7 +702,21 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       const file = url.searchParams.get('file') ?? ''
       const branch = url.searchParams.get('branch') ?? 'main'
       const value = await fetchSanitizedReadme(repo, file, branch)
-      sendJson(response, value.ok ? 200 : 404, value)
+      // v1.7.45：顺带解析 README 安装命令（展示-only，不执行）。
+      // 该语言 README 无安装章节时，回退 README.md 再解析一次。
+      const extra: Record<string, unknown> = {}
+      if (value.ok) {
+        const raw = await fetchRawReadme(repo, file, branch)
+        let parsed = parseInstallCommands(raw.ok ? raw.text : null)
+        if (parsed.commands.length === 0 && file.toLowerCase() !== 'readme.md') {
+          const en = await fetchRawReadme(repo, 'README.md', branch)
+          parsed = parseInstallCommands(en.ok ? en.text : null)
+        }
+        extra.installCmds = parsed.commands
+        extra.cmdSource = parsed.source
+        extra.needsConfig = detectNeedsConfig(raw.ok ? raw.text : null)
+      }
+      sendJson(response, value.ok ? 200 : 404, { ...value, ...extra })
     },
   }))
 
@@ -723,7 +739,49 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const repos = Array.isArray(body.repos) ? body.repos.filter((r): r is string => typeof r === 'string' && r !== '') : []
       const bundles = await ensureBundleScans(config.profile, config.githubToken, repos)
-      sendJson(response, 200, { ok: true, bundles })
+      const skills = await ensureSkillScans(config.profile, config.githubToken, repos)
+      sendJson(response, 200, { ok: true, bundles, skills })
+    },
+  }))
+
+  // v1.7.45：页级评分富化——POST {items:[{repo,branch}]} 对当前页条目拉
+  // README（24h 缓存）补全实用/便捷两维 + 重融合总分 + 安装命令解析。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/scores',
+    handler: async (request, response) => {
+      if (request.method !== 'POST' || !sameOrigin(request)) {
+        response.writeHead(405, { allow: 'POST' })
+        response.end()
+        return
+      }
+      let body: Record<string, unknown>
+      try {
+        body = await readJsonBody(request)
+      } catch {
+        sendJson(response, 400, { ok: false, error: 'invalid body' })
+        return
+      }
+      const items = Array.isArray(body.items)
+        ? body.items.filter((it): it is { repo: string; branch?: string } => it !== null && typeof it === 'object' && typeof (it as { repo?: unknown }).repo === 'string')
+        : []
+      const { registry } = await loadRegistry(config.profile, config.githubToken, {})
+      const out: Record<string, { score: ScoreView | null; needsConfig: boolean; installCmds: string[]; cmdSource: string }> = {}
+      for (const it of items.slice(0, 48)) {
+        const repo = it.repo
+        const branch = typeof it.branch === 'string' && it.branch !== '' ? it.branch : 'main'
+        const entry = registry.plugins.find(p => (p.owner + '/' + p.name).toLowerCase() === repo.toLowerCase())
+        const base = entry?.score ?? null
+        const raw = await fetchRawReadme(repo, 'README.md', branch)
+        const readmeText = raw.ok ? raw.text : null
+        const needsConfig = detectNeedsConfig(readmeText)
+        const parsed = parseInstallCommands(readmeText)
+        const score = base !== null
+          ? enrichScore(base, readmeText, needsConfig, { stars: entry?.stars ?? null, pushedAt: entry?.pushed ?? null, curated: entry?.curated === true, verified: entry?.verified != null, bundled: entry?.bundled === true })
+          : null
+        out[repo] = { score, needsConfig, installCmds: parsed.commands, cmdSource: parsed.source }
+      }
+      sendJson(response, 200, { ok: true, scores: out })
     },
   }))
 

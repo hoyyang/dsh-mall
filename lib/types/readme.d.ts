@@ -7,6 +7,11 @@
  * - 相对链接/图片改 absolute（raw 或 github blob），MarkdownText 可渲染。
  * - 24h 内存缓存；仓库/文件名严格白名单（防路径穿越）。
  */
+/** 原始 README（不做任何清洗）：评分/安装命令解析用；24h 缓存。 */
+export declare function fetchRawReadme(repo: string, file: string, branch: string): Promise<{
+    ok: boolean;
+    text: string;
+}>;
 export declare function fetchSanitizedReadme(repo: string, file: string, branch: string): Promise<{
     ok: boolean;
     text: string;

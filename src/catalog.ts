@@ -10,6 +10,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { fetchTopicPages, packageJsonVerdict, searchDshTopicRepos } from './github.ts'
+import { attachScores } from './score.ts'
 
 // ------------------------------------------------------------ CDN channel
 // Primary source: the community-built static index (GitHub Actions, token
@@ -80,6 +81,7 @@ interface CdnRepo {
   bundled_at?: string | null
   npm_linked?: boolean | null
   dormant?: boolean | null
+  has_skill?: boolean | null
   version?: string | null
   /** 索引 v1.10：GitHub tags 最新 tag（npm 未发布仓库的版本号展示）。 */
   latest_tag?: string | null
@@ -236,6 +238,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     bundledAt: typeof repo.bundled_at === 'string' ? repo.bundled_at : null,
     npmLinked: typeof repo.npm_linked === 'boolean' ? repo.npm_linked : null,
     dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
+    hasSkill: typeof repo.has_skill === 'boolean' ? repo.has_skill : null,
   }
 }
 
@@ -289,6 +292,7 @@ async function fetchCdnRegistry(profile: string, customUrl: string): Promise<Reg
       const verdicts = verdictsOf(profile)
       const entries = body.repos.map(repo => cdnEntry(repo, known, verdicts))
       const withDelta = computeTodayStars(profile, entries)
+      attachScores(withDelta)
       return normalizeCategories({
         updated: body.generated_at ?? new Date().toISOString(),
         count: withDelta.length,
@@ -397,6 +401,7 @@ function snapshot(): Registry {
 function snapshotWithDeltas(profile: string): Registry {
   const snap = snapshot()
   snap.plugins = computeTodayStars(profile, snap.plugins)
+  attachScores(snap.plugins)
   return snap
 }
 
@@ -769,6 +774,7 @@ function makeRegistry(profile: string, htmlByKey: Map<string, { pushed_at: strin
     entries.push(buildEntry(key, known, verdicts, searchByKey.get(key), htmlByKey.get(key)))
   }
   const withDelta = computeTodayStars(profile, entries)
+  attachScores(withDelta)
   return normalizeCategories({
     updated: new Date().toISOString(),
     count: withDelta.length,

@@ -98,6 +98,25 @@ export interface MarketEntry {
     npmLinked?: boolean | null;
     /** v1.7.23+：pushed_at 距今超过 180 天（腐烂信号）。 */
     dormant?: boolean | null;
+    /** v1.7.45+：skill 型检测（根 SKILL.md / skills/ 目录）；null=未扫描。 */
+    hasSkill?: boolean | null;
+    /** v1.7.45+：实用五维评分（目录加载算基础分，README 富化后补全）。 */
+    score?: {
+        total: number | null;
+        breakdown: {
+            maintain: number | null;
+            practical: number | null;
+            popularity: number | null;
+            ease: number | null;
+            signal: number;
+        };
+        confidence: number;
+        explanation: {
+            zh: string;
+            en: string;
+        };
+        complete: boolean;
+    } | null;
 }
 export interface Registry {
     updated: string;
@@ -151,6 +170,11 @@ export interface MarketState {
     }>;
     /** 运行时 bundle top-up 扫描缓存：owner/repo → {at, value}（24h TTL）。 */
     bundleScans?: Record<string, {
+        at: number;
+        value: boolean | null;
+    }>;
+    /** v1.7.45：运行时 skill 检测缓存：owner/repo → {at, value}（24h TTL）。 */
+    skillScans?: Record<string, {
         at: number;
         value: boolean | null;
     }>;

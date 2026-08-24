@@ -17,8 +17,17 @@ import {
   Tooltip,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import { formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
+import RadarChart from './Radar.tsx'
 
-const readmeCache = new Map<string, { status: 'ok' | 'error'; text: string }>()
+interface ReadmeHit {
+  status: 'ok' | 'error' | 'loading'
+  text: string
+  /** v1.7.45：host 顺带解析的 README 安装命令（展示-only）。 */
+  installCmds?: string[]
+  cmdSource?: string
+}
+
+const readmeCache = new Map<string, ReadmeHit>()
 
 /** 探测仓库实际提供的 README 语言（Range 请求只要 64 字节，零 API 额度）。 */
 const LANG_PROBE = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
@@ -127,7 +136,7 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
     .replace(/<(?:div|span|center|font|sub|sup|small|del|ins|u|s)\b[^>]*>/gi, '')
 }
 
-async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 'ok' | 'error'; text: string }> {
+async function fetchReadme(entry: MarketEntry, lang: string): Promise<ReadmeHit> {
   const branch = entry.defaultBranch ?? 'main'
   const candidates = [...readmeCandidates(lang), 'README.md']
   let lastError = ''
@@ -135,11 +144,17 @@ async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 
     try {
       // v1.7.26：README 走 host 安全预渲染端点（图片白名单/HTML 剥离/标题降级/
       // 相对链接绝对化），客户端再做一次针对 MarkdownText 的徽章清理。
+      // v1.7.45：响应顺带 installCmds/cmdSource（host 解析，展示-only）。
       const res = await fetch('/dsh-store/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=' + encodeURIComponent(file) + '&branch=' + encodeURIComponent(branch))
       if (res.ok) {
-        const body = await res.json() as { ok?: boolean; text?: string }
+        const body = await res.json() as { ok?: boolean; text?: string; installCmds?: string[]; cmdSource?: string }
         if (body.ok === true && typeof body.text === 'string') {
-          return { status: 'ok', text: preprocessReadme(body.text.slice(0, 200_000), entry) }
+          const hit: ReadmeHit = { status: 'ok', text: preprocessReadme(body.text.slice(0, 200_000), entry) }
+          if (Array.isArray(body.installCmds) && body.installCmds.length > 0) {
+            hit.installCmds = body.installCmds
+            hit.cmdSource = body.cmdSource ?? 'readme'
+          }
+          return hit
         }
         lastError = body.text ?? 'readme unavailable'
       } else {
@@ -152,8 +167,8 @@ async function fetchReadme(entry: MarketEntry, lang: string): Promise<{ status: 
   return { status: 'error', text: lastError }
 }
 
-function useReadme(entry: MarketEntry, lang: string): { status: 'loading' | 'ok' | 'error'; text: string } {
-  const [state, setState] = useState<{ status: 'loading' | 'ok' | 'error'; text: string }>(() => {
+function useReadme(entry: MarketEntry, lang: string): ReadmeHit {
+  const [state, setState] = useState<ReadmeHit>(() => {
     const hit = readmeCache.get(entry.owner + '/' + entry.name + '#' + lang)
     return hit ?? { status: 'loading', text: '' }
   })
@@ -224,6 +239,28 @@ export function DetailPanel(props: {
   const disclosure = entry.disclosure
   const discLines = useMemo(() => (disclosure == null ? [] : disclosureSummary(disclosure, t)), [disclosure, t])
   const [copied, setCopied] = useState(false)
+  // v1.7.45：五维评分——目录基础分即时可用；README 富化经 /dsh-store/scores 补全。
+  const [score, setScore] = useState<MarketEntry['score'] | null>(entry.score ?? null)
+  useEffect(() => {
+    if (entry.score != null && entry.score.complete) {
+      setScore(entry.score)
+      return
+    }
+    let alive = true
+    fetch('/dsh-store/scores', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ items: [{ repo: entry.owner + '/' + entry.name, branch: entry.defaultBranch ?? 'main' }] }),
+    })
+      .then(res => res.json())
+      .then((body: { scores?: Record<string, { score: MarketEntry['score'] | null }> }) => {
+        const hit = body.scores?.[entry.owner + '/' + entry.name]?.score
+        if (alive && hit != null) setScore(hit)
+      })
+      .catch(() => {})
+    return () => { alive = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entry.owner, entry.name, entry.defaultBranch, entry.score])
   const LANG_LABELS: Record<string, string> = { en: 'English', zh: '中文', ja: '日本語', ko: '한국어', es: 'Español', fr: 'Français', de: 'Deutsch', pt: 'Português', ru: 'Русский' }
   const copyCmd = () => {
     const cmd = entry.npmLinked === false || entry.npm === null ? 'dsh plugin add github:' + entry.owner + '/' + entry.name : 'dsh plugin add ' + entry.npm
@@ -316,6 +353,57 @@ export function DetailPanel(props: {
           </div>
 
           <div className="pcm-detail-desc">{desc === '' ? '—' : desc}</div>
+
+          {/* v1.7.45：实用评分卡片——总分+置信度+五维条+为什么推荐+雷达图 */}
+          {score != null && score.total !== null && (
+            <div className="pcm-score-card" title={t('scoreCardHint')}>
+              <div className="pcm-score-main">
+                <div className="pcm-score-head">
+                  <span className="pcm-score-title">{t('scoreTitle')}</span>
+                  <span className="pcm-score-conf">{t('scoreConfidence')} {Math.round(score.confidence * 100)}%</span>
+                </div>
+                {(langChoice === 'zh' ? score.explanation.zh : score.explanation.en) !== '' && (
+                  <div className="pcm-score-why">
+                    <span className="pcm-score-why-label">{t('scoreWhyTitle')}：</span>
+                    {langChoice === 'zh' ? score.explanation.zh : score.explanation.en}
+                  </div>
+                )}
+                <div className="pcm-score-bars">
+                  {([
+                    ['maintain', t('scoreDimMaintain'), score.breakdown.maintain],
+                    ['practical', t('scoreDimPractical'), score.breakdown.practical],
+                    ['popularity', t('scoreDimPopularity'), score.breakdown.popularity],
+                    ['ease', t('scoreDimEase'), score.breakdown.ease],
+                    ['signal', t('scoreDimSignal'), score.breakdown.signal],
+                  ] as const).map(([key, label, v]) => (
+                    <div className="pcm-score-bar" key={key}>
+                      <span className="pcm-score-dim">{label}</span>
+                      <div className="pcm-score-track">
+                        <div className="pcm-score-fill" style={{ width: (v === null ? 0 : v) + '%' }} />
+                      </div>
+                      <b className="pcm-score-val">{v === null ? t('scorePending') : v}</b>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="pcm-score-radar">
+                <RadarChart
+                  breakdown={score.breakdown}
+                  total={score.total}
+                  size={128}
+                  labels={{
+                    maintain: t('scoreDimMaintain'),
+                    practical: t('scoreDimPractical'),
+                    popularity: t('scoreDimPopularity'),
+                    ease: t('scoreDimEase'),
+                    signal: t('scoreDimSignal'),
+                  }}
+                  totalLabel={t('scoreTotalLabel')}
+                />
+              </div>
+            </div>
+          )}
+
           {(entry.bundled !== undefined && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false)) && (
             <div className={entry.bundled ? 'pcm-risk pcm-risk-curated' : 'pcm-risk pcm-risk-nonplugin'}>
               {entry.bundled ? props.t('scannedBadgeHint') + (entry.bundledAt !== undefined && entry.bundledAt !== null ? ' · ' + entry.bundledAt : '') : props.t('scanFailHint')}
@@ -432,6 +520,25 @@ export function DetailPanel(props: {
                 <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={copyCmd} />
               </Tooltip>
             </div>
+            {/* v1.7.45：README 安装命令（host 解析，展示-only，可复制） */}
+            {(readme.installCmds ?? []).length > 0 ? (
+              <div className="pcm-readme-cmds">
+                <div className="pcm-readme-cmds-title">
+                  {t('readmeCmdsTitle')}
+                  <span className="pcm-readme-cmds-src">{readme.cmdSource === 'readme-section' ? t('readmeCmdsFromSection') : t('readmeCmdsFromReadme')}</span>
+                </div>
+                {(readme.installCmds ?? []).map(cmd => (
+                  <div key={cmd} className="pcm-cmdrow">
+                    <div className="pcm-cmd pcm-readme-cmd">{cmd}</div>
+                    <Tooltip label={t('detailCopy')}>
+                      <Button variant="ghost" size="sm" icon={<IconCopyOutline16 size={14} />} onClick={() => { void navigator.clipboard?.writeText(cmd) }} />
+                    </Tooltip>
+                  </div>
+                ))}
+              </div>
+            ) : readme.status === 'ok' && (
+              <div className="pcm-readme-cmds-note">{t('readmeCmdsNone')}</div>
+            )}
             {/* v1.7.29：安装三通道注释 + 收录日 */}
             <div className="pcm-detail-channels">
               <div>{t('channelNpm')}</div>
