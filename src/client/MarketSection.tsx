@@ -1432,12 +1432,18 @@ export function MarketSection(props: SectionProps) {
       {!seedMode && q.trim() === '' && picks.length > 0 && (
         <div className="pcm-picks">
           <div className="pcm-picks-head">
-            <span className="pcm-picks-title">⚑ {t('picksTitle')}</span>
-            <span className="pcm-picks-note">{t('picksNote')}</span>
+            <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3v18" stroke="#272c36" strokeWidth="2" strokeLinecap="round" />
+              <path d="M5 4h12.5l-2.6 3.4 2.6 3.4H5" stroke="#272c36" strokeWidth="2" strokeLinejoin="round" fill="rgba(39,44,54,.08)" />
+            </svg>
+            <span className="pcm-picks-title">{t('picksTitle')}</span>
           </div>
           <div className="pcm-picks-grid">
             {picks.map(p => (
               <button key={p.owner + '/' + p.name} type="button" className="pcm-pick" title={p.description} onClick={() => setDetail(p)}>
+                <span className="pcm-pick-ribbon" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round"><path d="M5 3v18" /><path d="M5 4h12.5l-2.6 3.4 2.6 3.4H5" /></svg>
+                </span>
                 <span className="pcm-pick-name">{p.name}</span>
                 <span className="pcm-pick-owner">{p.owner}</span>
                 <span className="pcm-pick-meta">
