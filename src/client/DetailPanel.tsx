@@ -490,10 +490,11 @@ export function DetailPanel(props: {
             </div>
           )}
 
-          {(entry.topics ?? []).length > 0 && (
+          {((entry.topics ?? []).length > 0 || (entry.tagsZh ?? []).length > 0) && (
             <div className="pcm-detail-sec">
               <div className="pcm-detail-sec-title">{t('detailTopics')}</div>
               <div className="pcm-detail-topics">
+                {(entry.tagsZh ?? []).map(tp => <span key={'tag-' + tp} className="pcm-detail-topic pcm-detail-tag">{tp}</span>)}
                 {(entry.topics ?? []).map(tp => <span key={tp} className="pcm-detail-topic">{tp}</span>)}
               </div>
             </div>

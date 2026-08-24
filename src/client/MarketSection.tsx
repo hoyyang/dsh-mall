@@ -569,6 +569,22 @@ export function MarketSection(props: SectionProps) {
     .filter(p => p.curated)
     .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
     .slice(0, 8)), [data])
+
+  // v1.7.52：为你推荐（本地已装画像 → 相似推荐，host /dsh-store/recommend）
+  const [recommend, setRecommend] = useState<Array<{ entry: MarketEntry; reasons: string[] }> | null>(null)
+  const lastInstalledRef = useRef<string>('')
+  useEffect(() => {
+    if (seedMode) return
+    const installedKey = JSON.stringify(status?.installed ?? {})
+    fetch('/dsh-store/recommend', { cache: 'no-store' })
+      .then(res => res.json())
+      .then((body: { items?: Array<{ entry: MarketEntry; reasons: string[] }> }) => {
+        setRecommend(Array.isArray(body.items) ? body.items : [])
+      })
+      .catch(() => setRecommend([]))
+    lastInstalledRef.current = installedKey
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status?.installed, seedMode])
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
@@ -1519,6 +1535,30 @@ export function MarketSection(props: SectionProps) {
           </div>
         </div>
       )}
+      {/* v1.7.52：为你推荐——本地已装画像的被动推荐（编辑精选下方） */}
+      {!seedMode && q.trim() === '' && (recommend?.length ?? 0) > 0 && (
+        <div className="pcm-picks pcm-recommend">
+          <div className="pcm-picks-head">
+            <svg className="pcm-picks-flag" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L12 19.6 5.2 23l1.3-7.6L1 10l7.6-1.1z" stroke="#4d6bfe" strokeWidth="1.8" strokeLinejoin="round" />
+            </svg>
+            <span className="pcm-picks-title">{t('recommendTitle')}</span>
+          </div>
+          <div className="pcm-picks-grid">
+            {(recommend ?? []).map(r => (
+              <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
+                <span className="pcm-pick-name">{r.entry.name}</span>
+                <span className="pcm-pick-owner">{r.entry.owner}</span>
+                <span className="pcm-pick-meta">
+                  <span className="pcm-pick-star">★ {formatStars(r.entry.stars)}</span>
+                  {r.entry.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.entry.score.total}</span>}
+                </span>
+                {r.reasons.length > 0 && <span className="pcm-pick-reason">{r.reasons[0]}</span>}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {list.length === 0 ? (
         data === null ? (
           <div className="pcm-empty">{t('loading')}</div>
@@ -1637,6 +1677,12 @@ export function MarketSection(props: SectionProps) {
                         const d = langChoice !== 'en' && entry.descriptions?.[langChoice] ? entry.descriptions[langChoice] : entry.description
                         return d === '' ? '—' : d
                       })()}</div>
+                      {/* v1.7.52：中文功能标签（tags.json 手动 LLM 打标，≤3 个） */}
+                      {(entry.tagsZh ?? []).length > 0 && (
+                        <div className="pcm-tags-mini">
+                          {(entry.tagsZh ?? []).slice(0, 3).map(tag => <span key={tag} className="pcm-tag-mini">{tag}</span>)}
+                        </div>
+                      )}
                       {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
                       <div className="pcm-stats2">
                         <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>

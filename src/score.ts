@@ -330,8 +330,14 @@ export function attachScores(entries: Array<{
   homepage?: string | null
   readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
   score?: ScoreView | null
+  isPlugin?: boolean | null
 }>): void {
-  const p99 = computeP99Stars(entries.map(e => e.stars))
+  // v1.7.52：p99 口径修正——只在 isPlugin===true 的插件群体上取（与 dsh.market
+  // 在其已收录插件集上取 p99 同口径）。此前用全量 topic 仓库（含 react-resume
+  // 等 8 万星非插件）当基准，p99 被抬高、热度分被系统性压低——「90 分以上只有
+  // 一个」的重要原因之一。无任何判定插件时回退全量。
+  const pluginStars = entries.filter(e => e.isPlugin === true).map(e => e.stars)
+  const p99 = computeP99Stars(pluginStars.length > 0 ? pluginStars : entries.map(e => e.stars))
   for (const e of entries) {
     if (e.score !== undefined) continue
     e.score = computeBaseScore({

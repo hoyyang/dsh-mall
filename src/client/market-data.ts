@@ -67,6 +67,8 @@ export interface MarketEntry {
   installCmds?: string[] | null
   /** installCmds 来源：readme-section / readme / template。 */
   cmdSource?: string | null
+  /** v1.7.52+：中文功能标签（tags.json 手动 LLM 打标产物）。 */
+  tagsZh?: string[]
   /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷静态数据源）。 */
   readmeSig?: {
     len: number | null

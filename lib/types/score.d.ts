@@ -131,4 +131,5 @@ export declare function attachScores(entries: Array<{
         needsConfig: boolean;
     } | null;
     score?: ScoreView | null;
+    isPlugin?: boolean | null;
 }>): void;

@@ -22,6 +22,7 @@ import { fetchRawReadme, fetchSanitizedReadme } from './readme.ts'
 import { parseInstallCommands, detectNeedsConfig } from './install-parse.ts'
 import { enrichScore, type ScoreView } from './score.ts'
 import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
+import { recommendFor } from './recommend.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
@@ -683,6 +684,25 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         sendJson(response, 200, { ...locked.value, cancelled: isCancelled(taskId) })
       } finally {
         endTask(taskId)
+      }
+    },
+  }))
+
+  // v1.7.52：本地已装+推荐——GET 返回「为你推荐」列表（含理由，中文）。
+  disposers.push(host.webServer.register({
+    kind: 'exact',
+    path: '/dsh-store/recommend',
+    handler: async (request, response) => {
+      if (request.method !== 'GET') {
+        response.writeHead(405, { allow: 'GET' })
+        response.end()
+        return
+      }
+      try {
+        const items = await recommendFor(config.profile, config.githubToken, 8)
+        sendJson(response, 200, { ok: true, items })
+      } catch (err) {
+        sendJson(response, 200, { ok: true, items: [], error: err instanceof Error ? err.message : 'recommend failed' })
       }
     },
   }))

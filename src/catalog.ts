@@ -252,6 +252,7 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     npmLinked: typeof repo.npm_linked === 'boolean' ? repo.npm_linked : null,
     dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
     hasSkill: typeof repo.has_skill === 'boolean' ? repo.has_skill : null,
+    tagsZh: tagsOf(repo.full_name ?? key),
     readmeSig: typeof repo.readme_len === 'number'
       ? {
           len: repo.readme_len,
@@ -386,6 +387,19 @@ let knownCache: KnownMap | null = null
 let knownOverride: KnownMap | null = null
 export function setKnownOverride(map: KnownMap | null): void {
   knownOverride = map
+}
+
+// ------------------------------------------------------------------ tags.ts
+/** 中文打标覆盖（tags.json，手动 LLM 打标产物）：owner/repo → {descriptionZh, tagsZh}。 */
+let tagsOverrideMap: Record<string, { descriptionZh: string; tagsZh: string[] }> | null = null
+
+export function setTagsOverride(map: Record<string, { descriptionZh: string; tagsZh: string[] }> | null): void {
+  tagsOverrideMap = map
+}
+
+export function tagsOf(key: string): string[] {
+  const hit = tagsOverrideMap?.[key.toLowerCase()]
+  return hit !== undefined ? hit.tagsZh : []
 }
 export function loadKnown(): KnownMap {
   if (knownOverride !== null) return knownOverride
@@ -734,6 +748,7 @@ function buildEntry(
     disclosure: null,
     installable: null,
     topics: search?.topics ?? [],
+    tagsZh: tagsOf(fullName),
   }
 }
 

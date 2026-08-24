@@ -13,6 +13,7 @@ import { installFindTool } from './find.ts'
 import { installMarketSettings } from './settings.ts'
 import { startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { startAwesomeRefresh, stopAwesomeRefresh } from './awesome.ts'
+import { startTagsRefresh, stopTagsRefresh } from './tags.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-store'
@@ -86,11 +87,14 @@ export function apply(ctx: Context, config?: Config): void {
       startAutoUpdate(resolved)
       // awesome 人工目录自动保持最新（启动拉取 + 24h 周期）。
       startAwesomeRefresh(resolved.profile)
+      // 中文打标（tags.json 手动 LLM 产物）保持最新（启动拉取 + 24h 周期）。
+      startTagsRefresh(resolved.profile)
       return () => {
         disposeRoutes()
         removeSkill()
         stopAutoUpdate()
         stopAwesomeRefresh()
+        stopTagsRefresh()
       }
     }, 'dsh-store: http routes + skill + auto-update timer')
   })

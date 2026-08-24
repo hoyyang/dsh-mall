@@ -65,6 +65,8 @@ export interface MarketEntry {
     openIssues?: number | null;
     /** v1.7.47+：仓库 homepage（索引 v1.18 起提供；评分信号维度）。 */
     homepage?: string | null;
+    /** v1.7.52+：中文功能标签（tags.json 手动 LLM 打标产物，CDN 分发）。 */
+    tagsZh?: string[];
     /** v1.7.50+：索引 CI README 结构信号（评分实用/便捷两维静态数据源；
      *  字段齐全时目录加载即可算完整五维，无需运行时拉 README）。 */
     readmeSig?: {
