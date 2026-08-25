@@ -802,21 +802,29 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         ? body.items.filter((it): it is { repo: string; branch?: string } => it !== null && typeof it === 'object' && typeof (it as { repo?: unknown }).repo === 'string')
         : []
       const { registry } = await loadRegistry(config.profile, config.githubToken, {})
+      // v1.7.81：并发补分（此前逐仓串行，一页 24 仓慢链路上要几分钟——
+      // 雷达图「迟迟不出现」的主因）。8 并发 + 单仓 15s 超时兜底。
       const out: Record<string, { score: ScoreView | null; needsConfig: boolean; installCmds: string[]; cmdSource: string }> = {}
-      for (const it of items.slice(0, 48)) {
-        const repo = it.repo
-        const branch = typeof it.branch === 'string' && it.branch !== '' ? it.branch : 'main'
-        const entry = registry.plugins.find(p => (p.owner + '/' + p.name).toLowerCase() === repo.toLowerCase())
-        const base = entry?.score ?? null
-        const raw = await fetchRawReadme(repo, 'README.md', branch)
-        const readmeText = raw.ok ? raw.text : null
-        const needsConfig = detectNeedsConfig(readmeText)
-        const parsed = parseInstallCommands(readmeText)
-        const score = base !== null
-          ? enrichScore(base, readmeText, needsConfig, { stars: entry?.stars ?? null, pushedAt: entry?.pushed ?? null, curated: entry?.curated === true, verified: entry?.verified != null, bundled: entry?.bundled === true, description: entry?.description ?? '', license: entry?.license ?? null, topics: entry?.topics ?? [], hasHomepage: typeof entry?.homepage === 'string' && entry.homepage !== '' })
-          : null
-        out[repo] = { score, needsConfig, installCmds: parsed.commands, cmdSource: parsed.source }
+      const queue = items.slice(0, 48)
+      const worker = async (): Promise<void> => {
+        for (;;) {
+          const it = queue.shift()
+          if (it === undefined) return
+          const repo = it.repo
+          const branch = typeof it.branch === 'string' && it.branch !== '' ? it.branch : 'main'
+          const entry = registry.plugins.find(p => (p.owner + '/' + p.name).toLowerCase() === repo.toLowerCase())
+          const base = entry?.score ?? null
+          const raw = await fetchRawReadme(repo, 'README.md', branch)
+          const readmeText = raw.ok ? raw.text : null
+          const needsConfig = detectNeedsConfig(readmeText)
+          const parsed = parseInstallCommands(readmeText)
+          const score = base !== null
+            ? enrichScore(base, readmeText, needsConfig, { stars: entry?.stars ?? null, pushedAt: entry?.pushed ?? null, curated: entry?.curated === true, verified: entry?.verified != null, bundled: entry?.bundled === true, description: entry?.description ?? '', license: entry?.license ?? null, topics: entry?.topics ?? [], hasHomepage: typeof entry?.homepage === 'string' && entry.homepage !== '' })
+            : null
+          out[repo] = { score, needsConfig, installCmds: parsed.commands, cmdSource: parsed.source }
+        }
       }
+      await Promise.all(Array.from({ length: 8 }, () => worker()))
       sendJson(response, 200, { ok: true, scores: out })
     },
   }))

@@ -1749,7 +1749,7 @@ export function MarketSection(props: SectionProps) {
                     </div>
                   </div>
                   {/* v1.7.45：中段两栏——左侧徽章/简介/统计，右侧五维雷达图（仅五维齐全时）；简介宽度随雷达收窄 */}
-                  <div className={'pcm-card-mid' + (entry.score != null && entry.score.complete ? ' pcm-card-mid-radar' : '')}>
+                  <div className={'pcm-card-mid' + (entry.score != null ? ' pcm-card-mid-radar' : '')}>
                     <div className="pcm-card-left">
                       {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true) && (
                         <div className="pcm-safety-row">
@@ -1810,8 +1810,8 @@ export function MarketSection(props: SectionProps) {
                         )}
                       </div>
                     </div>
-                    {entry.score != null && entry.score.complete && (
-                      <div className="pcm-radar-wrap" title={t('cardRadarHint')} onClick={e => e.stopPropagation()}>
+                    {entry.score != null && (
+                      <div className="pcm-radar-wrap" onClick={e => e.stopPropagation()}>
                         <RadarChart
                           breakdown={entry.score.breakdown}
                           total={entry.score.total}
