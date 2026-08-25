@@ -81,6 +81,9 @@ export declare function pluginStatesOf(profile: string, manifest: {
     dependencies: Record<string, string>;
     bundles: string[];
 }): Record<string, 'live' | 'disabled' | 'restart'>;
+export declare function restartNeededOf(profile: string, manifest: {
+    dependencies: Record<string, string>;
+}): Record<string, boolean>;
 export declare function snapshotDep(profile: string, name: string, spec: string, to: string, state: {
     rollbacks?: Record<string, {
         name: string;

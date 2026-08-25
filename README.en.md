@@ -1,6 +1,8 @@
 # DSH Mall
 
-All the `#dsh-plugin` repos on GitHub, in one mall: browse, search, compare scores, one-click install. Before installing you can also let AI read the code first and veto it if it looks off.
+![banner](assets/banner.png)
+
+Every `#dsh-plugin` repo on GitHub, in one mall: browse, search, compare scores, install in one click. Not sure about a plugin? Let AI read its code first.
 
 [**中文**](README.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [Changelog](CHANGELOG.md)
 
@@ -20,75 +22,65 @@ All the `#dsh-plugin` repos on GitHub, in one mall: browse, search, compare scor
 dsh plugin add dsh-mall
 ```
 
-Restart `dsh web` and **DSH Mall** shows up in the sidebar above Settings. Requires dsh web 0.1.0-rc.8 or newer (tested on 0.1.0-rc.8).
+Restart `dsh web` and **DSH Mall** appears in the sidebar. Requires dsh web 0.1.0-rc.8 or newer (tested on 0.1.0-rc.8).
 
-## What it does
+## What's inside
 
-- **Complete catalog** — every GitHub repo tagged `#dsh-plugin`, indexed by our own CI every 2 hours. No rate limits to worry about.
-- **Smart install / update / uninstall** — before installing, AI (your configured model) reads the repo and returns install / caution / refuse. Uninstall scans local dependents first. Falls back to the regular flow when AI is unavailable.
-- **Agent-friendly** — ships the `find_dsh_mall_plugin` tool and a skill: ask for a plugin in the conversation and it picks for you.
-- **Five-dimension score** — maintain, practical, popularity, ease, signal plus one composite. Hover the radar and it explains how each number is computed.
-- **Chinese tags + 9-language descriptions** — function tags in Chinese, one-line descriptions in nine languages, distributed through the index pipeline at zero per-user LLM cost.
-- **Editor picks + For You** — weekly picks; recommendations based on what you installed (with a 30-second cold-start quiz).
-- **Trust badges** — scanned (dsh.bundle verified by machine), curated, verified, has-skill, stale warnings. Glance and know.
-- **9-language UI** — 中文, English, 日本語, 한국어, Español, Français, Deutsch, Português, Русский. One click switches everything.
-- **Full lifecycle** — one-click update, daily auto-update (03:30), rollback, enable switch, task panel with progress and cancel.
-- **Safe README rendering** — sanitized markdown, badge residue cleaned up, install commands extracted for copy.
-- **Signals** — today's +stars, npm downloads (30d & total), version capsules.
+- **The whole catalog** — every repo tagged `#dsh-plugin`, refreshed every 2 hours. No rate limits to worry about.
+- **AI pre-install review** — AI reads the repo first and returns install / caution / refuse. "Refuse" blocks the install.
+- **Find plugins in the conversation** — the plugin ships a skill: run `/dsh-mall` in your agent session, describe what you need, and it picks for you. The reply ends with a button that opens the store window.
+- **Five-dimension score** — maintain, practical, popularity, ease, signal, plus a composite. Hover the radar and it explains each number in plain words.
+- **Chinese tags** — every plugin carries Chinese function tags and a one-line description in nine languages.
+- **Editor picks + For You** — weekly picks; recommendations based on what you installed (30-second quiz if you have no idea).
+- **Trust badges** — scanned, curated, verified, has-skill, stale warnings. Know what you're looking at.
+- **9-language UI** — 中文, English, 日本語, 한국어, Español, Français, Deutsch, Português, Русский.
+- **Full lifecycle** — one-click update, daily auto-update, rollback, enable switch, task panel with cancel.
+- **Safe rendering** — sanitized READMEs, install commands extracted for copy.
 
-## Usage walkthrough
+## Usage
 
-Ranked by usefulness, brightest first. (Screenshots show the Chinese UI; every screen switches to any of the nine languages in one click.)
+### Find plugins right in the conversation
 
-### 🧠 Smart install — usefulness 95
+The plugin ships a skill called `dsh-mall`. Run `/dsh-mall find a plugin that can delete sessions` in your agent session — it searches the whole catalog and returns recommendations plus alternatives. The last line is a button: "Open DSH Mall to view plugin details". One click lands you in the store.
 
-Pick "Smart install" in the confirm dialog: AI reviews the repo as untrusted data (delimited, never executed) and returns install / caution / refuse. "Refuse" stops the install; if AI fails or times out, it falls back to a regular install.
+![The button in a skill reply](assets/shot-skill.png)
 
-![Install confirmation](assets/shot-zh-install.png)
-
-### 📊 Five-dimension score — usefulness 90
-
-A pentagon radar on every card: maintain, practical, popularity, ease, signal, plus the composite in the middle. The composite is a **weighted geometric mean** — multiplicative, so one near-zero dimension drags the whole thing down. That's why a new 0-star repo scores low honestly, and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining each number in plain words.
-
-![Detail score card](assets/shot-zh-detail.png)
-
-### 🔌 Agent-friendly — usefulness 90
-
-Works best for agents. Say what you need; the `find_dsh_mall_plugin` tool ranks the whole catalog and returns recommendations plus related entries, with a button back to the store window. Smart search first has your model translate the request into search terms, then ranks by keyword + reputation + quality.
+The button opens a results window — recommendations first, cards identical to the main store: install, details, favorites all work.
 
 ![Smart search results](assets/shot-results.png)
 
-### ⭐ Editor picks + For You — usefulness 85
+### Let AI review before you install
 
-Two columns in the middle of the home screen: Editor picks (refreshed every Monday, top composite scores among the awesome-curated), and For You (based on what you used in the last 30 days plus the quiz, with reasons printed on each card). No idea what to install? The quiz takes 30 seconds.
+Pick "Smart install" in the confirm dialog: AI reviews the repo as untrusted data (never executed) and returns install / caution / refuse. "Refuse" stops the install. If AI fails or times out, it falls back to a regular install.
+
+![Install confirmation](assets/shot-zh-install.png)
+
+### Look at the score, then decide
+
+Every card has a pentagon radar with the composite in the middle. The composite is a weighted geometric mean — one near-zero dimension drags the whole thing down, so a new 0-star repo scores low honestly and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining every number.
+
+![Detail score card](assets/shot-zh-detail.png)
+
+### No idea what to install? These two columns
+
+Middle of the home screen: "Editor picks" (refreshed every Monday, top composite scores among the curated) and "For You" (based on your last 30 days plus the quiz, with reasons on each card). Still no idea? The quiz takes 30 seconds.
 
 ![Picks and recommendations](assets/shot-picks.png)
 
-### 🧰 Task panel + restart hint — usefulness 80
+### Every task, visible from anywhere
 
-Install/update/uninstall all show progress in a global task panel with cancel. Plugins whose patch carries config or expressions only hot-mount plain inserts — when a change needs a restart, the card shows "Restart required" with a "Why not effective yet?" fold-out that explains it in one sentence. The panel is shared: tasks started from the results window are visible from the main store and vice versa.
+Install, update, uninstall all show progress in a global task panel with cancel — tasks started from the results window are visible from the main store and vice versa. Changes that need a restart get a hint on the card, with a one-sentence explanation.
 
 ![Task panel](assets/shot-tasks.png)
 
-### ⚙️ Settings — usefulness 75
+### Settings in one place
 
-"DSH Mall - Settings" in the Settings window: auto-update toggle (daily 03:30), data source, optional GitHub quota config (memory only). When GitHub is down or rate-limited, the mall falls back to a bundled snapshot and keeps working.
+"DSH Mall - Settings" in the Settings window: open-the-store button, auto-update toggle (daily 03:30), the risk note, and the current version.
 
 ![Mall settings](assets/shot-zh-settings.png)
-
-## Where the data comes from
-
-Built by the companion repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. The mall reads it over raw/jsDelivr CDN and refreshes every 30 minutes.
-
-## Security
-
-- Every mutating endpoint (install/uninstall/update/toggle) is same-origin only.
-- Install sources are always shown first; smart install treats repo content as untrusted data.
-- Credentials are never persisted; user-level data-source/token routes are removed (deployment config only).
-- Third-party plugins are third-party code — judge before installing. "Scanned" means installable structure, not a security audit.
 
 ## License
 
 [MIT](LICENSE) © hoyyang. Data from GitHub and [awesome-dsh-plugin](https://awesome-dsh-plugin.com) (MIT) under their own terms.
 
-Ideas borrowed from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).
+Design ideas from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.73 — 2026-08-25
+
+- **「重启后生效」判定修复**：此前只按 bundles 装配状态判定（session-manager 被误判 live 显示不出提示）；改为解析已装插件的 cordis.patch.yml 静态属性（含 config/!!js → 需重启，dsh-market 同款语义），/status 下发 restartNeeded，实测 dsh-session-manager 等 4 个插件正确亮出「⏳ 重启后生效 + 为什么未生效？」。
+- **去掉「已是最新」标签**（用户反馈）。
+- **README 产品化重写（中英）**：顶部加 image-prompt 生成的品牌横幅；去掉实用性评分标题与「按实用性打分」措辞；强调自带 skill「dsh-mall」——会话里执行 /dsh-mall 直接智能搜索、结果带「打开 DSH 商场查看插件详情」按钮（新截 skill 按钮图）+ 结果浮窗图配对；任务面板图换中文 UI 并马赛克隐私（侧边栏会话/仓库全部打码）+ 红框标注侧边栏入口按钮；设置图重截正确 section（打开入口/自动更新开关/风险提示/版本）并背景打码；删掉数据管道/安全等技术实现段落，突出产品亮点。
+
 ## 1.7.72 — 2026-08-25
 
 - **修复同名插件误标已安装**：目录里有 7 个 dsh-session-manager（4 个 curated），按「名字+精选豁免」会把 4 个全标已安装（装 1 个显示 4 个）。修复双管齐下——host 新增 `resolveInstalled`（/status 下发 installedRepos，含「已是最新」条目的精确仓库身份，updatesAll 只含可更新会漏最新版）；客户端撞名时 curated 豁免收紧为「唯一精选」。实测已安装 14→11、session-manager 只标 1 个（dream12347）。

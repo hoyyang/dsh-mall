@@ -12,7 +12,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, resolveInstalled, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
 import { smartSearch, takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
-import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest as readProfileManifest, removeLegacyPatchEntry, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
+import { installState, loaderIdOf, patchDisables, pluginStatesOf, restartNeededOf, readManifest as readProfileManifest, removeLegacyPatchEntry, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { ensureDownloads, ensureTotals } from './downloads.ts'
@@ -236,6 +236,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         updates,
         updatesAll,
         installedRepos,
+        restartNeeded: restartNeededOf(config.profile, manifest),
         pluginStates: states,
         rollbacks: state.rollbacks ?? {},
         skipUpdates: state.skipUpdates ?? [],
