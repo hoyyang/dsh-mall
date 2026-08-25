@@ -1019,69 +1019,9 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
     },
   }))
 
-  // Data source: custom registry URL (registry.json format). Empty resets to
-  // the default CDN index. Not a secret; still same-origin POST only, and only
-  // http(s) URLs are accepted (no file:// or javascript: scheme injection).
-  disposers.push(host.webServer.register({
-    kind: 'exact',
-    path: '/dsh-store/source',
-    handler: async (request, response) => {
-      if (request.method !== 'POST' || !sameOrigin(request)) {
-        response.writeHead(405, { allow: 'POST' })
-        response.end()
-        return
-      }
-      let body: Record<string, unknown>
-      try {
-        body = await readJsonBody(request)
-      } catch {
-        sendJson(response, 400, { ok: false, error: 'invalid body' })
-        return
-      }
-      const url = typeof body.url === 'string' ? body.url.trim() : ''
-      if (url !== '') {
-        let parsed: URL
-        try {
-          parsed = new URL(url)
-        } catch {
-          sendJson(response, 400, { ok: false, error: 'invalid url' })
-          return
-        }
-        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-          sendJson(response, 400, { ok: false, error: 'only http(s) urls are allowed' })
-          return
-        }
-      }
-      config.registryUrl = url
-      sendJson(response, 200, { ok: true, registryUrl: config.registryUrl })
-    },
-  }))
-
-  // Token: set the GitHub token for this process (memory only; never echoed back).
-  disposers.push(host.webServer.register({
-    kind: 'exact',
-    path: '/dsh-store/token',
-    handler: async (request, response) => {
-      if (request.method !== 'POST' || !sameOrigin(request)) {
-        response.writeHead(405, { allow: 'POST' })
-        response.end()
-        return
-      }
-      let body: Record<string, unknown>
-      try {
-        body = await readJsonBody(request)
-      } catch {
-        sendJson(response, 400, { ok: false, error: 'invalid body' })
-        return
-      }
-      if (typeof body.token !== 'string' || body.token.length > 200) {
-        sendJson(response, 400, { ok: false, error: 'invalid token' })
-        return
-      }
-      config.githubToken = body.token.trim()
-      sendJson(response, 200, { ok: true })
-    },
-  }))
+  // v1.7.60：/dsh-store/token 与 /dsh-store/source 已移除——不允许用户在运行时
+  // 设置 Token/数据源；二者仅能经部署配置（cordis.yml githubToken/registryUrl 或
+  // 环境变量 DSHM_GITHUB_TOKEN / DSH_STORE_REGISTRY_URL）由宿主机提供。
 
   // Publish: add the dsh-plugin topic to a repo the user can push to.
   disposers.push(host.webServer.register({

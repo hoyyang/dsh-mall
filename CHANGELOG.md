@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.60 — 2026-08-25
+
+- **彻底禁止用户设置数据源/GitHub Token**：删除宿主侧 /dsh-store/token 与 /dsh-store/source 两个路由（此前只删了设置 UI，同源脚本仍可直连设置）；二者现在只能由宿主机部署配置提供（cordis.yml githubToken/registryUrl 或环境变量 DSHM_GITHUB_TOKEN / DSH_STORE_REGISTRY_URL）。
+
 ## 1.7.59 — 2026-08-25
 
 - **设置页移除「数据源」与「GitHub Token」两个设置项**（状态/处理函数/UI 全部删除）；商店自身更新与自动一键更新保留。环境变量级配置（DSHM_GITHUB_TOKEN / DSH_STORE_REGISTRY_URL）不受影响。
