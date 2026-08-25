@@ -101,6 +101,8 @@ export function SidebarStoreButton(props: {
 }) {
   // 首页侧边栏（设置按钮上方、平级对齐）「DSH 商店」→ 打开唯一商店浮窗。
   // 渲染由 StoreSingleton 统一承担（单例、keep-mounted）。
+  // v1.7.56：订阅商店语言——切换后按钮文案即时更新
+  useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   return (
     <button
       type="button"
@@ -119,6 +121,8 @@ export function SettingsSection(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
+  // v1.7.56：订阅商店语言——设置页随语言切换即时刷新（此前停留在旧语言）
+  useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   const openStore = useCallback(() => {
     const st = getStoreState()
     if (st.mounted && st.source === 'sidebar') {

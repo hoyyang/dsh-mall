@@ -5,7 +5,8 @@
  * every host: current token status + a memory-only token input.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
+import { storeLang } from './locales.ts'
 import { Button, DisclosureRow, Input, IconSettingsOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 
 interface CardStatus {
@@ -16,6 +17,8 @@ interface CardStatus {
 
 export function SettingsCard(props: { t: (key: string) => string }) {
   const t = props.t
+  // v1.7.56：订阅商店语言——插件配置卡随语言切换即时刷新
+  useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState<CardStatus | null>(null)
   const [token, setToken] = useState('')

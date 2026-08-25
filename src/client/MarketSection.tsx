@@ -38,7 +38,7 @@ import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
 import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
 
-const PAGE_SIZES = [25, 50, 100]
+const PAGE_SIZES = [20, 50, 100]
 
 interface SectionProps {
   t: (key: string) => string
@@ -136,7 +136,7 @@ export function MarketSection(props: SectionProps) {
   }, [])
   const [langOpen, setLangOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(25)
+  const [pageSize, setPageSize] = useState(20)
   const [sortOpen, setSortOpen] = useState(false)
   const [sizeOpen, setSizeOpen] = useState(false)
   const [confirming, setConfirming] = useState<MarketEntry | null>(null)
@@ -1552,7 +1552,6 @@ export function MarketSection(props: SectionProps) {
                     <span className="pcm-pick-star">★ {formatStars(r.stars)}</span>
                     {r.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.score.total}</span>}
                   </span>
-                  <span className="pcm-pick-reason">{t('curatedBadgeTitle')}</span>
                 </button>
               ))}
             </div>
@@ -1585,14 +1584,13 @@ export function MarketSection(props: SectionProps) {
             )}
             <div className="pcm-rec-list">
               {(recommend ?? []).slice(0, 4).map(r => (
-                <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick pcm-pick-rec" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
+                <button key={r.entry.owner + '/' + r.entry.name} type="button" className="pcm-pick" title={r.reasons.join('；')} onClick={() => setDetail(r.entry)}>
                   <span className="pcm-pick-name">{r.entry.name}</span>
                   <span className="pcm-pick-owner">{r.entry.owner}</span>
                   <span className="pcm-pick-meta">
                     <span className="pcm-pick-star">★ {formatStars(r.entry.stars)}</span>
                     {r.entry.score?.total != null && <span className="pcm-pick-score">{t('scoreTotalLabel')} {r.entry.score.total}</span>}
                   </span>
-                  {r.reasons.length > 0 && <span className="pcm-pick-reason">{r.reasons[0]}</span>}
                 </button>
               ))}
             </div>
