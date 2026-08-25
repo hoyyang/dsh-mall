@@ -110,7 +110,7 @@ export function SidebarStoreButton(props: {
       title={props.t('nav')}
       onClick={() => openStoreFrom('sidebar')}
     >
-      <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={22} height={22} />
+      <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={24} height={24} />
       <span className="pcm-sidebar-label">{props.t('nav')}</span>
     </button>
   )
