@@ -6456,7 +6456,7 @@ function MarketSection(props) {
 									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 										className: "pcm-card-left",
 										children: [
-											(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+											(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 												className: "pcm-safety-row",
 												children: [
 													entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {

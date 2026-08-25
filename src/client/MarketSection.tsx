@@ -1718,7 +1718,7 @@ export function MarketSection(props: SectionProps) {
                   {/* v1.7.45：中段两栏——左侧徽章/简介/统计，右侧五维雷达图（仅五维齐全时）；简介宽度随雷达收窄 */}
                   <div className={'pcm-card-mid' + (entry.score != null && entry.score.complete ? ' pcm-card-mid-radar' : '')}>
                     <div className="pcm-card-left">
-                      {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true) && (
+                      {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true) && (
                         <div className="pcm-safety-row">
                           {entry.curated && (
                             <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
