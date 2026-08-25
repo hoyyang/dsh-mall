@@ -41,12 +41,11 @@
 ## 📦 Install
 
 ```sh
-# GitHub channel (always available):
-dsh plugin add github:hoyyang/dsh-mall
-# npm channel (once published):
 dsh plugin add dsh-mall
+# GitHub channel (equivalent):
+dsh plugin add github:hoyyang/dsh-mall
 # or, for a specific profile:
-dsh plugin --profile web add github:hoyyang/dsh-mall
+dsh plugin --profile web add dsh-mall
 ```
 
 Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.

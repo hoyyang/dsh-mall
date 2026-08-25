@@ -40,12 +40,11 @@
 ## 📦 安装
 
 ```sh
-# GitHub 通道（始终可用）：
-dsh plugin add github:hoyyang/dsh-mall
-# npm 通道（发布后可用）：
 dsh plugin add dsh-mall
+# GitHub 通道（等价）：
+dsh plugin add github:hoyyang/dsh-mall
 # 或指定 profile：
-dsh plugin --profile web add github:hoyyang/dsh-mall
+dsh plugin --profile web add dsh-mall
 ```
 
 重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商场**；也可以在官方设置浮窗里找到「DSH 商场设置」。
