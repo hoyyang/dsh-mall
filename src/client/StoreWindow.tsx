@@ -293,6 +293,7 @@ function ResultsWindow(props: {
                 plugins: [...payload.recommended, ...payload.related],
                 categories: payload.categories ?? {},
                 recommendedCount: payload.recommended.length,
+                query: payload.query,
               }}
             />
           )}

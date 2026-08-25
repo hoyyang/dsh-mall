@@ -51,7 +51,7 @@ interface SectionProps {
   /** true = 渲染在独立商场浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
   floating?: boolean
   /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商场完全一致。 */
-  seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }>; recommendedCount?: number } | null
+  seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }>; recommendedCount?: number; query?: string } | null
   /** 浮窗模式下头行容器的 ref（由窗口组件直传，避免多窗口 querySelector 歧义）。 */
   headRef?: { current: HTMLDivElement | null }
   /** 语言选择覆盖（结果浮窗头行自渲染语言按钮时由父组件控制）。 */
@@ -1406,7 +1406,13 @@ export function MarketSection(props: SectionProps) {
       <div className="pcm-brand-card pcm-seed-tasks-bar">
         <div className="pcm-header" style={{ gap: 8 }}>
           <img className="pcm-icon" src={ICON_DATA} alt="" width={18} height={18} />
-          <span className="pcm-seed-tasks-title" style={{ flex: '1 1 auto', color: '#f5f7ff', fontSize: 13, fontWeight: 600 }}>{t('resultsTitle')}</span>
+          <div className="pcm-seed-titles">
+            <span className="pcm-seed-tasks-title" style={{ color: '#f5f7ff', fontSize: 13, fontWeight: 600 }}>{t('resultsTitle')}</span>
+            {/* v1.7.86：显示智能搜索时用户输入的原话 */}
+            {(props.seed?.query ?? '') !== '' && (
+              <span className="pcm-seed-query">「{(props.seed?.query ?? '').slice(0, 80)}」</span>
+            )}
+          </div>
           <button
             type="button"
             ref={tasksAnchorRef}
