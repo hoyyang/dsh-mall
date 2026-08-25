@@ -27,6 +27,9 @@ export interface ScoreView {
     };
     /** 五维全部可得（卡片雷达图渲染门槛）。 */
     complete: boolean;
+    /** v1.7.68：基础分所用输入指纹——stars/pushed 变化时重算（星数与热度分同步）。 */
+    starsAt?: number | null;
+    pushedAt?: string | null;
 }
 /** Wilson Score 置信区间下界（小样本比例的稳健估计，dsh.market 同款）。 */
 export declare function wilsonLowerBound(positives: number, total: number, z?: number): number;

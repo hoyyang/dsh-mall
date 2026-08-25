@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.68 — 2026-08-25
+
+- **修复评分数据不同步**：评分一经挂载就跨刷新保留，星数更新后热度维不重算（「★ 变化但热度分不变」）；`attachScores` 改为按 stars/pushed 指纹重算基础三维（保留 README 富化维度并重新融合），客户端合并改为服务端新分优先。
+- **README 默认中文**：`README.md` 改为中文主入口（GitHub/npm 落地页默认中文），英文移至 `README.en.md`，互链与包 files 同步。
+- 清理 cordis.patch.yml 旧注释（DSH Store → DSH Mall）。
+
 ## 1.7.67 — 2026-08-25
 
 - **README 再优化**：主图重截（此前误截成详情面板，现为完整主商场界面，中英各一）；画廊改横向滑动条（flex overflow-x:auto，不占纵向篇幅）；npm 徽章加 kill_cache 强制刷新；Features 按惊艳度重排（Agent 友好升至第 3，工具名修正 `find_dsh_mall_plugin`）；安装标题去 emoji 与「无需配置」措辞（对齐索引 README 信号提取规则，实用/便捷两维评分随下次索引更新提升）。

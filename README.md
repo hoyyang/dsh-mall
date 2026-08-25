@@ -1,8 +1,8 @@
-# DSH Mall
+# DSH 商场
 
-**The complete plugin mall for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem, one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
+**DeepSeek Harness 最全的插件商场** —— 全量收录 `#dsh-plugin` 生态，浏览、搜索、一键安装，智能 AI 装前审查，五维实用评分，九语言界面。
 
-[**中文**](README.zh.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [Changelog](CHANGELOG.md)
+[**English**](README.en.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [更新日志](CHANGELOG.md)
 
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
@@ -12,66 +12,66 @@
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
 </p>
 
-![DSH Mall](assets/screenshot-main.png)
+![DSH 商场](assets/screenshot-main-zh.png)
 
 <div align="center" style="display:flex;overflow-x:auto;gap:8px;padding:4px 0">
   <a name="gallery"></a>
-  <img src="assets/shot-en-detail.png" style="width:300px;flex:0 0 auto" alt="Plugin detail panel with five-dimension score, trust badges and sanitized README">
-  <img src="assets/shot-en-install.png" style="width:300px;flex:0 0 auto" alt="Install confirmation with AI-reviewed smart install">
-  <img src="assets/shot-en-settings.png" style="width:300px;flex:0 0 auto" alt="DSH Mall settings section">
+  <img src="assets/shot-zh-detail.png" style="width:300px;flex:0 0 auto" alt="插件详情页：五维评分、信任徽章与安全渲染的 README">
+  <img src="assets/shot-zh-install.png" style="width:300px;flex:0 0 auto" alt="安装确认弹窗：智能 AI 装前审查">
+  <img src="assets/shot-zh-settings.png" style="width:300px;flex:0 0 auto" alt="DSH 商场-设置">
 </div>
 
 ---
 
-## ✨ Features
+## ✨ 功能
 
-- 🌐 **Complete catalog** — the full `#dsh-plugin` ecosystem from our own CI index (incremental every 2h + daily full rebuild), served over CDN with a bundled snapshot fallback. Never rate-limited.
-- 🧠 **Smart install / update / uninstall** — a pre-install AI security review (install / caution / refuse) runs through your configured model; local risk lists guard uninstalls. Falls back to the regular path when AI is unavailable.
-- 🔌 **Agent-friendly** — ships the `find_dsh_mall_plugin` tool and a skill, so your agent discovers and recommends plugins right in the conversation.
-- 📊 **Five-dimension practical score** — maintain / practical / popularity / ease / signal, weighted geometric mean × confidence, with a radar chart and "why recommended" reasons.
-- 🏷️ **LLM-tagged labels & descriptions** — plugins carry Chinese function tags and one-line descriptions in 9 languages, refreshed through the index pipeline (no per-user LLM cost).
-- ⭐ **Editor picks & For You** — weekly curated picks; profile-based recommendations with MMR diversity plus a cold-start quiz.
-- 🛡️ **Trust badges** — machine scan (dsh.bundle verified in the repo tree), awesome curated, human verified, has-skill, stale & npm-unlinked warnings.
-- 🌍 **9-language UI** — English, 中文, 日本語, 한국어, Español, Français, Deutsch, Português, Русский — one click switches the entire store.
-- 🧰 **Full lifecycle management** — one-click update, daily auto-update (03:30), rollback, enable/disable switch (hot), task panel with progress & cancel.
-- 📖 **Safe README rendering** — sanitized markdown with shields/badge cleanup, plus parsed install commands from the README (display-only, copyable).
-- ⬇️ **Signals you care about** — today's +stars, npm downloads (30d & total), publish date, version capsules.
+- 🌐 **全量目录** —— 自有 CI 索引收录 `#dsh-plugin` 生态全量 GitHub 仓库（每 2 小时增量 + 每日全量重建），CDN 分发 + 打包快照兜底，永不限流。
+- 🧠 **智能安装 / 更新 / 卸载** —— 装前 AI 安全审查（install / caution / refuse 三档结论）走你配置的模型；卸载前扫描本地依赖风险。AI 不可用时自动降级常规路径。
+- 🔌 **Agent 友好** —— 自带 `find_dsh_mall_plugin` 工具与 skill，对话中即可让 Agent 发现并推荐插件。
+- 📊 **五维实用评分** —— 维护 / 实用 / 热度 / 便捷 / 信号，加权几何平均 × 置信度，卡片雷达图 + 「为什么推荐」理由。
+- 🏷️ **LLM 打标中文标签 + 九语言简介** —— 插件自带中文功能标签与九语言一句话简介，经索引管道分发（用户零 LLM 成本）。
+- ⭐ **编辑精选 + 为你推荐** —— 每周更新的编辑精选；基于已装画像的推荐（MMR 多样性）+ 冷启动问卷。
+- 🛡️ **信任徽章** —— 已扫描（仓库树机器校验 dsh.bundle）、awesome 官方精选、已验证、含 skill、休眠与 npm 未回指警告。
+- 🌍 **九语言界面** —— 中文、English、日本語、한국어、Español、Français、Deutsch、Português、Русский，一键切换全店文案。
+- 🧰 **全生命周期管理** —— 一键更新、每日自动更新（03:30）、回退、启用开关（热生效）、带进度与取消的任务面板。
+- 📖 **README 安全渲染** —— 清洗后的 Markdown（徽章/残缺标签清理），并解析 README 安装命令（仅展示、可复制）。
+- ⬇️ **关键信号** —— 今日新增 star、npm 近 30 天 / 总下载量、收录时间、版本胶囊。
 
-## Install
+## 安装
 
 ```sh
 dsh plugin add dsh-mall
-# GitHub channel (equivalent):
+# GitHub 通道（等价）：
 dsh plugin add github:hoyyang/dsh-mall
-# or, for a specific profile:
+# 或指定 profile：
 dsh plugin --profile web add dsh-mall
 ```
 
-Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
+重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商场**；也可以在官方设置浮窗里找到「DSH 商场-设置」。
 
-## ✅ Requirements
+## ✅ 兼容性
 
-- **DeepSeek Harness (dsh web) 0.1.0-rc.8 or newer** — tested against 0.1.0-rc.8.
-- npm peers: `@deepseek-ai/cordis ^4.0.1`, `@deepseek-ai/dsh-settings ^0.1.0-rc.6` (optional), `@deepseek-ai/dsh-tools ^0.1.0-rc.6` — these are resolved automatically when installed through the store/plugin tooling.
-- **Works out of the box — no API key or setup required.** For heavy browsing, power users can raise the GitHub API quota through deployment configuration; credentials are kept in memory only and never persisted.
+- **需要 DeepSeek Harness（dsh web）0.1.0-rc.8 或更新版本** —— 已在 0.1.0-rc.8 实测。
+- npm peer 依赖：`@deepseek-ai/cordis ^4.0.1`、`@deepseek-ai/dsh-settings ^0.1.0-rc.6`（可选）、`@deepseek-ai/dsh-tools ^0.1.0-rc.6` —— 经商场/插件工具安装时自动解析。
+- **开箱即用，无需任何配置** —— 重度浏览可选通过部署配置提升 GitHub API 额度；凭证仅存内存、从不落盘。
 
-## 🗂 How data works
+## 🗂 数据管道
 
-The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (hand-picked entries), classified into curated categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-mall reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
+目录由配套索引仓库 [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index) 构建：GitHub 搜索 + 人工策展目录 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（精选条目），按策展分类归档，富化 bundle 扫描、npm 回指、休眠检测、README 结构与 LLM 标签。商场经 raw/jsDelivr CDN 通道读取，每 30 分钟刷新一次；GitHub 不可用或限流时回落到打包快照。
 
-## 🔐 Security
+## 🔐 安全
 
-- All mutating endpoints (install/uninstall/update/toggle) accept **same-origin requests only**.
-- Install sources are always shown before confirming; smart install routes repository content into a headless AI review as **untrusted data** (delimited, non-executable).
-- Credentials are never persisted; user-level data-source/token routes were removed (deployment config only).
-- Third-party plugins are third-party code — review before installing. The machine-scan badge means *installable structure*, not a security audit.
+- 所有写操作接口（安装/卸载/更新/开关）**仅接受同源请求**。
+- 安装前始终展示来源；智能安装把仓库内容作为**不可信数据**（分隔符隔离、不执行）送入 headless AI 审查。
+- 凭证从不持久化；用户级数据源/凭证设置路由已删除（仅部署配置可提供）。
+- 第三方插件是第三方代码——安装前请自行评估。「已扫描」徽章代表*结构可安装*，不是安全审计结论。
 
-## 🤔 Why another marketplace?
+## 🤔 为什么又做一个市场？
 
-40+ marketplace plugins exist — most are similar. DSH Mall bets on **audit + curation + trends + evidence**: machine scan verdicts, curated picks, five-dimension scoring with explanations, LLM tags, and an independent data pipeline. If you want numbers first, this is the store for you.
+市场类插件已有 40+ 家，多数同质化。DSH 商场押注 **审计 + 策展 + 趋势 + 证据**：机器扫描结论、精选策展、带解释的五维评分、LLM 标签，以及独立的数据管道。想要先看数据再安装，这里就是你的商场。
 
-## 📄 License
+## 📄 许可证
 
-[MIT](LICENSE) © hoyyang. Data from GitHub and [awesome-dsh-plugin](https://awesome-dsh-plugin.com) (MIT) under their own terms.
+[MIT](LICENSE) © hoyyang。数据来自 GitHub 与 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（MIT），遵循各自条款。
 
-Built with ideas from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).
+借鉴自 [dshmarket](https://www.npmjs.com/package/dshmarket) 与 [dsh-market](https://github.com/2BingLing/dsh-market) 的设计思路。

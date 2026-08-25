@@ -1,6 +1,6 @@
 # dsh-mall bundle patch: inserts the plugin market row into the web
 # profile roster. The host half serves the market data/install routes; the
-# browser half registers the "DSH Store" settings section.
+# browser half registers the "DSH Mall" settings section.
 - insert:
     - id: dsh-mall
       name: dsh-mall

@@ -236,10 +236,12 @@ export function MarketSection(props: SectionProps) {
                 if (old.repoVersion !== undefined) merged.repoVersion = old.repoVersion
                 // v1.7.45：刷新轮询同样会冲掉页级富化——bundled/hasSkill/score/
                 // installCmds 按 owner/name 保留（与下载量同款合并）。
+                // v1.7.68：score 改为服务端新值优先（attachScores 带 stars 指纹重算，
+                // 不再需要客户端保留旧分——保留会导致星数更新而热度分不更新）。
                 if (old.bundled !== undefined && old.bundled !== null) merged.bundled = old.bundled
                 if (old.bundledAt !== undefined) merged.bundledAt = old.bundledAt
                 if (old.hasSkill !== undefined && old.hasSkill !== null) merged.hasSkill = old.hasSkill
-                if (old.score !== undefined) merged.score = old.score
+                if (old.score !== undefined && merged.score === undefined) merged.score = old.score
                 if (old.installCmds !== undefined) merged.installCmds = old.installCmds
                 if (old.cmdSource !== undefined) merged.cmdSource = old.cmdSource
                 return merged

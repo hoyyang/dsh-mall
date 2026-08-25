@@ -4345,7 +4345,7 @@ function MarketSection(props) {
 						if (old.bundled !== void 0 && old.bundled !== null) merged.bundled = old.bundled;
 						if (old.bundledAt !== void 0) merged.bundledAt = old.bundledAt;
 						if (old.hasSkill !== void 0 && old.hasSkill !== null) merged.hasSkill = old.hasSkill;
-						if (old.score !== void 0) merged.score = old.score;
+						if (old.score !== void 0 && merged.score === void 0) merged.score = old.score;
 						if (old.installCmds !== void 0) merged.installCmds = old.installCmds;
 						if (old.cmdSource !== void 0) merged.cmdSource = old.cmdSource;
 						return merged;

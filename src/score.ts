@@ -26,6 +26,9 @@ export interface ScoreView {
   explanation: { zh: string; en: string }
   /** 五维全部可得（卡片雷达图渲染门槛）。 */
   complete: boolean
+  /** v1.7.68：基础分所用输入指纹——stars/pushed 变化时重算（星数与热度分同步）。 */
+  starsAt?: number | null
+  pushedAt?: string | null
 }
 
 const WEIGHTS = { maintain: 0.3, practical: 0.25, popularity: 0.2, ease: 0.15, signal: 0.1 } as const
@@ -266,7 +269,18 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
     confidence: Math.round(confidence * 100) / 100,
     explanation: buildExplanation(breakdown, input.stars, input.pushedAt),
     complete,
+    starsAt: input.stars,
+    pushedAt: input.pushedAt,
   }
+}
+
+/** v1.7.68：README 富化维度（实用/便捷/信号）保留、基础维度重算后的重新融合。 */
+function refoldScore(score: ScoreView): ScoreView {
+  const total = weightedGeometricMean(score.breakdown)
+  score.total = total === null ? null : Math.round(clip(total * score.confidence))
+  score.complete = score.breakdown.maintain !== null && score.breakdown.practical !== null && score.breakdown.popularity !== null && score.breakdown.ease !== null
+  score.explanation = buildExplanation(score.breakdown, score.starsAt ?? null, score.pushedAt ?? null)
+  return score
 }
 
 /** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
@@ -339,7 +353,11 @@ export function attachScores(entries: Array<{
   const pluginStars = entries.filter(e => e.isPlugin === true).map(e => e.stars)
   const p99 = computeP99Stars(pluginStars.length > 0 ? pluginStars : entries.map(e => e.stars))
   for (const e of entries) {
-    if (e.score !== undefined) continue
+    // v1.7.68：stars/pushed 变化时重算基础分（此前 score 一经挂载就跨刷新保留，
+    // 星数涨了热度维还是旧值——「★2 但热度 0」的数据不同步根因）。
+    // 重算时保留 README 富化维度（实用/便捷/信号），只刷新基础三维并重新融合。
+    if (e.score != null && e.score.starsAt === e.stars && e.score.pushedAt === e.pushed) continue
+    const old = e.score
     e.score = computeBaseScore({
       pushedAt: e.pushed,
       stars: e.stars,
@@ -353,5 +371,11 @@ export function attachScores(entries: Array<{
       p99Stars: p99,
       readmeSig: e.readmeSig ?? null,
     })
+    if (old != null && old.complete === true) {
+      e.score.breakdown.practical = old.breakdown.practical
+      e.score.breakdown.ease = old.breakdown.ease
+      if (old.breakdown.signal > e.score.breakdown.signal) e.score.breakdown.signal = old.breakdown.signal
+      refoldScore(e.score)
+    }
   }
 }
