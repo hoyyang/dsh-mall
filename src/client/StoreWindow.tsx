@@ -292,6 +292,7 @@ function ResultsWindow(props: {
               seed={{
                 plugins: [...payload.recommended, ...payload.related],
                 categories: payload.categories ?? {},
+                recommendedCount: payload.recommended.length,
               }}
             />
           )}

@@ -6,7 +6,7 @@
  */
 
 import {
-  useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore,
+  Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore,
 } from 'react'
 import { createPortal } from 'react-dom'
 import {
@@ -51,7 +51,7 @@ interface SectionProps {
   /** true = 渲染在独立商场浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
   floating?: boolean
   /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商场完全一致。 */
-  seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }> } | null
+  seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }>; recommendedCount?: number } | null
   /** 浮窗模式下头行容器的 ref（由窗口组件直传，避免多窗口 querySelector 歧义）。 */
   headRef?: { current: HTMLDivElement | null }
   /** 语言选择覆盖（结果浮窗头行自渲染语言按钮时由父组件控制）。 */
@@ -1353,6 +1353,8 @@ export function MarketSection(props: SectionProps) {
   })()
 
   const chipCats = orderedCategories(categories, cat, false)
+  // v1.7.85：结果浮窗「推荐 / 其他相关」分区边界（seed 数据前 recommendedCount 条为推荐）
+  const seedBoundary = seedMode ? Math.min(props.seed?.recommendedCount ?? 0, pageList.length) : -1
 
   return (
     <div className="pcm-root" ref={rootRef}>
@@ -1683,14 +1685,20 @@ export function MarketSection(props: SectionProps) {
       ) : (
         <>
           <div className="pcm-grid">
-            {pageList.map((entry: MarketEntry) => {
+            {pageList.map((entry: MarketEntry, idx: number) => {
               const installed = isInstalled(entry)
               const today = entry.todayStars
               const upd = updateFor(entry)
               const disclosure = entry.disclosure
               return (
+                <Fragment key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}>
+                {seedMode && idx === 0 && (
+                  <div className="pcm-results-sec-title">{t('resultsRecommended')}</div>
+                )}
+                {seedMode && seedBoundary > 0 && idx === seedBoundary && (
+                  <div className="pcm-results-sec-title">{t('resultsRelated')}</div>
+                )}
                 <div
-                  key={(entry.local === true ? 'local:' : '') + entry.owner + '/' + entry.name}
                   className={entry.local === true ? 'pcm-card pcm-card-local' : 'pcm-card'}
                   onClick={() => { if (entry.local !== true) setDetail(entry) }}
                 >
@@ -1929,6 +1937,7 @@ export function MarketSection(props: SectionProps) {
                     </div>
                   )}
                 </div>
+                </Fragment>
               )
             })}
           </div>
