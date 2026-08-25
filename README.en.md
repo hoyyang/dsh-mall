@@ -41,19 +41,19 @@ Restart `dsh web` and **DSH Mall** appears in the sidebar. Requires dsh web 0.1.
 
 In the dsh home sidebar, right above **Settings**, there's **DSH Mall**. One click opens it.
 
-![Sidebar entrance](assets/shot-entry.png)
+![Sidebar entrance](assets/shot-entry-en.png)
 
 ### 2. What it looks like
 
 One window is the whole mall: search and filters on top, editor picks and For You in the middle, plugin cards below. Everything happens inside this window.
 
-![DSH Mall main window](assets/screenshot-main.png)
+![DSH Mall main window](assets/screenshot-main-en.png)
 
 ### 3. Try smart search first
 
 Next to the search box there's a "✦ Smart search" button. Type what you need in plain words — "find a plugin that can delete sessions" — it first has your model translate the request into search terms, then picks recommendations and alternatives from the whole catalog into a results window: recommendations first, cards identical to the main store, install/details/favorites all work.
 
-![Smart search results](assets/shot-results.png)
+![Smart search results](assets/shot-results-en.png)
 
 Regular search, category filters, sorting, page size — all on the toolbar, ready to use.
 
@@ -61,37 +61,37 @@ Regular search, category filters, sorting, page size — all on the toolbar, rea
 
 Pick "Smart install" in the confirm dialog: AI reviews the repo as untrusted data (never executed) and returns install / caution / refuse. "Refuse" stops the install. If AI fails or times out, it falls back to a regular install.
 
-![Install confirmation](assets/shot-zh-install.png)
+![Install confirmation](assets/shot-install-en.png)
 
 ### 5. Look at the score, then decide
 
 Every card has a pentagon radar with the composite in the middle. The composite is a weighted geometric mean — one near-zero dimension drags the whole thing down, so a new 0-star repo scores low honestly and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining every number. The detail panel has the full score card with "why recommended".
 
-![Detail score card](assets/shot-zh-detail.png)
+![Detail score card](assets/shot-detail-en.png)
 
 ### 6. No idea what to install? These two columns
 
 Middle of the home screen: "Editor picks" (refreshed every Monday, top composite scores among the curated) and "For You" (based on your last 30 days plus the quiz, with reasons on each card). Still no idea? The quiz takes 30 seconds.
 
-![Picks and recommendations](assets/shot-picks.png)
+![Picks and recommendations](assets/shot-picks-en.png)
 
 ### 7. Every task, visible from anywhere
 
 Install, update, uninstall all show progress in a global task panel with cancel — tasks started from the results window are visible from the main store and vice versa. Changes that need a restart get a hint on the card, with a one-sentence explanation.
 
-![Task panel](assets/shot-tasks.png)
+![Task panel](assets/shot-tasks-en.png)
 
 ### 8. Find plugins right in the conversation
 
 The plugin ships a skill called `dsh-mall`. Run `/dsh-mall find a plugin that can delete sessions` in your agent session — it searches the whole catalog and returns recommendations plus alternatives. The last line is a button: "Open DSH Mall to view plugin details". One click lands you in the store.
 
-![The button in a skill reply](assets/shot-skill.png)
+![The button in a skill reply](assets/shot-skill-en.png)
 
 ### 9. Settings in one place
 
 "DSH Mall - Settings" in the Settings window: open-the-store button, auto-update toggle (daily 03:30), the risk note, and the current version.
 
-![Mall settings](assets/shot-zh-settings.png)
+![Mall settings](assets/shot-settings-en.png)
 
 ## License
 

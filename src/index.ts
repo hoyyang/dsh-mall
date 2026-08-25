@@ -47,7 +47,7 @@ const SKILL_MARKDOWN = [
   '回复要求：',
   '1. 列出工具返回的推荐条目（名称、star、一句话说明、插件/非插件标注、安装命令）。',
   '2. 给出你自己的推荐意见（为什么推荐第一个）。',
-  '3. 回答的最后一行必须是工具返回的「打开 DSH 商场查看插件详情」按钮链接，原样保留、不要修改文字或网址。',
+  '3. 回答的最后一行必须是工具返回的按钮链接（markdown 链接，文字跟随用户消息的语言：中文会话用「打开 DSH 商场查看插件详情」，英文会话用「Open DSH Mall to view plugin details」），链接网址原样保留、不要修改。',
 ].join('\n')
 
 function ensureSkill(profile: string): () => void {
