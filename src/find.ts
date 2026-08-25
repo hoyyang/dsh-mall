@@ -82,13 +82,9 @@ function tokensOf(needle: string): Array<{ t: string; w: number }> {
         }
       }
     } else {
+      // v1.7.69：完整词 w6；去掉 4-5 字乱码词干子串（"manager"→"mana"/"ager"
+      // 这类子串在长英文简介里乱命中，2 万星蹭词仓库凭一词命中霸榜的根因之一）。
       out.push({ t: lw, w: 6 })
-      // 英文长词加词干子串（marketplace → market）：dsh-market 这类命名也能命中。
-      if (lw.length >= 5) {
-        for (let len = lw.length - 1; len >= 4; len--) {
-          for (let i = 0; i + len <= lw.length; i++) out.push({ t: lw.slice(i, i + len), w: 2 })
-        }
-      }
     }
   }
   return out
@@ -103,21 +99,27 @@ function keywordScore(e: MarketEntry, needle: string): number {
   const desc = (e.description + ' ' + zh).toLowerCase()
   const owner = e.owner.toLowerCase()
   let kw = 0
+  let hitTokens = 0
   for (const token of tokensOf(needle)) {
-    if (name.includes(token.t)) kw += token.w + 3
-    else if (desc.includes(token.t)) kw += token.w
+    if (name.includes(token.t)) { kw += token.w + 3; hitTokens++ }
+    else if (desc.includes(token.t)) { kw += token.w; hitTokens++ }
     else if (owner.includes(token.t)) kw += 1
   }
   if (needle.trim() !== '' && kw === 0) return Number.NEGATIVE_INFINITY
+  // v1.7.69：命中多个不同 token 的条目（真实多词相关）显著加权——
+  // 「会话+管理+删除」三词命中必须压过「manager」一词命中的高星蹭词仓库。
+  if (hitTokens >= 3) kw += 4
+  else if (hitTokens >= 2) kw += 1
   // 关键词分设上限：name+desc 多处命中不无限叠加，防止"marketplace"字样
   // 淹没 dsh-market 这类命名。
-  kw = Math.min(kw, 12)
+  kw = Math.min(kw, 18)
   // 关键词弱命中（<3）的仓库不进推荐：大 star 蹭词仓库（8 万星项目
   // 恰好带"市场"字样）不该挤掉真正的插件。
   if (needle.trim() !== '' && kw < 3) return Number.NEGATIVE_INFINITY
   // star 取对数（1k≈3 分、10k≈4 分）：口碑信号，但不霸榜。
-  // star 权重 ×2：关键词命中相同时「最受欢迎」语义生效（高星在前）。
-  let score = kw * 0.8 + Math.log10(1 + (e.stars ?? 0)) * 2
+  // v1.7.69：star 权重 ×2→×1——高星蹭词仓库（voyager 2 万星凭"manager"
+  // 一词命中挤掉全部真实会话管理插件的实测根因）。
+  let score = kw * 0.8 + Math.log10(1 + (e.stars ?? 0))
   if (e.curated) score += 2
   if (e.verified != null) score += 3
   // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
@@ -206,10 +208,12 @@ export async function smartSearch(profile: string, token: string, rawQuery: stri
       }
     } catch { /* 模型不可用：原词兜底 */ }
   }
-  // 改写词与原词相同/包含原词时只用原词，避免标题出现重复。
-  const combined = refined === original || (refined !== '' && refined.includes(original)) ? original : original + ' ' + refined
+  // v1.7.69：AI 改写可用时只用改写词（英文功能词）检索——拼接中文原文会引入
+  // 大量 2 字滑动窗口噪声 token（"因为/现在/支持"等）在长中文简介里乱命中，
+  // 高星英文条目靠噪声词挤掉真实结果。AI 不可用才回退原词。
+  const combined = aiUsed ? refined : original
   const payload = await findPlugins(profile, token, combined, limit)
-  return { ...payload, aiUsed }
+  return { ...payload, aiUsed, query: original }
 }
 
 export function installFindTool(ctx: { tools: { register(tool: unknown): void } }, profile: string, githubToken: () => string, webOrigin: () => string): void {

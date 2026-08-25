@@ -479,6 +479,15 @@ export function DetailPanel(props: {
                     {langChoice === 'zh' ? score.explanation.zh : score.explanation.en}
                   </div>
                 )}
+                {/* v1.7.69：热度维过低时明示几何平均的惩罚效应（新仓库高分四维但总分
+                    很低的原因——乘法融合下 0 热度维把总分强力拉低，随 star 增长回升）。 */}
+                {score.breakdown.popularity !== null && score.breakdown.popularity <= 20 && (
+                  <div className="pcm-score-note">
+                    {langChoice === 'zh'
+                      ? '热度维当前 ' + score.breakdown.popularity + ' 分——综合分是五维加权几何平均（乘法融合），任一维接近 0 都会强力拉低总分；仓库获得 star 后热度维回升，总分将显著上涨。'
+                      : 'Popularity is ' + score.breakdown.popularity + '/100 — the composite score is a weighted geometric mean, so one near-zero dimension pulls the total down hard; it rises quickly as the repo earns stars.'}
+                  </div>
+                )}
                 <div className="pcm-score-bars">
                   {([
                     ['maintain', t('scoreDimMaintain'), score.breakdown.maintain],

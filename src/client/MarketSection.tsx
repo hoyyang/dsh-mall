@@ -1642,9 +1642,6 @@ export function MarketSection(props: SectionProps) {
         ) : (q.trim() !== '' || scannedOnly || skillOnly || curatedOnly || verifiedOnly || installedOnly || favOnly || cat !== 'all' || kind !== 'all') ? (
           <div className="pcm-empty">
             <div>{t('emptyFiltered')}</div>
-            <Button variant="outline" size="sm" onClick={() => { setQ(''); setCat('all'); setKind('all'); setCuratedOnly(false); setVerifiedOnly(false); setInstalledOnly(false); setFavOnly(false); setScannedOnly(false); setSkillOnly(false); setPage(1) }}>
-              {t('clearFilters')}
-            </Button>
           </div>
         ) : (
           <div className="pcm-empty">{t('empty')}</div>
