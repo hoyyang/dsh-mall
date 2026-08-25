@@ -254,9 +254,7 @@ function ResultsWindow(props: {
     <div className="pcm-store-overlay" style={{ zIndex: 1200 }}>
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window pcm-results-window" role="dialog" aria-modal="true" aria-label={t('resultsTitle')}>
-        <div className="pcm-store-head">
-          <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={22} height={22} />
-          <span className="pcm-store-head-title">{t('resultsTitle')}{payload !== null ? ' · ' + payload.query : ''}</span>
+        <div className="pcm-store-head pcm-store-head-dark">
           <div className="pcm-store-head-actions" ref={headActionsRef}>
             <Menu
               open={langOpen}
@@ -340,9 +338,7 @@ function StoreWindow(props: {
     >
       <div className="pcm-store-mask" onClick={props.onClose} />
       <div className="pcm-store-window" role="dialog" aria-label={props.t('nav')} aria-modal="true">
-        <div className="pcm-store-head">
-          <img className="pcm-sidebar-icon" src={ICON_DATA} alt="" width={22} height={22} />
-          <span className="pcm-store-head-title">{props.t('nav')}</span>
+        <div className="pcm-store-head pcm-store-head-dark">
           <div className="pcm-store-head-actions" ref={headActionsRef} />
           <Button
             variant="ghost"
