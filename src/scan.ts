@@ -123,10 +123,12 @@ export async function ensureBundleScans(profile: string, token: string, rawRepos
   const state = readState(profile)
   const cache = state.bundleScans ?? {}
   const now = Date.now()
+  // v1.7.61：未通过扫描（false）缓存缩短为 6h——「下次重新扫」；已扫描/其他仍 24h。
+  const FALSE_TTL_MS = 6 * 60 * 60 * 1000
   for (const repo of repos) {
     const key = repo.toLowerCase()
     const hit = cache[key]
-    if (hit !== undefined && now - hit.at < TTL_MS) { out[repo] = hit.value; continue }
+    if (hit !== undefined && now - hit.at < TTL_MS && (hit.value !== false || now - hit.at < FALSE_TTL_MS)) { out[repo] = hit.value; continue }
     const value = await manifestHasBundle(repo, token)
     if (value === null) continue // 不可判定：不缓存、不返回
     cache[key] = { at: now, value }

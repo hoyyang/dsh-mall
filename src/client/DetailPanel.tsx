@@ -515,11 +515,6 @@ export function DetailPanel(props: {
             </div>
           )}
 
-          {(entry.bundled !== undefined && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false)) && (
-            <div className={entry.bundled ? 'pcm-risk pcm-risk-curated' : 'pcm-risk pcm-risk-nonplugin'}>
-              {entry.bundled ? props.t('scannedBadgeHint') + (entry.bundledAt !== undefined && entry.bundledAt !== null ? ' · ' + entry.bundledAt : '') : props.t('scanFailHint')}
-            </div>
-          )}
           {entry.dormant === true && (
             <div className="pcm-risk pcm-risk-community">{props.t('dormantHint')}</div>
           )}

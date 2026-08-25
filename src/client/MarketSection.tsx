@@ -790,7 +790,9 @@ export function MarketSection(props: SectionProps) {
     const todo = pageList
       .filter(e => e.local !== true && !scansRequested.current.has((e.owner + '/' + e.name).toLowerCase()))
       .filter(e => {
-        if (e.bundled === null || e.bundled === undefined) return true
+        // v1.7.61：未通过扫描（false）也进重试队列——下次浏览时重新扫，
+        // 不再展示「未通过扫描」；已扫描（true）仅当仓库有新 push 才重扫。
+        if (e.bundled === null || e.bundled === undefined || e.bundled === false) return true
         if (e.bundledAt === null || e.bundledAt === undefined || e.pushed === null) return false
         return Date.parse(e.pushed) > Date.parse(e.bundledAt)
       })
@@ -1807,9 +1809,6 @@ export function MarketSection(props: SectionProps) {
                       {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
                       {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
-                      {entry.bundled === false && entry.isPlugin !== false && (
-                        <span className="pcm-badge pcm-badge-scanfail" title={t('scanFailHint')}>{t('scanFailBadge')}</span>
-                      )}
                       {entry.dormant === true && (
                         <span className="pcm-badge pcm-badge-dormant" title={t('dormantHint')}>{t('dormantBadge')}</span>
                       )}

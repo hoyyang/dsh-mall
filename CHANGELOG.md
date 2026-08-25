@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.61 — 2026-08-25
+
+- **不再显示「未通过扫描」**：卡片角落徽章与详情页红色横幅全部移除，只显示「已扫描」徽章；未通过（false）的条目自动进重试队列——每次浏览重新扫、宿主机缓存缩短为 6 小时，扫过（true）后徽章自然出现。
+
 ## 1.7.60 — 2026-08-25
 
 - **彻底禁止用户设置数据源/GitHub Token**：删除宿主侧 /dsh-store/token 与 /dsh-store/source 两个路由（此前只删了设置 UI，同源脚本仍可直连设置）；二者现在只能由宿主机部署配置提供（cordis.yml githubToken/registryUrl 或环境变量 DSHM_GITHUB_TOKEN / DSH_STORE_REGISTRY_URL）。

@@ -3575,10 +3575,6 @@ function DetailPanel(props) {
 								})
 							})]
 						}),
-						entry.bundled !== void 0 && entry.bundled !== null && (entry.bundled || entry.isPlugin !== false) && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-							className: entry.bundled ? "pcm-risk pcm-risk-curated" : "pcm-risk pcm-risk-nonplugin",
-							children: entry.bundled ? props.t("scannedBadgeHint") + (entry.bundledAt !== void 0 && entry.bundledAt !== null ? " · " + entry.bundledAt : "") : props.t("scanFailHint")
-						}),
 						entry.dormant === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 							className: "pcm-risk pcm-risk-community",
 							children: props.t("dormantHint")
@@ -4918,7 +4914,7 @@ function MarketSection(props) {
 	(0, react.useEffect)(() => {
 		if (data === null) return;
 		const todo = pageList.filter((e) => e.local !== true && !scansRequested.current.has((e.owner + "/" + e.name).toLowerCase())).filter((e) => {
-			if (e.bundled === null || e.bundled === void 0) return true;
+			if (e.bundled === null || e.bundled === void 0 || e.bundled === false) return true;
 			if (e.bundledAt === null || e.bundledAt === void 0 || e.pushed === null) return false;
 			return Date.parse(e.pushed) > Date.parse(e.bundledAt);
 		}).slice(0, 24);
@@ -6652,11 +6648,6 @@ function MarketSection(props) {
 											entry.local === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-local",
 												children: t("localBadge")
-											}),
-											entry.bundled === false && entry.isPlugin !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-												className: "pcm-badge pcm-badge-scanfail",
-												title: t("scanFailHint"),
-												children: t("scanFailBadge")
 											}),
 											entry.dormant === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 												className: "pcm-badge pcm-badge-dormant",
