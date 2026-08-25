@@ -6,20 +6,20 @@
 
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
-  <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall">
+  <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall?kill_cache=1">
+  <img alt="release" src="https://img.shields.io/github/v/release/hoyyang/dsh-mall">
   <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
 </p>
 
 ![DSH 商场](assets/screenshot-main-zh.png)
 
-<table>
-  <tr>
-    <td><img src="assets/shot-zh-detail.png" width="300" alt="插件详情页：五维评分、信任徽章与安全渲染的 README"></td>
-    <td><img src="assets/shot-zh-install.png" width="300" alt="安装确认弹窗：智能 AI 装前审查"></td>
-    <td><img src="assets/shot-zh-settings.png" width="300" alt="DSH 商场-设置"></td>
-  </tr>
-</table>
+<div align="center" style="display:flex;overflow-x:auto;gap:8px;padding:4px 0">
+  <a name="gallery"></a>
+  <img src="assets/shot-zh-detail.png" style="width:300px;flex:0 0 auto" alt="插件详情页：五维评分、信任徽章与安全渲染的 README">
+  <img src="assets/shot-zh-install.png" style="width:300px;flex:0 0 auto" alt="安装确认弹窗：智能 AI 装前审查">
+  <img src="assets/shot-zh-settings.png" style="width:300px;flex:0 0 auto" alt="DSH 商场-设置">
+</div>
 
 ---
 
@@ -27,17 +27,17 @@
 
 - 🌐 **全量目录** —— 自有 CI 索引收录 `#dsh-plugin` 生态全量 GitHub 仓库（每 2 小时增量 + 每日全量重建），CDN 分发 + 打包快照兜底，永不限流。
 - 🧠 **智能安装 / 更新 / 卸载** —— 装前 AI 安全审查（install / caution / refuse 三档结论）走你配置的模型；卸载前扫描本地依赖风险。AI 不可用时自动降级常规路径。
+- 🔌 **Agent 友好** —— 自带 `find_dsh_mall_plugin` 工具与 skill，对话中即可让 Agent 发现并推荐插件。
 - 📊 **五维实用评分** —— 维护 / 实用 / 热度 / 便捷 / 信号，加权几何平均 × 置信度，卡片雷达图 + 「为什么推荐」理由。
 - 🏷️ **LLM 打标中文标签 + 九语言简介** —— 插件自带中文功能标签与九语言一句话简介，经索引管道分发（用户零 LLM 成本）。
-- 🌍 **九语言界面** —— 中文、English、日本語、한국어、Español、Français、Deutsch、Português、Русский，一键切换全店文案。
-- 🛡️ **信任徽章** —— 已扫描（仓库树机器校验 dsh.bundle）、awesome 官方精选、已验证、含 skill、休眠与 npm 未回指警告。
 - ⭐ **编辑精选 + 为你推荐** —— 每周更新的编辑精选；基于已装画像的推荐（MMR 多样性）+ 冷启动问卷。
-- ⬇️ **关键信号** —— 今日新增 star、npm 近 30 天 / 总下载量、收录时间、版本胶囊。
+- 🛡️ **信任徽章** —— 已扫描（仓库树机器校验 dsh.bundle）、awesome 官方精选、已验证、含 skill、休眠与 npm 未回指警告。
+- 🌍 **九语言界面** —— 中文、English、日本語、한국어、Español、Français、Deutsch、Português、Русский，一键切换全店文案。
 - 🧰 **全生命周期管理** —— 一键更新、每日自动更新（03:30）、回退、启用开关（热生效）、带进度与取消的任务面板。
 - 📖 **README 安全渲染** —— 清洗后的 Markdown（徽章/残缺标签清理），并解析 README 安装命令（仅展示、可复制）。
-- 🔌 **Agent 友好** —— 自带 `find_dsh_store_plugin` 工具与 skill，对话中即可发现插件。
+- ⬇️ **关键信号** —— 今日新增 star、npm 近 30 天 / 总下载量、收录时间、版本胶囊。
 
-## 📦 安装
+## 安装
 
 ```sh
 dsh plugin add dsh-mall
@@ -47,13 +47,13 @@ dsh plugin add github:hoyyang/dsh-mall
 dsh plugin --profile web add dsh-mall
 ```
 
-重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商场**；也可以在官方设置浮窗里找到「DSH 商场设置」。
+重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商场**；也可以在官方设置浮窗里找到「DSH 商场-设置」。
 
 ## ✅ 兼容性
 
 - **需要 DeepSeek Harness（dsh web）0.1.0-rc.8 或更新版本** —— 已在 0.1.0-rc.8 实测。
 - npm peer 依赖：`@deepseek-ai/cordis ^4.0.1`、`@deepseek-ai/dsh-settings ^0.1.0-rc.6`（可选）、`@deepseek-ai/dsh-tools ^0.1.0-rc.6` —— 经商场/插件工具安装时自动解析。
-- 可选：GitHub Token（`DSHM_GITHUB_TOKEN` 或 cordis 配置 `githubToken`）提升搜索/验证/版本查询额度；token **仅存内存**，不落盘、不外发。
+- **开箱即用，无需任何配置** —— 重度浏览可选通过部署配置提升 GitHub API 额度；凭证仅存内存、从不落盘。
 
 ## 🗂 数据管道
 
@@ -63,7 +63,7 @@ dsh plugin --profile web add dsh-mall
 
 - 所有写操作接口（安装/卸载/更新/开关）**仅接受同源请求**。
 - 安装前始终展示来源；智能安装把仓库内容作为**不可信数据**（分隔符隔离、不执行）送入 headless AI 审查。
-- GitHub Token 从不持久化；用户级数据源/Token 设置路由已删除（仅部署配置可提供）。
+- 凭证从不持久化；用户级数据源/凭证设置路由已删除（仅部署配置可提供）。
 - 第三方插件是第三方代码——安装前请自行评估。「已扫描」徽章代表*结构可安装*，不是安全审计结论。
 
 ## 🤔 为什么又做一个市场？

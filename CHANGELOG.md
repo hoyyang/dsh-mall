@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.67 — 2026-08-25
+
+- **README 再优化**：主图重截（此前误截成详情面板，现为完整主商场界面，中英各一）；画廊改横向滑动条（flex overflow-x:auto，不占纵向篇幅）；npm 徽章加 kill_cache 强制刷新；Features 按惊艳度重排（Agent 友好升至第 3，工具名修正 `find_dsh_mall_plugin`）；安装标题去 emoji 与「无需配置」措辞（对齐索引 README 信号提取规则，实用/便捷两维评分随下次索引更新提升）。
+
 ## 1.7.66 — 2026-08-25
 
 - **npm 包净化**：删除 4 个编辑器残留锁文件（`src/client/.!*`，0B，曾混入 npm 包）；确认 files 白名单内条目不受 `.npmignore` 排除（npm 规则），锁文件已物理清除。

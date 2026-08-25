@@ -1,7 +1,7 @@
 {
   "name": "dsh-mall",
   "description": "DSH Mall — GitHub #dsh-plugin topic browser with one-click install/uninstall and publish-your-plugin. · DSH 商店：GitHub #dsh-plugin 全量目录，浏览/搜索/排序/筛选 + 一键安装卸载 + 上传入口。",
-  "version": "1.7.66",
+  "version": "1.7.67",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
