@@ -46,9 +46,9 @@ interface SectionProps {
     subscribe(callback: () => void): () => void
     getSnapshot(): { active: string }
   }
-  /** true = 渲染在独立商店浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
+  /** true = 渲染在独立商场浮窗内：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。 */
   floating?: boolean
-  /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商店完全一致。 */
+  /** 结果浮窗模式：固定条目列表（推荐+相关），卡片/交互与主商场完全一致。 */
   seed?: { plugins: MarketEntry[]; categories: Record<string, { en: string; zh: string }> } | null
   /** 浮窗模式下头行容器的 ref（由窗口组件直传，避免多窗口 querySelector 歧义）。 */
   headRef?: { current: HTMLDivElement | null }
@@ -77,7 +77,7 @@ interface StatusBody {
 export function MarketSection(props: SectionProps) {
   const t = props.t
   const floating = props.floating === true
-  // v1.7.53：dsh-store 自身 UI 语言（独立于宿主），语言按钮切换全店
+  // v1.7.53：dsh-mall 自身 UI 语言（独立于宿主），语言按钮切换全店
   const uiLangSnap = useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   const lang = uiLangSnap
   const seedMode = props.seed != null
@@ -121,7 +121,7 @@ export function MarketSection(props: SectionProps) {
   const [langChoice, setLangChoice] = useState<string>(() => {
     if (props.langOverride !== undefined) return props.langOverride
     try {
-      const saved = localStorage.getItem('dsh-store-lang')
+      const saved = localStorage.getItem('dsh-mall-lang')
       if (saved !== null && (LANGS as readonly string[]).includes(saved)) return saved
     } catch { /* localStorage 不可用 */ }
     return 'en'
@@ -132,7 +132,7 @@ export function MarketSection(props: SectionProps) {
   }, [props.langOverride])
   const setLangPersist = useCallback((l: string) => {
     setLangChoice(l)
-    try { localStorage.setItem('dsh-store-lang', l) } catch { /* 忽略 */ }
+    try { localStorage.setItem('dsh-mall-lang', l) } catch { /* 忽略 */ }
   }, [])
   const [langOpen, setLangOpen] = useState(false)
   const [page, setPage] = useState(1)
@@ -163,7 +163,7 @@ export function MarketSection(props: SectionProps) {
       return
     }
     setSmartSearchBusy(true)
-    fetch('/dsh-store/smart-search', {
+    fetch('/dsh-mall/smart-search', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ query }),
@@ -171,7 +171,7 @@ export function MarketSection(props: SectionProps) {
       .then(res => res.json())
       .then((body: { ok?: boolean; payload?: unknown; error?: string }) => {
         if (body.ok === true && body.payload !== undefined) {
-          window.dispatchEvent(new CustomEvent('dsh-store-open-results', { detail: { payload: body.payload } }))
+          window.dispatchEvent(new CustomEvent('dsh-mall-open-results', { detail: { payload: body.payload } }))
         } else {
           setToast(t('installFailed') + ': ' + (body.error ?? ''))
         }
@@ -213,7 +213,7 @@ export function MarketSection(props: SectionProps) {
   const fetchRegistry = useCallback((force: boolean) => {
     // 结果浮窗（seed）模式：目录固定为推荐条目，不拉 registry。
     if (seedMode) return
-    fetch('/dsh-store/registry' + (force ? '?force=1' : ''), { cache: 'no-store' })
+    fetch('/dsh-mall/registry' + (force ? '?force=1' : ''), { cache: 'no-store' })
       .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json() })
       .then((body: { registry?: Registry; refreshing?: boolean; fetchAt?: string }) => {
         if (body.registry !== undefined) {
@@ -254,14 +254,14 @@ export function MarketSection(props: SectionProps) {
   }, [])
 
   const fetchStatus = useCallback(() => {
-    fetch('/dsh-store/status', { cache: 'no-store' })
+    fetch('/dsh-mall/status', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: StatusBody) => setStatus(body))
       .catch(() => {})
   }, [])
 
   useEffect(() => {
-    fetch('/dsh-store/favorites', { cache: 'no-store' })
+    fetch('/dsh-mall/favorites', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { favorites?: string[] }) => setFavorites(new Set(body.favorites ?? [])))
       .catch(() => {})
@@ -378,7 +378,7 @@ export function MarketSection(props: SectionProps) {
     const unknown = entries.filter(e => e.isPlugin === null).map(e => e.owner + '/' + e.name).slice(0, 12)
     if (unknown.length === 0 || verifyBusy) return
     setVerifyBusy(true)
-    fetch('/dsh-store/verify', {
+    fetch('/dsh-mall/verify', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repos: unknown }),
@@ -470,7 +470,7 @@ export function MarketSection(props: SectionProps) {
     for (const [name, spec] of Object.entries(deps)) {
       const s = String(spec).trim()
       // 本地 link:/file: 安装没有市场身份（无 owner/repo 可对应），跳过，
-      // 否则同名仓库会被误标已安装（如别人的 dsh-store 撞名本地包）。
+      // 否则同名仓库会被误标已安装（如别人的 dsh-mall 撞名本地包）。
       if (s.startsWith('link:') || s.startsWith('file:')) continue
       const n = name.toLowerCase()
       names.add(n)
@@ -533,7 +533,7 @@ export function MarketSection(props: SectionProps) {
     if (next.has(key)) next.delete(key)
     else next.add(key)
     setFavorites(next)
-    fetch('/dsh-store/favorites', {
+    fetch('/dsh-mall/favorites', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ key }),
@@ -566,7 +566,7 @@ export function MarketSection(props: SectionProps) {
 
   // v1.7.53：编辑精选已移除（用户决定不需要该功能）。
 
-  // v1.7.52：为你推荐（本地已装画像 → 相似推荐，host /dsh-store/recommend）
+  // v1.7.52：为你推荐（本地已装画像 → 相似推荐，host /dsh-mall/recommend）
   // v1.7.55：profileStats（跨天画像统计）+ 冷启动问卷（画像薄弱且未答卷 → CTA 卡）
   const [recommend, setRecommend] = useState<Array<{ entry: MarketEntry; reasons: string[] }> | null>(null)
   const [profileStats, setProfileStats] = useState<{ days: number; installs: number; hasQuiz: boolean; quizAt: string | null; showQuiz: boolean } | null>(null)
@@ -575,7 +575,7 @@ export function MarketSection(props: SectionProps) {
   useEffect(() => {
     if (seedMode) return
     const installedKey = JSON.stringify(status?.installed ?? {})
-    fetch('/dsh-store/recommend', { cache: 'no-store' })
+    fetch('/dsh-mall/recommend', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { items?: Array<{ entry: MarketEntry; reasons: string[] }>; stats?: { days: number; installs: number; hasQuiz: boolean; quizAt: string | null; showQuiz: boolean } | null }) => {
         setRecommend(Array.isArray(body.items) ? body.items : [])
@@ -588,7 +588,7 @@ export function MarketSection(props: SectionProps) {
   // v1.7.55：问卷提交 → host 持久化 + 立即重算推荐
   const submitQuiz = (answers: string[]) => {
     setQuizOpen(false)
-    fetch('/dsh-store/recommend', {
+    fetch('/dsh-mall/recommend', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ quiz: answers }),
@@ -619,7 +619,7 @@ export function MarketSection(props: SectionProps) {
       let storedWeek = ''
       let storedNames: string[] = []
       try {
-        const raw = localStorage.getItem('dsh-store-picks-week')
+        const raw = localStorage.getItem('dsh-mall-picks-week')
         if (raw !== null) {
           const o = JSON.parse(raw) as { week?: string; names?: string[] }
           storedWeek = o.week ?? ''
@@ -637,7 +637,7 @@ export function MarketSection(props: SectionProps) {
       const fresh = computePicks(data.plugins)
       setPicks(fresh)
       try {
-        localStorage.setItem('dsh-store-picks-week', JSON.stringify({ week: wk, names: fresh.map(p => p.owner + '/' + p.name) }))
+        localStorage.setItem('dsh-mall-picks-week', JSON.stringify({ week: wk, names: fresh.map(p => p.owner + '/' + p.name) }))
       } catch { /* 忽略 */ }
     }, [data])
     return picks
@@ -676,7 +676,7 @@ export function MarketSection(props: SectionProps) {
     }
     if (todo.length === 0) return
     for (const e of todo) descRequested.current.add(langChoice + ':' + e.owner + '/' + e.name)
-    fetch('/dsh-store/descriptions', {
+    fetch('/dsh-mall/descriptions', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ lang: langChoice, repos: todo.map(e => e.owner + '/' + e.name) }),
@@ -709,7 +709,7 @@ export function MarketSection(props: SectionProps) {
       .slice(0, 24)
     if (todo.length === 0) return
     for (const r of todo) versionsRequested.current.add(r.toLowerCase())
-    fetch('/dsh-store/versions', {
+    fetch('/dsh-mall/versions', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repos: todo }),
@@ -738,7 +738,7 @@ export function MarketSection(props: SectionProps) {
     const todo = [...new Set(names.filter(n => n !== '' && !downloadsRequested.current.has(n)))]
     if (todo.length === 0) return
     for (const n of todo) downloadsRequested.current.add(n)
-    fetch('/dsh-store/downloads', {
+    fetch('/dsh-mall/downloads', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ names: todo.slice(0, 1500) }),
@@ -799,7 +799,7 @@ export function MarketSection(props: SectionProps) {
       .slice(0, 24)
     if (todo.length === 0) return
     for (const e of todo) scansRequested.current.add((e.owner + '/' + e.name).toLowerCase())
-    fetch('/dsh-store/scan', {
+    fetch('/dsh-mall/scan', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repos: todo.map(e => e.owner + '/' + e.name) }),
@@ -839,7 +839,7 @@ export function MarketSection(props: SectionProps) {
       .slice(0, 24)
     if (todo.length === 0) return
     for (const e of todo) scoresRequested.current.add((e.owner + '/' + e.name).toLowerCase())
-    fetch('/dsh-store/scores', {
+    fetch('/dsh-mall/scores', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ items: todo.map(e => ({ repo: e.owner + '/' + e.name, branch: e.defaultBranch ?? 'main' })) }),
@@ -883,7 +883,7 @@ export function MarketSection(props: SectionProps) {
       at: Date.now(),
     }))
     setTasksOpen(true)
-    fetch('/dsh-store/smart-install', {
+    fetch('/dsh-mall/smart-install', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
@@ -922,7 +922,7 @@ export function MarketSection(props: SectionProps) {
       reason: null,
       at: Date.now(),
     }))
-    fetch('/dsh-store/install', {
+    fetch('/dsh-mall/install', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
@@ -952,7 +952,7 @@ export function MarketSection(props: SectionProps) {
       reason: null,
       at: Date.now(),
     }))
-    fetch('/dsh-store/uninstall', {
+    fetch('/dsh-mall/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name: entry.name, id }),
@@ -982,7 +982,7 @@ export function MarketSection(props: SectionProps) {
       reason: null,
       at: Date.now(),
     }))
-    fetch('/dsh-store/uninstall', {
+    fetch('/dsh-mall/uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repo: entry.owner + '/' + entry.name, id }),
@@ -1005,7 +1005,7 @@ export function MarketSection(props: SectionProps) {
   const [smartUninstallRisk, setSmartUninstallRisk] = useState<{ name: string; verdict: string; report: string } | null>(null)
   const [smartUninstallPending, setSmartUninstallPending] = useState<{ name: string; taskId: string } | null>(null)
   const runSmartUninstallRequest = useCallback((name: string, taskId: string, confirm: boolean) => {
-    fetch('/dsh-store/smart-uninstall', {
+    fetch('/dsh-mall/smart-uninstall', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name, confirm, id: taskId }),
@@ -1085,7 +1085,7 @@ export function MarketSection(props: SectionProps) {
   }, [updatesAll])
 
   const runUpdateRequest = useCallback((names: string[], toastDone: string, taskId: string | null) => {
-    fetch('/dsh-store/update', {
+    fetch('/dsh-mall/update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ names, id: taskId ?? undefined }),
@@ -1157,7 +1157,7 @@ export function MarketSection(props: SectionProps) {
       at: Date.now(),
     }))
     setTasksOpen(true)
-    fetch('/dsh-store/smart-update', {
+    fetch('/dsh-mall/smart-update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name: u.name, from: u.from, to: u.to, repo: entry.owner + '/' + entry.name, npm: entry.npm, id }),
@@ -1185,7 +1185,7 @@ export function MarketSection(props: SectionProps) {
       })
   }, [t, fetchStatus, fetchRegistry, finishTask])
 
-  // ---- 启用/停用、回退、不参与一键更新、商店自身更新 ----
+  // ---- 启用/停用、回退、不参与一键更新、商场自身更新 ----
   const skipSet = useMemo(() => new Set((status?.skipUpdates ?? []).map(n => n.toLowerCase())), [status])
   const rollbacks = status?.rollbacks ?? {}
   const stateOf = useCallback((e: MarketEntry): 'live' | 'disabled' | 'restart' | null => {
@@ -1209,7 +1209,7 @@ export function MarketSection(props: SectionProps) {
     if (depName === null || toggling.has(depName)) return
     const next = stateOf(e) === 'disabled'
     setToggling(prev => new Set(prev).add(depName))
-    fetch('/dsh-store/toggle', {
+    fetch('/dsh-mall/toggle', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name: depName, enabled: next }),
@@ -1242,7 +1242,7 @@ export function MarketSection(props: SectionProps) {
       at: Date.now(),
     }))
     setRollbacking(e.name)
-    fetch('/dsh-store/rollback', {
+    fetch('/dsh-mall/rollback', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name: depName, id }),
@@ -1267,7 +1267,7 @@ export function MarketSection(props: SectionProps) {
     }
     if (depName === null) return
     const next = !skipSet.has(depName.toLowerCase())
-    fetch('/dsh-store/skip', {
+    fetch('/dsh-mall/skip', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ name: depName, skip: next }),
@@ -1284,13 +1284,13 @@ export function MarketSection(props: SectionProps) {
     setTasks(list => enqueueTask(list, {
       id,
       kind: 'update',
-      name: 'dsh-store',
+      name: 'dsh-mall',
       state: 'running',
       detail: selfUpdate.from + ' → ' + selfUpdate.to,
       reason: null,
       at: Date.now(),
     }))
-    fetch('/dsh-store/self-update', { method: 'POST' })
+    fetch('/dsh-mall/self-update', { method: 'POST' })
       .then(res => res.json())
       .then((body: { ok?: boolean; needRestart?: boolean; message?: string; error?: string }) => {
         if (body.ok === true) {
@@ -1364,7 +1364,7 @@ export function MarketSection(props: SectionProps) {
           )}
           {selfUpdateDone && <span className="pcm-self-update-warn">{t('restartNeeded')}</span>}
           {/* v1.7.2：「上传我的插件」暂时隐藏（用户准备调整该功能，见 STATE 待办）；
-              PublishModal 与 /dsh-store/publish 路由保留，恢复时解注释即可。 */}
+              PublishModal 与 /dsh-mall/publish 路由保留，恢复时解注释即可。 */}
           <button
             type="button"
             ref={tasksAnchorRef}
@@ -1851,7 +1851,7 @@ export function MarketSection(props: SectionProps) {
                             </label>
                           </>
                         )}
-                        {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-store' ? (
+                        {!(entry.npm ?? entry.name).startsWith('@deepseek-ai/') && (entry.npm ?? entry.name) !== 'dsh-mall' ? (
                           <>
                             <span className="pcm-vsep" />
                             <label className="pcm-switch pcm-switch-inline" title={t('toggleHint')}>
@@ -2046,7 +2046,7 @@ export function MarketSection(props: SectionProps) {
         onClearSettled={() => setTasks(clearSettledTasks)}
         onDismiss={id => setTasks(list => dismissTask(list, id))}
         onCancelTask={id => {
-          fetch('/dsh-store/cancel', {
+          fetch('/dsh-mall/cancel', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ id }),
@@ -2095,7 +2095,7 @@ function InstallModal(props: {
   useEffect(() => {
     if (readmeCmds.commands.length > 0) return
     let alive = true
-    fetch('/dsh-store/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=README.md&branch=' + encodeURIComponent(entry.defaultBranch ?? 'main'))
+    fetch('/dsh-mall/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=README.md&branch=' + encodeURIComponent(entry.defaultBranch ?? 'main'))
       .then(res => res.json())
       .then((body: { ok?: boolean; installCmds?: string[]; cmdSource?: string }) => {
         if (alive && body.ok === true && Array.isArray(body.installCmds) && body.installCmds.length > 0) {
@@ -2236,7 +2236,7 @@ function PublishModal(props: { t: (key: string) => string; onClose: () => void }
   const [busy, setBusy] = useState(false)
 
   const loadMyRepos = () => {
-    fetch('/dsh-store/publish/repos', { cache: 'no-store' })
+    fetch('/dsh-mall/publish/repos', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { ok?: boolean; repos?: { full_name: string }[] }) => setMyRepos(body.repos ?? []))
       .catch(() => {})
@@ -2247,7 +2247,7 @@ function PublishModal(props: { t: (key: string) => string; onClose: () => void }
     setBusy(true)
     setResult(null)
     setError(null)
-    fetch('/dsh-store/publish', {
+    fetch('/dsh-mall/publish', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repo: target, checkOnly: true }),
@@ -2264,7 +2264,7 @@ function PublishModal(props: { t: (key: string) => string; onClose: () => void }
     setBusy(true)
     setResult(null)
     setError(null)
-    fetch('/dsh-store/publish', {
+    fetch('/dsh-mall/publish', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ repo: target }),

@@ -1,8 +1,8 @@
-# awesome-dsh-plugin 双仓库 × dsh-store 差距分析与借鉴清单
+# awesome-dsh-plugin 双仓库 × dsh-mall 差距分析与借鉴清单
 
 > 调研方式：纯本地代码级深读（未联网、未 clone）。所有结论附文件路径 + 字段名/行号证据。
-> 范围：/tmp/awesome-main（官方主仓库）、/tmp/awesome-bruc3van（数据管道仓库）、/Users/hoy/Desktop/DSH/dsh-store（本地源码）。
-> 数据基线：awesome-main data/plugins 1837 条 YAML；bruc3van repositories.json 快照 10270 仓、approved.json 8837 条；dsh-store 打包 awesome-known.json 1563 条 + CDN 全量索引（8.8k-10k）。
+> 范围：/tmp/awesome-main（官方主仓库）、/tmp/awesome-bruc3van（数据管道仓库）、/Users/hoy/Desktop/DSH/dsh-mall（本地源码）。
+> 数据基线：awesome-main data/plugins 1837 条 YAML；bruc3van repositories.json 快照 10270 仓、approved.json 8837 条；dsh-mall 打包 awesome-known.json 1563 条 + CDN 全量索引（8.8k-10k）。
 
 ---
 
@@ -95,7 +95,7 @@
 
 **无网站/搜索/详情页，无 skill/CLI/AI 运行时**：交付物即 GitHub 页面与 JSON 文件；唯一的「AI」是审核工作流约定（让 AI 助手按约定审 pending 队列）。
 
-### 1.3 dsh-store 现状基线（对照用，全部带证据）
+### 1.3 dsh-mall 现状基线（对照用，全部带证据）
 
 - 数据通道：CDN registry.json（hoyyang/dsh-market-index 优先 + bradeGithub fallback，.gz 与明文并行竞速，CDN_MAX_AGE_MS=6h 过期判定，src/catalog.ts:20-28）→ live 兜底（HTML topic 4 视图 ×50 页 + Search API union，30min TTL 缓存 + 打包快照，catalog.ts:712-772）；CDN 不可用且已有缓存时不再直爬（v1.7.18）。
 - curated 覆盖层：data/awesome-known.json 1563 条（name/category/npm/description.{en,zh}/added）；src/awesome.ts 每 24h 从 awesome-dsh-plugin.com/plugins.json 刷新，失败回退打包快照；mergeDescriptions 把 known 双语 + 索引 README.<lang> 首段富化合并（catalog.ts:85-101）；9 语言 UI（client/locales.ts）。
@@ -104,16 +104,16 @@
 - 状态/更新：computeTodayStars 今日涨星基线（state.json starsSnapshot，catalog.ts:646-677）；computeUpdates（已装 deps spec vs npmVersion/version，extractVersion+compareVersions，skip 名单，catalog.ts:526-555）；pluginStatesOf live/disabled/restart（install.ts:366）。
 - 操作闭环：runInstall/runUpdate/runUninstall/runSelfUpdate + withMutationLock 串行锁 + snapshotDep/rollbackDep 回退 + setPluginEnabled 启停 + removeLegacyPatchEntry 清理（install.ts）；runSmartInstall 装前 AI 审查（install/caution/refuse）+ 装后 AI 诊断（smart.ts:85-162）；智能更新/智能卸载同构（smart.ts:181+）；auto-update.ts 每日 03:30 自动一键更新（skip 名单持久化）；TaskPanel 进行中任务 + AbortController 取消（routes.ts:119,207）。
 - 富化：downloads.ts npm bulk（scoped 逐个）+ totalDownloads（2019 起累计）；versions.ts GitHub tags per_page=1 兜底版本号；verified（qing3a/dsh-plugin-verify 证据 by/at/reportUrl）+ disclosure 合规披露字段（types.ts:60-70）。
-- UI：MarketSection 1955 行 —— 分类 chips、搜索（name+owner+description 子串）、kind（插件/非插件）三态、curatedOnly/verifiedOnly/installedOnly/favOnly 过滤、4 排序维（stars/today/created/downloads）×升降序、分页 24、语言选择持久化；DetailPanel 多语言 README（MarkdownText 直渲）+ verified/disclosure；StoreWindow 浮窗；publish 对话框（发布自己的插件）；/dsh-store skill 落盘（index.ts:32-46）。
+- UI：MarketSection 1955 行 —— 分类 chips、搜索（name+owner+description 子串）、kind（插件/非插件）三态、curatedOnly/verifiedOnly/installedOnly/favOnly 过滤、4 排序维（stars/today/created/downloads）×升降序、分页 24、语言选择持久化；DetailPanel 多语言 README（MarkdownText 直渲）+ verified/disclosure；StoreWindow 浮窗；publish 对话框（发布自己的插件）；/dsh-mall skill 落盘（index.ts:32-46）。
 - 已知短板（为本报告铺垫）：ListQuery 定义了 sinceDays 但 UI 硬编码 0（market-data.ts:66,79-96 vs MarketSection.tsx:555）；无腐烂信号（仅 live pass 过滤 fork/archived，catalog.ts:762，grep 全库仅此一处）；无截图；README 直渲无清洗；无黑名单/剔除理由；无收录闸门。
 
 ---
 
 ## 2. 差距表
 
-### 表 A：awesome 有、dsh-store 没有
+### 表 A：awesome 有、dsh-mall 没有
 
-| 能力 | awesome 证据 | dsh-store 现状 |
+| 能力 | awesome 证据 | dsh-mall 现状 |
 | --- | --- | --- |
 | 收录闸门（dsh.bundle 全树扫描 + 仓库年龄/提交数 + 单 PR≤3） | check-submission.mjs:21-70（MIN_AGE_DAYS=1, MIN_COMMITS=10, MAX_ENTRIES_PER_PR=3） | 只有 heuristicIsPlugin 三态 + 社区索引 verdict（catalog.ts:590-596），无提交质量/年龄校验 |
 | 腐烂扫描 4 信号 + 周度 tracking issue | scan-decay.mjs（gone/archived/dormant 6 月/unbundled；inconclusive>5% 拒发报告） | 仅 live pass 一行过滤 fork/archived（catalog.ts:762）；无 dormant/unbundled、无 issue 流程 |
@@ -133,20 +133,20 @@
 
 ### 表 B：两边都有、awesome 更强
 
-| 能力 | awesome | dsh-store | 差距 |
+| 能力 | awesome | dsh-mall | 差距 |
 | --- | --- | --- | --- |
-| 双语简介质量 | 1837×2 人工撰写（entries.mjs ENTRY_KEYS） | 1563 known + README.<lang> 首段按需抓取（firstParagraph 噪声多，catalog.ts:408-432） | awesome 全人工、质量高；dsh-store 其余 7k+ 条目仅英文且靠启发式 |
-| 分类准确性 | 每条目人工 category + 维护者改分类 | knownEntry.category 覆盖 1563，其余 19 条正则兜底 | awesome 21 类全覆盖且准；dsh-store 正则误分类不可避免 |
+| 双语简介质量 | 1837×2 人工撰写（entries.mjs ENTRY_KEYS） | 1563 known + README.<lang> 首段按需抓取（firstParagraph 噪声多，catalog.ts:408-432） | awesome 全人工、质量高；dsh-mall 其余 7k+ 条目仅英文且靠启发式 |
+| 分类准确性 | 每条目人工 category + 维护者改分类 | knownEntry.category 覆盖 1563，其余 19 条正则兜底 | awesome 21 类全覆盖且准；dsh-mall 正则误分类不可避免 |
 | 详情页内容 | 预渲染 README（清洗）+ 安装三通道注释 + related 6 条 + 收录日 | raw README + 安装单通道 + verified/disclosure | awesome 详情页信息密度与安全性更高 |
-| npm 下载量覆盖 | 每日全量探测已发布子集（0.66 地板） | 按需批量 TTL 24h（用户翻页才拉） | awesome 覆盖率高；但 dsh-store 有 totalDownloads 累计（awesome 明确不做） |
-| 可安装性验证 | check-submission 全树扫 dsh.bundle + 根 URL 可装性审计（48/1302 事故） | 社区索引 installable 字段（non-plugin/manual）+ 启发式 | awesome 收录即保证可装；dsh-store 三态里有「待判定」 |
-| 更新检测 | 无 | computeUpdates + auto-update 03:30 | dsh-store 独有 |
+| npm 下载量覆盖 | 每日全量探测已发布子集（0.66 地板） | 按需批量 TTL 24h（用户翻页才拉） | awesome 覆盖率高；但 dsh-mall 有 totalDownloads 累计（awesome 明确不做） |
+| 可安装性验证 | check-submission 全树扫 dsh.bundle + 根 URL 可装性审计（48/1302 事故） | 社区索引 installable 字段（non-plugin/manual）+ 启发式 | awesome 收录即保证可装；dsh-mall 三态里有「待判定」 |
+| 更新检测 | 无 | computeUpdates + auto-update 03:30 | dsh-mall 独有 |
 | 验证徽章 | 无 verified 字段（收录即人工审） | verified（qing3a 证据链） | 各有语义，不能互替 |
 
-### 表 C：dsh-store 已更强（如实列出，附证据）
+### 表 C：dsh-mall 已更强（如实列出，附证据）
 
-1. **目录规模**：CDN 全量 8.8k-10k（README 自述 + catalog.ts CDN_URLS）vs awesome 1837 精选；bruc3van 8787 approved 与 dsh-store 同级，但 dsh-store 无审核延迟（新仓当天进索引）。
-2. **agent 工具 + skill + 按钮**：find_dsh_store_plugin（find.ts:180-218）+ /dsh-store skill 落盘（index.ts:32-46）+ 结果 staging 与按钮链接（find.ts:36-56）——awesome 两仓库均无任何 agent 入口。
+1. **目录规模**：CDN 全量 8.8k-10k（README 自述 + catalog.ts CDN_URLS）vs awesome 1837 精选；bruc3van 8787 approved 与 dsh-mall 同级，但 dsh-mall 无审核延迟（新仓当天进索引）。
+2. **agent 工具 + skill + 按钮**：find_dsh_store_plugin（find.ts:180-218）+ /dsh-mall skill 落盘（index.ts:32-46）+ 结果 staging 与按钮链接（find.ts:36-56）——awesome 两仓库均无任何 agent 入口。
 3. **评分检索**：关键词加权（中文滑窗/英文词干）+ log10 star + curated/verified/market 加权（find.ts:95-124）；awesome 网站搜索是纯子串 includes（template.html 脚本段），无分词无权重。
 4. **AI 智能搜索**：smartSearch 经用户模型改写需求（find.ts:149-178）——awesome 无 AI 能力。
 5. **一键装/卸/更新/回退/启停 + 取消 + 任务面板**：install.ts 全套 + TaskPanel.tsx + /cancel（routes.ts:207）——awesome 只有复制命令（build-site.mjs buildRows）。
@@ -159,11 +159,11 @@
 
 ---
 
-## 3. 可借鉴优化清单（借鉴点 + awesome 代码位置 + dsh-store 落点 + 工作量 + 优先级）
+## 3. 可借鉴优化清单（借鉴点 + awesome 代码位置 + dsh-mall 落点 + 工作量 + 优先级）
 
 ### P0（数据可信度，直接影响「推荐即能装」承诺）
 
-| # | 借鉴点 | awesome 代码位置 | dsh-store 落点文件 | 工作量 | 优先级 |
+| # | 借鉴点 | awesome 代码位置 | dsh-mall 落点文件 | 工作量 | 优先级 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | dsh.bundle 全树扫描式安装源校验：对目录条目做「根/子包 package.json 是否声明 dsh.bundle」判定，替换仅靠名字的启发式三态 | check-submission.mjs scanTree/hasBundle（97-236 行，含 MAX_TREE_PKGS=40、BOM、truncated=unknown、根指向错误时给正确子目录） | src/github.ts packageJsonVerdict 扩展为全树扫描；src/catalog.ts cdnEntry 接入 verdict 三态 | 大 | P0 |
 | 2 | 数据劣化拒发：目录 star 覆盖率骤降 >1/3 时拒绝用新索引换缓存（沿用上一次可用数据） | build-site.mjs:158-166（STARS_MIN_COVERAGE=0.66）+ probe-stars.mjs 写盘守卫 | src/catalog.ts fetchCdnRegistry（现有 CDN age 检查旁加覆盖率/条目数地板） | 中 | P0 |
@@ -172,58 +172,58 @@
 
 ### P1（策展深度与安全渲染）
 
-| # | 借鉴点 | awesome 代码位置 | dsh-store 落点文件 | 工作量 | 优先级 |
+| # | 借鉴点 | awesome 代码位置 | dsh-mall 落点文件 | 工作量 | 优先级 |
 | --- | --- | --- | --- | --- | --- |
 | 5 | 黑名单 + 理由：本地排除清单（key→理由）持久化在 state.json，卡片/详情展示「目录站/非插件/蹭 topic」理由；对接 bruc3van curated.json 的 414 条现成理由 | bruc3van data/curated.json（excluded_repos 带理由）+ render.mjs catalogRepositories | src/catalog.ts readState/applyVerdicts 旁加 exclusions；src/client/MarketSection.tsx 过滤 + DetailPanel 展示 | 中 | P1 |
-| 6 | README 安全渲染：host 端清洗（丢原始 HTML、图片域名白名单 raw/camo/user-images.githubusercontent.com、heading 降级、相对链接改绝对）后再下发，替代 MarkdownText 直渲 raw | build-site.mjs renderReadme:456-505 + SCREENSHOT_HOSTS:199 | src/routes.ts 新增 /dsh-store/readme 端点（DetailPanel 抓取逻辑上移）或 client/DetailPanel.tsx 前置清洗 | 中 | P1 |
+| 6 | README 安全渲染：host 端清洗（丢原始 HTML、图片域名白名单 raw/camo/user-images.githubusercontent.com、heading 降级、相对链接改绝对）后再下发，替代 MarkdownText 直渲 raw | build-site.mjs renderReadme:456-505 + SCREENSHOT_HOSTS:199 | src/routes.ts 新增 /dsh-mall/readme 端点（DetailPanel 抓取逻辑上移）或 client/DetailPanel.tsx 前置清洗 | 中 | P1 |
 | 7 | 详情页信息密度：安装多通道注释（npm 预构建/tgz/源码构建提示）、related 同类别 6 条、added 收录日、downloads 展示 | build-site.mjs:525-547（specs/cmds/related） | src/client/DetailPanel.tsx | 中 | P1 |
 | 8 | 榜单豁免/加权修正：星数与 DSH 无关的仓库（如 mirage 星来自通用产品）不进「最受欢迎」排序头部；market 类 +4 与「市场不能包含市场」原则冲突，改成分段呈现而非加分 | bruc3van leaderboard_exclusions 2 条带理由 + market_exclusions 592 条 | src/find.ts scoreEntry（豁免表或减权）；src/client/MarketSection.tsx 排序 | 小 | P1 |
 | 9 | 收录日补全：非 awesome 条目用 GitHub created_at（索引已有）填充 created，让 created 排序维与「新收录」筛选真正可用 | build-site.mjs added-dates 机制 | src/catalog.ts cdnEntry created 回退 repo 索引 created_at；MarketSection sinceDays 接线（现硬编码 0，market-data.ts:66 vs MarketSection.tsx:555） | 小 | P1 |
 
 ### P2（体验加分）
 
-| # | 借鉴点 | awesome 代码位置 | dsh-store 落点文件 | 工作量 | 优先级 |
+| # | 借鉴点 | awesome 代码位置 | dsh-mall 落点文件 | 工作量 | 优先级 |
 | --- | --- | --- | --- | --- | --- |
-| 10 | 编辑精选位：「套装|适合|组合」表与精选推荐的人工策展形态 → 商店顶部「编辑精选」卡片组（awesome known + 预设 JSON） | bruc3van README.md:196、SHOWCASE.md | src/client/MarketSection.tsx 品牌卡下新增精选行 + data 包内精选清单 | 小 | P2 |
+| 10 | 编辑精选位：「套装|适合|组合」表与精选推荐的人工策展形态 → 商场顶部「编辑精选」卡片组（awesome known + 预设 JSON） | bruc3van README.md:196、SHOWCASE.md | src/client/MarketSection.tsx 品牌卡下新增精选行 + data 包内精选清单 | 小 | P2 |
 | 11 | 截图：详情面板 README 首图抽取或索引 screenshot 字段展示轮播（GitHub 域名白名单同 #6） | data/screenshots.json | src/client/DetailPanel.tsx + 索引消费 | 中 | P2 |
 | 12 | 分类正则质量：未知条目定期用 bruc3van category_overrides 扩充映射 | bruc3van curated.json category_overrides（14 条）+ categories.mjs 8 类正则 | data/awesome-known.json 生成脚本或 src/catalog.ts 内嵌映射 | 小 | P2 |
 | 13 | 发布防护语义化：CDN 索引条目数较上次快照骤降（<60%）时前端显示「索引可能不完整」提示而非静默展示 | bruc3van market.mjs BREAKER_RATIO=0.6 | src/catalog.ts LoadResult 增加 degradation 标志 + MarketSection 提示行 | 小 | P2 |
 
 ---
 
-## 4. 「做得比 awesome 强」策略（8 条，基于 dsh-store 独特资产）
+## 4. 「做得比 awesome 强」策略（8 条，基于 dsh-mall 独特资产）
 
 **策略 1：全量长尾 × 评分检索——awesome 的结构性盲区。**
-awesome 的定位决定了它只能收录 1837 条：单 PR ≤3（check-submission.mjs:70）、维护者逐仓读源码（contributing.md 评审第 1 条）、10 commits 门槛——长尾新插件要么等审核要么永远不可见。dsh-store 的 CDN 索引当天收录 8.8k-10k，find.ts 的滑窗分词 + log10 star 让任意长尾词都能命中。为什么 awesome 做不到：人工策展的边际成本与目录规模线性相关，而 dsh-store 的增量成本为零（索引方承担）。
+awesome 的定位决定了它只能收录 1837 条：单 PR ≤3（check-submission.mjs:70）、维护者逐仓读源码（contributing.md 评审第 1 条）、10 commits 门槛——长尾新插件要么等审核要么永远不可见。dsh-mall 的 CDN 索引当天收录 8.8k-10k，find.ts 的滑窗分词 + log10 star 让任意长尾词都能命中。为什么 awesome 做不到：人工策展的边际成本与目录规模线性相关，而 dsh-mall 的增量成本为零（索引方承担）。
 
 **策略 2：安装时点的 AI 安全审查——awesome 的审查发生在错误的时间。**
-awesome 的人工审查是收录时点的一次性 sanity check（contributing.md 明说「不是安全审计」）；用户安装时没人再看。dsh-store 的 runSmartInstall 在用户点击安装的那一刻抓最新 README+package.json 交给用户自己的模型裁决 install/caution/refuse（smart.ts:85-127）。为什么 awesome 做不到：静态网站没有运行时、没有用户模型上下文，审查时点与风险窗口必然脱节。
+awesome 的人工审查是收录时点的一次性 sanity check（contributing.md 明说「不是安全审计」）；用户安装时没人再看。dsh-mall 的 runSmartInstall 在用户点击安装的那一刻抓最新 README+package.json 交给用户自己的模型裁决 install/caution/refuse（smart.ts:85-127）。为什么 awesome 做不到：静态网站没有运行时、没有用户模型上下文，审查时点与风险窗口必然脱节。
 
 **策略 3：装/卸/更新/回退/启停的一键闭环——静态列表的物理上限。**
-awesome 能提供的最好东西是复制命令（build-site.mjs buildRows 的 cmd）。dsh-store 有 install.ts 全套（runInstall/runUninstall/runUpdate/rollbackDep/setPluginEnabled）+ 串行锁 + 取消 + 任务面板 + 回退快照。为什么 awesome 做不到：它不运行在 DSH 进程内，没有 profile/manifest/patch 的读写权限；这是插件形态对「目录+文档」形态的碾压性差异，不是工程差距。
+awesome 能提供的最好东西是复制命令（build-site.mjs buildRows 的 cmd）。dsh-mall 有 install.ts 全套（runInstall/runUninstall/runUpdate/rollbackDep/setPluginEnabled）+ 串行锁 + 取消 + 任务面板 + 回退快照。为什么 awesome 做不到：它不运行在 DSH 进程内，没有 profile/manifest/patch 的读写权限；这是插件形态对「目录+文档」形态的碾压性差异，不是工程差距。
 
 **策略 4：更新检测与每日自动更新——awesome 连版本号都没有。**
-plugins.json 的字段清单里没有 version（build-site.mjs:694-730 registry 定义）；bruc3van 亦无。dsh-store 用 npmVersion/tags 富化 + extractVersion/compareVersions 对比已装 deps（catalog.ts:508-555），每日 03:30 自动更新（auto-update.ts）+ skip 名单 + 回退。为什么 awesome 做不到：需要读取用户 profile 的 package.json 依赖 spec——目录站永远拿不到这份数据。
+plugins.json 的字段清单里没有 version（build-site.mjs:694-730 registry 定义）；bruc3van 亦无。dsh-mall 用 npmVersion/tags 富化 + extractVersion/compareVersions 对比已装 deps（catalog.ts:508-555），每日 03:30 自动更新（auto-update.ts）+ skip 名单 + 回退。为什么 awesome 做不到：需要读取用户 profile 的 package.json 依赖 spec——目录站永远拿不到这份数据。
 
 **策略 5：今日涨星基线——需要「用户本地状态」的指标。**
-computeTodayStars 以用户首次成功拉取当天的 star 为基线计算增量（catalog.ts:646-677）。awesome 的 stars.json 是全局快照，无法回答「我上次看之后涨了多少」。为什么 awesome 做不到：每个访客的基线不同，静态托管没有 per-user 持久化；dsh-store 把基线写进 profile state.json 天然实现。
+computeTodayStars 以用户首次成功拉取当天的 star 为基线计算增量（catalog.ts:646-677）。awesome 的 stars.json 是全局快照，无法回答「我上次看之后涨了多少」。为什么 awesome 做不到：每个访客的基线不同，静态托管没有 per-user 持久化；dsh-mall 把基线写进 profile state.json 天然实现。
 
 **策略 6：npm 下载量按需 + 累计总量——比 awesome 多一个时间维度。**
-awesome 明确只做 last-month 且给出理由（probe-downloads.mjs 头注释）；dsh-store 在同样 last-month 之外还提供 2019 起的 totalDownloads（downloads.ts:20-28）作为第二个排序信号，且按需拉取 + TTL 缓存不占 CI。为什么 awesome 不做：它是批处理管道，全量 lifetime 探测没有收益；dsh-store 的按需模型对用户翻页零浪费。
+awesome 明确只做 last-month 且给出理由（probe-downloads.mjs 头注释）；dsh-mall 在同样 last-month 之外还提供 2019 起的 totalDownloads（downloads.ts:20-28）作为第二个排序信号，且按需拉取 + TTL 缓存不占 CI。为什么 awesome 不做：它是批处理管道，全量 lifetime 探测没有收益；dsh-mall 的按需模型对用户翻页零浪费。
 
 **策略 7：插件三态 + 本机状态融合——从「目录」到「你的目录」。**
-isPlugin 三态判定（plugin/non-plugin/待判定，heuristicIsPlugin + verdicts，catalog.ts:590-596）、已验证徽章（qing3a 证据链）、curated 徽章、已装/可更新/已停用状态合成到同一张卡片（MarketSection.tsx:495-505 installedInfo 匹配逻辑）。awesome 的条目是静态事实，不含任何「对当前用户意味着什么」。为什么 awesome 做不到：它不知道你是谁、装了什么；dsh-store 的 state.json + manifest 读取把目录变成个人仪表盘。
+isPlugin 三态判定（plugin/non-plugin/待判定，heuristicIsPlugin + verdicts，catalog.ts:590-596）、已验证徽章（qing3a 证据链）、curated 徽章、已装/可更新/已停用状态合成到同一张卡片（MarketSection.tsx:495-505 installedInfo 匹配逻辑）。awesome 的条目是静态事实，不含任何「对当前用户意味着什么」。为什么 awesome 做不到：它不知道你是谁、装了什么；dsh-mall 的 state.json + manifest 读取把目录变成个人仪表盘。
 
 **策略 8：9 语言 UI + 按需多语言简介——策展双语不可扩展。**
-awesome 的双语靠人工翻译 1837×2（contributing.md 明说「缺翻译是维护者的活」），永远只有 en/zh。dsh-store 用 README.<lang>.md 首段按需富化（catalog.ts:405-487 fetchLocalizedDescriptions，6 并发 raw 直连不占 API 额度）+ 9 语言界面（locales.ts）。为什么 awesome 做不到：人工翻译 9 语言 ×1800 条目在经济上不可行；dsh-store 的机器富化对 10k 全量免费扩展。
+awesome 的双语靠人工翻译 1837×2（contributing.md 明说「缺翻译是维护者的活」），永远只有 en/zh。dsh-mall 用 README.<lang>.md 首段按需富化（catalog.ts:405-487 fetchLocalizedDescriptions，6 并发 raw 直连不占 API 额度）+ 9 语言界面（locales.ts）。为什么 awesome 做不到：人工翻译 9 语言 ×1800 条目在经济上不可行；dsh-mall 的机器富化对 10k 全量免费扩展。
 
 ---
 
 ## 5. 结论
 
-1. 三个仓库的分工事实：awesome-main = 高质量人工策展（1837）+ 防腐基础设施（收录闸门/腐烂扫描/发布防护/防文本串）；bruc3van = 全量抓取管道（10270）+ 人工核实门控（8837 approved）+ 带理由黑名单 + 规范化下游 feed；dsh-store = 运行时商店 + AI 操作闭环 + 全量可搜索性。三者是「策展深度 × 覆盖面 × 运行时能力」三角，互不重叠的部分才是各自护城河。
-2. dsh-store 最大的真实差距不在功能而在数据治理：收录闸门（#1）、发布防护（#2）、npm 防抢注（#3）、腐烂信号（#4）四项 P0 补上后，「推荐即能装」的承诺才与 awesome 同级；否则 10k 目录的噪声会持续侵蚀 find 工具的可信度。
-3. dsh-store 已不可替代的能力：一键装更卸回退、安装时点 AI 审查、每日自动更新、今日涨星——这些全部依赖「在 DSH 进程内、有用户 profile 与模型」的资产，awesome 两仓库在架构上永远做不到。差异化方向应继续加注运行时闭环，同时把策展信号（黑名单/腐烂/防抢注）作为数据层接入。
+1. 三个仓库的分工事实：awesome-main = 高质量人工策展（1837）+ 防腐基础设施（收录闸门/腐烂扫描/发布防护/防文本串）；bruc3van = 全量抓取管道（10270）+ 人工核实门控（8837 approved）+ 带理由黑名单 + 规范化下游 feed；dsh-mall = 运行时商场 + AI 操作闭环 + 全量可搜索性。三者是「策展深度 × 覆盖面 × 运行时能力」三角，互不重叠的部分才是各自护城河。
+2. dsh-mall 最大的真实差距不在功能而在数据治理：收录闸门（#1）、发布防护（#2）、npm 防抢注（#3）、腐烂信号（#4）四项 P0 补上后，「推荐即能装」的承诺才与 awesome 同级；否则 10k 目录的噪声会持续侵蚀 find 工具的可信度。
+3. dsh-mall 已不可替代的能力：一键装更卸回退、安装时点 AI 审查、每日自动更新、今日涨星——这些全部依赖「在 DSH 进程内、有用户 profile 与模型」的资产，awesome 两仓库在架构上永远做不到。差异化方向应继续加注运行时闭环，同时把策展信号（黑名单/腐烂/防抢注）作为数据层接入。
 
 
 

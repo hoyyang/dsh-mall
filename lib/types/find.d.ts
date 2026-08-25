@@ -1,6 +1,6 @@
 /**
- * dsh-store find tool + result staging:
- * - find_dsh_store_plugin tool (any agent can call it): searches the local
+ * dsh-mall find tool + result staging:
+ * - find_dsh_mall_plugin tool (any agent can call it): searches the local
  *   store catalog (CDN index already in memory), returns recommended +
  *   related plugin lists, and renders a button-link that opens the store
  *   results window.
@@ -8,12 +8,12 @@
  *   random token; the client fetches it when the user clicks the button.
  */
 import type { MarketEntry } from './types.ts';
-export declare const FIND_TOOL_NAME = "find_dsh_store_plugin";
+export declare const FIND_TOOL_NAME = "find_dsh_mall_plugin";
 interface FindPayload {
     query: string;
     recommended: MarketEntry[];
     related: MarketEntry[];
-    /** 结果条目的分类表（与主商店同款 catLabel 数据源）。 */
+    /** 结果条目的分类表（与主商场同款 catLabel 数据源）。 */
     categories?: Record<string, {
         en: string;
         zh: string;

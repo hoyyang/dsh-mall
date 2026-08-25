@@ -40,7 +40,7 @@ export declare function runInstall(config: MarketConfig, repo: string, npmName: 
 }>;
 /** 批量更新：对每个 npm 包名跑 dsh plugin add <name>（不带版本 = 装 latest），
  *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
-/** 商店自身更新：dsh plugin add dsh-store@latest。host 代码更新后需要重启
+/** 商场自身更新：dsh plugin add dsh-mall@latest。host 代码更新后需要重启
  *  dsh 才生效（bundle 层的 JS 已经加载），返回值固定带 needRestart。 */
 export declare function runSelfUpdate(config: MarketConfig, signal?: AbortSignal): Promise<{
     ok: boolean;

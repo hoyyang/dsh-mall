@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const base = process.env.DSHM_BASE_URL ?? 'http://127.0.0.1:3080'
-const res = await fetch(base + '/dsh-store/registry?force=1', { headers: { accept: 'application/json' } })
+const res = await fetch(base + '/dsh-mall/registry?force=1', { headers: { accept: 'application/json' } })
 const body = await res.json()
 const registry = body.registry
 if (registry.source !== 'live' && registry.source !== 'cdn') {

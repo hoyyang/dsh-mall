@@ -161,7 +161,7 @@ export interface MarketState {
     starsSnapshot?: StarsSnapshot;
     /** owner/repo -> verdict from package.json deep-check. */
     verdicts: Record<string, boolean>;
-    /** 收藏条目（小写 owner/repo 或 local:包名），持久化在 profile 的 dsh-store/state.json。 */
+    /** 收藏条目（小写 owner/repo 或 local:包名），持久化在 profile 的 dsh-mall/state.json。 */
     favorites?: string[];
     /** 更新前快照（包名 → 旧 spec/版本），「回退到上个版本」数据源。 */
     rollbacks?: Record<string, RollbackEntry>;

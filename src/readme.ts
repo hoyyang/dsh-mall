@@ -42,7 +42,7 @@ export async function fetchRawReadme(repo: string, file: string, branch: string)
   const rawBase = 'https://raw.githubusercontent.com/' + repo + '/' + safeBranch + '/'
   let md = ''
   try {
-    const res = await fetch(rawBase + file, { headers: { 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(15_000) })
+    const res = await fetch(rawBase + file, { headers: { 'user-agent': 'dsh-mall' }, signal: AbortSignal.timeout(15_000) })
     if (!res.ok) {
       const value = { ok: false, text: 'HTTP ' + res.status }
       rawCache.set(key, { at: Date.now(), value })

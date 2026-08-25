@@ -9,7 +9,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
 import z from '@deepseek-ai/schemastery'
 
-export const MARKET_SETTINGS_NS = settingsNamespace('dsh-store')
+export const MARKET_SETTINGS_NS = settingsNamespace('dsh-mall')
 
 export interface MarketSettings {
   githubToken: string

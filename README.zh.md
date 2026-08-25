@@ -1,17 +1,17 @@
-# DSH 商店
+# DSH 商场
 
-**DeepSeek Harness 最全的插件商店** —— 全量收录 `#dsh-plugin` 生态（11,000+ 仓库），浏览、搜索、一键安装，智能 AI 装前审查，五维实用评分，九语言界面。
+**DeepSeek Harness 最全的插件商场** —— 全量收录 `#dsh-plugin` 生态（11,000+ 仓库），浏览、搜索、一键安装，智能 AI 装前审查，五维实用评分，九语言界面。
 
-[**English**](README.md) · [Releases](https://github.com/hoyyang/dsh-store/releases) · [更新日志](CHANGELOG.md)
+[**English**](README.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [更新日志](CHANGELOG.md)
 
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
-  <img alt="npm" src="https://img.shields.io/npm/v/dsh-store">
-  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-store">
-  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-store?style=flat">
+  <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall">
+  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
+  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
 </p>
 
-![DSH 商店](assets/screenshot-main-zh.png)
+![DSH 商场](assets/screenshot-main-zh.png)
 
 ---
 
@@ -32,22 +32,22 @@
 ## 📦 安装
 
 ```sh
-dsh plugin add dsh-store
+dsh plugin add dsh-mall
 # 或指定 profile：
-dsh plugin --profile web add dsh-store
+dsh plugin --profile web add dsh-mall
 ```
 
-重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商店**；也可以在官方设置浮窗里找到「DSH 商店设置」。
+重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商场**；也可以在官方设置浮窗里找到「DSH 商场设置」。
 
 ## ✅ 兼容性
 
 - **需要 DeepSeek Harness（dsh web）0.1.0-rc.8 或更新版本** —— 已在 0.1.0-rc.8 实测。
-- npm peer 依赖：`@deepseek-ai/cordis ^4.0.1`、`@deepseek-ai/dsh-settings ^0.1.0-rc.6`（可选）、`@deepseek-ai/dsh-tools ^0.1.0-rc.6` —— 经商店/插件工具安装时自动解析。
+- npm peer 依赖：`@deepseek-ai/cordis ^4.0.1`、`@deepseek-ai/dsh-settings ^0.1.0-rc.6`（可选）、`@deepseek-ai/dsh-tools ^0.1.0-rc.6` —— 经商场/插件工具安装时自动解析。
 - 可选：GitHub Token（`DSHM_GITHUB_TOKEN` 或 cordis 配置 `githubToken`）提升搜索/验证/版本查询额度；token **仅存内存**，不落盘、不外发。
 
 ## 🗂 数据管道
 
-目录由配套索引仓库 [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index) 构建：GitHub 搜索 + 人工策展目录 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（1,900+ 精选条目），20 类分类，富化 bundle 扫描、npm 回指、休眠检测、README 结构与 LLM 标签。商店经 raw/jsDelivr CDN 通道读取，每 30 分钟刷新一次；GitHub 不可用或限流时回落到打包快照。
+目录由配套索引仓库 [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index) 构建：GitHub 搜索 + 人工策展目录 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（1,900+ 精选条目），20 类分类，富化 bundle 扫描、npm 回指、休眠检测、README 结构与 LLM 标签。商场经 raw/jsDelivr CDN 通道读取，每 30 分钟刷新一次；GitHub 不可用或限流时回落到打包快照。
 
 ## 🔐 安全
 
@@ -58,7 +58,7 @@ dsh plugin --profile web add dsh-store
 
 ## 🤔 为什么又做一个市场？
 
-市场类插件已有 40+ 家，多数同质化。DSH 商店押注 **审计 + 策展 + 趋势 + 证据**：机器扫描结论、精选策展、带解释的五维评分、LLM 标签，以及独立的数据管道。想要先看数据再安装，这里就是你的商店。
+市场类插件已有 40+ 家，多数同质化。DSH 商场押注 **审计 + 策展 + 趋势 + 证据**：机器扫描结论、精选策展、带解释的五维评分、LLM 标签，以及独立的数据管道。想要先看数据再安装，这里就是你的商场。
 
 ## 📄 许可证
 

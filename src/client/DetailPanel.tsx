@@ -11,7 +11,7 @@
  * - 回到顶部 FAB：.pcm-detail-scroll 滚动 >400px 浮现（业界标准 Material FAB 模式）
  * - 元数据 star 单元格与首页卡片同款样式（pcm-meta-star）
  * - 信息补齐：分类恒显（other 本地化）、近30天下载/总下载、含 skill 徽章；
- *   详情打开时对缺失下载量的条目做一次性富化（/dsh-store/downloads）
+ *   详情打开时对缺失下载量的条目做一次性富化（/dsh-mall/downloads）
  * - 排版重设计：信任徽章行上移与简介相邻；单滚动容器（无子滚动）保持不变
  */
 
@@ -124,7 +124,7 @@ async function fetchReadme(entry: MarketEntry, lang: string): Promise<ReadmeHit>
       // v1.7.26：README 走 host 安全预渲染端点（图片白名单/HTML 剥离/标题降级/
       // 相对链接绝对化），客户端再做一次针对 MarkdownText 的徽章清理。
       // v1.7.45：响应顺带 installCmds/cmdSource（host 解析，展示-only）。
-      const res = await fetch('/dsh-store/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=' + encodeURIComponent(file) + '&branch=' + encodeURIComponent(branch))
+      const res = await fetch('/dsh-mall/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=' + encodeURIComponent(file) + '&branch=' + encodeURIComponent(branch))
       if (res.ok) {
         const body = await res.json() as { ok?: boolean; text?: string; installCmds?: string[]; cmdSource?: string }
         if (body.ok === true && typeof body.text === 'string') {
@@ -246,7 +246,7 @@ export function DetailPanel(props: {
   const disclosure = entry.disclosure
   const discLines = useMemo(() => (disclosure == null ? [] : disclosureSummary(disclosure, t)), [disclosure, t])
   const [copied, setCopied] = useState(false)
-  // v1.7.45：五维评分——目录基础分即时可用；README 富化经 /dsh-store/scores 补全。
+  // v1.7.45：五维评分——目录基础分即时可用；README 富化经 /dsh-mall/scores 补全。
   const [score, setScore] = useState<MarketEntry['score'] | null>(entry.score ?? null)
   useEffect(() => {
     if (entry.score != null && entry.score.complete) {
@@ -254,7 +254,7 @@ export function DetailPanel(props: {
       return
     }
     let alive = true
-    fetch('/dsh-store/scores', {
+    fetch('/dsh-mall/scores', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ items: [{ repo: entry.owner + '/' + entry.name, branch: entry.defaultBranch ?? 'main' }] }),
@@ -276,7 +276,7 @@ export function DetailPanel(props: {
     if (entry.downloads !== null && entry.downloads !== undefined) return
     if (entry.npm === null || entry.npmLinked === false) return
     let alive = true
-    fetch('/dsh-store/downloads', {
+    fetch('/dsh-mall/downloads', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ names: [entry.npm] }),

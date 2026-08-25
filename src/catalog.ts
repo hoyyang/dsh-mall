@@ -43,7 +43,7 @@ async function fetchExclusions(): Promise<void> {
   for (const url of EXCLUSION_URLS) {
     try {
       const res = await fetch(url, {
-        headers: { accept: 'application/json', 'user-agent': 'dsh-store' },
+        headers: { accept: 'application/json', 'user-agent': 'dsh-mall' },
         signal: AbortSignal.timeout(20_000),
       })
       if (!res.ok) continue
@@ -285,7 +285,7 @@ async function fetchIndexUrl(url: string): Promise<{ generated_at?: string; repo
   const variants = url.endsWith('.json') ? [url + '.gz', url] : [url]
   const attempt = async (variant: string): Promise<{ generated_at?: string; repos?: CdnRepo[] }> => {
     const res = await fetch(variant, {
-      headers: { accept: 'application/json', 'accept-encoding': 'gzip', 'user-agent': 'dsh-store' },
+      headers: { accept: 'application/json', 'accept-encoding': 'gzip', 'user-agent': 'dsh-mall' },
       signal: AbortSignal.timeout(30_000),
     })
     if (!res.ok) throw new Error('HTTP ' + res.status)
@@ -458,7 +458,7 @@ function snapshotWithDeltas(profile: string): Registry {
 
 export function stateFile(profile: string): string {
   const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
-  return join(home, 'profiles', profile, 'dsh-store', 'state.json')
+  return join(home, 'profiles', profile, 'dsh-mall', 'state.json')
 }
 
 export function readState(profile: string): MarketState {
@@ -589,7 +589,7 @@ export async function fetchLocalizedDescriptions(lang: string, repos: string[]):
       for (const file of readmeCandidates(lang)) {
         const url = 'https://raw.githubusercontent.com/' + owner + '/' + name + '/HEAD/' + file
         try {
-          const res = await fetch(url, { headers: { 'user-agent': 'dsh-store' }, signal: AbortSignal.timeout(10_000) })
+          const res = await fetch(url, { headers: { 'user-agent': 'dsh-mall' }, signal: AbortSignal.timeout(10_000) })
           if (res.ok) {
             const raw = await res.text()
             const first = firstParagraph(raw.slice(0, 6_000), lang)
@@ -642,7 +642,7 @@ export function compareVersions(a: string, b: string): number {
 }
 
 /** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；
- *  无版本 spec 跳过；「不参与一键更新」名单与商店自身（dsh-store）排除。 */
+ *  无版本 spec 跳过；「不参与一键更新」名单与商场自身（dsh-mall）排除。 */
 export function computeUpdates(registry: Registry, deps: Record<string, string>, skip?: Set<string>): PluginUpdate[] {
   const out: PluginUpdate[] = []
   const seen = new Set<string>()
@@ -650,7 +650,7 @@ export function computeUpdates(registry: Registry, deps: Record<string, string>,
     const s = String(spec).trim()
     if (s.startsWith('link:') || s.startsWith('file:')) continue
     const lower = name.toLowerCase()
-    if (lower === 'dsh-store') continue // 商店自身走独立的「更新 DSH 商店」按钮
+    if (lower === 'dsh-mall') continue // 商场自身走独立的「更新 DSH 商场」按钮
     if (skip?.has(lower) === true) continue
     const from = extractVersion(s)
     if (from === null) continue

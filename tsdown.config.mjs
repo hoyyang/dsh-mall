@@ -12,7 +12,7 @@ const EXTERNALS = [
 ]
 
 export default {
-  name: 'dsh-store/client',
+  name: 'dsh-mall/client',
   entry: { client: 'src/client/index.ts' },
   outDir: 'client',
   format: 'cjs',

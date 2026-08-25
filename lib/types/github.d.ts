@@ -3,7 +3,7 @@
  * verdict checks, topics read/write, and rate-limit bookkeeping. All network
  * calls live on the host side; the browser only talks to our own routes.
  */
-export declare const UA = "dsh-store";
+export declare const UA = "dsh-mall";
 export interface RateInfo {
     limit: number;
     remaining: number;

@@ -47,7 +47,7 @@ export function QuizView(props: {
     setPicked(prev => prev.includes(id) ? prev.filter(x => x !== id) : (prev.length >= MAX ? prev : [...prev, id]))
   }
   return (
-    <Modal open={props.open} onClose={props.onClose} title="DSH Store" headless className="pcm-quiz-modal">
+    <Modal open={props.open} onClose={props.onClose} title="DSH Mall" headless className="pcm-quiz-modal">
       <div className="pcm-quiz">
         <div className="pcm-quiz-head">
           <div className="pcm-quiz-badge">{props.t('quizBadge')}</div>

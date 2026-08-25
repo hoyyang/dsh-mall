@@ -3,7 +3,7 @@
  * - 数据源：https://awesome-dsh-plugin.com/plugins.json（与 dshmarket 同源，
  *   目录自带 description.{en,zh} 多语言简介 + category/npm/added/stars/downloads）
  * - 进程启动 + 每 24h 拉取一次，转换为 KnownMap 格式缓存在
- *   profiles/<profile>/dsh-store/awesome-cache.json；
+ *   profiles/<profile>/dsh-mall/awesome-cache.json；
  * - catalog.ts 的 loadKnown() 优先使用该缓存（刷新成功即覆盖），
  *   拉取失败永远回退打包快照（data/awesome-known.json），浏览不中断。
  */
@@ -34,7 +34,7 @@ let knownOverride: KnownMap | null = null
 
 function cachePath(profile: string): string {
   const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
-  return join(home, 'profiles', profile, 'dsh-store', 'awesome-cache.json')
+  return join(home, 'profiles', profile, 'dsh-mall', 'awesome-cache.json')
 }
 
 function toKnown(list: AwesomePlugin[]): KnownMap {
@@ -61,7 +61,7 @@ function toKnown(list: AwesomePlugin[]): KnownMap {
 /** 拉取一次并写缓存；失败抛错（由调用方决定重试节奏）。 */
 export async function refreshAwesome(profile: string): Promise<{ count: number }> {
   const res = await fetch(AWESOME_URL, {
-    headers: { accept: 'application/json', 'user-agent': 'dsh-store' },
+    headers: { accept: 'application/json', 'user-agent': 'dsh-mall' },
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   })
   if (!res.ok) throw new Error('awesome catalog HTTP ' + res.status)

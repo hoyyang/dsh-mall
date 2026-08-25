@@ -26,7 +26,7 @@ async function manifestHasBundle(repo: string, token: string): Promise<boolean |
   let rootMissing = false
   try {
     const res = await fetch('https://raw.githubusercontent.com/' + repo + '/HEAD/package.json', {
-      headers: { 'user-agent': 'dsh-store', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
+      headers: { 'user-agent': 'dsh-mall', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     })
     if (res.ok) {
@@ -41,7 +41,7 @@ async function manifestHasBundle(repo: string, token: string): Promise<boolean |
   // 2) GitHub API 树抽查（子包 monorepo 判定；有限预算，额度耗尽即停）
   try {
     const res = await fetch('https://api.github.com/repos/' + repo + '/git/trees/HEAD?recursive=1', {
-      headers: { 'user-agent': 'dsh-store', accept: 'application/vnd.github+json', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
+      headers: { 'user-agent': 'dsh-mall', accept: 'application/vnd.github+json', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     })
     if (!res.ok) return null
@@ -55,7 +55,7 @@ async function manifestHasBundle(repo: string, token: string): Promise<boolean |
     let checked = 0
     for (const pkg of pkgs) {
       const raw = await fetch('https://raw.githubusercontent.com/' + repo + '/HEAD/' + pkg.path, {
-        headers: { 'user-agent': 'dsh-store', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
+        headers: { 'user-agent': 'dsh-mall', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       })
       if (!raw.ok) continue
@@ -75,7 +75,7 @@ async function manifestSkill(repo: string, token: string): Promise<boolean | nul
   // 1) raw 根 SKILL.md（零额度）
   try {
     const res = await fetch('https://raw.githubusercontent.com/' + repo + '/HEAD/SKILL.md', {
-      headers: { 'user-agent': 'dsh-store', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
+      headers: { 'user-agent': 'dsh-mall', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     })
     if (res.ok) return true
@@ -84,7 +84,7 @@ async function manifestSkill(repo: string, token: string): Promise<boolean | nul
   // 2) 无根 SKILL.md：GitHub API 树找 skills?/ 目录下的 SKILL.md
   try {
     const res = await fetch('https://api.github.com/repos/' + repo + '/git/trees/HEAD?recursive=1', {
-      headers: { 'user-agent': 'dsh-store', accept: 'application/vnd.github+json', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
+      headers: { 'user-agent': 'dsh-mall', accept: 'application/vnd.github+json', ...(token !== '' ? { authorization: 'Bearer ' + token } : {}) },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     })
     if (!res.ok) return null

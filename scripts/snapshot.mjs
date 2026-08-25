@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url'
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DATA = join(ROOT, 'data')
 const TOKEN = process.env.DSHM_GITHUB_TOKEN ?? ''
-const UA = 'dsh-store-snapshot'
+const UA = 'dsh-mall-snapshot'
 
 const CATEGORIES = {
   ui: { en: 'UI Enhancements', zh: 'UI 增强' },

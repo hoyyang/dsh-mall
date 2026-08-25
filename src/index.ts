@@ -1,8 +1,8 @@
 /**
- * dsh-store host entry: mounts the market's HTTP routes once the
+ * dsh-mall host entry: mounts the market's HTTP routes once the
  * profile composes the webServer service, registers the settings
  * namespace for the GitHub token (rc.7+ hosts), installs the
- * find_dsh_store_plugin tool, and provisions the /dsh-store skill.
+ * find_dsh_mall_plugin tool, and provisions the /dsh-mall skill.
  */
 
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -16,7 +16,7 @@ import { startAwesomeRefresh, stopAwesomeRefresh } from './awesome.ts'
 import { startTagsRefresh, stopTagsRefresh } from './tags.ts'
 import type { MarketConfig } from './types.ts'
 
-export const name = 'dsh-store'
+export const name = 'dsh-mall'
 
 /** Optional cordis.yml configuration; the profile defaults to `web`. */
 export type Config = Partial<Pick<MarketConfig, 'profile' | 'githubToken' | 'registryUrl'>>
@@ -28,27 +28,27 @@ function argvProfile(): string | undefined {
   return undefined
 }
 
-/** /dsh-store skill: 落盘到 <dshHome>/skills/dsh-store.md（官方 filesystem
+/** /dsh-mall skill: 落盘到 <dshHome>/skills/dsh-mall.md（官方 filesystem
  *  provider 的 USER_DSH_RANK 根，watcher 自动发现）；卸载时删除。 */
 const SKILL_MARKDOWN = [
   '---',
-  'name: dsh-store',
-  'description: 在本地 DSH 商店（dsh-store 插件，全量收录 8.8k+ 个 #dsh-plugin 条目）中按用户需求查找插件与相关工具（插件和非插件都会返回并标注类别）并给出推荐。当用户想找插件、问有没有某种功能的插件、想装什么东西时使用。',
+  'name: dsh-mall',
+  'description: 在本地 DSH 商场（dsh-mall 插件，全量收录 8.8k+ 个 #dsh-plugin 条目）中按用户需求查找插件与相关工具（插件和非插件都会返回并标注类别）并给出推荐。当用户想找插件、问有没有某种功能的插件、想装什么东西时使用。',
   '---',
   '',
-  '# DSH 商店查找',
+  '# DSH 商场查找',
   '',
-  '用户想在 DeepSeek Harness 里找插件或相关工具时，调用 find_dsh_store_plugin 工具（参数 query 用用户原话）。',
+  '用户想在 DeepSeek Harness 里找插件或相关工具时，调用 find_dsh_mall_plugin 工具（参数 query 用用户原话）。',
   '',
   '回复要求：',
   '1. 列出工具返回的推荐条目（名称、star、一句话说明、插件/非插件标注、安装命令）。',
   '2. 给出你自己的推荐意见（为什么推荐第一个）。',
-  '3. 回答的最后一行必须是工具返回的「打开 DSH 商店查看插件详情」按钮链接，原样保留。',
+  '3. 回答的最后一行必须是工具返回的「打开 DSH 商场查看插件详情」按钮链接，原样保留。',
 ].join('\n')
 
 function ensureSkill(profile: string): () => void {
   const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
-  const file = join(home, 'skills', 'dsh-store.md')
+  const file = join(home, 'skills', 'dsh-mall.md')
   let wrote = false
   try {
     let existing = ''
@@ -58,7 +58,7 @@ function ensureSkill(profile: string): () => void {
       writeFileSync(file, SKILL_MARKDOWN)
       wrote = true
     }
-  } catch { /* 技能落盘失败不影响商店主体 */ }
+  } catch { /* 技能落盘失败不影响商场主体 */ }
   return () => {
     try {
       if (existsSync(file)) rmSync(file)
@@ -96,6 +96,6 @@ export function apply(ctx: Context, config?: Config): void {
         stopAwesomeRefresh()
         stopTagsRefresh()
       }
-    }, 'dsh-store: http routes + skill + auto-update timer')
+    }, 'dsh-mall: http routes + skill + auto-update timer')
   })
 }

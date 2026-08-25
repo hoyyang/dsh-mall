@@ -46,7 +46,7 @@ async function fetchRepoDigest(repo: string, signal?: AbortSignal): Promise<stri
   const pick = async (name: string, max: number): Promise<string> => {
     try {
       const res = await fetch(base + name, {
-        headers: { 'user-agent': 'dsh-store' },
+        headers: { 'user-agent': 'dsh-mall' },
         signal: signal ?? AbortSignal.timeout(20_000),
       })
       if (!res.ok) return ''
@@ -310,7 +310,7 @@ export async function runSmartUninstall(config: MarketConfig, depName: string, c
   if (dependents.length > 0) localRisks.push('以下插件依赖它：' + dependents.join('、') + '——删除可能影响它们')
   if (inBundles) localRisks.push('它在 profile bundles 装配列表里，删除会移除该装配条目')
   if (inPatch) localRisks.push('cordis.patch.yml 里有它的条目（含停用状态），删除会一并清理')
-  if (name.startsWith('@deepseek-ai/') || name === 'dsh-store') localRisks.push('这是宿主/商店自身组件，删除可能破坏 DSH 功能')
+  if (name.startsWith('@deepseek-ai/') || name === 'dsh-mall') localRisks.push('这是宿主/商场自身组件，删除可能破坏 DSH 功能')
 
   // AI 审查
   let verdict: SmartUninstallResult['verdict'] = 'unavailable'

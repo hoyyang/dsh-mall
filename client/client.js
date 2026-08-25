@@ -1,4 +1,4 @@
-window.__ModuleLoader__.load({ id: "dsh-store", factory: (require) => {
+window.__ModuleLoader__.load({ id: "dsh-mall", factory: (require) => {
 		var module = { exports: {} };
 		var exports = module.exports;
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
@@ -38,9 +38,9 @@ var import_client = (/* @__PURE__ */ __commonJSMin(((exports) => {
 	exports.hydrateRoot = m.hydrateRoot;
 })))();
 const en = {
-	nav: "DSH Store",
-	versionHint: "dsh-store v{0}",
-	title: "DSH Store",
+	nav: "DSH Mall",
+	versionHint: "dsh-mall v{0}",
+	title: "DSH Mall",
 	subtitle: "The most complete DeepSeek Harness plugin catalog — smart search, smart install/update/uninstall, built-in Skills tool.",
 	refresh: "Refresh",
 	autoRefresh: "auto-refresh database every 30 min",
@@ -252,10 +252,10 @@ const en = {
 	stateLive: "· Active",
 	stateDisabled: "· Disabled",
 	stateRestart: "· Restart to apply",
-	resultsTitle: "DSH Store results",
+	resultsTitle: "DSH Mall results",
 	resultsRecommended: "Recommended",
 	resultsRelated: "Other related",
-	resultsExpired: "Results expired — run /dsh-store again.",
+	resultsExpired: "Results expired — run /dsh-mall again.",
 	verifiedOnly: "Verified",
 	curatedBadgeTitle: "Listed in awesome-dsh-plugin",
 	verifiedBadgeHint: "Verified install (qing3a/dsh-plugin-verify)",
@@ -268,9 +268,9 @@ const en = {
 	rollbackFailed: "Rollback failed",
 	skipUpdate: "Skip in Update All",
 	skipHint: "Excluded from \"Update plugins\" and auto-update only — the card update button still works.",
-	selfUpdateBtn: "Update \"DSH Store\" {0} → {1}",
-	selfUpdateDone: "DSH Store updated.",
-	selfUpdateFailed: "DSH Store update failed",
+	selfUpdateBtn: "Update \"DSH Mall\" {0} → {1}",
+	selfUpdateDone: "DSH Mall updated.",
+	selfUpdateFailed: "DSH Mall update failed",
 	restartNeeded: "Restart dsh to apply.",
 	tasksBtn: "Running tasks",
 	tasksPanelTitle: "Running tasks",
@@ -298,9 +298,9 @@ const en = {
 	taskFailed: "Failed",
 	tasksAggregate: "{0}/{1} done",
 	updateAllShort: "All plugins ({0})",
-	settingsNav: "DSH Store - Settings",
-	settingsTitle: "DSH Store Settings",
-	openStoreBtn: "Open DSH Store",
+	settingsNav: "DSH Mall - Settings",
+	settingsTitle: "DSH Mall Settings",
+	openStoreBtn: "Open DSH Mall",
 	openStoreHint: "Browse, search, install and update plugins in the full catalog.",
 	autoUpdateTitle: "Auto-update plugins",
 	autoUpdateDesc: "When on, the store refreshes its catalog daily and then automatically runs Update All on every updatable plugin.",
@@ -332,9 +332,9 @@ const en = {
 	smartSearchEmpty: "Type your need in the search box first."
 };
 const zh = {
-	nav: "DSH 商店",
-	versionHint: "dsh-store v{0}",
-	title: "DSH 商店",
+	nav: "DSH 商场",
+	versionHint: "dsh-mall v{0}",
+	title: "DSH 商场",
 	subtitle: "全网最强-DeepSeek Harness 插件全量收录，支持智能搜索、智能安装/更新/卸载、自带 Skills 工具。",
 	refresh: "刷新",
 	autoRefresh: "每 30 分钟刷新一次数据库",
@@ -546,10 +546,10 @@ const zh = {
 	stateLive: "· 启用中",
 	stateDisabled: "· 未启用",
 	stateRestart: "· 重启后生效",
-	resultsTitle: "DSH 商店查询结果",
+	resultsTitle: "DSH 商场查询结果",
 	resultsRecommended: "推荐的",
 	resultsRelated: "其他相关的",
-	resultsExpired: "结果已过期——请重新执行 /dsh-store。",
+	resultsExpired: "结果已过期——请重新执行 /dsh-mall。",
 	verifiedOnly: "已验证",
 	curatedBadgeTitle: "awesome-dsh-plugin 精选收录",
 	verifiedBadgeHint: "实测可装（qing3a/dsh-plugin-verify 验证）",
@@ -562,9 +562,9 @@ const zh = {
 	rollbackFailed: "回退失败",
 	skipUpdate: "不参与一键更新",
 	skipHint: "只排除在一键更新/自动更新之外——卡片自己的「更新」按钮仍然可用。",
-	selfUpdateBtn: "更新「DSH 商店」 {0} → {1}",
-	selfUpdateDone: "DSH 商店已更新。",
-	selfUpdateFailed: "DSH 商店更新失败",
+	selfUpdateBtn: "更新「DSH 商场」 {0} → {1}",
+	selfUpdateDone: "DSH 商场已更新。",
+	selfUpdateFailed: "DSH 商场更新失败",
 	restartNeeded: "需重启 dsh 生效。",
 	tasksBtn: "查看进行中任务",
 	tasksPanelTitle: "进行中的任务",
@@ -592,12 +592,12 @@ const zh = {
 	taskFailed: "失败",
 	tasksAggregate: "已完成 {0}/{1}",
 	updateAllShort: "全部插件（{0}个）",
-	settingsNav: "DSH商店-设置",
-	settingsTitle: "DSH商店设置",
-	openStoreBtn: "打开 DSH商店",
+	settingsNav: "DSH 商场-设置",
+	settingsTitle: "DSH 商场设置",
+	openStoreBtn: "打开 DSH 商场",
 	openStoreHint: "浏览、搜索、安装与更新插件全量目录",
 	autoUpdateTitle: "自动一键更新插件",
-	autoUpdateDesc: "开启后，每天商店自动刷新到最新插件数据时，会自动一键更新全部可更新的插件。",
+	autoUpdateDesc: "开启后，每天商场自动刷新到最新插件数据时，会自动一键更新全部可更新的插件。",
 	autoUpdateWarn: "⚠ 很多插件的新版本可能不稳定，自动更新有风险，请谨慎开启。",
 	autoUpdateNever: "还没有自动更新过",
 	autoUpdateLastRun: "上次自动更新：{0} · {1}",
@@ -605,14 +605,14 @@ const zh = {
 	autoUpdateOff: "已关闭",
 	settingsSource: "数据源",
 	settingsToken: "GitHub Token",
-	settingsSelfUpdate: "商店自身更新",
+	settingsSelfUpdate: "商场自身更新",
 	smartSearch: "智能搜索",
-	smartSearchHint: "用你的主模型理解需求，从商店目录里挑出推荐插件。",
+	smartSearchHint: "用你的主模型理解需求，从商场目录里挑出推荐插件。",
 	smartSearching: "搜索中…",
 	backTop: "回到顶部",
 	quizBadge: "个性化推荐",
 	quizTitle: "选功能，找到你的插件",
-	quizSub: "30 秒选好你关心的功能，商店为你挑插件。",
+	quizSub: "30 秒选好你关心的功能，商场为你挑插件。",
 	quizPicked: "已选",
 	quizSkip: "跳过",
 	quizGo: "看推荐",
@@ -626,9 +626,9 @@ const zh = {
 	smartSearchEmpty: "请先在搜索框里输入你的需求。"
 };
 const ja = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "最も包括的なDeepSeek Harnessプラグインカタログ — スマート検索、スマートインストール/アップデート/アンインストール、組み込みのSkillsツール。",
 	"refresh": "更新",
 	"autoRefresh": "データベースを30分ごとに自動更新",
@@ -840,10 +840,10 @@ const ja = {
 	"stateLive": "· 有効",
 	"stateDisabled": "· 無効",
 	"stateRestart": "· 再起動して適用",
-	"resultsTitle": "DSH Store の結果",
+	"resultsTitle": "DSH Mall の結果",
 	"resultsRecommended": "おすすめ",
 	"resultsRelated": "その他の関連",
-	"resultsExpired": "結果の有効期限が切れました — /dsh-store を再度実行してください。",
+	"resultsExpired": "結果の有効期限が切れました — /dsh-mall を再度実行してください。",
 	"verifiedOnly": "検証済みのみ",
 	"curatedBadgeTitle": "awesome-dsh-plugin に掲載",
 	"verifiedBadgeHint": "検証済みインストール（qing3a/dsh-plugin-verify）",
@@ -856,9 +856,9 @@ const ja = {
 	"rollbackFailed": "ロールバックに失敗しました",
 	"skipUpdate": "一括更新でスキップ",
 	"skipHint": "「プラグインを更新」と自動更新の対象から除外されます — カードの更新ボタンは引き続き機能します。",
-	"selfUpdateBtn": "「DSH Store」を更新 {0} → {1}",
-	"selfUpdateDone": "DSH Store を更新しました。",
-	"selfUpdateFailed": "DSH Store の更新に失敗しました",
+	"selfUpdateBtn": "「DSH Mall」を更新 {0} → {1}",
+	"selfUpdateDone": "DSH Mall を更新しました。",
+	"selfUpdateFailed": "DSH Mall の更新に失敗しました",
 	"restartNeeded": "適用するには dsh を再起動してください。",
 	"tasksBtn": "実行中のタスク",
 	"tasksPanelTitle": "実行中のタスク",
@@ -886,9 +886,9 @@ const ja = {
 	"taskFailed": "失敗",
 	"tasksAggregate": "{0}/{1} 完了",
 	"updateAllShort": "全プラグイン ({0})",
-	"settingsNav": "DSH Store - 設定",
-	"settingsTitle": "DSH Store 設定",
-	"openStoreBtn": "DSH Store を開く",
+	"settingsNav": "DSH Mall - 設定",
+	"settingsTitle": "DSH Mall 設定",
+	"openStoreBtn": "DSH Mall を開く",
 	"openStoreHint": "全カタログでプラグインの閲覧、検索、インストール、更新ができます。",
 	"autoUpdateTitle": "プラグインを自動更新",
 	"autoUpdateDesc": "オンにすると、ストアはカタログを毎日更新し、更新可能なすべてのプラグインに対して「すべて更新」を自動実行します。",
@@ -919,9 +919,9 @@ const ja = {
 	"recDaily": "毎日更新"
 };
 const ko = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "가장 완벽한 DeepSeek Harness 플러그인 카탈로그 — 스마트 검색, 스마트 설치/업데이트/제거, 내장 Skills 도구.",
 	"refresh": "새로고침",
 	"autoRefresh": "데이터베이스를 30분마다 자동 새로고침",
@@ -1133,10 +1133,10 @@ const ko = {
 	"stateLive": "· 활성",
 	"stateDisabled": "· 비활성",
 	"stateRestart": "· 적용하려면 재시작",
-	"resultsTitle": "DSH Store 결과",
+	"resultsTitle": "DSH Mall 결과",
 	"resultsRecommended": "추천",
 	"resultsRelated": "기타 관련",
-	"resultsExpired": "결과가 만료되었습니다 — /dsh-store를 다시 실행하세요.",
+	"resultsExpired": "결과가 만료되었습니다 — /dsh-mall를 다시 실행하세요.",
 	"verifiedOnly": "검증됨",
 	"curatedBadgeTitle": "awesome-dsh-plugin에 등재됨",
 	"verifiedBadgeHint": "검증된 설치 (qing3a/dsh-plugin-verify)",
@@ -1149,9 +1149,9 @@ const ko = {
 	"rollbackFailed": "롤백 실패",
 	"skipUpdate": "모두 업데이트에서 제외",
 	"skipHint": "\"플러그인 업데이트\" 및 자동 업데이트에서만 제외됩니다 — 카드의 업데이트 버튼은 여전히 동작합니다.",
-	"selfUpdateBtn": "\"DSH Store\" 업데이트 {0} → {1}",
-	"selfUpdateDone": "DSH Store가 업데이트되었습니다.",
-	"selfUpdateFailed": "DSH Store 업데이트 실패",
+	"selfUpdateBtn": "\"DSH Mall\" 업데이트 {0} → {1}",
+	"selfUpdateDone": "DSH Mall가 업데이트되었습니다.",
+	"selfUpdateFailed": "DSH Mall 업데이트 실패",
 	"restartNeeded": "적용하려면 dsh를 재시작하세요.",
 	"tasksBtn": "실행 중인 작업",
 	"tasksPanelTitle": "실행 중인 작업",
@@ -1179,9 +1179,9 @@ const ko = {
 	"taskFailed": "실패",
 	"tasksAggregate": "{0}/{1} 완료",
 	"updateAllShort": "모든 플러그인 ({0})",
-	"settingsNav": "DSH Store - 설정",
-	"settingsTitle": "DSH Store 설정",
-	"openStoreBtn": "DSH Store 열기",
+	"settingsNav": "DSH Mall - 설정",
+	"settingsTitle": "DSH Mall 설정",
+	"openStoreBtn": "DSH Mall 열기",
 	"openStoreHint": "전체 카탈로그에서 플러그인을 탐색, 검색, 설치, 업데이트할 수 있습니다.",
 	"autoUpdateTitle": "플러그인 자동 업데이트",
 	"autoUpdateDesc": "켜면 스토어가 매일 카탈로그를 새로고침한 뒤 업데이트 가능한 모든 플러그인에 모두 업데이트를 자동으로 실행합니다.",
@@ -1212,9 +1212,9 @@ const ko = {
 	"recDaily": "매일 업데이트됨"
 };
 const es = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "El catálogo de plugins de DeepSeek Harness más completo: búsqueda inteligente, instalación/actualización/desinstalación inteligente y herramienta Skills integrada.",
 	"refresh": "Actualizar",
 	"autoRefresh": "actualizar base de datos automáticamente cada 30 min",
@@ -1426,10 +1426,10 @@ const es = {
 	"stateLive": "· Activo",
 	"stateDisabled": "· Deshabilitado",
 	"stateRestart": "· Reiniciar para aplicar",
-	"resultsTitle": "Resultados de DSH Store",
+	"resultsTitle": "Resultados de DSH Mall",
 	"resultsRecommended": "Recomendados",
 	"resultsRelated": "Otros relacionados",
-	"resultsExpired": "Resultados caducados: ejecuta /dsh-store de nuevo.",
+	"resultsExpired": "Resultados caducados: ejecuta /dsh-mall de nuevo.",
 	"verifiedOnly": "Verificado",
 	"curatedBadgeTitle": "Listado en awesome-dsh-plugin",
 	"verifiedBadgeHint": "Instalación verificada (qing3a/dsh-plugin-verify)",
@@ -1442,9 +1442,9 @@ const es = {
 	"rollbackFailed": "Error al revertir",
 	"skipUpdate": "Omitir en Actualizar todo",
 	"skipHint": "Solo se excluye de «Actualizar plugins» y de la autoactualización; el botón de actualizar de la tarjeta sigue funcionando.",
-	"selfUpdateBtn": "Actualizar «DSH Store» {0} → {1}",
-	"selfUpdateDone": "DSH Store actualizado.",
-	"selfUpdateFailed": "Error al actualizar DSH Store",
+	"selfUpdateBtn": "Actualizar «DSH Mall» {0} → {1}",
+	"selfUpdateDone": "DSH Mall actualizado.",
+	"selfUpdateFailed": "Error al actualizar DSH Mall",
 	"restartNeeded": "Reinicia dsh para aplicar los cambios.",
 	"tasksBtn": "Tareas en curso",
 	"tasksPanelTitle": "Tareas en curso",
@@ -1472,9 +1472,9 @@ const es = {
 	"taskFailed": "Falló",
 	"tasksAggregate": "{0}/{1} completadas",
 	"updateAllShort": "Todos los plugins ({0})",
-	"settingsNav": "DSH Store - Ajustes",
-	"settingsTitle": "Ajustes de DSH Store",
-	"openStoreBtn": "Abrir DSH Store",
+	"settingsNav": "DSH Mall - Ajustes",
+	"settingsTitle": "Ajustes de DSH Mall",
+	"openStoreBtn": "Abrir DSH Mall",
 	"openStoreHint": "Explora, busca, instala y actualiza plugins en el catálogo completo.",
 	"autoUpdateTitle": "Autoactualización de plugins",
 	"autoUpdateDesc": "Cuando está activado, la tienda actualiza su catálogo a diario y luego ejecuta automáticamente «Actualizar todo» en cada plugin actualizable.",
@@ -1505,9 +1505,9 @@ const es = {
 	"recDaily": "Actualizado a diario"
 };
 const fr = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "Le catalogue de plugins DeepSeek Harness le plus complet — recherche intelligente, installation/mise à jour/désinstallation intelligentes, outil Skills intégré.",
 	"refresh": "Actualiser",
 	"autoRefresh": "Actualisation automatique de la base toutes les 30 min",
@@ -1719,10 +1719,10 @@ const fr = {
 	"stateLive": "· Actif",
 	"stateDisabled": "· Désactivé",
 	"stateRestart": "· Redémarrer pour appliquer",
-	"resultsTitle": "Résultats du DSH Store",
+	"resultsTitle": "Résultats du DSH Mall",
 	"resultsRecommended": "Recommandés",
 	"resultsRelated": "Autres résultats associés",
-	"resultsExpired": "Résultats expirés — exécutez à nouveau /dsh-store.",
+	"resultsExpired": "Résultats expirés — exécutez à nouveau /dsh-mall.",
 	"verifiedOnly": "Vérifiés",
 	"curatedBadgeTitle": "Listé dans awesome-dsh-plugin",
 	"verifiedBadgeHint": "Installation vérifiée (qing3a/dsh-plugin-verify)",
@@ -1735,9 +1735,9 @@ const fr = {
 	"rollbackFailed": "Échec de la restauration",
 	"skipUpdate": "Ignorer dans « Tout mettre à jour »",
 	"skipHint": "Exclu de « Mettre à jour les plugins » et de la mise à jour automatique — le bouton de mise à jour de la carte fonctionne toujours.",
-	"selfUpdateBtn": "Mettre à jour « DSH Store » {0} → {1}",
-	"selfUpdateDone": "DSH Store mis à jour.",
-	"selfUpdateFailed": "Échec de la mise à jour de DSH Store",
+	"selfUpdateBtn": "Mettre à jour « DSH Mall » {0} → {1}",
+	"selfUpdateDone": "DSH Mall mis à jour.",
+	"selfUpdateFailed": "Échec de la mise à jour de DSH Mall",
 	"restartNeeded": "Redémarrez dsh pour appliquer.",
 	"tasksBtn": "Tâches en cours",
 	"tasksPanelTitle": "Tâches en cours",
@@ -1765,9 +1765,9 @@ const fr = {
 	"taskFailed": "Échoué",
 	"tasksAggregate": "{0}/{1} terminées",
 	"updateAllShort": "Tous les plugins ({0})",
-	"settingsNav": "DSH Store - Paramètres",
-	"settingsTitle": "Paramètres de DSH Store",
-	"openStoreBtn": "Ouvrir DSH Store",
+	"settingsNav": "DSH Mall - Paramètres",
+	"settingsTitle": "Paramètres de DSH Mall",
+	"openStoreBtn": "Ouvrir DSH Mall",
 	"openStoreHint": "Parcourez, recherchez, installez et mettez à jour des plugins dans le catalogue complet.",
 	"autoUpdateTitle": "Mise à jour automatique des plugins",
 	"autoUpdateDesc": "Lorsque cette option est activée, le store actualise son catalogue chaque jour puis lance automatiquement « Tout mettre à jour » sur chaque plugin à mettre à jour.",
@@ -1798,9 +1798,9 @@ const fr = {
 	"recDaily": "Mis à jour quotidiennement"
 };
 const de = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "Der vollständigste DeepSeek-Harness-Plugin-Katalog – intelligente Suche, intelligentes Installieren/Aktualisieren/Deinstallieren, integriertes Skills-Tool.",
 	"refresh": "Aktualisieren",
 	"autoRefresh": "Datenbank alle 30 Minuten automatisch aktualisieren",
@@ -2015,7 +2015,7 @@ const de = {
 	"resultsTitle": "DSH-Store-Ergebnisse",
 	"resultsRecommended": "Empfohlen",
 	"resultsRelated": "Weitere verwandte Plugins",
-	"resultsExpired": "Ergebnisse abgelaufen – führen Sie /dsh-store erneut aus.",
+	"resultsExpired": "Ergebnisse abgelaufen – führen Sie /dsh-mall erneut aus.",
 	"verifiedOnly": "Verifiziert",
 	"curatedBadgeTitle": "Gelistet in awesome-dsh-plugin",
 	"verifiedBadgeHint": "Verifizierte Installation (qing3a/dsh-plugin-verify)",
@@ -2028,8 +2028,8 @@ const de = {
 	"rollbackFailed": "Rollback fehlgeschlagen",
 	"skipUpdate": "Bei „Alle aktualisieren“ überspringen",
 	"skipHint": "Nur von „Plugins aktualisieren“ und automatischem Update ausgeschlossen – die Update-Schaltfläche auf der Karte funktioniert weiterhin.",
-	"selfUpdateBtn": "„DSH Store“ aktualisieren {0} → {1}",
-	"selfUpdateDone": "DSH Store aktualisiert.",
+	"selfUpdateBtn": "„DSH Mall“ aktualisieren {0} → {1}",
+	"selfUpdateDone": "DSH Mall aktualisiert.",
 	"selfUpdateFailed": "DSH-Store-Update fehlgeschlagen",
 	"restartNeeded": "Starten Sie dsh neu, um die Änderungen zu übernehmen.",
 	"tasksBtn": "Laufende Aufgaben",
@@ -2058,9 +2058,9 @@ const de = {
 	"taskFailed": "Fehlgeschlagen",
 	"tasksAggregate": "{0}/{1} erledigt",
 	"updateAllShort": "Alle Plugins ({0})",
-	"settingsNav": "DSH Store – Einstellungen",
+	"settingsNav": "DSH Mall – Einstellungen",
 	"settingsTitle": "DSH-Store-Einstellungen",
-	"openStoreBtn": "DSH Store öffnen",
+	"openStoreBtn": "DSH Mall öffnen",
 	"openStoreHint": "Plugins im vollständigen Katalog durchsuchen, suchen, installieren und aktualisieren.",
 	"autoUpdateTitle": "Plugins automatisch aktualisieren",
 	"autoUpdateDesc": "Wenn aktiviert, aktualisiert der Store seinen Katalog täglich und führt dann automatisch „Alle aktualisieren“ für jedes aktualisierbare Plugin aus.",
@@ -2091,9 +2091,9 @@ const de = {
 	"recDaily": "Täglich aktualisiert"
 };
 const pt = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "O catálogo de plugins mais completo do DeepSeek Harness — busca inteligente, instalação/atualização/desinstalação inteligentes, ferramenta de Skills integrada.",
 	"refresh": "Atualizar",
 	"autoRefresh": "atualização automática do banco de dados a cada 30 min",
@@ -2305,10 +2305,10 @@ const pt = {
 	"stateLive": "· Ativo",
 	"stateDisabled": "· Desativado",
 	"stateRestart": "· Reinicie para aplicar",
-	"resultsTitle": "Resultados da DSH Store",
+	"resultsTitle": "Resultados da DSH Mall",
 	"resultsRecommended": "Recomendados",
 	"resultsRelated": "Outros relacionados",
-	"resultsExpired": "Resultados expirados — execute /dsh-store novamente.",
+	"resultsExpired": "Resultados expirados — execute /dsh-mall novamente.",
 	"verifiedOnly": "Verificados",
 	"curatedBadgeTitle": "Listado em awesome-dsh-plugin",
 	"verifiedBadgeHint": "Instalação verificada (qing3a/dsh-plugin-verify)",
@@ -2321,9 +2321,9 @@ const pt = {
 	"rollbackFailed": "Falha na reversão",
 	"skipUpdate": "Ignorar em Atualizar Tudo",
 	"skipHint": "Excluído apenas de \"Atualizar plugins\" e da atualização automática — o botão de atualização no card ainda funciona.",
-	"selfUpdateBtn": "Atualizar \"DSH Store\" {0} → {1}",
-	"selfUpdateDone": "DSH Store atualizada.",
-	"selfUpdateFailed": "Falha na atualização da DSH Store",
+	"selfUpdateBtn": "Atualizar \"DSH Mall\" {0} → {1}",
+	"selfUpdateDone": "DSH Mall atualizada.",
+	"selfUpdateFailed": "Falha na atualização da DSH Mall",
 	"restartNeeded": "Reinicie o dsh para aplicar.",
 	"tasksBtn": "Tarefas em execução",
 	"tasksPanelTitle": "Tarefas em execução",
@@ -2351,9 +2351,9 @@ const pt = {
 	"taskFailed": "Falhou",
 	"tasksAggregate": "{0}/{1} concluídas",
 	"updateAllShort": "Todos os plugins ({0})",
-	"settingsNav": "DSH Store - Configurações",
-	"settingsTitle": "Configurações da DSH Store",
-	"openStoreBtn": "Abrir a DSH Store",
+	"settingsNav": "DSH Mall - Configurações",
+	"settingsTitle": "Configurações da DSH Mall",
+	"openStoreBtn": "Abrir a DSH Mall",
 	"openStoreHint": "Navegue, pesquise, instale e atualize plugins no catálogo completo.",
 	"autoUpdateTitle": "Atualizar plugins automaticamente",
 	"autoUpdateDesc": "Quando ativada, a loja atualiza o catálogo diariamente e executa automaticamente Atualizar Tudo em todos os plugins atualizáveis.",
@@ -2384,9 +2384,9 @@ const pt = {
 	"recDaily": "Atualizado diariamente"
 };
 const ru = {
-	"nav": "DSH Store",
-	"versionHint": "dsh-store v{0}",
-	"title": "DSH Store",
+	"nav": "DSH Mall",
+	"versionHint": "dsh-mall v{0}",
+	"title": "DSH Mall",
 	"subtitle": "Самый полный каталог плагинов DeepSeek Harness — умный поиск, умная установка/обновление/удаление, встроенный инструмент Skills.",
 	"refresh": "Обновить",
 	"autoRefresh": "автообновление базы каждые 30 мин",
@@ -2598,10 +2598,10 @@ const ru = {
 	"stateLive": "· Активен",
 	"stateDisabled": "· Отключён",
 	"stateRestart": "· Требуется перезапуск",
-	"resultsTitle": "Результаты DSH Store",
+	"resultsTitle": "Результаты DSH Mall",
 	"resultsRecommended": "Рекомендуется",
 	"resultsRelated": "Другие похожие",
-	"resultsExpired": "Результаты устарели — выполните /dsh-store заново.",
+	"resultsExpired": "Результаты устарели — выполните /dsh-mall заново.",
 	"verifiedOnly": "Проверенные",
 	"curatedBadgeTitle": "Указан в awesome-dsh-plugin",
 	"verifiedBadgeHint": "Проверенная установка (qing3a/dsh-plugin-verify)",
@@ -2614,9 +2614,9 @@ const ru = {
 	"rollbackFailed": "Не удалось выполнить откат",
 	"skipUpdate": "Пропустить при обновлении всех",
 	"skipHint": "Исключается только из «Обновить плагины» и автообновления — кнопка обновления на карточке по-прежнему работает.",
-	"selfUpdateBtn": "Обновить «DSH Store» {0} → {1}",
-	"selfUpdateDone": "DSH Store обновлён.",
-	"selfUpdateFailed": "Не удалось обновить DSH Store",
+	"selfUpdateBtn": "Обновить «DSH Mall» {0} → {1}",
+	"selfUpdateDone": "DSH Mall обновлён.",
+	"selfUpdateFailed": "Не удалось обновить DSH Mall",
 	"restartNeeded": "Перезапустите dsh для применения.",
 	"tasksBtn": "Выполняющиеся задачи",
 	"tasksPanelTitle": "Выполняющиеся задачи",
@@ -2644,9 +2644,9 @@ const ru = {
 	"taskFailed": "Ошибка",
 	"tasksAggregate": "Готово: {0}/{1}",
 	"updateAllShort": "Все плагины ({0})",
-	"settingsNav": "DSH Store — Настройки",
-	"settingsTitle": "Настройки DSH Store",
-	"openStoreBtn": "Открыть DSH Store",
+	"settingsNav": "DSH Mall — Настройки",
+	"settingsTitle": "Настройки DSH Mall",
+	"openStoreBtn": "Открыть DSH Mall",
 	"openStoreHint": "Просматривайте, ищите, устанавливайте и обновляйте плагины в полном каталоге.",
 	"autoUpdateTitle": "Автообновление плагинов",
 	"autoUpdateDesc": "Когда включено, магазин ежедневно обновляет каталог и автоматически запускает обновление всех плагинов, для которых есть обновление.",
@@ -2682,7 +2682,7 @@ const storeLang = {
 	init(l) {
 		if (uiLang !== null) return;
 		try {
-			const saved = localStorage.getItem("dsh-store-uilang");
+			const saved = localStorage.getItem("dsh-mall-uilang");
 			uiLang = [
 				"zh",
 				"en",
@@ -2705,7 +2705,7 @@ const storeLang = {
 		if (uiLang === l) return;
 		uiLang = l;
 		try {
-			localStorage.setItem("dsh-store-uilang", l);
+			localStorage.setItem("dsh-mall-uilang", l);
 		} catch {}
 		for (const fn of langListeners) fn();
 	},
@@ -2716,7 +2716,7 @@ const storeLang = {
 		};
 	}
 };
-/** 按当前商店 UI 语言取词条（缺 zh/en 兜底原 key）。 */
+/** 按当前商场 UI 语言取词条（缺 zh/en 兜底原 key）。 */
 function storeT(key) {
 	return (storeLang.get() === "zh" ? zh : storeLang.get() === "ja" ? ja : storeLang.get() === "ko" ? ko : storeLang.get() === "es" ? es : storeLang.get() === "fr" ? fr : storeLang.get() === "de" ? de : storeLang.get() === "pt" ? pt : storeLang.get() === "ru" ? ru : en)[key] ?? en[key] ?? key;
 }
@@ -2943,7 +2943,7 @@ function RadarChart({ breakdown, total, size = 140, labels, totalLabel }) {
 * - 回到顶部 FAB：.pcm-detail-scroll 滚动 >400px 浮现（业界标准 Material FAB 模式）
 * - 元数据 star 单元格与首页卡片同款样式（pcm-meta-star）
 * - 信息补齐：分类恒显（other 本地化）、近30天下载/总下载、含 skill 徽章；
-*   详情打开时对缺失下载量的条目做一次性富化（/dsh-store/downloads）
+*   详情打开时对缺失下载量的条目做一次性富化（/dsh-mall/downloads）
 * - 排版重设计：信任徽章行上移与简介相邻；单滚动容器（无子滚动）保持不变
 */
 const readmeCache = /* @__PURE__ */ new Map();
@@ -2989,7 +2989,7 @@ async function fetchReadme(entry, lang) {
 	const candidates = [...readmeCandidates(lang), "README.md"];
 	let lastError = "";
 	for (const file of candidates) try {
-		const res = await fetch("/dsh-store/readme?repo=" + encodeURIComponent(entry.owner + "/" + entry.name) + "&file=" + encodeURIComponent(file) + "&branch=" + encodeURIComponent(branch));
+		const res = await fetch("/dsh-mall/readme?repo=" + encodeURIComponent(entry.owner + "/" + entry.name) + "&file=" + encodeURIComponent(file) + "&branch=" + encodeURIComponent(branch));
 		if (res.ok) {
 			const body = await res.json();
 			if (body.ok === true && typeof body.text === "string") {
@@ -3114,7 +3114,7 @@ function DetailPanel(props) {
 			return;
 		}
 		let alive = true;
-		fetch("/dsh-store/scores", {
+		fetch("/dsh-mall/scores", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ items: [{
@@ -3139,7 +3139,7 @@ function DetailPanel(props) {
 		if (entry.downloads !== null && entry.downloads !== void 0) return;
 		if (entry.npm === null || entry.npmLinked === false) return;
 		let alive = true;
-		fetch("/dsh-store/downloads", {
+		fetch("/dsh-mall/downloads", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ names: [entry.npm] })
@@ -3859,7 +3859,7 @@ function QuizView(props) {
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
 		open: props.open,
 		onClose: props.onClose,
-		title: "DSH Store",
+		title: "DSH Mall",
 		headless: true,
 		className: "pcm-quiz-modal",
 		children: /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
@@ -3956,7 +3956,7 @@ function QuizView(props) {
 }
 //#endregion
 //#region src/client/icon.ts
-/** dsh-store brand icon (64px, base64-inlined so the client bundle stays self-contained). */
+/** dsh-mall brand icon (64px, base64-inlined so the client bundle stays self-contained). */
 const ICON_DATA = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABGUUKwAAARF0lEQVRoBbVa628U1xXf2YffhuBg0xKXSImahDwgJIhUbXjmoWCbQh6IRkn6IqiqEgWlX9qopY3yvVWSqlLT/6BV06/pS4ASHoamQHjYBnttA8a79vq9axt7Z2f6O+fce+fOrJdEUTpa7px77nn8zrnn3rkzxlksFp1YLEb/9M0XUm5Mo0HPgZBPBC4mmcNdNL6RJ1HNte7Ec9gOjDgxh+WFsG1aGuwFkmycvOMyxoXwnaLr2ipfBW18fBXGbmnD9/34LQW+7KBk9Etoi+IXVsfs/H8CQHnYIGz6FlEZ9FJdZEJ+t9CJVQpgSZ8RZqTLbgyPKtZ0DGlxQqg4YKhIndNQOAUh4VCnUgDGElzCFrdKkUEQAzJMUysEOxYxtaaZHyAzZpUQG2eaRtiOSj+vXcUzxkUr1FYKwAhh37C9ii32FKC3BQBDd5VfETYGKxARKdFVFmBQUeXKyXIWS2sQ0DSkiAaJjw7w5ii+2KUZl5BMV7nExDJL+NQaCXFqttqlMGpeZAYkUGNIS9FdT4VMMURCUrzBI1oYIAE7YYJDmNxSowVMwZALzSTThqYBdhbhCD+6iAVURDSElC0vJUY8/OMhMYCWfpJpPWRJKQhL3zgjaorEHCxwgqSntSIzoNm4h+RYmbAhnXQLX2yXWKbeeAkaQaQ5mBY2RbIyLFMn9phDfmGQTYXmB3xjkWVYackAWA7KNNHGqFY2s8/6HKgewj06qoQIbiQjECY9OzYWJqaMiXfQ4QSRgMjQLR62SyzrYuVAgg1hBsgE/ilLgTxBNExBLMLgy+TIqJExEMEx8Uni2Cp4yIgaEeHAG/Edf8ldiP2hUTNo6UQ4yKvtmgSNP0urIsnKgs8EpYSFKy2bVZ60P3Edi1UKADpIoaRN9JVhznHYJxWbk0woU57nxeOqMnHYghmZBQiVSp6xEhDBMTPglVE8n5CEZxMq0xVOoyZySrkViaw8RkzzI2IY9/yB/sGbC/MAfMcdqwv5wvRMHrPxtVWrisXi+OQEJJtWrFjduhoC+tLKuq/vhs8EGkJsoabcyxARFWZAyYu2mQfYYdCkziYgRrlPdPd2b9n8RGFu1i0WO3a19fWme3v7Sl5px7btMzMzZ86ehcK6h+4/evRIbW2t5+t5EPMauL6TUU3Do8k6u8agYFAIoyVkm9Q0ZZ0tio60YKhxGpqfX8gX8m7JLRXdbHZkanoaife8Um40V5grgIbM+MSkW3RjdSF4AdCKlE4f+dFIgglxIjMg6MSYSJv5Mog1gcD0IoEowJdKeDdyfQBHsRNdKqHs0Xj0zgQiCpI94ESfiCeiQ+TEL7keQyXsAXgjyuqRAMwgCMmwbiUcNqWEHJ8cgx+LrVmz5vnndiPfiGHfiy92d3VfuHDB90odu3ZNTk4eP34c/h/71qb6hnqsFlZnNXCd2Gx+9sTJE8WiC/qBBx4cGOifnZuNef669etbW1tZWgnrvMumoFDcIgCR0MroCSkAkB/fz43nkO5EIjU2Nnbm7Ll8Pl9y3c7OznQ63deXxlBzS8vU9Ex3z2UI19bVYhKSqRTXI6yQuUQi8cknxzt2tcdQC7773d3PHjlyJE8bgHvw4M/effe3mFeFlNXogWghwlCFAJR9rWuwC3onhk3zo3/8/Uc/fDWeSHglr719Z25sfCY/47nulb700PXro7kx1FJvuj+fL4CG96vXrmF+UqkUL0ZjObZYXMDzFPxSKT47O+c48VRVVXHRXVgEny8Cw44VKhjgINAASWDJpkhBlr9oRuOGbDaTGcneoGd5zBsYHPRKRc8ll7ICuO7xSMBVQmrBR/rj8QQeEfFYnOqbUks42AFWkAsW+vPz88XFOZKHogwzWqJBqFUnqCQAhkrD5ZfS1OsYAmSCAkNJPPzwhh07noJjYPzBK99vvfPBG8OjQP/8s09fPP8p1gD4u3Z1jI9PnDzR6ce8rVu2FgqF60PXod7Y2Njc0gwwkHnssU2olr7eK8j9qwf2t7e35TGTnvf000+ipQBV2ZBvhVGAUS+6C5kgFHbu63BJHj+yiCuTzXR1dyOpbvFmV990fM3vGpdj7cUmnOkL5//U138dwZw789nk9FRfOg2dFStWvPjSKwjGiTv33XPP4cP/qq+v93z/jtWrsRKOHj0Kyzue2PHmmwcNCGSHXBIW3vFkQEdBPb9SCYkotVxIROgwJIZYbCyXy2aGEsmaknuzp/fawsrY3GzR85P912cGr17NjY5jF8LjbKaQz+VyUE/3pxOJ5GxhFkU3Mjq6uLhY39BAJRGLjY7maOeJ+ROTk+i6bolBg7RKV6WUb6QFgnTtNSBcMCtf9FxUTxZ2jcqm+oYpPF6BvuQ5+NYEpu/h4YVljCXgxnx6kOHZ4DgoCTfmyXqIx1E0CXoCeD7KndDQ2anixYjJu0TFpUUBqMhErywGNmu9xDB6Hyj9dQ+t27H9SazFkufu3bO5J5sbGZtHCT317fra8T2XumjrbG9vnxif6Ow8Cb9bt23FAj5y+HaUyoYNG8C5du0azDc2NLS17cxmhlGN27ZtqRiDQKMMcvZlcsIlFApFJULxWEmihwGkAGsgk+3tvezEk4jgzKeHj/z7rdxYznVdP9sxMDA0MDCI7F+8cHFyerp/YBDpuv3SymQi3j8wAAwonlcP/OTw4cOYgW/efffatWvPnjsPaHgCPvnEE+GcAggnW3bSYH4U0y4hMwi4uAS7xIuW5w6tNp8dyWJL4TXgnr/YNXg9O5PP4znQ1dN3Y+jGcCaLNXCpqztfKICGendPTyKZyGQy+BxYVV29bNny6alpJxG/cWO4qrpmcgLV72IxsGsBYDDAJ+AazyyimyUD0EaC9IstY5cEfD5U8nYu5x/Pw+LD9o2y9+T8w0sA+z0/B9BxaKPHksAigRiEsfcnQLsuFgk/K2TvD3LHSKgx2TRxKHCRAMyw0aTUs7rc0NKFSl2//uGOjt0z09PA8r19+5pua0Id48m/d+/enp6eSxcvAWJbW9v45OTpzlPQ2LxlC22XR26DuY0bN+I50Fhfh1Jce/8DeBR8o7U17sR37NhOa4BciSOpE3IoIPiZwEO6sQPQOiSPMhcRFaixwPBpS9n46CMvv/zSW7/4OZZBur9/aGgolxvFGkin+7E6M9ksAkD1T01NgUbEqP5UKomVg3QMXh3E8Rs0ngnJVDXOPAcO7CfLmAjZ1qSjEs94wLEAmpBwhFKxKZXoTZQ4DFuSw7t85crA4AA0TnZ29ly+Mj09g93z0zP/xRpAZWMXxatMfqYwOHgVMqmaaszA4NVrQOX7zrLly/C4iMUTE5MzExMTDQ0NwfaPZS5gMRsUA3uHR8ESRmjPAMuJlEgLgxR458HuySRboJ300Uce2bZtezye2rjp0dMnT8v5B07pnYu2dtwhhb0fNJ0aUDBE+w4tFDomlHByuvPONcuXL4cg49T1Q564CgQ09Az6gCaWHQADIzMsizsuaZk0Fqjn08OovW0nzqHojYyMpPv6M8MZHC2f27Ont7f3wsWLeIw9s/OZyYmJU6f/g5xv3vw4nsRHGxoRxqZNm5pbVq5a1dzc3HLo0C+xI6mjm4CGReNXEca5IQiFgxdauqsLY0ZP8+SujlPoyFOQY3RiLm0aZHHVqlXvvPP2Cy/sm5+bw96KY9L4+DgizAxnp6Ymx8bGIYOVgLPo2PgEJgqnoN/8+pDYRsuHfkZGjVl+AmcpVIDJ4pC2AzAGheBTAxvkvjwHQIqqhCrWiTOSHenuOg/i2PETWM2ZGxlUyKlTpwuF/CCvk0QST63E4EA/+OfOfQZJRKhhoMeggqph+2JePNK4cQp5dUWOEppNdylKtqvYsqkZTkCgoNete+i9996fm5276+67fnXo7WRqzPMSLS0tqark9aEhGFt5+0oE0JdI19c17N37AjtQdu1bEBKhNS5ERCDZ4rHy70JiwWgaQlJvSojFlA+yiF0cpzOx3XP5Ml4vQa/++uqFxZt4JQDd0tyMdnR0tHHZsvvuvdd6VxQlu5XMB7HoMTkIGT51IwGYMa1i54AGdQAg0VWASZg2GH2ZrwyyDVojSoIe1cpV2Iq2wHeecFC8+akRqiJTGuBV+rClxEkiIMsoAQ0oKGYcI4quj7McPh/iFET7Jx9a6dzHirjhbTIRjyWT+BbmpJJ4scZ5mgbDwUihljmTVNrBMLglZ4CjLLdAHAFDr2TY3xeK/vyCv7hIezo4ONsDEyAyUAUcuIEPP5y0PRz86WUALfZYsoZvFLXV8ZoqvBhYYahNj3OnUq78alDSRXbxl3p8LVNdGY3MqcyAKT6CBd+z897cPEGoropXVzn1tUmVZ7Yhm7opJPDoeeZ78INDv7hBO3/TvbngIws479VUO4319HoDSRKgGDQhxUogBQyNB6m0/qsBhkOhkBjxjCH6u/jCoj+d95BpnMSqUhQPlu+xY8c//PBveE5BYf/+H9+39l4o/uXPfz3ZeTKeSDbW179x8PWmpib4+uCPH+CABMNrWltfe/2n+IKCyFB7s/OYyVhDvVNXA38RoNLV2BChIuk0gMLFF0v5YTIMbQgw+Ycx183PLmbHFubmizhy4cdDLqy89tobFC1f7//+D5Rvz/vO41s0z0GEYOZGx1paVgvzthUrh28MY6mwYexJmA13ZHxhaoZQKKfatThieAYkEYtF1/4TE+KyQxdHEixNKKLFr2lZAomnw44lm0xSYaSq8eUWuympYBTfqvCgTFXVpVLgy+VX19TEE9V4DaqpqWUWrJAlLA/YaFqegLb6+qg0pCwYhuVRBsGNPIkFLkYhK7TMp6j6dTX4JsVRqt1Ay/MKKC7MY1AWLxg4cuOUgG9s8CK7DVpk1yvR96/F4qLeetkIdgUGVVfHqRKAaLUHYti0FojsQga5BMA2xbAoExuUGSUuPi7gDebjj49x7p2dO5/B3zjAP3bsRFfXJeyUdXX1u3d34MsudtePPvrn8DC+5+H41IJvWHg2i3mNR9IDL7TBMGLxFYyHvJc9yEQuajPQVsg5GgmJ58P8fQmSEJFvLTYT52d5BbWZ+gynDJGXEFobhiUToCH5shkgK3qZB3sZKxkjtDfzhEZchNyzCjU2lxVUao2AECxmy6pxngrQVGIGQaAbXgOyMENi6LBXYRJphrVFErFkyLiRKaOVktYlYblYRfTYmLahHwhaju9GPfQ/tjjxyrWNwFIFWy02ZgZSAWVJ34KEvMCU1pY0HBCGNgIhDmYnso2KnKAxawig8STmh7E9bmwu4SYYq0zZMYRgUe5Nmmhuqc+/JYyFS0hPmyXIbqRCaJQ9Be70agFfmBChS7xqWhU9S1AuDBglLXK6Fab2pSCJdS2CuzBwDlCUNVRG8lTAoGSFVjBwswGxQhz89EVM7sqo9AwNgnSlb7haV92Fz0YCw6CMWQ2JDjeBBLRZkxrbtGFG2NqcABL7So8npNxy4IzngSIvuzDbkiMbQqAYla9UQrZpQ+uCgWn87AmBWeVvqU0jgKItQNpYtShCR3xdkNQhT8RXl6xM3fMxA+WXLa9xKSmBQgLWmlYuwqYhonDr6VZdscQ+IrUXqLB9EbxlCyufuwYgE/JMW36IgQ6joYYJ06WeFgVWOoMYGebLHDKXG1laIma4dhda8jOjCMAWCPiVKJ1OjEMR1iLq0gVctXFZdhgz9WkUcvKzBIgU/bLJDOEWGVb8YruQ9kFeDQrGQUnVLrUU3YlnhFlFpEQYtOraOmV0RRkLA5XQ519hS6Qe5oR7yp5i4sZUyGkll0saMsLalGEwkcSrtp4wSHyuHwhAjP8PBk1I+JJBadWINkjlruUtMihCmxm2Sj0yQ//oIjNM02L0/wfBXuT7QUB8ywAAAABJRU5ErkJggg==";
 //#endregion
 //#region src/client/tasks.ts
@@ -4230,7 +4230,7 @@ function MarketSection(props) {
 	const [langChoice, setLangChoice] = (0, react.useState)(() => {
 		if (props.langOverride !== void 0) return props.langOverride;
 		try {
-			const saved = localStorage.getItem("dsh-store-lang");
+			const saved = localStorage.getItem("dsh-mall-lang");
 			if (saved !== null && LANGS.includes(saved)) return saved;
 		} catch {}
 		return "en";
@@ -4241,7 +4241,7 @@ function MarketSection(props) {
 	const setLangPersist = (0, react.useCallback)((l) => {
 		setLangChoice(l);
 		try {
-			localStorage.setItem("dsh-store-lang", l);
+			localStorage.setItem("dsh-mall-lang", l);
 		} catch {}
 	}, []);
 	const [langOpen, setLangOpen] = (0, react.useState)(false);
@@ -4273,12 +4273,12 @@ function MarketSection(props) {
 			return;
 		}
 		setSmartSearchBusy(true);
-		fetch("/dsh-store/smart-search", {
+		fetch("/dsh-mall/smart-search", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ query })
 		}).then((res) => res.json()).then((body) => {
-			if (body.ok === true && body.payload !== void 0) window.dispatchEvent(new CustomEvent("dsh-store-open-results", { detail: { payload: body.payload } }));
+			if (body.ok === true && body.payload !== void 0) window.dispatchEvent(new CustomEvent("dsh-mall-open-results", { detail: { payload: body.payload } }));
 			else setToast(t("installFailed") + ": " + (body.error ?? ""));
 		}).catch(() => setToast(t("installFailed"))).finally(() => setSmartSearchBusy(false));
 	}, [
@@ -4324,7 +4324,7 @@ function MarketSection(props) {
 	const installing = status?.install?.active === true;
 	const fetchRegistry = (0, react.useCallback)((force) => {
 		if (seedMode) return;
-		fetch("/dsh-store/registry" + (force ? "?force=1" : ""), { cache: "no-store" }).then((res) => {
+		fetch("/dsh-mall/registry" + (force ? "?force=1" : ""), { cache: "no-store" }).then((res) => {
 			if (!res.ok) throw new Error("HTTP " + res.status);
 			return res.json();
 		}).then((body) => {
@@ -4357,10 +4357,10 @@ function MarketSection(props) {
 		}).catch(() => setLoadError(true));
 	}, []);
 	const fetchStatus = (0, react.useCallback)(() => {
-		fetch("/dsh-store/status", { cache: "no-store" }).then((res) => res.json()).then((body) => setStatus(body)).catch(() => {});
+		fetch("/dsh-mall/status", { cache: "no-store" }).then((res) => res.json()).then((body) => setStatus(body)).catch(() => {});
 	}, []);
 	(0, react.useEffect)(() => {
-		fetch("/dsh-store/favorites", { cache: "no-store" }).then((res) => res.json()).then((body) => setFavorites(new Set(body.favorites ?? []))).catch(() => {});
+		fetch("/dsh-mall/favorites", { cache: "no-store" }).then((res) => res.json()).then((body) => setFavorites(new Set(body.favorites ?? []))).catch(() => {});
 	}, []);
 	(0, react.useEffect)(() => {
 		if (!seedMode) fetchRegistry(true);
@@ -4488,7 +4488,7 @@ function MarketSection(props) {
 		const unknown = entries.filter((e) => e.isPlugin === null).map((e) => e.owner + "/" + e.name).slice(0, 12);
 		if (unknown.length === 0 || verifyBusy) return;
 		setVerifyBusy(true);
-		fetch("/dsh-store/verify", {
+		fetch("/dsh-mall/verify", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ repos: unknown })
@@ -4641,7 +4641,7 @@ function MarketSection(props) {
 		if (next.has(key)) next.delete(key);
 		else next.add(key);
 		setFavorites(next);
-		fetch("/dsh-store/favorites", {
+		fetch("/dsh-mall/favorites", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ key })
@@ -4691,7 +4691,7 @@ function MarketSection(props) {
 	(0, react.useEffect)(() => {
 		if (seedMode) return;
 		const installedKey = JSON.stringify(status?.installed ?? {});
-		fetch("/dsh-store/recommend", { cache: "no-store" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/recommend", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			setRecommend(Array.isArray(body.items) ? body.items : []);
 			setProfileStats(body.stats ?? null);
 		}).catch(() => setRecommend([]));
@@ -4699,7 +4699,7 @@ function MarketSection(props) {
 	}, [status?.installed, seedMode]);
 	const submitQuiz = (answers) => {
 		setQuizOpen(false);
-		fetch("/dsh-store/recommend", {
+		fetch("/dsh-mall/recommend", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ quiz: answers })
@@ -4722,7 +4722,7 @@ function MarketSection(props) {
 			let storedWeek = "";
 			let storedNames = [];
 			try {
-				const raw = localStorage.getItem("dsh-store-picks-week");
+				const raw = localStorage.getItem("dsh-mall-picks-week");
 				if (raw !== null) {
 					const o = JSON.parse(raw);
 					storedWeek = o.week ?? "";
@@ -4740,7 +4740,7 @@ function MarketSection(props) {
 			const fresh = computePicks(data.plugins);
 			setPicks(fresh);
 			try {
-				localStorage.setItem("dsh-store-picks-week", JSON.stringify({
+				localStorage.setItem("dsh-mall-picks-week", JSON.stringify({
 					week: wk,
 					names: fresh.map((p) => p.owner + "/" + p.name)
 				}));
@@ -4800,7 +4800,7 @@ function MarketSection(props) {
 		}
 		if (todo.length === 0) return;
 		for (const e of todo) descRequested.current.add(langChoice + ":" + e.owner + "/" + e.name);
-		fetch("/dsh-store/descriptions", {
+		fetch("/dsh-mall/descriptions", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -4838,7 +4838,7 @@ function MarketSection(props) {
 		const todo = pageList.filter((e) => e.local !== true && e.owner !== "" && e.npmVersion == null && e.version == null && e.repoVersion === void 0 && !versionsRequested.current.has(e.owner + "/" + e.name)).map((e) => e.owner + "/" + e.name).slice(0, 24);
 		if (todo.length === 0) return;
 		for (const r of todo) versionsRequested.current.add(r.toLowerCase());
-		fetch("/dsh-store/versions", {
+		fetch("/dsh-mall/versions", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ repos: todo })
@@ -4865,7 +4865,7 @@ function MarketSection(props) {
 		const todo = [...new Set(names.filter((n) => n !== "" && !downloadsRequested.current.has(n)))];
 		if (todo.length === 0) return;
 		for (const n of todo) downloadsRequested.current.add(n);
-		fetch("/dsh-store/downloads", {
+		fetch("/dsh-mall/downloads", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ names: todo.slice(0, 1500) })
@@ -4920,7 +4920,7 @@ function MarketSection(props) {
 		}).slice(0, 24);
 		if (todo.length === 0) return;
 		for (const e of todo) scansRequested.current.add((e.owner + "/" + e.name).toLowerCase());
-		fetch("/dsh-store/scan", {
+		fetch("/dsh-mall/scan", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ repos: todo.map((e) => e.owner + "/" + e.name) })
@@ -4955,7 +4955,7 @@ function MarketSection(props) {
 		const todo = pageList.filter((e) => e.local !== true && !scoresRequested.current.has((e.owner + "/" + e.name).toLowerCase())).filter((e) => e.score == null || e.score.complete !== true).slice(0, 24);
 		if (todo.length === 0) return;
 		for (const e of todo) scoresRequested.current.add((e.owner + "/" + e.name).toLowerCase());
-		fetch("/dsh-store/scores", {
+		fetch("/dsh-mall/scores", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ items: todo.map((e) => ({
@@ -5003,7 +5003,7 @@ function MarketSection(props) {
 			at: Date.now()
 		}));
 		setTasksOpen(true);
-		fetch("/dsh-store/smart-install", {
+		fetch("/dsh-mall/smart-install", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5065,7 +5065,7 @@ function MarketSection(props) {
 			reason: null,
 			at: Date.now()
 		}));
-		fetch("/dsh-store/install", {
+		fetch("/dsh-mall/install", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5109,7 +5109,7 @@ function MarketSection(props) {
 			reason: null,
 			at: Date.now()
 		}));
-		fetch("/dsh-store/uninstall", {
+		fetch("/dsh-mall/uninstall", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5152,7 +5152,7 @@ function MarketSection(props) {
 			reason: null,
 			at: Date.now()
 		}));
-		fetch("/dsh-store/uninstall", {
+		fetch("/dsh-mall/uninstall", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5187,7 +5187,7 @@ function MarketSection(props) {
 	const [smartUninstallRisk, setSmartUninstallRisk] = (0, react.useState)(null);
 	const [smartUninstallPending, setSmartUninstallPending] = (0, react.useState)(null);
 	const runSmartUninstallRequest = (0, react.useCallback)((name, taskId, confirm) => {
-		fetch("/dsh-store/smart-uninstall", {
+		fetch("/dsh-mall/smart-uninstall", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5305,7 +5305,7 @@ function MarketSection(props) {
 		return null;
 	}, [updatesAll]);
 	const runUpdateRequest = (0, react.useCallback)((names, toastDone, taskId) => {
-		fetch("/dsh-store/update", {
+		fetch("/dsh-mall/update", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5396,7 +5396,7 @@ function MarketSection(props) {
 			at: Date.now()
 		}));
 		setTasksOpen(true);
-		fetch("/dsh-store/smart-update", {
+		fetch("/dsh-mall/smart-update", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5485,7 +5485,7 @@ function MarketSection(props) {
 		if (depName === null || toggling.has(depName)) return;
 		const next = stateOf(e) === "disabled";
 		setToggling((prev) => new Set(prev).add(depName));
-		fetch("/dsh-store/toggle", {
+		fetch("/dsh-mall/toggle", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5532,7 +5532,7 @@ function MarketSection(props) {
 			at: Date.now()
 		}));
 		setRollbacking(e.name);
-		fetch("/dsh-store/rollback", {
+		fetch("/dsh-mall/rollback", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5580,7 +5580,7 @@ function MarketSection(props) {
 		}
 		if (depName === null) return;
 		const next = !skipSet.has(depName.toLowerCase());
-		fetch("/dsh-store/skip", {
+		fetch("/dsh-mall/skip", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -5602,13 +5602,13 @@ function MarketSection(props) {
 		setTasks((list) => enqueueTask(list, {
 			id,
 			kind: "update",
-			name: "dsh-store",
+			name: "dsh-mall",
 			state: "running",
 			detail: selfUpdate.from + " → " + selfUpdate.to,
 			reason: null,
 			at: Date.now()
 		}));
-		fetch("/dsh-store/self-update", { method: "POST" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/self-update", { method: "POST" }).then((res) => res.json()).then((body) => {
 			if (body.ok === true) {
 				setSelfUpdateDone(true);
 				setToast(t("selfUpdateDone") + (body.needRestart === true ? " " + t("restartNeeded") : ""));
@@ -6728,7 +6728,7 @@ function MarketSection(props) {
 													onChange: () => doToggleSkip(entry)
 												}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { children: t("skipUpdate") })]
 											})] }),
-											!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-store" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
+											!(entry.npm ?? entry.name).startsWith("@deepseek-ai/") && (entry.npm ?? entry.name) !== "dsh-mall" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", { className: "pcm-vsep" }), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("label", {
 												className: "pcm-switch pcm-switch-inline",
 												title: t("toggleHint"),
 												children: [
@@ -6944,7 +6944,7 @@ function MarketSection(props) {
 				onClearSettled: () => setTasks(clearSettledTasks),
 				onDismiss: (id) => setTasks((list) => dismissTask(list, id)),
 				onCancelTask: (id) => {
-					fetch("/dsh-store/cancel", {
+					fetch("/dsh-mall/cancel", {
 						method: "POST",
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ id })
@@ -6988,7 +6988,7 @@ function InstallModal(props) {
 	(0, react.useEffect)(() => {
 		if (readmeCmds.commands.length > 0) return;
 		let alive = true;
-		fetch("/dsh-store/readme?repo=" + encodeURIComponent(entry.owner + "/" + entry.name) + "&file=README.md&branch=" + encodeURIComponent(entry.defaultBranch ?? "main")).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/readme?repo=" + encodeURIComponent(entry.owner + "/" + entry.name) + "&file=README.md&branch=" + encodeURIComponent(entry.defaultBranch ?? "main")).then((res) => res.json()).then((body) => {
 			if (alive && body.ok === true && Array.isArray(body.installCmds) && body.installCmds.length > 0) setReadmeCmds({
 				commands: body.installCmds,
 				source: body.cmdSource ?? "readme"
@@ -7184,14 +7184,14 @@ function PublishModal(props) {
 	const [copied, setCopied] = (0, react.useState)(false);
 	const [busy, setBusy] = (0, react.useState)(false);
 	const loadMyRepos = () => {
-		fetch("/dsh-store/publish/repos", { cache: "no-store" }).then((res) => res.json()).then((body) => setMyRepos(body.repos ?? [])).catch(() => {});
+		fetch("/dsh-mall/publish/repos", { cache: "no-store" }).then((res) => res.json()).then((body) => setMyRepos(body.repos ?? [])).catch(() => {});
 	};
 	(0, react.useEffect)(loadMyRepos, []);
 	const checkTopic = (target) => {
 		setBusy(true);
 		setResult(null);
 		setError(null);
-		fetch("/dsh-store/publish", {
+		fetch("/dsh-mall/publish", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({
@@ -7209,7 +7209,7 @@ function PublishModal(props) {
 		setBusy(true);
 		setResult(null);
 		setError(null);
-		fetch("/dsh-store/publish", {
+		fetch("/dsh-mall/publish", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ repo: target })
@@ -7311,11 +7311,11 @@ function PublishModal(props) {
 //#endregion
 //#region src/client/SettingsWindow.tsx
 /**
-* DSH 商店设置页（v1.7.1）：作为官方「设置」浮窗里的一个 section 渲染
+* DSH 商场设置页（v1.7.1）：作为官方「设置」浮窗里的一个 section 渲染
 * （不再是独立浮窗）。内容：
-* - 顶部大按钮「打开 DSH 商店」：打开独立商店浮窗；
+* - 顶部大按钮「打开 DSH 商场」：打开独立商场浮窗；
 * - 自动一键更新插件开关（说明 + 风险警告 + 上次运行结果）；
-* - 数据源 URL / GitHub Token / 商店自身更新（设置功能载体）。
+* - 数据源 URL / GitHub Token / 商场自身更新（设置功能载体）。
 */
 function formatTime(iso) {
 	const d = new Date(iso);
@@ -7330,10 +7330,10 @@ function SettingsContent(props) {
 	const [selfBusy, setSelfBusy] = (0, react.useState)(false);
 	const [selfDone, setSelfDone] = (0, react.useState)(false);
 	(0, react.useEffect)(() => {
-		fetch("/dsh-store/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			setStatus(body);
 		}).catch(() => {});
-		fetch("/dsh-store/auto-update", { cache: "no-store" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/auto-update", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			if (body.autoUpdate !== void 0) setAuto(body.autoUpdate);
 		}).catch(() => {});
 	}, []);
@@ -7341,7 +7341,7 @@ function SettingsContent(props) {
 		if (auto === null || autoBusy) return;
 		const next = !auto.enabled;
 		setAutoBusy(true);
-		fetch("/dsh-store/auto-update", {
+		fetch("/dsh-mall/auto-update", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body: JSON.stringify({ enabled: next })
@@ -7352,7 +7352,7 @@ function SettingsContent(props) {
 	const doSelfUpdate = () => {
 		if (selfBusy || status?.selfUpdate?.to == null) return;
 		setSelfBusy(true);
-		fetch("/dsh-store/self-update", { method: "POST" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/self-update", { method: "POST" }).then((res) => res.json()).then((body) => {
 			if (body.ok === true) setSelfDone(true);
 		}).catch(() => {}).finally(() => setSelfBusy(false));
 	};
@@ -7436,10 +7436,10 @@ function SettingsContent(props) {
 //#region src/client/StoreWindow.tsx
 /**
 * 独立浮窗入口 + find 工具结果浮窗。
-* - SidebarStoreButton: sidebar 底部「DSH 商店」按钮 → 全尺寸商店浮窗。
-* - StoreResultsLauncher: 全局点击拦截（/dsh-store/open-results 链接，
-*   由 find_dsh_store_plugin 工具输出）→ 打开「推荐 + 其他相关」结果浮窗，
-*   卡片样式与商店主页面一致（安装/源码/收藏星可用）。
+* - SidebarStoreButton: sidebar 底部「DSH 商场」按钮 → 全尺寸商场浮窗。
+* - StoreResultsLauncher: 全局点击拦截（/dsh-mall/open-results 链接，
+*   由 find_dsh_mall_plugin 工具输出）→ 打开「推荐 + 其他相关」结果浮窗，
+*   卡片样式与商场主页面一致（安装/源码/收藏星可用）。
 */
 let storeState = {
 	mounted: false,
@@ -7483,14 +7483,14 @@ function subscribeStore(fn) {
 		storeListeners.delete(fn);
 	};
 }
-/** 打开官方设置浮窗并自动定位到「DSH商店-设置」section（DOM 触发）。 */
+/** 打开官方设置浮窗并自动定位到「DSH商场-设置」section（DOM 触发）。 */
 function openSettingsAtStoreSection() {
 	window.setTimeout(() => {
 		Array.from(document.querySelectorAll("button")).find((b) => (b.textContent ?? "").trim() === "设置")?.click();
 		let tries = 0;
 		const timer = window.setInterval(() => {
 			tries += 1;
-			const nav = Array.from(document.querySelectorAll("button")).find((b) => (b.textContent ?? "").includes("DSH商店"));
+			const nav = Array.from(document.querySelectorAll("button")).find((b) => (b.textContent ?? "").includes("DSH商场"));
 			if (nav !== void 0) {
 				nav.click();
 				window.clearInterval(timer);
@@ -7503,7 +7503,7 @@ function closeSettingsWindow() {
 	const close = document.querySelector(".VOzbGW_close");
 	if (close !== null) close.click();
 }
-/** 唯一商店浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
+/** 唯一商场浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
 function StoreSingleton(props) {
 	const state = (0, react.useSyncExternalStore)(subscribeStore, () => storeState);
 	(0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
@@ -7535,7 +7535,7 @@ function SidebarStoreButton(props) {
 		})]
 	});
 }
-/** 设置浮窗里的「DSH商店-设置」section：设置内容 + 顶部大按钮打开商店浮窗。 */
+/** 设置浮窗里的「DSH商场-设置」section：设置内容 + 顶部大按钮打开商场浮窗。 */
 function SettingsSection(props) {
 	(0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
 	const openStore = (0, react.useCallback)(() => {
@@ -7552,7 +7552,7 @@ function SettingsSection(props) {
 	});
 }
 /** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗；
-*  也监听 window 事件 'dsh-store-open-results'（智能搜索直接带 payload 弹窗）。 */
+*  也监听 window 事件 'dsh-mall-open-results'（智能搜索直接带 payload 弹窗）。 */
 function StoreResultsLauncher(props) {
 	(0, react.useSyncExternalStore)((cb) => storeLang.subscribe(cb), () => storeLang.get());
 	const [token, setToken] = (0, react.useState)(null);
@@ -7561,7 +7561,7 @@ function StoreResultsLauncher(props) {
 		const anchor = e.target?.closest?.("a[href]");
 		if (anchor === null) return;
 		const href = anchor.getAttribute("href") ?? "";
-		if (!href.includes("/dsh-store/open-results")) return;
+		if (!href.includes("/dsh-mall/open-results")) return;
 		e.preventDefault();
 		e.stopPropagation();
 		const id = new URL(href, window.location.origin).searchParams.get("id");
@@ -7579,8 +7579,8 @@ function StoreResultsLauncher(props) {
 				setDirect(detail.payload);
 			}
 		};
-		window.addEventListener("dsh-store-open-results", onOpen);
-		return () => window.removeEventListener("dsh-store-open-results", onOpen);
+		window.addEventListener("dsh-mall-open-results", onOpen);
+		return () => window.removeEventListener("dsh-mall-open-results", onOpen);
 	}, []);
 	if (!(token !== null || direct !== null)) return null;
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(ResultsWindow, {
@@ -7595,7 +7595,7 @@ function StoreResultsLauncher(props) {
 	});
 }
 /** v1.7.4：#9 结果浮窗内嵌完整 MarketSection（seed=推荐+相关条目）——
-*  卡片内容/交互/功能与主商店浮窗完全一致（安装/卸载/更新/收藏/详情/任务）。 */
+*  卡片内容/交互/功能与主商场浮窗完全一致（安装/卸载/更新/收藏/详情/任务）。 */
 function ResultsWindow(props) {
 	const headActionsRef = (0, react.useRef)(null);
 	const [payload, setPayload] = (0, react.useState)(props.initialPayload);
@@ -7641,7 +7641,7 @@ function ResultsWindow(props) {
 	};
 	const [lang, setLang] = (0, react.useState)(() => {
 		try {
-			const saved = localStorage.getItem("dsh-store-lang");
+			const saved = localStorage.getItem("dsh-mall-lang");
 			if (saved !== null && LANGS.includes(saved)) return saved;
 		} catch {}
 		return "en";
@@ -7654,14 +7654,14 @@ function ResultsWindow(props) {
 	const setLangPersist = (l) => {
 		setLang(l);
 		try {
-			localStorage.setItem("dsh-store-lang", l);
+			localStorage.setItem("dsh-mall-lang", l);
 		} catch {}
 	};
 	const token = props.token;
 	(0, react.useEffect)(() => {
 		if (token === null || props.initialPayload !== null) return;
 		let alive = true;
-		fetch("/dsh-store/query-result?id=" + encodeURIComponent(token), { cache: "no-store" }).then((res) => res.json()).then((body) => {
+		fetch("/dsh-mall/query-result?id=" + encodeURIComponent(token), { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			if (alive) if (body.payload !== void 0) setPayload(body.payload);
 			else setFailed(true);
 		}).catch(() => {
@@ -7859,9 +7859,9 @@ function StoreWindow(props) {
 //#endregion
 //#region src/client/styles.ts
 /** Inline stylesheet: injected once with a data-plugin tag; hot reloads replace its content in place. */
-const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-degraded{font-size:11px;color:#b45309;border:1px solid rgba(217,119,6,.5);border-radius:999px;padding:1px 7px;background:rgba(217,119,6,.08);white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:visible}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);min-width:112px;justify-content:center}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-badge-scanned{background:rgba(34,197,94,.12);color:#15803d;font-weight:600}.pcm-badge-scanfail{background:rgba(220,38,38,.1);color:#b91c1c}.pcm-badge-dormant{background:rgba(217,119,6,.12);color:#b45309}.pcm-pill-shield{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-scanned{border:1px solid rgba(21,128,61,.65) !important;color:#15803d !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-scanned:hover{border-color:#15803d !important;background:rgba(21,128,61,.08) !important}.pcm-toolbar .pcm-pill-scanned-on{border-color:#15803d !important;color:#fff !important;background:#15803d !important}.pcm-toolbar .pcm-pill-scanned-on:hover{background:#166534 !important;border-color:#166534 !important}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{display:none}.pcm-search-row{display:flex;align-items:stretch;gap:10px;padding:2px 0}.pcm-search-wrap-full{margin-left:0;max-width:none;flex:1 1 auto}.pcm-search-row .pcm-search-wrap{max-width:none !important;margin-left:0 !important;flex:1 1 auto !important}.pcm-search-big{height:34px;font-size:14px}.pcm-search-row .pcm-search-big input{font-size:14px}.pcm-search-row .pcm-search-big{height:36px !important}.pcm-search-row .pcm-smart-search-btn{height:auto !important;flex:0 0 240px !important;padding:0 16px !important;font-size:14px !important;justify-content:center}.pcm-sort-wrap{margin-left:auto;display:inline-flex;align-items:center}.pcm-search-wrap{margin-left:auto;flex:1 1 160px;max-width:300px;display:flex;align-items:center;position:relative}.pcm-search-clear{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:none;background:#040506;color:#fff;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}.pcm-search-clear:hover{background:#1a1d22}.pcm-search-wrap .pcm-search input{padding-right:26px}.pcm-toolbar .pcm-search{width:100%;height:26px;box-sizing:border-box}.pcm-search input,.pcm-search > div,.pcm-search > span,.pcm-search [class]{border:none !important;box-shadow:none !important}.pcm-search{border:1px solid rgba(4,5,6,.7) !important;border-radius:8px !important;box-shadow:none !important;background:var(--dsw-alias-bg-base,#fff) !important}.pcm-search input{color:rgba(15,17,21,.92) !important;font-size:12px !important;font-weight:500;height:100%}.pcm-search input::placeholder{color:rgba(15,17,21,.5) !important}.pcm-search svg{color:#040506 !important;opacity:.85}.pcm-search{flex:1 1 auto;min-width:0}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn{height:24px !important;padding:0 8px !important;line-height:24px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:transparent !important;color:#dc2626 !important;border:1px solid rgba(220,38,38,.55) !important;border-radius:8px !important;height:22px;padding:0 8px;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}.pcm-uninstall-btn:hover{border-color:#dc2626 !important;background:rgba(220,38,38,.08) !important;color:#dc2626 !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-verified{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-verified::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-verified:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-verified-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-verified-on::before{color:#fff}.pcm-toolbar .pcm-pill-verified-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'';width:11px;height:11px;margin-right:4px;background:currentColor;-webkit-mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat;mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-wrap{margin-left:8px;margin-right:8px;display:inline-flex;align-items:center}.pcm-toolbar .pcm-lang-btn{margin-left:auto;margin-right:8px}.pcm-lang-select-wrap{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(4,5,6,.7);color:#040506;background:transparent;border-radius:0;font-weight:600;padding:3px 7px;font-size:12px;line-height:1}.pcm-lang-select{border:none;background:transparent;color:inherit;font-weight:600;font-size:12px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:10px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 5px) 50%;background-size:3px 3px,3px 3px;background-repeat:no-repeat}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-picks{border:none;background:transparent;padding:0;margin:0 0 10px;display:flex;flex-direction:column;gap:10px}.pcm-picks-head{display:flex;align-items:center;gap:6px}.pcm-picks-flag{flex:none}.pcm-picks-title{font-size:13.5px;font-weight:700;color:var(--dsw-alias-label-primary,#292d36)}.pcm-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.pcm-pick{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid rgba(128,128,128,.22);background:var(--dsw-alias-bg-base,#fff);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;transition:border-color .12s,box-shadow .12s}.pcm-pick:hover{border-color:rgba(77,107,254,.65);box-shadow:0 2px 8px rgba(77,107,254,.14)}.pcm-pick-ribbon{position:absolute;top:8px;right:8px;color:rgba(180,83,9,.5)}.pcm-pick-name{font-weight:600;font-size:12.5px;color:var(--dsw-alias-label-primary,#292d36);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:calc(100% - 18px)}.pcm-pick-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.pcm-pick-meta{display:flex;align-items:center;gap:6px;margin-top:2px}.pcm-pick-star{color:#b45309;font-weight:700;font-size:11px;background:rgba(245,158,11,.12);border-radius:999px;padding:0 7px;line-height:17px}.pcm-pick-cat{opacity:.68;font-size:10.5px;border:1px solid rgba(128,128,128,.3);border-radius:999px;padding:0 6px;line-height:15px}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none;align-items:center}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap;align-items:center}.pcm-safety-controls{display:inline-flex;align-items:center;gap:8px;margin-left:auto}.pcm-safety{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;padding:1px 8px;border-radius:999px;line-height:16px;white-space:nowrap;font-weight:500}.pcm-safety-verified{color:#7c3aed;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.55)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-curated{color:#8f6a17;background:rgba(163,126,32,.06);border:1px solid rgba(163,126,32,.45)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-safety-scanned{color:#15803d;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.55)}.pcm-pill-person{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-verified::before{content:none !important}.pcm-detail-modal{width:min(980px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:none;overflow:visible}.pcm-detail-readme code{word-break:break-all}.pcm-detail-readme pre{overflow-x:auto;max-width:100%}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-channels{display:flex;flex-direction:column;gap:3px;font-size:11px;opacity:.75;margin-top:6px}.pcm-detail-added{font-size:11px;opacity:.65;margin-top:6px}.pcm-detail-related{display:flex;align-items:center;gap:8px;width:100%;border:1px solid rgba(128,128,128,.25);border-radius:8px;background:transparent;padding:5px 8px;margin-bottom:6px;cursor:pointer;text-align:left}.pcm-detail-related:hover{border-color:#4d6bfe}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}.pcm-store-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center}.pcm-store-mask{position:absolute;inset:0;background:rgba(15,17,21,.45);backdrop-filter:blur(6px)}.pcm-store-window{position:relative;width:min(1100px,96vw);height:min(860px,94vh);background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.25);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}.pcm-store-window .pcm-root{flex:1 1 auto;height:auto !important;max-height:none;overflow:hidden;display:flex}.pcm-store-window .pcm-sticky-top{position:relative}.pcm-store-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 16px 0}.pcm-store-head-title{font-size:13.5px;font-weight:700;flex:1 1 auto}.pcm-store-close{flex:none}.pcm-store-body{flex:1 1 auto;min-height:0;padding:0 16px 14px;display:flex;flex-direction:column}.pcm-store-body .pcm-root{height:100% !important;flex:1 1 auto;min-height:0}.pcm-results-body{padding-top:8px}.pcm-results-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.pcm-results-sec-title{font-size:13px;font-weight:700;color:#040506;padding:2px 2px 0}.pcm-toast{position:absolute;top:8px;right:8px;background:rgba(15,17,21,.92);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;z-index:5;max-width:70%}.pcm-sidebar-btn{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;border:none;background:transparent;border-radius:8px;padding:0 10px 0 8px;cursor:pointer;font-size:14px;font-weight:400;color:var(--dsw-alias-label-primary);width:calc(100% + 14px);margin-left:-2px;height:42px;justify-content:flex-start}.pcm-sidebar-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.pcm-sidebar-icon{width:16px;height:16px;flex:none}.pcm-sidebar-rail{border-radius:50%;justify-content:center;gap:0;width:36px;height:36px;margin:8px 0 10px;padding:0}.pcm-sidebar-rail .pcm-sidebar-label{display:none}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}a[href*='/dsh-store/open-results']{display:inline-flex !important;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#4d6bfe,#3a51c4) !important;color:#fff !important;font-size:15px !important;font-weight:700 !important;text-decoration:none !important;padding:11px 26px !important;border-radius:12px !important;box-shadow:0 4px 16px rgba(77,107,254,.4) !important;margin:10px 0 6px !important;line-height:1.25 !important;border:none !important;width:fit-content !important}a[href*='/dsh-store/open-results']::after{content:'›';font-size:18px;line-height:1;margin-left:4px}a[href*='/dsh-store/open-results']:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe) !important;box-shadow:0 6px 20px rgba(77,107,254,.55) !important}.pcm-tasks-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-tasks-btn:hover{background:#eef1ff}.pcm-tasks-count{background:#4d6bfe;color:#fff;border-radius:999px;font-size:10.5px;padding:0 6px;line-height:15px;font-weight:700}.pcm-tasks-pop{position:fixed;z-index:650;width:380px;max-width:92vw;background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.3);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden}.pcm-tasks-head{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-tasks-head-title{font-size:13px;font-weight:700;flex:1 1 auto}.pcm-tasks-body{max-height:320px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.pcm-tasks-empty{padding:14px 6px;text-align:center;font-size:12.5px;opacity:.85}.pcm-tasks-empty-hint{font-size:11.5px;opacity:.6;margin-top:4px}.pcm-task-row{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-radius:8px;background:rgba(128,128,128,.06)}.pcm-task-icon{flex:none;width:16px;height:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}.pcm-task-ok{color:#16a34a}.pcm-task-bad{color:#dc2626}.pcm-task-main{flex:1 1 auto;min-width:0}.pcm-task-top{display:flex;gap:6px;align-items:baseline;min-width:0}.pcm-task-verb{font-size:11px;font-weight:700;color:#4d6bfe;flex:none}.pcm-task-name{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-task-status{font-size:11.5px;opacity:.75;margin-top:2px;word-break:break-all}.pcm-task-x{flex:none;border:none;background:transparent;cursor:pointer;color:inherit;opacity:.45;font-size:13px;padding:2px;border-radius:4px}.pcm-task-cancel{flex:none;border:1px solid rgba(220,38,38,.55);background:transparent;color:#dc2626;cursor:pointer;font-size:11px;padding:1px 8px;border-radius:6px;line-height:16px}.pcm-task-cancel:hover{background:rgba(220,38,38,.08);border-color:#dc2626}.pcm-task-x:hover{opacity:1;background:rgba(128,128,128,.15)}.pcm-tasks-bar{height:5px;border-radius:999px;background:rgba(128,128,128,.2);overflow:hidden;margin:2px 0 4px}.pcm-tasks-bar-fill{height:100%;background:#4d6bfe;border-radius:999px;transition:width .3s}.pcm-tasks-agg{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:4px 6px 0}.pcm-settings-window{width:min(560px,94vw);height:min(640px,92vh)}.pcm-settings-body{display:flex;flex-direction:column;gap:14px;padding:6px 2px 14px}.pcm-settings-open-store{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;background:linear-gradient(135deg,#4d6bfe,#3a51c4);color:#fff;border:none;border-radius:14px;padding:16px 20px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(77,107,254,.4)}.pcm-settings-open-store:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe)}.pcm-settings-body input::placeholder{color:rgba(15,17,21,.55) !important}.pcm-settings-open-store-hint{font-size:12px;font-weight:500;opacity:.85}.pcm-settings-sec{display:flex;flex-direction:column;gap:8px}.pcm-settings-sec-title{font-size:13px;font-weight:700}.pcm-settings-sec-desc{font-size:12px;opacity:.78;line-height:1.55}.pcm-settings-warn{font-size:12px;line-height:1.55;color:#9a3412;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.4);border-radius:8px;padding:8px 10px}.pcm-settings-note{font-size:11.5px;opacity:.65;line-height:1.5}.pcm-auto-row{display:flex;align-items:center;gap:10px}.pcm-auto-label{flex:1 1 auto;font-size:13.5px;font-weight:700}.pcm-auto-switch{position:relative;flex:none;width:36px;height:20px}.pcm-auto-switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}.pcm-auto-switch .pcm-auto-track{position:relative;display:block;width:36px;height:20px;border-radius:999px;background:rgba(128,128,128,.35);transition:background .2s}.pcm-auto-switch .pcm-auto-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}.pcm-auto-switch input:checked + .pcm-auto-track{background:#4d6bfe}.pcm-auto-switch input:checked + .pcm-auto-track::after{left:18px}.pcm-smart-install-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-smart-install-btn:hover{background:#1a1d22}.pcm-smart-install-btn:disabled{opacity:.75;cursor:default}.pcm-smart-install-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}.pcm-smart-uninstall-btn{background:#dc2626}.pcm-smart-uninstall-btn:hover{background:#b91c1c}.pcm-uninstall-plain-btn{color:#dc2626 !important;border-color:#dc2626 !important}.pcm-uninstall-plain-btn:hover{background:rgba(220,38,38,.08)}.pcm-install-plain-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;color:#040506;border:1px solid #040506;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-install-plain-btn:hover{background:#f2f3f5}.pcm-install-plain-btn:disabled{opacity:.7;cursor:default}.pcm-store-head-settings{border-radius:50%;flex:none}.pcm-store-head-settings svg{color:#040506}.pcm-lang-flag{display:inline-flex;align-items:center;color:inherit}.pcm-lang-flag svg{color:currentColor}.pcm-results-window{width:min(920px,92vw);height:min(660px,88vh)}div[role='presentation']:has([class*='pcm-']){z-index:1300 !important}.pcm-switch-inline .pcm-state-chip{margin-left:4px;flex:none}.pcm-card{border:1px solid #040506}.pcm-card:hover{border-color:#4f6ef7}.pcm-brand-card .pcm-version{color:#fff;border:1px solid #fff;background:rgba(255,255,255,.08)}.pcm-store-overlay{z-index:1000}.pcm-tasks-pop{z-index:1100}.pcm-smart-search-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:8px;padding:0 12px;height:26px;font-size:12px;font-weight:600;cursor:pointer;line-height:1;flex:none}.pcm-smart-search-btn:hover{background:#1a1d22}.pcm-smart-search-btn:disabled{opacity:.75;cursor:default}.pcm-smart-star{color:#fff;font-size:12px;line-height:1}.pcm-smart-search-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}@keyframes pcm-shine{0%{left:-40%}12%{left:110%}100%{left:110%}}.pcm-stats2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:rgba(15,17,21,.72);font-weight:500;margin:1px 0}.pcm-stats2 .pcm-dl-30{color:#1d4ed8}.pcm-stats2 .pcm-dl-total{color:#1d4ed8}.pcm-seg{border:1px solid #040506;border-radius:8px;overflow:hidden}.pcm-seg button{border-right:1px solid rgba(4,5,6,.22)}.pcm-seg button:last-child{border-right:none}.pcm-seg button.on{background:#040506;color:#fff}.pcm-store-head-actions .pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;border-radius:14px !important;background:transparent !important;color:#040506 !important;height:28px;font-size:12px;box-sizing:border-box}.pcm-store-head-actions .pcm-lang-btn:hover{background:rgba(4,5,6,.06) !important;color:#040506 !important}.pcm-sort-wrap{display:inline-flex;align-items:center}.pcm-sort-wrap .pcm-sort-btn{border:1px solid rgba(4,5,6,.7);border-radius:8px;color:#040506;background:transparent;font-weight:600}.pcm-pager{position:relative;z-index:3}.pcm-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-left:auto;flex-wrap:wrap}.pcm-header-actions .pcm-tasks-btn{background:#040506;border:1px solid #fff;color:#fff;box-sizing:border-box}.pcm-header-actions .pcm-tasks-btn:hover{background:#1a1d22;border-color:#fff}.pcm-header-actions .pcm-tasks-count{background:#4d6bfe}.pcm-header-actions .pcm-self-update-warn{color:#fbbf24}.pcm-store-head-actions{flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}.pcm-store-head-actions .pcm-header-row2{gap:8px;flex-wrap:nowrap}.pcm-store-head-actions .pcm-subtitle{color:inherit;opacity:.75;font-size:11.5px;white-space:nowrap}.pcm-store-head-actions .pcm-source{color:#040506;border-color:rgba(4,5,6,.45);opacity:.8;font-size:10.5px;white-space:nowrap}.pcm-store-head-actions .pcm-brand-btn{border-color:rgba(4,5,6,.7);color:#040506;background:transparent;font-size:12px}.pcm-store-head-actions .pcm-brand-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-downloads{color:#1d4ed8;background:rgba(77,107,254,.1);border-radius:999px;padding:0 6px;font-size:10.5px;font-weight:700;line-height:16px;white-space:nowrap}.pcm-installed-panel{background:rgba(4,5,6,.045);border:none;border-radius:10px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:7px}.pcm-installed-tag{color:rgba(4,5,6,.62) !important;border-color:rgba(4,5,6,.32) !important;opacity:1 !important;font-weight:500}.pcm-switch input:checked + .pcm-switch-track{background:#16a34a}.pcm-dl-none{color:rgba(15,17,21,.4)}.pcm-card button{font-size:13px}.pcm-source-btn{border-color:#040506 !important;color:#040506 !important}.pcm-installed-switches{display:flex;flex-direction:column;gap:6px}.pcm-installed-actions .pcm-uninstall-btn{background:#dc2626 !important;border-color:#dc2626 !important;color:#fff !important;height:28px !important;border-radius:14px !important;padding:0 14px !important;display:inline-flex;align-items:center;justify-content:center}.pcm-installed-actions .pcm-uninstall-btn:hover{background:#b91c1c !important;border-color:#b91c1c !important;color:#fff !important}.pcm-installed-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-vsep{width:1px;height:16px;background:rgba(4,5,6,.18);flex:none}.pcm-installed-actions .pcm-skip-row,.pcm-installed-actions .pcm-switch-inline{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(15,17,21,.85);cursor:pointer;height:28px}.pcm-installed-actions .pcm-skip-row input,.pcm-installed-actions .pcm-switch-inline input{margin:0}.pcm-switch-label{font-size:11.5px;font-weight:600;color:rgba(15,17,21,.85)}.pcm-switch-state{font-size:11px;opacity:.75;min-width:56px}.pcm-card-version{font-size:10.5px;color:rgba(15,17,21,.62);background:rgba(4,5,6,.06);border-radius:999px;padding:0 6px;line-height:15px;font-weight:500;white-space:nowrap}.pcm-installed-update{display:flex;align-items:center;justify-content:space-between;gap:8px}.pcm-installed-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-av{border:1px solid #040506;box-sizing:border-box}.pcm-downloads-total{color:#0f766e;background:rgba(20,184,166,.12)}.pcm-card-mid{display:flex;gap:8px;align-items:stretch}.pcm-card-left{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-width:0}.pcm-radar-wrap{flex:none;align-self:center;display:flex;align-items:center;justify-content:center}.pcm-radar{position:relative}.pcm-radar-grid{fill:none;stroke:#dbe4f0;stroke-width:.8}.pcm-radar-data{fill:rgba(77,107,254,.22);stroke:#4d6bfe;stroke-width:1.3;stroke-linejoin:round}.pcm-radar-dot{fill:#4d6bfe}.pcm-radar-label{font-size:8.5px;font-weight:500;fill:#6b7785}.pcm-radar-total{font-size:18px;font-weight:700;fill:#1d4ed8}.pcm-radar-total-label{font-size:8.5px;fill:#6b7785}.pcm-safety-skill{color:#040506;background:transparent;border:1px solid rgba(4,5,6,.6)}.pcm-toolbar .pcm-pill-skill{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-skill:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-skill-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-skill-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-pill-skill-icon{flex:none;margin-right:2px}.pcm-score-card{display:flex;gap:14px;border:1px solid rgba(128,128,128,.22);border-radius:12px;padding:10px 12px;background:rgba(77,107,254,.03);align-items:center}.pcm-score-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}.pcm-score-head{display:flex;align-items:center;gap:8px}.pcm-score-title{font-weight:700;font-size:13px}.pcm-score-conf{font-size:10.5px;opacity:.6;border:1px solid rgba(128,128,128,.35);border-radius:999px;padding:0 7px;line-height:16px}.pcm-score-why{font-size:11.5px;line-height:1.45;color:rgba(15,17,21,.78)}.pcm-score-why-label{font-weight:700}.pcm-score-bars{display:flex;flex-direction:column;gap:3px}.pcm-score-bar{display:flex;align-items:center;gap:8px}.pcm-score-dim{width:34px;font-size:10.5px;opacity:.65;flex:none}.pcm-score-track{flex:1 1 auto;height:5px;border-radius:3px;background:rgba(128,128,128,.16);overflow:hidden}.pcm-score-fill{height:100%;border-radius:3px;background:#4d6bfe}.pcm-score-val{width:26px;text-align:right;font-size:10.5px;color:#1d4ed8;font-weight:700;flex:none}.pcm-score-radar{flex:none}.pcm-readme-cmds{display:flex;flex-direction:column;gap:5px;border:1px dashed rgba(4,5,6,.25);border-radius:8px;padding:7px 8px}.pcm-readme-cmds-title{font-size:10.5px;font-weight:700;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-readme-cmds-src{font-weight:400;opacity:.75}.pcm-readme-cmd{background:rgba(4,5,6,.05);font-size:11px}.pcm-readme-cmds-note{font-size:10.5px;opacity:.55}.pcm-radar-val{fill:#1d4ed8;font-weight:700}.pcm-tags-mini{display:flex;gap:4px;flex-wrap:wrap}.pcm-tag-mini{font-size:9.5px;color:#4d6bfe;background:rgba(77,107,254,.09);border:1px solid rgba(77,107,254,.35);border-radius:999px;padding:0 7px;line-height:15px;white-space:nowrap}.pcm-detail-tag{color:#4d6bfe;border-color:rgba(77,107,254,.4)}.pcm-pick-score{font-size:10px;color:#1d4ed8;font-weight:700;border:1px solid rgba(77,107,254,.4);border-radius:999px;padding:0 7px;line-height:16px}.pcm-pick-reason{font-size:10px;color:rgba(15,17,21,.72);line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}/* ===== v1.7.54 详情页重设计（image-prompt ui-screenshot-system 出稿）===== *//* 安装区紫色高亮：渐变底 + 3px 紫左边线 + 圆角，整块重点行动区 */.pcm-detail-sec.pcm-install-sec { background: linear-gradient(135deg, rgba(124,92,255,.10) 0%, rgba(77,107,254,.07) 55%, rgba(124,92,255,.05) 100%); border: 2px solid #7c5cff; border-radius: 12px; padding: 14px 16px 12px; margin: 14px 0 18px; }.pcm-install-sec-title { color: #5b3df0; font-weight: 700; letter-spacing: .2px; }.pcm-install-cmdrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }.pcm-install-cmdrow .pcm-detail-cmdrow { flex: 1 1 auto; min-width: 240px; margin: 0; }.pcm-install-cta { white-space: nowrap; }/* 同类相关：两行式迷你卡（第 1 行标题、第 2 行 ★star · 开发者） */.pcm-related-list { display: flex; flex-direction: column; gap: 8px; }.pcm-detail-related { display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left; border: 1px solid rgba(4,5,6,.08); border-radius: 10px; padding: 8px 10px; background: #fff; cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease; }.pcm-detail-related:hover { border-color: #4d6bfe; box-shadow: 0 2px 8px rgba(77,107,254,.10); transform: translateY(-1px); }.pcm-related-title { font-weight: 600; font-size: 13px; color: #040506; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.pcm-related-sub { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(4,5,6,.55); }.pcm-related-stars { color: #d99a1f; font-weight: 600; }.pcm-related-dev { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }/* 元数据 star 单元格与首页卡片同款（颜色/字重对齐卡片 ★ 样式） */.pcm-meta-star { color: #b45309; font-weight: 700; }/* 回到顶部 FAB（Material FAB 模式：滚过 400px 浮现） */.pcm-backtop { position: absolute; right: 16px; bottom: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; background: #040506; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 6px 20px rgba(4,5,6,.28); cursor: pointer; opacity: 0; pointer-events: none; z-index: 30; }.pcm-backtop:hover { background: #4d6bfe; }.pcm-backtop-show { opacity: 1; pointer-events: auto; }.pcm-backtop-show { opacity: 1; transform: translateY(0); pointer-events: auto; }/* ===== v1.7.55 冷启动问卷（QuizView）===== */.pcm-quiz { width: min(560px, 92vw); max-height: min(680px, 88vh); display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: #fff; }.pcm-quiz-head { background: linear-gradient(135deg, #040506 0%, #1a2350 60%, #3d2c8f 100%); color: #fff; padding: 22px 24px 18px; }.pcm-quiz-badge { display: inline-block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #c7b9ff; background: rgba(124,92,255,.18); border: 1px solid rgba(124,92,255,.4); border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }.pcm-quiz-title { font-size: 19px; font-weight: 700; }.pcm-quiz-sub { margin-top: 6px; font-size: 13px; color: rgba(255,255,255,.72); }.pcm-quiz-body { padding: 18px 24px; overflow-y: auto; flex: 1 1 auto; }.pcm-quiz-count { font-size: 12px; color: rgba(4,5,6,.55); margin-bottom: 12px; }.pcm-quiz-count b { color: #4d6bfe; }.pcm-quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }.pcm-quiz-chip { position: relative; display: flex; align-items: center; gap: 8px; padding: 11px 12px; border-radius: 12px; border: 1.5px solid rgba(4,5,6,.10); background: #fff; cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease, transform .1s ease; }.pcm-quiz-chip:hover { border-color: #4d6bfe; }.pcm-quiz-chip:active { transform: scale(.98); }.pcm-quiz-chip-on { border-color: #4d6bfe; background: rgba(77,107,254,.08); }.pcm-quiz-emoji { font-size: 16px; }.pcm-quiz-label { font-size: 13px; font-weight: 500; color: #040506; }.pcm-quiz-check { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: #4d6bfe; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(4,5,6,.25); }.pcm-quiz-foot { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-top: 1px solid rgba(4,5,6,.06); background: #fafafa; }.pcm-quiz-go { min-width: 120px; }/* v1.7.54 视觉复核微调 */.pcm-related-dev::before { content: '·'; margin-right: 8px; color: rgba(4,5,6,.35); }.pcm-score-card { padding: 14px 16px; }.pcm-score-head { margin-bottom: 8px; }.pcm-detail-channels { line-height: 1.8; opacity: .85; }.pcm-detail-head { padding-bottom: 6px; }/* v1.7.55 详情页按钮与首页卡片完全同款（13px） */.pcm-detail-actions button { font-size: 13px; }/* v1.7.55 编辑精选/为你推荐左右分栏 */.pcm-featured { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; margin-bottom: 12px; }.pcm-editor-picks { background: linear-gradient(180deg, rgba(217, 154, 31, .12) 0%, rgba(217, 154, 31, .04) 100%); border: 1px solid rgba(217, 154, 31, .30); border-radius: 14px; padding: 12px 14px; margin: 0; }.pcm-editor-picks .pcm-picks-title { color: #92530a; }.pcm-editor-picks .pcm-picks-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }.pcm-picks-sub { font-size: 10.5px; color: rgba(4, 5, 6, .5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.pcm-recommend { background: linear-gradient(180deg, rgba(77, 107, 254, .07) 0%, rgba(77, 107, 254, .02) 100%); border: 1px solid rgba(77, 107, 254, .28); border-radius: 14px; padding: 12px 14px; margin: 0; }.pcm-rec-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: stretch; }.pcm-rec-daily { font-size: 10.5px; color: #4d6bfe; background: rgba(77, 107, 254, .10); border: 1px solid rgba(77, 107, 254, .35); border-radius: 999px; padding: 1px 7px; line-height: 16px; font-weight: 600; }.pcm-pick-rec { width: 100%; }@media (max-width: 900px) { .pcm-featured { grid-template-columns: 1fr; } .pcm-editor-picks .pcm-picks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }/* v1.7.57 「为你推荐」画像说明样式=「精选收录」副标题同款（小灰字、无药丸底） */.pcm-rec-chip { font-size: 10.5px; color: rgba(4, 5, 6, .5); background: none; border: none; padding: 0; font-weight: 400; line-height: 1.2; }/* v1.7.57 更新按钮与安装按钮同款（深底 14px 圆角、无描边差异） */.pcm-update-btn { background: rgb(15, 17, 21) !important; color: #fff !important; border-radius: 14px !important; border: 1px solid transparent !important; }.pcm-update-btn:hover { background: rgb(26, 29, 34) !important; color: #fff !important; }/* v1.7.57 同类相关：简介行左对齐两行截断 */.pcm-related-desc { font-size: 11px; color: rgba(4, 5, 6, .62); text-align: left; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; align-self: stretch; }.pcm-detail-related { align-items: flex-start; }/* v1.7.58 卸载按钮全局统一为卡片同款（红底白字 28px/14px 圆角/13px，详情页不再是小号描边版） */.pcm-uninstall-btn { background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important; height: 28px !important; border-radius: 14px !important; padding: 0 14px !important; font-size: 13px !important; }.pcm-uninstall-btn:hover { background: #b91c1c !important; border-color: #b91c1c !important; color: #fff !important; }/* v1.7.58 编辑精选「每周更新」徽标（与每日更新同款、琥珀色） */.pcm-picks-weekly { font-size: 10.5px; color: #b45309; background: rgba(217, 154, 31, .12); border: 1px solid rgba(217, 154, 31, .4); border-radius: 999px; padding: 1px 7px; line-height: 16px; font-weight: 600; }";
+const CSS = ".pcm-root{display:flex;flex-direction:column;gap:12px;padding:4px 0 0;box-sizing:border-box}.pcm-sticky-top{position:sticky;top:0;z-index:5;background:var(--dsw-alias-bg-base,#fff);padding:4px 2px 8px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-brand-card{background:#040506;border-radius:16px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:10px;}.pcm-brand-card .pcm-title{color:#f5f7ff;font-size:16px}.pcm-brand-card .pcm-subtitle{color:rgba(245,247,255,.85);font-size:12.5px;font-weight:500}.pcm-brand-card .pcm-source{color:rgba(245,247,255,.92);border-color:rgba(245,247,255,.45);opacity:1;font-weight:500}.pcm-brand-card .pcm-progress{color:rgba(245,247,255,.88);font-weight:500}.pcm-brand-card .pcm-divider{background:rgba(245,247,255,.35)}.pcm-brand-card .pcm-brand-btn{border-color:rgba(245,247,255,.55);color:#ffffff;background:rgba(245,247,255,.1);font-weight:500}.pcm-brand-card .pcm-brand-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-publish-btn{border-color:#6d87ff;color:#eef2ff;background:rgba(77,107,254,.25);font-weight:600}.pcm-publish-btn:hover{background:rgba(77,107,254,.32);color:#fff}.pcm-version{font-size:11px;color:#8ea2d6;background:rgba(77,107,254,.18);border:1px solid rgba(77,107,254,.45);border-radius:999px;padding:1px 8px;line-height:16px;font-weight:500;letter-spacing:.2px}.pcm-token-badge{font-size:10.5px;color:#6ee7a0;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);border-radius:999px;padding:1px 8px;line-height:16px}.pcm-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-header-row2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-divider{width:1px;height:16px;background:rgba(128,128,128,.35);flex:none}.pcm-title{font-size:15px;font-weight:600;margin:0;flex:1 1 auto}.pcm-subtitle{font-size:12px;opacity:.7}.pcm-source{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid currentColor;opacity:.75;white-space:nowrap}.pcm-degraded{font-size:11px;color:#b45309;border:1px solid rgba(217,119,6,.5);border-radius:999px;padding:1px 7px;background:rgba(217,119,6,.08);white-space:nowrap}.pcm-progress{font-size:12px;opacity:.75}.pcm-rate{font-size:12px;color:#d97706}.pcm-chips{display:flex;flex-wrap:wrap;gap:6px;position:relative}.pcm-chips>button{flex:none}.pcm-chips-clamped{overflow:visible}.pcm-chip-more-btn{position:absolute;right:0;bottom:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);min-width:112px;justify-content:center}.pcm-card-local{border:1.5px dashed rgba(77,107,254,.55);background:rgba(77,107,254,.05)}.pcm-badge-scanned{background:rgba(34,197,94,.12);color:#15803d;font-weight:600}.pcm-badge-scanfail{background:rgba(220,38,38,.1);color:#b91c1c}.pcm-badge-dormant{background:rgba(217,119,6,.12);color:#b45309}.pcm-pill-shield{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-scanned{border:1px solid rgba(21,128,61,.65) !important;color:#15803d !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-scanned:hover{border-color:#15803d !important;background:rgba(21,128,61,.08) !important}.pcm-toolbar .pcm-pill-scanned-on{border-color:#15803d !important;color:#fff !important;background:#15803d !important}.pcm-toolbar .pcm-pill-scanned-on:hover{background:#166534 !important;border-color:#166534 !important}.pcm-card-local:hover{border-color:#4d6bfe}.pcm-badge-local{border:1px dashed rgba(77,107,254,.8);color:#4d6bfe;background:transparent}.pcm-count{font-size:10px;opacity:.68;margin-left:5px;background:rgba(128,128,128,.16);border-radius:999px;padding:0 5px;line-height:15px;display:inline-block;min-width:34px;text-align:center;box-sizing:border-box}.pcm-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-toolbar-search{display:none}.pcm-search-row{display:flex;align-items:stretch;gap:10px;padding:2px 0}.pcm-search-wrap-full{margin-left:0;max-width:none;flex:1 1 auto}.pcm-search-row .pcm-search-wrap{max-width:none !important;margin-left:0 !important;flex:1 1 auto !important}.pcm-search-big{height:34px;font-size:14px}.pcm-search-row .pcm-search-big input{font-size:14px}.pcm-search-row .pcm-search-big{height:36px !important}.pcm-search-row .pcm-smart-search-btn{height:auto !important;flex:0 0 240px !important;padding:0 16px !important;font-size:14px !important;justify-content:center}.pcm-sort-wrap{margin-left:auto;display:inline-flex;align-items:center}.pcm-search-wrap{margin-left:auto;flex:1 1 160px;max-width:300px;display:flex;align-items:center;position:relative}.pcm-search-clear{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:none;background:#040506;color:#fff;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;z-index:2}.pcm-search-clear:hover{background:#1a1d22}.pcm-search-wrap .pcm-search input{padding-right:26px}.pcm-toolbar .pcm-search{width:100%;height:26px;box-sizing:border-box}.pcm-search input,.pcm-search > div,.pcm-search > span,.pcm-search [class]{border:none !important;box-shadow:none !important}.pcm-search{border:1px solid rgba(4,5,6,.7) !important;border-radius:8px !important;box-shadow:none !important;background:var(--dsw-alias-bg-base,#fff) !important}.pcm-search input{color:rgba(15,17,21,.92) !important;font-size:12px !important;font-weight:500;height:100%}.pcm-search input::placeholder{color:rgba(15,17,21,.5) !important}.pcm-search svg{color:#040506 !important;opacity:.85}.pcm-search{flex:1 1 auto;min-width:0}.pcm-sort-btn{border:1px solid rgba(128,128,128,.5);border-radius:8px;background:transparent;font-size:12px}.pcm-sort-btn{height:24px !important;padding:0 8px !important;line-height:24px}.pcm-sort-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-sort-btn::after{content:'⇅';opacity:.45;margin-left:4px}.pcm-uninstall-btn{background:transparent !important;color:#dc2626 !important;border:1px solid rgba(220,38,38,.55) !important;border-radius:8px !important;height:22px;padding:0 8px;font-size:11px;line-height:1;display:inline-flex;align-items:center;justify-content:center}.pcm-uninstall-btn:hover{border-color:#dc2626 !important;background:rgba(220,38,38,.08) !important;color:#dc2626 !important}.pcm-toolbar .pcm-pill-curated{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-curated::before{content:'⚑';margin-right:4px;font-size:12px;opacity:.9}.pcm-toolbar .pcm-pill-curated:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-curated-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-curated-on::before{color:#fff}.pcm-toolbar .pcm-pill-curated-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-verified{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-verified::before{content:'✓';margin-right:4px;font-size:11px;font-weight:700}.pcm-toolbar .pcm-pill-verified:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-verified-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-verified-on::before{color:#fff}.pcm-toolbar .pcm-pill-verified-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-installed{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-installed::before{content:'';width:11px;height:11px;margin-right:4px;background:currentColor;-webkit-mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat;mask:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 d=%27M8 2v7M5 6l3 3 3-3M3 12.5h10%27/%3E%3C/svg%3E') center/contain no-repeat}.pcm-toolbar .pcm-pill-installed:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-installed-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-installed-on::before{color:#fff}.pcm-toolbar .pcm-pill-installed-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-toolbar .pcm-pill-fav{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-fav::before{content:'★';margin-right:4px;font-size:11px}.pcm-toolbar .pcm-pill-fav:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-fav-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-fav-on::before{color:#fff}.pcm-toolbar .pcm-pill-fav-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-fav-star{border:none;background:transparent;padding:2px;margin:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:0;flex:none;border-radius:4px}.pcm-fav-star:hover{opacity:.8}.pcm-fav-on{opacity:1}.pcm-sort-slot{position:absolute;top:0;right:0;z-index:2;background:var(--dsw-alias-bg-base,#fff);padding-left:8px;margin-right:8px;display:flex;align-items:center;gap:6px}.pcm-lang-wrap{margin-left:8px;margin-right:8px;display:inline-flex;align-items:center}.pcm-toolbar .pcm-lang-btn{margin-left:auto;margin-right:8px}.pcm-lang-select-wrap{display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(4,5,6,.7);color:#040506;background:transparent;border-radius:0;font-weight:600;padding:3px 7px;font-size:12px;line-height:1}.pcm-lang-select{border:none;background:transparent;color:inherit;font-weight:600;font-size:12px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:10px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 8px) 50%,calc(100% - 5px) 50%;background-size:3px 3px,3px 3px;background-repeat:no-repeat}.pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:0 !important;font-weight:600;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;font-size:12px;cursor:pointer;line-height:1}.pcm-lang-btn:hover{border-color:#040506 !important;background:#040506 !important;color:#fff !important}.pcm-lang-flag{font-size:12px;line-height:1}.pcm-lang-label{font-size:12px;line-height:1}.pcm-lang-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;margin-top:1px;flex:none}.pcm-lang-btn-open .pcm-lang-caret{border-top:none;border-bottom:5px solid currentColor;margin-top:-1px}.pcm-seg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid rgba(128,128,128,.3)}.pcm-seg button{border:none;background:transparent;padding:4px 10px;font-size:12px;cursor:pointer;color:inherit}.pcm-seg button.on{background:#4f6ef7;color:#fff}.pcm-picks{border:none;background:transparent;padding:0;margin:0 0 10px;display:flex;flex-direction:column;gap:10px}.pcm-picks-head{display:flex;align-items:center;gap:6px}.pcm-picks-flag{flex:none}.pcm-picks-title{font-size:13.5px;font-weight:700;color:var(--dsw-alias-label-primary,#292d36)}.pcm-picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.pcm-pick{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid rgba(128,128,128,.22);background:var(--dsw-alias-bg-base,#fff);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;transition:border-color .12s,box-shadow .12s}.pcm-pick:hover{border-color:rgba(77,107,254,.65);box-shadow:0 2px 8px rgba(77,107,254,.14)}.pcm-pick-ribbon{position:absolute;top:8px;right:8px;color:rgba(180,83,9,.5)}.pcm-pick-name{font-weight:600;font-size:12.5px;color:var(--dsw-alias-label-primary,#292d36);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:calc(100% - 18px)}.pcm-pick-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.pcm-pick-meta{display:flex;align-items:center;gap:6px;margin-top:2px}.pcm-pick-star{color:#b45309;font-weight:700;font-size:11px;background:rgba(245,158,11,.12);border-radius:999px;padding:0 7px;line-height:17px}.pcm-pick-cat{opacity:.68;font-size:10.5px;border:1px solid rgba(128,128,128,.3);border-radius:999px;padding:0 6px;line-height:15px}.pcm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:10px}.pcm-card{border:1px solid rgba(128,128,128,.25);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;cursor:pointer}.pcm-card:hover{border-color:#4f6ef7}.pcm-card-top{display:flex;align-items:center;gap:8px}.pcm-card-title{display:flex;align-items:baseline;gap:6px;overflow:hidden;flex:1 1 auto;min-width:0}.pcm-av{width:22px;height:22px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;position:relative;overflow:hidden}.pcm-av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}.pcm-name{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none;max-width:60%}.pcm-owner{font-size:10.5px;opacity:.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.pcm-desc{font-size:11.5px;opacity:.8;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.8em}.pcm-badges{display:flex;gap:4px;flex-wrap:wrap}.pcm-badge{font-size:10px;padding:0 6px;border-radius:999px;line-height:16px;white-space:nowrap}.pcm-badge-curated{background:rgba(34,197,94,.14);color:#22c55e}.pcm-badge-nonplugin{background:rgba(148,163,184,.16);opacity:.8}.pcm-badge-pending{background:rgba(217,119,6,.14);color:#d97706}.pcm-badge-installed{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-badge-plugin{background:rgba(79,110,247,.16);color:#4f6ef7}.pcm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.pcm-stats{display:flex;gap:8px;font-size:11px;align-items:center;flex-wrap:wrap;white-space:nowrap}.pcm-stars{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.14);color:#b45309;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;line-height:17px}.pcm-cat{border:1px solid rgba(15,17,21,.45);color:rgba(15,17,21,.85);background:transparent;border-radius:999px;padding:1px 7px;font-size:10px;line-height:15px;white-space:nowrap}.pcm-today{font-size:11px}.pcm-updated{font-size:10.5px;opacity:.7}.pcm-today-up{color:#15803d}.pcm-today-down{color:#b91c1c}.pcm-actions{display:flex;gap:6px;flex:none;align-items:center}.pcm-scroll{flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}.pcm-pager{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:8px 2px 6px;border-top:1px solid rgba(128,128,128,.18)}.pcm-page{min-width:26px;padding:3px 8px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid transparent;background:transparent;color:inherit}.pcm-page.on{border-color:#4f6ef7;color:#4f6ef7}.pcm-empty{text-align:center;padding:32px 0;opacity:.65}.pcm-modal-body{display:flex;flex-direction:column;gap:10px;font-size:13px}.pcm-risk{border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5}.pcm-risk-curated{background:rgba(34,197,94,.1);color:#16a34a}.pcm-risk-community{background:rgba(217,119,6,.1);color:#b45309}.pcm-risk-nonplugin{background:rgba(239,68,68,.1);color:#dc2626}.pcm-cmd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(128,128,128,.12);border-radius:6px;padding:6px 8px;word-break:break-all}.pcm-publish-repos{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:4px;border:1px solid rgba(128,128,128,.25);border-radius:8px;padding:6px}.pcm-publish-repo{font-size:12px;padding:4px 8px;border-radius:6px;cursor:pointer}.pcm-publish-repo:hover{background:rgba(128,128,128,.12)}.pcm-spin{animation:pcm-spin 1s linear infinite;display:inline-flex}@keyframes pcm-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.pcm-update-btn{background:#040506 !important;color:#fff !important;border-color:#040506 !important;border-radius:8px !important}.pcm-update-btn:hover{background:#1a1d22 !important;border-color:#1a1d22 !important;color:#fff !important}.pcm-update-btn:disabled{opacity:.75}.pcm-update-versions{font-size:10.5px;white-space:nowrap;display:inline-flex;align-items:center;gap:2px;color:#040506;font-weight:500}.pcm-update-arrow{color:#15803d;font-weight:700}.pcm-update-new{color:#15803d;font-weight:700}.pcm-source-btn{font-weight:500}.pcm-update-all-row{display:flex;justify-content:flex-end;margin-top:-2px}.pcm-update-all-btn{background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-update-all-btn:hover{background:#eef1ff}.pcm-update-all-btn:disabled{cursor:default;opacity:.85}.pcm-state-row{display:flex;align-items:center;gap:8px}.pcm-state-chip{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:4px;line-height:16px;white-space:nowrap}.pcm-state-live{color:#166534;background:#d9f99d}.pcm-state-disabled{color:#6b7280;background:rgba(128,128,128,.16)}.pcm-state-restart{color:#a16207;background:rgba(250,204,21,.3)}.pcm-switch{display:inline-flex;position:relative;cursor:pointer}.pcm-switch input{position:absolute;opacity:0;width:0;height:0}.pcm-switch-track{width:26px;height:15px;border-radius:999px;background:rgba(128,128,128,.3);transition:background .15s;position:relative;flex:none}.pcm-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}.pcm-switch input:checked + .pcm-switch-track{background:#040506}.pcm-switch input:checked + .pcm-switch-track::after{left:13px}.pcm-switch input:disabled + .pcm-switch-track{opacity:.5}.pcm-rollback-btn{color:#b45309 !important;border:1px solid rgba(217,119,6,.5) !important;border-radius:6px !important;font-size:11px;height:20px;padding:0 8px}.pcm-rollback-btn:hover{border-color:#d97706 !important;background:rgba(217,119,6,.08) !important}.pcm-skip-row{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;opacity:.75;cursor:pointer;user-select:none}.pcm-skip-row input{accent-color:#040506;margin:0;cursor:pointer}.pcm-skip-row:hover{opacity:1}.pcm-self-update-btn{border:1px solid rgba(245,247,255,.55);color:#fff;background:rgba(245,247,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer;line-height:16px;white-space:nowrap}.pcm-self-update-btn:hover{border-color:#4d6bfe;color:#fff}.pcm-self-update-btn:disabled{opacity:.75;cursor:default}.pcm-self-update-warn{color:#f87171;font-size:11.5px;font-weight:600}.pcm-safety-row{display:flex;gap:4px;flex-wrap:wrap;align-items:center}.pcm-safety-controls{display:inline-flex;align-items:center;gap:8px;margin-left:auto}.pcm-safety{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;padding:1px 8px;border-radius:999px;line-height:16px;white-space:nowrap;font-weight:500}.pcm-safety-verified{color:#7c3aed;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.55)}.pcm-safety-disclosure{color:#1d4ed8;background:linear-gradient(180deg,rgba(37,99,235,.14),rgba(37,99,235,.05));border:1px solid rgba(37,99,235,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 2px rgba(37,99,235,.12)}.pcm-safety-curated{color:#8f6a17;background:rgba(163,126,32,.06);border:1px solid rgba(163,126,32,.45)}.pcm-safety-manual{background:rgba(217,119,6,.1);color:#b45309;border:1px solid rgba(217,119,6,.35)}.pcm-safety-nonplugin{background:rgba(148,163,184,.14);color:#64748b;border:1px solid rgba(148,163,184,.4)}.pcm-safety-scanned{color:#15803d;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.55)}.pcm-pill-person{flex:none;margin-right:2px}.pcm-toolbar .pcm-pill-verified::before{content:none !important}.pcm-detail-modal{width:min(980px,94vw) !important;max-width:94vw}.pcm-detail-scroll{max-height:78vh;overflow-y:auto}.pcm-detail{display:flex;align-items:flex-start;padding:16px 18px 18px}.pcm-detail-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px}.pcm-detail-side{flex:none;width:240px;margin-left:16px;display:flex;flex-direction:column;gap:10px}.pcm-detail-head{display:flex;align-items:center;gap:8px}.pcm-detail-titles{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}.pcm-detail-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-owner{font-size:11px;opacity:.6}.pcm-detail-actions{display:flex;gap:6px;flex:none;margin-left:auto;align-items:center}.pcm-detail-desc{font-size:12.5px;opacity:.85;line-height:1.5}.pcm-detail-safety{display:flex;gap:4px;flex-wrap:wrap}.pcm-detail-readme{border:1px solid rgba(128,128,128,.22);border-radius:10px;padding:12px 14px;max-height:none;overflow:visible}.pcm-detail-readme code{word-break:break-all}.pcm-detail-readme pre{overflow-x:auto;max-width:100%}.pcm-detail-readme-note{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-detail-md{font-size:12.5px;line-height:1.55;overflow-wrap:break-word}.pcm-detail-sec{border:1px solid rgba(128,128,128,.2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.pcm-detail-sec-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55}.pcm-detail-verline{display:flex;justify-content:space-between;gap:8px;font-size:11.5px}.pcm-detail-verlabel{opacity:.6}.pcm-detail-ver{font-family:ui-monospace,monospace;font-size:11px}.pcm-detail-ver-new{color:#15803d;font-weight:600}.pcm-detail-update-note{font-size:11.5px;font-weight:600}.pcm-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.pcm-detail-cell{display:flex;flex-direction:column;min-width:0}.pcm-detail-cellk{font-size:10px;opacity:.55}.pcm-detail-cellv{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-detail-topics{display:flex;flex-wrap:wrap;gap:4px}.pcm-detail-topic{font-size:10px;background:rgba(128,128,128,.12);border-radius:999px;padding:1px 7px}.pcm-detail-cmdrow{display:flex;gap:6px;align-items:center}.pcm-detail-cmdrow .pcm-cmd{flex:1 1 auto;min-width:0}.pcm-detail-linkrow{display:flex;flex-direction:column;gap:2px}.pcm-detail-channels{display:flex;flex-direction:column;gap:3px;font-size:11px;opacity:.75;margin-top:6px}.pcm-detail-added{font-size:11px;opacity:.65;margin-top:6px}.pcm-detail-related{display:flex;align-items:center;gap:8px;width:100%;border:1px solid rgba(128,128,128,.25);border-radius:8px;background:transparent;padding:5px 8px;margin-bottom:6px;cursor:pointer;text-align:left}.pcm-detail-related:hover{border-color:#4d6bfe}.pcm-detail-link{font-size:11.5px;color:#4d6bfe}.pcm-detail-close{margin-left:2px}.pcm-store-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center}.pcm-store-mask{position:absolute;inset:0;background:rgba(15,17,21,.45);backdrop-filter:blur(6px)}.pcm-store-window{position:relative;width:min(1100px,96vw);height:min(860px,94vh);background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.25);border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}.pcm-store-window .pcm-root{flex:1 1 auto;height:auto !important;max-height:none;overflow:hidden;display:flex}.pcm-store-window .pcm-sticky-top{position:relative}.pcm-store-head{flex:none;display:flex;align-items:center;gap:8px;padding:10px 16px 0}.pcm-store-head-title{font-size:13.5px;font-weight:700;flex:1 1 auto}.pcm-store-close{flex:none}.pcm-store-body{flex:1 1 auto;min-height:0;padding:0 16px 14px;display:flex;flex-direction:column}.pcm-store-body .pcm-root{height:100% !important;flex:1 1 auto;min-height:0}.pcm-results-body{padding-top:8px}.pcm-results-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.pcm-results-sec-title{font-size:13px;font-weight:700;color:#040506;padding:2px 2px 0}.pcm-toast{position:absolute;top:8px;right:8px;background:rgba(15,17,21,.92);color:#fff;border-radius:8px;padding:6px 10px;font-size:11.5px;z-index:5;max-width:70%}.pcm-sidebar-btn{box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;border:none;background:transparent;border-radius:8px;padding:0 10px 0 8px;cursor:pointer;font-size:14px;font-weight:400;color:var(--dsw-alias-label-primary);width:calc(100% + 14px);margin-left:-2px;height:42px;justify-content:flex-start}.pcm-sidebar-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}.pcm-sidebar-icon{width:16px;height:16px;flex:none}.pcm-sidebar-rail{border-radius:50%;justify-content:center;gap:0;width:36px;height:36px;margin:8px 0 10px;padding:0}.pcm-sidebar-rail .pcm-sidebar-label{display:none}@media (max-width:760px){.pcm-detail{flex-direction:column}.pcm-detail-side{width:100%;margin-left:0;margin-top:10px}.pcm-detail-readme{max-height:none}}a[href*='/dsh-mall/open-results']{display:inline-flex !important;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#4d6bfe,#3a51c4) !important;color:#fff !important;font-size:15px !important;font-weight:700 !important;text-decoration:none !important;padding:11px 26px !important;border-radius:12px !important;box-shadow:0 4px 16px rgba(77,107,254,.4) !important;margin:10px 0 6px !important;line-height:1.25 !important;border:none !important;width:fit-content !important}a[href*='/dsh-mall/open-results']::after{content:'›';font-size:18px;line-height:1;margin-left:4px}a[href*='/dsh-mall/open-results']:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe) !important;box-shadow:0 6px 20px rgba(77,107,254,.55) !important}.pcm-tasks-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#040506;border:none;border-radius:8px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:16px}.pcm-tasks-btn:hover{background:#eef1ff}.pcm-tasks-count{background:#4d6bfe;color:#fff;border-radius:999px;font-size:10.5px;padding:0 6px;line-height:15px;font-weight:700}.pcm-tasks-pop{position:fixed;z-index:650;width:380px;max-width:92vw;background:var(--dsw-alias-bg-base,#fff);border:1px solid rgba(128,128,128,.3);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);display:flex;flex-direction:column;overflow:hidden}.pcm-tasks-head{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid rgba(128,128,128,.18)}.pcm-tasks-head-title{font-size:13px;font-weight:700;flex:1 1 auto}.pcm-tasks-body{max-height:320px;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px}.pcm-tasks-empty{padding:14px 6px;text-align:center;font-size:12.5px;opacity:.85}.pcm-tasks-empty-hint{font-size:11.5px;opacity:.6;margin-top:4px}.pcm-task-row{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-radius:8px;background:rgba(128,128,128,.06)}.pcm-task-icon{flex:none;width:16px;height:16px;display:flex;align-items:center;justify-content:center;margin-top:1px}.pcm-task-ok{color:#16a34a}.pcm-task-bad{color:#dc2626}.pcm-task-main{flex:1 1 auto;min-width:0}.pcm-task-top{display:flex;gap:6px;align-items:baseline;min-width:0}.pcm-task-verb{font-size:11px;font-weight:700;color:#4d6bfe;flex:none}.pcm-task-name{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pcm-task-status{font-size:11.5px;opacity:.75;margin-top:2px;word-break:break-all}.pcm-task-x{flex:none;border:none;background:transparent;cursor:pointer;color:inherit;opacity:.45;font-size:13px;padding:2px;border-radius:4px}.pcm-task-cancel{flex:none;border:1px solid rgba(220,38,38,.55);background:transparent;color:#dc2626;cursor:pointer;font-size:11px;padding:1px 8px;border-radius:6px;line-height:16px}.pcm-task-cancel:hover{background:rgba(220,38,38,.08);border-color:#dc2626}.pcm-task-x:hover{opacity:1;background:rgba(128,128,128,.15)}.pcm-tasks-bar{height:5px;border-radius:999px;background:rgba(128,128,128,.2);overflow:hidden;margin:2px 0 4px}.pcm-tasks-bar-fill{height:100%;background:#4d6bfe;border-radius:999px;transition:width .3s}.pcm-tasks-agg{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:4px 6px 0}.pcm-settings-window{width:min(560px,94vw);height:min(640px,92vh)}.pcm-settings-body{display:flex;flex-direction:column;gap:14px;padding:6px 2px 14px}.pcm-settings-open-store{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;background:linear-gradient(135deg,#4d6bfe,#3a51c4);color:#fff;border:none;border-radius:14px;padding:16px 20px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(77,107,254,.4)}.pcm-settings-open-store:hover{background:linear-gradient(135deg,#5c79ff,#4d6bfe)}.pcm-settings-body input::placeholder{color:rgba(15,17,21,.55) !important}.pcm-settings-open-store-hint{font-size:12px;font-weight:500;opacity:.85}.pcm-settings-sec{display:flex;flex-direction:column;gap:8px}.pcm-settings-sec-title{font-size:13px;font-weight:700}.pcm-settings-sec-desc{font-size:12px;opacity:.78;line-height:1.55}.pcm-settings-warn{font-size:12px;line-height:1.55;color:#9a3412;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.4);border-radius:8px;padding:8px 10px}.pcm-settings-note{font-size:11.5px;opacity:.65;line-height:1.5}.pcm-auto-row{display:flex;align-items:center;gap:10px}.pcm-auto-label{flex:1 1 auto;font-size:13.5px;font-weight:700}.pcm-auto-switch{position:relative;flex:none;width:36px;height:20px}.pcm-auto-switch input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}.pcm-auto-switch .pcm-auto-track{position:relative;display:block;width:36px;height:20px;border-radius:999px;background:rgba(128,128,128,.35);transition:background .2s}.pcm-auto-switch .pcm-auto-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}.pcm-auto-switch input:checked + .pcm-auto-track{background:#4d6bfe}.pcm-auto-switch input:checked + .pcm-auto-track::after{left:18px}.pcm-smart-install-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-smart-install-btn:hover{background:#1a1d22}.pcm-smart-install-btn:disabled{opacity:.75;cursor:default}.pcm-smart-install-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}.pcm-smart-uninstall-btn{background:#dc2626}.pcm-smart-uninstall-btn:hover{background:#b91c1c}.pcm-uninstall-plain-btn{color:#dc2626 !important;border-color:#dc2626 !important}.pcm-uninstall-plain-btn:hover{background:rgba(220,38,38,.08)}.pcm-install-plain-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;color:#040506;border:1px solid #040506;border-radius:14px;padding:0 14px;height:28px;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1}.pcm-install-plain-btn:hover{background:#f2f3f5}.pcm-install-plain-btn:disabled{opacity:.7;cursor:default}.pcm-store-head-settings{border-radius:50%;flex:none}.pcm-store-head-settings svg{color:#040506}.pcm-lang-flag{display:inline-flex;align-items:center;color:inherit}.pcm-lang-flag svg{color:currentColor}.pcm-results-window{width:min(920px,92vw);height:min(660px,88vh)}div[role='presentation']:has([class*='pcm-']){z-index:1300 !important}.pcm-switch-inline .pcm-state-chip{margin-left:4px;flex:none}.pcm-card{border:1px solid #040506}.pcm-card:hover{border-color:#4f6ef7}.pcm-brand-card .pcm-version{color:#fff;border:1px solid #fff;background:rgba(255,255,255,.08)}.pcm-store-overlay{z-index:1000}.pcm-tasks-pop{z-index:1100}.pcm-smart-search-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:5px;background:#040506;color:#fff;border:none;border-radius:8px;padding:0 12px;height:26px;font-size:12px;font-weight:600;cursor:pointer;line-height:1;flex:none}.pcm-smart-search-btn:hover{background:#1a1d22}.pcm-smart-search-btn:disabled{opacity:.75;cursor:default}.pcm-smart-star{color:#fff;font-size:12px;line-height:1}.pcm-smart-search-btn::after{content:'';position:absolute;top:0;left:-40%;width:30%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:pcm-shine 3.5s ease-in-out infinite}@keyframes pcm-shine{0%{left:-40%}12%{left:110%}100%{left:110%}}.pcm-stats2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:rgba(15,17,21,.72);font-weight:500;margin:1px 0}.pcm-stats2 .pcm-dl-30{color:#1d4ed8}.pcm-stats2 .pcm-dl-total{color:#1d4ed8}.pcm-seg{border:1px solid #040506;border-radius:8px;overflow:hidden}.pcm-seg button{border-right:1px solid rgba(4,5,6,.22)}.pcm-seg button:last-child{border-right:none}.pcm-seg button.on{background:#040506;color:#fff}.pcm-store-head-actions .pcm-lang-btn{border:1px solid rgba(4,5,6,.7) !important;border-radius:14px !important;background:transparent !important;color:#040506 !important;height:28px;font-size:12px;box-sizing:border-box}.pcm-store-head-actions .pcm-lang-btn:hover{background:rgba(4,5,6,.06) !important;color:#040506 !important}.pcm-sort-wrap{display:inline-flex;align-items:center}.pcm-sort-wrap .pcm-sort-btn{border:1px solid rgba(4,5,6,.7);border-radius:8px;color:#040506;background:transparent;font-weight:600}.pcm-pager{position:relative;z-index:3}.pcm-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-left:auto;flex-wrap:wrap}.pcm-header-actions .pcm-tasks-btn{background:#040506;border:1px solid #fff;color:#fff;box-sizing:border-box}.pcm-header-actions .pcm-tasks-btn:hover{background:#1a1d22;border-color:#fff}.pcm-header-actions .pcm-tasks-count{background:#4d6bfe}.pcm-header-actions .pcm-self-update-warn{color:#fbbf24}.pcm-store-head-actions{flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}.pcm-store-head-actions .pcm-header-row2{gap:8px;flex-wrap:nowrap}.pcm-store-head-actions .pcm-subtitle{color:inherit;opacity:.75;font-size:11.5px;white-space:nowrap}.pcm-store-head-actions .pcm-source{color:#040506;border-color:rgba(4,5,6,.45);opacity:.8;font-size:10.5px;white-space:nowrap}.pcm-store-head-actions .pcm-brand-btn{border-color:rgba(4,5,6,.7);color:#040506;background:transparent;font-size:12px}.pcm-store-head-actions .pcm-brand-btn:hover{border-color:#4d6bfe;color:#4d6bfe}.pcm-downloads{color:#1d4ed8;background:rgba(77,107,254,.1);border-radius:999px;padding:0 6px;font-size:10.5px;font-weight:700;line-height:16px;white-space:nowrap}.pcm-installed-panel{background:rgba(4,5,6,.045);border:none;border-radius:10px;padding:8px 10px;margin-top:auto;display:flex;flex-direction:column;gap:7px}.pcm-installed-tag{color:rgba(4,5,6,.62) !important;border-color:rgba(4,5,6,.32) !important;opacity:1 !important;font-weight:500}.pcm-switch input:checked + .pcm-switch-track{background:#16a34a}.pcm-dl-none{color:rgba(15,17,21,.4)}.pcm-card button{font-size:13px}.pcm-source-btn{border-color:#040506 !important;color:#040506 !important}.pcm-installed-switches{display:flex;flex-direction:column;gap:6px}.pcm-installed-actions .pcm-uninstall-btn{background:#dc2626 !important;border-color:#dc2626 !important;color:#fff !important;height:28px !important;border-radius:14px !important;padding:0 14px !important;display:inline-flex;align-items:center;justify-content:center}.pcm-installed-actions .pcm-uninstall-btn:hover{background:#b91c1c !important;border-color:#b91c1c !important;color:#fff !important}.pcm-installed-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pcm-vsep{width:1px;height:16px;background:rgba(4,5,6,.18);flex:none}.pcm-installed-actions .pcm-skip-row,.pcm-installed-actions .pcm-switch-inline{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(15,17,21,.85);cursor:pointer;height:28px}.pcm-installed-actions .pcm-skip-row input,.pcm-installed-actions .pcm-switch-inline input{margin:0}.pcm-switch-label{font-size:11.5px;font-weight:600;color:rgba(15,17,21,.85)}.pcm-switch-state{font-size:11px;opacity:.75;min-width:56px}.pcm-card-version{font-size:10.5px;color:rgba(15,17,21,.62);background:rgba(4,5,6,.06);border-radius:999px;padding:0 6px;line-height:15px;font-weight:500;white-space:nowrap}.pcm-installed-update{display:flex;align-items:center;justify-content:space-between;gap:8px}.pcm-installed-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pcm-av{border:1px solid #040506;box-sizing:border-box}.pcm-downloads-total{color:#0f766e;background:rgba(20,184,166,.12)}.pcm-card-mid{display:flex;gap:8px;align-items:stretch}.pcm-card-left{display:flex;flex-direction:column;gap:6px;flex:1 1 auto;min-width:0}.pcm-radar-wrap{flex:none;align-self:center;display:flex;align-items:center;justify-content:center}.pcm-radar{position:relative}.pcm-radar-grid{fill:none;stroke:#dbe4f0;stroke-width:.8}.pcm-radar-data{fill:rgba(77,107,254,.22);stroke:#4d6bfe;stroke-width:1.3;stroke-linejoin:round}.pcm-radar-dot{fill:#4d6bfe}.pcm-radar-label{font-size:8.5px;font-weight:500;fill:#6b7785}.pcm-radar-total{font-size:18px;font-weight:700;fill:#1d4ed8}.pcm-radar-total-label{font-size:8.5px;fill:#6b7785}.pcm-safety-skill{color:#040506;background:transparent;border:1px solid rgba(4,5,6,.6)}.pcm-toolbar .pcm-pill-skill{border:1px solid rgba(4,5,6,.7) !important;color:#040506 !important;background:transparent !important;border-radius:8px !important;font-weight:600}.pcm-toolbar .pcm-pill-skill:hover{border-color:#040506 !important}.pcm-toolbar .pcm-pill-skill-on{border-color:#040506 !important;color:#fff !important;background:#040506 !important}.pcm-toolbar .pcm-pill-skill-on:hover{background:#1a1d22 !important;border-color:#1a1d22 !important}.pcm-pill-skill-icon{flex:none;margin-right:2px}.pcm-score-card{display:flex;gap:14px;border:1px solid rgba(128,128,128,.22);border-radius:12px;padding:10px 12px;background:rgba(77,107,254,.03);align-items:center}.pcm-score-main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}.pcm-score-head{display:flex;align-items:center;gap:8px}.pcm-score-title{font-weight:700;font-size:13px}.pcm-score-conf{font-size:10.5px;opacity:.6;border:1px solid rgba(128,128,128,.35);border-radius:999px;padding:0 7px;line-height:16px}.pcm-score-why{font-size:11.5px;line-height:1.45;color:rgba(15,17,21,.78)}.pcm-score-why-label{font-weight:700}.pcm-score-bars{display:flex;flex-direction:column;gap:3px}.pcm-score-bar{display:flex;align-items:center;gap:8px}.pcm-score-dim{width:34px;font-size:10.5px;opacity:.65;flex:none}.pcm-score-track{flex:1 1 auto;height:5px;border-radius:3px;background:rgba(128,128,128,.16);overflow:hidden}.pcm-score-fill{height:100%;border-radius:3px;background:#4d6bfe}.pcm-score-val{width:26px;text-align:right;font-size:10.5px;color:#1d4ed8;font-weight:700;flex:none}.pcm-score-radar{flex:none}.pcm-readme-cmds{display:flex;flex-direction:column;gap:5px;border:1px dashed rgba(4,5,6,.25);border-radius:8px;padding:7px 8px}.pcm-readme-cmds-title{font-size:10.5px;font-weight:700;opacity:.7;display:flex;align-items:center;gap:6px}.pcm-readme-cmds-src{font-weight:400;opacity:.75}.pcm-readme-cmd{background:rgba(4,5,6,.05);font-size:11px}.pcm-readme-cmds-note{font-size:10.5px;opacity:.55}.pcm-radar-val{fill:#1d4ed8;font-weight:700}.pcm-tags-mini{display:flex;gap:4px;flex-wrap:wrap}.pcm-tag-mini{font-size:9.5px;color:#4d6bfe;background:rgba(77,107,254,.09);border:1px solid rgba(77,107,254,.35);border-radius:999px;padding:0 7px;line-height:15px;white-space:nowrap}.pcm-detail-tag{color:#4d6bfe;border-color:rgba(77,107,254,.4)}.pcm-pick-score{font-size:10px;color:#1d4ed8;font-weight:700;border:1px solid rgba(77,107,254,.4);border-radius:999px;padding:0 7px;line-height:16px}.pcm-pick-reason{font-size:10px;color:rgba(15,17,21,.72);line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}/* ===== v1.7.54 详情页重设计（image-prompt ui-screenshot-system 出稿）===== *//* 安装区紫色高亮：渐变底 + 3px 紫左边线 + 圆角，整块重点行动区 */.pcm-detail-sec.pcm-install-sec { background: linear-gradient(135deg, rgba(124,92,255,.10) 0%, rgba(77,107,254,.07) 55%, rgba(124,92,255,.05) 100%); border: 2px solid #7c5cff; border-radius: 12px; padding: 14px 16px 12px; margin: 14px 0 18px; }.pcm-install-sec-title { color: #5b3df0; font-weight: 700; letter-spacing: .2px; }.pcm-install-cmdrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }.pcm-install-cmdrow .pcm-detail-cmdrow { flex: 1 1 auto; min-width: 240px; margin: 0; }.pcm-install-cta { white-space: nowrap; }/* 同类相关：两行式迷你卡（第 1 行标题、第 2 行 ★star · 开发者） */.pcm-related-list { display: flex; flex-direction: column; gap: 8px; }.pcm-detail-related { display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left; border: 1px solid rgba(4,5,6,.08); border-radius: 10px; padding: 8px 10px; background: #fff; cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease; }.pcm-detail-related:hover { border-color: #4d6bfe; box-shadow: 0 2px 8px rgba(77,107,254,.10); transform: translateY(-1px); }.pcm-related-title { font-weight: 600; font-size: 13px; color: #040506; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.pcm-related-sub { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(4,5,6,.55); }.pcm-related-stars { color: #d99a1f; font-weight: 600; }.pcm-related-dev { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }/* 元数据 star 单元格与首页卡片同款（颜色/字重对齐卡片 ★ 样式） */.pcm-meta-star { color: #b45309; font-weight: 700; }/* 回到顶部 FAB（Material FAB 模式：滚过 400px 浮现） */.pcm-backtop { position: absolute; right: 16px; bottom: 16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; background: #040506; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 6px 20px rgba(4,5,6,.28); cursor: pointer; opacity: 0; pointer-events: none; z-index: 30; }.pcm-backtop:hover { background: #4d6bfe; }.pcm-backtop-show { opacity: 1; pointer-events: auto; }.pcm-backtop-show { opacity: 1; transform: translateY(0); pointer-events: auto; }/* ===== v1.7.55 冷启动问卷（QuizView）===== */.pcm-quiz { width: min(560px, 92vw); max-height: min(680px, 88vh); display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: #fff; }.pcm-quiz-head { background: linear-gradient(135deg, #040506 0%, #1a2350 60%, #3d2c8f 100%); color: #fff; padding: 22px 24px 18px; }.pcm-quiz-badge { display: inline-block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #c7b9ff; background: rgba(124,92,255,.18); border: 1px solid rgba(124,92,255,.4); border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }.pcm-quiz-title { font-size: 19px; font-weight: 700; }.pcm-quiz-sub { margin-top: 6px; font-size: 13px; color: rgba(255,255,255,.72); }.pcm-quiz-body { padding: 18px 24px; overflow-y: auto; flex: 1 1 auto; }.pcm-quiz-count { font-size: 12px; color: rgba(4,5,6,.55); margin-bottom: 12px; }.pcm-quiz-count b { color: #4d6bfe; }.pcm-quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }.pcm-quiz-chip { position: relative; display: flex; align-items: center; gap: 8px; padding: 11px 12px; border-radius: 12px; border: 1.5px solid rgba(4,5,6,.10); background: #fff; cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease, transform .1s ease; }.pcm-quiz-chip:hover { border-color: #4d6bfe; }.pcm-quiz-chip:active { transform: scale(.98); }.pcm-quiz-chip-on { border-color: #4d6bfe; background: rgba(77,107,254,.08); }.pcm-quiz-emoji { font-size: 16px; }.pcm-quiz-label { font-size: 13px; font-weight: 500; color: #040506; }.pcm-quiz-check { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: #4d6bfe; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(4,5,6,.25); }.pcm-quiz-foot { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-top: 1px solid rgba(4,5,6,.06); background: #fafafa; }.pcm-quiz-go { min-width: 120px; }/* v1.7.54 视觉复核微调 */.pcm-related-dev::before { content: '·'; margin-right: 8px; color: rgba(4,5,6,.35); }.pcm-score-card { padding: 14px 16px; }.pcm-score-head { margin-bottom: 8px; }.pcm-detail-channels { line-height: 1.8; opacity: .85; }.pcm-detail-head { padding-bottom: 6px; }/* v1.7.55 详情页按钮与首页卡片完全同款（13px） */.pcm-detail-actions button { font-size: 13px; }/* v1.7.55 编辑精选/为你推荐左右分栏 */.pcm-featured { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; align-items: start; margin-bottom: 12px; }.pcm-editor-picks { background: linear-gradient(180deg, rgba(217, 154, 31, .12) 0%, rgba(217, 154, 31, .04) 100%); border: 1px solid rgba(217, 154, 31, .30); border-radius: 14px; padding: 12px 14px; margin: 0; }.pcm-editor-picks .pcm-picks-title { color: #92530a; }.pcm-editor-picks .pcm-picks-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }.pcm-picks-sub { font-size: 10.5px; color: rgba(4, 5, 6, .5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.pcm-recommend { background: linear-gradient(180deg, rgba(77, 107, 254, .07) 0%, rgba(77, 107, 254, .02) 100%); border: 1px solid rgba(77, 107, 254, .28); border-radius: 14px; padding: 12px 14px; margin: 0; }.pcm-rec-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: stretch; }.pcm-rec-daily { font-size: 10.5px; color: #4d6bfe; background: rgba(77, 107, 254, .10); border: 1px solid rgba(77, 107, 254, .35); border-radius: 999px; padding: 1px 7px; line-height: 16px; font-weight: 600; }.pcm-pick-rec { width: 100%; }@media (max-width: 900px) { .pcm-featured { grid-template-columns: 1fr; } .pcm-editor-picks .pcm-picks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }/* v1.7.57 「为你推荐」画像说明样式=「精选收录」副标题同款（小灰字、无药丸底） */.pcm-rec-chip { font-size: 10.5px; color: rgba(4, 5, 6, .5); background: none; border: none; padding: 0; font-weight: 400; line-height: 1.2; }/* v1.7.57 更新按钮与安装按钮同款（深底 14px 圆角、无描边差异） */.pcm-update-btn { background: rgb(15, 17, 21) !important; color: #fff !important; border-radius: 14px !important; border: 1px solid transparent !important; }.pcm-update-btn:hover { background: rgb(26, 29, 34) !important; color: #fff !important; }/* v1.7.57 同类相关：简介行左对齐两行截断 */.pcm-related-desc { font-size: 11px; color: rgba(4, 5, 6, .62); text-align: left; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; align-self: stretch; }.pcm-detail-related { align-items: flex-start; }/* v1.7.58 卸载按钮全局统一为卡片同款（红底白字 28px/14px 圆角/13px，详情页不再是小号描边版） */.pcm-uninstall-btn { background: #dc2626 !important; border-color: #dc2626 !important; color: #fff !important; height: 28px !important; border-radius: 14px !important; padding: 0 14px !important; font-size: 13px !important; }.pcm-uninstall-btn:hover { background: #b91c1c !important; border-color: #b91c1c !important; color: #fff !important; }/* v1.7.58 编辑精选「每周更新」徽标（与每日更新同款、琥珀色） */.pcm-picks-weekly { font-size: 10.5px; color: #b45309; background: rgba(217, 154, 31, .12); border: 1px solid rgba(217, 154, 31, .4); border-radius: 999px; padding: 1px 7px; line-height: 16px; font-weight: 600; }";
 function injectStyles() {
-	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-store\"]");
+	const stale = document.querySelectorAll("style[data-plugin-css=\"dsh-mall\"]");
 	stale.forEach((tag, index) => {
 		if (index > 0) tag.remove();
 	});
@@ -7871,20 +7871,20 @@ function injectStyles() {
 		return;
 	}
 	const tag = document.createElement("style");
-	tag.dataset.plugin = "dsh-store";
-	tag.dataset.pluginCss = "dsh-store";
+	tag.dataset.plugin = "dsh-mall";
+	tag.dataset.pluginCss = "dsh-mall";
 	tag.textContent = CSS;
 	document.head.appendChild(tag);
 }
 //#endregion
 //#region src/client/index.ts
 /**
-* dsh-store client: registers the "DSH Plugin Market" settings
+* dsh-mall client: registers the "DSH Plugin Market" settings
 * section plus the plugin-configuration card (GitHub token, dsh >= rc.7).
 * Built by tsdown into lib/client.js; react and the primitives module are
 * resolved through the loader module table at runtime.
 */
-const NS = "dsh-store";
+const NS = "dsh-mall";
 const REQUIRED_PRIMITIVES = [
 	"Menu",
 	"Modal",
@@ -7906,7 +7906,7 @@ var Guard = class extends react.Component {
 		return { failed: true };
 	}
 	componentDidCatch(error) {
-		console.error("[dsh-store] component crashed (isolated):", error);
+		console.error("[dsh-mall] component crashed (isolated):", error);
 	}
 	render() {
 		return this.state.failed ? null : this.props.children;
@@ -7915,20 +7915,20 @@ var Guard = class extends react.Component {
 function apply(ctx) {
 	const gaps = missingPrimitives(_deepseek_ai_dsh_client_ui_primitives);
 	if (gaps.length > 0) {
-		console.warn("[dsh-store] host ui-primitives missing " + gaps.join(", ") + " — market section disabled (dsh web >= 0.1.0-rc.6 required)");
+		console.warn("[dsh-mall] host ui-primitives missing " + gaps.join(", ") + " — market section disabled (dsh web >= 0.1.0-rc.6 required)");
 		return;
 	}
 	ctx.effect(() => ctx.locale.register(NS, {
 		zh,
 		en
-	}), "dsh-store: dictionaries");
+	}), "dsh-mall: dictionaries");
 	const hostActive = String(ctx.locale.getSnapshot().active ?? "zh").toLowerCase();
 	storeLang.init(hostActive.startsWith("zh") ? "zh" : "en");
 	const t = storeT;
 	injectStyles();
 	ctx.effect(() => {
 		const mount = document.createElement("div");
-		mount.id = "dsh-store-launcher";
+		mount.id = "dsh-mall-launcher";
 		document.body.appendChild(mount);
 		const resultsRoot = (0, import_client.createRoot)(mount);
 		resultsRoot.render((0, react.createElement)(Guard, null, (0, react.createElement)(StoreResultsLauncher, {
@@ -7936,7 +7936,7 @@ function apply(ctx) {
 			locale: ctx.locale
 		})));
 		const storeMount = document.createElement("div");
-		storeMount.id = "dsh-store-singleton";
+		storeMount.id = "dsh-mall-singleton";
 		document.body.appendChild(storeMount);
 		const storeRoot = (0, import_client.createRoot)(storeMount);
 		storeRoot.render((0, react.createElement)(Guard, null, (0, react.createElement)(StoreSingleton, {
@@ -7949,7 +7949,7 @@ function apply(ctx) {
 			mount.remove();
 			storeMount.remove();
 		};
-	}, "dsh-store: results launcher + store singleton");
+	}, "dsh-mall: results launcher + store singleton");
 	ctx.slots.inject("settings.section", () => ctx.slots.register({
 		name: "settings.section",
 		id: "plugin-market",
@@ -7963,7 +7963,7 @@ function apply(ctx) {
 	})));
 	ctx.slots.inject("sidebar.footer.action", () => ctx.slots.register({
 		name: "sidebar.footer.action",
-		id: "dsh-store",
+		id: "dsh-mall",
 		order: 10,
 		locale: NS
 	}, ((props) => (0, react.createElement)(SidebarStoreButton, {

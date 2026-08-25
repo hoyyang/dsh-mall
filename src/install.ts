@@ -186,20 +186,20 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
 
 /** 批量更新：对每个 npm 包名跑 dsh plugin add <name>（不带版本 = 装 latest），
  *  串行执行、逐个汇报结果；全部成功才算 ok。installState.kind = 'update'。 */
-/** 商店自身更新：dsh plugin add dsh-store@latest。host 代码更新后需要重启
+/** 商场自身更新：dsh plugin add dsh-mall@latest。host 代码更新后需要重启
  *  dsh 才生效（bundle 层的 JS 已经加载），返回值固定带 needRestart。 */
 export async function runSelfUpdate(config: MarketConfig, signal?: AbortSignal): Promise<{ ok: boolean; message: string; needRestart: boolean }> {
   installState.active = true
   installState.kind = 'update'
-  installState.target = 'dsh-store'
+  installState.target = 'dsh-mall'
   installState.phase = 'updating'
-  installState.line = 'dsh plugin add dsh-store@latest'
+  installState.line = 'dsh plugin add dsh-mall@latest'
   installState.startedAt = Date.now()
   try {
-    const result = await runDsh(config.profile, ['add', 'dsh-store@latest'], signal)
+    const result = await runDsh(config.profile, ['add', 'dsh-mall@latest'], signal)
     if (signal?.aborted === true) return { ok: false, message: 'Cancelled by user', needRestart: false }
     const ok = result.exitCode === 0 && !result.timedOut
-    const message = ok ? 'Updated dsh-store.' : (result.timedOut ? 'Update timed out (10 min)' : resultMessage(result))
+    const message = ok ? 'Updated dsh-mall.' : (result.timedOut ? 'Update timed out (10 min)' : resultMessage(result))
     installState.lastResult = { ok, message }
     return { ok, message, needRestart: true }
   } finally {
@@ -261,7 +261,7 @@ export async function runUpdate(config: MarketConfig, targets: Array<{ name: str
 const PROTECTED_MODULE_RE = [
   /^@deepseek-ai\//,
   /^cordis:/,
-  /^dsh-store$/,
+  /^dsh-mall$/,
 ]
 
 export function patchFilePath(profile: string): string {

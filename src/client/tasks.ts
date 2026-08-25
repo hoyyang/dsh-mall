@@ -11,7 +11,7 @@ export interface TaskRecord {
   /** 稳定 id：面板操作（移除）按它寻址。 */
   id: string
   kind: TaskKind
-  /** 展示名：插件名 / 批量更新的聚合名 / dsh-store。 */
+  /** 展示名：插件名 / 批量更新的聚合名 / dsh-mall。 */
   name: string
   state: TaskState
   /** 运行中显示的一行细节（如 from → to）；done 时优先显示 host 消息。 */

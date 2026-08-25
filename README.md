@@ -1,17 +1,17 @@
-# DSH Store
+# DSH Mall
 
-**The complete plugin store for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem (11,000+ repos), one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
+**The complete plugin mall for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem (11,000+ repos), one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
 
-[**中文**](README.zh.md) · [Releases](https://github.com/hoyyang/dsh-store/releases) · [Changelog](CHANGELOG.md)
+[**中文**](README.zh.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [Changelog](CHANGELOG.md)
 
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
-  <img alt="npm" src="https://img.shields.io/npm/v/dsh-store">
-  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-store">
-  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-store?style=flat">
+  <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall">
+  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
+  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
 </p>
 
-![DSH Store](assets/screenshot-main.png)
+![DSH Mall](assets/screenshot-main.png)
 
 ---
 
@@ -32,12 +32,12 @@
 ## 📦 Install
 
 ```sh
-dsh plugin add dsh-store
+dsh plugin add dsh-mall
 # or, for a specific profile:
-dsh plugin --profile web add dsh-store
+dsh plugin --profile web add dsh-mall
 ```
 
-Restart `dsh web` and open **DSH Store** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
+Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
 
 ## ✅ Requirements
 
@@ -47,7 +47,7 @@ Restart `dsh web` and open **DSH Store** in the sidebar (above Settings). You ca
 
 ## 🗂 How data works
 
-The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (1,900+ hand-picked entries), classified into 20 categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-store reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
+The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (1,900+ hand-picked entries), classified into 20 categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-mall reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
 
 ## 🔐 Security
 
@@ -58,7 +58,7 @@ The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](htt
 
 ## 🤔 Why another marketplace?
 
-40+ marketplace plugins exist — most are similar. DSH Store bets on **audit + curation + trends + evidence**: machine scan verdicts, curated picks, five-dimension scoring with explanations, LLM tags, and an independent data pipeline. If you want numbers first, this is the store for you.
+40+ marketplace plugins exist — most are similar. DSH Mall bets on **audit + curation + trends + evidence**: machine scan verdicts, curated picks, five-dimension scoring with explanations, LLM tags, and an independent data pipeline. If you want numbers first, this is the store for you.
 
 ## 📄 License
 

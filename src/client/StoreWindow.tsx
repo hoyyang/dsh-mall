@@ -1,9 +1,9 @@
 /**
  * 独立浮窗入口 + find 工具结果浮窗。
- * - SidebarStoreButton: sidebar 底部「DSH 商店」按钮 → 全尺寸商店浮窗。
- * - StoreResultsLauncher: 全局点击拦截（/dsh-store/open-results 链接，
- *   由 find_dsh_store_plugin 工具输出）→ 打开「推荐 + 其他相关」结果浮窗，
- *   卡片样式与商店主页面一致（安装/源码/收藏星可用）。
+ * - SidebarStoreButton: sidebar 底部「DSH 商场」按钮 → 全尺寸商场浮窗。
+ * - StoreResultsLauncher: 全局点击拦截（/dsh-mall/open-results 链接，
+ *   由 find_dsh_mall_plugin 工具输出）→ 打开「推荐 + 其他相关」结果浮窗，
+ *   卡片样式与商场主页面一致（安装/源码/收藏星可用）。
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
@@ -20,15 +20,15 @@ interface LocaleLike {
   getSnapshot(): { active: string }
 }
 
-// ---------------------------------------------------------------- 单例商店浮窗
-// v1.7.5：无论从首页「DSH 商店」、设置页「打开 DSH 商店」还是结果浮窗进入，
-// 商店浮窗都是同一个实例（StoreSingleton 挂载一次，keep-mounted）。
+// ---------------------------------------------------------------- 单例商场浮窗
+// v1.7.5：无论从首页「DSH 商场」、设置页「打开 DSH 商场」还是结果浮窗进入，
+// 商场浮窗都是同一个实例（StoreSingleton 挂载一次，keep-mounted）。
 interface StoreState {
   mounted: boolean
   open: boolean
-  /** 浮窗来源：sidebar=首页入口；settings=设置页「打开 DSH 商店」。 */
+  /** 浮窗来源：sidebar=首页入口；settings=设置页「打开 DSH 商场」。 */
   source: 'sidebar' | 'settings' | null
-  /** true=官方设置浮窗临时盖在商店浮窗上面（主浮窗不关闭，点「打开 DSH 商店」=关设置浮窗）。 */
+  /** true=官方设置浮窗临时盖在商场浮窗上面（主浮窗不关闭，点「打开 DSH 商场」=关设置浮窗）。 */
   settingsOnTop: boolean
 }
 let storeState: StoreState = { mounted: false, open: false, source: null, settingsOnTop: false }
@@ -52,7 +52,7 @@ export function subscribeStore(fn: () => void): () => void {
   return () => { storeListeners.delete(fn) }
 }
 
-/** 打开官方设置浮窗并自动定位到「DSH商店-设置」section（DOM 触发）。 */
+/** 打开官方设置浮窗并自动定位到「DSH商场-设置」section（DOM 触发）。 */
 function openSettingsAtStoreSection(): void {
   window.setTimeout(() => {
     const trigger = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').trim() === '设置')
@@ -60,7 +60,7 @@ function openSettingsAtStoreSection(): void {
     let tries = 0
     const timer = window.setInterval(() => {
       tries += 1
-      const nav = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').includes('DSH商店'))
+      const nav = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').includes('DSH商场'))
       if (nav !== undefined) {
         nav.click()
         window.clearInterval(timer)
@@ -77,10 +77,10 @@ export function closeSettingsWindow(): void {
   if (close !== null) close.click()
 }
 
-/** 唯一商店浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
+/** 唯一商场浮窗宿主：订阅 store 状态，渲染同一个 StoreWindow 实例。 */
 export function StoreSingleton(props: { t: (key: string) => string; locale: LocaleLike }) {
   const state = useSyncExternalStore(subscribeStore, () => storeState)
-  // v1.7.53：商店 UI 语言切换时重渲染整个浮窗（含设置页/任务面板）
+  // v1.7.53：商场 UI 语言切换时重渲染整个浮窗（含设置页/任务面板）
   useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   if (!state.mounted) return null
   return (
@@ -99,9 +99,9 @@ export function SidebarStoreButton(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  // 首页侧边栏（设置按钮上方、平级对齐）「DSH 商店」→ 打开唯一商店浮窗。
+  // 首页侧边栏（设置按钮上方、平级对齐）「DSH 商场」→ 打开唯一商场浮窗。
   // 渲染由 StoreSingleton 统一承担（单例、keep-mounted）。
-  // v1.7.56：订阅商店语言——切换后按钮文案即时更新
+  // v1.7.56：订阅商场语言——切换后按钮文案即时更新
   useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   return (
     <button
@@ -116,18 +116,18 @@ export function SidebarStoreButton(props: {
   )
 }
 
-/** 设置浮窗里的「DSH商店-设置」section：设置内容 + 顶部大按钮打开商店浮窗。 */
+/** 设置浮窗里的「DSH商场-设置」section：设置内容 + 顶部大按钮打开商场浮窗。 */
 export function SettingsSection(props: {
   t: (key: string) => string
   locale: LocaleLike
 }) {
-  // v1.7.56：订阅商店语言——设置页随语言切换即时刷新（此前停留在旧语言）
+  // v1.7.56：订阅商场语言——设置页随语言切换即时刷新（此前停留在旧语言）
   useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
   const openStore = useCallback(() => {
     const st = getStoreState()
     if (st.mounted && st.source === 'sidebar') {
-      // 首页路径（主浮窗先开、设置浮窗盖在上面）：「打开 DSH 商店」=关闭设置浮窗，
-      // 商店浮窗恢复置顶（主浮窗从未关闭）。
+      // 首页路径（主浮窗先开、设置浮窗盖在上面）：「打开 DSH 商场」=关闭设置浮窗，
+      // 商场浮窗恢复置顶（主浮窗从未关闭）。
       closeSettingsWindow()
       setSettingsOnTop(false)
       setStoreOpen(true)
@@ -141,7 +141,7 @@ export function SettingsSection(props: {
 }
 
 /** 全局点击拦截器：find 工具输出的按钮链接 → 结果浮窗；
- *  也监听 window 事件 'dsh-store-open-results'（智能搜索直接带 payload 弹窗）。 */
+ *  也监听 window 事件 'dsh-mall-open-results'（智能搜索直接带 payload 弹窗）。 */
 export function StoreResultsLauncher(props: { t: (key: string) => string; locale: LocaleLike }) {
   // v1.7.53：UI 语言切换重渲染结果浮窗
   useSyncExternalStore(cb => storeLang.subscribe(cb), () => storeLang.get())
@@ -152,7 +152,7 @@ export function StoreResultsLauncher(props: { t: (key: string) => string; locale
     const anchor = target?.closest?.('a[href]') as HTMLAnchorElement | null
     if (anchor === null) return
     const href = anchor.getAttribute('href') ?? ''
-    if (!href.includes('/dsh-store/open-results')) return
+    if (!href.includes('/dsh-mall/open-results')) return
     e.preventDefault()
     e.stopPropagation()
     const id = new URL(href, window.location.origin).searchParams.get('id')
@@ -170,8 +170,8 @@ export function StoreResultsLauncher(props: { t: (key: string) => string; locale
         setDirect(detail.payload)
       }
     }
-    window.addEventListener('dsh-store-open-results', onOpen)
-    return () => window.removeEventListener('dsh-store-open-results', onOpen)
+    window.addEventListener('dsh-mall-open-results', onOpen)
+    return () => window.removeEventListener('dsh-mall-open-results', onOpen)
   }, [])
   const open = token !== null || direct !== null
   if (!open) return null
@@ -194,7 +194,7 @@ export interface ResultsPayload {
 }
 
 /** v1.7.4：#9 结果浮窗内嵌完整 MarketSection（seed=推荐+相关条目）——
- *  卡片内容/交互/功能与主商店浮窗完全一致（安装/卸载/更新/收藏/详情/任务）。 */
+ *  卡片内容/交互/功能与主商场浮窗完全一致（安装/卸载/更新/收藏/详情/任务）。 */
 function ResultsWindow(props: {
   t: (key: string) => string
   locale: LocaleLike
@@ -218,7 +218,7 @@ function ResultsWindow(props: {
   const LANG_SHORT: Record<string, string> = { en: 'EN', zh: '中文', ja: '日本語', ko: '한국어', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT', ru: 'RU' }
   const [lang, setLang] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem('dsh-store-lang')
+      const saved = localStorage.getItem('dsh-mall-lang')
       if (saved !== null && (LANGS as readonly string[]).includes(saved)) return saved
     } catch { /* ignore */ }
     return 'en'
@@ -227,13 +227,13 @@ function ResultsWindow(props: {
   const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
   const setLangPersist = (l: string) => {
     setLang(l)
-    try { localStorage.setItem('dsh-store-lang', l) } catch { /* ignore */ }
+    try { localStorage.setItem('dsh-mall-lang', l) } catch { /* ignore */ }
   }
   const token = props.token
   useEffect(() => {
     if (token === null || props.initialPayload !== null) return
     let alive = true
-    fetch('/dsh-store/query-result?id=' + encodeURIComponent(token), { cache: 'no-store' })
+    fetch('/dsh-mall/query-result?id=' + encodeURIComponent(token), { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { ok?: boolean; payload?: ResultsPayload }) => {
         if (alive) {
@@ -306,7 +306,7 @@ function StoreWindow(props: {
   locale: LocaleLike
   /** false = 隐藏但保持挂载（保留页面状态），true = 显示。 */
   open: boolean
-  /** true=设置浮窗临时在上层（商店浮窗降到 z900 让位，但保持显示）。 */
+  /** true=设置浮窗临时在上层（商场浮窗降到 z900 让位，但保持显示）。 */
   settingsOnTop: boolean
   onClose: () => void
 }) {
@@ -320,7 +320,7 @@ function StoreWindow(props: {
     return () => document.removeEventListener('keydown', onKey)
   }, [props.open, props])
   // v1.7.6：#2 交互修正——来源为设置页：设置按钮=关闭浮窗（设置浮窗在下面）；
-  // 首页来源：主浮窗保持打开，设置浮窗盖到上面（商店浮窗 z 降到 900）。
+  // 首页来源：主浮窗保持打开，设置浮窗盖到上面（商场浮窗 z 降到 900）。
   const onHeadSettings = useCallback(() => {
     const st = getStoreState()
     if (st.source === 'settings') {
@@ -333,7 +333,7 @@ function StoreWindow(props: {
   return createPortal(
     <div
       className="pcm-store-overlay"
-      // 默认 1000：与官方设置浮窗同级但 DOM 在其后（商店浮窗显示在上）；
+      // 默认 1000：与官方设置浮窗同级但 DOM 在其后（商场浮窗显示在上）；
       // settingsOnTop 时降到 900 让位。绝不高于 1000——否则 primitives Modal
       // （z1000）等弹层会被主浮窗盖住（“弹窗跑浮窗后面”的根因）。
       style={props.open ? { zIndex: props.settingsOnTop ? 900 : 1000 } : { display: 'none' }}

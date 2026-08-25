@@ -37,15 +37,15 @@ export function marketVersion(): string {
   return cachedVersion
 }
 
-/** npm registry 上 dsh-store 的 latest 版本（缓存 10 分钟；查不到 = 尚未发布）。 */
+/** npm registry 上 dsh-mall 的 latest 版本（缓存 10 分钟；查不到 = 尚未发布）。 */
 let selfUpdateCache: { at: number; from: string; to: string | null } | null = null
 async function selfUpdateInfo(): Promise<{ from: string; to: string | null }> {
   const from = marketVersion()
   if (selfUpdateCache !== null && Date.now() - selfUpdateCache.at < 10 * 60_000) return selfUpdateCache
   let to: string | null = null
   try {
-    const res = await fetch('https://registry.npmjs.org/dsh-store/latest', {
-      headers: { 'user-agent': 'dsh-store' },
+    const res = await fetch('https://registry.npmjs.org/dsh-mall/latest', {
+      headers: { 'user-agent': 'dsh-mall' },
       signal: AbortSignal.timeout(15_000),
     })
     if (res.ok) {
@@ -121,7 +121,7 @@ function parseRepo(value: unknown): string | null {
 }
 
 // ---- 任务取消（v1.7.18）：客户端把 taskId 带进 POST body，宿主按 id 注册
-// AbortController；「查看进行中的任务」面板的取消按钮 → /dsh-store/cancel → abort。
+// AbortController；「查看进行中的任务」面板的取消按钮 → /dsh-mall/cancel → abort。
 // runDsh / headless 子进程监听 signal 后 SIGKILL，操作返回 cancelled 结果。 ----
 const activeOps = new Map<string, AbortController>()
 
@@ -157,7 +157,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/doc',
+    path: '/dsh-mall/doc',
     handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
@@ -183,7 +183,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/registry',
+    path: '/dsh-mall/registry',
     handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
@@ -199,7 +199,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/status',
+    path: '/dsh-mall/status',
     handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
@@ -207,7 +207,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const manifest = readProfileManifest(config.profile)
-      // 可更新检测随 status 一起下发——与商店所有刷新时机天然对齐。
+      // 可更新检测随 status 一起下发——与商场所有刷新时机天然对齐。
       let updates: Array<{ name: string; from: string; to: string; repo: string; npm: string }> = []
       // v1.7.3：updatesAll=不排 skip 的全量可更新列表（卡片「更新」按钮数据源——
       // 「不参与一键更新」只影响一键更新/自动更新，不影响单插件手动更新）。
@@ -245,7 +245,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/cancel',
+    path: '/dsh-mall/cancel',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -272,7 +272,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/install',
+    path: '/dsh-mall/install',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -316,7 +316,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
 
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/uninstall',
+    path: '/dsh-mall/uninstall',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -357,7 +357,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 生命周期，持久化 state.json；v1.7.15 起不再 30 分钟过期）。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/query-result',
+    path: '/dsh-mall/query-result',
     handler: (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
@@ -372,7 +372,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const payload = takeResults(config.profile, id)
       if (payload === null) {
-        sendJson(response, 404, { ok: false, error: 'results expired — re-run /dsh-store' })
+        sendJson(response, 404, { ok: false, error: 'results expired — re-run /dsh-mall' })
         return
       }
       sendJson(response, 200, { ok: true, payload })
@@ -383,7 +383,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 返回 payload 与 /query-result 同构（含 categories），客户端直接弹结果浮窗。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/smart-search',
+    path: '/dsh-mall/smart-search',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -410,7 +410,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 多语言简介按需富化：POST {lang, repos[]} — 抓 README.<lang>.md 首段。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/descriptions',
+    path: '/dsh-mall/descriptions',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -438,7 +438,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 启用/停用：cordis.patch.yml 顶层 "- id: X" + disabled 行（官方机制，HMR 生效）。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/toggle',
+    path: '/dsh-mall/toggle',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -469,7 +469,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 回退到上个版本：恢复更新前快照的 spec → pnpm install。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/rollback',
+    path: '/dsh-mall/rollback',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -517,7 +517,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 「不参与一键更新」开关：持久化在 state.json。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/skip',
+    path: '/dsh-mall/skip',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -545,7 +545,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 24h 缓存（未发布 6h），单次最多 2000 个包名。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/downloads',
+    path: '/dsh-mall/downloads',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -573,7 +573,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 智能卸载：AI 审查（有风险先 review 报告、确认后才执行）+ dsh plugin remove + 残留检查。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/smart-uninstall',
+    path: '/dsh-mall/smart-uninstall',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -612,7 +612,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 智能安装：AI 装前审查（refuse 终止）+ dsh plugin add + 装后 AI 诊断。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/smart-install',
+    path: '/dsh-mall/smart-install',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -650,7 +650,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 智能更新（v1.7.16）：AI 装前审查 → 快照旧版本 → runUpdate → 装后 AI 诊断。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/smart-update',
+    path: '/dsh-mall/smart-update',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -691,7 +691,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // v1.7.52：本地已装+推荐；v1.7.55：GET 返回画像统计（跨天持久化），POST 提交冷启动问卷并持久化。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/recommend',
+    path: '/dsh-mall/recommend',
     handler: async (request, response) => {
       if (request.method !== 'GET' && request.method !== 'POST') {
         response.writeHead(405, { allow: 'GET, POST' })
@@ -717,7 +717,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // README 安全预渲染（v1.7.26）：GET ?repo=&file=&branch= —— host 清洗后下发。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/readme',
+    path: '/dsh-mall/readme',
     handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })
@@ -750,7 +750,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 运行时 bundle top-up 扫描（v1.7.24）：POST {repos[]} —— 页级抽查，24h 缓存。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/scan',
+    path: '/dsh-mall/scan',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -775,7 +775,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // README（24h 缓存）补全实用/便捷两维 + 重融合总分 + 安装命令解析。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/scores',
+    path: '/dsh-mall/scores',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -815,7 +815,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 仓库版本号按需富化：POST {repos[]} —— GitHub Releases latest（npm 未发布的仓库用）。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/versions',
+    path: '/dsh-mall/versions',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -838,7 +838,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 自动一键更新开关：GET 读状态，POST {enabled} 切换并重排每日定时器。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/auto-update',
+    path: '/dsh-mall/auto-update',
     handler: async (request, response) => {
       if (request.method === 'GET') {
         sendJson(response, 200, { ok: true, autoUpdate: autoUpdateStateOf(config.profile) })
@@ -867,10 +867,10 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
     },
   }))
 
-  // 商店自身更新：POST 执行 dsh plugin add dsh-store@latest（重启后生效）。
+  // 商场自身更新：POST 执行 dsh plugin add dsh-mall@latest（重启后生效）。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/self-update',
+    path: '/dsh-mall/self-update',
     handler: async (request, response) => {
       if (request.method === 'GET') {
         sendJson(response, 200, await selfUpdateInfo())
@@ -906,7 +906,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // 串行执行 dsh plugin add <name>（不带版本即 latest）。
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/update',
+    path: '/dsh-mall/update',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -963,7 +963,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // it managed to check.
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/verify',
+    path: '/dsh-mall/verify',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -987,11 +987,11 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
     },
   }))
 
-  // Favorites: persisted in the profile's dsh-store/state.json (next to the
+  // Favorites: persisted in the profile's dsh-mall/state.json (next to the
   // plugin's other local state), keyed by lowercase owner/repo (or local:name).
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/favorites',
+    path: '/dsh-mall/favorites',
     handler: async (request, response) => {
       if (request.method === 'GET') {
         sendJson(response, 200, { favorites: readFavorites(config.profile) })
@@ -1019,14 +1019,14 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
     },
   }))
 
-  // v1.7.60：/dsh-store/token 与 /dsh-store/source 已移除——不允许用户在运行时
+  // v1.7.60：/dsh-mall/token 与 /dsh-mall/source 已移除——不允许用户在运行时
   // 设置 Token/数据源；二者仅能经部署配置（cordis.yml githubToken/registryUrl 或
   // 环境变量 DSHM_GITHUB_TOKEN / DSH_STORE_REGISTRY_URL）由宿主机提供。
 
   // Publish: add the dsh-plugin topic to a repo the user can push to.
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/publish',
+    path: '/dsh-mall/publish',
     handler: async (request, response) => {
       if (request.method !== 'POST' || !sameOrigin(request) || !notGet(request)) {
         response.writeHead(405, { allow: 'POST' })
@@ -1071,7 +1071,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
   // My repos picker for the publish dialog (token required).
   disposers.push(host.webServer.register({
     kind: 'exact',
-    path: '/dsh-store/publish/repos',
+    path: '/dsh-mall/publish/repos',
     handler: async (request, response) => {
       if (request.method !== 'GET') {
         response.writeHead(405, { allow: 'GET' })

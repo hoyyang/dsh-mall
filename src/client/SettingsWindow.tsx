@@ -1,9 +1,9 @@
 /**
- * DSH 商店设置页（v1.7.1）：作为官方「设置」浮窗里的一个 section 渲染
+ * DSH 商场设置页（v1.7.1）：作为官方「设置」浮窗里的一个 section 渲染
  * （不再是独立浮窗）。内容：
- * - 顶部大按钮「打开 DSH 商店」：打开独立商店浮窗；
+ * - 顶部大按钮「打开 DSH 商场」：打开独立商场浮窗；
  * - 自动一键更新插件开关（说明 + 风险警告 + 上次运行结果）；
- * - 数据源 URL / GitHub Token / 商店自身更新（设置功能载体）。
+ * - 数据源 URL / GitHub Token / 商场自身更新（设置功能载体）。
  */
 
 import { useEffect, useState } from 'react'
@@ -41,13 +41,13 @@ export function SettingsContent(props: {
   const [selfDone, setSelfDone] = useState(false)
 
   useEffect(() => {
-    fetch('/dsh-store/status', { cache: 'no-store' })
+    fetch('/dsh-mall/status', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: StatusBody) => {
         setStatus(body)
       })
       .catch(() => {})
-    fetch('/dsh-store/auto-update', { cache: 'no-store' })
+    fetch('/dsh-mall/auto-update', { cache: 'no-store' })
       .then(res => res.json())
       .then((body: { autoUpdate?: AutoUpdateBody }) => {
         if (body.autoUpdate !== undefined) setAuto(body.autoUpdate)
@@ -60,7 +60,7 @@ export function SettingsContent(props: {
     if (auto === null || autoBusy) return
     const next = !auto.enabled
     setAutoBusy(true)
-    fetch('/dsh-store/auto-update', {
+    fetch('/dsh-mall/auto-update', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ enabled: next }),
@@ -76,7 +76,7 @@ export function SettingsContent(props: {
   const doSelfUpdate = () => {
     if (selfBusy || status?.selfUpdate?.to == null) return
     setSelfBusy(true)
-    fetch('/dsh-store/self-update', { method: 'POST' })
+    fetch('/dsh-mall/self-update', { method: 'POST' })
       .then(res => res.json())
       .then((body: { ok?: boolean }) => { if (body.ok === true) setSelfDone(true) })
       .catch(() => {})

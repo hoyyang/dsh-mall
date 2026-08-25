@@ -3,7 +3,7 @@
  * - 数据源：https://awesome-dsh-plugin.com/plugins.json（与 dshmarket 同源，
  *   目录自带 description.{en,zh} 多语言简介 + category/npm/added/stars/downloads）
  * - 进程启动 + 每 24h 拉取一次，转换为 KnownMap 格式缓存在
- *   profiles/<profile>/dsh-store/awesome-cache.json；
+ *   profiles/<profile>/dsh-mall/awesome-cache.json；
  * - catalog.ts 的 loadKnown() 优先使用该缓存（刷新成功即覆盖），
  *   拉取失败永远回退打包快照（data/awesome-known.json），浏览不中断。
  */

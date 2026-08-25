@@ -14,7 +14,7 @@ const file = join(dirname(fileURLToPath(import.meta.url)), '..', 'client', 'clie
 let code = readFileSync(file, 'utf8')
 
 // Strip a pre-existing wrapper if a previous normalize ran.
-const head = 'window.__ModuleLoader__.load({ id: "dsh-store", factory: (require) => {'
+const head = 'window.__ModuleLoader__.load({ id: "dsh-mall", factory: (require) => {'
 if (code.includes(head)) {
   const start = code.indexOf(head) + head.length
   const end = code.lastIndexOf('\n\t}\n});')

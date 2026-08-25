@@ -1,6 +1,6 @@
 /**
- * dsh-store find tool + result staging:
- * - find_dsh_store_plugin tool (any agent can call it): searches the local
+ * dsh-mall find tool + result staging:
+ * - find_dsh_mall_plugin tool (any agent can call it): searches the local
  *   store catalog (CDN index already in memory), returns recommended +
  *   related plugin lists, and renders a button-link that opens the store
  *   results window.
@@ -15,13 +15,13 @@ import { fetchRawReadme } from './readme.ts'
 import { enrichScore } from './score.ts'
 import type { MarketEntry, MarketState } from './types.ts'
 
-export const FIND_TOOL_NAME = 'find_dsh_store_plugin'
+export const FIND_TOOL_NAME = 'find_dsh_mall_plugin'
 
 interface FindPayload {
   query: string
   recommended: MarketEntry[]
   related: MarketEntry[]
-  /** 结果条目的分类表（与主商店同款 catLabel 数据源）。 */
+  /** 结果条目的分类表（与主商场同款 catLabel 数据源）。 */
   categories?: Record<string, { en: string; zh: string }>
 }
 
@@ -60,7 +60,7 @@ export function takeResults(profile: string, token: string): FindPayload | null 
 /** 通用词：每条目都命中、零区分度，命中不加分（防大 star 目录霸榜）。 */
 const STOP_TOKENS = new Set([
   'dsh', 'harness', 'deepseek', 'deep', 'seek', 'plugin', 'plugins', 'plug', 'ins',
-  '插件', '商店', '最受欢迎', '受欢迎', '最好用的', '好用', '帮我', '找到', '找', '的', '一个', '什么', '推荐',
+  '插件', '商场', '商店', '最受欢迎', '受欢迎', '最好用的', '好用', '帮我', '找到', '找', '的', '一个', '什么', '推荐',
 ])
 
 /** 中文查询串按 2-4 字滑动窗口拆 token（"应用市场"能命中中文简介/分类名）；
@@ -122,9 +122,9 @@ function keywordScore(e: MarketEntry, needle: string): number {
   if (e.verified != null) score += 3
   // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
   // 结果条目自带 isPlugin 标记（卡片有「插件/非插件」徽章区分）。
-  // v1.7.27：market 类条件加分——只有查询本身是「市场/商店」语义时才给 +4，
+  // v1.7.27：market 类条件加分——只有查询本身是「市场/商场」语义时才给 +4，
   // 否则市场目录不再靠无条件加分霸榜（与「市场不能包含市场」原则对齐）。
-  if (e.category === 'market' && /market|store|商店|市场|目录|hub|marketplace/i.test(needle)) score += 4
+  if (e.category === 'market' && /market|store|mall|商场|商店|市场|目录|hub|marketplace/i.test(needle)) score += 4
   return score
 }
 
@@ -216,7 +216,7 @@ export function installFindTool(ctx: { tools: { register(tool: unknown): void } 
   ctx.tools.register(defineTool({
     name: FIND_TOOL_NAME,
     description:
-      'Search the local DSH Store catalog (a full index of every GitHub repo tagged ' +
+      'Search the local DSH Mall catalog (a full index of every GitHub repo tagged ' +
       'dsh-plugin, refreshed daily) for plugins AND related non-plugin tools matching the user\'s requirement. ' +
       'Both kinds are returned and labeled (plugin vs non-plugin). Returns a recommended list plus ' +
       'other related entries with stars, descriptions, five-dimension practical scores, recommendation reasons and install commands. ' +
@@ -287,7 +287,7 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
   }
   if (value.buttonUrl !== undefined) {
     lines.push('')
-    lines.push('[打开 DSH 商店查看插件详情](' + origin + '/dsh-store/open-results?id=' + value.buttonUrl + ')')
+    lines.push('[打开 DSH 商场查看插件详情](' + origin + '/dsh-mall/open-results?id=' + value.buttonUrl + ')')
   }
   return [{ type: 'text', text: lines.join('\n') }]
 }
