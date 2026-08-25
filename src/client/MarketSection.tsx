@@ -1781,6 +1781,7 @@ export function MarketSection(props: SectionProps) {
                         <RadarChart
                           breakdown={entry.score.breakdown}
                           total={entry.score.total}
+                          tooltipLang={lang === 'zh' ? 'zh' : 'en'}
                           size={140}
                           labels={{
                             maintain: t('scoreDimMaintain'),

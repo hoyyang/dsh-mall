@@ -510,6 +510,7 @@ export function DetailPanel(props: {
                 <RadarChart
                   breakdown={score.breakdown}
                   total={score.total}
+                  tooltipLang={langChoice === 'zh' ? 'zh' : 'en'}
                   size={184}
                   labels={{
                     maintain: t('scoreDimMaintain'),
