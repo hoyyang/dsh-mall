@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.66 — 2026-08-25
+
+- **npm 包净化**：删除 4 个编辑器残留锁文件（`src/client/.!*`，0B，曾混入 npm 包）；确认 files 白名单内条目不受 `.npmignore` 排除（npm 规则），锁文件已物理清除。
+
 ## 1.7.65 — 2026-08-25
 
 - **npm 首发**：`dsh-mall@1.7.65` 发布至 npm registry（`dsh plugin add dsh-mall` 短名安装生效）；README 安装命令切回 npm 为主通道；新增 `.npmignore` 排除编辑器临时锁文件（此前 npm 包内混入 `.!*` 0B 临时文件）。
