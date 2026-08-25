@@ -1348,7 +1348,6 @@ export function MarketSection(props: SectionProps) {
 
   const sourceLabel = (() => {
     if (data === null) return ''
-    if (data.source === 'snapshot') return t('sourceSnapshot').replace('{0}', relativeFromNow(data.updated, t))
     const synced = fetchAt !== null ? relativeFromNow(fetchAt, t) : relativeFromNow(data.updated, t)
     return t('syncedAt').replace('{0}', synced)
   })()
@@ -1423,9 +1422,6 @@ export function MarketSection(props: SectionProps) {
           <div className="pcm-header-row2 pcm-head-actions-row">
             <span className="pcm-subtitle">{t('autoRefresh')}</span>
             {data !== null && <span className="pcm-source">{sourceLabel}</span>}
-            {data !== null && data.source === 'cdn' && (status?.progress?.lastError ?? null) !== null && (
-              <span className="pcm-degraded" title={status?.progress?.lastError ?? ''}>{t('indexDegraded')}</span>
-            )}
             <span className="pcm-divider" />
             <Button
               variant="outline"
