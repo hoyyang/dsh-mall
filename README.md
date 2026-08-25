@@ -9,6 +9,7 @@ GitHub 上所有 `#dsh-plugin` 插件都在这：逛、搜、比分数，看中�
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
   <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall?kill_cache=1">
+  <img alt="downloads" src="https://img.shields.io/npm/dw/dsh-mall">
   <img alt="release" src="https://img.shields.io/github/v/release/hoyyang/dsh-mall">
   <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
