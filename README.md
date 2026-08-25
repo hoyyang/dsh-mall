@@ -1,6 +1,6 @@
 # DSH Mall
 
-**The complete plugin mall for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem (11,000+ repos), one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
+**The complete plugin mall for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem, one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
 
 [**中文**](README.zh.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [Changelog](CHANGELOG.md)
 
@@ -14,14 +14,22 @@
 
 ![DSH Mall](assets/screenshot-main.png)
 
+<table>
+  <tr>
+    <td><img src="assets/shot-en-detail.png" width="300" alt="Plugin detail panel with five-dimension score, trust badges and sanitized README"></td>
+    <td><img src="assets/shot-en-install.png" width="300" alt="Install confirmation with AI-reviewed smart install"></td>
+    <td><img src="assets/shot-en-settings.png" width="300" alt="DSH Mall settings section"></td>
+  </tr>
+</table>
+
 ---
 
 ## ✨ Features
 
-- 🌐 **Complete catalog** — 11,000+ GitHub repos from our own CI index (incremental every 2h + daily full rebuild), served over CDN with a bundled snapshot fallback. Never rate-limited.
+- 🌐 **Complete catalog** — the full `#dsh-plugin` ecosystem from our own CI index (incremental every 2h + daily full rebuild), served over CDN with a bundled snapshot fallback. Never rate-limited.
 - 🧠 **Smart install / update / uninstall** — a pre-install AI security review (install / caution / refuse) runs through your configured model; local risk lists guard uninstalls. Falls back to the regular path when AI is unavailable.
 - 📊 **Five-dimension practical score** — maintain / practical / popularity / ease / signal, weighted geometric mean × confidence, with a radar chart and "why recommended" reasons.
-- 🏷️ **LLM-tagged labels & descriptions** — 11,032 plugins carry Chinese function tags and one-line descriptions in 9 languages, refreshed through the index pipeline (no per-user LLM cost).
+- 🏷️ **LLM-tagged labels & descriptions** — plugins carry Chinese function tags and one-line descriptions in 9 languages, refreshed through the index pipeline (no per-user LLM cost).
 - 🌍 **9-language UI** — English, 中文, 日本語, 한국어, Español, Français, Deutsch, Português, Русский — one click switches the entire store.
 - 🛡️ **Trust badges** — machine scan (dsh.bundle verified in the repo tree), awesome curated, human verified, has-skill, stale & npm-unlinked warnings.
 - ⭐ **Editor picks & For You** — weekly curated picks; profile-based recommendations with MMR diversity plus a cold-start quiz.
@@ -33,9 +41,12 @@
 ## 📦 Install
 
 ```sh
+# GitHub channel (always available):
+dsh plugin add github:hoyyang/dsh-mall
+# npm channel (once published):
 dsh plugin add dsh-mall
 # or, for a specific profile:
-dsh plugin --profile web add dsh-mall
+dsh plugin --profile web add github:hoyyang/dsh-mall
 ```
 
 Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
@@ -48,7 +59,7 @@ Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can
 
 ## 🗂 How data works
 
-The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (1,900+ hand-picked entries), classified into 20 categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-mall reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
+The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (hand-picked entries), classified into curated categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-mall reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
 
 ## 🔐 Security
 

@@ -1320,7 +1320,7 @@ export function MarketSection(props: SectionProps) {
     { type: 'label', id: 'dir-label', text: t('sortDir') },
     { id: 'desc', label: t('sortDesc') },
     { id: 'asc', label: t('sortAsc') },
-  ], [t])
+  ], [t, lang])
 
   const sizeItems = useMemo<MenuEntry[]>(() => PAGE_SIZES.map(n => ({ id: String(n), label: String(n) })), [])
 
