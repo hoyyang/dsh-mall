@@ -225,8 +225,11 @@ function ResultsWindow(props: {
   })
   const [langOpen, setLangOpen] = useState(false)
   const langItems = useMemo<MenuEntry[]>(() => LANGS.map(l => ({ id: l, label: LANG_LABELS[l] ?? l })), [])
+  // v1.7.84：结果浮窗语言切换必须同步模块 storeLang——t() 全部读模块 store，
+  // 只改本窗 lang 状态会导致浮窗 UI 文案永远停在旧语言（截图双语对照发现的真 bug）。
   const setLangPersist = (l: string) => {
     setLang(l)
+    storeLang.set(l === 'zh' ? 'zh' : 'en')
     try { localStorage.setItem('dsh-mall-lang', l) } catch { /* ignore */ }
   }
   const token = props.token
