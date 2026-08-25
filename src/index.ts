@@ -17,6 +17,8 @@ import { startTagsRefresh, stopTagsRefresh } from './tags.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-mall'
+/** Host process start time (ms): installs after this need a restart to take effect. */
+export const STARTED_AT = Date.now()
 
 /** Optional cordis.yml configuration; the profile defaults to `web`. */
 export type Config = Partial<Pick<MarketConfig, 'profile' | 'githubToken' | 'registryUrl'>>

@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { InstallState, MarketConfig } from './types.ts'
+import { readState, writeState } from './catalog.ts'
 
 const INSTALL_TIMEOUT_MS = 10 * 60 * 1000
 
@@ -171,6 +172,11 @@ export async function runInstall(config: MarketConfig, repo: string, npmName: st
       if (dep !== null) ensureBundles(config.profile, dep.name)
       const message = 'Installed ' + target + '. Refresh the page to activate.'
       installState.lastResult = { ok: true, message }
+      try {
+        const st = readState(config.profile)
+        st.installs = { ...(st.installs ?? {}), [dep?.name ?? target]: Date.now() }
+        writeState(config.profile, st)
+      } catch { /* ignore */ }
       return { ok: true, message }
     }
     const message = result.timedOut ? 'Install timed out (10 min)' : resultMessage(result)

@@ -26,6 +26,9 @@ import { recommendFor } from './recommend.ts'
 
 let cachedVersion: string | null = null
 /** The market's own version from its package.json (read once per process). */
+/** Host process start time (ms) — installs after this need a restart to take effect. */
+const STARTED_AT = Date.now()
+
 export function marketVersion(): string {
   if (cachedVersion !== null) return cachedVersion
   try {
@@ -237,6 +240,8 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         updatesAll,
         installedRepos,
         restartNeeded: restartNeededOf(config.profile, manifest),
+        startedAt: STARTED_AT,
+        installsAt: readState(config.profile).installs ?? {},
         pluginStates: states,
         rollbacks: state.rollbacks ?? {},
         skipUpdates: state.skipUpdates ?? [],

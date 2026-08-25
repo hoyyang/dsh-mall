@@ -7,7 +7,6 @@
  * GitHub token never leaves the process and never appears in responses.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http';
-/** The market's own version from its package.json (read once per process). */
 export declare function marketVersion(): string;
 import type { MarketConfig } from './types.ts';
 export interface WebServerService {

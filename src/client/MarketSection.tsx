@@ -70,6 +70,8 @@ interface StatusBody {
   updatesAll?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
   installedRepos?: Array<{ name: string; repo: string; from: string; to: string | null; current: boolean }>
   restartNeeded?: Record<string, boolean>
+  startedAt?: number
+  installsAt?: Record<string, number>
   pluginStates?: Record<string, 'live' | 'disabled' | 'restart'>
   rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }>
   skipUpdates?: string[]
@@ -1856,7 +1858,7 @@ export function MarketSection(props: SectionProps) {
                     <div className="pcm-installed-panel" onClick={e => e.stopPropagation()}>
                       {/* v1.7.72：重启后生效提示 + 「为什么未生效？」可展开说明
                           （patch 带配置/表达式时热挂载只支持纯 insert，借鉴 dsh-market） */}
-                      {(stateOf(entry) === 'restart' || status?.restartNeeded?.[entry.npm ?? entry.name] === true || status?.restartNeeded?.[entry.name] === true) && (
+                      {((stateOf(entry) === 'restart') || (status?.restartNeeded?.[entry.npm ?? entry.name] === true && (status.installsAt?.[entry.npm ?? entry.name] ?? 0) > (status.startedAt ?? 0)) || (status?.restartNeeded?.[entry.name] === true && (status.installsAt?.[entry.name] ?? 0) > (status.startedAt ?? 0))) && (
                         <div className="pcm-restart-note">
                           <span className="pcm-restart-chip">⏳ {t('stateRestart')}</span>
                           <button
