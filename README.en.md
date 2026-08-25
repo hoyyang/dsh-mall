@@ -14,8 +14,6 @@ Every `#dsh-plugin` repo on GitHub, in one mall: browse, search, compare scores,
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
 </p>
 
-![DSH Mall](assets/screenshot-main.png)
-
 ## Install
 
 ```sh
@@ -39,41 +37,57 @@ Restart `dsh web` and **DSH Mall** appears in the sidebar. Requires dsh web 0.1.
 
 ## Usage
 
-### Find plugins right in the conversation
+### 1. Where the entrance is
 
-The plugin ships a skill called `dsh-mall`. Run `/dsh-mall find a plugin that can delete sessions` in your agent session — it searches the whole catalog and returns recommendations plus alternatives. The last line is a button: "Open DSH Mall to view plugin details". One click lands you in the store.
+In the dsh home sidebar, right above **Settings**, there's **DSH Mall**. One click opens it.
 
-![The button in a skill reply](assets/shot-skill.png)
+![Sidebar entrance](assets/shot-entry.png)
 
-The button opens a results window — recommendations first, cards identical to the main store: install, details, favorites all work.
+### 2. What it looks like
+
+One window is the whole mall: search and filters on top, editor picks and For You in the middle, plugin cards below. Everything happens inside this window.
+
+![DSH Mall main window](assets/screenshot-main.png)
+
+### 3. Try smart search first
+
+Next to the search box there's a "✦ Smart search" button. Type what you need in plain words — "find a plugin that can delete sessions" — it first has your model translate the request into search terms, then picks recommendations and alternatives from the whole catalog into a results window: recommendations first, cards identical to the main store, install/details/favorites all work.
 
 ![Smart search results](assets/shot-results.png)
 
-### Let AI review before you install
+Regular search, category filters, sorting, page size — all on the toolbar, ready to use.
+
+### 4. Let AI review before installing
 
 Pick "Smart install" in the confirm dialog: AI reviews the repo as untrusted data (never executed) and returns install / caution / refuse. "Refuse" stops the install. If AI fails or times out, it falls back to a regular install.
 
 ![Install confirmation](assets/shot-zh-install.png)
 
-### Look at the score, then decide
+### 5. Look at the score, then decide
 
-Every card has a pentagon radar with the composite in the middle. The composite is a weighted geometric mean — one near-zero dimension drags the whole thing down, so a new 0-star repo scores low honestly and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining every number.
+Every card has a pentagon radar with the composite in the middle. The composite is a weighted geometric mean — one near-zero dimension drags the whole thing down, so a new 0-star repo scores low honestly and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining every number. The detail panel has the full score card with "why recommended".
 
 ![Detail score card](assets/shot-zh-detail.png)
 
-### No idea what to install? These two columns
+### 6. No idea what to install? These two columns
 
 Middle of the home screen: "Editor picks" (refreshed every Monday, top composite scores among the curated) and "For You" (based on your last 30 days plus the quiz, with reasons on each card). Still no idea? The quiz takes 30 seconds.
 
 ![Picks and recommendations](assets/shot-picks.png)
 
-### Every task, visible from anywhere
+### 7. Every task, visible from anywhere
 
 Install, update, uninstall all show progress in a global task panel with cancel — tasks started from the results window are visible from the main store and vice versa. Changes that need a restart get a hint on the card, with a one-sentence explanation.
 
 ![Task panel](assets/shot-tasks.png)
 
-### Settings in one place
+### 8. Find plugins right in the conversation
+
+The plugin ships a skill called `dsh-mall`. Run `/dsh-mall find a plugin that can delete sessions` in your agent session — it searches the whole catalog and returns recommendations plus alternatives. The last line is a button: "Open DSH Mall to view plugin details". One click lands you in the store.
+
+![The button in a skill reply](assets/shot-skill.png)
+
+### 9. Settings in one place
 
 "DSH Mall - Settings" in the Settings window: open-the-store button, auto-update toggle (daily 03:30), the risk note, and the current version.
 
