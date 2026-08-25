@@ -7336,18 +7336,11 @@ function SettingsContent(props) {
 	const [auto, setAuto] = (0, react.useState)(null);
 	const [autoBusy, setAutoBusy] = (0, react.useState)(false);
 	const [status, setStatus] = (0, react.useState)(null);
-	const [token, setToken] = (0, react.useState)("");
-	const [tokenSaving, setTokenSaving] = (0, react.useState)(false);
-	const [tokenSaved, setTokenSaved] = (0, react.useState)(false);
-	const [source, setSource] = (0, react.useState)("");
-	const [sourceSaving, setSourceSaving] = (0, react.useState)(false);
-	const [sourceSaved, setSourceSaved] = (0, react.useState)(false);
 	const [selfBusy, setSelfBusy] = (0, react.useState)(false);
 	const [selfDone, setSelfDone] = (0, react.useState)(false);
 	(0, react.useEffect)(() => {
 		fetch("/dsh-store/status", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			setStatus(body);
-			setSource(body.registryUrl ?? "");
 		}).catch(() => {});
 		fetch("/dsh-store/auto-update", { cache: "no-store" }).then((res) => res.json()).then((body) => {
 			if (body.autoUpdate !== void 0) setAuto(body.autoUpdate);
@@ -7364,37 +7357,6 @@ function SettingsContent(props) {
 		}).then((res) => res.json()).then((body) => {
 			if (body.autoUpdate !== void 0) setAuto(body.autoUpdate);
 		}).catch(() => {}).finally(() => setAutoBusy(false));
-	};
-	const saveToken = () => {
-		if (token.trim() === "" || tokenSaving) return;
-		setTokenSaving(true);
-		fetch("/dsh-store/token", {
-			method: "POST",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify({ token: token.trim() })
-		}).then((res) => res.json()).then((body) => {
-			if (body.ok === true) {
-				setTokenSaved(true);
-				setToken("");
-			}
-		}).catch(() => {}).finally(() => setTokenSaving(false));
-	};
-	const saveSource = () => {
-		if (sourceSaving) return;
-		setSourceSaving(true);
-		fetch("/dsh-store/source", {
-			method: "POST",
-			headers: { "content-type": "application/json" },
-			body: JSON.stringify({ url: source.trim() })
-		}).then((res) => res.json()).then((body) => {
-			if (body.ok === true) {
-				setStatus((s) => s === null ? null : {
-					...s,
-					registryUrl: body.registryUrl ?? ""
-				});
-				setSourceSaved(true);
-			}
-		}).catch(() => {}).finally(() => setSourceSaving(false));
 	};
 	const doSelfUpdate = () => {
 		if (selfBusy || status?.selfUpdate?.to == null) return;
@@ -7446,92 +7408,6 @@ function SettingsContent(props) {
 					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: "pcm-settings-note",
 						children: auto?.enabled === true ? t("autoUpdateOn") + " · " + lastRun : t("autoUpdateOff")
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-				className: "pcm-settings-sec",
-				children: [
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-settings-sec-title",
-						children: t("settingsSource")
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Input, {
-						autoComplete: "off",
-						value: source,
-						placeholder: t("sourcePlaceholder"),
-						onChange: (e) => setSource(e.target.value)
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						style: {
-							display: "flex",
-							gap: 8,
-							alignItems: "center"
-						},
-						children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-							variant: "primary",
-							size: "sm",
-							disabled: sourceSaving,
-							onClick: saveSource,
-							children: t("sourceSave")
-						}), sourceSaved && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-							style: {
-								fontSize: 12,
-								color: "#22c55e"
-							},
-							children: t("sourceSaved")
-						})]
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-settings-note",
-						children: t("sourceHint")
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-				className: "pcm-settings-sec",
-				children: [
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-settings-sec-title",
-						children: t("settingsToken")
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Input, {
-						type: "password",
-						autoComplete: "off",
-						value: token,
-						placeholder: t("tokenPlaceholder"),
-						onChange: (e) => setToken(e.target.value)
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
-						style: {
-							display: "flex",
-							gap: 8,
-							alignItems: "center"
-						},
-						children: [
-							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Button, {
-								variant: "primary",
-								size: "sm",
-								disabled: tokenSaving || token.trim() === "",
-								onClick: saveToken,
-								children: t("tokenSave")
-							}),
-							tokenSaved && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-								style: {
-									fontSize: 12,
-									color: "#22c55e"
-								},
-								children: t("tokenSaved")
-							}),
-							status?.tokenConfigured === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-								className: "pcm-token-badge",
-								children: t("tokenConfigured")
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
-						className: "pcm-settings-note",
-						children: t("tokenHint")
 					})
 				]
 			}),

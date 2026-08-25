@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { Button, IconLoadingOutline16, Input } from '@deepseek-ai/dsh-client-ui-primitives'
+import { Button, IconLoadingOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
 
 interface AutoUpdateBody {
   enabled: boolean
@@ -37,12 +37,6 @@ export function SettingsContent(props: {
   const [auto, setAuto] = useState<AutoUpdateBody | null>(null)
   const [autoBusy, setAutoBusy] = useState(false)
   const [status, setStatus] = useState<StatusBody | null>(null)
-  const [token, setToken] = useState('')
-  const [tokenSaving, setTokenSaving] = useState(false)
-  const [tokenSaved, setTokenSaved] = useState(false)
-  const [source, setSource] = useState('')
-  const [sourceSaving, setSourceSaving] = useState(false)
-  const [sourceSaved, setSourceSaved] = useState(false)
   const [selfBusy, setSelfBusy] = useState(false)
   const [selfDone, setSelfDone] = useState(false)
 
@@ -51,7 +45,6 @@ export function SettingsContent(props: {
       .then(res => res.json())
       .then((body: StatusBody) => {
         setStatus(body)
-        setSource(body.registryUrl ?? '')
       })
       .catch(() => {})
     fetch('/dsh-store/auto-update', { cache: 'no-store' })
@@ -78,44 +71,6 @@ export function SettingsContent(props: {
       })
       .catch(() => {})
       .finally(() => setAutoBusy(false))
-  }
-
-  const saveToken = () => {
-    if (token.trim() === '' || tokenSaving) return
-    setTokenSaving(true)
-    fetch('/dsh-store/token', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ token: token.trim() }),
-    })
-      .then(res => res.json())
-      .then((body: { ok?: boolean }) => {
-        if (body.ok === true) {
-          setTokenSaved(true)
-          setToken('')
-        }
-      })
-      .catch(() => {})
-      .finally(() => setTokenSaving(false))
-  }
-
-  const saveSource = () => {
-    if (sourceSaving) return
-    setSourceSaving(true)
-    fetch('/dsh-store/source', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ url: source.trim() }),
-    })
-      .then(res => res.json())
-      .then((body: { ok?: boolean; registryUrl?: string }) => {
-        if (body.ok === true) {
-          setStatus(s => (s === null ? null : { ...s, registryUrl: body.registryUrl ?? '' }))
-          setSourceSaved(true)
-        }
-      })
-      .catch(() => {})
-      .finally(() => setSourceSaving(false))
   }
 
   const doSelfUpdate = () => {
@@ -159,27 +114,6 @@ export function SettingsContent(props: {
         <div className="pcm-settings-note">
           {auto?.enabled === true ? t('autoUpdateOn') + ' · ' + lastRun : t('autoUpdateOff')}
         </div>
-      </div>
-
-      <div className="pcm-settings-sec">
-        <div className="pcm-settings-sec-title">{t('settingsSource')}</div>
-        <Input autoComplete="off" value={source} placeholder={t('sourcePlaceholder')} onChange={e => setSource(e.target.value)} />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Button variant="primary" size="sm" disabled={sourceSaving} onClick={saveSource}>{t('sourceSave')}</Button>
-          {sourceSaved && <span style={{ fontSize: 12, color: '#22c55e' }}>{t('sourceSaved')}</span>}
-        </div>
-        <div className="pcm-settings-note">{t('sourceHint')}</div>
-      </div>
-
-      <div className="pcm-settings-sec">
-        <div className="pcm-settings-sec-title">{t('settingsToken')}</div>
-        <Input type="password" autoComplete="off" value={token} placeholder={t('tokenPlaceholder')} onChange={e => setToken(e.target.value)} />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Button variant="primary" size="sm" disabled={tokenSaving || token.trim() === ''} onClick={saveToken}>{t('tokenSave')}</Button>
-          {tokenSaved && <span style={{ fontSize: 12, color: '#22c55e' }}>{t('tokenSaved')}</span>}
-          {status?.tokenConfigured === true && <span className="pcm-token-badge">{t('tokenConfigured')}</span>}
-        </div>
-        <div className="pcm-settings-note">{t('tokenHint')}</div>
       </div>
 
       <div className="pcm-settings-sec">
