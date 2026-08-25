@@ -96,5 +96,3 @@ The plugin ships a skill called `dsh-mall`. Run `/dsh-mall find a plugin that ca
 ## License
 
 [MIT](LICENSE) © hoyyang. Data from GitHub and [awesome-dsh-plugin](https://awesome-dsh-plugin.com) (MIT) under their own terms.
-
-Design ideas from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).

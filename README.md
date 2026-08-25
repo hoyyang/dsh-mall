@@ -96,5 +96,3 @@ dsh 首页左侧栏，「设置」按钮正上方就是 **DSH 商场**，点一�
 ## 许可证
 
 [MIT](LICENSE) © hoyyang。数据来自 GitHub 与 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（MIT），各自条款为准。
-
-设计上参考了 [dshmarket](https://www.npmjs.com/package/dshmarket) 和 [dsh-market](https://github.com/2BingLing/dsh-market)。
