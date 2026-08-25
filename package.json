@@ -6,6 +6,14 @@
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoyyang/dsh-store.git"
+  },
+  "homepage": "https://github.com/hoyyang/dsh-store#readme",
+  "bugs": {
+    "url": "https://github.com/hoyyang/dsh-store/issues"
+  },
   "keywords": [
     "deepseek",
     "harness",
@@ -60,7 +68,11 @@
     "client",
     "data",
     "cordis.patch.yml",
-    "LICENSE"
+    "LICENSE",
+    "README.md",
+    "README.zh.md",
+    "CHANGELOG.md",
+    "assets"
   ],
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",

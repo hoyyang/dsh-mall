@@ -1,79 +1,67 @@
-# DSH Store · DSH 商店
+# DSH Store
 
-The complete GitHub #dsh-plugin catalog inside DeepSeek Harness: browse
-every repo tagged dsh-plugin, search, sort, filter (plugin / non-plugin /
-awesome-curated / installed), one-click install & uninstall, and publish
-your own plugin by adding the topic.
+**The complete plugin store for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem (11,000+ repos), one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
 
-装在 DeepSeek Harness 里的 GitHub 全量插件目录：浏览所有带 #dsh-plugin
-标签的仓库，搜索、排序、筛选（是否插件 / awesome 精选 / 已安装），一键安装卸载，
-并可一键为自己的仓库打上标签上架。
+[**中文**](README.zh.md) · [Releases](https://github.com/hoyyang/dsh-store/releases) · [Changelog](CHANGELOG.md)
 
-Custom data source: the settings card accepts any registry.json URL
-(DSH_STORE_REGISTRY_URL env persists it); the official index
-(hoyyang/dsh-market-index, refreshed every 30 min) stays the fallback.
-Fork dsh-market-index to run your own index.
+<p align="center">
+  <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
+  <img alt="npm" src="https://img.shields.io/npm/v/dsh-store">
+  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-store">
+  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-store?style=flat">
+</p>
 
-## Install
+![DSH Store](assets/screenshot-main.png)
 
-    dsh plugin --profile web add github:YOUR/dsh-store
-    # or from a local checkout:
-    dsh plugin --profile web add /path/to/dsh-store
+---
 
-Restart dsh web, then open Settings → DSH Store.
+## ✨ Features
 
-需要 dsh web ≥ 0.1.0-rc.6（缺组件时市场会自我禁用并在控制台说明原因）。
+- 🌐 **Complete catalog** — 11,000+ GitHub repos from our own CI index (incremental every 2h + daily full rebuild), served over CDN with a bundled snapshot fallback. Never rate-limited.
+- 🧠 **Smart install / update / uninstall** — a pre-install AI security review (install / caution / refuse) runs through your configured model; local risk lists guard uninstalls. Falls back to the regular path when AI is unavailable.
+- 📊 **Five-dimension practical score** — maintain / practical / popularity / ease / signal, weighted geometric mean × confidence, with a radar chart and "why recommended" reasons.
+- 🏷️ **LLM-tagged labels & descriptions** — 11,032 plugins carry Chinese function tags and one-line descriptions in 9 languages, refreshed through the index pipeline (no per-user LLM cost).
+- 🌍 **9-language UI** — English, 中文, 日本語, 한국어, Español, Français, Deutsch, Português, Русский — one click switches the entire store.
+- 🛡️ **Trust badges** — machine scan (dsh.bundle verified in the repo tree), awesome curated, human verified, has-skill, stale & npm-unlinked warnings.
+- ⭐ **Editor picks & For You** — weekly curated picks; profile-based recommendations with MMR diversity plus a cold-start quiz.
+- ⬇️ **Signals you care about** — today's +stars, npm downloads (30d & total), publish date, version capsules.
+- 🧰 **Full lifecycle management** — one-click update, daily auto-update (03:30), rollback, enable/disable switch (hot), task panel with progress & cancel.
+- 📖 **Safe README rendering** — sanitized markdown with shields/badge cleanup, plus parsed install commands from the README (display-only, copyable).
+- 🔌 **Agent-friendly** — ships the `find_dsh_store_plugin` tool and a skill so agents can discover plugins in conversations.
 
-## Features
+## 📦 Install
 
-- Full catalog: every public GitHub repo with the dsh-plugin topic (7k+ and
-  growing), fetched in date shards with a 30-min host cache and a bundled
-  snapshot fallback.
-- Rich cards: name, description, stars, category badge, publish age, last
-  update, and today's star delta (computed from a local daily baseline —
-  the field shows — until the baseline exists).
-- Classification: awesome-dsh-plugin curated map first, then
-  name/description/topic rules, then other. A three-tier isPlugin verdict
-  (heuristic → package.json check → unknown badge).
-- Filters: category × kind (all / plugins / non-plugins) × awesome-only,
-  plus recency window; everything combines with realtime search and 4 sort
-  modes (stars ↑↓, today's +stars ↑↓).
-- Install / uninstall with risk-graded confirmation (curated green,
-  community yellow, likely-not-a-plugin red), progress via status polling,
-  installed badge matching profile deps.
-- Publish your plugin: add the dsh-plugin topic to your own repo with one
-  click (GitHub token, repo scope) — or copy the gh command / do it manually.
-- GitHub token (Settings → Plugins → plugin configuration, or the
-  DSHM_GITHUB_TOKEN env var): raises search limits 10→30/min and core
-  60→5000/h and enables the verification batch. Memory only.
+```sh
+dsh plugin add dsh-store
+# or, for a specific profile:
+dsh plugin --profile web add dsh-store
+```
 
-## Security
+Restart `dsh web` and open **DSH Store** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
 
-- Install/uninstall/token/publish routes accept same-origin POSTs only.
-- The GitHub token never touches disk, logs, or responses.
-- Build scripts stay blocked (pnpm ≥10 default).
+## ✅ Requirements
 
-## Data
+- **DeepSeek Harness (dsh web) 0.1.0-rc.8 or newer** — tested against 0.1.0-rc.8.
+- npm peers: `@deepseek-ai/cordis ^4.0.1`, `@deepseek-ai/dsh-settings ^0.1.0-rc.6` (optional), `@deepseek-ai/dsh-tools ^0.1.0-rc.6` — these are resolved automatically when installed through the store/plugin tooling.
+- Optional: a GitHub token (`DSHM_GITHUB_TOKEN` or `githubToken` in your cordis config) raises the API quota for search/verify/version lookups. It is kept **in memory only** and never written to disk or sent anywhere else.
 
-- Primary: your own static index (GitHub Actions, star-segment binary
-  split past the 1000/query cap, rebuilt every 2h, daily full refresh) via
-  jsDelivr CDN — zero API quota on the user side. ~7.1k repos.
-  See https://github.com/hoyyang/dsh-market-index (pipeline based on
-  https://github.com/bradeGithub/DSH-Plugins-Marketplace, MIT)
-- Fallback: bundled snapshot (data/registry-snapshot.json, 7.1k repos,
-  rebuild with npm run snapshot); optional direct Search API union with a
-  token. Anonymous qualifier queries (created:/stars:) return 0 on shared
-  egress IPs and HTML topic pages cap at 50 pages, so the CDN channel is
-  the primary source by design.
-- Today's star delta needs a daily baseline: recorded locally on the first
-  successful fetch of each day.
-- Bundled snapshots: data/registry-snapshot.json, data/awesome-known.json
-  (rebuild with npm run snapshot).
+## 🗂 How data works
 
-## License
+The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (1,900+ hand-picked entries), classified into 20 categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-store reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
 
-MIT
+## 🔐 Security
 
-## Versioning
+- All mutating endpoints (install/uninstall/update/toggle) accept **same-origin requests only**.
+- Install sources are always shown before confirming; smart install routes repository content into a headless AI review as **untrusted data** (delimited, non-executable).
+- GitHub tokens are never persisted; user-level data-source/token routes were removed (deployment config only).
+- Third-party plugins are third-party code — review before installing. The machine-scan badge means *installable structure*, not a security audit.
 
-A.B.C — major (A, max two digits) bumps on breaking/major changes; minor (B) adds features; patch (C) fixes bugs. Release: npm version <patch|minor|major>, update CHANGELOG, npm run build && npm pack.
+## 🤔 Why another marketplace?
+
+40+ marketplace plugins exist — most are similar. DSH Store bets on **audit + curation + trends + evidence**: machine scan verdicts, curated picks, five-dimension scoring with explanations, LLM tags, and an independent data pipeline. If you want numbers first, this is the store for you.
+
+## 📄 License
+
+[MIT](LICENSE) © hoyyang. Data from GitHub and [awesome-dsh-plugin](https://awesome-dsh-plugin.com) (MIT) under their own terms.
+
+Built with ideas from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).

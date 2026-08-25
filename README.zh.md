@@ -1,53 +1,67 @@
-# DSH 商店（dsh-store）
+# DSH 商店
 
-DeepSeek Harness 里的 GitHub 全量插件市场：收录所有带 #dsh-plugin 标签的公开仓库（8000+ 且持续增长），支持浏览、搜索、排序、筛选、一键安装/卸载，并可一键给自己的仓库打标签上架。
+**DeepSeek Harness 最全的插件商店** —— 全量收录 `#dsh-plugin` 生态（11,000+ 仓库），浏览、搜索、一键安装，智能 AI 装前审查，五维实用评分，九语言界面。
 
-## 安装
+[**English**](README.md) · [Releases](https://github.com/hoyyang/dsh-store/releases) · [更新日志](CHANGELOG.md)
 
-    dsh plugin --profile web add github:YOUR/dsh-store
-    # 或本地构建包：
-    dsh plugin --profile web add /path/to/dsh-store
+<p align="center">
+  <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
+  <img alt="npm" src="https://img.shields.io/npm/v/dsh-store">
+  <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-store">
+  <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-store?style=flat">
+</p>
 
-重启 dsh web，打开 设置 → DSH 商店。
+![DSH 商店](assets/screenshot-main-zh.png)
 
-需要 dsh web ≥ 0.1.0-rc.6（缺组件时市场会自我禁用并在浏览器控制台说明原因）。
+---
 
-## 功能
+## ✨ 功能
 
-- 全量目录：GitHub 上所有 dsh-plugin topic 公开仓库（约 7.1k）。数据来自你自己的索引仓库 hoyyang/dsh-market-index：GitHub Actions 用 stars 分段 + 对半二分突破单 query 1000 条上限全量收敛，每 2 小时增量、每天全量刷新，经 jsDelivr CDN 分发（插件端零 API 限流）；host 端 30 分钟 TTL 缓存 + 内置快照兜底。
-- 卡片字段：项目名、简介、star 数、分类徽标、发布时间、发布时长、最近更新、今日 star 增长（本地每日基线差值，无基线显示 —）、精选/非插件/已安装徽标。
-- 分类：沿用 awesome-dsh-plugin 12 类 + 其他；精选映射表优先，其次名称/描述/topics 规则，兜底其他。
-- 是否插件判定：三层（免费启发式 → 按需抓 package.json 深度校验并缓存结论 → 待判定徽标）；有 token 时后台全量批处理。
-- 筛选：分类 × 是否插件（全部/仅插件/非插件）× 仅精选 × 已安装 × 最近活跃时间窗，全部与实时搜索、4 种排序（star 升/降、今日增长升/降）组合生效，纯前端零网络请求。「已安装」按当前 profile 的依赖与 bundles 清单判定，与其他筛选及分类计数实时联动。
-- 安装/卸载：风险分级确认（精选绿 / 社区黄 / 疑似非插件红）+ 进度轮询 + 已安装徽标；经 dsh CLI 写入 profile 依赖与 bundles，卸载同步清理。
-- 上传我的插件：为自己的仓库一键添加 dsh-plugin 标签（需 GitHub token，repo 权限）——GitHub 索引后几分钟即可在市场搜到；无 token 可复制 gh 命令或手动在 About 添加标签。
-- GitHub token：设置 → 插件 → 插件配置 的卡片（dsh ≥ rc.7）或 POST /dsh-store/token、DSHM_GITHUB_TOKEN 环境变量；提升限额（search 10→30/分钟、core 60→5000/小时）并启用判定批处理。token 仅存内存。
-- 自定义数据源：设置卡片可填任意 registry.json 格式的 URL（DSH_STORE_REGISTRY_URL 环境变量可持久化）；自定义源优先，官方索引（hoyyang/dsh-market-index，每 30 分钟增量更新）兜底。想自建市场：fork dsh-market-index 仓库即得自己的索引。
+- 🌐 **全量目录** —— 自有 CI 索引收录 11,000+ GitHub 仓库（每 2 小时增量 + 每日全量重建），CDN 分发 + 打包快照兜底，永不限流。
+- 🧠 **智能安装 / 更新 / 卸载** —— 装前 AI 安全审查（install / caution / refuse 三档结论）走你配置的模型；卸载前扫描本地依赖风险。AI 不可用时自动降级常规路径。
+- 📊 **五维实用评分** —— 维护 / 实用 / 热度 / 便捷 / 信号，加权几何平均 × 置信度，卡片雷达图 + 「为什么推荐」理由。
+- 🏷️ **LLM 打标中文标签 + 九语言简介** —— 11,032 个插件自带中文功能标签与九语言一句话简介，经索引管道分发（用户零 LLM 成本）。
+- 🌍 **九语言界面** —— 中文、English、日本語、한국어、Español、Français、Deutsch、Português、Русский，一键切换全店文案。
+- 🛡️ **信任徽章** —— 已扫描（仓库树机器校验 dsh.bundle）、awesome 官方精选、已验证、含 skill、休眠与 npm 未回指警告。
+- ⭐ **编辑精选 + 为你推荐** —— 每周更新的编辑精选；基于已装画像的推荐（MMR 多样性）+ 冷启动问卷。
+- ⬇️ **关键信号** —— 今日新增 star、npm 近 30 天 / 总下载量、收录时间、版本胶囊。
+- 🧰 **全生命周期管理** —— 一键更新、每日自动更新（03:30）、回退、启用开关（热生效）、带进度与取消的任务面板。
+- 📖 **README 安全渲染** —— 清洗后的 Markdown（徽章/残缺标签清理），并解析 README 安装命令（仅展示、可复制）。
+- 🔌 **Agent 友好** —— 自带 `find_dsh_store_plugin` 工具与 skill，对话中即可发现插件。
 
-## 数据刷新时机
+## 📦 安装
 
-- 进入市场分区（mount）：拉取 registry，命中 TTL 缓存秒开，过期则后台重抓并展示旧数据 + 刷新中状态。
-- 切换分类/筛选：纯前端即时过滤 + 触发一次静默刷新（TTL 内不重复请求）。
-- 手动刷新按钮：绕过 TTL 强制重抓，显示分片进度与完成时间。
-- GitHub 限流时自动降级内置快照并提示恢复倒计时。
+```sh
+dsh plugin add dsh-store
+# 或指定 profile：
+dsh plugin --profile web add dsh-store
+```
 
-## 安全
+重启 `dsh web`，在侧边栏「设置」上方打开 **DSH 商店**；也可以在官方设置浮窗里找到「DSH 商店设置」。
 
-- 安装/卸载/上传/token 路由仅接受同源 POST。
-- token 不落盘、不进日志、不出现在任何响应中。
-- 构建脚本保持 pnpm ≥10 默认禁止。
+## ✅ 兼容性
 
-## 已知取舍
+- **需要 DeepSeek Harness（dsh web）0.1.0-rc.8 或更新版本** —— 已在 0.1.0-rc.8 实测。
+- npm peer 依赖：`@deepseek-ai/cordis ^4.0.1`、`@deepseek-ai/dsh-settings ^0.1.0-rc.6`（可选）、`@deepseek-ai/dsh-tools ^0.1.0-rc.6` —— 经商店/插件工具安装时自动解析。
+- 可选：GitHub Token（`DSHM_GITHUB_TOKEN` 或 cordis 配置 `githubToken`）提升搜索/验证/版本查询额度；token **仅存内存**，不落盘、不外发。
 
-- 今日 star 增长需要本地每日基线：当天首次成功抓取落盘，此后与基线求差；新装用户当天显示 —。
-- 无 token 时 isPlugin 深度校验按 GitHub 限额排队，仅处理当前页附近条目；token 可全量批处理。
-- v1 安装后需刷新页面激活（未做热挂载）；卸载同样即时生效但 UI 状态在下次 status 轮询后更新。
+## 🗂 数据管道
 
-## 开发
+目录由配套索引仓库 [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index) 构建：GitHub 搜索 + 人工策展目录 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（1,900+ 精选条目），20 类分类，富化 bundle 扫描、npm 回指、休眠检测、README 结构与 LLM 标签。商店经 raw/jsDelivr CDN 通道读取，每 30 分钟刷新一次；GitHub 不可用或限流时回落到打包快照。
 
-    npm install        # 依赖
-    npm run build      # tsc（host）+ tsdown（client bundle）+ normalize
-    npm run snapshot   # 重建内置快照（data/）
-    npm run typecheck
+## 🔐 安全
 
-MIT License
+- 所有写操作接口（安装/卸载/更新/开关）**仅接受同源请求**。
+- 安装前始终展示来源；智能安装把仓库内容作为**不可信数据**（分隔符隔离、不执行）送入 headless AI 审查。
+- GitHub Token 从不持久化；用户级数据源/Token 设置路由已删除（仅部署配置可提供）。
+- 第三方插件是第三方代码——安装前请自行评估。「已扫描」徽章代表*结构可安装*，不是安全审计结论。
+
+## 🤔 为什么又做一个市场？
+
+市场类插件已有 40+ 家，多数同质化。DSH 商店押注 **审计 + 策展 + 趋势 + 证据**：机器扫描结论、精选策展、带解释的五维评分、LLM 标签，以及独立的数据管道。想要先看数据再安装，这里就是你的商店。
+
+## 📄 许可证
+
+[MIT](LICENSE) © hoyyang。数据来自 GitHub 与 [awesome-dsh-plugin](https://awesome-dsh-plugin.com)（MIT），遵循各自条款。
+
+借鉴自 [dshmarket](https://www.npmjs.com/package/dshmarket) 与 [dsh-market](https://github.com/2BingLing/dsh-market) 的设计思路。
