@@ -288,6 +288,7 @@ export const en: Record<string, string> = {
   recQuizCtaBtn: 'Pick features',
   recProfileChip: 'Personalized from your {0}-day usage',
   recDaily: 'Updated daily',
+  picksWeekly: 'Updated weekly',
   recRetakeQuiz: 'Retake quiz',
   smartSearchEmpty: 'Type your need in the search box first.',
 };
@@ -582,6 +583,7 @@ export const zh: Record<string, string> = {
   recQuizCtaBtn: '选功能',
   recProfileChip: '根据你 {0} 天的使用习惯推荐',
   recDaily: '每日更新',
+  picksWeekly: '每周更新',
   recRetakeQuiz: '重做问卷',
   smartSearchEmpty: '请先在搜索框里输入你的需求。',
 };

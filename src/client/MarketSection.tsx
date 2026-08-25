@@ -600,14 +600,48 @@ export function MarketSection(props: SectionProps) {
       })
       .catch(() => {})
   }
-  // v1.7.55：编辑精选 = awesome 人工策展条目按综合分取前 6（与「为你推荐」左右分栏）
-  const editorPicks = useMemo<MarketEntry[]>(() => {
-    if (data === null) return []
-    return data.plugins
+  // v1.7.58：编辑精选 = 每周更新——awesome 人工策展按综合分取前 6，
+  // 按「周一所在周的周一日期」快照到 localStorage（一周内不变、跨周重算）。
+  const editorPicks = (() => {
+    const [picks, setPicks] = useState<MarketEntry[]>([])
+    const weekKeyOf = (d: Date): string => {
+      const day = (d.getDay() + 6) % 7 // 周一=0
+      const mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day)
+      return mon.getFullYear() + '-' + String(mon.getMonth() + 1).padStart(2, '0') + '-' + String(mon.getDate()).padStart(2, '0')
+    }
+    const computePicks = (pluginsAll: MarketEntry[]): MarketEntry[] => pluginsAll
       .filter(p => p.curated === true && p.excluded == null && p.isPlugin !== false)
       .sort((a, b) => (b.score?.total ?? 0) - (a.score?.total ?? 0))
       .slice(0, 6)
-  }, [data])
+    useEffect(() => {
+      if (data === null) return
+      const wk = weekKeyOf(new Date())
+      let storedWeek = ''
+      let storedNames: string[] = []
+      try {
+        const raw = localStorage.getItem('dsh-store-picks-week')
+        if (raw !== null) {
+          const o = JSON.parse(raw) as { week?: string; names?: string[] }
+          storedWeek = o.week ?? ''
+          storedNames = Array.isArray(o.names) ? o.names : []
+        }
+      } catch { /* 忽略损坏的本地存储 */ }
+      if (storedWeek === wk && storedNames.length > 0) {
+        const byKey = new Map(data.plugins.map(p => [(p.owner + '/' + p.name).toLowerCase(), p]))
+        const restored = storedNames.map(n => byKey.get(n.toLowerCase())).filter((p): p is MarketEntry => p !== undefined)
+        if (restored.length === 6) {
+          setPicks(restored)
+          return
+        }
+      }
+      const fresh = computePicks(data.plugins)
+      setPicks(fresh)
+      try {
+        localStorage.setItem('dsh-store-picks-week', JSON.stringify({ week: wk, names: fresh.map(p => p.owner + '/' + p.name) }))
+      } catch { /* 忽略 */ }
+    }, [data])
+    return picks
+  })()
   const scannedCount = useMemo(() => plugins.filter(p => p.bundled === true).length, [plugins])
   const list = useMemo(
     () => visiblePlugins(plugins, { category: cat, kind, curatedOnly, verifiedOnly, installedOnly, favOnly, query: q, sort, sinceDays: 0, lang, scannedOnly, skillOnly }, isInstalled, isFav),
@@ -1541,6 +1575,7 @@ export function MarketSection(props: SectionProps) {
                 <path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" stroke="#d99a1f" strokeWidth="1.8" strokeLinejoin="round" />
               </svg>
               <span className="pcm-picks-title">{t('picksTitle')}</span>
+              <span className="pcm-picks-weekly">{t('picksWeekly')}</span>
               <span className="pcm-picks-sub">{t('curatedBadgeTitle')}</span>
             </div>
             <div className="pcm-picks-grid">

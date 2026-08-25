@@ -9,7 +9,6 @@ import { Component, createElement as h, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import { en, zh, storeLang, storeT } from './locales.ts'
-import { SettingsCard } from './SettingsCard.tsx'
 import { SettingsSection, SidebarStoreButton, StoreResultsLauncher, StoreSingleton } from './StoreWindow.tsx'
 import { injectStyles } from './styles.ts'
 
@@ -116,16 +115,6 @@ export function apply(ctx: MarketClientContext): void {
     locale: ctx.locale,
   })) as unknown as () => unknown))
 
-  // Settings card (dsh >= rc.7): nested inject so older hosts simply skip it.
-  const settingsCtx = ctx as unknown as {
-    inject(services: string[], callback: (scoped: { slots: SlotsService }) => void): void
-  }
-  settingsCtx.inject(['settingsScope'], (scoped) => {
-    scoped.slots.inject('settings.plugin.item', () => scoped.slots.register({
-      name: 'settings.plugin.item',
-      key: NS,
-      locale: NS,
-      inject: () => ({ t }),
-    }, () => h(SettingsCard, { t })))
-  })
+  // v1.7.58：插件页的「DSH 商店」配置卡已移除（与「DSH 商店-设置」section 重复，
+  // token/数据源等设置统一收敛在设置 section 内）。
 }
