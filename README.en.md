@@ -1,6 +1,6 @@
 # DSH Mall
 
-**The complete plugin mall for DeepSeek Harness** — browse the entire `#dsh-plugin` ecosystem, one-click install, AI-reviewed smart install, five-dimension practical scores, and a full UI in 9 languages.
+All the `#dsh-plugin` repos on GitHub, in one mall: browse, search, compare scores, one-click install. Before installing you can also let AI read the code first and veto it if it looks off.
 
 [**中文**](README.md) · [Releases](https://github.com/hoyyang/dsh-mall/releases) · [Changelog](CHANGELOG.md)
 
@@ -14,64 +14,81 @@
 
 ![DSH Mall](assets/screenshot-main.png)
 
-<div align="center" style="display:flex;overflow-x:auto;gap:8px;padding:4px 0">
-  <a name="gallery"></a>
-  <img src="assets/shot-en-detail.png" style="width:300px;flex:0 0 auto" alt="Plugin detail panel with five-dimension score, trust badges and sanitized README">
-  <img src="assets/shot-en-install.png" style="width:300px;flex:0 0 auto" alt="Install confirmation with AI-reviewed smart install">
-  <img src="assets/shot-en-settings.png" style="width:300px;flex:0 0 auto" alt="DSH Mall settings section">
-</div>
-
----
-
-## ✨ Features
-
-- 🌐 **Complete catalog** — the full `#dsh-plugin` ecosystem from our own CI index (incremental every 2h + daily full rebuild), served over CDN with a bundled snapshot fallback. Never rate-limited.
-- 🧠 **Smart install / update / uninstall** — a pre-install AI security review (install / caution / refuse) runs through your configured model; local risk lists guard uninstalls. Falls back to the regular path when AI is unavailable.
-- 🔌 **Agent-friendly** — ships the `find_dsh_mall_plugin` tool and a skill, so your agent discovers and recommends plugins right in the conversation.
-- 📊 **Five-dimension practical score** — maintain / practical / popularity / ease / signal, weighted geometric mean × confidence, with a radar chart and "why recommended" reasons.
-- 🏷️ **LLM-tagged labels & descriptions** — plugins carry Chinese function tags and one-line descriptions in 9 languages, refreshed through the index pipeline (no per-user LLM cost).
-- ⭐ **Editor picks & For You** — weekly curated picks; profile-based recommendations with MMR diversity plus a cold-start quiz.
-- 🛡️ **Trust badges** — machine scan (dsh.bundle verified in the repo tree), awesome curated, human verified, has-skill, stale & npm-unlinked warnings.
-- 🌍 **9-language UI** — English, 中文, 日本語, 한국어, Español, Français, Deutsch, Português, Русский — one click switches the entire store.
-- 🧰 **Full lifecycle management** — one-click update, daily auto-update (03:30), rollback, enable/disable switch (hot), task panel with progress & cancel.
-- 📖 **Safe README rendering** — sanitized markdown with shields/badge cleanup, plus parsed install commands from the README (display-only, copyable).
-- ⬇️ **Signals you care about** — today's +stars, npm downloads (30d & total), publish date, version capsules.
-
 ## Install
 
 ```sh
 dsh plugin add dsh-mall
-# GitHub channel (equivalent):
-dsh plugin add github:hoyyang/dsh-mall
-# or, for a specific profile:
-dsh plugin --profile web add dsh-mall
 ```
 
-Restart `dsh web` and open **DSH Mall** in the sidebar (above Settings). You can also reach the store settings from the official Settings window.
+Restart `dsh web` and **DSH Mall** shows up in the sidebar above Settings. Requires dsh web 0.1.0-rc.8 or newer (tested on 0.1.0-rc.8).
 
-## ✅ Requirements
+## What it does
 
-- **DeepSeek Harness (dsh web) 0.1.0-rc.8 or newer** — tested against 0.1.0-rc.8.
-- npm peers: `@deepseek-ai/cordis ^4.0.1`, `@deepseek-ai/dsh-settings ^0.1.0-rc.6` (optional), `@deepseek-ai/dsh-tools ^0.1.0-rc.6` — these are resolved automatically when installed through the store/plugin tooling.
-- **Works out of the box — no API key or setup required.** For heavy browsing, power users can raise the GitHub API quota through deployment configuration; credentials are kept in memory only and never persisted.
+- **Complete catalog** — every GitHub repo tagged `#dsh-plugin`, indexed by our own CI every 2 hours. No rate limits to worry about.
+- **Smart install / update / uninstall** — before installing, AI (your configured model) reads the repo and returns install / caution / refuse. Uninstall scans local dependents first. Falls back to the regular flow when AI is unavailable.
+- **Agent-friendly** — ships the `find_dsh_mall_plugin` tool and a skill: ask for a plugin in the conversation and it picks for you.
+- **Five-dimension score** — maintain, practical, popularity, ease, signal plus one composite. Hover the radar and it explains how each number is computed.
+- **Chinese tags + 9-language descriptions** — function tags in Chinese, one-line descriptions in nine languages, distributed through the index pipeline at zero per-user LLM cost.
+- **Editor picks + For You** — weekly picks; recommendations based on what you installed (with a 30-second cold-start quiz).
+- **Trust badges** — scanned (dsh.bundle verified by machine), curated, verified, has-skill, stale warnings. Glance and know.
+- **9-language UI** — 中文, English, 日本語, 한국어, Español, Français, Deutsch, Português, Русский. One click switches everything.
+- **Full lifecycle** — one-click update, daily auto-update (03:30), rollback, enable switch, task panel with progress and cancel.
+- **Safe README rendering** — sanitized markdown, badge residue cleaned up, install commands extracted for copy.
+- **Signals** — today's +stars, npm downloads (30d & total), version capsules.
 
-## 🗂 How data works
+## Usage walkthrough
 
-The catalog is built by our companion CI repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory (hand-picked entries), classified into curated categories, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. dsh-mall reads it over raw/jsDelivr CDN channels, refreshes every 30 minutes, and falls back to a bundled snapshot when GitHub is unreachable or rate-limited.
+Ranked by usefulness, brightest first. (Screenshots show the Chinese UI; every screen switches to any of the nine languages in one click.)
 
-## 🔐 Security
+### 🧠 Smart install — usefulness 95
 
-- All mutating endpoints (install/uninstall/update/toggle) accept **same-origin requests only**.
-- Install sources are always shown before confirming; smart install routes repository content into a headless AI review as **untrusted data** (delimited, non-executable).
-- Credentials are never persisted; user-level data-source/token routes were removed (deployment config only).
-- Third-party plugins are third-party code — review before installing. The machine-scan badge means *installable structure*, not a security audit.
+Pick "Smart install" in the confirm dialog: AI reviews the repo as untrusted data (delimited, never executed) and returns install / caution / refuse. "Refuse" stops the install; if AI fails or times out, it falls back to a regular install.
 
-## 🤔 Why another marketplace?
+![Install confirmation](assets/shot-zh-install.png)
 
-40+ marketplace plugins exist — most are similar. DSH Mall bets on **audit + curation + trends + evidence**: machine scan verdicts, curated picks, five-dimension scoring with explanations, LLM tags, and an independent data pipeline. If you want numbers first, this is the store for you.
+### 📊 Five-dimension score — usefulness 90
 
-## 📄 License
+A pentagon radar on every card: maintain, practical, popularity, ease, signal, plus the composite in the middle. The composite is a **weighted geometric mean** — multiplicative, so one near-zero dimension drags the whole thing down. That's why a new 0-star repo scores low honestly, and rises as stars come in. Hover the radar: it glows, zooms, and a tooltip follows your mouse explaining each number in plain words.
+
+![Detail score card](assets/shot-zh-detail.png)
+
+### 🔌 Agent-friendly — usefulness 90
+
+Works best for agents. Say what you need; the `find_dsh_mall_plugin` tool ranks the whole catalog and returns recommendations plus related entries, with a button back to the store window. Smart search first has your model translate the request into search terms, then ranks by keyword + reputation + quality.
+
+![Smart search results](assets/shot-results.png)
+
+### ⭐ Editor picks + For You — usefulness 85
+
+Two columns in the middle of the home screen: Editor picks (refreshed every Monday, top composite scores among the awesome-curated), and For You (based on what you used in the last 30 days plus the quiz, with reasons printed on each card). No idea what to install? The quiz takes 30 seconds.
+
+![Picks and recommendations](assets/shot-picks.png)
+
+### 🧰 Task panel + restart hint — usefulness 80
+
+Install/update/uninstall all show progress in a global task panel with cancel. Plugins whose patch carries config or expressions only hot-mount plain inserts — when a change needs a restart, the card shows "Restart required" with a "Why not effective yet?" fold-out that explains it in one sentence. The panel is shared: tasks started from the results window are visible from the main store and vice versa.
+
+![Task panel](assets/shot-tasks.png)
+
+### ⚙️ Settings — usefulness 75
+
+"DSH Mall - Settings" in the Settings window: auto-update toggle (daily 03:30), data source, optional GitHub quota config (memory only). When GitHub is down or rate-limited, the mall falls back to a bundled snapshot and keeps working.
+
+![Mall settings](assets/shot-zh-settings.png)
+
+## Where the data comes from
+
+Built by the companion repo [**hoyyang/dsh-market-index**](https://github.com/hoyyang/dsh-market-index): GitHub search + the curated [awesome-dsh-plugin](https://awesome-dsh-plugin.com) directory, enriched with bundle scans, npm linkage, dormant detection, README signals and LLM tags. The mall reads it over raw/jsDelivr CDN and refreshes every 30 minutes.
+
+## Security
+
+- Every mutating endpoint (install/uninstall/update/toggle) is same-origin only.
+- Install sources are always shown first; smart install treats repo content as untrusted data.
+- Credentials are never persisted; user-level data-source/token routes are removed (deployment config only).
+- Third-party plugins are third-party code — judge before installing. "Scanned" means installable structure, not a security audit.
+
+## License
 
 [MIT](LICENSE) © hoyyang. Data from GitHub and [awesome-dsh-plugin](https://awesome-dsh-plugin.com) (MIT) under their own terms.
 
-Built with ideas from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).
+Ideas borrowed from [dshmarket](https://www.npmjs.com/package/dshmarket) and [dsh-market](https://github.com/2BingLing/dsh-market).

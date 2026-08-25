@@ -49,6 +49,16 @@ export declare function extractVersion(spec: string): string | null;
 export declare function compareVersions(a: string, b: string): number;
 /** 已装依赖 × 目录索引：npm 最新版 > 已装版 → 可更新。link/file 安装跳过；
  *  无版本 spec 跳过；「不参与一键更新」名单与商场自身（dsh-mall）排除。 */
+/** v1.7.72：已装依赖 → 市场条目的全量解析（含「已是最新」条目，不筛版本）。
+ *  computeUpdates 只返回有更新的，导致已装但最新的包（如 dsh-session-manager）
+ *  在客户端拿不到精确 repo 身份——同名条目多个时无法判定哪个是真身。 */
+export declare function resolveInstalled(registry: Registry, deps: Record<string, string>): Array<{
+    name: string;
+    repo: string;
+    from: string;
+    to: string | null;
+    current: boolean;
+}>;
 export declare function computeUpdates(registry: Registry, deps: Record<string, string>, skip?: Set<string>): PluginUpdate[];
 export declare function heuristicIsPlugin(repo: {
     name: string;

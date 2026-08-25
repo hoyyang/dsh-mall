@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
+import { computeUpdates, compareVersions, fetchLocalizedDescriptions, loadRegistry, progress, readFavorites, readSkipUpdates, readState, resolveInstalled, setSkipUpdate, toggleFavorite, verifyRepos, writeState } from './catalog.ts'
 import { smartSearch, takeResults } from './find.ts'
 import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './github.ts'
 import { installState, loaderIdOf, patchDisables, pluginStatesOf, readManifest as readProfileManifest, removeLegacyPatchEntry, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
@@ -212,11 +212,13 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       // v1.7.3：updatesAll=不排 skip 的全量可更新列表（卡片「更新」按钮数据源——
       // 「不参与一键更新」只影响一键更新/自动更新，不影响单插件手动更新）。
       let updatesAll: Array<{ name: string; from: string; to: string; repo: string; npm: string }> = []
+      let installedRepos: Array<{ name: string; repo: string; from: string; to: string | null; current: boolean }> = []
       try {
         const { registry } = await loadRegistry(config.profile, config.githubToken, {})
         const skip = readSkipUpdates(config.profile)
         updates = computeUpdates(registry, manifest.dependencies, skip)
         updatesAll = computeUpdates(registry, manifest.dependencies, undefined)
+        installedRepos = resolveInstalled(registry, manifest.dependencies)
       } catch { /* registry 不可用时 updates 留空，不阻塞状态 */ }
       // 激活状态（live/disabled/restart）：bundle 装配 + patch 停用判定。 */
       const states = pluginStatesOf(config.profile, manifest)
@@ -233,6 +235,7 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         rateLimit: lastRateInfo(),
         updates,
         updatesAll,
+        installedRepos,
         pluginStates: states,
         rollbacks: state.rollbacks ?? {},
         skipUpdates: state.skipUpdates ?? [],

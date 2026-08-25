@@ -68,6 +68,7 @@ interface StatusBody {
   rateLimit?: { remaining?: number; reset?: number } | null
   updates?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
   updatesAll?: Array<{ name: string; from: string; to: string; repo: string; npm: string }>
+  installedRepos?: Array<{ name: string; repo: string; from: string; to: string | null; current: boolean }>
   pluginStates?: Record<string, 'live' | 'disabled' | 'restart'>
   rollbacks?: Record<string, { name: string; from: string; to: string; spec: string; at: string }>
   skipUpdates?: string[]
@@ -184,6 +185,7 @@ export function MarketSection(props: SectionProps) {
   // 任一入口发起的任务与结果（主商店/结果浮窗两个 MarketSection 共享同一列表）。
   const tasks = useSyncExternalStore(cb => taskStore.subscribe(cb), () => taskStore.get())
   const [tasksOpen, setTasksOpen] = useState(false)
+  const [whyEntry, setWhyEntry] = useState<string | null>(null)
   const tasksAnchorRef = useRef<HTMLButtonElement | null>(null)
   const nextTaskId = () => taskStore.nextId()
   const tasksSummary = taskSummary(tasks)
@@ -480,6 +482,13 @@ export function MarketSection(props: SectionProps) {
       const m = /^github:([\w.-]+\/[\w.-]+)/i.exec(s)
       if (m !== null) repos.add(m[1].toLowerCase())
     }
+    // v1.7.72：host resolveInstalled 给出每个已装依赖在市场里的精确仓库身份
+    // （含「已是最新」条目——updatesAll 只含可更新的，会漏掉最新版包）。
+    // 同名条目多个时（目录里有 7 个 dsh-session-manager），只有这个真实仓库
+    // 该被标已安装。
+    for (const u of status?.installedRepos ?? []) {
+      if (typeof u.repo === 'string' && u.repo.includes('/')) repos.add(u.repo.toLowerCase())
+    }
     return { names, repos }
   }, [status])
 
@@ -488,15 +497,21 @@ export function MarketSection(props: SectionProps) {
   const identityCounts = useMemo(() => {
     const names = new Map<string, number>()
     const npms = new Map<string, number>()
+    // v1.7.72：同名/同 npm 条目中的精选数量——撞名时只有「唯一精选」才按名放行，
+    // 多个精选同名（dsh-session-manager 有 4 个 curated）一律不放行。
+    const curatedNames = new Map<string, number>()
+    const curatedNpms = new Map<string, number>()
     for (const p of plugins) {
       const n = p.name.toLowerCase()
       names.set(n, (names.get(n) ?? 0) + 1)
+      if (p.curated) curatedNames.set(n, (curatedNames.get(n) ?? 0) + 1)
       if (p.npm !== null) {
         const pn = p.npm.toLowerCase()
         npms.set(pn, (npms.get(pn) ?? 0) + 1)
+        if (p.curated) curatedNpms.set(pn, (curatedNpms.get(pn) ?? 0) + 1)
       }
     }
-    return { names, npms }
+    return { names, npms, curatedNames, curatedNpms }
   }, [plugins])
 
   /** 全部已装包名（含本地 link 安装），只用于本地合成卡片的已装判定。 */
@@ -510,10 +525,12 @@ export function MarketSection(props: SectionProps) {
     if (e.local === true) return installedAll.has(e.name.toLowerCase())
     if (installedInfo.repos.has((e.owner + '/' + e.name).toLowerCase())) return true
     const nm = e.name.toLowerCase()
-    if (installedInfo.names.has(nm) && (identityCounts.names.get(nm) === 1 || e.curated)) return true
+    // v1.7.72：撞名时 curated 豁免收紧为「唯一精选」——多个精选同名一律不放行
+    // （真实身份由 updatesAll[].repo 精确匹配，见 installedInfo）。
+    if (installedInfo.names.has(nm) && (identityCounts.names.get(nm) === 1 || (e.curated && identityCounts.curatedNames.get(nm) === 1))) return true
     if (e.npm !== null) {
       const pn = e.npm.toLowerCase()
-      if (installedInfo.names.has(pn) && (identityCounts.npms.get(pn) === 1 || e.curated)) return true
+      if (installedInfo.names.has(pn) && (identityCounts.npms.get(pn) === 1 || (e.curated && identityCounts.curatedNpms.get(pn) === 1))) return true
     }
     return false
   }, [installedInfo, identityCounts, installedAll])
@@ -1836,6 +1853,28 @@ export function MarketSection(props: SectionProps) {
                   {/* v1.7.10：#3 已安装功能区（★ 行下方浅色圆角面板）——更新/卸载/回退/skip/开关全部收纳 */}
                   {installed && (
                     <div className="pcm-installed-panel" onClick={e => e.stopPropagation()}>
+                      {/* v1.7.72：已是最新标签（无可用更新时显示，dsh-market 同款语义） */}
+                      {upd === null && entry.local !== true && (
+                        <span className="pcm-latest-chip">{t('upToDate')}</span>
+                      )}
+                      {/* v1.7.72：重启后生效提示 + 「为什么未生效？」可展开说明
+                          （patch 带配置/表达式时热挂载只支持纯 insert，借鉴 dsh-market） */}
+                      {stateOf(entry) === 'restart' && (
+                        <div className="pcm-restart-note">
+                          <span className="pcm-restart-chip">⏳ {t('stateRestart')}</span>
+                          <button
+                            type="button"
+                            className={'pcm-restart-why' + (whyEntry === (entry.npm ?? entry.name) ? ' pcm-restart-why-open' : '')}
+                            onClick={e => { e.stopPropagation(); setWhyEntry(prev => prev === (entry.npm ?? entry.name) ? null : (entry.npm ?? entry.name)) }}
+                          >
+                            {t('whyNotEffective')}
+                            <span className="pcm-restart-why-caret" aria-hidden="true" />
+                          </button>
+                          {whyEntry === (entry.npm ?? entry.name) && (
+                            <div className="pcm-restart-why-body">{t('whyNotEffectiveBody')}</div>
+                          )}
+                        </div>
+                      )}
                       {upd !== null && (
                         <div className="pcm-installed-update">
                           <span className="pcm-update-versions" title={t('updateHint')}>
