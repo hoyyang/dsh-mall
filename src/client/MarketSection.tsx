@@ -37,6 +37,7 @@ import RadarChart from './RadarChart.tsx'
 import { ICON_DATA } from './icon.ts'
 import { TaskPanel } from './TaskPanel.tsx'
 import { clearSettledTasks, dismissTask, enqueueTask, patchTask, taskSummary, type TaskRecord } from './tasks.ts'
+import { taskStore } from './task-store.ts'
 
 const PAGE_SIZES = [20, 50, 100]
 
@@ -179,12 +180,12 @@ export function MarketSection(props: SectionProps) {
       .catch(() => setToast(t('installFailed')))
       .finally(() => setSmartSearchBusy(false))
   }, [smartSearchBusy, q, t])
-  // 进行中任务（安装/更新/卸载进度面板，参考 dshmarket）。
-  const [tasks, setTasks] = useState<TaskRecord[]>([])
+  // v1.7.71：任务列表挂全局 taskStore（业务逻辑层），任何浮窗实例都能看到
+  // 任一入口发起的任务与结果（主商店/结果浮窗两个 MarketSection 共享同一列表）。
+  const tasks = useSyncExternalStore(cb => taskStore.subscribe(cb), () => taskStore.get())
   const [tasksOpen, setTasksOpen] = useState(false)
   const tasksAnchorRef = useRef<HTMLButtonElement | null>(null)
-  const taskSeq = useRef(0)
-  const nextTaskId = () => 'task-' + String(++taskSeq.current) + '-' + String(Date.now() % 100000)
+  const nextTaskId = () => taskStore.nextId()
   const tasksSummary = taskSummary(tasks)
   // 浮窗模式：刷新/同步信息行 portal 到窗口头行（关闭叉号左侧）。
   const [headHost, setHeadHost] = useState<HTMLElement | null>(null)
@@ -201,7 +202,7 @@ export function MarketSection(props: SectionProps) {
   }, [floating])
   /** 任务收尾：ok→done（附 host 消息），否则→failed（附原因）并自动打开面板。 */
   const finishTask = useCallback((id: string, body: { ok?: boolean; message?: string; error?: string }, doneText: string) => {
-    setTasks(list => patchTask(list, id, body.ok === true
+    taskStore.set(patchTask(taskStore.get(), id, body.ok === true
       ? { state: 'done', detail: (body.message ?? '') !== '' ? body.message : doneText, reason: null }
       : { state: 'failed', reason: body.message ?? body.error ?? t('taskFailed'), detail: null }))
     if (body.ok !== true) setTasksOpen(true)
@@ -875,7 +876,7 @@ export function MarketSection(props: SectionProps) {
   const doSmartInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'smart-install',
       name: entry.npm ?? entry.owner + '/' + entry.name,
@@ -915,7 +916,7 @@ export function MarketSection(props: SectionProps) {
   const doInstall = useCallback((entry: MarketEntry) => {
     setConfirming(null)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'install',
       name: entry.npm ?? entry.owner + '/' + entry.name,
@@ -945,7 +946,7 @@ export function MarketSection(props: SectionProps) {
   const doUninstallLocal = useCallback((entry: MarketEntry) => {
     setRemovingLocal(null)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'uninstall',
       name: entry.name,
@@ -975,7 +976,7 @@ export function MarketSection(props: SectionProps) {
   const doUninstall = useCallback((entry: MarketEntry) => {
     setRemoving(null)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'uninstall',
       name: entry.npm ?? entry.owner + '/' + entry.name,
@@ -1045,7 +1046,7 @@ export function MarketSection(props: SectionProps) {
     setRemoving(null)
     setSmartUninstallBusy(true)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'smart-uninstall',
       name,
@@ -1063,7 +1064,7 @@ export function MarketSection(props: SectionProps) {
     setSmartUninstallPending(null)
     if (pending === null) return
     setSmartUninstallBusy(true)
-    setTasks(list => patchTask(list, pending.taskId, { state: 'running', detail: t('uninstalling').replace('{0}', pending.name) }))
+    taskStore.set(patchTask(taskStore.get(), pending.taskId, { state: 'running', detail: t('uninstalling').replace('{0}', pending.name) }))
     runSmartUninstallRequest(pending.name, pending.taskId, true)
   }, [smartUninstallPending, t, runSmartUninstallRequest])
 
@@ -1113,7 +1114,7 @@ export function MarketSection(props: SectionProps) {
   const doUpdateAll = useCallback(() => {
     if (updateBusy || updates.length === 0) return
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'update',
       name: t('updateAllShort').replace('{0}', String(updates.length)),
@@ -1131,7 +1132,7 @@ export function MarketSection(props: SectionProps) {
     setUpdatingConfirm(null)
     if (updateBusy) return
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'update',
       name: u.name,
@@ -1149,7 +1150,7 @@ export function MarketSection(props: SectionProps) {
   const doSmartUpdate = useCallback((entry: MarketEntry, u: { name: string; from: string; to: string }) => {
     setUpdatingConfirm(null)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'smart-update',
       name: u.name,
@@ -1234,7 +1235,7 @@ export function MarketSection(props: SectionProps) {
     }
     if (depName === null || rollbacks[depName] === undefined) return
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'rollback',
       name: depName,
@@ -1283,7 +1284,7 @@ export function MarketSection(props: SectionProps) {
     if (selfUpdateBusy || selfUpdate?.to == null) return
     setSelfUpdateBusy(true)
     const id = nextTaskId()
-    setTasks(list => enqueueTask(list, {
+    taskStore.set(enqueueTask(taskStore.get(), {
       id,
       kind: 'update',
       name: 'dsh-mall',
@@ -1338,7 +1339,7 @@ export function MarketSection(props: SectionProps) {
   return (
     <div className="pcm-root" ref={rootRef}>
       <div className="pcm-sticky-top">
-      {!seedMode && <div className="pcm-brand-card">
+      {!seedMode ? (<div className="pcm-brand-card">
       <div className="pcm-header">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: '1 1 auto', minWidth: 200 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1379,7 +1380,25 @@ export function MarketSection(props: SectionProps) {
           </button>
         </div>
       </div>
-      </div>}
+      </div>) : (
+      // v1.7.71：结果浮窗（seed）版深色条——与首页品牌卡同位置同视觉，
+      // 放「查看进行中任务」，任务数据走全局 taskStore（任何入口发起的任务都可见）。
+      <div className="pcm-brand-card pcm-seed-tasks-bar">
+        <div className="pcm-header" style={{ gap: 8 }}>
+          <img className="pcm-icon" src={ICON_DATA} alt="" width={18} height={18} />
+          <span className="pcm-seed-tasks-title" style={{ flex: '1 1 auto', color: '#f5f7ff', fontSize: 13, fontWeight: 600 }}>{t('resultsTitle')}</span>
+          <button
+            type="button"
+            ref={tasksAnchorRef}
+            className="pcm-tasks-btn"
+            aria-expanded={tasksOpen}
+            onClick={() => setTasksOpen(o => !o)}
+          >
+            {tasksSummary.running > 0 && <span className="pcm-spin"><IconLoadingOutline16 size={13} /></span>}
+            {tasksSummary.running > 0 ? t('tasksBtn') + '（' + String(tasksSummary.running) + '）' : t('tasksBtn')}
+          </button>
+        </div>
+      </div>)}
       {floating && !seedMode ? (
         headHost !== null && createPortal(
           <div className="pcm-header-row2 pcm-head-actions-row">
@@ -2043,8 +2062,8 @@ export function MarketSection(props: SectionProps) {
         open={tasksOpen}
         anchor={tasksAnchorRef.current}
         onClose={() => setTasksOpen(false)}
-        onClearSettled={() => setTasks(clearSettledTasks)}
-        onDismiss={id => setTasks(list => dismissTask(list, id))}
+        onClearSettled={() => taskStore.set(clearSettledTasks(taskStore.get()))}
+        onDismiss={id => taskStore.set(dismissTask(taskStore.get(), id))}
         onCancelTask={id => {
           fetch('/dsh-mall/cancel', {
             method: 'POST',
