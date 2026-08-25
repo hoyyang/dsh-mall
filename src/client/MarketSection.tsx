@@ -1729,7 +1729,9 @@ export function MarketSection(props: SectionProps) {
                       })()}
                       {/* v1.7.3：简介与 ★ 行之间的新信息行——今日 star、近30天下载、总下载 */}
                       <div className="pcm-stats2">
-                        <span className={today === null ? 'pcm-today' : (today >= 0 ? 'pcm-today pcm-today-up' : 'pcm-today pcm-today-down')} title={t('todayGainHint')}>{t('todayGain')}{today === null ? '—' : (today >= 0 ? '+' : '') + today} star</span>
+                        {typeof entry.todayStars === 'number' && entry.todayStars > 0 && (
+                          <span className="pcm-today pcm-today-up" title={t('todayGainHint')}>{t('todayGain')}+{entry.todayStars} star</span>
+                        )}
                         {typeof entry.downloads === 'number' && (
                           <span className="pcm-dl-30" title={t('downloadsHint')}>{t('downloads30Label')} {formatDownloads(entry.downloads)}</span>
                         )}

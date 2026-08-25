@@ -359,6 +359,7 @@ export function DetailPanel(props: {
             <div className="pcm-detail-actions">
               {props.isInstalled ? (
                 <>
+                  <Button variant="outline" size="sm" disabled className="pcm-installed-tag">{t('installed')}</Button>
                   {props.update != null && (
                     <Button variant="primary" size="sm" className="pcm-update-btn" disabled={props.updating} onClick={props.onUpdate}>
                       {props.updating ? <span className="pcm-spin"><IconLoadingOutline16 size={14} /></span> : t('updateBtn')}
@@ -380,9 +381,15 @@ export function DetailPanel(props: {
 
           <div className="pcm-detail-desc">{desc === '' ? '—' : desc}</div>
 
-          {/* v1.7.54：信任徽章行上移，与简介相邻（重点=信任+行动） */}
-          {(entry.verified != null || disclosure != null || entry.installable != null || entry.hasSkill === true) && (
+          {/* v1.7.57：信任徽章行——与首页卡片徽章内容/图标/样式完全一致（curated/verified/scanned/skill/disclosure），manual/non-plugin 为详情页补充徽章 */}
+          {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true || entry.installable != null) && (
             <div className="pcm-detail-safety">
+              {entry.curated && (
+                <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.4l-5.8 3 1.1-6.4-4.7-4.6 6.5-.9z" /></svg>
+                  {t('curatedBadge')}
+                </span>
+              )}
               {entry.hasSkill === true && (
                 <span className="pcm-safety pcm-safety-skill" title={t('skillBadgeHint')}>
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3.6 2.8 9.3l9.2 5.7 9.2-5.7z" /><path d="M6.6 12.3v4.2c0 1.6 2.4 2.9 5.4 2.9s5.4-1.3 5.4-2.9v-4.2" /><path d="M21.2 9.3v5.4" /></svg>
@@ -390,8 +397,15 @@ export function DetailPanel(props: {
                 </span>
               )}
               {entry.verified != null && (
-                <span className="pcm-safety pcm-safety-verified" title={t('verifiedHintTitle').replace('{0}', entry.verified.by + (entry.verified.at !== '' ? ' · ' + entry.verified.at.slice(0, 10) : ''))}>
-                  ✓ {t('verifiedBadge')}
+                <span className="pcm-safety pcm-safety-verified" title={t('verifiedBadgeHint') + ' · ' + entry.verified.by}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7.6" r="3.4" /><path d="M5.6 20.2c1.1-3.4 3.6-5.1 6.4-5.1s5.3 1.7 6.4 5.1c.3.8-.3 1.6-1.1 1.6H6.7c-.8 0-1.4-.8-1.1-1.6z" /></svg>
+                  {t('verifiedBadge')}
+                </span>
+              )}
+              {entry.bundled === true && (
+                <span className="pcm-safety pcm-safety-scanned" title={t('scannedBadgeHint')}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2.4l7.5 2.8v5.6c0 4.7-3.2 8.7-7.5 10.2-4.3-1.5-7.5-5.5-7.5-10.2V5.2l7.5-2.8z" /><path d="M9 11.6l2 2 4-4.2" /></svg>
+                  {t('scannedBadge')}
                 </span>
               )}
               {disclosure != null && (
@@ -588,6 +602,8 @@ export function DetailPanel(props: {
                 {props.related.map(r => (
                   <button key={r.owner + '/' + r.name} type="button" className="pcm-detail-related" onClick={() => props.onOpenEntry(r)}>
                     <span className="pcm-related-title">{r.name}</span>
+                    {/* v1.7.57：中间一行简介（打标多语言优先，左对齐） */}
+                    <span className="pcm-related-desc">{(r.tagDescriptions?.[langChoice] && r.tagDescriptions[langChoice] !== '') ? r.tagDescriptions[langChoice] : ((langChoice !== 'en' && r.descriptions?.[langChoice] && r.descriptions[langChoice] !== '') ? r.descriptions[langChoice] : (r.description === '' ? '—' : r.description))}</span>
                     <span className="pcm-related-sub">
                       <span className="pcm-related-stars">★ {formatStars(r.stars)}</span>
                       <span className="pcm-related-dev">{r.owner}</span>
