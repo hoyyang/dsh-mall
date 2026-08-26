@@ -23,6 +23,8 @@ interface FindPayload {
   related: MarketEntry[]
   /** 结果条目的分类表（与主商场同款 catLabel 数据源）。 */
   categories?: Record<string, { en: string; zh: string }>
+  /** v1.7.87：实际用于检索的词（AI 改写 + 原话英文词），诊断/透明化用。 */
+  refined?: string
 }
 
 /** Staged results: token -> payload. 跟随 session 生命周期（v1.7.15：不再 30 分钟
@@ -101,7 +103,10 @@ function keywordScore(e: MarketEntry, needle: string): number {
   let kw = 0
   let hitTokens = 0
   for (const token of tokensOf(needle)) {
-    if (name.includes(token.t)) { kw += token.w + 3; hitTokens++ }
+    // v1.7.87：仓库名命中大幅加权（+8）——「readme 工具」查询时 dsh-readme-forge
+    // 这类 0 星命名精确命中必须压过高星蹭词仓库（此前 name+3 与 desc+0 的
+    // 分差只有 2.4 分，被质量维度 0-8 分淹没，结果跑题）。
+    if (name.includes(token.t)) { kw += token.w + 12; hitTokens++ }
     else if (desc.includes(token.t)) { kw += token.w; hitTokens++ }
     else if (owner.includes(token.t)) kw += 1
   }
@@ -112,7 +117,7 @@ function keywordScore(e: MarketEntry, needle: string): number {
   else if (hitTokens >= 2) kw += 1
   // 关键词分设上限：name+desc 多处命中不无限叠加，防止"marketplace"字样
   // 淹没 dsh-market 这类命名。
-  kw = Math.min(kw, 18)
+  kw = Math.min(kw, 30)
   // 关键词弱命中（<3）的仓库不进推荐：大 star 蹭词仓库（8 万星项目
   // 恰好带"市场"字样）不该挤掉真正的插件。
   if (needle.trim() !== '' && kw < 3) return Number.NEGATIVE_INFINITY
@@ -190,7 +195,7 @@ export async function smartSearch(profile: string, token: string, rawQuery: stri
   if (original !== '') {
     const prompt = [
       '你是 DSH 插件搜索助手。把用户的需求改写/翻译成适合检索 GitHub 插件仓库的英文关键词（空格分隔，3-6 个，只保留核心功能词，例如"视觉"→vision）。',
-      '规则：不要输出 dsh/deepseek/harness/plugin/popular/best 这类通用词；保留功能语义词（vision、market、memory、wechat、pdf 等）。只输出 JSON：{"query": "..."}',
+      '规则：不要输出 dsh/deepseek/harness/plugin/popular/best 这类通用词；不要输出「写/做/生成/管理」这类动词本身（除非用户要的就是动词功能）；保留功能语义词（vision、market、memory、wechat、pdf 等）。用户消息里出现的英文专有词（如 readme、pdf、mcp、api、tui、skill）必须原样保留在检索词里，且放在最前面。只输出 JSON：{"query": "..."}',
       '用户需求：' + original,
     ].join('\n')
     try {
@@ -211,9 +216,18 @@ export async function smartSearch(profile: string, token: string, rawQuery: stri
   // v1.7.69：AI 改写可用时只用改写词（英文功能词）检索——拼接中文原文会引入
   // 大量 2 字滑动窗口噪声 token（"因为/现在/支持"等）在长中文简介里乱命中，
   // 高星英文条目靠噪声词挤掉真实结果。AI 不可用才回退原词。
-  const combined = aiUsed ? refined : original
+  // v1.7.87：原话里的英文专有词（readme/pdf/mcp/api…）无条件并入检索词——
+  // 模型偶尔会把 readme 这类词当通用词丢掉，导致 dsh-readme-forge 这种
+  // 精确命名仓库整个漏掉（「写 README 的最强工具」实测根因）。
+  const literalWords = (original.match(/[A-Za-z][A-Za-z0-9._-]{2,}/g) ?? [])
+    .map(w => w.toLowerCase())
+    .filter(w => !STOP_TOKENS.has(w))
+  // v1.7.87：原话英文词重复两遍加权——「readme」这类用户明说的词必须压过
+  // AI 泛化出的 markdown/docs（同名命中同分时质量分抢位，README 生成器反被
+  // markdown 查看器挤下去）。重复词 ×2 + 命中上限放宽到 30。
+  const combined = (aiUsed ? [...literalWords, ...literalWords, ...refined.split(/\s+/).filter(w => w !== '')].join(' ') : original).trim()
   const payload = await findPlugins(profile, token, combined, limit)
-  return { ...payload, aiUsed, query: original }
+  return { ...payload, aiUsed, refined: aiUsed ? combined : undefined, query: original }
 }
 
 export function installFindTool(ctx: { tools: { register(tool: unknown): void } }, profile: string, githubToken: () => string, webOrigin: () => string): void {

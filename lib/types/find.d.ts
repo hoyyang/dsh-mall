@@ -18,6 +18,8 @@ interface FindPayload {
         en: string;
         zh: string;
     }>;
+    /** v1.7.87：实际用于检索的词（AI 改写 + 原话英文词），诊断/透明化用。 */
+    refined?: string;
 }
 export declare function stageResults(profile: string, payload: FindPayload): string;
 export declare function takeResults(profile: string, token: string): FindPayload | null;

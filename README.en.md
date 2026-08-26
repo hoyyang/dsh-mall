@@ -9,7 +9,6 @@ Every `#dsh-plugin` repo on GitHub, in one mall: browse, search, compare scores,
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
   <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall?kill_cache=1">
-  <img alt="downloads" src="https://img.shields.io/npm/dw/dsh-mall">
   <img alt="release" src="https://img.shields.io/github/v/release/hoyyang/dsh-mall">
   <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
@@ -25,7 +24,7 @@ Restart `dsh web` and **DSH Mall** appears in the sidebar. Requires dsh web 0.1.
 
 ## What's inside
 
-- **The whole catalog** — every repo tagged `#dsh-plugin`, refreshed every 2 hours. No rate limits to worry about.
+- **The whole catalog** — every repo tagged `#dsh-plugin`, refreshed every 30 minutes, keeps working through rate limits.
 - **AI pre-install review** — AI reads the repo first and returns install / caution / refuse. "Refuse" blocks the install.
 - **Find plugins in the conversation** — the plugin ships a skill: run `/dsh-mall` in your agent session, describe what you need, and it picks for you. The reply ends with a button that opens the store window.
 - **Five-dimension score** — maintain, practical, popularity, ease, signal, plus a composite. Hover the radar and it explains each number in plain words.
@@ -72,7 +71,7 @@ Every card has a pentagon radar with the composite in the middle. The composite 
 
 ### 6. No idea what to install? These two columns
 
-Middle of the home screen: "Editor picks" (refreshed every Monday, top composite scores among the curated) and "For You" (based on your last 30 days plus the quiz, with reasons on each card). Still no idea? The quiz takes 30 seconds.
+Middle of the home screen: "Editor picks" (a fresh six every Monday — the top composite scores from the awesome curated list) and "For You" (based on the plugins you installed recently and the quiz — recent activity counts more, hover a card to see the reasons). Still no idea? The quiz takes 30 seconds.
 
 ![Picks and recommendations](assets/shot-picks-en.png)
 

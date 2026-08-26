@@ -9,7 +9,6 @@ GitHub 上所有 `#dsh-plugin` 插件都在这：逛、搜、比分数，看中�
 <p align="center">
   <img alt="dsh compatibility" src="https://img.shields.io/badge/dsh-0.1.0--rc.8%2B-blue">
   <img alt="npm" src="https://img.shields.io/npm/v/dsh-mall?kill_cache=1">
-  <img alt="downloads" src="https://img.shields.io/npm/dw/dsh-mall">
   <img alt="release" src="https://img.shields.io/github/v/release/hoyyang/dsh-mall">
   <img alt="license" src="https://img.shields.io/github/license/hoyyang/dsh-mall">
   <img alt="stars" src="https://img.shields.io/github/stars/hoyyang/dsh-mall?style=flat">
@@ -25,7 +24,7 @@ dsh plugin add dsh-mall
 
 ## 功能一览
 
-- **全目录**——GitHub 上打 `#dsh-plugin` 标签的仓库全收，每 2 小时自动更新，不怕限流。
+- **全目录**——GitHub 上打 `#dsh-plugin` 标签的仓库全收，每 30 分钟自动刷新，遇到限流也能接着用。
 - **AI 装前审查**——装之前 AI 把仓库代码读一遍，给「装 / 谨慎 / 别装」的结论，别装就直接拦下。
 - **在会话里找插件**——插件自带 skill，在 Agent 会话里执行 `/dsh-mall` 说一句需求，它直接从全目录挑好，结果带一个按钮点开就是商场卡片页。
 - **五维评分**——维护、实用、热度、便捷、信号，五个数加综合分，每张卡带雷达图。分数怎么算的，鼠标放雷达图上就解释给你听。
@@ -72,7 +71,7 @@ dsh 首页左侧栏，「设置」按钮正上方就是 **DSH 商场**，点一�
 
 ### 6. 不知道装什么？看这两栏
 
-首页中段：左「编辑精选」每周一更新，是人工策展里综合分最高的几位；右「为你推荐」看你 30 天装了啥、答过啥问卷，推荐理由写在卡上。还没想法？点问卷，30 秒出结果。
+首页中段两栏：左「编辑精选」每周一换一批，是 awesome 人工策展目录里综合分最高的六位；右「为你推荐」根据你最近装过的插件和答过的问卷来推（越近的越算数），悬停卡片能看到推荐理由。还没想法？点问卷，30 秒出结果。
 
 ![编辑精选与为你推荐](assets/shot-picks-zh.png)
 
