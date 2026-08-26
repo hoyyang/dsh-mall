@@ -1716,10 +1716,11 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
                       {(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}
                       {entry.avatar !== '' && (
                         <img
-                          className="pcm-av-img"
+                          className="pcm-av-img pcm-av-fade"
                           src={entry.avatar}
                           alt=""
-                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          onLoad={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1' }}
                           onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                         />
                       )}

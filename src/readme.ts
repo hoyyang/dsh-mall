@@ -59,6 +59,29 @@ export async function fetchRawReadme(repo: string, file: string, branch: string)
   return value
 }
 
+/** 某语言 README 的候选文件名（与客户端/富化同表）。 */
+export function readmeCandidates(lang: string): string[] {
+  const base: string[] = []
+  if (lang === 'en') base.push('README.md')
+  else if (lang === 'zh') base.push('README.zh-CN.md', 'README.zh.md', 'README.zh_CN.md', 'README.cn.md')
+  else base.push('README.' + lang + '.md')
+  const out = [...base]
+  if (!out.includes('README.md')) out.push('README.md')
+  return out
+}
+
+/** v1.7.89：并行探测某语言 README——候选文件同时抓（各 15s 超时、24h 缓存），
+ *  第一个命中的返回。串行逐文件抓在慢链路上最坏要 5×15s，详情页就卡在
+ *  「正在加载 README…」很久。 */
+export async function probeReadme(repo: string, lang: string, branch: string): Promise<{ ok: boolean; text: string; file: string }> {
+  if (!REPO_RE.test(repo) || !/^[a-z]{2}$/i.test(lang)) return { ok: false, text: 'invalid repo or lang', file: '' }
+  const safeBranch = /^[A-Za-z0-9._/-]+$/.test(branch) && !branch.includes('..') ? branch : 'main'
+  const candidates = readmeCandidates(lang.toLowerCase())
+  const results = await Promise.all(candidates.map(async file => ({ file, value: await fetchRawReadme(repo, file, safeBranch) })))
+  for (const r of results) if (r.value.ok) return { ok: true, text: r.value.text, file: r.file }
+  return { ok: false, text: results[0]?.value.text ?? 'readme unavailable', file: '' }
+}
+
 export async function fetchSanitizedReadme(repo: string, file: string, branch: string): Promise<{ ok: boolean; text: string }> {
   if (!REPO_RE.test(repo) || !FILE_RE.test(file) || file.includes('..')) return { ok: false, text: 'invalid repo or file' }
   const safeBranch = /^[A-Za-z0-9._/-]+$/.test(branch) && !branch.includes('..') ? branch : 'main'
@@ -66,15 +89,22 @@ export async function fetchSanitizedReadme(repo: string, file: string, branch: s
   const hit = cache.get(key)
   if (hit !== undefined && Date.now() - hit.at < TTL_MS) return hit.value
 
-  const rawBase = 'https://raw.githubusercontent.com/' + repo + '/' + safeBranch + '/'
-  const ghBase = 'https://github.com/' + repo + '/blob/' + safeBranch + '/'
   const raw = await fetchRawReadme(repo, file, safeBranch)
   if (!raw.ok) {
     const value = raw
     cache.set(key, { at: Date.now(), value })
     return value
   }
-  let md = raw.text
+
+  const value = { ok: true, text: sanitizeMarkdown(raw.text, repo, safeBranch) }
+  cache.set(key, { at: Date.now(), value })
+  return value
+}
+
+/** 安全清洗（v1.7.89 抽出复用：lang 探测路径与单文件路径共用同一清洗管线）。 */
+export function sanitizeMarkdown(md: string, repo: string, safeBranch: string): string {
+  const rawBase = 'https://raw.githubusercontent.com/' + repo + '/' + safeBranch + '/'
+  const ghBase = 'https://github.com/' + repo + '/blob/' + safeBranch + '/'
 
   const absolutize = (url: string, base: string): string => {
     if (/^(https?:|data:|#|mailto:)/i.test(url)) return url
@@ -97,7 +127,5 @@ export async function fetchSanitizedReadme(repo: string, file: string, branch: s
     .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_m: string, alt: string, url: string) => (/^https?:/i.test(url) || url.startsWith('#') ? _m : '![' + alt + '](' + absolutize(url, rawBase) + ')'))
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m: string, label: string, url: string) => (/^(https?:|#|mailto:)/i.test(url) ? _m : '[' + label + '](' + absolutize(url, ghBase) + ')'))
 
-  const value = { ok: true, text: md }
-  cache.set(key, { at: Date.now(), value })
-  return value
+  return md
 }

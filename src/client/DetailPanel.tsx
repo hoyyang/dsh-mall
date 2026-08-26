@@ -15,7 +15,7 @@
  * - 排版重设计：信任徽章行上移与简介相邻；单滚动容器（无子滚动）保持不变
  */
 
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import {
   Button,
   IconCloseOutline16,
@@ -117,36 +117,37 @@ function preprocessReadme(md: string, entry: MarketEntry): string {
 
 async function fetchReadme(entry: MarketEntry, lang: string): Promise<ReadmeHit> {
   const branch = entry.defaultBranch ?? 'main'
-  const candidates = [...readmeCandidates(lang), 'README.md']
+  // v1.7.89：一次请求由 host 并行探测该语言候选 README（不再客户端串行逐文件试）；
+  // 12s 硬超时，超时/失败可重试，不再无限「正在加载 README…」。
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), 12_000)
   let lastError = ''
-  for (const file of candidates) {
-    try {
-      // v1.7.26：README 走 host 安全预渲染端点（图片白名单/HTML 剥离/标题降级/
-      // 相对链接绝对化），客户端再做一次针对 MarkdownText 的徽章清理。
-      // v1.7.45：响应顺带 installCmds/cmdSource（host 解析，展示-only）。
-      const res = await fetch('/dsh-mall/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&file=' + encodeURIComponent(file) + '&branch=' + encodeURIComponent(branch))
-      if (res.ok) {
-        const body = await res.json() as { ok?: boolean; text?: string; installCmds?: string[]; cmdSource?: string }
-        if (body.ok === true && typeof body.text === 'string') {
-          const hit: ReadmeHit = { status: 'ok', text: preprocessReadme(body.text.slice(0, 200_000), entry) }
-          if (Array.isArray(body.installCmds) && body.installCmds.length > 0) {
-            hit.installCmds = body.installCmds
-            hit.cmdSource = body.cmdSource ?? 'readme'
-          }
-          return hit
+  try {
+    const res = await fetch('/dsh-mall/readme?repo=' + encodeURIComponent(entry.owner + '/' + entry.name) + '&lang=' + encodeURIComponent(lang) + '&branch=' + encodeURIComponent(branch), { signal: ctrl.signal })
+    if (res.ok) {
+      const body = await res.json() as { ok?: boolean; text?: string; installCmds?: string[]; cmdSource?: string }
+      if (body.ok === true && typeof body.text === 'string') {
+        const hit: ReadmeHit = { status: 'ok', text: preprocessReadme(body.text.slice(0, 200_000), entry) }
+        if (Array.isArray(body.installCmds) && body.installCmds.length > 0) {
+          hit.installCmds = body.installCmds
+          hit.cmdSource = body.cmdSource ?? 'readme'
         }
-        lastError = body.text ?? 'readme unavailable'
-      } else {
-        lastError = 'HTTP ' + res.status
+        return hit
       }
-    } catch (err) {
-      lastError = err instanceof Error ? err.message : String(err)
+      lastError = body.text ?? 'readme unavailable'
+    } else {
+      lastError = 'HTTP ' + res.status
     }
+  } catch (err) {
+    lastError = ctrl.signal.aborted ? 'timeout' : (err instanceof Error ? err.message : String(err))
+  } finally {
+    clearTimeout(timer)
   }
   return { status: 'error', text: lastError }
 }
 
-function useReadme(entry: MarketEntry, lang: string): ReadmeHit {
+function useReadme(entry: MarketEntry, lang: string): { hit: ReadmeHit; retry: () => void } {
+  const [tick, setTick] = useState(0)
   const [state, setState] = useState<ReadmeHit>(() => {
     const hit = readmeCache.get(entry.owner + '/' + entry.name + '#' + lang)
     return hit ?? { status: 'loading', text: '' }
@@ -165,8 +166,13 @@ function useReadme(entry: MarketEntry, lang: string): ReadmeHit {
       if (alive) setState(result)
     })
     return () => { alive = false }
+  }, [entry, lang, tick])
+  const retry = useCallback(() => {
+    const key = entry.owner + '/' + entry.name + '#' + lang
+    readmeCache.delete(key)
+    setTick(t => t + 1)
   }, [entry, lang])
-  return state
+  return { hit: state, retry }
 }
 
 /** Disclosure summary lines, e.g. "cloud", "network", "offline only". */
@@ -238,7 +244,7 @@ export function DetailPanel(props: {
 }) {
   const { t, entry, langChoice } = props
   // v1.7.54：删除详情页语言按钮——readmeLang 一律跟随全店语言 langChoice
-  const readme = useReadme(entry, langChoice)
+  const { hit: readme, retry: retryReadme } = useReadme(entry, langChoice)
   // v1.7.53：打标简介优先（LLM 多语言一句话），其次索引 README.<lang> 首段，最后英文兜底
   const desc = (entry.tagDescriptions?.[langChoice] && entry.tagDescriptions[langChoice] !== '')
     ? entry.tagDescriptions[langChoice]
@@ -538,7 +544,7 @@ export function DetailPanel(props: {
             )}
             {readme.status === 'error' && (
               <div className="pcm-detail-readme-note">
-                {t('readmeFailed')} <a className="pcm-detail-link" href={entry.url} target="_blank" rel="noopener noreferrer">{t('openRepo')} ↗</a>
+                {t('readmeFailed')} <button type="button" className="pcm-detail-link" onClick={retryReadme}>{t('readmeRetry')}</button> · <a className="pcm-detail-link" href={entry.url} target="_blank" rel="noopener noreferrer">{t('openRepo')} ↗</a>
               </div>
             )}
             {readme.status === 'ok' && (

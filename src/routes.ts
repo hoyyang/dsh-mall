@@ -18,7 +18,7 @@ import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdat
 import { ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
 import { ensureBundleScans, ensureSkillScans } from './scan.ts'
-import { fetchRawReadme, fetchSanitizedReadme } from './readme.ts'
+import { fetchRawReadme, fetchSanitizedReadme, probeReadme, sanitizeMarkdown } from './readme.ts'
 import { parseInstallCommands, detectNeedsConfig } from './install-parse.ts'
 import { enrichScore, type ScoreView } from './score.ts'
 import { runSmartInstall, runSmartUninstall, runSmartUpdate } from './smart.ts'
@@ -736,8 +736,17 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       const url = new URL(request.url ?? '/', 'http://localhost')
       const repo = url.searchParams.get('repo') ?? ''
       const file = url.searchParams.get('file') ?? ''
+      const lang = url.searchParams.get('lang') ?? ''
       const branch = url.searchParams.get('branch') ?? 'main'
-      const value = await fetchSanitizedReadme(repo, file, branch)
+      // v1.7.89：带 lang 时并行探测该语言候选 README（单请求拿到结果），
+      // 客户端不再逐个候选串行试，详情页 README 秒开。
+      let value: { ok: boolean; text: string }
+      if (lang !== '') {
+        const probed = await probeReadme(repo, lang, branch)
+        value = { ok: probed.ok, text: probed.ok ? sanitizeMarkdown(probed.text, repo, branch) : probed.text }
+      } else {
+        value = await fetchSanitizedReadme(repo, file, branch)
+      }
       // v1.7.45：顺带解析 README 安装命令（展示-only，不执行）。
       // 该语言 README 无安装章节时，回退 README.md 再解析一次。
       const extra: Record<string, unknown> = {}

@@ -64,6 +64,17 @@ export function apply(ctx: MarketClientContext): void {
   storeLang.init(hostActive.startsWith('zh') ? 'zh' : 'en')
   const t = storeT
   injectStyles()
+  // v1.7.89：头像与 README 源预连接（DNS+TCP+TLS 提前握手），
+  // 卡片头像秒出、详情页 README 探测更快。
+  try {
+    for (const origin of ['https://avatars.githubusercontent.com', 'https://raw.githubusercontent.com']) {
+      const link = document.createElement('link')
+      link.rel = 'preconnect'
+      link.href = origin
+      link.crossOrigin = 'anonymous'
+      document.head.appendChild(link)
+    }
+  } catch { /* 忽略 */ }
 
   // find 工具结果浮窗（智能搜索/按钮链接共用）+ 唯一商场浮窗单例。
   // v1.7.7：两个独立 React root + ErrorBoundary——任一崩溃互不影响，
