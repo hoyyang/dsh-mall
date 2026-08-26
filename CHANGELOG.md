@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.90 — 2026-08-26
+
+- **README 下载量徽章加回**：npm 下载统计库已有 dsh-mall 数据（截至 08-25 批次 915 次），两个 README（README.md / README.en.md）恢复 `npm/dw` 周下载量徽章（此前因统计库无数据显示 "package not found" 而移除）。
+
 ## 1.7.89 — 2026-08-26
 
 - **卡片头像提速**：去掉 loading="lazy"（头像立即加载）、加载完成淡入（不再"默认字母头像卡半天突然跳变"）、页面预连接 avatars.githubusercontent.com；实测开窗 3.5s 内 20/20 头像加载完成。
