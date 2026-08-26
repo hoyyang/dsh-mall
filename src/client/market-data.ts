@@ -109,7 +109,7 @@ export interface Registry {
   plugins: MarketEntry[]
 }
 
-export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc' | 'downloads-asc' | 'downloads-desc' | 'score-asc' | 'score-desc'
+export type SortKey = 'stars-asc' | 'stars-desc' | 'today-asc' | 'today-desc' | 'created-asc' | 'created-desc' | 'downloads-asc' | 'downloads-desc' | 'score-asc' | 'score-desc' | 'relevance-asc' | 'relevance-desc'
 export type PluginKind = 'all' | 'plugin' | 'nonplugin'
 export type SinceDays = 0 | 1 | 7 | 30 | 365
 

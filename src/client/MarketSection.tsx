@@ -116,7 +116,9 @@ export function MarketSection(props: SectionProps) {
   const [scannedOnly, setScannedOnly] = useState(false)
   const [skillOnly, setSkillOnly] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
-  const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads' | 'score'>('stars')
+  // v1.7.88：结果浮窗（seed）默认「相关度」排序——保持智能搜索的推荐顺序，
+  // 否则按 star 重排会把 dsh-readme-forge（0 星精确命中）挤到后排。
+const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'downloads' | 'score' | 'relevance'>(() => (props.seed != null ? 'relevance' : 'stars'))
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const sort = (sortDim + '-' + sortDir) as SortKey
   const LANGS = ['en', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'] as const
@@ -1333,6 +1335,7 @@ export function MarketSection(props: SectionProps) {
 
   const sortItems = useMemo<MenuEntry[]>(() => [
     { type: 'label', id: 'dim-label', text: t('sortDim') },
+    ...(seedMode ? [{ id: 'relevance' as const, label: t('sortRelevance') }] : []),
     { id: 'stars', label: t('sortStars') },
     { id: 'today', label: t('sortToday') },
     { id: 'downloads', label: t('sortDownloads') },
@@ -1503,7 +1506,7 @@ export function MarketSection(props: SectionProps) {
           </div>
           <button
             type="button"
-            className="pcm-smart-search-btn pcm-smart-search-btn-big"
+            className={'pcm-smart-search-btn pcm-smart-search-btn-big' + (q.trim() !== '' ? ' pcm-smart-search-ready' : '')}
             title={t('smartSearchHint')}
             disabled={smartSearchBusy}
             onClick={doSmartSearch}
@@ -1579,7 +1582,7 @@ export function MarketSection(props: SectionProps) {
             open={sortOpen}
             onClose={() => setSortOpen(false)}
             onSelect={id => {
-              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads' || id === 'score') setSortDim(id)
+              if (id === 'stars' || id === 'today' || id === 'created' || id === 'downloads' || id === 'score' || id === 'relevance') setSortDim(id)
               else if (id === 'asc' || id === 'desc') setSortDir(id)
               setPage(1)
             }}
