@@ -44,9 +44,17 @@ export declare function scorePracticalFromSig(sig: {
 }): number | null;
 /** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
 export declare function scorePractical(readme: string | null): number | null;
-/** 3. 生态热度：stars 对数归一化×0.6 + fork 参与率×0.4（理想区间 0.05-0.3，
- *  过高(刷 fork)/过低(无人参与)都扣分）。forks 缺失时仅 star 分降级。 */
-export declare function scorePopularity(stars: number | null, forks: number | null, p99Stars: number): number | null;
+/** npm 下载统计（downloads.json 通道，v1.8.0）。 */
+export interface DlStats {
+    dl7: number;
+    dl7prev: number;
+    dl30: number;
+    dlYTD: number;
+}
+export declare function setHotScores(dl: Record<string, DlStats> | null, starDelta: Record<string, number | null> | null): void;
+export declare function hotScoresReady(): boolean;
+export declare function setDownloadBaselines(p99dl30: number, p99dlYTD: number): void;
+export declare function scorePopularity(stars: number | null, forks: number | null, p99Stars: number, dl?: DlStats | null, starDelta30?: number | null): number | null;
 /** 4a. 便捷度（索引 CI 结构信号版）：安装命令/无需配置/结构说明，零网络。 */
 export declare function scoreEaseFromSig(sig: {
     cmds: string[];
@@ -70,6 +78,8 @@ export declare function buildExplanation(breakdown: ScoreBreakdown, stars: numbe
     curated?: boolean;
     verified?: boolean;
     bundled?: boolean;
+    dlActive?: boolean;
+    dl30?: number | null;
 }): {
     zh: string;
     en: string;
@@ -85,6 +95,10 @@ export interface ScoreInput {
     hasHomepage: boolean;
     topics: string[];
     p99Stars: number;
+    /** v1.8.0：npm 下载统计（实测）；缺失走 star 无偏换算。 */
+    dl?: DlStats | null;
+    /** v1.8.0：星 30 天增量（star-history.json）；<7 天窗口时 null=中性。 */
+    starDelta?: number | null;
     /** v1.7.50+：索引 CI README 结构信号（有则实用/便捷两维零网络可算）。 */
     readmeSig?: {
         len: number | null;
@@ -112,10 +126,14 @@ export declare function enrichScore(base: ScoreView, readme: string | null, need
     license?: string | null;
     topics?: string[];
     hasHomepage?: boolean;
+    dlActive?: boolean;
+    dl30?: number | null;
 }): ScoreView;
 /** 全量 stars 的 p99（动态基准，避免硬编码）。 */
 export declare function computeP99Stars(starsList: Array<number | null>): number;
-/** 目录加载时为整批条目挂基础分（原地修改，返回同一数组）。 */
+/** 目录加载时为整批条目挂基础分（原地修改，返回同一数组）。
+ *  v1.8.0：force=true 时无条件重算（downloads.json/star-history 拉取落地后
+ *  由 reapplyHotScores 触发），热度维随后接上实测下载量与星动量。 */
 export declare function attachScores(entries: Array<{
     pushed: string | null;
     stars: number | null;
@@ -125,6 +143,9 @@ export declare function attachScores(entries: Array<{
     openIssues?: number | null;
     forks?: number | null;
     homepage?: string | null;
+    npm?: string | null;
+    owner?: string;
+    name?: string;
     readmeSig?: {
         len: number | null;
         installSection: boolean;
@@ -135,4 +156,4 @@ export declare function attachScores(entries: Array<{
     } | null;
     score?: ScoreView | null;
     isPlugin?: boolean | null;
-}>): void;
+}>, force?: boolean): void;

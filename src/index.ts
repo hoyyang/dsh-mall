@@ -14,6 +14,7 @@ import { installMarketSettings } from './settings.ts'
 import { startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
 import { startAwesomeRefresh, stopAwesomeRefresh } from './awesome.ts'
 import { startTagsRefresh, stopTagsRefresh } from './tags.ts'
+import { startHotData, stopHotData } from './hotdata.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-mall'
@@ -93,12 +94,15 @@ export function apply(ctx: Context, config?: Config): void {
       startAwesomeRefresh(resolved.profile)
       // 中文打标（tags.json 手动 LLM 产物）保持最新（启动拉取 + 24h 周期）。
       startTagsRefresh(resolved.profile)
+      // 热度数据（downloads.json / star-history.json）保持最新——热度 v2 实测下载量与星动量。
+      startHotData(resolved.profile)
       return () => {
         disposeRoutes()
         removeSkill()
         stopAutoUpdate()
         stopAwesomeRefresh()
         stopTagsRefresh()
+        stopHotData()
       }
     }, 'dsh-mall: http routes + skill + auto-update timer')
   })

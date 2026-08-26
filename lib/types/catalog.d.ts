@@ -11,6 +11,9 @@ export declare const CATEGORIES: Record<string, {
     zh: string;
 }>;
 export declare function setKnownOverride(map: KnownMap | null): void;
+/** v1.8.0：热数据（downloads.json / star-history.json）落地后强制重算当前在内存
+ *  目录的热度维（实测下载量与星动量接入）。无内存目录时为 no-op（下次加载自然带上）。 */
+export declare function reapplyHotScores(): void;
 export declare function setTagsOverride(map: Record<string, {
     descriptions: Record<string, string>;
     tagsZh: string[];

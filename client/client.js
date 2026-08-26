@@ -2863,7 +2863,7 @@ const RULES = {
 		dims: {
 			maintain: "维护：最近是否还在更新代码、问题多不多",
 			practical: "实用：README 有没有安装说明和代码示例",
-			popularity: "热度：star / fork 多不多，社区认不认",
+			popularity: "热度：星数 + npm 下载量 + 增长趋势——没有 npm 数据就用星数换算等效下载量，同样算法不亏待",
 			ease: "便捷：能不能一条命令装好、要不要额外配置",
 			signal: "信号：许可证 / 简介 / 主题标签全不全"
 		},
@@ -2874,7 +2874,7 @@ const RULES = {
 		dims: {
 			maintain: "Maintain: recently updated, few open issues",
 			practical: "Practical: README has install & usage docs",
-			popularity: "Popularity: stars/forks — community trust",
+			popularity: "Popularity: stars + npm downloads + momentum — without npm data we convert stars to an equivalent estimate, so no one is penalized",
 			ease: "Ease: one-command install, no extra setup",
 			signal: "Signal: license/description/topics completeness"
 		},

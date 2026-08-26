@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0 — 2026-08-26
+
+- **热度评分 v2**（用户拍板口径）：热度 = 0.40·starScore + 0.25·dlScore + 0.20·momentum + 0.15·forkScore。有实测 npm 下载量（dl30≥100 防撞名护栏）用实测值；无实测用星数无偏换算等效下载量 774·(stars+1)^0.16 **同权参与——有/无 npm 数据身份零加成**。动量 = 真实 dl 周环比 + 星 30 天增量（缺数据取中性 50，不惩罚）；零星无实测不给模拟分。
+- **热度数据管道**：新增 dsh-market-index `downloads.json`（npm 下载统计，CI 每日采集）+ `star-history.json`（星数 30 天滚动快照）双通道（src/hotdata.ts，启动+24h 拉取，tags.json 同款模式）；拉取落地后强制重算当前目录热度维。
+- 雷达图悬停说明更新热度规则文案（中英）；详情页评分卡热度≥70 且有实测下载量时新增理由「近 30 天 npm 下载 N 次」。
+
 ## 1.7.90 — 2026-08-26
 
 - **README 下载量徽章加回**：npm 下载统计库已有 dsh-mall 数据（截至 08-25 批次 915 次），两个 README（README.md / README.en.md）恢复 `npm/dw` 周下载量徽章（此前因统计库无数据显示 "package not found" 而移除）。

@@ -391,6 +391,13 @@ export function setKnownOverride(map: KnownMap | null): void {
   knownOverride = map
 }
 
+// ------------------------------------------------------------------ hotdata.ts
+/** v1.8.0：热数据（downloads.json / star-history.json）落地后强制重算当前在内存
+ *  目录的热度维（实测下载量与星动量接入）。无内存目录时为 no-op（下次加载自然带上）。 */
+export function reapplyHotScores(): void {
+  if (cache !== null) attachScores(cache.data.plugins, true)
+}
+
 // ------------------------------------------------------------------ tags.ts
 /** 打标覆盖（tags.json，手动 LLM 多语言打标产物）：owner/repo → {descriptions, tagsZh, tagsEn}。 */
 let tagsOverrideMap: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> | null = null
