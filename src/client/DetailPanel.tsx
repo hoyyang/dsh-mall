@@ -340,7 +340,14 @@ export function DetailPanel(props: {
             <div className="pcm-av" style={{ background: '#4d6bfe' }}>
               {(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}
               {entry.avatar !== '' && (
-                <img className="pcm-av-img" src={entry.avatar} alt="" loading="lazy" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                <img
+                  className="pcm-av-img pcm-av-fade"
+                  src={entry.avatar}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  onLoad={e => { (e.currentTarget as HTMLImageElement).style.opacity = '1' }}
+                  onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                />
               )}
             </div>
             <div className="pcm-detail-titles">

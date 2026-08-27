@@ -3290,10 +3290,13 @@ function DetailPanel(props) {
 									className: "pcm-av",
 									style: { background: "#4d6bfe" },
 									children: [(entry.name.replace(/^dsh[-_]/i, "").charAt(0) || "P").toUpperCase(), entry.avatar !== "" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("img", {
-										className: "pcm-av-img",
+										className: "pcm-av-img pcm-av-fade",
 										src: entry.avatar,
 										alt: "",
-										loading: "lazy",
+										referrerPolicy: "no-referrer",
+										onLoad: (e) => {
+											e.currentTarget.style.opacity = "1";
+										},
 										onError: (e) => {
 											e.currentTarget.style.display = "none";
 										}
