@@ -7,10 +7,11 @@
  * 拉取失败永远保留上次缓存，浏览不中断；数据无需商场升版本即可分发。
  */
 /** 拉取两个数据文件并应用；失败抛错（调用方保持缓存）。 */
-export declare function refreshHotData(profile: string): Promise<{
+export declare function refreshHotData(profile: string, signal?: AbortSignal): Promise<{
     dl: number;
     hist: number;
 }>;
-/** 进程启动：先读本地缓存（立即生效），再后台拉最新。 */
-export declare function startHotData(profile: string): void;
+/** 进程启动：先读本地缓存（立即生效），再后台拉最新；返回本代专属 disposer。 */
+export declare function startHotData(profile: string): () => void;
+/** 兼容旧调用：停止当前 hotdata owner。 */
 export declare function stopHotData(): void;

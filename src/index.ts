@@ -12,9 +12,9 @@ import { mountMarketRoutes, type MarketHost } from './routes.ts'
 import { installFindTool } from './find.ts'
 import { installMarketSettings } from './settings.ts'
 import { startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
-import { startAwesomeRefresh, stopAwesomeRefresh } from './awesome.ts'
-import { startTagsRefresh, stopTagsRefresh } from './tags.ts'
-import { startHotData, stopHotData } from './hotdata.ts'
+import { startAwesomeRefresh } from './awesome.ts'
+import { startTagsRefresh } from './tags.ts'
+import { startHotData } from './hotdata.ts'
 import type { MarketConfig } from './types.ts'
 
 export const name = 'dsh-mall'
@@ -91,18 +91,18 @@ export function apply(ctx: Context, config?: Config): void {
       // 自动一键更新：开关为开时进程启动即重排每日定时器。
       startAutoUpdate(resolved)
       // awesome 人工目录自动保持最新（启动拉取 + 24h 周期）。
-      startAwesomeRefresh(resolved.profile)
+      const disposeAwesomeRefresh = startAwesomeRefresh(resolved.profile)
       // 中文打标（tags.json 手动 LLM 产物）保持最新（启动拉取 + 24h 周期）。
-      startTagsRefresh(resolved.profile)
+      const disposeTagsRefresh = startTagsRefresh(resolved.profile)
       // 热度数据（downloads.json / star-history.json）保持最新——热度 v2 实测下载量与星动量。
-      startHotData(resolved.profile)
+      const disposeHotData = startHotData(resolved.profile)
       return () => {
         disposeRoutes()
         removeSkill()
         stopAutoUpdate()
-        stopAwesomeRefresh()
-        stopTagsRefresh()
-        stopHotData()
+        disposeAwesomeRefresh()
+        disposeTagsRefresh()
+        disposeHotData()
       }
     }, 'dsh-mall: http routes + skill + auto-update timer')
   })

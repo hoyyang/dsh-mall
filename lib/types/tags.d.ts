@@ -6,9 +6,10 @@
  * 拉取失败永远保留上次缓存/空值，浏览不中断；打标结果无需商场升版本即可分发。
  */
 /** 拉取一次并写缓存；失败抛错（由调用方决定重试节奏）。 */
-export declare function refreshTags(profile: string): Promise<{
+export declare function refreshTags(profile: string, signal?: AbortSignal): Promise<{
     count: number;
 }>;
-/** 进程启动：先读本地缓存（立即生效），再后台拉最新。 */
-export declare function startTagsRefresh(profile: string): void;
+/** 进程启动：先读本地缓存（立即生效），再后台拉最新；返回本代专属 disposer。 */
+export declare function startTagsRefresh(profile: string): () => void;
+/** 兼容旧调用：停止当前 tags refresh owner。 */
 export declare function stopTagsRefresh(): void;

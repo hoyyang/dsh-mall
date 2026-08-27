@@ -341,6 +341,7 @@ export function DetailPanel(props: {
               {(entry.name.replace(/^dsh[-_]/i, '').charAt(0) || 'P').toUpperCase()}
               {entry.avatar !== '' && (
                 <img
+                  key={entry.avatar}
                   className="pcm-av-img pcm-av-fade"
                   src={entry.avatar}
                   alt=""

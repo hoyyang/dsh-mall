@@ -30,6 +30,9 @@ export interface ScoreView {
     /** v1.7.68：基础分所用输入指纹——stars/pushed 变化时重算（星数与热度分同步）。 */
     starsAt?: number | null;
     pushedAt?: string | null;
+    /** v1.8.2：热度解释证据快照，README 富化/refold 时继承，避免丢失下载理由。 */
+    dlActiveAt?: boolean;
+    dl30At?: number | null;
 }
 /** Wilson Score 置信区间下界（小样本比例的稳健估计，dsh.market 同款）。 */
 export declare function wilsonLowerBound(positives: number, total: number, z?: number): number;
@@ -146,6 +149,9 @@ export declare function attachScores(entries: Array<{
     npm?: string | null;
     owner?: string;
     name?: string;
+    curated?: boolean;
+    verified?: unknown;
+    bundled?: boolean | null;
     readmeSig?: {
         len: number | null;
         installSection: boolean;

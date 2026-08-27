@@ -138,6 +138,10 @@ export interface MarketEntry {
             en: string;
         };
         complete: boolean;
+        starsAt?: number | null;
+        pushedAt?: string | null;
+        dlActiveAt?: boolean;
+        dl30At?: number | null;
     } | null;
 }
 export interface Registry {

@@ -3300,7 +3300,7 @@ function DetailPanel(props) {
 										onError: (e) => {
 											e.currentTarget.style.display = "none";
 										}
-									})]
+									}, entry.avatar)]
 								}),
 								/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 									className: "pcm-detail-titles",

@@ -126,6 +126,10 @@ export interface MarketEntry {
     confidence: number
     explanation: { zh: string; en: string }
     complete: boolean
+    starsAt?: number | null
+    pushedAt?: string | null
+    dlActiveAt?: boolean
+    dl30At?: number | null
   } | null
 }
 

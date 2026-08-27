@@ -29,6 +29,9 @@ export interface ScoreView {
   /** v1.7.68：基础分所用输入指纹——stars/pushed 变化时重算（星数与热度分同步）。 */
   starsAt?: number | null
   pushedAt?: string | null
+  /** v1.8.2：热度解释证据快照，README 富化/refold 时继承，避免丢失下载理由。 */
+  dlActiveAt?: boolean
+  dl30At?: number | null
 }
 
 const WEIGHTS = { maintain: 0.3, practical: 0.25, popularity: 0.2, ease: 0.15, signal: 0.1 } as const
@@ -155,7 +158,7 @@ export function scorePopularity(stars: number | null, forks: number | null, p99S
       starMomentum = 50 + 50 * Math.tanh(1.1 * x)
     }
   }
-  const momentum = hasReal ? 0.7 * dlMomentum + 0.3 * starMomentum : starMomentum
+  const momentum = 0.7 * dlMomentum + 0.3 * starMomentum
   let forkScore = 50
   if (forks !== null && forks !== undefined) {
     const rate = forks / Math.max(stars, 1)
@@ -265,9 +268,17 @@ export function buildExplanation(
     const t = Date.parse(pushedAt)
     if (!Number.isNaN(t)) days = Math.round((Date.now() - t) / 86_400_000)
   }
+  const downloadReason = extras.dlActive === true && extras.dl30 != null && extras.dl30 > 0
+    ? (extras.dl30 >= 1000 ? (Math.round(extras.dl30 / 100) / 10) + 'k' : String(extras.dl30))
+    : null
   for (const k of dims) {
     const v = breakdown[k]
     if (v === null || v < 70) continue
+    if (k === 'popularity' && downloadReason !== null) {
+      zh.push('近 30 天 npm 下载 ' + downloadReason + ' 次')
+      en.push('actively downloaded on npm (' + downloadReason + '/mo)')
+      continue
+    }
     if (k === 'maintain' && days !== null && days >= 30) {
       zh.push('维护活跃（' + days + ' 天前有提交）')
       en.push('maintained (' + days + ' days since last push)')
@@ -280,11 +291,6 @@ export function buildExplanation(
     const s = (stars ?? 0) >= 1000 ? (Math.round((stars ?? 0) / 100) / 10) + 'k stars' : (stars ?? 0) + ' stars'
     zh.push(s)
     en.push(s)
-  }
-  if (extras.dlActive === true && extras.dl30 != null && extras.dl30 > 0) {
-    const d = extras.dl30 >= 1000 ? (Math.round(extras.dl30 / 100) / 10) + 'k' : String(extras.dl30)
-    zh.push('近 30 天 npm 下载 ' + d + ' 次')
-    en.push('actively downloaded on npm (' + d + '/mo)')
   }
   if (extras.curated === true) { zh.push('awesome 人工策展精选'); en.push('awesome curated pick') }
   if (extras.verified === true) { zh.push('人工实测验证'); en.push('human-verified') }
@@ -342,15 +348,21 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
     complete,
     starsAt: input.stars,
     pushedAt: input.pushedAt,
+    dlActiveAt: input.dl != null && input.dl.dl30 >= DL_FLOOR && popularity !== null && popularity >= 70,
+    dl30At: input.dl?.dl30 ?? null,
   }
 }
 
 /** v1.7.68：README 富化维度（实用/便捷/信号）保留、基础维度重算后的重新融合。 */
-function refoldScore(score: ScoreView): ScoreView {
+function refoldScore(score: ScoreView, extras: { curated?: boolean; verified?: boolean; bundled?: boolean; dlActive?: boolean; dl30?: number | null } = {}): ScoreView {
   const total = weightedGeometricMean(score.breakdown)
   score.total = total === null ? null : Math.round(clip(total * score.confidence))
   score.complete = score.breakdown.maintain !== null && score.breakdown.practical !== null && score.breakdown.popularity !== null && score.breakdown.ease !== null
-  score.explanation = buildExplanation(score.breakdown, score.starsAt ?? null, score.pushedAt ?? null)
+  const dlActive = extras.dlActive ?? score.dlActiveAt
+  const dl30 = extras.dl30 ?? score.dl30At
+  score.explanation = buildExplanation(score.breakdown, score.starsAt ?? null, score.pushedAt ?? null, { ...extras, dlActive, dl30 })
+  score.dlActiveAt = dlActive
+  score.dl30At = dl30
   return score
 }
 
@@ -387,12 +399,20 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
   const total = weightedGeometricMean(breakdown)
   const confidence = confidenceOf({ hasDescription: description !== '', hasLicense: typeof license === 'string' && license !== '', readme, topics })
   const complete = breakdown.maintain !== null && breakdown.practical !== null && breakdown.popularity !== null && breakdown.ease !== null
+  const stars = extras.stars ?? base.starsAt
+  const pushedAt = extras.pushedAt ?? base.pushedAt
+  const dlActive = extras.dlActive ?? base.dlActiveAt
+  const dl30 = extras.dl30 ?? base.dl30At
   return {
     total: total === null ? null : Math.round(clip(total * confidence)),
     breakdown,
     confidence: Math.round(confidence * 100) / 100,
-    explanation: buildExplanation(breakdown, extras.stars ?? null, extras.pushedAt ?? null, extras),
+    explanation: buildExplanation(breakdown, stars ?? null, pushedAt ?? null, { ...extras, dlActive, dl30 }),
     complete,
+    starsAt: stars,
+    pushedAt,
+    dlActiveAt: dlActive,
+    dl30At: dl30,
   }
 }
 
@@ -420,6 +440,9 @@ export function attachScores(entries: Array<{
   npm?: string | null
   owner?: string
   name?: string
+  curated?: boolean
+  verified?: unknown
+  bundled?: boolean | null
   readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
   score?: ScoreView | null
   isPlugin?: boolean | null
@@ -456,11 +479,19 @@ export function attachScores(entries: Array<{
       starDelta,
       readmeSig: e.readmeSig ?? null,
     })
-    if (old != null && old.complete === true) {
-      e.score.breakdown.practical = old.breakdown.practical
-      e.score.breakdown.ease = old.breakdown.ease
-      if (old.breakdown.signal > e.score.breakdown.signal) e.score.breakdown.signal = old.breakdown.signal
-      refoldScore(e.score)
+    if (old != null) {
+      if (old.complete === true) {
+        e.score.breakdown.practical = old.breakdown.practical
+        e.score.breakdown.ease = old.breakdown.ease
+        if (old.breakdown.signal > e.score.breakdown.signal) e.score.breakdown.signal = old.breakdown.signal
+      }
+      refoldScore(e.score, {
+        curated: e.curated === true,
+        verified: e.verified != null,
+        bundled: e.bundled === true,
+        dlActive: dl != null && dl.dl30 >= DL_FLOOR && e.score.breakdown.popularity !== null && e.score.breakdown.popularity >= 70,
+        dl30: dl?.dl30 ?? null,
+      })
     }
   }
 }

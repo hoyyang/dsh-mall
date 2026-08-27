@@ -6,8 +6,8 @@
  * 拉取失败永远保留上次缓存/空值，浏览不中断；打标结果无需商场升版本即可分发。
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { cacheFile, writeCacheJson } from './cache.ts'
 import { setTagsOverride } from './catalog.ts'
 
 const TAGS_URLS = [
@@ -17,30 +17,30 @@ const TAGS_URLS = [
 const REFRESH_MS = 24 * 60 * 60 * 1000
 const FETCH_TIMEOUT_MS = 30_000
 
-let timer: NodeJS.Timeout | null = null
-let tagsOverride: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> | null = null
+type TagMap = Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }>
+let activeDisposer: (() => void) | null = null
 
 function cachePath(profile: string): string {
-  const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
-  return join(home, 'profiles', profile, 'dsh-mall', 'tags-cache.json')
+  return cacheFile(profile, 'tags-cache.json')
 }
 
 /** 拉取一次并写缓存；失败抛错（由调用方决定重试节奏）。 */
-export async function refreshTags(profile: string): Promise<{ count: number }> {
+export async function refreshTags(profile: string, signal?: AbortSignal): Promise<{ count: number }> {
   let lastError: Error | null = null
   for (const url of TAGS_URLS) {
     try {
+      const timeout = AbortSignal.timeout(FETCH_TIMEOUT_MS)
+      const requestSignal = signal === undefined ? timeout : AbortSignal.any([signal, timeout])
       const res = await fetch(url, {
         headers: { accept: 'application/json', 'user-agent': 'dsh-mall' },
-        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        signal: requestSignal,
       })
       if (!res.ok) throw new Error('tags HTTP ' + res.status)
       const body = (await res.json()) as { entries?: Record<string, { descriptions?: Record<string, string>; descriptionZh?: string; tags?: { zh?: string[]; en?: string[] }; tagsZh?: string[] }> }
       if (body.entries === undefined || typeof body.entries !== 'object') throw new Error('tags.json 结构不对')
-      const entries: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> = {}
+      const entries: TagMap = {}
       for (const [key, value] of Object.entries(body.entries)) {
         if (value === null || typeof value !== 'object') continue
-        // v2 多语言结构；v1（仅 zh）结构兼容
         const descriptions: Record<string, string> = {}
         if (value.descriptions !== undefined && typeof value.descriptions === 'object') {
           for (const [lang, text] of Object.entries(value.descriptions)) {
@@ -54,37 +54,55 @@ export async function refreshTags(profile: string): Promise<{ count: number }> {
       }
       const count = Object.keys(entries).length
       if (count < 10) throw new Error('tags.json 可疑地小（' + count + '）')
-      writeFileSync(cachePath(profile), JSON.stringify({ at: new Date().toISOString(), count, entries }))
-      tagsOverride = entries
+      signal?.throwIfAborted()
+      writeCacheJson(profile, 'tags-cache.json', { at: new Date().toISOString(), count, entries })
       setTagsOverride(entries)
       return { count }
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err))
+    } catch (error) {
+      if (signal?.aborted === true) throw error
+      lastError = error instanceof Error ? error : new Error(String(error))
     }
   }
   throw lastError ?? new Error('tags fetch failed')
 }
 
-/** 进程启动：先读本地缓存（立即生效），再后台拉最新。 */
-export function startTagsRefresh(profile: string): void {
+/** 进程启动：先读本地缓存（立即生效），再后台拉最新；返回本代专属 disposer。 */
+export function startTagsRefresh(profile: string): () => void {
+  activeDisposer?.()
   try {
-    const cached = JSON.parse(readFileSync(cachePath(profile), 'utf8')) as { entries?: Record<string, { descriptions: Record<string, string>; tagsZh: string[]; tagsEn: string[] }> }
-    if (cached.entries !== undefined && Object.keys(cached.entries).length > 0) {
-      tagsOverride = cached.entries
-      setTagsOverride(cached.entries)
-    }
+    const cached = JSON.parse(readFileSync(cachePath(profile), 'utf8')) as { entries?: TagMap }
+    if (cached.entries !== undefined && Object.keys(cached.entries).length > 0) setTagsOverride(cached.entries)
   } catch { /* 无缓存：目录无标签 */ }
-  const run = () => {
-    refreshTags(profile).catch(() => { /* 网络失败：保持现有缓存，24h 后重试 */ })
+
+  const controller = new AbortController()
+  let timer: NodeJS.Timeout | null = null
+  let inFlight: Promise<void> | null = null
+  let disposed = false
+  const run = (): void => {
+    if (disposed || inFlight !== null) return
+    let task: Promise<void>
+    task = refreshTags(profile, controller.signal)
+      .then(() => undefined)
+      .catch(() => { /* 网络失败：保持现有缓存，24h 后重试 */ })
+      .finally(() => { if (inFlight === task) inFlight = null })
+    inFlight = task
   }
+  const dispose = (): void => {
+    if (disposed) return
+    disposed = true
+    controller.abort()
+    if (timer !== null) clearInterval(timer)
+    timer = null
+    if (activeDisposer === dispose) activeDisposer = null
+  }
+  activeDisposer = dispose
   run()
   timer = setInterval(run, REFRESH_MS)
   timer.unref?.()
+  return dispose
 }
 
+/** 兼容旧调用：停止当前 tags refresh owner。 */
 export function stopTagsRefresh(): void {
-  if (timer !== null) {
-    clearInterval(timer)
-    timer = null
-  }
+  activeDisposer?.()
 }

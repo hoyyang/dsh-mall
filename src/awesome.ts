@@ -8,11 +8,10 @@
  *   拉取失败永远回退打包快照（data/awesome-known.json），浏览不中断。
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { cacheFile, writeCacheJson } from './cache.ts'
 import { CATEGORIES, setKnownOverride } from './catalog.ts'
-import type { KnownEntry } from './types.ts'
-import type { KnownMap } from './types.ts'
+import type { KnownEntry, KnownMap } from './types.ts'
 
 const AWESOME_URL = 'https://awesome-dsh-plugin.com/plugins.json'
 const REFRESH_MS = 24 * 60 * 60 * 1000
@@ -27,14 +26,10 @@ interface AwesomePlugin {
   added?: string
 }
 
-let timer: NodeJS.Timeout | null = null
-
-/** KnownMap 覆盖：拉取成功后经 setKnownOverride 写入 catalog。 */
-let knownOverride: KnownMap | null = null
+let activeDisposer: (() => void) | null = null
 
 function cachePath(profile: string): string {
-  const home = process.env.DSH_HOME ?? join(process.env.HOME ?? '', '.dsh')
-  return join(home, 'profiles', profile, 'dsh-mall', 'awesome-cache.json')
+  return cacheFile(profile, 'awesome-cache.json')
 }
 
 function toKnown(list: AwesomePlugin[]): KnownMap {
@@ -59,10 +54,12 @@ function toKnown(list: AwesomePlugin[]): KnownMap {
 }
 
 /** 拉取一次并写缓存；失败抛错（由调用方决定重试节奏）。 */
-export async function refreshAwesome(profile: string): Promise<{ count: number }> {
+export async function refreshAwesome(profile: string, signal?: AbortSignal): Promise<{ count: number }> {
+  const timeout = AbortSignal.timeout(FETCH_TIMEOUT_MS)
+  const requestSignal = signal === undefined ? timeout : AbortSignal.any([signal, timeout])
   const res = await fetch(AWESOME_URL, {
     headers: { accept: 'application/json', 'user-agent': 'dsh-mall' },
-    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    signal: requestSignal,
   })
   if (!res.ok) throw new Error('awesome catalog HTTP ' + res.status)
   const body = (await res.json()) as { plugins?: AwesomePlugin[] }
@@ -70,33 +67,49 @@ export async function refreshAwesome(profile: string): Promise<{ count: number }
   const known = toKnown(body.plugins)
   const count = Object.keys(known).length
   if (count < 100) throw new Error('awesome catalog suspiciously small (' + count + ')')
-  writeFileSync(cachePath(profile), JSON.stringify({ at: new Date().toISOString(), count, known }))
-  knownOverride = known
+  signal?.throwIfAborted()
+  writeCacheJson(profile, 'awesome-cache.json', { at: new Date().toISOString(), count, known })
   setKnownOverride(known)
   return { count }
 }
 
-/** 进程启动：先读本地缓存（立即生效），再后台拉最新。 */
-export function startAwesomeRefresh(profile: string): void {
-  // 已有缓存直接生效（不阻塞目录加载）
+/** 进程启动：先读本地缓存（立即生效），再后台拉最新；返回本代专属 disposer。 */
+export function startAwesomeRefresh(profile: string): () => void {
+  activeDisposer?.()
   try {
     const cached = JSON.parse(readFileSync(cachePath(profile), 'utf8')) as { known?: KnownMap }
-    if (cached.known !== undefined && Object.keys(cached.known).length > 0) {
-      knownOverride = cached.known
-      setKnownOverride(cached.known)
-    }
+    if (cached.known !== undefined && Object.keys(cached.known).length > 0) setKnownOverride(cached.known)
   } catch { /* 无缓存：用打包快照 */ }
-  const run = () => {
-    refreshAwesome(profile).catch(() => { /* 网络失败：保持现有缓存/快照，24h 后重试 */ })
+
+  const controller = new AbortController()
+  let timer: NodeJS.Timeout | null = null
+  let inFlight: Promise<void> | null = null
+  let disposed = false
+  const run = (): void => {
+    if (disposed || inFlight !== null) return
+    let task: Promise<void>
+    task = refreshAwesome(profile, controller.signal)
+      .then(() => undefined)
+      .catch(() => { /* 网络失败：保持现有缓存/快照，24h 后重试 */ })
+      .finally(() => { if (inFlight === task) inFlight = null })
+    inFlight = task
   }
+  const dispose = (): void => {
+    if (disposed) return
+    disposed = true
+    controller.abort()
+    if (timer !== null) clearInterval(timer)
+    timer = null
+    if (activeDisposer === dispose) activeDisposer = null
+  }
+  activeDisposer = dispose
   run()
   timer = setInterval(run, REFRESH_MS)
   timer.unref?.()
+  return dispose
 }
 
+/** 兼容旧调用：停止当前 awesome refresh owner。 */
 export function stopAwesomeRefresh(): void {
-  if (timer !== null) {
-    clearInterval(timer)
-    timer = null
-  }
+  activeDisposer?.()
 }
