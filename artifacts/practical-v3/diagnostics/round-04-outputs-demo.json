@@ -1,0 +1,1352 @@
+{
+  "generatedAt": "2026-09-02T09:20:07.187Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-04.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-04-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-04-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "outputs-demo",
+  "question": "Diagnose outputItems under-extraction and media over/under-counting.",
+  "families": [
+    "outputItems",
+    "media"
+  ],
+  "under": [
+    {
+      "repo": "sandbaseai/sandbase-skills",
+      "practicalScore": 61,
+      "oracleScore": 65,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 7,
+          "gap": 7
+        },
+        "media": {
+          "machine": 1.5,
+          "oracle": 1,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "Source-linked posts, trends, accounts, and a structured comparison"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "Cross-checked web and academic findings with disagreements called out"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "A dated competitive-intelligence brief with observed changes"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "Search intent, competing pages, required subtopics, and differentiation angles"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "Repository, language, contribution, star, and activity analysis"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "Video and channel discovery, transcript evidence, and comment themes"
+          },
+          {
+            "heading": "# VALID: 3 source(s), 1 claim(s), 2 provider(s)",
+            "excerpt": "# VALID: 3 source(s), 1 claim(s), 2 provider(s)"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# SandBase Skills",
+            "excerpt": "![Multi-source search workflow: search capabilities, source-origin tracing, evidence ledger, and offline validation](assets/multi-source-search-workflow.svg)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xi-zhao/OpenQuantum",
+      "practicalScore": 58,
+      "oracleScore": 61,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 3,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "<td align=\"center\"><strong>-1.85727503 Ha</strong><br /><sub>VQE 能量</sub></td>"
+          },
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "<td align=\"center\"><strong>4.44 × 10⁻¹⁶ Ha</strong><br /><sub>能量差</sub></td>"
+          },
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "<td align=\"center\"><strong>通过</strong><br /><sub>科学验收</sub></td>"
+          },
+          {
+            "heading": "## 近期能力升级：从能调用到能复核",
+            "excerpt": "`p=0` 时 0/100；`p=0.01`、seed 123 时 59/1000，95% 区间约 4.60%–7.54%"
+          },
+          {
+            "heading": "## 近期能力升级：从能调用到能复核",
+            "excerpt": "参考模型得到赋值 `[0, 1]`、最优值 -2.0，和独立枚举一致"
+          },
+          {
+            "heading": "## 近期能力升级：从能调用到能复核",
+            "excerpt": "Bell 态纯度 1、部分转置最小本征值 -0.5、negativity 0.5，central Acceptance 为 `passed`；篡改事实为 `failed`"
+          },
+          {
+            "heading": "## 近期能力升级：从能调用到能复核",
+            "excerpt": "GHZ-3、QFT-3、BV-4 三个案例全部与锁定 manifest 匹配"
+          },
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "<strong>通过</strong><br /><sub>科学验收</sub>"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "<img src=\"./docs/images/openquantum-quantum-result.jpg\" width=\"720\" alt=\"OpenQuantum 运行量子基态任务并完成科学检查\" />"
+          },
+          {
+            "heading": "## 已集成的量子工具与能力",
+            "excerpt": "<img src=\"./docs/images/openquantum-quantum-settings.jpg\" width=\"100%\" alt=\"OpenQuantum 量子组件设置中心\" />"
+          },
+          {
+            "heading": "## 已集成的量子工具与能力",
+            "excerpt": "<img src=\"./docs/images/openquantum-trajectory.jpg\" width=\"100%\" alt=\"OpenQuantum Harness 量子任务执行轨迹\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "FuRongJun-1999/dsh-memory",
+      "practicalScore": 54,
+      "oracleScore": 65,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 🧠 白箱智能管线（知识查询零 LLM）",
+            "excerpt": "| 知识问答白箱率 | **100%**（零 LLM） |"
+          },
+          {
+            "heading": "## 🧠 白箱智能管线（知识查询零 LLM）",
+            "excerpt": "| 总 token 节约（vs 全 LLM） | **83.3%** |"
+          },
+          {
+            "heading": "## 🧠 白箱智能管线（知识查询零 LLM）",
+            "excerpt": "| 组合生成测试通过率 | 100%（19/19，目标 ≥80%） |"
+          },
+          {
+            "heading": "## 🧠 白箱智能管线（知识查询零 LLM）",
+            "excerpt": "| 白箱 vs LLM 对照一致率 | 100%（17/17，目标 ≥90%） |"
+          },
+          {
+            "heading": "## 🎭 角色扮演引擎（v3.3 · 扮演论）",
+            "excerpt": "- **自我锚点**：角色人设核心（身份/性格/底线），SELF 层不可遗忘——OOC 测试 100 轮零漂移"
+          },
+          {
+            "heading": "### 知识统一（v1.16 · 智慧之书并入灵枢主库）",
+            "excerpt": "- 图谱信噪比 **0.9524**（verified 80 / 全边 341，超 90% 健康线）"
+          },
+          {
+            "heading": "### 知识统一（v1.16 · 智慧之书并入灵枢主库）",
+            "excerpt": "图谱信噪比 **0.9524**（verified 80 / 全边 341，超 90% 健康线）"
+          },
+          {
+            "heading": "### 知识统一（v1.16 · 智慧之书并入灵枢主库）",
+            "excerpt": "四路融合检索（翻译表+二元组+语义坐标+bge）在主库 **0.11s** 命中学科卡"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 🗺️ 功能使用教学 · 条件路由图",
+            "excerpt": "[![灵枢使用教学认知图](docs/lingshu_tutorial.html)](docs/lingshu_tutorial.html)"
+          },
+          {
+            "heading": "## 📊 记忆系统使用性评分（五维标尺）",
+            "excerpt": "![记忆系统使用性评分](docs/memory_score.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Phant0Meow/dsh-meow-memory",
+      "practicalScore": 33,
+      "oracleScore": 45,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "（默认折叠，显示「新增记忆 N 条」/「记忆梦境任务」）"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "会话行显示**淡黄色小月牙 🌙**"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "todo 输出「已完成：」最近 5 条 +「To do list：」"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "自动去重合并，返回读回确认：关键词/项目归属"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "返回检索元数据视图：\n  归属 + 完整 id + 相对时间 + 关键词列表，不含原文"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "显示「新增记忆 N 条」/「记忆梦境任务」"
+          },
+          {
+            "heading": "## ✨ 功能特性",
+            "excerpt": "「可能相关的记忆，仅供参考：」前缀注入"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "AgentDebugX/AgentDebugX",
+      "practicalScore": 70,
+      "oracleScore": 70,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Quick Start: Python API",
+            "excerpt": "The report localizes the responsible upstream step rather than only reporting\nthe final visible error."
+          },
+          {
+            "heading": "### 1. Normalize an external trace",
+            "excerpt": "Every batch writes `batch-summary.json`."
+          },
+          {
+            "heading": "### 4. Execute the Rerun stage",
+            "excerpt": "It returns a workflow JSON with `status=simulated`, a validated\n`hypothetical_trajectory`, and model-generated events explicitly marked as\nsimulated."
+          },
+          {
+            "heading": "## Why AgentDebugX",
+            "excerpt": "The output is a portable diagnostic report that can be inspected in a local UI,"
+          },
+          {
+            "heading": "### 4. Execute the Rerun stage",
+            "excerpt": "It returns a workflow JSON with `status=simulated`, a validated"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## System Overview",
+            "excerpt": "<img src=\"docs/assets/overview.png\" alt=\"AgentDebugX system overview\" width=\"900\">"
+          },
+          {
+            "heading": "### Launch from the CLI",
+            "excerpt": "![AgentDebugX local inspection UI](docs/assets/UI.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "william-jin-cmu/dsh-vision",
+      "practicalScore": 14,
+      "oracleScore": 26,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 真实效果（dsh web，DeepSeek-V4-Flash）",
+            "excerpt": "模型自己定位文件、带着问题调 `view_image`（14.5s），拿到的描述精确到樱花图案、摄像头开孔和底部的 BURGA 品牌标识"
+          },
+          {
+            "heading": "## 实测（2026-08-05，4K 屏幕截图问答，全链路真实调用）",
+            "excerpt": "| `qwen3-vl-flash`                   | ✅ 准确                            | **~2.9s** | 全场最快，百炼最便宜 VL 线——追求速度选它         |"
+          },
+          {
+            "heading": "## 真实效果（dsh web，DeepSeek-V4-Flash）",
+            "excerpt": "对纯文本的 deepseek-v4 说\"看看 images.jpeg 在我的桌面上的\"——模型自己定位文件、带着问题调 `view_image`（14.5s），拿到的描述精确到樱花图案、摄像头开孔和底部的 BURGA 品牌标识："
+          },
+          {
+            "heading": "## 实测（2026-08-05，4K 屏幕截图问答，全链路真实调用）",
+            "excerpt": "| `qwen3.8-max`                      | ✅ 细节最丰富（认出了 Arc 浏览器） | ~18s      | 旗舰档                                           |"
+          },
+          {
+            "heading": "## 实测（2026-08-05，4K 屏幕截图问答，全链路真实调用）",
+            "excerpt": "| `glm-4.6v-flash`（**默认，免费**） | ✅ 准确                            | ~6.8s     | 高峰限流时自动走降级链                           |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 真实效果（dsh web，DeepSeek-V4-Flash）",
+            "excerpt": "<img src=\"assets/demo-input.jpeg\" width=\"220\" alt=\"测试图片：BURGA 樱花手机壳\">"
+          },
+          {
+            "heading": "## 真实效果（dsh web，DeepSeek-V4-Flash）",
+            "excerpt": "<img src=\"assets/demo-session.png\" width=\"640\" alt=\"dsh web 会话：模型自主调用 view_image 并准确描述图片\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "lamost423/dsh-maze",
+      "practicalScore": 48,
+      "oracleScore": 60,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 6,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 迷宫画的是什么",
+            "excerpt": "双泳道额外标注耗时差与该轮支路数差（如「第 3 轮耗时：1st 4m ↔ 2nd 6m（Δ2m）· 支路 4↔0」）。"
+          },
+          {
+            "heading": "## 迷宫画的是什么",
+            "excerpt": "每个判定都带**依据文本**，悬停 tooltip 和详情面板可见（如「同一操作连续重试 4 次（其中 1 次失败），判为盲目重试」）。"
+          },
+          {
+            "heading": "## 迷宫画的是什么",
+            "excerpt": "（如「第 3 轮耗时：1st 4m ↔ 2nd 6m（Δ2m）· 支路 4↔0」）"
+          },
+          {
+            "heading": "## 迷宫画的是什么",
+            "excerpt": "双泳道附差额列（如「第 2 会话多耗 48.4s」）"
+          },
+          {
+            "heading": "## 迷宫画的是什么",
+            "excerpt": "（如「同一操作连续重试 4 次（其中 1 次失败），判为盲目重试」）"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![执行迷宫：迷宫 + 数据轨道 + 执行分析，一屏读懂一场 8.6 小时的真实会话](assets/maze-hero.png)"
+          },
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![密集会话：整图态聚合徽标 → 点击放大 → 标签补齐 → 点开失败详情](assets/maze-zoom.gif)"
+          },
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![轨道悬停：Token 分层数字 → 上下文占用 → 压缩事件前后对比](assets/maze-tracks.gif)"
+          },
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![点失败链任意一条：缩放定位到那次失败，弹出完整命令、报错返回与判定依据](assets/maze-drilldown.gif)"
+          },
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![对比：同一任务的两次真实跑 → 支路盘点按轮次列差额 → 点行缩放到该轮](assets/maze-compare.gif)"
+          },
+          {
+            "heading": "# dsh-maze",
+            "excerpt": "![回放：300× 重放一场 8.6 小时的会话](assets/maze-replay.gif)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Yan-Zero/dsh-codex",
+      "practicalScore": 39,
+      "oracleScore": 51,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Install",
+            "excerpt": "The account page shows live Codex quota bars and exact remaining percentages"
+          },
+          {
+            "heading": "## Images",
+            "excerpt": "omitting it creates a unique `generated-<timestamp>-<id>.png` file"
+          },
+          {
+            "heading": "## Search",
+            "excerpt": "Each resolved, secret-free auxiliary request is recorded before dispatch as the dedicated `web/openai-codex-search-llm-request` session event."
+          },
+          {
+            "heading": "## Images",
+            "excerpt": "Every result is shown inline, saved as a durable attachment, and written to the active workspace."
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "Viy1204/recruiting-copilot",
+      "practicalScore": 40,
+      "oracleScore": 46,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 它帮你做什么",
+            "excerpt": "同时产出对外 JD 与对内寻源笔记。"
+          },
+          {
+            "heading": "## 它帮你做什么",
+            "excerpt": "还能把日报推成一张飞书卡片（四个数字 + 重点人选 + 待你拍板，点按钮跳完整文档）。"
+          },
+          {
+            "heading": "## 工作区长什么样",
+            "excerpt": "dedup-ledger.csv 候选人台账（唯一事实源）+ shortlist"
+          },
+          {
+            "heading": "## 它帮你做什么",
+            "excerpt": "还能把日报推成一张飞书卡片（四个数字 + 重点人选 + 待你拍板，点按钮跳完整文档）"
+          },
+          {
+            "heading": "## 工作区长什么样",
+            "excerpt": "初始化后你会得到一个自足的招聘工作区（换任何 AI 工具打开都能接着干活）："
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "MiaoQichuan/new-litigation-visualization",
+      "practicalScore": 34,
+      "oracleScore": 56,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 出来的图",
+            "excerpt": "五种格式同时交付：SVG（主交付物）、PNG（位图）、PPTX（原生对象，每个方框\n双击就能改字）、VSDX（ProcessOn / Visio / WPS）、drawio。"
+          },
+          {
+            "heading": "### 出来的图",
+            "excerpt": "出图的同时会给一份 Word 三线表：图上每一个元素，出自材料的哪一份、哪一句。"
+          },
+          {
+            "heading": "## 现在有什么",
+            "excerpt": "同上 + 溯源索引 Word"
+          },
+          {
+            "heading": "### 出来的图",
+            "excerpt": "五种格式同时交付：SVG（主交付物）、PNG（位图）、PPTX（原生对象，每个方框\n双击就能改字）、VSDX（ProcessOn / Visio / WPS）、drawio。五份都转写自同一份母版。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 诉讼可视化重画",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/how-it-works.png\" width=\"820\" alt=\"Skill 运行全过程\"/>"
+          },
+          {
+            "heading": "### 三类七种布局",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/seven-layouts.png\" width=\"820\" alt=\"三类七种图形\"/>"
+          },
+          {
+            "heading": "### 七种布局 × 三种风格",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/visual-system-qichuan.png\" width=\"760\" alt=\"视觉系统 · 奇川风\"/>"
+          },
+          {
+            "heading": "### 七种布局 × 三种风格",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/visual-system-baimiao.png\" width=\"760\" alt=\"视觉系统 · 白描\"/>"
+          },
+          {
+            "heading": "### 七种布局 × 三种风格",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/visual-system-guizang.png\" width=\"760\" alt=\"视觉系统 · 歸藏风\"/>"
+          },
+          {
+            "heading": "## 时间轴大师",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-timeline-master/assets/screenshots/timeline-example.png\" width=\"880\" alt=\"时间轴成品示例\"/>"
+          },
+          {
+            "heading": "## 现在有什么",
+            "excerpt": "<img src=\"assets/modules.png\" width=\"100%\" alt=\"两个模块\"/>"
+          },
+          {
+            "heading": "### 用数学算清楚一张时间轴怎么画",
+            "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-timeline-master/assets/longform/01-mathematics.png\" width=\"820\" alt=\"01 数学\"/>"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xiehuan123/dsh-deepread",
+      "practicalScore": 54,
+      "oracleScore": 64,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2,
+          "oracle": 4.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 1.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## See real outputs",
+            "excerpt": "Reconstructed the engineering chain from visibility to input, output, and retrieval-path compression; separated recommendations from project-authored benchmarks."
+          },
+          {
+            "heading": "## See real outputs",
+            "excerpt": "Found that the article's “90%”, “¥1.28M salary”, and “¥2,000/day” claims had no source, sample, or baseline; marked each one unverified."
+          },
+          {
+            "heading": "## See real outputs",
+            "excerpt": "Connected architecture choices to reported size/performance evidence while preserving the article's untested assumptions and deployment limits."
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "One-line summary, core claim, argument structure, quotes, key concepts, critical questions"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "Overview, core claim, argument structure (claim + evidence + verbatim quotes), argument flow, section highlights, quotes, key concepts, critical thinking"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "Table of contents, chapter flow, a full-book summary assembled from per-part deep reads"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# 📖 DeepRead — Make AI reading traceable",
+            "excerpt": "![DeepRead evidence-first reading workflow](assets/deepread-demo.svg)"
+          },
+          {
+            "heading": "## Why it is different",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/xiehuan123/dsh-deepread/main/.github/assets/deepread-panel-light.jpg\" width=\"470\" alt=\"DeepRead reading panel with input, reading mode, export, focus, and budget controls\">"
+          },
+          {
+            "heading": "## Why it is different",
+            "excerpt": "https://raw.githubusercontent.com/xiehuan123/dsh-deepread/main/.github/assets/deepread-panel-dark.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SenmuuuuW/dsh-whale-report",
+      "practicalScore": 41,
+      "oracleScore": 52,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 1,
+          "oracle": 3.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 4,
+          "oracle": 3,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Performance",
+            "excerpt": "| Refresh / Overview | ~31s（重放 + 重新聚合 session） | ~7ms median（纯索引查询） |"
+          },
+          {
+            "heading": "## Performance",
+            "excerpt": "| Refresh ×100 压测 | — | p95 8.3ms / max 11.3ms |"
+          },
+          {
+            "heading": "### Exact accounting（精确对账）",
+            "excerpt": "- 窗口边界逐事件精确过滤（无比例近似），Raw Oracle 对账 costDiff = 0.0000"
+          },
+          {
+            "heading": "### 示例",
+            "excerpt": "PROBLEM    Repeated Shell Timeouts\nEVIDENCE   6 次确定性 timeout / 3 个会话（0 硬失败）\nCHANGE     shell.timeoutMs  60s → 120s"
+          },
+          {
+            "heading": "### 示例",
+            "excerpt": "满足最低证据后输出 **VERIFIED / NOT IMPROVED / INCONCLUSIVE**。NOT IMPROVED 只推荐 Revert，绝不自动回滚。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"docs/images/deeptrace-overview.png\" alt=\"DeepTrace inside DSH\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">"
+          },
+          {
+            "heading": "## Product",
+            "excerpt": "<img src=\"docs/images/overview.png\" alt=\"DeepTrace overview\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">"
+          },
+          {
+            "heading": "## Product",
+            "excerpt": "<img src=\"docs/images/report.png\" alt=\"Full report\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kanghelyu/dsh-deepseek-flow",
+      "practicalScore": 39,
+      "oracleScore": 54,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## AI document assistant",
+            "excerpt": "The Agent returns clickable errors and warnings; no file is changed."
+          },
+          {
+            "heading": "## AI document assistant",
+            "excerpt": "A complete proposal appears in the preview."
+          },
+          {
+            "heading": "## AI document assistant",
+            "excerpt": "A complete proposal appears in the preview. You must **Accept** or **Reject** it."
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"docs/images/engdark.png\" width=\"49%\" alt=\"DeepSeek Flow in dark mode\">"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"docs/images/englight.png\" width=\"49%\" alt=\"DeepSeek Flow in light mode\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-lark",
+      "practicalScore": 51,
+      "oracleScore": 62,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 快速开始",
+            "excerpt": "终端会显示二维码。"
+          },
+          {
+            "heading": "## 可以这样开始",
+            "excerpt": "Agent 的执行过程会显示在飞书中；需要你参与时，会发送提问、计划或审批卡片。"
+          },
+          {
+            "heading": "### 添加更多 Agent",
+            "excerpt": "命令会写入新实例、重启服务并显示二维码。"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "runzhliu/deepseek-harness-docker",
+      "practicalScore": 47,
+      "oracleScore": 53,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 直接使用 Docker",
+            "excerpt": "启动命令会直接打印带 token 的访问地址，请打开该完整地址。"
+          },
+          {
+            "heading": "## 常见问题",
+            "excerpt": "最后一条命令应输出 `/workspace`。"
+          },
+          {
+            "heading": "## Smoke Test",
+            "excerpt": "通过标准包括：CLI 版本等于构建版本；dump 后的 `webserver.config.host` 为 `0.0.0.0`；未认证首页返回 `401`，启动 token 能换取 Cookie 并加载首页；容器进入 healthy"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# DeepSeek Harness Docker",
+            "excerpt": "![DeepSeek Harness Web UI running from this image](assets/deepseek-harness-web.png)"
+          },
+          {
+            "heading": "### WebUI 内置浏览器",
+            "excerpt": "![Harness WebUI 中可移动、缩放的内嵌 Chromium 浏览器](assets/browser-desktop-webui.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "beiyege-01/dsh-voice-ai-girlfriend",
+      "practicalScore": 42,
+      "oracleScore": 51,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 六、先验证桥接（强烈建议）",
+            "excerpt": "结束后项目根目录会生成 `tts_out.wav`，播放它——**能听到克隆音色的声音，说明 TTS 链路通了**。"
+          },
+          {
+            "heading": "## 六、先验证桥接（强烈建议）",
+            "excerpt": "看到 `{\"status\":\"ok\", ...}` 就说明桥接起来了（此时模型还没加载，等首次调用才会加载）。"
+          },
+          {
+            "heading": "## 八、流式数字人：回复出镜对口型（可选增强）",
+            "excerpt": "成品视频直接落在宿主 `D:\\duix_avatar_data\\face2face\\temp\\`"
+          },
+          {
+            "heading": "### 2. TTS 引擎：OmniVoice（推荐，跑在 WSL2，FlashInfer 加速）",
+            "excerpt": "| 克隆首轮出音 | 18.3s | **1.6s** |"
+          },
+          {
+            "heading": "### 2. TTS 引擎：OmniVoice（推荐，跑在 WSL2，FlashInfer 加速）",
+            "excerpt": "| 热态出音 | ~2.2s | **~1.3s** |"
+          },
+          {
+            "heading": "## 八、流式数字人：回复出镜对口型（可选增强）",
+            "excerpt": "**提速技巧**（实测：7.3s 音频 20.1s → 14.1s，约 -30%）："
+          }
+        ],
+        "media": [
+          {
+            "heading": "# DSH 语音 AI 女友（Voice AI Girlfriend）",
+            "excerpt": "> - [口播视频效果 ①](https://www.douyin.com/user/self?from_tab_name=main&modal_id=7676326565919149339)"
+          },
+          {
+            "heading": "# DSH 语音 AI 女友（Voice AI Girlfriend）",
+            "excerpt": "> - [口播视频效果 ②](https://www.douyin.com/user/self?from_tab_name=main&modal_id=7678063553395412259)"
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "Yts1919/dsh-vision-complete",
+      "practicalScore": 55,
+      "oracleScore": 52,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 0,
+          "gap": -8
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": []
+      }
+    },
+    {
+      "repo": "Sutera-Diffusus/dsh-whale-musume",
+      "practicalScore": 87,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 0,
+          "gap": -8
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 5,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "### 实际运行截图",
+            "excerpt": "<img src=\"docs/images/preview-idle-coffee.png\" alt=\"待机陪伴：喝咖啡小动作\" width=\"560\">"
+          },
+          {
+            "heading": "### 实际运行截图",
+            "excerpt": "<img src=\"docs/images/preview-working.png\" alt=\"工作状态：抱起笔记本陪你干活\" width=\"560\">"
+          },
+          {
+            "heading": "### 实际运行截图",
+            "excerpt": "<img src=\"docs/images/preview-headpat.png\" alt=\"摸头互动：台词气泡反馈\" width=\"560\">"
+          },
+          {
+            "heading": "### 实际运行截图",
+            "excerpt": "<img src=\"docs/images/preview-feeding.png\" alt=\"投喂互动：吃东西反应\" width=\"560\">"
+          },
+          {
+            "heading": "### 实际运行截图",
+            "excerpt": "<img src=\"docs/images/preview-idle-sparkle.png\" alt=\"待机形态：收起侧边栏后的悬浮形态\" width=\"560\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "openguardrails/openguardrails",
+      "practicalScore": 47,
+      "oracleScore": 29,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 0,
+          "gap": -8
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": []
+      }
+    },
+    {
+      "repo": "MichengAI/dsh-codex-desktop",
+      "practicalScore": 35,
+      "oracleScore": 51,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 7,
+          "oracle": 0,
+          "gap": -7
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-conversation-dark.png\" alt=\"DSH Codex Desktop dark conversation workspace\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-context-sidebar.png\" alt=\"Context management dashboard with the extensible workspace sidebar\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-archive.png\" alt=\"Archived conversation management\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-skills.png\" alt=\"Skill management\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-im-channels.png\" alt=\"IM channel configuration\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-experts.png\" alt=\"Expert preset management\" width=\"960\">"
+          },
+          {
+            "heading": "## Product preview",
+            "excerpt": "<img src=\"assets/screenshots/desktop-conversation-light.png\" alt=\"DSH Codex Desktop light conversation workspace\" width=\"960\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "the-beating-light-of-the-nail/dsh-meme-hub",
+      "practicalScore": 18,
+      "oracleScore": 14,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 0,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# 🐋 DSH Meme Hub",
+            "excerpt": "Visit the website — dsh-meme-hub.cdqyfdbymn.me"
+          },
+          {
+            "heading": "## Copyright",
+            "excerpt": "32 projects listed · 24 hand-picked screenshots"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "edonadei/caliper",
+      "practicalScore": 67,
+      "oracleScore": 74,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 2.5,
+          "gap": -5.5
+        },
+        "media": {
+          "machine": 2.5,
+          "oracle": 3,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# commit-writer.eval.yaml",
+            "excerpt": "The report ends with the per-task failure panels: for each attempt that didn't pass, the output plus the assertion or autorater reason *why*."
+          },
+          {
+            "heading": "# commit-writer.eval.yaml",
+            "excerpt": "Full results are also saved as JSON under `.caliper/results/<spec>/` at the project's [results root](#where-results-are-saved), for you to inspect or `caliper compare` later."
+          },
+          {
+            "heading": "# commit-writer.eval.yaml",
+            "excerpt": "Full results are also saved as JSON under `.caliper/results/<spec>/`"
+          },
+          {
+            "heading": "# Machine-readable diff for a ship / no-ship decision",
+            "excerpt": "`--format json` serializes the full comparison (per-task scores, deltas,\nregression flags, unmatched lists, warnings, `skill_drift`, and per-side usage)"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "![caliper compare, without commit-commands vs full neighbourhood on commit-commands: both tasks go 33.3% to 100.0% (+66.7%); tokens 290K to 180K, wall 1m 1s to 42s](docs/assets/compare-ablation.svg)"
+          },
+          {
+            "heading": "# Machine-readable diff for a ship / no-ship decision",
+            "excerpt": "handles conflict regresses 100.0% to 20.0% (-80.0%), pushes upstream becomes unmeasured; 1 regression, 1 unmeasured, and unmatched tasks on each side](docs/assets/compare-runs.svg)"
+          },
+          {
+            "heading": "# commit-writer.eval.yaml",
+            "excerpt": "Failure panels below show the assertion error and the attempts where commit-writer activated on the changelog prompt](docs/assets/run-output.svg)"
+          },
+          {
+            "heading": "# commit-writer.eval.yaml",
+            "excerpt": "docs/assets/run-output.svg"
+          },
+          {
+            "heading": "# Machine-readable diff for a ship / no-ship decision",
+            "excerpt": "docs/assets/compare-runs.svg"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "sorsama/deepseek-harness-mobile",
+      "practicalScore": 43,
+      "oracleScore": 48,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 5,
+          "oracle": 0,
+          "gap": -5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 5,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## Screenshots",
+            "excerpt": "<img src=\"docs/images/home.png\" width=\"240\" alt=\"Connect screen: recent harnesses with live reachability, discovery, manual entry and auto-connect toggles\">"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "<img src=\"docs/images/chat.png\" width=\"240\" alt=\"Chat: streamed turns with per-tool icons, tool cards, goal dock and composer\">"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "<img src=\"docs/images/trajectory.png\" width=\"240\" alt=\"Trajectory: a per-turn ledger with usage totals\">"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "<img src=\"docs/images/session-info.png\" width=\"240\" alt=\"Details panel: context breakdown, goal, plan mode, jobs, queue, subagents, host information\">"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "<img src=\"docs/images/subagent.png\" width=\"240\" alt=\"Subagent catalog with continuable children\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "cosyncing/cosyncing",
+      "practicalScore": 21,
+      "oracleScore": 38,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 1.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/sync/sync-demo-light.gif\""
+          },
+          {
+            "heading": "## Client",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/workspace.png\""
+          },
+          {
+            "heading": "## Client",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/sessions.png\""
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/sync/sync-demo-light.gif\"\n           alt=\"cosyncing app and agent CLI staying in sync through takeover and a permission request\" width=\"830\">"
+          },
+          {
+            "heading": "## Client",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/workspace.png\"\n           alt=\"cosyncing landscape workspace with a session roster beside a live conversation\" width=\"620\">"
+          },
+          {
+            "heading": "## Client",
+            "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/sessions.png\"\n           alt=\"cosyncing portrait client with sessions grouped by project and live status\" width=\"180\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hanelalo/browser-bridge",
+      "practicalScore": 43,
+      "oracleScore": 61,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 6,
+          "oracle": 2,
+          "gap": -4
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### youtubesearch",
+            "excerpt": "实测 `--max 40` 约 3 秒返回。"
+          },
+          {
+            "heading": "### googletrends",
+            "excerpt": "同样自动翻完分页（实测可达 66 个地区）"
+          },
+          {
+            "heading": "### googletrends",
+            "excerpt": "`regions`：按地区显示的搜索热度 `[{ rank, region, geo_code, interest }]`，`geo_code` 为 ISO 地区码，同样自动翻完分页（实测可达 66 个地区）"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "JingxuanC/causal-memory",
+      "practicalScore": 61,
+      "oracleScore": 68,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 4.5,
+          "gap": -3.5
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 3,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### CausalEval — the causal memory benchmark (primary)",
+            "excerpt": "| **C7 Update** | **100%** | 50% | 80% | Supersede old belief after falsification (soft `superseded_by` annotation) |"
+          },
+          {
+            "heading": "### Fact-recall benchmarks (not our strong suit)",
+            "excerpt": "| Compaction survival | 100% | 45% | External table = immune to compaction |"
+          },
+          {
+            "heading": "## Why",
+            "excerpt": "| 5 | **45%** | **100%** |"
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "- ✅ Multi-session multi-pass retrieval (LongMemEval multi-session 42.9% → 57.9%, same-codebase)"
+          },
+          {
+            "heading": "### CausalEval — the causal memory benchmark (primary)",
+            "excerpt": "| **Overall** | **78%** | 81% | 65% |"
+          },
+          {
+            "heading": "### CausalEval — the causal memory benchmark (primary)",
+            "excerpt": "**Key result: C7 update 50% → 100% (+50pp, 20/20 questions) and it holds at\ndoubled sample size.**"
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "✅ Multi-session multi-pass retrieval (LongMemEval multi-session 42.9% → 57.9%, same-codebase)"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## Demo",
+            "excerpt": "[![30-second danger-warning demo](docs/demo/causal-memory-danger-30s.gif)](docs/demo/causal-memory-danger-30s.mp4)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "[![21-second demo](docs/demo/causal-memory-demo.gif)](docs/demo/causal-memory-demo.mp4)"
+          },
+          {
+            "heading": "## Architecture",
+            "excerpt": "![architecture](docs/architecture.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "zenx0x/allinluna",
+      "practicalScore": 68,
+      "oracleScore": 46,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 0,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 3. Separate working contexts",
+            "excerpt": "✓ what is done\n● what is running\n○ what is waiting\n! what needs your decision"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "opencues/opencues",
+      "practicalScore": 49,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 3,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "| ↳ the 19th is a Friday |"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "| ffmpeg -i input.mov -vcodec libx264 -crf 23 -pix_fmt yuv420p -acodec aac output.mp4 |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "alt=\"One prompt improved, rewritten as a senior engineer would, grown with a security paragraph, translated to Japanese - then an ffmpeg command answered on a fresh line\" src=\"assets/readme-1-hero.webp\""
+          },
+          {
+            "heading": "# Quickstart",
+            "excerpt": "<img width=\"100%\" alt=\"A Claude Code tip cue, then Slack catching a date that does not exist\" src=\"assets/readme-2-cues.webp\">"
+          },
+          {
+            "heading": "# What you get",
+            "excerpt": "<img width=\"100%\" alt=\"A price, a forecast, and a system volume you can turn - none of them asking a model\" src=\"assets/readme-3-local.webp\">"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "assets/readme-1-hero.webp"
+          },
+          {
+            "heading": "# Quickstart",
+            "excerpt": "assets/readme-2-cues.webp"
+          },
+          {
+            "heading": "# What you get",
+            "excerpt": "assets/readme-3-local.webp"
+          }
+        ]
+      }
+    }
+  ]
+}

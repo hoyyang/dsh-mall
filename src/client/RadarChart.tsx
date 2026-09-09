@@ -27,7 +27,7 @@ const RULES: Record<'zh' | 'en', { title: string; dims: Record<RadarDim, string>
     title: '五维分数怎么算的',
     dims: {
       maintain: '维护：最近是否还在更新代码、问题多不多',
-      practical: '实用：README 有没有安装说明和代码示例',
+      practical: '实用：README 是否提供能力、用法、场景、产出和可靠性证据',
       popularity: '热度：星数 + npm 下载量 + 增长趋势——没有 npm 数据就用星数换算等效下载量，同样算法不亏待',
       ease: '便捷：能不能一条命令装好、要不要额外配置',
       signal: '信号：许可证 / 简介 / 主题标签全不全',
@@ -38,7 +38,7 @@ const RULES: Record<'zh' | 'en', { title: string; dims: Record<RadarDim, string>
     title: 'How the five dimensions score',
     dims: {
       maintain: 'Maintain: recently updated, few open issues',
-      practical: 'Practical: README has install & usage docs',
+      practical: 'Practical: README evidence for capabilities, usage, use cases, outputs, and reliability',
       popularity: 'Popularity: stars + npm downloads + momentum — without npm data we convert stars to an equivalent estimate, so no one is penalized',
       ease: 'Ease: one-command install, no extra setup',
       signal: 'Signal: license/description/topics completeness',

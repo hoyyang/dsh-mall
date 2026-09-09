@@ -1,0 +1,299 @@
+{
+  "reviews": [
+    {
+      "repo": "SepineTam/mcp-for-stata",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Enable Claude Code, Codex, OpenClaw, and other AI agents to safely invoke Stata on your local device for data analysis.",
+        "Standalone CLI tools for OpenClaw integration (`stata-mcp tool`)",
+        "Official plugin package with MCP server and Stata LSP integration",
+        "CSV, DTA, XLSX, SPSS handlers",
+        "Text + SMCL readers",
+        "Native (same tools as MCP server)",
+        "**Beta async `stata_do` execution**: Supports concurrent MCP calls for multi-client workflows"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "uvx stata-mcp doctor"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "If you want to check whether your device is supported, you can run:\n```bash\nuvx stata-mcp doctor"
+      ],
+      "usecases": [
+        "**Paper Replication**: Replicate empirical studies from economics papers",
+        "**Quick Hypothesis Testing**: Validate economic hypotheses through regression analysis",
+        "**Stata Learning Assistant**: Learn econometrics with step-by-step Stata explanations",
+        "**Code Organization**: Review and optimize existing Stata do-files",
+        "**Result Interpretation**: Understand complex statistical outputs and regression results"
+      ],
+      "outputs": [
+        "Automatic log capture and error reporting"
+      ],
+      "reliability": [
+        "It displays basic information about your device and checks whether your setup is supported.",
+        "Claude Science runs MCP servers inside a strict sandbox that blocks access to the home directory (`~`) by default.",
+        "Blocks dangerous commands (`!`, `shell`, `erase`, etc.)",
+        "Prevents memory exhaustion with configurable limits",
+        "Configurable data access boundaries",
+        "Cross-platform support (macOS, Windows, Linux)"
+      ],
+      "media": [],
+      "concerns": [
+        "Installation and configuration material was excluded; the README contains no qualifying paired input/output example or meaningful non-badge project media."
+      ]
+    },
+    {
+      "repo": "op7418/pilot-harness",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "owns native window behavior, and provides a recovery screen when startup needs attention.",
+        "consistent tokens, radii, menus, hover states, settings cards, Markdown, conversation/trajectory navigation, and platform-aware title bars.",
+        "connect supported providers, declare an OpenAI-compatible endpoint, manage credentials separately from settings, browse the live model catalog, and identify image-capable models.",
+        "Right sidebar, file count, branch summary, row actions, and <code>@path</code> insertion"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "<code>/export</code>"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "project-aware conversation rows show branch, state, reminder summary, mode, and model details",
+        "Active reminder count and nearest scheduled time in Session hover details",
+        "Per-Session ZIP export from the Trajectory toolbar and <code>/export</code>"
+      ],
+      "reliability": [
+        "Electron packages the local Harness runtime for macOS, Windows, and Linux",
+        "Formal macOS files must pass Developer ID verification before publication",
+        "Windows and Linux preview installers remain unsigned.",
+        "older upstream Harness builds can install their bundles but cannot render those two UI contributions.",
+        "Official installers are never built or uploaded from a developer machine.",
+        "A merge conflict opens or refreshes a GitHub Issue and stops before changing `main`"
+      ],
+      "media": [],
+      "concerns": [
+        "The repository combines a desktop client with DSH plugin bundles; it is classified as dsh-plugin because the README presents the additions as ordinary Harness plugins.",
+        "Install/configuration commands were excluded, leaving no qualifying operational code example, paired I/O example, or meaningful non-badge media."
+      ]
+    },
+    {
+      "repo": "openma-ai/open-managed-agents",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "<summary><strong>Agents</strong> — Create and manage agent configurations</summary>",
+        "<summary><strong>Sessions</strong> — Run agent conversations</summary>",
+        "<summary><strong>Memory Stores</strong> — persistent storage; Claude Managed Agents Memory contract</summary>",
+        "| `web_fetch` | URL → markdown via Workers AI; auto-summarized when `agent.aux_model` is set, raw saved to `/workspace/.web/` |",
+        "| `web_search` | Web search via Tavily API (requires `TAVILY_API_KEY`) |",
+        "| `schedule` / `cancel_schedule` / `list_schedules` | Cron-style self-wakeup for long-running agents |",
+        "| `browser` (opt-in) | Headless browser session — navigate, click, screenshot.",
+        "OMA registers any [Model Context Protocol](https://modelcontextprotocol.io) server attached to an agent.",
+        "At session start the platform mounts everything under `/home/user/.skills/{name}/` in the sandbox **and inlines the SKILL.md body directly into the system prompt**",
+        "Make an agent a member of your Linear workspace with its own identity, avatar, and `@autocomplete` slot.",
+        "Give an agent its own GitHub App with a real bot identity — assignable on issues, requestable as a reviewer on PRs, posts comments under its own `@<slug>[bot]` handle.",
+        "Publish an agent into a Slack workspace as a dedicated bot — `@mention`able in channels, replies in threads, joins DMs, hosts the AI assistant pane."
+      ],
+      "usageItems": [
+        "When you need custom behavior — different caching, compaction, context engineering — write your own:",
+        "For long-lived sessions use `GET /v1/sessions/$SESSION/events/stream` — replays history on connect, never closes.",
+        "Deploy it:",
+        "CLI:",
+        "Servers attach to the agent (not the session)",
+        "Create a skill (JSON; files inlined):",
+        "For large skills with binaries: `POST /v1/skills/upload` multipart with `file=<my-skill.zip>`.",
+        "Attach to an agent with the **object form** — a bare string array silently does not bind:",
+        "Add one from **Console → Model Cards**, or via CLI:",
+        "Add the label to any issue/PR to engage the bot for every subsequent activity on that thread; remove the label to mute."
+      ],
+      "usageActions": [
+        "GET /v1/sessions/$SESSION/events/stream",
+        "oma deploy --harness my-harness.ts --agent agent_abc123",
+        "oma memory stores create \"User Preferences\"",
+        "oma connect linear --vault $VAULT_ID",
+        "POST /v1/skills",
+        "POST /v1/skills/upload",
+        "{ \"skills\": [{ \"skill_id\": \"skill_abc123\", \"type\": \"custom\" }] }",
+        "oma linear rules create <pub-id> --label triage --state Backlog --project \"Inbox\"",
+        "oma github bind <agent-id> --env <env-id>",
+        "oma slack publish <agent-id> --env <env-id>"
+      ],
+      "ioPairs": [
+        "curl localhost:8787/health\n# → {\"status\":\"ok\",\"backends\":{\"db\":\"sqlite ...\"}, ...}",
+        "npm run deploy\n# → https://openma.dev (or https://managed-agents.<your-subdomain>.workers.dev for a personal deploy)",
+        "# Inside the sandbox: curl https://api.github.com/user → 200, Authorization injected at the network layer",
+        "oma github bind <agent-id> --env <env-id>       # → opens one-click GitHub App Manifest flow",
+        "oma slack publish <agent-id> --env <env-id>    # → returns manifestLaunchUrl + formToken (60 min TTL)"
+      ],
+      "codeExamples": [
+        "Smoke test the harness end-to-end:\n\n```bash\nAID=$(curl -s -X POST localhost:8787/v1/agents -H 'content-type: application/json' \\",
+        "Deploy it:\n\n```bash\noma deploy --harness my-harness.ts --agent agent_abc123",
+        "CLI:\n```bash\noma memory stores create \"User Preferences\"",
+        "PAT-mode autopilot — let the bot pick up unassigned issues by label/state/project:\n\n```bash\noma linear rules create <pub-id> --label triage --state Backlog --project \"Inbox\""
+      ],
+      "usecases": [
+        "A self-hosted Claude Managed Agents API implementation.",
+        "An open-source, self-hosted Claude Tag-style workflow with BYOK model credentials.",
+        "MCP, private tools, encrypted vaults, and durable sessions under your own deployment boundary.",
+        "OSS users, on-prem, no CF account, data-resident deploys",
+        "Edge scale, no host management, already on CF"
+      ],
+      "outputs": [
+        "Workspace file persistence across container restarts",
+        "and the files appear at `/home/user/.skills/invoice-parser/SKILL.md` etc.",
+        "The agent appears in the assignee dropdown, gets pinged on `@mentions`, replies in the Agent panel, and pushes status back to issues it's working on.",
+        "same token also injected as `GITHUB_TOKEN` for sandbox `gh` / `git`",
+        "Per-channel sessions: one running session per `(publication, channel)`, with all events in that channel converging on the same session id."
+      ],
+      "reliability": [
+        "Switch between them by changing env vars, not code.",
+        "Up to 20 servers per agent.",
+        "Credentials never enter the sandbox; the outbound resolver matches by host and injects at forward time.",
+        "yes — on 401 **and 403** (Airtable/Asana/Sentry use 403 for expired tokens), CAS-writes new token to D1, retries once",
+        "Tool discovery is bounded at 15 s per server; one bad server logs and skips, the rest stay live.",
+        "CAS via `precondition: { type: \"content_sha256\", content_sha256 }`.",
+        "Workers refuse to start without it. **Back this up** — losing it makes every encrypted row unreadable.",
+        "`subprocess` (default, no isolation), `litebox` (Firecracker), `daytona`, `e2b`, or `boxrun`. Use an isolated backend for untrusted agents.",
+        "Keys are AES-256-GCM-encrypted at rest under `PLATFORM_ROOT_SECRET` (label `model.cards.keys`); list responses surface only the last-4 preview.",
+        "destructive ops (`pr.merge`, `repo.branch.delete`, `workflow.dispatch`, `release.create`, `*.delete`) require explicit opt-in"
+      ],
+      "media": [],
+      "concerns": [
+        "Installation and environment configuration were excluded; the README contains no qualifying non-badge demonstration media."
+      ]
+    },
+    {
+      "repo": "mrpulor-gh/nuphus-mcp",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "mouse click/drag/scroll/position,\n  keyboard input/hotkey, clipboard write/clean",
+        "`desktop_vision` (BYOK — send a screenshot to your\n  own vision model via an OpenAI-compatible or Anthropic native API)",
+        "`desktop_perceive` (local OCR with PaddleOCR, models auto-downloaded on first\n  run; optional YOLO icon detection).",
+        "click, type, exec, scroll, extract",
+        "**Zero-cost stdio**: no HTTP server, no daemon. The process reads\n  single-line JSON from stdin and writes responses to stdout.",
+        "When set, `browser_*` tools attach to that endpoint and never launch a managed\nChrome",
+        "the state persists to that profile and every subsequent\n`browser_*` call carries those sessions."
+      ],
+      "usageItems": [
+        "Open it, log into the sites you want to\nstay signed in once",
+        "Run DSH in the desktop session of the machine you want controlled.",
+        "# quick smoke test"
+      ],
+      "usageActions": [
+        "echo '{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\"}}}' | nuphus-mcp",
+        "Run DSH in the desktop session of the machine you want controlled.",
+        "cargo run -p nuphus-mcp --example demo"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "# quick smoke test\necho '{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\"}}}' | nuphus-mcp",
+        "A self-contained stdio client that walks through\n`initialize → tools/list → tools/call`:\n\n```sh\ncargo build -p nuphus-mcp"
+      ],
+      "usecases": [
+        "drive an **external browser** instead — e.g. an anti-detect / fingerprint\nbrowser",
+        "Want `browser_*` tools to drive a browser carrying your own extensions /\nbookmarks / login state?",
+        "operate the user's **currently running** real browser"
+      ],
+      "outputs": [
+        "screenshot (PNG/base64)",
+        "snapshot (accessibility tree with `@N`\n  refs)",
+        "perceive still returns OCR elements and reports\n`yolo_available: false`",
+        "Logs go to stderr."
+      ],
+      "reliability": [
+        "destructive tools are annotated per the MCP spec; optional\n  strict-confirm mode; path validation for screenshots, uploads, and file drags.",
+        "The server auto-detects an\n  installed browser; if none is found, `browser_*` tools return a clear error.",
+        "Desktop input requires Accessibility permission (System Settings → Privacy & Security → Accessibility)",
+        "Partial — window/input capabilities are limited",
+        "when it is not configured\nthe tool returns a clear error instead of silently failing.",
+        "attach failures are hard errors (no silent fallback into the wrong\nbrowser). The external browser belongs to you — the server never kills it on\nexit.",
+        "verifies the candidate with a proxy-bypassing CDP probe and retries\nonce",
+        "hard Chrome 136+ restriction**: after\nChrome's official security change, `--remote-debugging-port` and\n`--remote-debugging-pipe` are **ignored against the default user data\ndirectory**",
+        "Download\nfailures return a clear error with manual instructions.",
+        "By default write\ntools run **without** confirmation"
+      ],
+      "media": [],
+      "concerns": [
+        "Install and MCP configuration examples were excluded; the README shows no explicit paired request/response example or meaningful non-badge media."
+      ]
+    },
+    {
+      "repo": "kelai141/dsh-mobile-apk",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "it boots a full dsh web agent that can really execute bash.",
+        "engine listens on `127.0.0.1:3080`; fully offline.",
+        "**File-to-session (F5)** — \"Open with / Share\" auto-jumps into this app and forces a fresh temp\n  workspace session for the file",
+        "**Search (grep/glob)** — mobile ripgrep platform package (android-arm64, pcre2/NEON full-featured).",
+        "**Notifications** — automatic task-completion notifications (engine event bridge + watchdog\n  consumer); system notification chain incl. authorization requests.",
+        "**Mobile UI** — responsive plugin (drawer/sheet on phones); adjustable font size, immersive status\n  bar, dark theme.",
+        "`pickDirectory` maps the picked tree to a real path (`/storage/emulated/0/…`).",
+        "**Online runtime updates** — manifest-driven snapshot swap (download → sha256 → atomic switch →\n  auto-restart); the running runtime can update itself without an APK update."
+      ],
+      "usageItems": [
+        "| `keepScreenOn` | (enable) | screen-on wake lock |",
+        "| `showNotification` | (title, text) | test notification channel (POST_NOTIFICATIONS) |",
+        "| `pickDirectory` | (callbackId) | SAF tree picker; result async via `window.__dshBridge.onDirectoryPicked(callbackId, path)` |",
+        "| `pickImage` | (callbackId) | SAF image picker; result async via the same callback |",
+        "| `setTextZoom` | (percent) | WebView font scale (50–200; Settings → General slider) |",
+        "| `setImmersiveMode` | (enable) | immersive status bar toggle (true = status bar normally hidden) |",
+        "| `restartEngine` | () | restarts the engine process (EngineService watchdog brings it back) |",
+        "| `shutdownToGuide` | () | stops the engine and falls back to the test screen (no auto-restart) |",
+        "| `reloadWebUI` | () | reloads the Web UI |",
+        "| `openConsole` | () | opens the built-in console |"
+      ],
+      "usageActions": [
+        "| `keepScreenOn` | (enable) | screen-on wake lock |",
+        "| `showNotification` | (title, text) | test notification channel (POST_NOTIFICATIONS) |",
+        "| `pickDirectory` | (callbackId) | SAF tree picker; result async via `window.__dshBridge.onDirectoryPicked(callbackId, path)` |",
+        "| `pickImage` | (callbackId) | SAF image picker; result async via the same callback |",
+        "| `setTextZoom` | (percent) | WebView font scale (50–200; Settings → General slider) |",
+        "| `setImmersiveMode` | (enable) | immersive status bar toggle (true = status bar normally hidden) |",
+        "| `restartEngine` | () | restarts the engine process (EngineService watchdog brings it back) |",
+        "| `shutdownToGuide` | () | stops the engine and falls back to the test screen (no auto-restart) |",
+        "| `reloadWebUI` | () | reloads the Web UI |",
+        "| `openConsole` | () | opens the built-in console |"
+      ],
+      "ioPairs": [
+        "| `version` | () → string | app version (`0.13.0-preview`) for feature detection |",
+        "| `getSystemDark` | () → boolean | system dark mode (bypasses vendor WebViews whose `matchMedia` is stuck on light; used by the first-frame theme bridge) |",
+        "| `checkEngine` | () → string | probes 127.0.0.1:3080; JSON `{running, latencyMs, error?}` |",
+        "| `hasAllFilesAccess` | () → boolean | whether All Files Access is granted (external workspace requirement) |",
+        "| `getPickToken` | () → string | one-shot token for the directory-picker bridge (validated by the engine-side pick endpoint) |",
+        "| `copyText` | (text) → boolean | native clipboard write (WebView `clipboard.writeText` is always rejected; page falls back to this) |",
+        "| `getDevLogEnabled` | () → boolean | dev debug-log toggle state |",
+        "| `pickDirectory` | (callbackId) | SAF tree picker; result async via `window.__dshBridge.onDirectoryPicked(callbackId, path)` |"
+      ],
+      "codeExamples": [
+        "# Snapshot build (Termux sources + dependency closure + pnpm + cordis overrides + slimming):\nnode scripts\\build-snapshot-013.mjs <arm64|x86_64>",
+        "# One-shot packaging (snapshot → injection → gates → gradle):\npwsh scripts\\build-apk-013.ps1 -Suffix \"-preview\""
+      ],
+      "usecases": [
+        "**Built-in console** — standalone bash terminal (`assets/console.html` + embedded Termux), usable\n  for diagnostics even when the engine is down."
+      ],
+      "outputs": [
+        "exports engine logs + environment info (zipped, system download/share dialog)",
+        "# output: out\\v0.13.0\\dsh-mobile-apk-v<ver>-<abi>.apk",
+        "status is written to `files/update-status.txt`."
+      ],
+      "reliability": [
+        "**0.13.0-preview — preview release**: unstable, intended for community validation — do not rely on it in production.",
+        "**ADB is not complete**: pairing / port auto-scan / execution are preview UI screens — the real ADB channel is under development",
+        "**most of them are likely unavailable or buggy on phones**",
+        "first launch extracts in 2–4 min",
+        "**Keep-alive** — foreground service + 5s watchdog (auto-restarts a hung engine) + 3s UI monitor\n  poll + crash auto-rollback gate (UndoGate).",
+        "Downloads the snapshot, verifies SHA-256, extracts to a staging dir (never touching the live tree)",
+        "A mismatched snapshot crashes the engine at startup",
+        "any failure rejects the build.",
+        "fail-closed when not authorized",
+        "A 16KB-page build must be produced on a 16KB device"
+      ],
+      "media": [],
+      "concerns": [
+        "The README calls the ADB flow incomplete while listing preview bridge methods; ADB capabilities beyond the stated preview authorization surface were omitted as ambiguous.",
+        "Install/configuration evidence and linked dsh-mobile ecosystem capabilities were excluded; no meaningful non-badge media is present."
+      ]
+    }
+  ]
+}

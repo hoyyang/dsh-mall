@@ -1,0 +1,459 @@
+{
+  "reviews": [
+    {
+      "repo": "c3ll256/dsh-toy",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`dsh-toy` is a DeepSeek Harness plugin for connecting small toys to DSH.",
+        "At connection time, the agent first asks for the brand and model, then selects the connection method automatically.",
+        "- On macOS, unknown hardware first uses read-only raw **CoreBluetooth** advertisement discovery, without starting Intiface or connecting to devices.",
+        "- Regular Bluetooth, serial, and USB models use **Buttplug / Intiface**. The plugin starts local Intiface Engine automatically when needed.",
+        "- Known sharing-link models from Ankni (安可尼), MizzZee (谜姬), and Zuiqingfeng (醉清风) use **MonsterParty**. Known dual-output devices expose their channels separately.",
+        "Users do not need to understand or select an underlying connection method, or manually start Intiface.",
+        "The plugin also supplies a verified local compatibility mapping for `RoomFun` devices reporting model `RF_CANNON_PT3`, exposed as **RoomFun Cannon** with one vibration channel."
+      ],
+      "usageItems": [
+        "Before scanning, turn the toy on, keep it nearby, and make sure a phone app or another program is not holding the device connection.",
+        "Known model: `toy_connect` → `toy_scan` → `toy_list` → `toy_control` → `toy_stop` → `toy_disconnect`."
+      ],
+      "usageActions": [
+        "| `toy_scan_raw_ble` | On macOS, discover connectable raw BLE advertisements without Intiface or device writes |",
+        "| `toy_connect` | Connect from the reported model; use `unknown` when it is not known |",
+        "| `toy_scan` | Discover available devices |",
+        "| `toy_list` | List device ids and controllable features |",
+        "| `toy_control` | Send a bounded scalar command |",
+        "| `toy_stop` | Stop one device or all devices |",
+        "| `toy_disconnect` | Stop output and close the connection |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Quick start\n\nYou can tell the agent directly:\n\n```text\nMy toy is a Lovense Lush 3. Connect it and scan for devices.\n```"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- Sharing tokens stay in plugin configuration and never appear in model-visible tool arguments or results.",
+        "- Raw BLE discovery is read-only: it scans connectable advertisements without connecting or writing characteristics.",
+        "- Output stops automatically after 30 seconds by default.",
+        "- Zero-duration holds are disabled unless `allowHold: true` is explicitly configured.",
+        "- `maxIntensityPercent` and `maxDurationSeconds` are enforced before backend dispatch.",
+        "- `toy_stop` without a device id performs a global stop.",
+        "- Plugin unload, HMR, and `toy_disconnect` stop output and await WebSocket shutdown.",
+        "Use only hardware you own or are explicitly authorized to control. Treat sharing tokens as temporary control credentials and keep them out of Git, logs, and conversations.",
+        "If it is not installed, it downloads a pinned build from the official Buttplug GitHub Release, verifies its SHA-256 digest, caches it in the user cache directory, and starts it.",
+        "- The Buttplug connection currently exposes scalar features only; position, direction, sensors, raw access, and subscriptions are outside the current scope."
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "Reliability cap 10 forced omitting further items (macOS-only raw BLE limitation, platform support for auto-download, troubleshooting rows, fixture-based tests)."
+      ]
+    },
+    {
+      "repo": "dclichang2022/dsh-green-meter",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Energy & carbon metering for DeepSeek Harness — see what your agentic sessions cost.**",
+        "turns every model call into **energy (J/kWh)**, **carbon footprint (g CO2e)** and **electricity cost (CNY)** — estimated from token accounting, so it works with any API-backed provider",
+        "| **Composer dock** (always visible under the input box) | live `能耗 1.5 kJ · 碳 0.2 g` readout + per-turn energy sparkline |",
+        "| **Detail panel** (click the readout) | floating draggable drawer with per-turn energy chart, per-request energy list, session totals (tokens / energy / carbon / **electricity cost**)",
+        "| **`/green`** | one-command session energy report |",
+        "| **`green_meter` tool** | the agent can query its own energy, carbon, cost and budget at any time |",
+        "| **Energy budget** | optional per-session budget — over-budget steps are rejected with a warning |",
+        "| **JSONL ledger** | every model call recorded, ready for your own analysis |"
+      ],
+      "usageItems": [
+        "Install it, chat as usual, and watch your session's energy bill in real time."
+      ],
+      "usageActions": [
+        "Type `/green` anytime."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "**carbon saved by caching ≈ N trees per year**"
+      ],
+      "reliability": [
+        "- **Estimate, not measurement** — energy is modeled from token accounting with calibrated per-model profiles; carbon and cost are energy × configurable factors.",
+        "- **GPU operational energy only** — CPU, memory, cooling and embodied carbon are out of scope.",
+        "- **Cache savings are counterfactual** — cached tokens that would otherwise be recomputed.",
+        "The installer edits by unique code anchors (no line numbers), so it works even\nwhen the patch's context no longer matches your checkout, and it is idempotent\n— running it twice is safe."
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "No paired input/output example appears, so ioPairs is empty; the thebestai promotion section contributes zero."
+      ]
+    },
+    {
+      "repo": "Stormycry-cryp/dsh-AuthInOne",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Provider login, API and custom OpenAI-compatible Provider setup, model switching, optional vision fallback for text-only models, token usage analytics, and cost tracking",
+        "OpenAI Codex uses browser OAuth with state, S256 PKCE, and a loopback callback.",
+        "Kimi Code opens the Provider's complete authorization link backed by an RFC 8628 device flow",
+        "| Vision fallback for text-only main models | **Verified** | PNG/JPEG/WebP/GIF use DSH `ImageBlock` references",
+        "| Plan/API presets | **Available with vendor limits shown** | OpenAI, xAI, Gemini, Anthropic, Kimi Code, GLM Coding Plan, and ModelStudio/Qwen presets write credentials through DSH",
+        "AuthInOne adds a compact connection/default-route projection, a full-width **Add Auth login** action, and an **Add Plan / API Key** action above the two native add-Provider buttons.",
+        "| Future-session default model and connection test | **Verified** |",
+        "| Cross-session Usage and cost analytics | **Verified** |"
+      ],
+      "usageItems": [
+        "Open DSH, then go to **Settings → Models** or **Settings → Usage**."
+      ],
+      "usageActions": [
+        "Open DSH, then go to **Settings → Models** or **Settings → Usage**."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "- you want OpenAI Codex or Kimi Code login inside DSH, or knowingly opt into a labeled compatibility flow;",
+        "- you manage API-key or custom OpenAI-compatible Providers in DSH's native Models page;",
+        "- you switch the future-session default model without replacing DSH's per-session selector;",
+        "- you want a separately configured vision model to describe images only when the selected main model explicitly declares text-only input;",
+        "- you need reconstructable Provider/model/tool token usage and auditable calculated cost."
+      ],
+      "outputs": [
+        "Real DSH session logs rebuilt 26,383 Token into KPI, heatmap, model, Provider, bucket, and cost projections",
+        "Successful auxiliary calls appear separately as **Vision-assist calls** and **Vision-assist Token** while retaining their actual Provider/model route."
+      ],
+      "reliability": [
+        "OAuth verifier, authorization code, device code, access token, and refresh token stay on the Host",
+        "the plugin never imports `~/.codex/auth.json`, OpenCodex state, cookies, browser storage, OTPs, or another product's credentials.",
+        "xAI Grok, Anthropic, GitHub Copilot, Command Code, Cursor, Google Antigravity, and Kiro are explicitly marked **Experimental compatibility**.",
+        "Installed-Host validation reached each Provider's authorization boundary and stopped before user consent",
+        "mock/fixture tests cover exchange or polling, refresh rotation, denial, timeout, cancellation, logout, route activation, and secret redaction.",
+        "The bootstrap only supports a credential-free loopback HTTP origin and a standard DSH launcher",
+        "Ambiguous ports, unrelated listener processes, unknown owner artifacts, and unsupported launch provenance fail before the Host is stopped. It never falls back to another port.",
+        "A changed or native-seam host fails with `AUTH_IN_ONE_COMPAT_UNSUPPORTED_DSH` instead of being silently replaced or double-registered.",
+        "- It does not fabricate missing Token buckets, prices, currency conversion, tool ownership, or a successful login.",
+        "**Alpha `v0.2.0-alpha.4`** · exact compatibility target: official DSH `47f9438`"
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness Models settings with Provider state and OpenAI Codex account authorization](docs/assets/models-dark-desktop.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DeepSeek Harness Usage settings with token activity, model usage, and cost analytics](docs/assets/usage-light-desktop.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The cover image is decorative art and was excluded; six further captures are markdown links rather than embedded images, so they are not media markup.",
+        "Reliability cap 10 forced omitting further items (vision input-format limits, VISION_FALLBACK_FAILED behavior, missing-price policy, macOS/Linux+lsof verification, alpha.2 security scan)."
+      ]
+    },
+    {
+      "repo": "openma-ai/Martty",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Martty 在终端中呈现完整的 agent 工作过程，包括流式回复、推理、工具调用、\nsubagent、Plan、token 用量和持久化会话。",
+        "图片可以从文件或剪贴板加入 prompt；\n工具输出、Markdown、代码块和图片预览都使用终端原生交互。",
+        "回合运行时可以继续排队消息，也可以立即 steer 当前 agent。",
+        "Martty 的界面不是一组写死的开关。UI、主题、Slot、命令、Overlay 和 Session 视图\n都由 Cordis Plugin 组合，并随 Plugin 生命周期一起加载和卸载。",
+        "Agent 可以读取当前能力，创建新的界面 Plugin，并在运行中继续\n观察和修改。",
+        "带有 Client half 的 Plugin 可以通过 `tuiSlots.register` 向六个位置提供界面内容",
+        "Martty 的 ACP client 是内置的。默认配置连接 DSH；连接其他 ACP server 时，只需\n修改 agent 或 stream 配置，不需要替换 Martty 的 ACP 层。",
+        "只实现标准 ACP 的 agent 可以正常使用会话、认证、prompt、permission、配置与\n`session/update`。",
+        "| `/ui` | UI Plugin 列表，例如 Martty 与 DeepSeek；选择后切换整套 UI 组合 |"
+      ],
+      "usageItems": [
+        "会话通过 `/new`、\n`/resume` 和 `--session-id` 管理，workspace、模型、权限和界面选择会随会话恢复。"
+      ],
+      "usageActions": [
+        "| `enter` | 发送消息；composer 为空且 Queue 非空时立即发送队首 |",
+        "| `ctrl+x` | 立即 steer 当前 agent |",
+        "| `esc` | 中断当前回合并保留草稿 |",
+        "| `/model` · `/agent` | 选择模型和 Agent Preset |",
+        "| `/permission` · `shift+tab` | 选择或轮换权限模式 |",
+        "| `/image <path>` · `/clip` | 添加本地图片或剪贴板图片 |",
+        "| `!cmd` | 在 workspace 的会话级本地 shell 中执行命令 |",
+        "| `/help` · `/keys` | 查看命令与快捷键 |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "只想看界面，可以运行：\n\n```sh\nmartty --demo\nmartty --demo-skin\n```"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Plugin 只能使用公开的\nService 和语义节点，不能直接操作 TTY、raw mode 或终端坐标。",
+        "两边通过 ACP 通信，不共享 Plugin Fiber 或 Service 对象。",
+        "ACP 使用 Client 进程的\nstdin/stdout；用户 TTY 使用 fd 3/4，两条通道互不混用。",
+        "当前没有把任意动态 Package 一键转换为静态 Package 的 `promote` 命令；升级\n会显式经过保存或打包，避免把一次临时 run 自动写入长期配置。",
+        "旧配置和会话数据会在首次启动时复制到 Martty 路径，不会删除原数据。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/agent-turn.png\" width=\"720\"\n       alt=\"Martty 中的 Markdown 回复、工具调用和运行状态\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The lockup SVG is a logo and was excluded; one embedded screenshot remains.",
+        "No paired input/output example appears, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "PolinniZhong/dsh-omi-voice",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "让 DeepSeek Harness（DSH）桌面端里的 AI 回复，用**豆包自然音色**读给你听。语音由你本机常驻的 Omi 引擎合成，**豆包 API Key 只留在你自己的钥匙串里（BYOK）**。",
+        "| 语音能力 | 豆包 TTS 1.0（`seed-tts-1.0`），自然中文音色，支持暂停/继续（从暂停处续播） |",
+        "| 成本 | BYOK，按字符计费；内存 LRU 缓存 + 去重，避免重复请求 |",
+        "插件只是\"遥控器\"：播放、变速、暂停/继续、缓存、文本清洗全部在 Omi 引擎内完成。"
+      ],
+      "usageItems": [
+        "- **🔊 点读**；播放中再点 = **暂停**，再点 = **从暂停处继续**；点其它消息的 🔊 = 打断并读新的。",
+        "- **只读最终回答**：工具执行日志、思考过程不会读；代码围栏、表格、纯图形（盒绘/ASCII）在请求前过滤，回复若只有这些内容，按钮呈禁用态并提示\"没有可朗读的内容\"。"
+      ],
+      "usageActions": [
+        "在 DSH 对话里点 AI 回复旁的 🔊，即可朗读。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "| 解决的问题 | DSH 内置朗读（系统语音 / Edge TTS）音色机械、像上个时代的播报腔；通用剪贴板工具又要先复制再读 |"
+      ],
+      "outputs": [],
+      "reliability": [
+        "| 隐私特性 | API Key 存入 Omi 引擎的 macOS Keychain；插件零 Key；仅本机 `127.0.0.1` 通信 |",
+        "- 引擎未启动 / 未配置 Key 时，点击会给出明确提示（含去哪打开 Omi）。",
+        "引擎对相同文本 3 秒内去重，且进程内 LRU 缓存最近 3 条（≤5MB、纯内存、退出即清），重复朗读不重复计费；",
+        "- 纯表格/纯代码等无有效内容不发请求（`invalid_text`）。",
+        "| 支持 Windows 吗 | 暂不支持：Omi 引擎仅 macOS Apple Silicon |"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/idle.png\" width=\"360\" alt=\"未朗读状态\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/reading.png\" width=\"360\" alt=\"朗读中状态\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/reading.gif\" width=\"480\" alt=\"点读 → 暂停 → 继续 演示\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The three Volcengine console screenshots document third-party key setup rather than this plugin's own behavior and were excluded; logo excluded.",
+        "No paired input/output example appears, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "melandlabs/opencontext",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**OpenContext** is the agentic context runtime that sits underneath an agentic\napplication — and the substrate you build your own agent on top of.",
+        "it is the glue between the things that make an agent useful: durable\nmemory, retrieval, context correction, multi-platform connectivity,\nscheduled awareness, and a deterministic loop engine, all behind one dependency.",
+        "A directed acyclic graph where every fact has `valid_from` / `valid_until`. Supersession, contradiction, and merge are first-class edges — corrections are append-only, not destructive.",
+        "One uniform `IntegrationRecord` shape across Gmail, Slack, Telegram, Linear, Jira, iMessage, Feishu, Weixin, … — credential rotation, rate-limit handling, and reconnect logic live behind the adapter.",
+        "A scheduler that wakes up, decides whether there is real work, and only then calls into the agent runtime. LLM calls are not the foundation — they are the last step.",
+        "Chunking, embeddings, parsers (PDF/ZIP/text), sqlite-vec + pgvector + Chroma adapters. Mix backends without rewriting the recall pipeline.",
+        "AI SDK wrappers, sandbox providers (native / Claude / Vercel), MCP server, memory-consolidation job, image + audio generation.",
+        "The plugin exposes 16 `oc_*` tools (e.g., `oc_search`, `oc_remember`, `oc_memory_list`) and automatically:",
+        "- Runs a recall waterfall on each turn to inject relevant historical context\n- Captures user messages into durable memory\n- Summarizes sessions at natural breakpoints (opt-in)"
+      ],
+      "usageItems": [
+        "`add` writes a\nsingle raw message to the active manager with no LLM roundtrip, and\n`search` runs a unified read across memory, insights, and knowledge.",
+        "Run `opencontext <command> --help` for the full flag list."
+      ],
+      "usageActions": [
+        "opencontext add --text \"Rust achieves memory safety without GC\"",
+        "opencontext search --query \"memory safety\" --k 5",
+        "opencontext search --query \"x\" --json | jq '.results[].id'",
+        "opencontext doctor             # human-readable health checks"
+      ],
+      "ioPairs": [
+        "query: \"What does the user prefer?\",\n\tlimit: 5,\n});\n// hits.count    — number of results\n// hits.sources  — which sub-indexes were actually consulted\n// hits.warnings — per-source degradation (e.g. missing embedder)"
+      ],
+      "codeExamples": [
+        "# Write a fact (auto-fills messageId, platform=\"cli\", timestamp=now)\nopencontext add --text \"Rust achieves memory safety without GC\"",
+        "opencontext http \\\n  --embedding-provider local \\\n  --memory-backend sqlite-vec \\\n  --host 127.0.0.1 --port 7421"
+      ],
+      "usecases": [
+        "- **Software engineering teams.** Decisions scatter across GitHub PRs, Linear tickets, Slack threads, and Notion docs — across people, tools, and quarters.",
+        "- **Efficiency / productivity engineering teams.** The people building internal automation for the rest of the company.",
+        "- **Office-assistant products.** Assistants that live inside Telegram, iMessage, WhatsApp, Lark/Feishu, and friends. Same agent code, same context across channels.",
+        "- **Financial trading teams.** Every order, rebalance, and risk decision needs to be traceable and auditable.",
+        "- **Legal, healthcare and other audited domains.** Law firms, hospitals, and similar teams where every judgement needs per-fact provenance, append-only corrections, and exportable compliance evidence.",
+        "- **Multi-agent and autonomous-workflow authors.** Need scheduled, deterministic wake-up instead of an LLM loop all the way down."
+      ],
+      "outputs": [
+        "| LongMemEval-S | 97.6% | Long-term memory recall across long sessions                      |",
+        "| BEAM @ 10M    | 67.0% | Factual recall at a 10M-token context window                      |"
+      ],
+      "reliability": [
+        "`doctor` is read-only and exits `0` on a healthy install.",
+        "It scans nine\nsections (`runtime`, `filesystem`, `loop`, `memory-store`, `embedding`,\n`policies`, `audit`, `security`, `integrations`) and reports pass /\nwarn / fail for each. No auto-fix in v1.",
+        "Sources you\n// haven't wired up just emit a warning — fine for a single-backend deploy."
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "The DSH plugin is one of six integration paths; the primary identity is a standalone runtime, hence standalone-nonplugin."
+      ]
+    },
+    {
+      "repo": "vlln/dsh-navbar",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "An evenly spaced node strip along the right edge of the conversation area (one node per user message): the active pill follows your reading position, hovering shows a preview card (truncated at 6 lines)",
+        "more than 11 nodes automatically switch to a sliding window, it stays invisible until hovered, and it auto-hides when there are fewer than 2 user messages.",
+        "the preview switches to the nearest node and the corresponding pill elongates (gray) to indicate the click target — no dead zones",
+        "| Scroll-wheel switching | With the cursor over the rail, scrolling the wheel moves up/down one message (blocking conversation-area scrolling) |",
+        "| Click to jump | The whole rail is clickable (including gaps, jumping to the nearest node) plus an enlarged pill hit area — no need to precisely aim at tiny dots |",
+        "| Load earlier history | An ↑ button pinned at the top of the rail (visible only while the conversation has older history): click to load earlier messages",
+        "| Message pin | 📌 button on the assistant action bar (between copy and Good response); pinned turns render as a golden slim elliptical disc in the rail"
+      ],
+      "usageItems": [
+        "Works out of the box — no commands, no tools.",
+        "**Pin**: hover an assistant message's action bar and click 📌 to pin that reply — the corresponding turn's navigation node becomes a golden slim elliptical disc"
+      ],
+      "usageActions": [
+        "hover an assistant message's action bar and click 📌 to pin that reply",
+        "hover for a preview, click to jump",
+        "Click it to load the earlier messages"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Zero data-channel dependencies: driven only by official anchor attributes (`data-time-hover-root`, on user rows since 0806) — no polling, no routing, no tools.",
+        "Implements the dsh-external/issues#144 spec.",
+        "Animations are disabled under `prefers-reduced-motion`.",
+        "The button hides automatically once all history is loaded, and is disabled while a load is in flight.",
+        "The click is forwarded to the official load-older control, so your current reading position is preserved (no content jump)."
+      ],
+      "media": [
+        {
+          "excerpt": "![navbar node navigation rail (real runtime screenshot: node strip on the right edge + active highlight)](docs/preview/navbar.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No paired input/output example appears, so ioPairs is empty.",
+        "The pin-persistence claim appears in both the feature table and Usage; counted once under capability."
+      ]
+    },
+    {
+      "repo": "Yan-Zero/dsh-std",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "let DSH plugins, background runtimes, and various user interfaces (TUI terminals, Web UIs, desktop apps, headless daemons) decouple cleanly and work together smoothly.",
+        "Reference packages provide types, validators, and pure-function negotiators.",
+        "how participants declare what they need (`requires`) and what they provide (`supports`), and how to run pure-function negotiations to output a structured compatibility report.",
+        "Once written, the exact same plugin code runs without changes in TUI terminals, Web browsers, Remote SSH services, or headless daemon containers.",
+        "A single plugin package can contain both frontend UI and backend logic. A host only activates the facets it needs (e.g., a headless server never loads frontend UI code).",
+        "With static manifests (`dsh-plugin.json`), marketplaces, hosts, and CI tools calculate compatibility in milliseconds **without running a single line of plugin code**.",
+        "- **Blazing-fast Headless Unit Tests**: The protocol core consists entirely of pure data structures and pure-function negotiators.",
+        "**Adoption is voluntary**: No project is forced to adopt this standard; but once claiming conformance to a protocol version, it must pass the corresponding conformance suite.",
+        "It isolates the upstream runtime from the universal protocol layer."
+      ],
+      "usageItems": [
+        "Use the [package index](packages/README.md) to select the smallest implemented package surface."
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The code and proposals are early drafts.",
+        "Public contract modifications must update the corresponding changelog.",
+        "Conforming implementations are not required to depend on these npm packages, nor do they need to run inside DeepSeek Harness."
+      ],
+      "media": [],
+      "concerns": [
+        "A protocol-standard specification repo with reference packages, not a DSH plugin, hence standalone-nonplugin.",
+        "No screenshots or other media are present; no paired input/output example, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "cofy-x/axern",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Axern is an open-source sandbox platform for AI agents.",
+        "It isolates untrusted agent-generated code with runsc and runs trusted long-lived services with runc through one resource and lifecycle model.",
+        "The CLI and the Go, Python, and TypeScript SDKs expose the same public APIs for environments, processes, files, services, storage, tunnels, lifecycle state, and task evidence.",
+        "- **Agent sandboxes:** execute agent-generated code behind a runsc isolation boundary while retaining process, file, terminal, and output APIs.",
+        "- **Durable services:** run trusted, performance-sensitive processes with runc while the control plane owns replicas, health, storage, and rollouts.",
+        "- **Reproducible agent execution:** use Axrun to coordinate immutable tasks, verification, trajectories, usage, and typed artifacts.",
+        "- **Real data-plane access:** process streams, files, archives, HTTP services, SSH-compatible terminals, and reverse TCP tunnels are explicit capabilities.",
+        "- **Durable control plane:** PostgreSQL-backed intent, placement, leases, retries, health, cleanup, and storage state remain authoritative across process or node restarts."
+      ],
+      "usageItems": [
+        "`local up` starts PostgreSQL, MinIO, the control and node services, waits for readiness, and creates the `local` context."
+      ],
+      "usageActions": [
+        "axern local up",
+        "axern local image load python:3.12-slim --pull",
+        "axern run python:3.12-slim -- python -c 'print(\"hello from axern\")'",
+        "axern local status\naxern local down"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "axern local up\naxern local image load python:3.12-slim --pull\naxern run python:3.12-slim -- python -c 'print(\"hello from axern\")'"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "> **Project status:** Axern is pre-1.0 and under active development.",
+        "It is suitable for evaluation and contribution, but operators should review the security and production boundaries before deploying multi-tenant workloads.",
+        "The local environment uses generated development credentials and loopback listeners.\nDo not reuse them in a shared or production deployment.",
+        "Axern does not claim that a default local or example deployment is safe for an untrusted multi-tenant environment.",
+        "Review authentication, TLS, network policy, runtime isolation, image trust, secret storage, resource limits, and persistent storage before production use.",
+        "The bundled PostgreSQL and single-node defaults are intended for evaluation.",
+        "Durable or shared deployments must provide persistent storage, externalized secrets, ingress, and scheduling values described by the Helm chart."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./apps/docs/public/terminal/axern.gif\" width=\"760\" alt=\"Terminal recording of the axern CLI: command surface and run creation flags\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The hero GIF is decorative marketing art and was excluded.",
+        "Unrelated to DSH integration; classified standalone-nonplugin."
+      ]
+    },
+    {
+      "repo": "vlln/plugin-registry",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Thin console** (`packages/plugin/console`) — browser panel managing a profile's plugin install state + 4 agent tools",
+        "**Development spec and guidance** — `make-dsh-plugin` skill + cookbook for creating official bundle/cordis plugins",
+        "npm package name or GitHub project (`https://github.com/o/r` / `github.com/o/r` / `github:o/r`, URL auto-normalized) — automatic pnpm add",
+        "+ **loaded area** (version check/update, `disabled` toggle, bundle uninstall).",
+        "Create official bundle / cordis plugins: pick a form (skill package / MCP / Node tool / with UI) → declare `dsh.bundle` or plain apply → install-and-verify discipline."
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**Pivot (2026-08)**: Official 0809 added a repository plugin mechanism (`.dsh-plugin`) covering ~95% of the old mechanism",
+        "external plugins install via the web profile only: bundles (`dsh.bundle`) join `dsh.profile.bundles`;\n> non-bundles (plain cordis packages) mount via insert rows in `cordis.patch.yml` (live via HMR).",
+        "on win32 `dsh plugin` forwards\n> args through cmd.exe, where `&` is a command separator, so `#main&path:...` gets split and fails\n> with `ERR_PNPM_INVALID_DEPENDENCY_NAME`.",
+        "Key pitfalls (official packages not yet published, Node-half changes need a restart, host CSS overrides, etc.)"
+      ],
+      "media": [
+        {
+          "excerpt": "![Plugin management panel](screenshots/console-panel.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Install/update actions are the plugin's whole install section and were excluded, so usageItems/usageActions/ioPairs/codeExamples are empty.",
+        "No paired input/output example appears, so ioPairs is empty."
+      ]
+    }
+  ]
+}

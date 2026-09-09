@@ -1,0 +1,3441 @@
+{
+  "generatedAt": "2026-09-02T05:36:35.868Z",
+  "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-cap-equal-evaluation.json",
+  "invariant": "Popularity, identity, README length, installation and target score distribution are absent. Every evidence-family anchor equals its frozen rubric/parser cap, preserving marginal value through the full 0–100 scale.",
+  "searchSpace": {
+    "exponents": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1
+    ],
+    "anchors": {
+      "capabilityItems": 12,
+      "usageItems": 10,
+      "usageActions": 10,
+      "ioPairs": 8,
+      "codeExamples": 4,
+      "usecaseItems": 10,
+      "outputItems": 8,
+      "media": 6,
+      "reliabilityItems": 10
+    },
+    "candidatesEvaluated": 11
+  },
+  "current": {
+    "config": {
+      "exponent": 0.9,
+      "anchors": {
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 8,
+        "codeExamples": 4,
+        "usecaseItems": 10,
+        "outputItems": 8,
+        "media": 6,
+        "reliabilityItems": 10
+      }
+    },
+    "selection": "Exponent 0.9: median of five all-gate fixed-fold selections and the full-development-set overall leader within the strict cap-equal family; tied modal choices are 0.9 and 0.95.",
+    "fullScoreAtRubricCaps": 100,
+    "rawMetrics": {
+      "count": 100,
+      "spearman": 0.7693972926349018,
+      "topQuartileRecall": 0.6,
+      "severeFalseNegativeRate": 0.03,
+      "severeFalsePositiveRate": 0.03,
+      "within20Share": 0.91,
+      "meanError": -3.2,
+      "meanAbsoluteError": 10.36,
+      "maximumStratumSevereRate": 0.0967741935483871,
+      "languageMeanResidualGap": 1.92,
+      "byType": {
+        "catalog-list": {
+          "n": 9,
+          "meanError": -1.889,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "dsh-plugin": {
+          "n": 54,
+          "meanError": -2.111,
+          "severeErrorRate": 0.093,
+          "severeFalseNegativeRate": 0.037,
+          "severeFalsePositiveRate": 0.056
+        },
+        "standalone-nonplugin": {
+          "n": 37,
+          "meanError": -5.108,
+          "severeErrorRate": 0.027,
+          "severeFalseNegativeRate": 0.027,
+          "severeFalsePositiveRate": 0
+        }
+      },
+      "byLanguage": {
+        "mixed": {
+          "n": 50,
+          "meanError": -2.24,
+          "severeErrorRate": 0.06,
+          "severeFalseNegativeRate": 0.04,
+          "severeFalsePositiveRate": 0.02
+        },
+        "non-cjk-dominant": {
+          "n": 50,
+          "meanError": -4.16,
+          "severeErrorRate": 0.06,
+          "severeFalseNegativeRate": 0.02,
+          "severeFalsePositiveRate": 0.04
+        }
+      },
+      "byTypeLanguage": {
+        "catalog-list × mixed": {
+          "n": 6,
+          "meanError": -2.5,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "catalog-list × non-cjk-dominant": {
+          "n": 3,
+          "meanError": -0.667,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "dsh-plugin × mixed": {
+          "n": 31,
+          "meanError": -1.355,
+          "severeErrorRate": 0.097,
+          "severeFalseNegativeRate": 0.065,
+          "severeFalsePositiveRate": 0.032
+        },
+        "dsh-plugin × non-cjk-dominant": {
+          "n": 23,
+          "meanError": -3.13,
+          "severeErrorRate": 0.087,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0.087
+        },
+        "standalone-nonplugin × mixed": {
+          "n": 13,
+          "meanError": -4.231,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "standalone-nonplugin × non-cjk-dominant": {
+          "n": 24,
+          "meanError": -5.583,
+          "severeErrorRate": 0.042,
+          "severeFalseNegativeRate": 0.042,
+          "severeFalsePositiveRate": 0
+        }
+      }
+    },
+    "metrics": {
+      "count": 100,
+      "spearman": 0.7694,
+      "topQuartileRecall": 0.6,
+      "severeFalseNegativeRate": 0.03,
+      "severeFalsePositiveRate": 0.03,
+      "within20Share": 0.91,
+      "meanError": -3.2,
+      "meanAbsoluteError": 10.36,
+      "maximumStratumSevereRate": 0.0968,
+      "languageMeanResidualGap": 1.92,
+      "byType": {
+        "catalog-list": {
+          "n": 9,
+          "meanError": -1.889,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "dsh-plugin": {
+          "n": 54,
+          "meanError": -2.111,
+          "severeErrorRate": 0.093,
+          "severeFalseNegativeRate": 0.037,
+          "severeFalsePositiveRate": 0.056
+        },
+        "standalone-nonplugin": {
+          "n": 37,
+          "meanError": -5.108,
+          "severeErrorRate": 0.027,
+          "severeFalseNegativeRate": 0.027,
+          "severeFalsePositiveRate": 0
+        }
+      },
+      "byLanguage": {
+        "mixed": {
+          "n": 50,
+          "meanError": -2.24,
+          "severeErrorRate": 0.06,
+          "severeFalseNegativeRate": 0.04,
+          "severeFalsePositiveRate": 0.02
+        },
+        "non-cjk-dominant": {
+          "n": 50,
+          "meanError": -4.16,
+          "severeErrorRate": 0.06,
+          "severeFalseNegativeRate": 0.02,
+          "severeFalsePositiveRate": 0.04
+        }
+      },
+      "byTypeLanguage": {
+        "catalog-list × mixed": {
+          "n": 6,
+          "meanError": -2.5,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "catalog-list × non-cjk-dominant": {
+          "n": 3,
+          "meanError": -0.667,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "dsh-plugin × mixed": {
+          "n": 31,
+          "meanError": -1.355,
+          "severeErrorRate": 0.097,
+          "severeFalseNegativeRate": 0.065,
+          "severeFalsePositiveRate": 0.032
+        },
+        "dsh-plugin × non-cjk-dominant": {
+          "n": 23,
+          "meanError": -3.13,
+          "severeErrorRate": 0.087,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0.087
+        },
+        "standalone-nonplugin × mixed": {
+          "n": 13,
+          "meanError": -4.231,
+          "severeErrorRate": 0,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "standalone-nonplugin × non-cjk-dominant": {
+          "n": 24,
+          "meanError": -5.583,
+          "severeErrorRate": 0.042,
+          "severeFalseNegativeRate": 0.042,
+          "severeFalsePositiveRate": 0
+        }
+      }
+    }
+  },
+  "top": [
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7694,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.2,
+        "meanAbsoluteError": 10.36,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.92,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.889,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.111,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.108,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.24,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.16,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -2.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.355,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.13,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.231,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -5.583,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.25
+    },
+    {
+      "config": {
+        "exponent": 0.8,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7625,
+        "topQuartileRecall": 0.5867,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.89,
+        "meanError": -4.44,
+        "meanAbsoluteError": 10.68,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 2.12,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -3,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -3.222,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -6.568,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -3.38,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -5.5,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -3.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -1.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -2.387,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -4.348,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -5.615,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -7.083,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.2667
+    },
+    {
+      "config": {
+        "exponent": 0.7,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7531,
+        "topQuartileRecall": 0.58,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.86,
+        "meanError": -5.79,
+        "meanAbsoluteError": 11.21,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 2.18,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -4.222,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -4.519,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -8.027,
+            "severeErrorRate": 0.054,
+            "severeFalseNegativeRate": 0.054,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -4.7,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -6.88,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -5.167,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -2.333,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -3.806,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -5.478,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -6.615,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -8.792,
+            "severeErrorRate": 0.083,
+            "severeFalseNegativeRate": 0.083,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.275
+    },
+    {
+      "config": {
+        "exponent": 0.75,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7592,
+        "topQuartileRecall": 0.5733,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.88,
+        "meanError": -5.17,
+        "meanAbsoluteError": 10.89,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 2.1,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -3.778,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -3.944,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -7.297,
+            "severeErrorRate": 0.054,
+            "severeFalseNegativeRate": 0.054,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -4.12,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -6.22,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -4.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -2,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -3.161,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -5,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -6.154,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -7.917,
+            "severeErrorRate": 0.083,
+            "severeFalseNegativeRate": 0.083,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.2833
+    },
+    {
+      "config": {
+        "exponent": 0.95,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7667,
+        "topQuartileRecall": 0.57,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.91,
+        "meanError": -2.64,
+        "meanAbsoluteError": 10.28,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.76,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.444,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -1.63,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -4.405,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -1.76,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.04
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -3.52,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -1.833,
+            "severeErrorRate": 0.167,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.167
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -0.968,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -2.522,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -3.615,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -4.833,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.2875
+    },
+    {
+      "config": {
+        "exponent": 0.85,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7644,
+        "topQuartileRecall": 0.5667,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.8,
+        "meanAbsoluteError": 10.56,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 2.04,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -2.444,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.667,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.784,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.78,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.82,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -3,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -1.333,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.871,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.739,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.846,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -6.292,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.2917
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7685,
+        "topQuartileRecall": 0.536,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.05,
+        "within20Share": 0.91,
+        "meanError": -1.98,
+        "meanAbsoluteError": 10.1,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 1.52,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.222,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -0.944,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.074
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -3.676,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -1.22,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.04
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -2.74,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.06
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -1.5,
+            "severeErrorRate": 0.167,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.167
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -0.29,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -1.826,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.13
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -3.308,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -3.875,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 0.6343
+    },
+    {
+      "config": {
+        "exponent": 0.65,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7454,
+        "topQuartileRecall": 0.568,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.85,
+        "meanError": -6.56,
+        "meanAbsoluteError": 11.54,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 2.16,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -4.778,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -5.315,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.056,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -8.811,
+            "severeErrorRate": 0.054,
+            "severeFalseNegativeRate": 0.054,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -5.48,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -7.64,
+            "severeErrorRate": 0.1,
+            "severeFalseNegativeRate": 0.06,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -5.833,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -2.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -4.613,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -6.261,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0.043,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -7.385,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -9.583,
+            "severeErrorRate": 0.083,
+            "severeFalseNegativeRate": 0.083,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 4,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 0.6005
+    },
+    {
+      "config": {
+        "exponent": 0.6,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7395,
+        "topQuartileRecall": 0.5733,
+        "severeFalseNegativeRate": 0.06,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -7.4,
+        "meanAbsoluteError": 11.96,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 2.16,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -5.333,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -6.185,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.056,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -9.676,
+            "severeErrorRate": 0.081,
+            "severeFalseNegativeRate": 0.081,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -6.32,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -8.48,
+            "severeErrorRate": 0.12,
+            "severeFalseNegativeRate": 0.08,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -6.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -3,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -5.581,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -7,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0.043,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -8,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -10.583,
+            "severeErrorRate": 0.125,
+            "severeFalseNegativeRate": 0.125,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 3,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": false,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 0.8017
+    },
+    {
+      "config": {
+        "exponent": 0.5,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7171,
+        "topQuartileRecall": 0.56,
+        "severeFalseNegativeRate": 0.08,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.8,
+        "meanError": -9.11,
+        "meanAbsoluteError": 12.97,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 2.42,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -7.222,
+            "severeErrorRate": 0.222,
+            "severeFalseNegativeRate": 0.222,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -7.759,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.056,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -11.541,
+            "severeErrorRate": 0.081,
+            "severeFalseNegativeRate": 0.081,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -7.9,
+            "severeErrorRate": 0.1,
+            "severeFalseNegativeRate": 0.08,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -10.32,
+            "severeErrorRate": 0.12,
+            "severeFalseNegativeRate": 0.08,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -8.833,
+            "severeErrorRate": 0.333,
+            "severeFalseNegativeRate": 0.333,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -4,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -7.032,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -8.739,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0.043,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -9.538,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -12.625,
+            "severeErrorRate": 0.125,
+            "severeFalseNegativeRate": 0.125,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 3,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": false,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 1.2482
+    },
+    {
+      "config": {
+        "exponent": 0.55,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7239,
+        "topQuartileRecall": 0.5467,
+        "severeFalseNegativeRate": 0.08,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.81,
+        "meanError": -8.25,
+        "meanAbsoluteError": 12.49,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 2.3,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -6.222,
+            "severeErrorRate": 0.222,
+            "severeFalseNegativeRate": 0.222,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -6.889,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.056,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -10.73,
+            "severeErrorRate": 0.081,
+            "severeFalseNegativeRate": 0.081,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -7.1,
+            "severeErrorRate": 0.1,
+            "severeFalseNegativeRate": 0.08,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -9.4,
+            "severeErrorRate": 0.12,
+            "severeFalseNegativeRate": 0.08,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -7.667,
+            "severeErrorRate": 0.333,
+            "severeFalseNegativeRate": 0.333,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -3.333,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -6.161,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -7.87,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0.043,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -9.077,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -11.625,
+            "severeErrorRate": 0.125,
+            "severeFalseNegativeRate": 0.125,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 3,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": false,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 1.2558
+    }
+  ],
+  "leaders": {
+    "highestTopQuartileRecall": {
+      "config": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7694,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.2,
+        "meanAbsoluteError": 10.36,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.92,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.889,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.111,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.108,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.24,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.16,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -2.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.355,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.13,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.231,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -5.583,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.25
+    },
+    "highestSpearman": {
+      "config": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7694,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.2,
+        "meanAbsoluteError": 10.36,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.92,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.889,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.111,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.108,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.24,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.16,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -2.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.355,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.13,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.231,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -5.583,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.25
+    },
+    "lowestSevereFalseNegativeRate": {
+      "config": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7694,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.2,
+        "meanAbsoluteError": 10.36,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.92,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.889,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.111,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.108,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.24,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.16,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -2.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.355,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.13,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.231,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -5.583,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.25
+    },
+    "lowestMeanAbsoluteError": {
+      "config": {
+        "exponent": 1,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7685,
+        "topQuartileRecall": 0.536,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.05,
+        "within20Share": 0.91,
+        "meanError": -1.98,
+        "meanAbsoluteError": 10.1,
+        "maximumStratumSevereRate": 0.1304,
+        "languageMeanResidualGap": 1.52,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.222,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -0.944,
+            "severeErrorRate": 0.111,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.074
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -3.676,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -1.22,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.04
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -2.74,
+            "severeErrorRate": 0.08,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.06
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -1.5,
+            "severeErrorRate": 0.167,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.167
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -0.29,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -1.826,
+            "severeErrorRate": 0.13,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.13
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -3.308,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -3.875,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": false,
+        "languageResidualGap": true
+      },
+      "deficit": 0.6343
+    },
+    "bestTopQuartileWithOtherCoreGates": {
+      "config": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7694,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.91,
+        "meanError": -3.2,
+        "meanAbsoluteError": 10.36,
+        "maximumStratumSevereRate": 0.0968,
+        "languageMeanResidualGap": 1.92,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "meanError": -1.889,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "meanError": -2.111,
+            "severeErrorRate": 0.093,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.056
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "meanError": -5.108,
+            "severeErrorRate": 0.027,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        },
+        "byLanguage": {
+          "mixed": {
+            "n": 50,
+            "meanError": -2.24,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.04,
+            "severeFalsePositiveRate": 0.02
+          },
+          "non-cjk-dominant": {
+            "n": 50,
+            "meanError": -4.16,
+            "severeErrorRate": 0.06,
+            "severeFalseNegativeRate": 0.02,
+            "severeFalsePositiveRate": 0.04
+          }
+        },
+        "byTypeLanguage": {
+          "catalog-list × mixed": {
+            "n": 6,
+            "meanError": -2.5,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "catalog-list × non-cjk-dominant": {
+            "n": 3,
+            "meanError": -0.667,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin × mixed": {
+            "n": 31,
+            "meanError": -1.355,
+            "severeErrorRate": 0.097,
+            "severeFalseNegativeRate": 0.065,
+            "severeFalsePositiveRate": 0.032
+          },
+          "dsh-plugin × non-cjk-dominant": {
+            "n": 23,
+            "meanError": -3.13,
+            "severeErrorRate": 0.087,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.087
+          },
+          "standalone-nonplugin × mixed": {
+            "n": 13,
+            "meanError": -4.231,
+            "severeErrorRate": 0,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "standalone-nonplugin × non-cjk-dominant": {
+            "n": 24,
+            "meanError": -5.583,
+            "severeErrorRate": 0.042,
+            "severeFalseNegativeRate": 0.042,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 6,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "stratumSevereRate": true,
+        "languageResidualGap": true
+      },
+      "deficit": 0.25
+    }
+  },
+  "crossValidation": [
+    {
+      "fold": 0,
+      "trainCount": 87,
+      "holdoutCount": 13,
+      "selectedConfig": {
+        "exponent": 0.95,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.95,
+          "anchors": {
+            "capabilityItems": 12,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 87,
+          "spearman": 0.7636,
+          "topQuartileRecall": 0.6364,
+          "severeFalseNegativeRate": 0.023,
+          "severeFalsePositiveRate": 0.046,
+          "within20Share": 0.9195,
+          "meanError": -2.7011,
+          "meanAbsoluteError": 10.2414,
+          "maximumStratumSevereRate": 0.1,
+          "languageMeanResidualGap": 1.9704,
+          "byType": {
+            "catalog-list": {
+              "n": 8,
+              "meanError": -1.625,
+              "severeErrorRate": 0.125,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.125
+            },
+            "dsh-plugin": {
+              "n": 45,
+              "meanError": -1.756,
+              "severeErrorRate": 0.089,
+              "severeFalseNegativeRate": 0.022,
+              "severeFalsePositiveRate": 0.067
+            },
+            "standalone-nonplugin": {
+              "n": 34,
+              "meanError": -4.206,
+              "severeErrorRate": 0.029,
+              "severeFalseNegativeRate": 0.029,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 44,
+              "meanError": -1.727,
+              "severeErrorRate": 0.068,
+              "severeFalseNegativeRate": 0.023,
+              "severeFalsePositiveRate": 0.045
+            },
+            "non-cjk-dominant": {
+              "n": 43,
+              "meanError": -3.698,
+              "severeErrorRate": 0.07,
+              "severeFalseNegativeRate": 0.023,
+              "severeFalsePositiveRate": 0.047
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 6,
+              "meanError": -1.833,
+              "severeErrorRate": 0.167,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.167
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 2,
+              "meanError": -1,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 25,
+              "meanError": -0.72,
+              "severeErrorRate": 0.08,
+              "severeFalseNegativeRate": 0.04,
+              "severeFalsePositiveRate": 0.04
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 20,
+              "meanError": -3.05,
+              "severeErrorRate": 0.1,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.1
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 13,
+              "meanError": -3.615,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 21,
+              "meanError": -4.571,
+              "severeErrorRate": 0.048,
+              "severeFalseNegativeRate": 0.048,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 6,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": true
+        },
+        "deficit": 0.2045
+      },
+      "holdout": {
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": false,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": true
+        },
+        "deficit": 0.9135,
+        "metrics": {
+          "count": 13,
+          "spearman": 0.758,
+          "topQuartileRecall": 0.5,
+          "severeFalseNegativeRate": 0.0769,
+          "severeFalsePositiveRate": 0,
+          "within20Share": 0.8462,
+          "meanError": -2.2308,
+          "meanAbsoluteError": 10.5385,
+          "maximumStratumSevereRate": 0,
+          "languageMeanResidualGap": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 1,
+              "meanError": 0,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 9,
+              "meanError": -1,
+              "severeErrorRate": 0.111,
+              "severeFalseNegativeRate": 0.111,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin": {
+              "n": 3,
+              "meanError": -6.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 6,
+              "meanError": -2,
+              "severeErrorRate": 0.167,
+              "severeFalseNegativeRate": 0.167,
+              "severeFalsePositiveRate": 0
+            },
+            "non-cjk-dominant": {
+              "n": 7,
+              "meanError": -2.429,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × non-cjk-dominant": {
+              "n": 1,
+              "meanError": 0,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 6,
+              "meanError": -2,
+              "severeErrorRate": 0.167,
+              "severeFalseNegativeRate": 0.167,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 3,
+              "meanError": 1,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 3,
+              "meanError": -6.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "trainCount": 82,
+      "holdoutCount": 18,
+      "selectedConfig": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.9,
+          "anchors": {
+            "capabilityItems": 12,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 82,
+          "spearman": 0.7472,
+          "topQuartileRecall": 0.619,
+          "severeFalseNegativeRate": 0.0244,
+          "severeFalsePositiveRate": 0.0244,
+          "within20Share": 0.9146,
+          "meanError": -2.9756,
+          "meanAbsoluteError": 10.0732,
+          "maximumStratumSevereRate": 0.1053,
+          "languageMeanResidualGap": 2.3902,
+          "byType": {
+            "catalog-list": {
+              "n": 7,
+              "meanError": -0.571,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 43,
+              "meanError": -1.86,
+              "severeErrorRate": 0.093,
+              "severeFalseNegativeRate": 0.047,
+              "severeFalsePositiveRate": 0.047
+            },
+            "standalone-nonplugin": {
+              "n": 32,
+              "meanError": -5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 41,
+              "meanError": -1.78,
+              "severeErrorRate": 0.049,
+              "severeFalseNegativeRate": 0.049,
+              "severeFalsePositiveRate": 0
+            },
+            "non-cjk-dominant": {
+              "n": 41,
+              "meanError": -4.171,
+              "severeErrorRate": 0.049,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.049
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 5,
+              "meanError": 0,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 2,
+              "meanError": -2,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 24,
+              "meanError": -0.875,
+              "severeErrorRate": 0.083,
+              "severeFalseNegativeRate": 0.083,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 19,
+              "meanError": -3.105,
+              "severeErrorRate": 0.105,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.105
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 12,
+              "meanError": -4.333,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 20,
+              "meanError": -5.4,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 4,
+        "pass": false,
+        "gates": {
+          "spearman": false,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": false,
+          "languageResidualGap": true
+        },
+        "deficit": 0.2826
+      },
+      "holdout": {
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": true,
+          "severeFalseNegativeRate": false,
+          "severeFalsePositiveRate": false,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": true
+        },
+        "deficit": 0.2222,
+        "metrics": {
+          "count": 18,
+          "spearman": 0.8008,
+          "topQuartileRecall": 0.8,
+          "severeFalseNegativeRate": 0.0556,
+          "severeFalsePositiveRate": 0.0556,
+          "within20Share": 0.8889,
+          "meanError": -4.2222,
+          "meanAbsoluteError": 11.6667,
+          "maximumStratumSevereRate": 0.0909,
+          "languageMeanResidualGap": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 2,
+              "meanError": -6.5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 11,
+              "meanError": -3.091,
+              "severeErrorRate": 0.091,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.091
+            },
+            "standalone-nonplugin": {
+              "n": 5,
+              "meanError": -5.8,
+              "severeErrorRate": 0.2,
+              "severeFalseNegativeRate": 0.2,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 9,
+              "meanError": -4.333,
+              "severeErrorRate": 0.111,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.111
+            },
+            "non-cjk-dominant": {
+              "n": 9,
+              "meanError": -4.111,
+              "severeErrorRate": 0.111,
+              "severeFalseNegativeRate": 0.111,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 1,
+              "meanError": -15,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 1,
+              "meanError": 2,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 7,
+              "meanError": -3,
+              "severeErrorRate": 0.143,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.143
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 4,
+              "meanError": -3.25,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 1,
+              "meanError": -3,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 4,
+              "meanError": -6.5,
+              "severeErrorRate": 0.25,
+              "severeFalseNegativeRate": 0.25,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "trainCount": 72,
+      "holdoutCount": 28,
+      "selectedConfig": {
+        "exponent": 0.8,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.8,
+          "anchors": {
+            "capabilityItems": 12,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 72,
+          "spearman": 0.7506,
+          "topQuartileRecall": 0.5667,
+          "severeFalseNegativeRate": 0.0417,
+          "severeFalsePositiveRate": 0.0278,
+          "within20Share": 0.8889,
+          "meanError": -4.0417,
+          "meanAbsoluteError": 10.9861,
+          "maximumStratumSevereRate": 0.125,
+          "languageMeanResidualGap": 0.8611,
+          "byType": {
+            "catalog-list": {
+              "n": 8,
+              "meanError": -2.25,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 38,
+              "meanError": -2.842,
+              "severeErrorRate": 0.105,
+              "severeFalseNegativeRate": 0.053,
+              "severeFalsePositiveRate": 0.053
+            },
+            "standalone-nonplugin": {
+              "n": 26,
+              "meanError": -6.346,
+              "severeErrorRate": 0.038,
+              "severeFalseNegativeRate": 0.038,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 36,
+              "meanError": -3.611,
+              "severeErrorRate": 0.083,
+              "severeFalseNegativeRate": 0.056,
+              "severeFalsePositiveRate": 0.028
+            },
+            "non-cjk-dominant": {
+              "n": 36,
+              "meanError": -4.472,
+              "severeErrorRate": 0.056,
+              "severeFalseNegativeRate": 0.028,
+              "severeFalsePositiveRate": 0.028
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 5,
+              "meanError": -2.6,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 3,
+              "meanError": -1.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 24,
+              "meanError": -3.125,
+              "severeErrorRate": 0.125,
+              "severeFalseNegativeRate": 0.083,
+              "severeFalsePositiveRate": 0.042
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 14,
+              "meanError": -2.357,
+              "severeErrorRate": 0.071,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.071
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 7,
+              "meanError": -6,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 19,
+              "meanError": -6.474,
+              "severeErrorRate": 0.053,
+              "severeFalseNegativeRate": 0.053,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": false,
+          "languageResidualGap": true
+        },
+        "deficit": 0.5417
+      },
+      "holdout": {
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": false
+        },
+        "deficit": 0.3571,
+        "metrics": {
+          "count": 28,
+          "spearman": 0.7962,
+          "topQuartileRecall": 0.5714,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0.0357,
+          "within20Share": 0.8929,
+          "meanError": -5.4643,
+          "meanAbsoluteError": 9.8929,
+          "maximumStratumSevereRate": 0.0714,
+          "languageMeanResidualGap": 5.3571,
+          "byType": {
+            "catalog-list": {
+              "n": 1,
+              "meanError": -9,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 16,
+              "meanError": -4.125,
+              "severeErrorRate": 0.063,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.063
+            },
+            "standalone-nonplugin": {
+              "n": 11,
+              "meanError": -7.091,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 14,
+              "meanError": -2.786,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "non-cjk-dominant": {
+              "n": 14,
+              "meanError": -8.143,
+              "severeErrorRate": 0.071,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.071
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 1,
+              "meanError": -9,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 7,
+              "meanError": 0.143,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 9,
+              "meanError": -7.444,
+              "severeErrorRate": 0.111,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.111
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 6,
+              "meanError": -5.167,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 5,
+              "meanError": -9.4,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "trainCount": 79,
+      "holdoutCount": 21,
+      "selectedConfig": {
+        "exponent": 0.95,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.95,
+          "anchors": {
+            "capabilityItems": 12,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 79,
+          "spearman": 0.8096,
+          "topQuartileRecall": 0.625,
+          "severeFalseNegativeRate": 0.0253,
+          "severeFalsePositiveRate": 0.038,
+          "within20Share": 0.9241,
+          "meanError": -2.8734,
+          "meanAbsoluteError": 9.7089,
+          "maximumStratumSevereRate": 0.0769,
+          "languageMeanResidualGap": 3.1341,
+          "byType": {
+            "catalog-list": {
+              "n": 7,
+              "meanError": 1.429,
+              "severeErrorRate": 0.143,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.143
+            },
+            "dsh-plugin": {
+              "n": 44,
+              "meanError": -2.091,
+              "severeErrorRate": 0.068,
+              "severeFalseNegativeRate": 0.023,
+              "severeFalsePositiveRate": 0.045
+            },
+            "standalone-nonplugin": {
+              "n": 28,
+              "meanError": -5.179,
+              "severeErrorRate": 0.036,
+              "severeFalseNegativeRate": 0.036,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 41,
+              "meanError": -1.366,
+              "severeErrorRate": 0.073,
+              "severeFalseNegativeRate": 0.024,
+              "severeFalsePositiveRate": 0.049
+            },
+            "non-cjk-dominant": {
+              "n": 38,
+              "meanError": -4.5,
+              "severeErrorRate": 0.053,
+              "severeFalseNegativeRate": 0.026,
+              "severeFalsePositiveRate": 0.026
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 5,
+              "meanError": 1.6,
+              "severeErrorRate": 0.2,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.2
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 2,
+              "meanError": 1,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 26,
+              "meanError": -0.423,
+              "severeErrorRate": 0.077,
+              "severeFalseNegativeRate": 0.038,
+              "severeFalsePositiveRate": 0.038
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 18,
+              "meanError": -4.5,
+              "severeErrorRate": 0.056,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.056
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 10,
+              "meanError": -5.3,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 18,
+              "meanError": -5.111,
+              "severeErrorRate": 0.056,
+              "severeFalseNegativeRate": 0.056,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 6,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": true
+        },
+        "deficit": 0.2187
+      },
+      "holdout": {
+        "passCount": 4,
+        "pass": false,
+        "gates": {
+          "spearman": false,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": false,
+          "languageResidualGap": true
+        },
+        "deficit": 1.5829,
+        "metrics": {
+          "count": 21,
+          "spearman": 0.5941,
+          "topQuartileRecall": 0.5,
+          "severeFalseNegativeRate": 0.0476,
+          "severeFalsePositiveRate": 0.0476,
+          "within20Share": 0.8571,
+          "meanError": -1.7619,
+          "meanAbsoluteError": 12.4286,
+          "maximumStratumSevereRate": 0.2,
+          "languageMeanResidualGap": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 2,
+              "meanError": -11.5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 10,
+              "meanError": 0.4,
+              "severeErrorRate": 0.2,
+              "severeFalseNegativeRate": 0.1,
+              "severeFalsePositiveRate": 0.1
+            },
+            "standalone-nonplugin": {
+              "n": 9,
+              "meanError": -2,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 9,
+              "meanError": -3.556,
+              "severeErrorRate": 0.111,
+              "severeFalseNegativeRate": 0.111,
+              "severeFalsePositiveRate": 0
+            },
+            "non-cjk-dominant": {
+              "n": 12,
+              "meanError": -0.417,
+              "severeErrorRate": 0.083,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.083
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 1,
+              "meanError": -19,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 1,
+              "meanError": -4,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 5,
+              "meanError": -3.8,
+              "severeErrorRate": 0.2,
+              "severeFalseNegativeRate": 0.2,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 5,
+              "meanError": 4.6,
+              "severeErrorRate": 0.2,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.2
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 3,
+              "meanError": 2,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 6,
+              "meanError": -4,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "trainCount": 80,
+      "holdoutCount": 20,
+      "selectedConfig": {
+        "exponent": 0.9,
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.9,
+          "anchors": {
+            "capabilityItems": 12,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 80,
+          "spearman": 0.7647,
+          "topQuartileRecall": 0.575,
+          "severeFalseNegativeRate": 0.0375,
+          "severeFalsePositiveRate": 0.0375,
+          "within20Share": 0.8875,
+          "meanError": -3.4375,
+          "meanAbsoluteError": 10.8125,
+          "maximumStratumSevereRate": 0.12,
+          "languageMeanResidualGap": 0.8835,
+          "byType": {
+            "catalog-list": {
+              "n": 6,
+              "meanError": -7.167,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 46,
+              "meanError": -2.13,
+              "severeErrorRate": 0.109,
+              "severeFalseNegativeRate": 0.043,
+              "severeFalsePositiveRate": 0.065
+            },
+            "standalone-nonplugin": {
+              "n": 28,
+              "meanError": -4.786,
+              "severeErrorRate": 0.036,
+              "severeFalseNegativeRate": 0.036,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 38,
+              "meanError": -2.974,
+              "severeErrorRate": 0.079,
+              "severeFalseNegativeRate": 0.053,
+              "severeFalsePositiveRate": 0.026
+            },
+            "non-cjk-dominant": {
+              "n": 42,
+              "meanError": -3.857,
+              "severeErrorRate": 0.071,
+              "severeFalseNegativeRate": 0.024,
+              "severeFalsePositiveRate": 0.048
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 3,
+              "meanError": -13.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "catalog-list × non-cjk-dominant": {
+              "n": 3,
+              "meanError": -0.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 25,
+              "meanError": -2.04,
+              "severeErrorRate": 0.12,
+              "severeFalseNegativeRate": 0.08,
+              "severeFalsePositiveRate": 0.04
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 21,
+              "meanError": -2.238,
+              "severeErrorRate": 0.095,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.095
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 10,
+              "meanError": -2.1,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 18,
+              "meanError": -6.278,
+              "severeErrorRate": 0.056,
+              "severeFalseNegativeRate": 0.056,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": false,
+          "languageResidualGap": true
+        },
+        "deficit": 0.4813
+      },
+      "holdout": {
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": false,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "stratumSevereRate": true,
+          "languageResidualGap": true
+        },
+        "deficit": 0.2826,
+        "metrics": {
+          "count": 20,
+          "spearman": 0.7256,
+          "topQuartileRecall": 0.6,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0,
+          "within20Share": 1,
+          "meanError": -2.25,
+          "meanAbsoluteError": 8.55,
+          "maximumStratumSevereRate": 0,
+          "languageMeanResidualGap": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 3,
+              "meanError": 8.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 8,
+              "meanError": -2,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin": {
+              "n": 9,
+              "meanError": -6.111,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byLanguage": {
+            "mixed": {
+              "n": 12,
+              "meanError": 0.083,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "non-cjk-dominant": {
+              "n": 8,
+              "meanError": -5.75,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          },
+          "byTypeLanguage": {
+            "catalog-list × mixed": {
+              "n": 3,
+              "meanError": 8.667,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × mixed": {
+              "n": 6,
+              "meanError": 1.5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin × non-cjk-dominant": {
+              "n": 2,
+              "meanError": -12.5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × mixed": {
+              "n": 3,
+              "meanError": -11.333,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin × non-cjk-dominant": {
+              "n": 6,
+              "meanError": -3.5,
+              "severeErrorRate": 0,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -9,6 +9,7 @@
  * - 实用/便捷 依赖 README：基础分里为 null，拿到 README 后 enrich 补全
  *   并重新融合总分（complete 标记供 UI 决定是否渲染雷达图）
  */
+import type { ReadmePracticalEvidence, ReadmeSig } from './types.ts';
 export interface ScoreBreakdown {
     maintain: number | null;
     practical: number | null;
@@ -33,20 +34,33 @@ export interface ScoreView {
     /** v1.8.2：热度解释证据快照，README 富化/refold 时继承，避免丢失下载理由。 */
     dlActiveAt?: boolean;
     dl30At?: number | null;
+    /** practical 输入指纹；同版本 README 证据变化时强制重算，防旧缓存残留。 */
+    practicalEvidenceAt?: string | null;
 }
 /** Wilson Score 置信区间下界（小样本比例的稳健估计，dsh.market 同款）。 */
 export declare function wilsonLowerBound(positives: number, total: number, z?: number): number;
 /** 1. 维护活跃：pushed 新鲜度×0.6 + issue 健康度×0.4。
  *  openIssues 缺失（索引 v1.17 前无此字段）时 issue 健康度取中性 0.5 降级。 */
 export declare function scoreMaintain(pushedAt: string | null, stars: number | null, openIssues: number | null): number | null;
-/** 2a. 实用度（索引 CI 结构信号版）：len/安装章节/代码块，零网络。 */
-export declare function scorePracticalFromSig(sig: {
-    len: number | null;
-    installSection: boolean;
-    codeBlocks: number;
-}): number | null;
-/** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
-export declare function scorePractical(readme: string | null): number | null;
+export declare const PRACTICAL_EVIDENCE_VERSION = 3;
+export declare const PRACTICAL_PARSER_REVISION = 3;
+export declare function currentPracticalEvidence(evidence: ReadmePracticalEvidence | null | undefined): evidence is ReadmePracticalEvidence;
+export interface PracticalDimensionScores {
+    capability: number;
+    usage: number;
+    usecases: number;
+    demo: number;
+    reliability: number;
+}
+/**
+ * 实用度 V3 的五个可审计子维度。证据先由 parser 做语义归属、全局去重与 family cap，再在 scorer 中映射。
+ * 每个 anchor 严格等于 frozen rubric/parser cap，保证 cap 内每条合法证据都有边际价值且满证据严格为 100；
+ * 共享 0.9 次幂是 citation-grounded 全门控 5-fold 的中位数，也是完整开发集综合第一；只有轻微边际递减；
+ * confidence 仅描述证据、不改变分数。
+ */
+export declare function scorePracticalDimensions(evidence: ReadmePracticalEvidence | null | undefined): PracticalDimensionScores | null;
+/** 2. 实用度 v3：加权 README 实证；长度/安装/配置不参与，代码示例最多 5 分。 */
+export declare function scorePractical(evidence: ReadmePracticalEvidence | null | undefined): number | null;
 /** npm 下载统计（downloads.json 通道，v1.8.0）。 */
 export interface DlStats {
     dl7: number;
@@ -103,22 +117,14 @@ export interface ScoreInput {
     /** v1.8.0：星 30 天增量（star-history.json）；<7 天窗口时 null=中性。 */
     starDelta?: number | null;
     /** v1.7.50+：索引 CI README 结构信号（有则实用/便捷两维零网络可算）。 */
-    readmeSig?: {
-        len: number | null;
-        installSection: boolean;
-        codeBlocks: number;
-        heading: boolean;
-        cmds: string[];
-        needsConfig: boolean;
-    } | null;
+    readmeSig?: ReadmeSig | null;
 }
 /** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
  *  v1.7.47：forks/open_issues/homepage 字段存在时按 dsh.market 全公式计算
  *  （索引 v1.18 起提供；缺失时自动降级，不编造数据）。 */
 export declare function computeBaseScore(input: ScoreInput): ScoreView;
-/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
- *  v1.7.46：signal 重算必须沿用原始字段（description/license/topics）——
- *  此前传空 topics/license 会把信号分算低（dsh-web-ui 65 vs 应有的 85）。 */
+/** README 到手后只补全便捷/信号并重新融合（详情页/find/卡片页级富化）。
+ *  practical 只能来自索引 readmeSig.practical，详情路径不得重解析或覆盖。 */
 export declare function enrichScore(base: ScoreView, readme: string | null, needsConfig: boolean, extras?: {
     stars?: number | null;
     pushedAt?: string | null;
@@ -152,14 +158,9 @@ export declare function attachScores(entries: Array<{
     curated?: boolean;
     verified?: unknown;
     bundled?: boolean | null;
-    readmeSig?: {
-        len: number | null;
-        installSection: boolean;
-        codeBlocks: number;
-        heading: boolean;
-        cmds: string[];
-        needsConfig: boolean;
-    } | null;
+    readmeSig?: ReadmeSig | null;
     score?: ScoreView | null;
     isPlugin?: boolean | null;
+    /** v1.8.3 身份重构期间冻结 v1.8.2 p99 人口；不参与身份展示。 */
+    scoreBaselineEligible?: boolean;
 }>, force?: boolean): void;

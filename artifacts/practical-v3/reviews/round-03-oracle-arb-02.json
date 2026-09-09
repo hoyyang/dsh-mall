@@ -1,0 +1,200 @@
+{
+  "reviews": [
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`dsh-codex-connect` adds the `openai-codex` model catalog and a separate ChatGPT OAuth login.",
+        "When an eligible GPT Codex model is selected, the Composer also shows a conversation-scoped Fast Mode toggle and a compact weekly-quota indicator.",
+        "`enableSearch: true` registers Codex as an available search provider. It does not select the profile's global search route.",
+        "`enableImageTool: true` enables `view_image` for approved local reads and public-network image fetches on vision-capable models.",
+        "`enableImageGeneration: true` enables the prompt-only image generation tool. Use the image generation capability included with your current GPT subscription.",
+        "Codex Connect checks public package metadata and this repository's `verified-compatibility.json` periodically through the DSH Web server.",
+        "When a newer plugin version is available, a frame-wide DSH notice appears even if you switch conversations.",
+        "A red result includes a prefilled GitHub issue link for the installed DSH version so users can remind the maintainer without composing a report from scratch."
+      ],
+      "usageItems": [
+        "Open Harness's normal model picker and select an `openai-codex` model for the agent or session you are using.",
+        "open **Settings → Plugins → Plugin configuration → Codex Connect**, uncheck the models you do not want to see, and select **Save changes**.",
+        "Describe the image you want in ordinary language. The agent can expand that request into the prompt sent to GPT Image.",
+        "Click **Sign in with ChatGPT** and complete the browser approval yourself.",
+        "To update, copy the short request shown in the notice to the Agent you use for this DSH project.",
+        "After the Agent reports completion, return to the notice or settings card and select **Done — check again**.",
+        "Select **Detect proxy** to test only the standard proxy environment variables and the documented loopback candidates `127.0.0.1:7890`, `127.0.0.1:7897`, and `127.0.0.1:10809`.",
+        "Choose **Use this proxy** only after reviewing a candidate, then click **Save changes**.",
+        "Hover or focus the icon to see the current state and its quota-consumption warning.",
+        "Turn on **Enable GPT Image generation** in the Codex Connect card and select **Save changes**."
+      ],
+      "usageActions": [
+        "dsh plugin --profile web update dsh-codex-connect",
+        "dsh --profile web --dump-config",
+        "dsh plugin --profile web exec dsh-codex-connect status --json",
+        "dsh plugin --profile web exec dsh-codex-connect doctor --json",
+        "Click **Sign in with ChatGPT** and complete the browser approval yourself.",
+        "Select **Detect proxy** to test only the standard proxy environment variables",
+        "After the Agent reports completion, return to the notice or settings card and select **Done — check again**.",
+        "dsh plugin --profile web exec dsh-codex-connect trust-origin http://192.168.1.20:3080",
+        "dsh-codex-connect migrate-history --json`, stop DSH, then apply the reported repair with `migrate-history --apply --confirm-stopped --json`",
+        "uncheck the models you do not want to see, and select **Save changes**."
+      ],
+      "ioPairs": [
+        "dsh plugin --profile web exec dsh-codex-connect status --json\ndsh plugin --profile web exec dsh-codex-connect doctor --json\n```\n\nExpected result: `status --json` reports `signed-in` and exits `0`,",
+        "dsh --profile web --dump-config\n```\n\nExpected result: the configuration has exactly one `llm-openai-codex` row.",
+        "3. Describe the image you want in ordinary language. The agent can expand that request into the prompt sent to GPT Image.\n4. The completed image is stored as a DSH attachment and rendered directly"
+      ],
+      "codeExamples": [
+        "For secret-free status and diagnostics that do not start OAuth, run:\n\n```sh\ndsh plugin --profile web exec dsh-codex-connect status --json",
+        "For a manual terminal update, use the command documented for the profile you are running:\n\n```sh\ndsh plugin --profile web update dsh-codex-connect",
+        "To confirm the configured plugin row locally, run:\n\n```sh\ndsh --profile web --dump-config",
+        "approve the browser address-bar origin explicitly on the device that runs DSH:\n\n  ```sh\n  dsh plugin --profile web exec dsh-codex-connect trust-origin http://192.168.1.20:3080"
+      ],
+      "usecases": [
+        "When DSH runs on one device and you open it from another device on a trusted network, approve the browser address-bar origin explicitly on the device that runs DSH:"
+      ],
+      "outputs": [
+        "Expected result: the Harness web UI opens for the selected profile.",
+        "Expected result: a fresh installation shows **Not signed in** and a **Sign in with ChatGPT** button.",
+        "The completed image is stored as a DSH attachment and rendered directly in the conversation. The result card lets you review and copy the full prompt, download the image, and inspect image details.",
+        "`doctor --json` emits exactly one secret-free JSON document with schema version 1, package/version/Node metadata, credential-file state and safe mode, capabilities, conflict status, and hints.",
+        "`status --json` emits only signed-in or signed-out state with package metadata.",
+        "Each bar shows the remaining percentage and its local reset time."
+      ],
+      "reliability": [
+        "The only verified compatibility combination is DSH plugin API packages `0.1.1-rc.2`, `@earendil-works/pi-ai` `0.82.1`, and Node.js `^22.19.0 || >=24.0.0`",
+        "Remote `view_image` URLs are limited to public HTTP(S) destinations. Every DNS result and redirect is checked, and the connection is pinned to the validated address",
+        "OAuth is stored separately at `$DSH_HOME/.openai-codex-auth.json` (`~/.dsh` by default). `~/.codex/auth.json` is never copied or modified.",
+        "By default, the OAuth routes accept loopback browser requests only.",
+        "Codex Connect never silently retries the request through a direct connection.",
+        "Alpha 4.10 users whose search histories fail with an unknown `web/openai-codex-search-llm-request` event can run `dsh-codex-connect migrate-history --json`, stop DSH, then apply the reported repair",
+        "ChatGPT plan eligibility, model access, quotas, and backend behavior are controlled by OpenAI and may change.",
+        "The Codex endpoint does not enforce the ordinary Responses `max_output_tokens` field. Harness compaction still works, but that summary cap cannot be imposed server-side on this route.",
+        "If public metadata is unavailable, no update notice is shown; the account and model features continue working normally.",
+        "Codex Connect does not silently add image parameters: it validates the prompt-only request, forwards it through the ChatGPT subscription capability"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/franksong2702/dsh-codex-connect/main/docs/assets/en/plugin-entry.jpg\" alt=\"Collapsed English-localized Codex Connect entry under Harness plugin configuration\" width=\"586\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/franksong2702/dsh-codex-connect/main/docs/assets/en/oauth-status.jpg\" alt=\"English-localized Codex Connect signed-in state inside Harness plugin configuration\" width=\"720\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/franksong2702/dsh-codex-connect/main/docs/assets/en/model-selector.jpg\" alt=\"OpenAI Codex model group in the English-localized DeepSeek Harness model picker\" width=\"360\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "alt=\"DeepSeek Harness Composer with the per-conversation Fast Mode lightning control and weekly quota bar\"",
+          "weight": 1
+        },
+        {
+          "excerpt": "alt=\"English-localized Codex Connect optional capability configuration after explicit opt-in\"",
+          "weight": 1
+        },
+        {
+          "excerpt": "alt=\"English-localized Codex Connect GPT Image result with preview, copyable prompt, download action, and image details\"",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Hero banner image and npm badge excluded as marketing/decorative.",
+        "No dedicated use-case/scenario section; only one conditional cross-device scenario recorded.",
+        "Claims that streaming/compaction/approvals remain Harness-owned describe Harness core behavior, not this plugin, and were not counted.",
+        "Install commands (plugin add) excluded from usageActions per install/config rule; image-generation alt captions used where full img markup exceeds 220 chars."
+      ]
+    },
+    {
+      "repo": "yuc16/PatentRadar",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "输入一个专利公开号，输出一份竞品侵权分析报告——内容包括：逐项技术特征对比表、可点击的公开证据 URL、以及“还缺什么证据 / 下一步去哪查”的可执行建议。",
+        "抓 Google Patents 公开文本 → LLM 把每条权利要求（独立 + 从属）拆成原子特征 → 主题前序作为首条 feature 保留 → HTML 有图 / 公式乱码时回退到 PDF Vision 还原。",
+        "基于权 1 关键词 + 技术 tag → 30-50 条中英双语 query，按意图（规格书 / 新闻 / 拆解 / 学术）路由到不同 search provider",
+        "搜索结果交叉聚合 → LLM 抽出 8-12 个具体竞品（带 SKU 锁定标识）→ 排除申请人自家产品",
+        "每个候选独立抓页面 + PDF + 图片 → LLM 多模态评估权 1 各特征 → 给出 `明确满足 / 可能满足 / 证据不足 / 明确不满足` 四档判定",
+        "特征 LLM 主动建议 follow-up query → 代码端跑补搜 → 再判一次",
+        "复用模块 2 证据池 + 扩展到**全部从属权利要求** → 缺口特征主动补搜（query 必带 SKU 标识词，避免拉回其他 SKU 资料）→ Round 2 终判",
+        "特征生成 `evidence_gap_brief`（\"还缺什么 / 下一步去哪查\"两行）",
+        "把模块 1 / 3 数据组装成 4 章节的 markdown 报告 → WeasyPrint 渲染 PDF（A4 + 跨平台中文字体 Noto Sans CJK / PingFang SC / 微软雅黑 + 表格防溢出 CSS）",
+        "跑完后可回放（1x / 20x / 100x / 600x 倍速），支持导出离线 HTML 分享给同事",
+        "skill 会自动触发，按顺序 spawn 4 个独立 subagent，每个 subagent 跑完用 JSON Schema 自动校验产物",
+        "完整结构化日志写入 `logs/<PUB>/`：`run.jsonl` + `module_N.log` + `module_N.stream.jsonl`"
+      ],
+      "usageItems": [
+        "输入专利公开号，点「开始分析」即可端到端跑完 4 模块",
+        "命令前缀按你的部署方式替换，命令体和产物路径完全一致",
+        "**Docker**：`docker compose exec patentradar <命令>`",
+        "**本地 uv**：`uv run <命令>`",
+        "浏览器打开 `http://localhost:8000`",
+        "随后只需要自然语言输入你想要分析的专利公开号",
+        "curl -N    http://localhost:8000/api/stream/CN110293961B   # SSE 实时事件",
+        "curl       http://localhost:8000/api/status/CN110293961B   # JSON 快照",
+        "直接调每个模块的 CLI，业务产物正常落到 `data/output/<PUB>/`，但**没有 `logs/<PUB>/` 结构化日志**（那是 server 模式专属）：",
+        "open http://localhost:8000           # 浏览器打开 dashboard 即可使用"
+      ],
+      "usageActions": [
+        "uv run patentradar decompose CN110293961B",
+        "uv run patentradar competitor-search data/output/CN110293961B/task_package.json",
+        "uv run patentradar full-claim-chart  data/output/CN110293961B/task_package.json \\",
+        "uv run patentradar report            data/output/CN110293961B/task_package.json \\",
+        "curl -X POST http://localhost:8000/api/run/CN110293961B",
+        "uv run uvicorn patentradar.server.app:app --reload --port 8000",
+        "输入专利公开号，点「开始分析」即可端到端跑完 4 模块",
+        "docker compose logs -f                                  # 跟随日志",
+        "uv run pytest tests/                         # 单元 + 集成测试",
+        "uv run python scripts/smoke_aihubmix.py      # 跨 LLM backend 烟囱测试"
+      ],
+      "ioPairs": [
+        "`POST /api/run/{pub}` 同步校验格式（不合法专利号 → **400** + 错误信息）；\n若该 pub 已经在跑则直接 **409**，避免重复启动 BackgroundTask。",
+        "curl -X POST http://localhost:8000/api/run/CN110293961B\ncurl -N    http://localhost:8000/api/stream/CN110293961B   # SSE 实时事件\ncurl       http://localhost:8000/api/status/CN110293961B   # JSON 快照",
+        "> 帮我跑下 CN114512759B 的侵权竞品分析\n```\n\nskill 会自动触发，按顺序 spawn 4 个独立 subagent"
+      ],
+      "codeExamples": [
+        "#### HTTP API（脚本化 / CI 集成）\n\n与 Web Dashboard 同源同接口，适合无人值守：\n\n```bash\ncurl -X POST http://localhost:8000/api/run/CN110293961B",
+        "#### 分步 CLI（调试 / 重跑某一步）\n\n直接调每个模块的 CLI，业务产物正常落到 `data/output/<PUB>/`，但**没有 `logs/<PUB>/` 结构化日志**（那是 server 模式专属）：\n\n```bash\nuv run patentradar decompose CN110293961B",
+        "常用维护命令：\n\n```bash\ndocker compose logs -f",
+        "本地 uv 需要手动起 server，终端运行以下一行命令即可：\n\n```bash\nuv run uvicorn patentradar.server.app:app --reload --port 8000"
+      ],
+      "usecases": [
+        "传统侵权排查靠人工：律师团队读专利权 → 拆特征 → 翻竞品手册 → 搜证据 → 写 claim chart，一份高质量报告动辄 3-5 天。",
+        "与 Web Dashboard 同源同接口，适合无人值守",
+        "分步 CLI（调试 / 重跑某一步）",
+        "仅供开发期调试，不适合跑生产专利"
+      ],
+      "outputs": [
+        "**产物**：`task_package.json` —— 全部权利要求 + 拆解后的 `C{claim}-F{idx}` 原子特征 + 申请人识别信号 + 技术领域 tag（9 选一）。",
+        "**产物**：`step5_top5_claim1_candidates.json` —— TOP 候选 + 每个候选的权 1 逐特征对比 + 证据 URL / snippet / 图片 + 推理链。",
+        "**产物**：`top5_full_claim_chart.json`。",
+        "ORCH-->>U: 报告路径 + 风险摘要",
+        "**专利详细信息**　公开号 / 标题 / 申请人 / 发明人 / 申请日 / Google Patents 链接",
+        "**整体侵权风险评估**　最高分竞品介绍 + 权 1 满足情况速览 + TOP-N 一览表（rowspan 合并单元格的缺口 + 下一步建议汇总）",
+        "**TOP-N 竞品深度对比**　每个候选展示 SKU 锁定 / 上市日期 / 总分 / 全部权利要求的逐特征对比表（含证据 URL + 完整 reasoning）",
+        "**相似专利人工核查**（score ≥ 80 才出）　预生成 Google Patents 高级检索深链，让律师核查同族延续案 / 分案"
+      ],
+      "reliability": [
+        "本工具做的是**偏字面的初筛**，**不做专利法的等同侵权分析**（手段-功能-效果三性 + 显而易见替换，且需查审查历史 / 禁止反悔 / 捐献原则）。",
+        "缺图形库 → 只产出 md、无 PDF；缺中文字体 → PDF 中文乱码。",
+        "若 `uv run` 报找不到 libgobject / pango 等 DLL，把 `C:\\msys64\\mingw64\\bin` 加入系统 PATH",
+        "若该 pub 已经在跑则直接 **409**，避免重复启动 BackgroundTask。",
+        "（容器里必须用 openai 兼容后端）",
+        "PATENTRADAR_OPENAI_VISION=false       # 模型不支持图像时设 false",
+        "模块内部任何步骤失败都不影响其它模块的产物；可基于已落盘 JSON 单步重跑",
+        "（失败时把错误清单透传给该 subagent 让它修正后重交，最多重试 2 次）",
+        "URL 验活<br/>HTTP 200 · 跨 host 跳转丢弃<br/>反爬墙登录页丢弃",
+        "停止条件<br/>硬规则：全 feature ≥ 1 独立 host 明确满足<br/>软判断：2-3 轮无新证据停搜"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/94f8f758-6a43-49a8-b16b-2e04e1d8e110",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Demo video is externally hosted (GitHub user-attachments), weighted 0.5; no repository-hosted images found.",
+        "Mermaid architecture/workflow diagrams treated as design description, not media; only node text stating user-visible behavior was considered.",
+        "Score-threshold table (1.0/0.8/0.3/0.0) captured as capability semantics, not counted as outputs; duplicate phrasing between Mode A/B counted once."
+      ]
+    }
+  ]
+}

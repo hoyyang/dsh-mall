@@ -1,0 +1,1510 @@
+{
+  "generatedAt": "2026-09-02T03:17:19.315Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-02.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-production-scorer-evaluation-iteration-20.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "actions-io",
+  "question": "Diagnose recurring deterministic misses in usageActions and ioPairs.",
+  "families": [
+    "usageActions",
+    "ioPairs"
+  ],
+  "under": [
+    {
+      "repo": "Minara-AI/minara-skills",
+      "practicalScore": 26,
+      "oracleScore": 35,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### Basic flow",
+            "excerpt": "_\"Login to Minara\"_"
+          },
+          {
+            "heading": "### Basic flow",
+            "excerpt": "_\"Show my deposit address\"_"
+          },
+          {
+            "heading": "### Basic flow",
+            "excerpt": "_\"Buy 100 USDC worth of ETH\"_"
+          },
+          {
+            "heading": "### Perps and limit orders",
+            "excerpt": "_\"Long ETH perp\"_"
+          },
+          {
+            "heading": "### Perps and limit orders",
+            "excerpt": "_\"Analyze ETH long or short\"_"
+          },
+          {
+            "heading": "### Perps and limit orders",
+            "excerpt": "_\"Enable AI autopilot for perps\"_"
+          },
+          {
+            "heading": "### Perps and limit orders",
+            "excerpt": "_\"Buy ETH when price hits $3000\"_"
+          },
+          {
+            "heading": "### Perps and limit orders",
+            "excerpt": "_\"List my limit orders\"_"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "hyqibot/A-share-Ai",
+      "practicalScore": 27,
+      "oracleScore": 48,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 9.5,
+          "gap": 9.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "发送 `@模型名 你的问题`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "发送 `@iClaw 你的自然语言交易意图`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "`/buy [模型名] 股票代码 数量 [价格]`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "`/sell [模型名] 股票代码 数量 [价格]`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "`/batch_buy [模型名] 股票代码:数量,股票代码:数量,...`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "`/condition [模型名] 股票代码 条件 买入/卖出 [数量]`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "`/cancel <条件单ID>`"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "在钉钉中发送 `/help` 或 `/h` 可查看完整指令列表与示例。"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "发送 `@模型名 你的问题`，机器人会调用对应大模型回复（只聊天不下单）。"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "发送 `@iClaw 你的自然语言交易意图`，机器人会调用你文本中提到的模型把意图翻译为 JSON 指令，经校验后复用 `/buy`、`/sell` 链路执行。"
+          },
+          {
+            "heading": "## 💬 iClaw智能聊天与自然语言指令交易",
+            "excerpt": "创建后机器人会返回条件单ID，**撤销**：`/cancel <条件单ID>`（如 `/cancel COND-1734567890-000001`）。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SkillNerds/xskill",
+      "practicalScore": 55,
+      "oracleScore": 68,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 1,
+          "oracle": 10,
+          "gap": 9
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 为什么需要 xskill",
+            "excerpt": "直接修改本地的skill，改动会被云端自动学习。"
+          },
+          {
+            "heading": "#### 额外功能：管控面板",
+            "excerpt": "xskill dashboard"
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "xskill generate \"创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令\""
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "xskill generate \"改写现有的 python-memory-debug Skill，补充 Windows 排查步骤\""
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "xskill generate --name alice,bob \"根据这些用户的成功案例生成数据库迁移 Skill\""
+          },
+          {
+            "heading": "#### 额外功能：按需搜索",
+            "excerpt": "xskill search <KEYWORDS>"
+          },
+          {
+            "heading": "#### 额外功能：按需搜索",
+            "excerpt": "xskill search <KEYWORDS> --download     # 检索的同时下载到本地(老的搜索结果会被刷新掉，建议在临时使用场景触发）"
+          },
+          {
+            "heading": "#### 额外功能：按需搜索",
+            "excerpt": "xskill download <skill-id>          # 交互多选安装 harness, 会持久化到本地, 会随云端更新"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "PC2005-cloud/dsh-pet",
+      "practicalScore": 39,
+      "oracleScore": 69,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 8,
+          "gap": 8
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "# 路线 A（默认）：自动绿幕抠像（HSV 色相，无需人工）",
+            "excerpt": "python watermark_step01.py"
+          },
+          {
+            "heading": "# 路线 A（默认）：自动绿幕抠像（HSV 色相，无需人工）",
+            "excerpt": "python chroma_step02.py"
+          },
+          {
+            "heading": "#   2. 放入 pr/，文件名与动作名一致（如 吃白饭.mov）",
+            "excerpt": "python pr_import_step02.py"
+          },
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "python normalize_step03.py"
+          },
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "python encode_thumbs.py"
+          },
+          {
+            "heading": "# 手动触发仓库的 hevc-alpha workflow（Settings → Actions → Workflows → Run workflow）",
+            "excerpt": "手动触发仓库的 hevc-alpha workflow（Settings → Actions → Workflows → Run workflow）"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "chmod +x scripts/encode_hevc_alpha.sh"
+          },
+          {
+            "heading": "# 把 step04 的播放变体同步进插件包（webm 直接 cp）",
+            "excerpt": "cp step04/*.webm dsh-pet/assets/webm/"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "# dsh-pet 🐾",
+            "excerpt": "① 提示词（配方）    →  ② 素材生成链（引擎）  →  ③ 插件（成品）\nAI 生成动画的配方     源视频 → 透明动画的管线    运行在 DSH 里的宠物"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "输入：`dsh-pet/assets/webm/*.webm`；**输出直接写回 `dsh-pet/assets/mov/`**"
+          },
+          {
+            "heading": "#   2. 放入 pr/，文件名与动作名一致（如 吃白饭.mov）",
+            "excerpt": "python pr_import_step02.py   # pr/*.mov → step02/（透明 webm，覆盖该动作自动抠像结果）"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "编码脚本：`scripts/encode_hevc_alpha.sh`（ffmpeg 仅解码 webm → BGRA 帧管线 → Swift `hevc_alpha_encoder.swift` 走 AVAssetWriter `hevcWithAlpha` 原生 API）"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "vlln/whale-girl",
+      "practicalScore": 26,
+      "oracleScore": 38,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 8,
+          "gap": 8
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Usage",
+            "excerpt": "Drag the pet"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Menu 🍗 feed / 🎾 play"
+          },
+          {
+            "heading": "## Characters",
+            "excerpt": "🎭 \"Switch Character\" cycles characters"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "| Drag the pet | Stretched diagonally (`drag`) |"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "| Menu 🍗 feed / 🎾 play | Chomping / ball toss (`eat`/`play`) → joy (`joy`) |"
+          },
+          {
+            "heading": "# or local directory: dsh plugin --profile web add <path-to-whale-girl>",
+            "excerpt": "hover for the status bar (seniority level / task count / recent shared memories)"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## Usage",
+            "excerpt": "Drag the pet | Stretched diagonally (`drag`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Menu 🍗 feed / 🎾 play | Chomping / ball toss (`eat`/`play`) → joy (`joy`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Idle ≥60s | Naps (`sleep`); wakes on interaction (`wake`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Task done / level-up / title / round done | Cheers (`celebrate`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Task failed / request error | Startled (`error`) → disappointed (`disappointed`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "New session | Waves welcome (`welcome`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Session running / thinking | Pensive company (`think`, occasional `working`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Awaiting approval | Expectant waiting (`wait`)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kelai141/dsh-mobile-apk",
+      "practicalScore": 34,
+      "oracleScore": 56,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 8,
+          "gap": 8
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`downloadDebugLogs` | () | exports engine logs + environment info (zipped, system download/share dialog)"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`restartEngine` | () | restarts the engine process (EngineService watchdog brings it back)"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`reloadWebUI` | () | reloads the Web UI"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`openConsole` | () | opens the built-in console"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`revokeAdbPair` | () | revoke pairing (disconnect + delete adbkey + clear state; audited) (preview)"
+          },
+          {
+            "heading": "## Online update protocol",
+            "excerpt": "adb shell am start -n com.dsharnessmobile.shell/.MainActivity -a com.dsharnessmobile.shell.action.UPDATE"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `keepScreenOn` | (enable) | screen-on wake lock |"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `showNotification` | (title, text) | test notification channel (POST_NOTIFICATIONS) |"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`version` | () → string | app version (`0.13.0-preview`) for feature detection"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`checkEngine` | () → string | probes 127.0.0.1:3080; JSON `{running, latencyMs, error?}`"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`getAdbState` | () → string | ADB authorization state view (gate state machine): JSON `{fullAccess, allowSwitch, paired, wirelessDebugOn, message}` (preview)"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "`adbShell` | (cmd) → string | ADB shell primitive: JSON `{ok, stdout?, stderr?, guidance?}`; fail-closed when not authorized (preview)"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `version` | () → string | app version (`0.13.0-preview`) for feature detection |"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `getSystemDark` | () → boolean | system dark mode (bypasses vendor WebViews whose `matchMedia` is stuck on light; used by the first-frame theme bridge) |"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `checkEngine` | () → string | probes 127.0.0.1:3080; JSON `{running, latencyMs, error?}` |"
+          },
+          {
+            "heading": "## Bridge protocol v1 (`window.androidBridge`)",
+            "excerpt": "| `hasAllFilesAccess` | () → boolean | whether All Files Access is granted (external workspace requirement) |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "zhoushoujianwork/easyeda-agent",
+      "practicalScore": 62,
+      "oracleScore": 77,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 7.5,
+          "gap": 7.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 特色:电路块库(一次贡献,永久收益)",
+            "excerpt": "`easyeda blocks ls/show/search` 离线可查(无需 daemon/窗口)"
+          },
+          {
+            "heading": "## 安装",
+            "excerpt": "easyeda update --check      # 只读:cli / skill / connector 三方版本对齐表"
+          },
+          {
+            "heading": "## 核心能力 & 特色",
+            "excerpt": "`sch gate --strict` 一条命令过**五关**(layout-lint→clusters→check→bridge-check→drc)"
+          },
+          {
+            "heading": "## 能力清单(已支持)",
+            "excerpt": "`sch nets --strict`(网名变体/单引脚网机械拦截)+ `sch reconcile` 设计意图对账 + netlist **黄金表逐脚比对**"
+          },
+          {
+            "heading": "## 能力清单(已支持)",
+            "excerpt": "- **`pcb new-board`** — 从原理图**新建一块板 + 空 PCB 页**并绑定(CLI 版「新建 PCB / 原理图转 PCB」),再 `pcb import-changes` 从零布局"
+          },
+          {
+            "heading": "## 能力清单(已支持)",
+            "excerpt": "- **`pcb outline-fit`**(板框贴合器件)/ **`pcb outline-round`**(圆角矩形板框)。"
+          },
+          {
+            "heading": "## 能力清单(已支持)",
+            "excerpt": "**`pcb drc`** 跑检查。"
+          },
+          {
+            "heading": "### 原理图自动放置:两个引擎(模板 vs 官方)",
+            "excerpt": "> **优先级铁律**:命中电路块 → `sch block-apply` 模板;有 S0 分区 spec → `--engine template`;都没有才 `--engine official` 兜底。"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### 特色:电路块库(一次贡献,永久收益)",
+            "excerpt": "`sch block-apply` 一条命令完成**放件 + 连线 + 网表对账**"
+          },
+          {
+            "heading": "## 核心能力 & 特色",
+            "excerpt": "`sch gate --strict` 一条命令过**五关**(layout-lint→clusters→check→bridge-check→drc)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "客户口吻需求文档**,agent 沿 S0–S6 自己完成选型、放置、连线、分区与门禁——\n**3 页原理图 / 26 个真实 LCSC 库件 / 18 网黄金表逐脚全对 / 复用 6 个电路块 /"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "`pcb outline-fit` 板框贴合(利用率 17% → 71%)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "自动布局 → 板框贴合 → 规则感知布线 → 4 层电源平面 → 丝印碰撞避让**——并在真实 EasyEDA 画布上验证(DRC 31 → 3、No-Connection 归零)"
+          },
+          {
+            "heading": "## 安装",
+            "excerpt": "easyeda update --check --exit-code   # 有落后退出码 10(CI/agent 可 gate)"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "从一份客户口吻的需求文档出发,原理图全流程(S0–S6:方案书 → 分页 → 分区 → 摆放 →\n> 布线 → 机械门禁 → 交付)已可正式交付"
+          },
+          {
+            "heading": "### 特色:电路块库(一次贡献,永久收益)",
+            "excerpt": "`sch block-apply` 一条命令完成**放件 + 连线 + 网表对账**,你只需重绑对外的几根线(ports)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "bradeGithub/DSH-Plugins-Marketplace",
+      "practicalScore": 49,
+      "oracleScore": 52,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 5,
+          "oracle": 6.5,
+          "gap": 1.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 7,
+          "gap": 7
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "重启 DSH 后打开 Web GUI，进入 **设置 → DSH插件市场**"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "使用搜索框按名字过滤插件；分类 chips 按栏目筛选"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "**安装** → 开始安装，日志实时滚动"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "提供 API Key 等后点「提交材料并继续安装」"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "**更新** → 检测到新版本时覆盖升级"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "切换到 **通用 Skills** tab 浏览 20000+ 技能，支持搜索 / 触底分页 / 一键安装"
+          },
+          {
+            "heading": "## 🚀 使用方法",
+            "excerpt": "点击「刷新」强制重新拉取"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/install` | POST | 安装 / 更新，body：`{ \"repo\": \"owner/name\", \"answers\": { \"ENV_NAME\": \"值\" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` / `manual` 状态 + 逐步日志 |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/uninstall` | POST | 卸载，body：`{ \"repo\": \"owner/name\" }`；删除安装目录 / 包目录 + `cordis.patch.yml` 注册条目 + 安装记录；返回 `done`（含 `removed` 计数与日志） |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/self-update` | POST | 执行市场本体更新（官方 CLI 安装 + 装后版本校验）；返回 `no-update` / `done` / `failed` |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/check-update` | POST | npm 型 cli 插件手动版本检测（body `{ repo }`；查 npm registry，npmmirror 优先）；返回 `done` + `updateAvailable` / `latestVersion` |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/feedback` | POST | 提交安装反馈（body `{ repo, ok, note }`）→ 移除队列并同步创建 GitHub issue；返回 `done`（含 `issueUrl` / `manualUrl`） |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/env-edit` | POST | 写入插件环境变量（body `{ repo, values }`，落盘 `~/.dsh/.env` + `envs.json`）；返回 `done` + `applied` |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/restore/diff` | POST | 给定备份计算恢复差异（body `{ backup }`；返回 `missing` / `already`） |"
+          },
+          {
+            "heading": "## 📡 HTTP 接口",
+            "excerpt": "| `/api/marketplace/logs` | GET | 导出脱敏安装日志（`{ text, count }`） |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ChisaAlter/Deepseek-Harness-Desktop",
+      "practicalScore": 29,
+      "oracleScore": 55,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 6.5,
+          "gap": 6.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 功能",
+            "excerpt": "`Ctrl+\\` 打开右栏（Files / Diff / Browser / Agents）"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`` Ctrl+` `` 打开底栏终端，选区可送进对话。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`Ctrl+,` 打开设置。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "请先完全退出应用（托盘也要退）。推荐冷启动进入 **启动器 → 导入**。不要拷 `profiles`。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "若终端仍见 `Unable to load libghostty-vt (404)`，或装过 0.2.4 / 0.2.5，请改装 0.2.7。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`` Ctrl+` `` 打开底栏终端"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "推荐冷启动进入 **启动器 → 导入**。"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "`pnpm run build:lib:client`"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 功能",
+            "excerpt": "`Ctrl+\\` 打开右栏（Files / Diff / Browser / Agents）"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`` Ctrl+` `` 打开底栏终端，选区可送进对话。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`Ctrl+,` 打开设置。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "若终端仍见 `Unable to load libghostty-vt (404)`，或装过 0.2.4 / 0.2.5，请改装 0.2.7。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "Harness 挂了会回到故障页并自动重启。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "主模型不识图时走官方兜底。"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "npm run dist          # Windows 安装包"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "npm run dist:mac      # macOS 安装包（须在 macOS 上）"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-genui",
+      "practicalScore": 51,
+      "oracleScore": 61,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 1,
+          "oracle": 7,
+          "gap": 6
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for an order or service dashboard"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for an audio or video reference"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for `plot` with a parameter"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for a short quiz"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for `/panel` or `panel: true`"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Dragging sliders redraws the curve locally and immediately."
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "click or blur sends back to the model"
+          },
+          {
+            "heading": "## ❓ FAQ",
+            "excerpt": "just say \"output it with dsh-ui\""
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "# 🎨 dsh-genui",
+            "excerpt": "Ask “how are this month’s orders doing?” and the answer can include a sortable data panel, a native video, a draggable plot, a local quiz, or a persistent session panel"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "| Data | Ask for an order or service dashboard | `stat`, `table`, `chart`, and `progress` appear inside the reply; supported numeric table values sort numerically. |"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "| Media | Ask for an audio or video reference | Browser-reachable media plays inline, with poster/aspect-ratio and failure states. |"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "| Exploration | Ask for `plot` with a parameter | Dragging sliders redraws the curve locally and immediately. |"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "| Feedback | Ask for a short quiz | The UI grades and explains locally; only the next model step needs an `action`. |"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "| Workspace | Ask for `/panel` or `panel: true` | A persistent, resizable session dock is updated in place. |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hust-open-atom-club/oh-dsh",
+      "practicalScore": 44,
+      "oracleScore": 32,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用",
+            "excerpt": "ohdsh desktop          # 启动 Oh-DSH Desktop"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "ohdsh gui              # Desktop 的启动别名"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "ohdsh web              # 启动 Oh-DSH Web"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "ohdsh web --port 3080  # 指定 Web 端口"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "ohdsh tui              # 启动 Oh-DSH TUI"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "TUI 可输入 `/preset liangshen`。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "运行 `ohdsh web --help` 或\n`ohdsh tui --help` 可以查看界面专属选项。"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "d-dev0101/open-sea-skin",
+      "practicalScore": 41,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Recommended — install as a DSH plugin",
+            "excerpt": "use **Skin settings** at the lower left to adjust wave\nsize, daylight, 40% glass opacity, and the automatic day/night cycle."
+          },
+          {
+            "heading": "## Install option 1 — Chrome or Edge extension",
+            "excerpt": "Use the toolbar popup\nto disable the Harness skin."
+          },
+          {
+            "heading": "## Install option 1 — Chrome or Edge extension",
+            "excerpt": "The lower-left wave button opens sea-state,\ndaylight, and glass-opacity controls."
+          },
+          {
+            "heading": "## Native Harness source plugin",
+            "excerpt": "Use the native **Skin settings** action at the lower left for fast adjustments,\nor open **Settings → General → Open Sea Skin** for every option."
+          },
+          {
+            "heading": "## Native Harness source plugin",
+            "excerpt": "npm run build"
+          },
+          {
+            "heading": "## Development and verification",
+            "excerpt": "npm run check"
+          },
+          {
+            "heading": "## Development and verification",
+            "excerpt": "npm run package:extension"
+          },
+          {
+            "heading": "## Development and verification",
+            "excerpt": "npm run test:browser"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "cocofhu/anime-find",
+      "practicalScore": 39,
+      "oracleScore": 46,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用",
+            "excerpt": "> 搜一下无职转生，看看有没有磁力"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "> 最近有哪些好看的动漫"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "> 还有吗"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "点击卡片即可查看字幕组与下载资源。"
+          },
+          {
+            "heading": "### 资源详情",
+            "excerpt": "按字幕组浏览集数、复制磁力链接或打开种子文件："
+          },
+          {
+            "heading": "### 流媒体播放",
+            "excerpt": "在详情中切换到流媒体，选择剧集后可在对话中直接播放："
+          },
+          {
+            "heading": "## 版本与更新",
+            "excerpt": "在 **设置 → 插件 → 插件配置 → 搜番** 的「版本与更新」区块中，可手动检查\nGitHub 上的最新正式 Release。"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 使用",
+            "excerpt": "可以直接对 Agent 说：\n\n> 搜一下无职转生，看看有没有磁力\n\n> 最近有哪些好看的动漫\n\n> 还有吗\n\n插件向 Agent 提供 `anime_find_search` 工具。搜索完成后，对话中会显示可点击卡片；点击卡片即可查看字幕组与下载资源。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PM-Shawn/Abu-Cowork",
+      "practicalScore": 66,
+      "oracleScore": 69,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 1,
+          "oracle": 6.5,
+          "gap": 5.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Organize the files on my desktop by type"
+          },
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Extract the tables from this PDF and generate an Excel file"
+          },
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Every morning at 9 AM, search for the latest AI news and generate a daily digest"
+          },
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Use the frontend design skill to create a product landing page"
+          },
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Create a weekly report PPT for this week"
+          },
+          {
+            "heading": "### 2. Start Chatting",
+            "excerpt": "Return to the main screen, use the model selector to pick your preferred model, and start chatting."
+          },
+          {
+            "heading": "### IM Channel Integration",
+            "excerpt": "Turn Abu into your team bot — just @Abu in your chat:"
+          },
+          {
+            "heading": "### Core Capabilities",
+            "excerpt": "left-click opens main window, right-click menu, drag-to-edge dock"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "bruc3van/awesome-dsh-plugin",
+      "practicalScore": 21,
+      "oracleScore": 42,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "发现遗漏、分类不准确或说明过时？欢迎提交 Issue 或 Pull Request："
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "如果你是插件作者，可以按 [CONTRIBUTING](./CONTRIBUTING.md#作者自荐--self-promotion) 的自荐规范在 [SHOWCASE.md](./SHOWCASE.md) 末尾追加一条自荐（中英各一行）"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "提 Issue 告诉我们它解决什么问题、适合谁"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "或直接编辑对应 Markdown 并附上理由"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "欢迎提交 Issue 或 Pull Request"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "公开仓库只要带上 `dsh-plugin` Topic"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "在 [SHOWCASE.md](./SHOWCASE.md) 末尾追加一条自荐（中英各一行）"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件，就会在每日刷新时进入[待审核队列](./data/review/pending.md)，经我们核实后进入全量目录"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件，就会在每日刷新时进入[待审核队列](./data/review/pending.md)，经我们核实后进入全量目录——**不需要给我们提 PR**。"
+          },
+          {
+            "heading": "## 🤝 推荐或修正插件",
+            "excerpt": "在 [SHOWCASE.md](./SHOWCASE.md) 末尾追加一条自荐（中英各一行），并把首页自荐预览区同步为最近 10 条"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "tinqiao-oss/engramory",
+      "practicalScore": 34,
+      "oracleScore": 43,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Continuity without a second handoff store",
+            "excerpt": "updated **in place**: never a dated series of state files, and never a per-turn\nhandoff log indexed beside it."
+          },
+          {
+            "heading": "## Continuity without a second handoff store",
+            "excerpt": "scan the task, dedup/update existing notes, refresh project\nstate, promote reusable feedback, keep durable reference pointers, retire stale\nor completed transient state, run the size check plus doctor"
+          },
+          {
+            "heading": "### Any other agent (Hermes, Cursor, Cline, Windsurf, …)",
+            "excerpt": "don't blindly fix them."
+          },
+          {
+            "heading": "## What's actually differentiated",
+            "excerpt": "run\n`--no-schema` for structure first, batch-backfill dates with the snippet, then\nhand-write Why/How."
+          },
+          {
+            "heading": "## Security & privacy",
+            "excerpt": "**Never write a secret's *value*** into memory — keys, tokens, passwords,\n  cookies, recovery codes."
+          },
+          {
+            "heading": "## Security & privacy",
+            "excerpt": "Record only *where* the secret lives (e.g. \"in the\n  password manager / env var `FOO`\")."
+          },
+          {
+            "heading": "## Security & privacy",
+            "excerpt": "Minimize partial PII (phone, email, address) — prefer a pointer."
+          },
+          {
+            "heading": "## Continuity without a second handoff store",
+            "excerpt": "verify that a\ncold-started agent could continue from the repo and memory alone."
+          }
+        ],
+        "ioPairs": []
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "yogsoth-ai/de-anthropocentric-research-engine",
+      "practicalScore": 53,
+      "oracleScore": 45,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 3,
+          "gap": -7
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### ⚔️ Arsenal, Not Pipeline",
+            "excerpt": "approve the spec (including its backtrack conditions and recommended campaign combinations) before execution begins"
+          },
+          {
+            "heading": "### Codex",
+            "excerpt": "Use DARE to turn this research direction into an executable Research Spec: ..."
+          },
+          {
+            "heading": "## 🚀 Quick Start",
+            "excerpt": "/de-anthropocentric-research-engine"
+          },
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "/executing-specs docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md"
+          },
+          {
+            "heading": "### 📏 Executable Research Specs",
+            "excerpt": "read the spec, find the first unchecked box, read the latest context checkpoint, resume"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "You: /de-anthropocentric-research-engine\n     \"I'm interested in improving LLM reasoning faithfulness\"\n\nPhase 1 — North Star Crystallization (warm-start)\n  → Dialogue to narrow scope, identify obstacles, decompose goals"
+          },
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "You: /executing-specs docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md\n  → Agent reads spec, executes stage by stage"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-mnemon",
+      "practicalScore": 38,
+      "oracleScore": 51,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        },
+        "ioPairs": {
+          "machine": 7,
+          "oracle": 0,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 3. Verify the first workflow",
+            "excerpt": "Open **Memory System → Status** and verify dsh-mnemon, Mnemon Native, Runtime, Documents, and enabled Providers."
+          },
+          {
+            "heading": "### 3. Verify the first workflow",
+            "excerpt": "Open **Memory Spaces → Overview → Create Memory Space** and choose an enabled Provider explicitly."
+          },
+          {
+            "heading": "### 3. Verify the first workflow",
+            "excerpt": "Submit one stable, future-useful candidate through **Remember**."
+          },
+          {
+            "heading": "### 3. Verify the first workflow",
+            "excerpt": "Open **Recall**, run a direct search, then run **Agent query** against the same question."
+          },
+          {
+            "heading": "### 3. Verify the first workflow",
+            "excerpt": "Return to the conversation, expand **Turn memory**, and follow one exact tool link."
+          },
+          {
+            "heading": "## Web, conversation, and Headless share one system",
+            "excerpt": "**Commands** | `/mnemon status`, `recall`, `related`, `remember`, and `forget`"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Search** | Concurrent provider-native recall | Read-only |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Agent query** | A clean top-level task Agent receives bounded evidence and writes an answer | Read-only |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Remember** / **Save to memory** | A clean task Agent qualifies, routes, deduplicates, distills, and writes behind Host controls | Writes only if accepted |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Smart selection** | Hard rules filter providers; a task Agent resolves only genuine ambiguity | Saves a routing receipt |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **AI metadata** | One asynchronous task Agent per selected Memory Space, each using the provider's fastest sample path | Local title/description only |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Archive Document** | A task Agent creates a searchable cold reference before the Host moves the original | Supervised move |"
+          },
+          {
+            "heading": "## Clicks that start real work",
+            "excerpt": "| **Turn memory** | Expands exact recall, write, and Document-search activity; each item navigates to its source | Read-only |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "text2future/flowix",
+      "practicalScore": 36,
+      "oracleScore": 36,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 4,
+          "oracle": 3.5,
+          "gap": -0.5
+        },
+        "ioPairs": {
+          "machine": 4,
+          "oracle": 0,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Quick start",
+            "excerpt": "2. Create a new local folder, or register an existing folder as a notebook."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "3. Create a document and write down the task background, reference materials, goals and constraints."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "4. Call an agent from within the document, or keep organizing content with tags and properties."
+          },
+          {
+            "heading": "## Flowix turns notes into working memory",
+            "excerpt": "Write in Markdown, point an agent to the context it needs, and save the result back to the same note — ready to review, edit, and reuse next time."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "Create a new local folder, or register an existing folder as a notebook."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "Create a document and write down the task background, reference materials, goals and constraints."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "Call an agent from within the document, or keep organizing content with tags and properties."
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Ychris12138/dsh-usage-stats",
+      "practicalScore": 61,
+      "oracleScore": 50,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 8,
+          "oracle": 4,
+          "gap": -4
+        },
+        "ioPairs": {
+          "machine": 8,
+          "oracle": 8,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用 / Usage",
+            "excerpt": "1. 点击侧边栏“用量/余额”。"
+          },
+          {
+            "heading": "## 使用 / Usage",
+            "excerpt": "2. 用“当前供应商”切换账户卡片；一次只显示一个 provider。"
+          },
+          {
+            "heading": "## 使用 / Usage",
+            "excerpt": "3. 使用 `‹` / `›` 切换月份，点击热图日期查看当天的 provider/model 明细。"
+          },
+          {
+            "heading": "## 使用 / Usage",
+            "excerpt": "4. 标题栏刷新会更新 Token、provider 列表，并强制刷新当前账户。"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/usage` | 按日期/provider/model 聚合的 Token、派生费用、session 明细与日/月预算状态 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/providers` | provider 列表、account mode、adapter、状态与预警摘要 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/account?provider=<id>` | 当前 provider 的统一余额或 Token Plan 快照；`refresh=1` 强制刷新 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/balance?provider=<id>` | `0.1.x` 余额兼容路由 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/subscriptions` | `0.1.x` Token Plan 兼容路由 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/session-context?session=<id>` | 当前 live session 的 route/model/account 与同一增量 fold 的 session 费用快照 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/export/daily.csv` | secret-free daily provider/model CSV |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` | `/api/usage-stats/export/sessions.csv` | secret-free session CSV |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wssfk12138/dsh-damage-pulse",
+      "practicalScore": 55,
+      "oracleScore": 55,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 6,
+          "gap": -4
+        },
+        "ioPairs": {
+          "machine": 8,
+          "oracle": 8,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 余额、峰谷与悬浮交互",
+            "excerpt": "右键可隐藏鲸鱼娘或打开详细设置。"
+          },
+          {
+            "heading": "## 提醒与微信通知",
+            "excerpt": "- **ClawBot 微信通知**：在详细设置中查看连接、认证与投递状态，完成二维码登录、刷新、重连、安全断开和测试消息发送。"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/balance` | DeepSeek 账户余额（含 currency / 总余额 / 赠送余额） |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/usage?sessionId=` | 用量明细历史（可过滤会话） |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/usage-summary?range=` | 今日 / 7 天 / 30 天 / 全部时间的聚合统计 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/charge-events?since=<seq>` | 严格递增的扣费事件流，驱动余额变化、飘字和受击动画 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/notification-events?since=<seq>` | 预算、峰谷和缓存异常通知流 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/wechat/status` | 查询微信连接、认证、投递和短时登录会话状态；设置页“刷新”会重新请求此端点 |"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/balance` | DeepSeek 账户余额（含 currency / 总余额 / 赠送余额） |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/usage?sessionId=` | 用量明细历史（可过滤会话） |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/usage-summary?range=` | 今日 / 7 天 / 30 天 / 全部时间的聚合统计 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/charge-events?since=<seq>` | 严格递增的扣费事件流，驱动余额变化、飘字和受击动画 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/notification-events?since=<seq>` | 预算、峰谷和缓存异常通知流 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `GET /api/token-monitor/wechat/status` | 查询微信连接、认证、投递和短时登录会话状态；设置页“刷新”会重新请求此端点 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `POST /api/token-monitor/wechat/login` | 创建二维码登录会话 |"
+          },
+          {
+            "heading": "## HTTP 端点",
+            "excerpt": "| `POST /api/token-monitor/wechat/login/confirm` | 确认当前二维码登录状态 |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "cocode-agency/cocode",
+      "practicalScore": 47,
+      "oracleScore": 50,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 6.5,
+          "gap": -3.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### Five-minute first run",
+            "excerpt": "Start the GUI, or run `cocode doctor` followed by `cocode` in a real TTY."
+          },
+          {
+            "heading": "### Five-minute first run",
+            "excerpt": "Open a workspace and ask the agent to inspect a file or explain the project."
+          },
+          {
+            "heading": "### Five-minute first run",
+            "excerpt": "If startup fails, save the output of `cocode doctor` and\n   `cocode host status --json` for troubleshooting."
+          },
+          {
+            "heading": "# The Host on its own, for wire-protocol debugging",
+            "excerpt": "Run `make` with no arguments to list every target."
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode version                   # Show Cocode and bundled DSH versions"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode gui                       # Open the GUI"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode tui                       # Open the TUI"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode plugin list               # List plugins in the default cocode profile"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode plugin list               # List plugins in the default cocode profile"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode host status --json        # Print machine-readable status"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode doctor                    # Check TUI, Supervisor, and Host connectivity"
+          },
+          {
+            "heading": "### Building distributables",
+            "excerpt": "make gui-build      # Electron Forge installers for the current platform"
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "cocode version                   # Show Cocode and bundled DSH versions"
+          }
+        ]
+      }
+    }
+  ]
+}

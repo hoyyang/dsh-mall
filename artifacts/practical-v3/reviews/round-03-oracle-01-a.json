@@ -1,0 +1,672 @@
+{
+  "reviews": [
+    {
+      "repo": "PerryLink/dsh-auto-review",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Second-model AI approval for DeepSeek Harness — a read-only reviewer subagent decides allow/deny on the approval chain",
+        "an answerer that claims only the requests it owns (`ai` policy) and delegates everything else via `next()`; the human approval flow is never short-circuited",
+        "a one-shot fork with a `read`/`glob`/`grep` tool allow-list returns a structured verdict `{ decision, reason, riskLevel }`",
+        "the reviewer's reason is injected into the denied tool result (callId-linked)",
+        "log-only `autoReview/verdict` + `autoReview/rejection` session events (envelope `ignorable: true`)",
+        "a rejection circuit breaker (3 consecutive denials, or 6 of the last 10 verdicts, per turn), a risk-level policy, a one-shot `/auto-review approve` override",
+        "a session-header action (**AI Review**) that opens a panel with the session's auto-review state",
+        "`dsh-auto-review` ships `dsh-eval`: a YAML-driven agent evaluation platform that runs real headless DSH sessions",
+        "also ships a stdio **MCP server** (`dsh-auto-review-mcp`) so external MCP clients (Claude, Codex, …) can consume a deterministic review path without a harness"
+      ],
+      "usageItems": [
+        "`status` reports the effective state, both per-turn budgets (AI verdicts and reviewer failures), a tripped circuit breaker when one is active, and the session's cumulative statistics",
+        "`approve [n]` records a single-use `autoReview/override` for the n-th most recent denial (1 = most recent)",
+        "`on`/`off` append the durable `autoReview/state` override (the fold survives restart/resume — replay IS the state) and inject a switch notice the model sees",
+        "Add `edit: ai` explicitly if you accept in-place edits without a human in the loop."
+      ],
+      "usageActions": [
+        "/auto-review on|off|status|approve [n]",
+        "dsh-eval eval/cases --model deepseek-v4-flash --timeout-ms 240000 --out .eval-reports",
+        "node bin/dsh-auto-review-mcp.mjs"
+      ],
+      "ioPairs": [
+        "`{tool, args?, reason?}` → `{decision, reason, riskLevel}`",
+        "`{}` → `{hits, stores, size, ttlMs, enabled}`"
+      ],
+      "codeExamples": [
+        "```yaml\n# eval/cases/demo.yaml (abridged)\nsuite:\n  name: my-suite",
+        "node bin/dsh-auto-review-mcp.mjs\n# or, after npm install: npx dsh-auto-review-mcp"
+      ],
+      "usecases": [
+        "for gating any DSH agent, not research ranking",
+        "unattended deployments whose admin accepts that risk"
+      ],
+      "outputs": [
+        "Each case leaves a replayable session JSONL and a trace JSON beside `report.md`/`report.json`",
+        "assertion results (including the prompt side-by-side diff), token usage, stress/bias metrics, and the review verdict are all written into the report files"
+      ],
+      "reliability": [
+        "| Harness | DeepSeek Harness `0.1.1-rc.2` (dependencies pinned to `0.1.1-rc.2`; peers `>=0.1.0-rc.8 <0.2.0`) |",
+        "| Node | `^22.19.0 \\|\\| >=24.0.0` |",
+        "reviewer crash, timeout, or schema mismatch resolves through `fallbackPolicy` (default `rejected`)",
+        "The reviewer's `toolFilter` allow-list (`read`/`glob`/`grep`) cannot write, edit, run bash, fetch the network, or delegate (`maxDepth` = its own depth).",
+        "**Sensitive arguments are redacted** (key-name matching: `token`, `password`, `api_key`, `Authorization`, credentials, private keys …) before entering the reviewer prompt",
+        "Its verdicts are advisory policy, not a security kernel; prefer `human`/`never` rules for irreversible operations.",
+        "The reviewer needs a working LLM route (inherited by default); without one every review falls back per `fallbackPolicy` — never a silent grant.",
+        "CI gate: the process exits 0 only when every case of every suite passed — failing evaluations fail the build.",
+        "On released rc hosts (rc.1–rc.8) the runtime detects the dropped marker and never writes these events (the in-memory mirror keeps the command, budgets, breaker, and `approve` working for the session)",
+        "The server is read-only and deterministic: no network, no model, no writes."
+      ],
+      "media": [],
+      "concerns": [
+        "Configuration tables and YAML config examples excluded per rubric; composition-order guidance is config-adjacent and omitted.",
+        "No screenshots or GIFs exist in the README; media is empty."
+      ]
+    },
+    {
+      "repo": "shengsheng90/DSH-taskboard",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Native, local project task management for DeepSeek Harness. SQLite is the sole task authority.",
+        "A **Taskboard** sidebar button and a native overlay page (not an iframe, not a second chat runtime)",
+        "Local SQLite projects, tasks, comments, relations, attachments, workflows, and automation",
+        "Stable readable keys such as `DSH-42` plus opaque ids and optimistic versions",
+        "Seven statuses: `backlog` → `todo` → `in_progress` → `in_review` → `done`, plus `blocked` and `canceled`",
+        "In-process Agent tools `taskboard_*` (no accept / no generic status mutation)",
+        "Headless JSON CLI `dsh-taskboard`",
+        "Packaged Skill `manage-taskboard`",
+        "Agents can submit verified work to `in_review`. Only an authenticated human UI or CLI operation can accept it as `done`.",
+        "the Host scheduler claims eligible `todo` work, drives a root Agent Session and Goal, and stops at `in_review`"
+      ],
+      "usageItems": [
+        "1. Open the Harness Web Client and click the **Taskboard** control in the sidebar footer.",
+        "2. Create a project: name, short key (used for readable ids such as `DSH-1`), optional Harness Workspace id. Leave Workspace blank for a global project.",
+        "4. Write the description in Markdown. Attach files by paste, drop, or file picker.",
+        "7. When an Agent submits review, open the task, read the result comment and verification, then **Accept** (`done`) or **Return for rework**.",
+        "8. Map a Workspace before using **Open in new session**. That action opens a native blank Session with an unsent draft that carries the exact task id and revision.",
+        "Models must use the in-process tools. Do not shell out to `dsh-taskboard` from a model turn when a tool exists.",
+        "Use it for human scripts and interoperability, not as the model's primary API."
+      ],
+      "usageActions": [
+        "1. Open the Harness Web Client and click the **Taskboard** control in the sidebar footer.",
+        "5. **Approve for work** moves `backlog` → `todo`.",
+        "1. `taskboard_list` → pick an eligible `todo`.",
+        "2. `taskboard_get` immediately before the write.",
+        "3. `taskboard_claim` with the exact version.",
+        "5. Verify, then `taskboard_submit_review` with evidence. Never edit the task description to record the result.",
+        "dsh-taskboard --database .dsh/taskboard.sqlite task approve --task <opaque-id> --version 1",
+        "dsh-taskboard --database .dsh/taskboard.sqlite task accept --task <opaque-id> --version 7",
+        "dsh-taskboard task return --task task-... --version 4 --comment \"Fix the failing test\""
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```sh\ndsh-taskboard --database .dsh/taskboard.sqlite project list",
+        "```sh\ndsh-taskboard task create --request-json '{\"projectId\":\"project-...\",\"title\":\"Ship\",\"creator\":\"human:cli\",\"priority\":\"high\"}'",
+        "```sh\nnode ~/.dsh/profiles/web/node_modules/@shengsheng/dsh-taskboard/lib/cli.js --database .dsh/taskboard.sqlite storage status"
+      ],
+      "usecases": [],
+      "outputs": [
+        ".dsh/taskboard.sqlite\n.dsh/taskboard-attachments"
+      ],
+      "reliability": [
+        "Every mutation except create carries the **exact current `version`**.",
+        "`TASK_STALE_VERSION` means reread and reconcile; do not retry the stale version.",
+        "Never derive an opaque task id from a display key such as `DSH-42`. Use the id the API returned.",
+        "Human-only actions (UI or CLI, never model tools): approve, accept, return, archive, restore, cancel, reopen, force takeover, permanent delete.",
+        "Exit codes: `0` success, `2` usage, `3` storage/service unavailable, `4` domain/API error, `5` optimistic conflict (`TASK_STALE_VERSION`).",
+        "**Compatible Host:** DeepSeek Harness `0.1.0-rc.8` and `0.1.1-rc.2`",
+        "The SQLite integrity scan reads every database page, so it never runs on the snapshot path: it runs once when the database opens and on the dashboard's explicit re-check.",
+        "Harness currently exposes no proactive quota signal, so the plugin reports quota as uncertain",
+        "The scheduler does not automatically invoke workflow nodes; `executable` means a Host provider is registered for that node kind, not that assignment turns the workflow into an implicit runner.",
+        "Backup both the SQLite file (and WAL, if live) and the attachment directory. For a consistent offline backup, stop Harness first."
+      ],
+      "media": [
+        {
+          "excerpt": "![Native Taskboard board, task detail, and workflow views](docs/assets/taskboard-demo.gif)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README is dominated by install/verification procedure, excluded per rubric, so operational evidence is thinner than the doc length suggests.",
+        "No worked example pairs an input with its output; ioPairs left empty.",
+        "No explicit scenario/use-case section; usecases empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "Sikao-Engine/KimiX",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Compressed initial prompts and tool descriptions down to ~2000 tokens while covering nearly all built-in tools",
+        "Start and continue `Bash`/`Powershell`/`Run` sessions via `task_id`, with optional `wait_for_pattern`",
+        "Built-in document conversion without external deps",
+        "Combines prompts with Python logic to orchestrate complex tasks",
+        "Headless-browser-based Markdown output (not plain text), supports `output_path` and auto-truncation",
+        "Run the SAME task N times in isolated workspaces (git worktree / temp copy), pick the winner via `self_eval` or `majority` selection, then apply and verify the winning diff",
+        "Every user/assistant message is automatically indexed by **BM25 inverted index** (N-gram, n=2) on append, persisted to `<session>/history_index/<id>.json`, and survives process restarts.",
+        "Each round, if user input ≥10 chars, BM25-searches HistoryIndex for matching compacted rounds; injects matches above `auto_retrieve_history_threshold` as `[Auto-retrieved from past conversation]`",
+        "the agent can actively search all archived history (including compacted rounds) by natural-language query, returning verbatim excerpts with relevance scores",
+        "a turn can't end while todos are unfinished, or while files were edited without running any check. Failing checks are fed back to the agent to fix.",
+        "catches repeated edits to the same file across different tools, and the same error recurring without a root-cause fix; nudges the agent to change strategy.",
+        "Incremental updates with append/overwrite modes, fuzzy title matching, and per-todo notes."
+      ],
+      "usageItems": [
+        "use `kimix --config=xx.json` after setup"
+      ],
+      "usageActions": [
+        "kimix --config=xx.json"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```python\nfrom kimix import *\nfrom pathlib import Path"
+      ],
+      "usecases": [
+        "**Batch automation**: Use native Python syntax (`for` loops, file globbing) to fire tasks at multiple files at once.",
+        "**Complex orchestration**: Freely compose mode switches, tool calls, and logic into multi-stage, multi-branch workflows.",
+        "**Reproducible & maintainable**: Workflows live as version-controlled scripts, not ephemeral chat history."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Tested against kimi, xai, anthropic, openai_legacy, openai_responses, google_genai/gemini, vertexai/vertex, plus 25+ Hermes-ported providers (deepseek, openrouter, xiaomi, zai, minimax, bedrock, ...).",
+        "Properly handles Shell, Glob, and other tool validations to reduce retry loops from failures",
+        "Cap at 500 rounds; oldest evicted automatically.",
+        "Auto format checks and warnings on strict config files to prevent model-hallucinated errors",
+        "Failures are explicit errors — never silently accepted.",
+        "Recent N rounds kept verbatim (depth adapted by `adaptive_preserve_depth` — deepened on errors, thinking, multi-file edits, etc.); first message always kept (primacy effect).",
+        "When already-compacted content is compressed again (depth ≥3), switches to `COMPACT_CASCADE` prompt to prevent information degradation.",
+        "when context fills up (~70%), the agent is prompted to compact on its own terms before forced auto-compaction kicks in",
+        "stale tool outputs, thinking blocks, and near-duplicate content are automatically elided to reclaim context space."
+      ],
+      "media": [
+        {
+          "excerpt": "![teasor](kimix_en.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The single image is captioned only 'teasor'; kept as product media with residual ambiguity about whether it is a demo or decorative art.",
+        "Operational instructions are mostly deferred to linked docs; very few usage steps are verbatim in this README.",
+        "No paired request/response examples or described result artifacts; ioPairs and outputs empty."
+      ]
+    },
+    {
+      "repo": "taxueseek/argo",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Argo 是给 AI Agent 用的多语言搜索基础设施。**",
+        "**按领域、按语言、按需求选路**，把问题送到合适的源，而不是一律扫网页标题",
+        "产出不是「链接清单」，而是「证据候选 + 可信度分解」。",
+        "一问到行情、影视、体育、宏观这类「有标准答案」的问题，自动切到垂直源直接给答案，而不是扔给你一堆链接。",
+        "双层缓存（内存 + SQLite），热查询约 10ms 级返回，既省钱也省时间。",
+        "把一个笼统的问题拆成多个子问题，多源并行采集，最后给出「还差什么证据」的缺口提示。",
+        "知乎、小红书、公众号这类要登录才能看的内容，以及 JS 渲染页、反爬页，用真实浏览器配合登录态去搜。",
+        "用 `--since 7d` 这类时间窗框住发布时间范围，判断新旧不再靠猜。",
+        "高后果问题标记 `fetch_required` + 每条 `fetch_suggested`；`--verify` 一键抓正文核验、回填「核实后证据分」、核实过的链接自动记住",
+        "本地文件搜索 | 本机代码/笔记/记忆（非联网）",
+        "**12 个 MCP 工具**：搜索、研究、证据、消歧、抓取、截图、PDF、社交舆情、本地文件搜索、站点爬取、本地预览、可复算",
+        "MCP 响应可以按需裁剪，snippet 可控，不会撑爆 Agent 的上下文。"
+      ],
+      "usageItems": [
+        "**高后果问题**（持仓、安全、是否属实）：search → 看快评分 → 对 top 结果 `fetch` → 再下结论",
+        "**数字**：写清口径，冲突时并列，不要硬合并",
+        "**搜索结果页 / 跳转链**：不要当正文信源",
+        "**社交帖**：当舆情与叙事，不当事实真值",
+        "**事实核查**：宁可多一两条分层查询（来源 / 对比 / 主体）"
+      ],
+      "usageActions": [
+        "python3 scripts/search.py \"贵州茅台股价\" --explain",
+        "python3 scripts/search.py \"transformer attention mechanism paper\" --json",
+        "python3 scripts/research.py \"2026 公募基金二季报 持仓结构\" --depth deep --json",
+        "python3 scripts/evidence.py \"同一查询\" --stdin --json",
+        "python3 sub-skills/ego-search/scripts/ego_search.py enable",
+        "python3 sub-skills/ego-search/scripts/ego_search.py status",
+        "python3 scripts/search.py --list-engines"
+      ],
+      "ioPairs": [
+        "贵州茅台股价 | A 股行情域，优先快照源，够用就停",
+        "AAPL / 美股盘前 | 美股域，与 A 股分流",
+        "肖申克的救赎 主演 / Inception director | 影视域 → IMDb 等",
+        "梅西 俱乐部 / 库里 球队 | 体育域 → TheSportsDB 等",
+        "埃菲尔铁塔在哪 / where is Eiffel Tower | 地理实体 → OpenStreetMap 等",
+        "NASA founding year / 国务院职能 | 组织实体 → Wikidata 等",
+        "アニメ おすすめ / 한국 영화 추천 | 识别日/韩语 → 语言友好源，少塞中文专用站",
+        "阿司匹林 分子式 | 化学域 → PubChem 类答案"
+      ],
+      "codeExamples": [
+        "### 金融\n\n```bash\npython3 scripts/search.py \"贵州茅台股价\" --explain",
+        "### 学术\n\n```bash\npython3 scripts/search.py \"transformer attention mechanism paper\" --json",
+        "### 研究与核验\n\n```bash\npython3 scripts/research.py \"2026 公募基金二季报 持仓结构\" --depth deep --json"
+      ],
+      "usecases": [
+        "Claude Code / Grok Build / Codex / Kimi 等 **Agent 的搜索后端**",
+        "**多语言、多领域**日常问答：中英日韩等 + 金融 / 影视 / 体育 / 学术 / 代码",
+        "脚本与流水线里需要 **可复现、可缓存** 的检索",
+        "事实核查、金融公开信息、实体与公开资料的 **多源对照**",
+        "适合综述、调研这类要全面、要扎实的场景。",
+        "不太适合单独承担：平台内高级互动定榜、需要长期养服务的最大召回聚合器"
+      ],
+      "outputs": [
+        "结果字段含 `selection`、`absorption`、`credibility_fast`、`evidence_flags` 等，方便 Agent 直接排序。",
+        "深度研究只产 dossier（来源/覆盖/缺口/门禁），判断稿归 Agent",
+        "返回包带 `time_filtered` 统计",
+        "典型：命中 stock_query → 行情快照源"
+      ],
+      "reliability": [
+        "熔断、负缓存、分阶恢复（防垂直源串味）",
+        "登录态搜到的结果**不写**公共搜索缓存（避免污染共享缓存）",
+        "**失败要可观测**：空结果、超时、熔断分开标，不静默吞掉",
+        "不配置则跳过对应引擎，免费引擎自动兜底。",
+        "recompute 封死外部进程出网、主机路径全部改为安装感知",
+        "全链路 UTF-8 防线（`PYTHONUTF8` + `-X utf8` + 6 处 JSON `read_bytes`）根治 GBK 崩溃",
+        "**请勿用 `npm install argo-search`**——npm registry 上那份是**非官方陈旧版 v1.0.1**",
+        "| 空结果 | 很短（避免把失败固化） |",
+        "| Python | 3.10+（命令行与 MCP 核心） |",
+        "缺失时自动降级，核心功能不受影响"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/readme/why-better.svg\" width=\"100%\" alt=\"左侧三种默认搜索给人看的结果，右侧 Argo 给 Agent 的可吸收证据 JSON\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/proof-routes.svg\" width=\"100%\" alt=\"四类真实路由：金融、影视、多语言、地理\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/workflow.svg\" width=\"100%\" alt=\"查询 → 语言与域 → 多引擎召回 → RRF → 证据快评 → 统一 JSON\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "hero.svg treated as decorative banner and the beautify badge excluded from media.",
+        "Version-record table excluded per changelog rule; some security/compat facts (e.g. SSRF 防护) appear only there and were omitted.",
+        "DSH-plugin install variants treated as packaging, not extra capability."
+      ]
+    },
+    {
+      "repo": "ZSeven-W/dsh-crew",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "It makes DSH agents dispatchable from Claude Code, Codex, Antigravity and Grok: the orchestrator keeps its own model, the work runs on a real DSH agent with that harness's tools, sandbox, presets and session history",
+        "Workers appear as regular subagents in Claude Code / Codex / Antigravity / Grok — dispatch count, running step, tool calls and token usage all show up in the host's own task panel",
+        "`escalate_on_failure` retries a failed flash run once on pro — based on evidence, not on guessing difficulty up front.",
+        "each worker is a first-class DSH session: visible in the Web UI, grouped by working directory, mounted with the Agent preset you choose per tier.",
+        "Without DSH running, dispatch falls back to a standalone DSH runtime, so CI and headless environments still work.",
+        "`describe_image` now prefers DeepSeek's own VL model (`deepseek-v4-flash-vision-exp`) whenever a key is available, then falls back to the CLIs you already have",
+        "**Session image pasting**: In DSH, switch model to `DeepSeek (vision) ◉` to directly paste images.",
+        "every worker job — running or finished — is listed with tier, effort, live progress and tokens, held workspaces show their holders",
+        "Bring your own endpoint (Base URL + API key + models) or a local command template.",
+        "Progress is simultaneously mirrored to `~/.config/dsh-crew/status.d/` (one shard file per writer, can be read by statusline / external monitoring)."
+      ],
+      "usageItems": [
+        "Directly in conversation, say \"dispatch X to ds-flash\" or \"dispatch X to ds-pro\", and subagent executes the task",
+        "long tasks can have orchestrator use `dsh_spawn_worker` + `dsh_worker_result(wait_seconds)` polling",
+        "`dsh_run_worker` | Blocking task dispatch (`tier`: flash/pro, `effort`: off/high/max, `cwd`, `worker`), waits for result",
+        "`dsh_spawn_worker` | Async dispatch, returns job id (for parallel fan-out); collect results with `dsh_worker_result`",
+        "`dsh_worker_status` | Real-time progress of all jobs (turn/step/current tool/token) + cwd advisory locks",
+        "`dsh_worker_result` | Fetch result, can specify `wait_seconds` to wait",
+        "`dsh_worker_cancel` | Cancel specified job, terminate its runtime process",
+        "wait for it to settle, cancel it with `dsh_worker_cancel`, or pass `allow_concurrent_cwd: true` (read-only tasks only)",
+        "In interactive TUI, select \"spawn ds-pro to ...\" to dispatch tasks; Active/Done panels show progress",
+        "`codex exec` mode can also directly call `dsh_run_worker`"
+      ],
+      "usageActions": [
+        "say \"dispatch X to ds-flash\" or \"dispatch X to ds-pro\"",
+        "`/dsh-crew:config` | Show or set this session's defaults",
+        "`/dsh-crew:on` · `/dsh-crew:off` | Turn dispatch for this session on or off (off is a hard switch: the tool refuses)",
+        "`/dsh-crew:status` | Live status of worker jobs: tier, progress, tokens, current tool",
+        "`/dsh-crew:playbook` | Dispatch best practices: choosing flash vs pro, self-contained briefs, parallelism, verifying results, guardrails",
+        "In DSH, switch model to `DeepSeek (vision) ◉` to directly paste images.",
+        "node scripts/smoke.mjs",
+        "`dsh_worker_config` | Read/set session defaults (tier, effort, mode, timeout, policy, escalation) and list `worker_profiles`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### Verify\n\n```bash\nnode scripts/smoke.mjs"
+      ],
+      "usecases": [
+        "`flash` for mechanical work, `pro` for reasoning, `effort` from `off` to `max`",
+        "If you already subscribe to Claude Pro or use Claude Code, use this approach—convenient and transparent",
+        "If using API-key credentials (not OAuth) and want to save Anthropic tokens, can run local router for direct DeepSeek connection",
+        "During local development iteration, recommend enabling hub mode; worker progress can be fully observed in Web UI",
+        "for cross-machine collaboration or environments without Web UI, use the dispatching-host shell approach"
+      ],
+      "outputs": [
+        "plus a claude-hud statusline segment: `⚙dsh 1▶pro 2m14s 21.7k/606 ✓3`",
+        "Within about ten seconds you should see `smoke test passed — configuration OK`."
+      ],
+      "reliability": [
+        "Nesting deeper than the cap (`origin_depth_limit`, default 3) is refused, and so is any cycle (the same backend + cwd appearing twice) — the guard that stops recursive worker self-amplification.",
+        "**cwd advisory lock**: one running worker per workspace. A second dispatch into a held workspace is refused with the holder's job id, backend and start time",
+        "agy runs workers with **full approval** (`--dangerously-skip-permissions` + accept-edits): agy 1.1.16 has no workspace-scoped permission mode, so a headless worker must auto-approve tool requests.",
+        "By security design, grok does not start repo-level MCP servers in untrusted project directories (`grok mcp doctor` reports \"folder untrusted\")",
+        "grok workers run with `bypassPermissions` (always-approve, as the grok docs recommend for headless automation); deny rules and hooks still apply.",
+        "**Codex must configure**: `default_tools_approval_mode = \"approve\"`, otherwise tool calls are auto-cancelled",
+        "Image generation output is flat bitmap; layer editing requires OpenPencil",
+        "Current plugin release: <code>0.1.0-rc.4</code> &middot; Tested with DSH <code>0.1.1-rc.1</code>",
+        "**Borrowed subscription CLIs** (claude / codex / grok / agy) require you to be logged in locally; the plugin won't bypass their permissions for you.",
+        "On failure the reason is printed, scoped to the path that was tested."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-crew-overview.png\" alt=\"DSH Crew — settings page\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-crew-host.png\" alt=\"Claude Code\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-crew-jobs.png\" alt=\"DSH Crew\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Extensive per-host installation sections excluded per rubric; one-click install counted as install, not capability.",
+        "Ecosystem linked-project descriptions excluded under linked-project ownership rule.",
+        "No explicit paired input/output demo; ioPairs empty."
+      ]
+    },
+    {
+      "repo": "volcengine/ark-cli",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**模型调用**：文本对话、多模态输入、流式输出、多轮接续",
+        "**图片 / 视频生成**：Seedream 生图、Seedance 生视频，产物自动下载到本地",
+        "**多模态理解**：OCR、视频总结、语音转写、字幕打轴、文档字段抽取",
+        "**Plan 管理**：Agent Plan / Coding Plan 查询、购买、续费、团队席位管理",
+        "**Agent 接入**：安装 Ark Skills，配置 Harness / MCP，让本地 Agent 调用方舟能力",
+        "**模型生产**：精调任务、自定义模型、训练状态跟踪",
+        "**服务上线**：基础模型或自定义模型一键部署为 Endpoint",
+        "**治理闭环**：Usage、Billing、Doctor、监控指标和错误码诊断"
+      ],
+      "usageItems": [
+        "`+connect` 安装 Ark Skills，让 Agent 知道有哪些方舟任务可以做。",
+        "`helper` 配置 Harness / MCP / Plan，让 Agent 真正接上模型和工具能力。",
+        "`arkcli +connect uninstall` 会清理注入到本地 Agent 的 `ark-` / `arkcli-` 前缀 Skills，适合想恢复干净 Agent 环境、或担心 Skills 过多影响 Agent 路由时使用。"
+      ],
+      "usageActions": [
+        "arkcli +chat \"总结一下 RAG 的核心思想\"",
+        "arkcli +chat --input @photo.jpg \"描述这张图片\"",
+        "arkcli +understand video-summary --input @demo.mp4 \"按章节总结这个视频\"",
+        "arkcli +gen \"生成一张未来城市海报\"",
+        "arkcli plans get",
+        "arkcli plans model-list --plan agent-plan",
+        "arkcli plans team seat-list --plan agent-plan-team",
+        "arkcli usage stats --start 2026-07-01 --mine",
+        "arkcli billing list --start 2026-07 --endpoint ep-xxx",
+        "arkcli doctor error ContentRiskBlocked"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### 选择并调用模型\n\n```shell\narkcli +chat \"总结一下 RAG 的核心思想\"",
+        "```shell\n# 查看会检测到哪些本地 Agent\narkcli +connect list",
+        "### 上线服务\n\n```shell\narkcli +deploy --name my-endpoint --model doubao-seed-2-0-pro-260215 --dry-run",
+        "### 管成本、状态和健康\n\n```shell\narkcli usage plan"
+      ],
+      "usecases": [
+        "无浏览器环境，例如远程开发机、CI 或 Agent 沙箱"
+      ],
+      "outputs": [
+        "产物自动下载到本地"
+      ],
+      "reliability": [
+        "`plans buy` / `plans renew` 是计费操作，Ark CLI 会先展示协议和确认步骤，不会默认直接扣款。",
+        "`doctor` 默认是只读诊断，不会修改资源。需要修复时会通过确认流程执行。",
+        "它不会卸载 `arkcli` 命令本身。"
+      ],
+      "media": [],
+      "concerns": [
+        "The goal→command-chain walkthrough pairs an agent goal with a command flow, not an explicit response; ioPairs left empty rather than inferred.",
+        "README has no compatibility/limitations section; reliability evidence is sparse.",
+        "The user-group QR code excluded as promotional media."
+      ]
+    },
+    {
+      "repo": "Mars-Sea/dsh-commandcode-provider",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "registers a `commandcode` provider route with a live model catalog",
+        "when one account hits its usage limit, requests switch to the next account automatically",
+        "start the official authorization flow (the same one `cmd login` runs) from the settings page; the approved key lands in the local credential service automatically",
+        "minimum plan, active deal or `FREE` badge, peak/off-peak state, image support, and context window; free models listed first",
+        "models above your subscription tier are hidden by default (toggleable)",
+        "models with selectable reasoning effort levels expose them in the picker",
+        "Vision-capable models accept images."
+      ],
+      "usageItems": [
+        "Send a message with a model your plan includes.",
+        "the **Active account** dropdown pins a preferred account; if it is exhausted, requests fall back to other accounts and return once its window resets."
+      ],
+      "usageActions": [
+        "/commandcode        (or /commandcode status)",
+        "Send a message with a model your plan includes."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "**Settings → Models** shows a **Command Code** card, and the model picker lists the live catalog under **commandcode**.",
+        "once a key is saved, a live **Account usage** card appears at the top of the page."
+      ],
+      "reliability": [
+        "**Image input is model-gated** — only Vision models accept images; text-only models refuse them.",
+        "Switching to a text-only model in an image-bearing session is rejected by dsh — pick a model marked *`Image`* or remove the images first.",
+        "**No `stop` sequences** — requests carrying one fail.",
+        "Reasoning blocks are not replayed into later turns; only tool calls with a paired tool result are replayed.",
+        "The model catalog is browsable without a key; chat requests need one.",
+        "The sign-in flow needs the Host and your browser on the same machine (loopback callback). With a remote Host, paste the key manually",
+        "locally it touches only the credential store and the models cache (plus `~/.commandcode/auth.json` as a last-resort fallback); on the network it calls only the Command Code API. No telemetry."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/model-picker.png\" alt=\"Model picker with plan, deal, image and context annotations\" width=\"320\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/usage-dashboard.png\" alt=\"Usage dashboard\" width=\"520\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/settings-page.png\" alt=\"Command Code settings page with the account usage card\" width=\"640\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "All code fences are install/config/YAML; codeExamples empty by rule 8.",
+        "No scenario or when-to-use narrative; usecases empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "HanaAyane/dsh-reasoning-effort",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**把 Codex 风格的“模型 + 推理强度”控件直接带进 DeepSeek Harness。**",
+        "滑块显示的档位完全来自当前模型在 DSH 模型目录中公开的 `reasoning.efforts`——档数、名称与顺序都由模型决定，插件自动适配。",
+        "插件默认启用，并与 DSH 的 `/model` 命令保持同步。",
+        "**失败自动回滚**：更新失败时恢复到上一个已确认档位。",
+        "**真正跟手的拖动**：按钮按指针位置连续移动，释放后才吸附到有效档位。",
+        "面板展示建议档位（知识库命中时，如 GLM-5.2 的 minimal/low/medium/high）、一段可直接复制的完整条目 YAML（含 `- id:` 行，原有 name 等字段自动保留）",
+        "内置知识库目前收录 GLM-5.2（`minimal/low/medium/high`）与 Kimi K3（`low/high/max`）。",
+        "插件**默认启用**八帧奔跑小人作为滑块按钮。",
+        "**深浅主题适配**：深色为蓝紫黑渐变，浅色为蓝白渐变，强度越高蓝色越深。"
+      ],
+      "usageItems": [
+        "打开模型菜单。若当前模型是你自定义声明、且目录读不到档位（或声明与知识库不符），菜单里会出现 **查看档位声明指引**"
+      ],
+      "usageActions": [
+        "1. 新建或打开一个会话。",
+        "2. 点击输入框下方显示“模型 + 当前强度”的按钮。",
+        "3. 拖动滑块或点击轨道，释放后会吸附到最近的档位。",
+        "4. 点击滑块下方的模型行，可以继续进入 DSH 原生模型列表。",
+        "1. 打开 **设置 → 通用设置**。",
+        "2. 找到“外观”下方的 **大肥鱼滑块**。",
+        "3. 关闭开关，再回到模型入口。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "`off` | 简单问答、改写、快速操作 | 更快",
+        "`high` | 日常编程、分析和多步骤任务 | 速度与推理平衡",
+        "`max` | 复杂调试、规划和高难度任务 | 更充分的推理"
+      ],
+      "outputs": [],
+      "reliability": [
+        "模型公开的档位少于两档、或没有声明任何档位时，菜单会显示\"当前模型未提供推理强度档位\"。",
+        "**无额外网络行为**：插件不新增遥测、凭据处理或服务端存储。",
+        "提交的档位值最终由 host 校验并发送，插件不会绕过模型或部署的能力限制。",
+        "| DeepSeek Harness packages | `0.1.0-rc.6` |",
+        "| Node.js | `22.19+` |",
+        "DeepSeek Harness 仍处于开发者预览阶段；上游 UI 或服务变更可能需要同步更新插件。",
+        "遇到\"端点因 developer 角色拒绝请求\"之类的情况，面板会直接给出警告与替代建议（例如阿里云百炼端点建议改用内置 zai 路由）。",
+        "两个开关都只保存在当前浏览器。",
+        "上游目录收录该模型后，手写声明即可删除；手写条目始终优先于目录。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/readme/themes.webp\" alt=\"推理强度选择器在 DeepSeek Harness 深色和浅色主题中的真实效果\" width=\"1200\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/settings.webp\" alt=\"DeepSeek Harness 通用设置中的推理强度滑块和大肥鱼滑块开关\" width=\"1200\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "hero.webp treated as decorative banner and excluded from media.",
+        "Config YAML examples excluded per rubric; codeExamples empty.",
+        "outputs empty: UI states are shown via screenshots rather than described in text."
+      ]
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DeepSeek Harness GenUI lets an Agent create a focused interface for the current task: something that explains a difficult relationship or collects a complex user response.",
+        "The Coding Agent writes ordinary React + TypeScript, not a component-tree DSL or IR.",
+        "The interface can save what the user selected, entered, or changed so the next Agent turn can read it and continue the task.",
+        "The same app can sit inside the answer or open beside the conversation.",
+        "Later edits update the same app. A failed update never replaces the current working version.",
+        "`DESIGN.md` controls the design language, not the page structure. React + TypeScript remains free to implement simulations, graphics, maps, timelines, code graphs, animation, and irregular layouts.",
+        "Inline, Canvas, fullscreen, and CLI/localhost are different surfaces over the same task state."
+      ],
+      "usageItems": [
+        "Start a new Web session and paste one of these prompts:",
+        "After changing and saving something in the interface, ask:",
+        "In Web, access can be reviewed or revoked from the app card."
+      ],
+      "usageActions": [
+        "Plan a Saturday route with a museum, a riverside garden, and dinner. Build an\ninterface where I can change the times and make the garden optional.",
+        "Trace how a generated app reaches the permission-gated runtime in this\nrepository. Build an interactive code-path explorer grounded in the source.",
+        "What did I just choose in the interface? Continue from the saved result.",
+        "Ask from the CLI for a source-grounded explanation of a real project flow."
+      ],
+      "ioPairs": [
+        "❯ Where does the path I selected stop?\n\n  It reaches the permission check in src/runtime/server.ts, then stops before\n  the connected tool runs because access has not been allowed."
+      ],
+      "codeExamples": [
+        "## CLI Example\n\nThe terminal profile returns a localhost app. A follow-up can refer to the path already selected in that app.\n\n```text\n❯ Explain how a generated app reaches the permission-gated runtime in this",
+        "## Try It in Two Minutes\n\nStart a new Web session and paste one of these prompts:\n\n```text\nPlan a Saturday route with a museum, a riverside garden, and dinner. Build an"
+      ],
+      "usecases": [
+        "Use an interface when the user needs to see a difficult relationship or make several connected choices. Plain questions, rewriting, summaries, and simple lists stay in prose.",
+        "Turn candidate availability into a short list of useful 90-minute writing blocks.",
+        "Move light, carbon dioxide, temperature, and stomatal controls to find the limiting step.",
+        "Ask from the CLI for a source-grounded explanation of a real project flow."
+      ],
+      "outputs": [
+        "The result is a local explorer with files, functions, branches, and the path selected by the user.",
+        "The interface saves the three choices to the task.",
+        "The terminal profile returns a localhost app."
+      ],
+      "reliability": [
+        "Generated code runs in a sandbox.",
+        "Direct API requests are limited to declared, credential-free public HTTPS routes.",
+        "Temporary links and grants expire after 7 days; saved task state expires 7 days after its last update.",
+        "MCP credentials never enter generated code.",
+        "Before opening a connected app, Harness presents the complete access list for one task-scoped decision; changed capabilities are shown again, and undeclared calls are blocked.",
+        "Every candidate is compiled and checked against the source contracts before it can replace the last working version.",
+        "The plugin does not download or launch a browser.",
+        "Repository tests use Playwright and Vitest.",
+        "The repository CI separately exercises the sandboxed runtime in Chromium; plugin users do not need it.",
+        "Use Node.js `^22.19.0 || >=24`."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/assets/hero-en.png\" width=\"1280\" alt=\"DeepSeek Harness with an interactive day plan inline and a scientific model open in Canvas\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/calendar-planner.jpg\" width=\"280\" alt=\"English interface for choosing three writing slots\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/photosynthesis-explorer.jpg\" width=\"280\" alt=\"English interactive photosynthesis model with four causal controls\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/code-path-explorer.jpg\" width=\"280\" alt=\"English source-grounded code path explorer returned from a CLI request\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/code-path-inline.jpg\" width=\"620\" alt=\"An interactive code path shown inline in a DeepSeek Harness conversation\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "The DeepSeek Harness sidebar, conversation, and code-path explorer visible together in the right-side Canvas",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "All images are externally hosted on raw.githubusercontent.com, so each carries weight 0.5.",
+        "The Canvas screenshot's markup exceeds the excerpt limit; its unique caption is recorded instead."
+      ]
+    },
+    {
+      "repo": "seriousz158/dsh-memory",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a local, Git-backed long-term-memory plugin for [DeepSeek Harness (DSH)]",
+        "It adds one persistent setting, a safe settings-page workflow for clearing memories, and an optional idle-session synchronizer.",
+        "The host plugin injects memory guidance only when `memory.enabled` is true",
+        "the UI plugin lets a user inspect the repository state, toggle the setting, and clear learned memory through a deliberate two-step confirmation.",
+        "Markdown records support front matter, namespaced ids, provenance, expiry\n  projection, deterministic conflict handling, and legacy compatibility.",
+        "`summary.md` is a short navigation snapshot; detailed knowledge belongs in\n  `handbook/`, `rollouts/`, and `archive/`.",
+        "`memory.search()` and `memory.context()` provide local, bounded retrieval\n  with source citations and usage-aware deterministic ordering.",
+        "Optional idle-session sync runs in a private per-run workspace.",
+        "The host provides dry-run/preview/apply flows, operation locking, health\n  checks, bounded batches, retry backoff, duplicate-id diagnostics, and\n  metadata-only journals.",
+        "Recovery/apply commits, rollback, backup export/import, and legacy migration\n  keep changes auditable and reversible."
+      ],
+      "usageItems": [
+        "In DSH Settings, find **长期记忆** and leave the switch on to enable recall for the next model call.",
+        "1. Click **删除记忆**, read the affected paths, then click **继续**.",
+        "2. Enter exactly `删除记忆`, then click the final confirmation.",
+        "Use Git history inside the local memory repository to recover a checkpoint."
+      ],
+      "usageActions": [
+        "In DSH Settings, find **长期记忆** and leave the switch on to enable recall for the next model call.",
+        "1. Click **删除记忆**, read the affected paths, then click **继续**.",
+        "2. Enter exactly `删除记忆`, then click the final confirmation.",
+        "./integrations/dsh/dsh-memory-sync"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "`status()` reports metadata such as `empty`, `dataFileCount`, `targetDirty`, and `recoverable`; it never returns the memory body."
+      ],
+      "reliability": [
+        "The clear operation is designed for recoverable day-to-day resets, not guaranteed privacy erasure.",
+        "Git history alone is not a secure-erasure mechanism.",
+        "Refuses unsafe repository layouts, symbolic-link escapes, non-repository roots, and path races during a clear operation.",
+        "a bounded and explicitly untrusted `summary.md` snapshot is\n  available to the model (12 KiB maximum).",
+        "The session filter redacts common credential shapes and home-directory prefixes before a transcript reaches the memory-extraction model.",
+        "| DSH runtime peer range | `@deepseek-ai/dsh@^0.1.0-rc.6` (rc.6 and rc.7) |",
+        "| Operating system | macOS is the supported/tested integration target |",
+        "later releases are unverified until they pass this repository's test suite.",
+        "They must not require a DSH account, start Chrome, launch a LaunchAgent, read the current user's memory/session folders, or make a paid model request.",
+        "It defaults to `workspace-write`; wider privileges are never a repository default."
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots, worked examples, or paired demos; ioPairs, codeExamples, usecases and media are empty rather than inferred.",
+        "Source lines wrap mid-sentence; excerpts preserve the exact original wrapping."
+      ]
+    }
+  ]
+}

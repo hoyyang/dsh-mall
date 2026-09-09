@@ -1,0 +1,561 @@
+{
+  "reviews": [
+    {
+      "repo": "zuorn/Tydora",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "The <mark>ultimate writing experience</mark>: WYSIWYG, with an interface so <mark>clean</mark> that only the words remain.",
+        "**Relationship graphs** form between notes — the <mark>gravitational lines of thought</mark>.",
+        "And the **infinite whiteboard canvas** lets you personally guide these <mark>stars</mark>, <mark>connecting them freely</mark>, <mark>restructuring logic</mark>.",
+        "Turn any document into a **mind map** with one click. Linear text instantly unfolds into a **structure** of clear branches — hierarchy and connections at a glance.",
+        "**Publish your local knowledge repository as a static website with one click.**"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Outlining, dissecting books, reviewing ideas — no need to switch tools, the <mark>flow</mark> never breaks.",
+        "Blogs, documentation, personal wikis."
+      ],
+      "outputs": [],
+      "reliability": [],
+      "media": [
+        {
+          "excerpt": "![image.png](website/assets/image-20260815-221141.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![image.png](website/assets/image-20260815-171029.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![image.png](website/assets/image-20260815-171200.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![image.png](website/assets/image-20260815-171446.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![image.png](website/assets/image-20260815-172124.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README is promotional; no operational usage steps, code examples, reliability, or verification evidence beyond install/run-from-source instructions.",
+        "Screenshot captions are duplicated placeholder text (image.png), so the exact image markup is used as the media excerpt."
+      ]
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-tabbit",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "The working guide for browser automation: persistent task spaces, locators and waits, screenshots, receipts and recovery.",
+        "Environment preflight: detects installed stable Tabbit editions, requires version `1.9.0` or newer, and verifies the `tabbit-cli` resident runtime.",
+        "When Tabbit is missing or outdated, it starts a DSH background job that downloads the region-appropriate installer.",
+        "It selects the right Windows x64, macOS Apple Silicon, or macOS Intel package, saves it to the user's `Downloads` folder, reports download progress, and notifies the absolute installer path on completion.",
+        "Plugin update check: compares the installed plugin version with the published changelog at most once a day, silently skips offline failures, and records a version the user declined.",
+        "When a newer release exists, the skill loads with an update notice showing what the new version added.",
+        "Treats the runtime as available when multiple Tabbit instances are running; the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint instead of reporting the instance ambiguity as an unavailable runtime.",
+        "Diagnoses the DSH sandbox mode required to invoke the CLI on the current platform: Windows reports `cliSandboxMode: danger-full-access`, other platforms report `default`.",
+        "Caches a successful environment check per agent session and re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+      ],
+      "usageItems": [
+        "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:",
+        "The model loads the skill via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`.",
+        "**`ready`** — a stable Tabbit edition at `1.9.0` or newer is installed and the runtime is running; the agent continues with the `tabbit-cli` workflow.",
+        "**`restart-required`** — the installed version is sufficient, but the `tabbit-cli` runtime is not running; the user is asked to restart Tabbit Browser once."
+      ],
+      "usageActions": [
+        "The model loads it via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`.",
+        "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:",
+        "the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint",
+        "the user is asked to restart Tabbit Browser once.",
+        "re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Use it for web automation, information extraction, QA, and benchmarks."
+      ],
+      "outputs": [],
+      "reliability": [
+        "A stable Tabbit Browser at version `1.9.0` or newer: either the international `Tabbit` or the domestic `Tabbit Browser` — installing either one is enough.",
+        "The current DSH profile provides a Bash/Shell tool running on the same host machine as Tabbit Browser.",
+        "On Windows, DSH's `read-only` and `workspace-write` restricted tokens cannot write to the Runtime named pipe.",
+        "does it ask the user to switch the current DSH session to Full Permission — and it then stops the task immediately, without retrying or continuing browser operations.",
+        "Development builds are not detected.",
+        "The plugin does not provide native browser tools such as `tabbit_browser_evaluate`.",
+        "If DSH's Bash runs in a sandbox such as E2B or a remote container that cannot access the local GUI browser, this skill cannot make Tabbit automation work there.",
+        "It never opens the `.dmg`/`.exe` automatically."
+      ],
+      "media": [
+        {
+          "excerpt": "![Tabbit Browser for DeepSeek Harness](tabbit-for-dsh.png?v=2)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README text is identical to Tabbit-Browser/dsh-plugin in this batch; annotations are therefore the same.",
+        "No paired input/output examples or operational code fences beyond installation are shown."
+      ]
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "The working guide for browser automation: persistent task spaces, locators and waits, screenshots, receipts and recovery.",
+        "Environment preflight: detects installed stable Tabbit editions, requires version `1.9.0` or newer, and verifies the `tabbit-cli` resident runtime.",
+        "When Tabbit is missing or outdated, it starts a DSH background job that downloads the region-appropriate installer.",
+        "It selects the right Windows x64, macOS Apple Silicon, or macOS Intel package, saves it to the user's `Downloads` folder, reports download progress, and notifies the absolute installer path on completion.",
+        "Plugin update check: compares the installed plugin version with the published changelog at most once a day, silently skips offline failures, and records a version the user declined.",
+        "When a newer release exists, the skill loads with an update notice showing what the new version added.",
+        "Treats the runtime as available when multiple Tabbit instances are running; the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint instead of reporting the instance ambiguity as an unavailable runtime.",
+        "Diagnoses the DSH sandbox mode required to invoke the CLI on the current platform: Windows reports `cliSandboxMode: danger-full-access`, other platforms report `default`.",
+        "Caches a successful environment check per agent session and re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+      ],
+      "usageItems": [
+        "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:",
+        "The model loads the skill via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`.",
+        "**`ready`** — a stable Tabbit edition at `1.9.0` or newer is installed and the runtime is running; the agent continues with the `tabbit-cli` workflow.",
+        "**`restart-required`** — the installed version is sufficient, but the `tabbit-cli` runtime is not running; the user is asked to restart Tabbit Browser once."
+      ],
+      "usageActions": [
+        "The model loads it via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`.",
+        "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:",
+        "the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint",
+        "the user is asked to restart Tabbit Browser once.",
+        "re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Use it for web automation, information extraction, QA, and benchmarks."
+      ],
+      "outputs": [],
+      "reliability": [
+        "A stable Tabbit Browser at version `1.9.0` or newer: either the international `Tabbit` or the domestic `Tabbit Browser` — installing either one is enough.",
+        "The current DSH profile provides a Bash/Shell tool running on the same host machine as Tabbit Browser.",
+        "On Windows, DSH's `read-only` and `workspace-write` restricted tokens cannot write to the Runtime named pipe.",
+        "does it ask the user to switch the current DSH session to Full Permission — and it then stops the task immediately, without retrying or continuing browser operations.",
+        "Development builds are not detected.",
+        "The plugin does not provide native browser tools such as `tabbit_browser_evaluate`.",
+        "If DSH's Bash runs in a sandbox such as E2B or a remote container that cannot access the local GUI browser, this skill cannot make Tabbit automation work there.",
+        "It never opens the `.dmg`/`.exe` automatically."
+      ],
+      "media": [
+        {
+          "excerpt": "![Tabbit Browser for DeepSeek Harness](tabbit-for-dsh.png?v=2)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README text is identical to Tabbit-Browser/dsh-tabbit in this batch; annotations are therefore the same.",
+        "No paired input/output examples or operational code fences beyond installation are shown."
+      ]
+    },
+    {
+      "repo": "liguobao/deepseek-harness-remote",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Continue active sessions and review their latest progress from another device",
+        "Send new instructions, change direction, and use image prompts with Harness `dsh-v0.1.1-rc.2`",
+        "Answer questions and permission requests from clients with live conversation controls",
+        "Open workspaces from another authorized computer on the same account",
+        "Preview remote files between two Harness installations with the optional `dsh-file-viewer` plugin"
+      ],
+      "usageItems": [
+        "Open **Remote** from the Harness sidebar.",
+        "Sign in with a GitHub or Zhihu QR code, or use your account and password.",
+        "Enable remote control for the current computer.",
+        "On another device, open DSH Desktop, Remote Web, or the Android client and sign in to the same account.",
+        "Select the online Host, then choose an existing workspace or browse remote directories to open one.",
+        "Enable **Allow control of this device** in Remote settings to make the current computer\navailable as a Host.",
+        "Sign in to the Android client with your existing account, select an available computer,\nopen a workspace, and continue the conversation with text or image prompts."
+      ],
+      "usageActions": [
+        "Open **Remote** from the Harness sidebar.",
+        "Sign in with a GitHub or Zhihu QR code, or use your account and password.",
+        "Enable remote control for the current computer.",
+        "Enable **Allow control of this device** in Remote settings",
+        "Select the online Host, then choose an existing workspace or browse remote directories to open one."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Return to the same Harness session from whichever device is with you. Harness keeps running on your work computer, with the same workspaces, tools, and project setup."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Session traffic is end-to-end encrypted. The service relays ciphertext without storing session plaintext or device private keys.",
+        "Server membership and the Host's locally pinned peer identity must both authorize a connection.",
+        "Remote does not expose a direct shell, PTY, general tool RPC, or remote desktop.",
+        "The workspace picker lists folders only and returns bounded, read-only directory metadata.",
+        "Remote file preview cannot write, delete, upload, execute, or open a path in an external application.",
+        "Removing a device revokes its credentials, membership, and active Remote connections.",
+        "Compatible with DeepSeek Harness `dsh-v0.1.1-rc.2`.",
+        "The public service currently uses the hosted Remote relay. A supported self-hosted relay\noption is not available yet.",
+        "Credential values remain write-only, and Host-local document/open actions are never exposed."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/images/setting.png\" alt=\"Remote settings showing an authorized and online Host\" width=\"520\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/host-list.png\" alt=\"Remote workspace picker listing online Hosts\" width=\"900\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/remote.png\" alt=\"A Harness conversation running through an encrypted remote connection\" width=\"900\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/mobile-list.jpg\" alt=\"Android client listing online and offline computers\" width=\"30%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/image-msg.jpg\" alt=\"Sending an image prompt from the Android client\" width=\"30%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/image-result.jpg\" alt=\"Viewing the image response in the Android client\" width=\"30%\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No paired input/output examples or non-install code fences are provided.",
+        "Screenshot captions describe UI states rather than textual outputs and were not double-counted as outputs."
+      ]
+    },
+    {
+      "repo": "N0zoM1z0/th08",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "| Web | **Playable** | Public WebAssembly/WebGL 2 build |",
+        "| Linux | **Playable** | Native i386 ELF and portable CI package |",
+        "TH08 Web compiles the reconstructed C++ game code with Emscripten and runs it\nas WebAssembly on a browser worker."
+      ],
+      "usageItems": [
+        "Select `th08.dat` and `thbgm.dat` from a legal TH08 installation in the\nlauncher.",
+        "After first-time setup, use the incremental launcher:",
+        "Extract it and pass the original data directory:",
+        "Supply your own original executable as `resources/th08.exe`:",
+        "Read current figures directly from the ledgers:"
+      ],
+      "usageActions": [
+        "Select `th08.dat` and `thbgm.dat` from a legal TH08 installation in the\nlauncher.",
+        "Supply your own original executable as `resources/th08.exe`:",
+        "Verify the private target before analysis or comparison:",
+        "Read current figures directly from the ledgers:"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "python3 scripts/verify-target.py",
+        "scripts/play-modern-linux.sh \"/path/to/the/original/TH08 directory\"",
+        "./run-th08.sh \"/path/to/the/original/TH08 directory\"",
+        "python3 scripts/analysis/report-reconstruction-status.py --summary"
+      ],
+      "usecases": [],
+      "outputs": [
+        "| Authored source | **Complete** | 1,107 / 1,107 functions are present in source |",
+        "| Strict authored comparison | **99.86% by bytes** | 1,105 / 1,107 functions are accepted as exact |",
+        "The CI workflow publishes `th08-modern-linux-i386.tar.gz` as a portable\nActions artifact."
+      ],
+      "reliability": [
+        "Running on a modern platform is not an exactness claim, and source presence is\nnot counted as a byte-exact result.",
+        "They do not bundle the original executable or game archives; players must\nprovide data from a legally obtained copy of TH08.",
+        "Neither file is uploaded, bundled,\ncached by the site, or placed in persistent browser storage.",
+        "Chrome is\nrecommended for the best observed frame pacing; Firefox is supported but is\nusually slower.",
+        "The native i386 ELF has been exercised under WSLg and in a Kali Linux x86-64\nvirtual machine.",
+        "During the Stage 4-to-5 transition, a dynamic text texture can tile across the\nouter frame and HUD, most visibly as repeated `Yakumo Yukari` text.",
+        "On software-rendered systems, a fresh\nconfiguration's fullscreen FPS/vsync calibration can be slow; reusing an\nexisting `th08.cfg` is optional.",
+        "native startup is not yet reliable and the build still depends\non a non-redistributable DirectX SDK debug DLL. There is no supported Windows\nrelease asset yet.",
+        "No native executable or package exists yet.",
+        "Never\ncommit the original executable, DAT archives, extracted retail assets, private\nanalysis databases, or credentials."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"resources/progress.svg\" alt=\"TH08 exact-source and playable-platform progress\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "Original Japanese TH08 1.00d title screen",
+          "weight": 1
+        },
+        {
+          "excerpt": "TH08 native Linux reconstruction starting and running on Kali Linux",
+          "weight": 1
+        },
+        {
+          "excerpt": "Known Linux Stage 5 dynamic text texture tiling bug",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit end-user use cases are stated; contributing areas were not counted as use cases.",
+        "Web-port image, links, and documentation belong to the linked th08-web project and were excluded as linked-project media."
+      ]
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "它会自动识别包类型，在需要时使用 AppID 解密，并完成解包、反编译、排版整理和结果检查。",
+        "支持普通包、加密包和常见微信 4.x 结构；加密包需要匹配的 AppID。",
+        "自动反编译并整理 JSON、JavaScript、WXML 和 WXSS，无法确认的内容会如实标记。",
+        "提供实时进度、结果状态、静态质量分、检查提示和技术报告。",
+        "下载 ZIP 只包含 `src/`，原始解包依据不会混入交付文件。",
+        "支持在线使用与单机 Docker Compose 自托管，不依赖外部数据库、缓存或消息队列。"
+      ],
+      "usageItems": [
+        "打开 [seewxapkg.keepbuild.cn](https://seewxapkg.keepbuild.cn/)，选择或拖入 `.wxapkg` 文件即可。",
+        "选择 `.wxapkg` 文件；加密包填写 18 位 AppID（`wx` + 16 位小写十六进制字符）。",
+        "点击“开始反编译”，等待系统自动处理。",
+        "查看结果提示并下载只含 `src/` 的反编译结果。",
+        "不同微信版本的目录可能变化，下面仅作为常见位置参考："
+      ],
+      "usageActions": [
+        "选择 `.wxapkg` 文件；加密包填写 18 位 AppID（`wx` + 16 位小写十六进制字符）。",
+        "点击“开始反编译”，等待系统自动处理。",
+        "查看结果提示并下载只含 `src/` 的反编译结果。",
+        "| `GET`          | `/api/health`                    | 健康状态、版本和运行能力 |",
+        "| `POST`         | `/api/compile`                   | 上传文件并创建任务       |",
+        "| `GET`          | `/api/events?taskId=<id>`        | SSE 实时进度             |",
+        "| `GET` / `HEAD` | `/api/download/:taskId`          | 下载 ZIP 或检查是否就绪  |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "curl -fsS -X POST http://localhost:9090/api/compile \\",
+        "./scripts/manual_validate.sh \"$WXAPKG_PATH\" http://127.0.0.1:9090 completed"
+      ],
+      "usecases": [
+        "本项目仅用于对已获授权的小程序包进行学习、研究、兼容性分析和故障排查。"
+      ],
+      "outputs": [
+        "`reports/` 技术报告通过结果页或任务 API 查询，不会进入下载 ZIP。",
+        "下载包是面向继续阅读和分析的干净工程："
+      ],
+      "reliability": [
+        "本项目所称“反编译”是对编译产物的**尽力静态恢复**，不是提取原始源码。结果可能缺少原变量名、注释、目录结构或运行时生成内容；“反编译结果已生成”也不代表与原工程完全一致或可以直接运行。",
+        "静态反编译，不通过 `eval`、`Function` 或 VM 执行包内 JavaScript。",
+        "反编译无法重新生成编译时已经丢失的注释、原始变量名、源码目录和构建配置，也无法静态确定所有动态生成、运行时注入或强混淆内容。",
+        "可以识别；缺少主包运行时时会跳过不可靠处理并标记为 `partial`",
+        "当前仅做分类识别，不承诺完整反编译",
+        "AppID 在一次解密尝试后即销毁，因此此后若进程意外中断，加密任务需要重新提交。",
+        "解包与打包会检查路径穿越、绝对路径、重复 ZIP 条目和符号链接。",
+        "API 没有内置用户认证和按用户划分的任务权限。",
+        "结果评分衡量结构完整度和静态可解析性，不表示原始源码复现程度，也不保证运行正确性。",
+        "敏感、私有或未获授权的软件包请勿上传，建议在受控环境中自托管处理。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./ScreenShot.png\" alt=\"See Wxapkg V2 微信小程序反编译工具首页\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Star-history media and CI/stars badges excluded as popularity/decoration.",
+        "Configuration environment-variable table and deployment commands excluded per install/config rule."
+      ]
+    },
+    {
+      "repo": "oil-oil/dsh-vision",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Vision-capable models keep receiving images natively.",
+        "When the selected main model is text-only, the plugin asks a separate vision model to observe the original images, then lets the original DeepSeek model produce the final answer.",
+        "Multiple image attachments are analyzed together, so comparisons and combined evidence work naturally.",
+        "The user's task is forwarded unchanged instead of being wrapped in a fixed report template.",
+        "| Cloud vision unavailable | Falls back to macOS Vision or Tesseract | DeepSeek |",
+        "If Harness has no usable vision model, the plugin also reads `~/.config/see/config.env`.",
+        "The bridge then tries image-capable models already configured in Harness, followed by see-compatible private configuration and local OCR."
+      ],
+      "usageItems": [
+        "Restart Harness, then paste or drag images into the composer as usual."
+      ],
+      "usageActions": [
+        "Restart Harness, then paste or drag images into the composer as usual."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The plugin does not replace the main model selected in Harness.",
+        "Local fallback is primarily OCR and is not equivalent to full multimodal understanding.",
+        "Original images are sent only to vision services configured by the user.",
+        "Vision output is marked as untrusted observation data; instructions inside an image receive no system authority.",
+        "Generated vision context affects only the current model request and does not rewrite message history.",
+        "API keys are resolved through Harness credentials or the user's private see config and are never written to this repository.",
+        "It is write-only in the browser: the plugin can report whether a key exists, but never reads it back into the page, chat, settings document, or session log.",
+        "A Harness custom model must declare `image` as an input modality or it remains a text model.",
+        "This release supports `0.1.0-rc.6` and `0.1.0-rc.7`;",
+        "Changes apply without a restart."
+      ],
+      "media": [],
+      "concerns": [
+        "Hero banner SVG excluded as decorative; badges excluded.",
+        "Operational guidance is limited to install/configuration steps; no explicit use cases, outputs, or paired input/output examples are stated."
+      ]
+    },
+    {
+      "repo": "1692775560/dsh-Mimir-Academic-research",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Eight-view web workbench** (sidebar toggle → overlay, dark/light, 中/EN):",
+        "**Paper** Overleaf-style LaTeX studio (edit → compile → PDF preview, one-click AI fix)",
+        "**Library** arXiv + web search, AI relevance scoring, fullscreen PDF reader",
+        "**Experiments** metric charts, one-click paper figures",
+        "**Figures** upload/organize/insert into the paper",
+        "**Meetings** one-click group-meeting PPT (real paper figures + optional AI illustrations)",
+        "**Servers** GPU fleet probes + remote jobs",
+        "**Ledger** growth-record timeline + one-click progress report",
+        "**Agent tools & slash commands**: `/research-idea` `/research-plan` `/research-review` `/paper-write` `/paper-compile`, plus `arxiv_search`, `web_search`, `wiki_note`, `figure_save`, `latex_compile`, `meeting_deck`",
+        "**Nine bundled research skills** (literature review, novelty check, experiment planning, citation audit, rebuttal…) that teach the agent the workflow — no setup needed"
+      ],
+      "usageItems": [
+        "Click **Mimir** in the sidebar footer.",
+        "The wiki persists at `~/.dsh/storages/research_wiki.json`; artifacts land under `./.research`."
+      ],
+      "usageActions": [
+        "Click **Mimir** in the sidebar footer.",
+        "`/research-idea` `/research-plan` `/research-review` `/paper-write` `/paper-compile`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "literature · experiments &amp; remote GPUs · figures · LaTeX writing → compile → preview · group-meeting decks — one workbench, driven by your agent."
+      ],
+      "outputs": [],
+      "reliability": [
+        "dsh resolves plugin names from the profile directory; install with `dsh plugin --profile web add dsh-mimir@latest`, not from your cwd.",
+        "First tectonic compile downloads packages; raise `latex.timeoutMs` if it times out.",
+        "export `HTTPS_PROXY` before starting dsh when behind a proxy.",
+        "run `bash scripts/setup-web-search.sh` (local SearXNG), or `sxng init` against your own instance, then restart dsh.",
+        "dsh's plugin store uses pnpm, which holds back freshly published releases by default."
+      ],
+      "media": [
+        {
+          "excerpt": "▶ [Full MP4 demo](https://raw.githubusercontent.com/1692775560/dsh-Mimir-Academic-research/main/docs/media/mimir-demo.mp4) (22 MB)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Overview](docs/screenshots/tab-overview.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Paper](docs/screenshots/tab-paper.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Library](docs/screenshots/tab-papers.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Experiments](docs/screenshots/tab-experiments.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Meetings](docs/screenshots/tab-meetings.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Eight view screenshots exist in the README; the weighted media cap (6) required selecting six — Figures/Servers/Ledger screenshots omitted.",
+        "No paired input/output examples or non-install operational code fences; most operational detail is installation/configuration."
+      ]
+    },
+    {
+      "repo": "Renzic-Stone/DSH-EasyRewrite",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**撤回键**：每条用户消息的官方复制键旁。",
+        "**行内确认胶囊**（dsh 风格灰色胶囊：`撤回这条消息及其后 x 条提问？` + 白底黑字「确定/取消」）。",
+        "**惰性提交**：确认只回填输入框，真正截断发生在你按「发送」时；中途关掉 dsh，对话零改动。",
+        "**「正在修改」条**：输入框内部（分割线 + 标签 + 圆形 ×）；× 取消撤回并恢复原草稿。",
+        "**覆盖 / 合并**回填模式：覆盖模式下原草稿在发送/取消后都会恢复——信息零丢失。",
+        "**将删除数量实时统计**（仅用户提问，可开关）；0 条时显示「是否撤回这条消息？」。",
+        "**无痕替换**：发送即执行撤回——原会话**归档**，**同名新会话**（截断到目标消息之前）顶替，修改后的文本自动发出。",
+        "单击气泡 → 原位编辑（保留原始 Markdown 原文），Esc 取消 / Ctrl+Enter 确定。",
+        "**三档编辑宽度**（紧凑：气泡原宽起步上限 360px / 标准：固定 360px / 扩展：748px 顶满），自动增高 + 内部滚动。",
+        "**带图片消息 Rewrite 完整支持（撤回键 + 气泡框编辑双路径）**：确认后图片随修改文本一并发出；",
+        "待定草稿超过 10 秒未处理自动备份到本地文件（之后每 5 秒刷新）；「确定 / 发送」处理完成即删除备份。",
+        "每次撤回/编辑重发后，该次问询最后回答的操作区出现 **`‹ X/N ›`** 控件；点击（或键盘 ←/→）切换版本，**后续上下文跟随版本变动**。"
+      ],
+      "usageItems": [
+        "单击自己的消息气泡即可原位编辑；点击复制键旁的撤回键可撤回该消息及其后的全部内容。",
+        "触发条件：输入框未聚焦且当前会话最近一条为用户消息——等效点击该消息的撤回键（确认胶囊照常出现）。",
+        "全归档后仍可在 **设置 → 插件配置 → 「版本」组** 逐版本「恢复并打开」。"
+      ],
+      "usageActions": [
+        "单击自己的消息气泡即可原位编辑",
+        "点击复制键旁的撤回键可撤回该消息及其后的全部内容。",
+        "Esc 取消 / Ctrl+Enter 确定",
+        "点击（或键盘 ←/→）切换版本"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "兼容 DeepSeek Harness Web（rc.6+），纯官方扩展点实现，不改 DSH 源码。",
+        "DSH 的 fork 只能在闭合回合边界截断，未结束回合内的消息暂时无法撤回——等回复完成后即可。",
+        "恢复兜底：仅当本地没有待定状态时才从备份恢复——绝不覆盖正在编辑的草稿。",
+        "日志只记录本地行为，不上传任何数据。",
+        "卸载即还原：不留配置残留、不改动任何官方文件。",
+        "备份位置：`$DSH_HOME/dsh-easyrewrite/backups/<会话ID>.json`。"
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots, demo media, code examples, or paired input/output examples appear in the README.",
+        "Competitor-comparison and design-philosophy sections treated as marketing and excluded from evidence families."
+      ]
+    },
+    {
+      "repo": "liyupi/dsh-kun-like-pet",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**9 种状态动画**：完全沿用 Codex 桌宠精灵图契约（8 列 × 9 行、每格 192×208），素材零重绘",
+        "**实时感知 Agent 状态**：轮询 `agents` 服务感知每个 Agent 的 running/idle 状态，配合 `tools/execute`、`approval/request`、`agent/request-error` 事件推导工作 / 思考 / 等待 / 出错 / 空闲五种模式",
+        "**任务完成全机可闻**：宿主进程用系统命令播放「你干嘛~哎哟」，任何窗口、任何会话完成任务都会响，与浏览器静音无关",
+        "**可互动**：拖动桌宠到处跑（跑步动画方向跟随），点击它会挥手打招呼",
+        "**内置调试工具**：`kun_pet_debug` 可随时查看状态机内部计数与轮询健康度"
+      ],
+      "usageItems": [
+        "打开 `demo/index.html`（建议起个静态服务器，如 `npx serve .` 或 `python3 -m http.server`），即可查看全部 9 种动画并拖动互动。"
+      ],
+      "usageActions": [
+        "打开 `demo/index.html`（建议起个静态服务器，如 `npx serve .` 或 `python3 -m http.server`），即可查看全部 9 种动画并拖动互动。",
+        "点击它会挥手打招呼",
+        "`kun_pet_debug` 可随时查看状态机内部计数与轮询健康度"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "动态插件是会话级绑定：桌宠界面只注入到激活它的会话页面。",
+        "若要让桌宠形象出现在所有窗口，需将插件升级为宿主组合级插件包（欢迎 PR）。",
+        "部分部署里 `agent/status`、`agent/turn-stopping` 等 Agent 状态事件不流经动态插件所在总线（831 次事件观测中 status 类事件为 0），事件监听永远等不到「任务完成」。",
+        "轮询 `agents` 服务是最可靠的跨部署方案。",
+        "`assets/voice.mp3` 为网络公开的二创梗语音片段（含公众人物声音），版权归原作者所有，**仅供个人学习交流使用**，请勿用于商业用途"
+      ],
+      "media": [
+        {
+          "excerpt": "![Kun Like 桌宠 · 工作中](docs/screenshot-working.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Kun Like 桌宠 · 挥手](docs/screenshot-wave.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No code examples or paired input/output examples beyond installation/config fences.",
+        "State→action mapping table captured once as capability; bubble texts not double-counted as outputs."
+      ]
+    }
+  ]
+}

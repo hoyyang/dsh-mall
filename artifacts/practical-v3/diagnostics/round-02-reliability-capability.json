@@ -1,0 +1,2581 @@
+{
+  "generatedAt": "2026-09-02T03:17:19.328Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-02.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-production-scorer-evaluation-iteration-20.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "reliability-capability",
+  "question": "Diagnose reliabilityItems under-extraction and capabilityItems saturation/overcounting.",
+  "families": [
+    "reliabilityItems",
+    "capabilityItems"
+  ],
+  "under": [
+    {
+      "repo": "NanmiCoder/dsh-auto-mode",
+      "practicalScore": 17,
+      "oracleScore": 37,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 1.5,
+          "oracle": 9,
+          "gap": 7.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "This plugin does not implement a sandbox."
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "The file sandbox does not restrict reads, network access, or external services; the Windows backend reports `partial` enforcement."
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "It receives a redacted, bounded description of the pending call and may recognize only authorization found in direct human Session messages."
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "Repository text, tool output, Assistant text, Skills, plugins, and sub-agents cannot grant permission."
+          },
+          {
+            "heading": "## Shell, sandbox, and deletion behavior",
+            "excerpt": "| Multiple targets, globs, variables, piped operands, or nested-interpreter deletion | deny in the background and require one visible literal target per call |"
+          },
+          {
+            "heading": "## Shell, sandbox, and deletion behavior",
+            "excerpt": "| Filesystem root, Home, DSH_HOME, system, or credential-critical paths | deny unconditionally |"
+          },
+          {
+            "heading": "## Shell, sandbox, and deletion behavior",
+            "excerpt": "ephemeral runners such as `npx`, `bunx`, `pnpm dlx`, `yarn dlx`, and `npm exec` remain reviewed because they fetch and execute a package without first making it an ordinary project dependency."
+          },
+          {
+            "heading": "## Shell, sandbox, and deletion behavior",
+            "excerpt": "Overwriting or deleting pre-existing data still requires a direct user message that precisely names the effect and target."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "Routine project work runs directly inside the official `workspace-write` sandbox"
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "only semantic risks outside that boundary are classified using the current DSH model and the direct user's instructions"
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "genuine ambiguity asks once, and destructive access to critical paths is denied before execution."
+          },
+          {
+            "heading": "### Build from source",
+            "excerpt": "The Web client registers its copy with DSH's official locale service."
+          },
+          {
+            "heading": "### Build from source",
+            "excerpt": "Switching the DSH language updates the permission menus, active-mode control, General-settings selector, `/permission` picker description, and acknowledgement dialog without a restart."
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "Only an explicit one-shot widening may be approved automatically:"
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "| **Allow** | unfamiliar sandboxed Bash/PowerShell, routine dependency installation, local Git commits, project work, builds, tests, type checks, audited DSH coordination tools |"
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "| **Classify** | pre-session deletion, ephemeral downloaded-package execution, dangerous remote Git/database/service changes, sensitive reads, network transmission, external-system writes, exact sandbox widening |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "EverMind-AI/SkillCorpus",
+      "practicalScore": 45,
+      "oracleScore": 56,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 7,
+          "gap": 7
+        },
+        "capabilityItems": {
+          "machine": 10.5,
+          "oracle": 8,
+          "gap": -2.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## SkillHub integrations",
+            "excerpt": "The packaged Raven plugin is ready to install, but it will claim the `skills`\nstage once Raven merges its upstream `context_segments` slot; Raven's built-in retrieval keeps\nworking today."
+          },
+          {
+            "heading": "## Public artifacts",
+            "excerpt": "The hosted SkillHub\nservice is closed, and the full hosted catalog is not yet published as a downloadable dataset."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "LLM classification and\nquality scoring degrade gracefully to rules when no model endpoint is reachable, so the pipeline\nalways runs end to end."
+          },
+          {
+            "heading": "# fresh clone) and serve both models behind one endpoint  ->  /embed + /score",
+            "excerpt": "it is **not** a\ndrop-in for SkillHub's hosted-only `/openapi/v1/skills` API."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "`match/` and `evaluate/` are standalone toolkits with their own `requirements.txt`\n(torch / transformers, per benchmark); they are **not** pulled in by `pip install` of the producer."
+          },
+          {
+            "heading": "## Build your own corpus",
+            "excerpt": "Only skills from GREEN-licensed **sources** are exported"
+          },
+          {
+            "heading": "## License",
+            "excerpt": "every skill keeps its **original upstream license**; only GREEN\n  (MIT / Apache-2.0 / BSD / ISC / …) skills are included, none relicensed."
+          },
+          {
+            "heading": "## What SkillCorpus gives you",
+            "excerpt": "The core code is Apache-2.0 licensed (`match/` and `evaluate/` are MIT); each skill retains its\nupstream license."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What SkillCorpus gives you",
+            "excerpt": "It aggregates sources, applies safety and license gates,\nevaluates quality, and matches task-specific skills before the agent answers."
+          },
+          {
+            "heading": "## Stronger agents, one turn at a time",
+            "excerpt": "SkillHub selects vetted procedural\nknowledge for the task and puts it into the agent's context."
+          },
+          {
+            "heading": "## Query the API directly",
+            "excerpt": "serves the corpus in three tiers — discover\n(metadata), read (`skill_md`), download (zip with `scripts/`)."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "`cli build` runs the whole curation chain\n(`ingest → quality_pass → dedup_pass → license_audit → export.corpus`)."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "a bi-encoder fine-tuned from `Qwen3-Embedding-0.6B` for candidate recall"
+          },
+          {
+            "heading": "## Public artifacts",
+            "excerpt": "a reranker\n  fine-tuned from `Qwen3-Reranker-0.6B` that scores the top candidates."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "`skillsbench`,\n  `qwenclawbench`, `gdpval` — each self-contained with its own README and dependencies."
+          },
+          {
+            "heading": "## Public artifacts",
+            "excerpt": "packaged host adapters for OpenClaw · Hermes · WorkBuddy · Raven, plus DeepSeek Harness and an HTTP adapter"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ChisaAlter/Deepseek-Harness-Desktop",
+      "practicalScore": 29,
+      "oracleScore": 55,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 10,
+          "gap": 7
+        },
+        "capabilityItems": {
+          "machine": 9.5,
+          "oracle": 8.5,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **独立家目录** — 会话、设置、市场插件只在应用数据下的 `dsh-home`，不读、不迁、不改官方 CLI 的 `~/.dsh`。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **Harness `0.1.1-rc.1`** — 安装包钉官方 `dsh-v0.1.1-rc.1`。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **终端资源** — Ghostty wasm / 字体打进安装包；源码启动缺资源则拒绝启动。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **识图与网关** — 自定义网关不再误写官方 `DEEPSEEK_*`；主模型不识图时走官方兜底。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "**升级后不会自动带上旧对话，侧栏可能是空的。**"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "旧 rc 的 SQLite 会话库与本版不兼容，不要硬开。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "Harness 挂了会回到故障页并自动重启。用户插件把启动弄挂时，启动器可以按包禁用或先跳过用户插件。"
+          },
+          {
+            "heading": "## 从源码运行",
+            "excerpt": "需要 Windows 10+ 或 macOS 14+（Apple Silicon），Node 22.19+ / 24+，pnpm 11。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "下载安装即可使用，不用自己起 <code>dsh web</code>"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **官方界面** — 对话、工具调用、审批就是 `dsh web`，没有另做一套聊天页。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **启动器** — 冷启动先开启动器（更新询问、导入、版本、插件问诊）；托盘可随时再打开。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **Git** — 标题栏切分支、提交、推送、开变更请求。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`Ctrl+\\` 打开右栏（Files / Diff / Browser / Agents）"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "`` Ctrl+` `` 打开底栏终端，选区可送进对话。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **模型** — 第三方思考强度、识图兜底；最新一条用户消息可改完再发。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **外观** — 浅色 / 深色主题。壁纸在外观里选或点「浏览」打开图库（分类、搜索、收藏，确认后按窗口比例裁切）；毛玻璃和像素化也在外观里调。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Totoro-qaq/dsh-plugin-bridge",
+      "practicalScore": 32,
+      "oracleScore": 50,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 9,
+          "gap": -1
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 7.5,
+          "gap": 7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Why Bridge",
+            "excerpt": "**Fail closed** | The target goal is paused before kickoff. If that cannot be guaranteed, Bridge clears/cancels the target and sends no model request."
+          },
+          {
+            "heading": "## Evidence at a glance",
+            "excerpt": "The release gate is intentionally small and reproducible; these are regression results, not population guarantees."
+          },
+          {
+            "heading": "## Evidence at a glance",
+            "excerpt": "Five-part summary facts | **30/30**"
+          },
+          {
+            "heading": "## Evidence at a glance",
+            "excerpt": "Critical facts / obsolete-value resurrection | **90/90 · 0**"
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "CI covers Node.js 22 and 24."
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "Run `/bridge --doctor` after every Harness upgrade; it names missing required gateway methods instead of failing vaguely."
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "the current fixed three-run sample took 7.4–12.8 seconds of worker time, while `previewTimeoutMs` remains the hard bound;"
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "text-only models cannot inspect unresolved images;"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# restart dsh web once",
+            "excerpt": "**Text** exposes the fixed five sections as ordinary fields and list rows"
+          },
+          {
+            "heading": "# restart dsh web once",
+            "excerpt": "**Markdown** preserves full source freedom"
+          },
+          {
+            "heading": "# restart dsh web once",
+            "excerpt": "**Preview** renders Markdown or a complete JSON tree."
+          },
+          {
+            "heading": "# restart dsh web once",
+            "excerpt": "Long content scrolls inside the card while the action bar stays reachable."
+          },
+          {
+            "heading": "# restart dsh web once",
+            "excerpt": "**Confirm migration** opens the created target session."
+          },
+          {
+            "heading": "## Why Bridge",
+            "excerpt": "Decisions, paths, current state, and next steps move to a clean preset. Incompatible calls from the old tool assembly do not."
+          },
+          {
+            "heading": "## Migration decisions",
+            "excerpt": "Image already has assistant analysis | Copy that response verbatim"
+          },
+          {
+            "heading": "## Migration decisions",
+            "excerpt": "Image is unresolved and target accepts images | Copy the original attachment and preserve the source VLM"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "humblebanana/open-record-replay",
+      "practicalScore": 47,
+      "oracleScore": 64,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 7.5,
+          "gap": -2.5
+        },
+        "capabilityItems": {
+          "machine": 2,
+          "oracle": 8.5,
+          "gap": 6.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "`events.jsonl` is the primary evidence. Screenshots are not part of the current core recording path."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "- macOS."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "The core recorder does not require Screen Recording."
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "Recordings are local by default, but `events.jsonl` can contain sensitive data:"
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "Review recordings before sharing them. Do not publish raw recordings that contain secrets, private documents, customer data, internal URLs, or personal information."
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "Open Record/Replay is alpha software."
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "Future work may include richer adapters or optional visual evidence. They are not part of the current stable public path."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "- macOS.\n- Node.js 18+.\n- Swift toolchain / Xcode Command Line Tools.\n- Accessibility permission.\n- Input Monitoring permission."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "Open Record/Replay is a local-first macOS recorder for workflows that are easier to show than to write down."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "validates the recording quality"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "packages the evidence for an agent's skill creation flow."
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- `window.changed`"
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- `mouse.click`"
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- `mouse.drag`"
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- `keyboard.text_input`"
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- `keyboard.submit`"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ericshang98/Perfect-Web-Clone",
+      "practicalScore": 12,
+      "oracleScore": 38,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        },
+        "capabilityItems": {
+          "machine": 1,
+          "oracle": 7,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "Hands and eyes are deterministic (`pwc`) — they never call a model"
+          },
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "Pixel-perfect is a gate table, not a prompt"
+          },
+          {
+            "heading": "# Perfect Web Clone",
+            "excerpt": "it will not stop after the first viewport or call a similar-looking inert widget “done.”"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "If the page is WebGL, runtime canvas, or scroll-choreographed, that ceiling is reported up front. Content still clones; the runtime-drawn look may not."
+          },
+          {
+            "heading": "## CLI",
+            "excerpt": "`ok` is the only pass/fail that matters."
+          },
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "- Hands and eyes are deterministic (`pwc`) — they never call a model"
+          },
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "- Done means `ready_for_user_review` or `failed_with_residuals`, with evidence"
+          },
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "- Pixel-perfect is a gate table, not a prompt"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# Perfect Web Clone",
+            "excerpt": "turns one `clone <url>` into a full-page, scored replica."
+          },
+          {
+            "heading": "# Perfect Web Clone",
+            "excerpt": "The skill drives the agent through capture → section plan → clean React → build → measured repair"
+          },
+          {
+            "heading": "## The skill is the product",
+            "excerpt": "The agent authors code and repairs the worst measured section"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "Capture the live URL (integrity-checked, assets localized)"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "Plan the real page sections"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "Author clean React for every section"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "Score fingerprints, weight, and visual match"
+          },
+          {
+            "heading": "## How a clone run works",
+            "excerpt": "Repair the worst section, rebuild, re-measure"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "alaliqing/claude-paper",
+      "practicalScore": 46,
+      "oracleScore": 55,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 7.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# Claude Paper",
+            "excerpt": "It preserves the same study workflow, generated materials, code demonstrations, and interactive web viewer across supported agents."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Context-safe previews** - Save complete text to `paper.txt` while keeping a 50k preview in metadata"
+          },
+          {
+            "heading": "### System Requirements",
+            "excerpt": "- **Node.js**: 20.19.x, or 22.12.0 and higher"
+          },
+          {
+            "heading": "# Verify cross-agent adapters and reviewed canonical Claude Skills",
+            "excerpt": "# Verify cross-agent adapters and reviewed canonical Claude Skills\nnpm test"
+          },
+          {
+            "heading": "# Verify generated adapters are synchronized",
+            "excerpt": "# Verify generated adapters are synchronized\nnpm run check:adapters"
+          },
+          {
+            "heading": "# Runs adapter checks and tests before producing the publishable tarball",
+            "excerpt": "# Runs adapter checks and tests before producing the publishable tarball\nnpm pack --dry-run"
+          },
+          {
+            "heading": "### System Requirements",
+            "excerpt": "- **Agent host**: Claude Code, Codex, OpenCode, or DeepSeek Harness"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Features",
+            "excerpt": "- **Automatic PDF parsing** - Extract title, authors, abstract, links, and complete paper text"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Code repository detection** - Automatically finds GitHub, arXiv, CodeOcean links"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Interactive web viewer** - Nuxt.js interface with math equation support (KaTeX)"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Intelligent assessment** - Difficulty levels and paper type detection for adaptive content generation"
+          },
+          {
+            "heading": "# arXiv abstract URL (automatically converted to PDF)",
+            "excerpt": "# arXiv abstract URL (automatically converted to PDF)"
+          },
+          {
+            "heading": "# arXiv abstract URL (automatically converted to PDF)",
+            "excerpt": "5. Extract and include original code (if available)"
+          },
+          {
+            "heading": "# arXiv abstract URL (automatically converted to PDF)",
+            "excerpt": "7. Update the global search index"
+          },
+          {
+            "heading": "# arXiv abstract URL (automatically converted to PDF)",
+            "excerpt": "8. Launch the web viewer automatically"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "nutshellai-tech/mobius",
+      "practicalScore": 23,
+      "oracleScore": 46,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 3,
+          "oracle": 8.5,
+          "gap": 5.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "Available now on Windows, macOS, and Linux."
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "The demos on this page were produced by XiaoMo itself, recorded with zero human involvement."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Self-Evolving",
+            "excerpt": "Mobius rewrites itself from your input. Send a **change request**, a **screenshot**, or a **reference link** — Mobius turns them into real code, UI, plugins, or workflow updates, without interrupting your work."
+          },
+          {
+            "heading": "## Auto Research",
+            "excerpt": "Mobius orchestrates multiple agents into an autonomous research pipeline — reading papers, extracting methods, running experiments, and surfacing results."
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "Talk to it: create projects, split tasks, launch agents, track progress."
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "It supports voice input, multiple devices (Web, PC, mobile), and configurable reminders."
+          },
+          {
+            "heading": "## Any Model, Any Agent",
+            "excerpt": "Mobius is model-agnostic. GPT, Claude, **GLM-5.2**, Codex — all serve as execution engines inside the same project. Choose by task type, cost, or performance."
+          },
+          {
+            "heading": "## Connect Everything",
+            "excerpt": "Mobius schedules browsers, terminals, GPU clusters, embedded boards, cloud servers, and workstations — all inside the same task network."
+          },
+          {
+            "heading": "## Connect Everything",
+            "excerpt": "Reach your resources through SSH, AIMUX, and controllable proxies:"
+          },
+          {
+            "heading": "## Team Collaboration",
+            "excerpt": "Human members, AI agents, tasks, and deliverables in one view. Leads see who is doing what, where each agent is, what needs confirmation, and where risks exist — no more fragmented communication."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "csyangwen/dsh-memory-evolve",
+      "practicalScore": 57,
+      "oracleScore": 75,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 8.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 10.5,
+          "oracle": 11.5,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# 2. 重启 dsh web 即生效",
+            "excerpt": "> ⚠️ **不要再往 `~/.dsh/profiles/web/cordis.patch.yml` 手动 insert 本插件**：bundle patch 已自动注册，重复 insert 同 id 会让加载器报 duplicate loader entry id 无法启动。"
+          },
+          {
+            "heading": "## 认识它（30 秒）",
+            "excerpt": "> 小提示：插件里很多能力默认关闭（不占 AI 的工具清单），需要时在「Memory Evolve 设置」里打开即可。"
+          },
+          {
+            "heading": "## 场景一：让 AI 真正记住你（长期记忆）",
+            "excerpt": "它会写入项目关键记忆，**你确认后**才生效——AI 不会擅自往记忆里写东西"
+          },
+          {
+            "heading": "## 场景三：一个人指挥一群 AI 干活（内部团队）",
+            "excerpt": "唯一的前提是**主会话所在的 DSH 进程保持运行**；如果主会话空闲了或 DSH 被关掉，唤醒链就停了"
+          },
+          {
+            "heading": "## 场景四：重活派给外部 AI 代理（外部外援）",
+            "excerpt": "codex/kimi/hermes 都能真看图（grok 走 prompt 读图，zcode 纯文本会明确拒绝）"
+          },
+          {
+            "heading": "## 场景九：给每个会话配一个隐形评审员（会话评审）",
+            "excerpt": "它**只观察你在界面上看到的对话**（用户说的话 + Agent 的回复正文），看不到思考过程、工具调用参数等内部细节"
+          },
+          {
+            "heading": "## 场景十：散落的素材，一块画板装下（无限画板）",
+            "excerpt": "- **安全边界**：AI 只能读**已上板**的节点（没有任意路径读取 API）；敏感目录（.ssh/.config 等）即使上板也拒绝代理。"
+          },
+          {
+            "heading": "# 2. 用发版脚本一键完成：工作树/远端同步检查 → 构建 → 全量测试 → 打 annotated tag → 推送 tag",
+            "excerpt": "更新完成后**必须重启 dsh web 再刷新浏览器**（仅刷新页面不会加载新代码）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 场景一：让 AI 真正记住你（长期记忆）",
+            "excerpt": "- **用户档案**：你的偏好、公司、沟通习惯——AI 每回合都能看到；"
+          },
+          {
+            "heading": "## 场景一：让 AI 真正记住你（长期记忆）",
+            "excerpt": "- **全局事实**：环境、工具、惯例等长期知识；"
+          },
+          {
+            "heading": "## 场景一：让 AI 真正记住你（长期记忆）",
+            "excerpt": "- **项目关键记忆**：当前项目的约定、决策、架构、踩坑，自动注入上下文，重要结论可标记**只在某个 git 分支生效**；"
+          },
+          {
+            "heading": "## 场景一：让 AI 真正记住你（长期记忆）",
+            "excerpt": "- **项目日志 / 每日日志**：每回合自动记录进展，按需读取，历史可追溯。"
+          },
+          {
+            "heading": "## 场景二：多项目并行开发，每件事都不丢（待办 + 项目日志 + 本地搜索）",
+            "excerpt": "- **本地文件搜索**：对 AI 说「**搜一下本机有没有写过类似的东西**」——按文件名找文档（可扩展到全类型）；也能内容检索：「**哪个文档里提过 XX**」直接返回命中文件和片段。"
+          },
+          {
+            "heading": "## 场景三：一个人指挥一群 AI 干活（内部团队）",
+            "excerpt": "**持续运转（关键）**：主会话自己一直在运行，所以它能**随时唤醒已经休息（空闲）的会话继续干活**——催活、收结果、派下一轮，哪怕你不在电脑前，队伍也能一路推进到出结果。"
+          },
+          {
+            "heading": "## 场景六：AI 的自我纪律——提示词注入",
+            "excerpt": "提示词库是**指令范式资产库**：代码审查、调试、PRD、测试策略……把常用的工作方法固化成提示词（可分类、可搜索、可启用/禁用）。"
+          },
+          {
+            "heading": "## 场景七：会话太长、太贵、容易糊——书签与分支",
+            "excerpt": "- **会话书签**：每一轮都可以点星（☆）标记，「书签」列出全部书签（名称/轮次/时间/摘要，可搜索），**点击一键跳回任意一轮**——探索到「这个结论很重要」就打个星；"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ayase34/gal-view",
+      "practicalScore": 3,
+      "oracleScore": 32,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 4,
+          "gap": 3.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### 完成安装",
+            "excerpt": "bundle 层在启动时合成，必须重启才会加载插件"
+          },
+          {
+            "heading": "# 卸载后同样要重启 web",
+            "excerpt": "场景布局、素材图片、字体与阅读进度都保存在你的**浏览器**里（localStorage / IndexedDB），重装或卸载插件不会丢失；清除浏览器站点数据才会重置它们。"
+          },
+          {
+            "heading": "## 结构",
+            "excerpt": "Node half（极简，无宿主行为）"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "纯逻辑单测（node:test，同进程运行）"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "校验 client.js 新鲜度"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "Playwright 冒烟（需 DSH_CHECKOUT 指向 dsh checkout）"
+          },
+          {
+            "heading": "### 完成安装",
+            "excerpt": "安装后**重启 web**（bundle 层在启动时合成，必须重启才会加载插件）。"
+          },
+          {
+            "heading": "## 开发",
+            "excerpt": "npm test                # 纯逻辑单测（node:test，同进程运行）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# gal-view · GAL 视窗",
+            "excerpt": "编辑器一样拖拽/改属性/换图层，编辑结果实时同步回游戏模式。"
+          },
+          {
+            "heading": "## 默认预设",
+            "excerpt": "首次打开「GAL视窗」且本地没有存档场景时自动加载，编辑模式的「重置」也回到该预设。"
+          },
+          {
+            "heading": "# gal-view · GAL 视窗",
+            "excerpt": "DSH Web GUI 会话页的 **Galgame 风格对话视图 + 场景元素可视化编辑器**"
+          },
+          {
+            "heading": "# gal-view · GAL 视窗",
+            "excerpt": "在会话标签页栏（「对话」/「轨迹」）中间加入 **「GAL视窗」** 标签"
+          },
+          {
+            "heading": "# gal-view · GAL 视窗",
+            "excerpt": "16:9 Galgame 舞台：占位立绘、大对话框、打字机台词、玩家输入"
+          },
+          {
+            "heading": "# gal-view · GAL 视窗",
+            "excerpt": "内置「编辑模式」可像场景\n编辑器一样拖拽/改属性/换图层"
+          },
+          {
+            "heading": "## 默认预设",
+            "excerpt": "首次打开「GAL视窗」且本地没有存档场景时自动加载"
+          },
+          {
+            "heading": "## 默认预设",
+            "excerpt": "编辑模式的「重置」也回到该预设。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "drewnekota/cetus",
+      "practicalScore": 40,
+      "oracleScore": 61,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 8,
+          "gap": 5
+        },
+        "capabilityItems": {
+          "machine": 6.5,
+          "oracle": 9.5,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Get started",
+            "excerpt": "The prebuilt app supports **Apple Silicon** and **macOS 13 or later**."
+          },
+          {
+            "heading": "## Get started",
+            "excerpt": "**Early release:** Cetus is under active development."
+          },
+          {
+            "heading": "### Screen Context — let it remember what you were doing",
+            "excerpt": "Images and text stay on your Mac; capture is opt-in, with retention controls and an excluded-apps list."
+          },
+          {
+            "heading": "## Get started",
+            "excerpt": "Claude Code, Codex, and DeepSeek Harness reuse their existing CLI login — there is no second account to configure."
+          },
+          {
+            "heading": "### Turn meetings into searchable context",
+            "excerpt": "on-device, text only, no audio stored."
+          },
+          {
+            "heading": "### Turn meetings into searchable context",
+            "excerpt": "macOS 14.2+; falls back to mic-only below that"
+          },
+          {
+            "heading": "### Turn meetings into searchable context",
+            "excerpt": "Transcription is 100% on-device via Apple's Speech framework — streaming, punctuated, segmented on natural pauses."
+          },
+          {
+            "heading": "### Turn meetings into searchable context",
+            "excerpt": "all local, nothing uploaded. Off by default; the master switch means Cetus never listens until you opt in. macOS only for now."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### Quick Launcher — your agent, one hotkey away",
+            "excerpt": "Cetus brings along the current screenshot, frontmost app, browser URL, and selected text as removable context chips"
+          },
+          {
+            "heading": "### Automations — let it work while you are away",
+            "excerpt": "Turn any prompt into a one-off or recurring job (`at` / `every` / `cron` / `daily`)."
+          },
+          {
+            "heading": "### Global Quick Reply — draft the answer without leaving the thread",
+            "excerpt": "It follows the language and register of the thread and answers what was actually asked"
+          },
+          {
+            "heading": "### Screen Context — let it remember what you were doing",
+            "excerpt": "With screen context on, Cetus periodically captures frames, dedupes them, and OCRs them on-device with Apple Vision."
+          },
+          {
+            "heading": "### Screen Context — let it remember what you were doing",
+            "excerpt": "Your agent can later recall what was on screen or search the history by text and app."
+          },
+          {
+            "heading": "### Keep the runtime you already trust",
+            "excerpt": "Cetus translates each runtime into the same desktop workflow while preserving conversation context and background terminals across replies."
+          },
+          {
+            "heading": "### More ways to extend your runtime",
+            "excerpt": "**Persistent memory** you and the agent both edit, injected into future turns"
+          },
+          {
+            "heading": "### More ways to extend your runtime",
+            "excerpt": "**Cetus Remote**, an optional Tailscale-backed mobile companion for following runs and handling approvals"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PC2005-cloud/dsh-pet",
+      "practicalScore": 39,
+      "oracleScore": 69,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 8.5,
+          "gap": 4.5
+        },
+        "capabilityItems": {
+          "machine": 10.5,
+          "oracle": 9.5,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# ③ 安装本插件",
+            "excerpt": "本插件在 dsh **`0.1.1-rc.2`** 下开发并测试"
+          },
+          {
+            "heading": "# ④ 安装到 DSH（file: 指向本目录，用构建好的 lib）",
+            "excerpt": "`prepare:webm` / `prepare:mov` 才产出可安装的 lib（注入播放扩展名）；直接用 `tsdown` 裸构建会留下占位符，动画无法播放。"
+          },
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "自动 HSV 抠像易残边或误抠，PR 手动遮罩更精细。"
+          },
+          {
+            "heading": "### ②.5 🍎 Safari 版素材（webm → mov，GitHub Actions macOS 流水线）",
+            "excerpt": "`step04/` 是 **VP9-alpha webm**（Chrome/Edge/Firefox 原生支持）"
+          },
+          {
+            "heading": "### ②.5 🍎 Safari 版素材（webm → mov，GitHub Actions macOS 流水线）",
+            "excerpt": "**Safari 不认 webm alpha**（渲染黑底），只支持 **HEVC-with-Alpha mov**"
+          },
+          {
+            "heading": "### ②.5 🍎 Safari 版素材（webm → mov，GitHub Actions macOS 流水线）",
+            "excerpt": "该编码器（`hevcWithAlpha`，AVFoundation）**只有 macOS 有，Windows/Linux 产不出**"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "校验：自动检查产物 `hvc1` tag + alpha 通道真实存在，并打包上传为 artifact（`dsh-pet-hevc-alpha`）"
+          },
+          {
+            "heading": "## ⚙️ 余额展示（Balance）",
+            "excerpt": "未匹配的服务商按设计不触发动画、不显示气泡"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 插件功能",
+            "excerpt": "**余额展示**：实时显示当前 LLM 服务商的余额/额度——DeepSeek 官方显示账户余额（¥），OpenCode Zen Go 显示 5h/周/月 三个额度窗口中最紧张的一个"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "每次刷新按档位播放余额动画，头顶弹出联想气泡（随宠物大小等比缩放，10 秒后自动消失）"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **动画链**：每个动画（含待机）播完立即按权重选下一个"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **多开**：可配置同时显示多个宠物，每只宠物独立的大小与位置"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **屏幕漫游**：朝 facing 方向行走，先检查空间、不走出屏幕"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **点击/拖拽**：点击有回应动画，可拖到任意位置"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **左右朝向**：所有动画可镜像，人物可朝左/朝右"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **落地对齐**：动画统一脚底线，宠物始终站在地面上"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "liustack/modsearch",
+      "practicalScore": 28,
+      "oracleScore": 42,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 5.5,
+          "gap": 4.5
+        },
+        "capabilityItems": {
+          "machine": 7.5,
+          "oracle": 4,
+          "gap": -3.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Supported engines",
+            "excerpt": "Every engine participates by default."
+          },
+          {
+            "heading": "## Supported engines",
+            "excerpt": "Official endpoints stay built into the code and are never written as default config."
+          },
+          {
+            "heading": "## Contributing",
+            "excerpt": "This repo does not accept pull requests. The project is maintained by the author alone."
+          },
+          {
+            "heading": "## Disclaimer",
+            "excerpt": "ModSearch is MIT-licensed, so use is not restricted. The author gives no warranty and no endorsement for any particular use, commercial or otherwise."
+          },
+          {
+            "heading": "## Disclaimer",
+            "excerpt": "The upstream engines it drives (Antigravity CLI, Tavily, Exa, Firecrawl, Grok Build) each carry their own terms and quotas, and complying with them is the user's responsibility."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "When a channel fails or exhausts its quota, the next one takes over."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Authentication, rate-limit, and quota failures rotate to the next key before the engine chain falls back."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Works in Claude Code, Codex, Pi, and OpenCode."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Features",
+            "excerpt": "**Automatic failover.** When a channel fails or exhausts its quota, the next one takes over."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "**Per-engine key rotation.** Give Tavily, Exa, or Firecrawl multiple comma-separated keys."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Authentication, rate-limit, and quota failures rotate to the next key before the engine chain falls back."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "**Searches X (Twitter).** With Grok Build installed, ModSearch queries the corpus that web indexes cannot reach."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Install once, use everywhere.** Works in Claude Code, Codex, Pi, and OpenCode."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "web search, X search, and single-page fetch."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "With Grok Build installed, ModSearch queries the corpus that web indexes cannot reach."
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "it picks an engine, runs the search or fetch"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ningbainb/deepseek-harness-desktop",
+      "practicalScore": 40,
+      "oracleScore": 56,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 7.5,
+          "oracle": 12,
+          "gap": 4.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 👥 DeepSeek Harness Desktop 用户交流群",
+            "excerpt": "支持 **Windows 10 / 11 x64**"
+          },
+          {
+            "heading": "### 3.0.9 直接启动与自动修复",
+            "excerpt": "完整 Profile 失败时原样重试一次，不先停用插件，也不把“外来插件”当作启动阻断条件。"
+          },
+          {
+            "heading": "### 3.0.9 直接启动与自动修复",
+            "excerpt": "确认为插件或配置问题后，可调用用户已经配置的模型在私有事务工作区生成候选；只有通过注册检查的修改才会原子应用。"
+          },
+          {
+            "heading": "### 3.0.9 直接启动与自动修复",
+            "excerpt": "没有模型或可用 Key 时不会调用云端模型，页面明确显示无模型状态并继续同 Home 内置插件回退；Tools capability 按当前 Runtime 能力安全处理。"
+          },
+          {
+            "heading": "### 3.0.9 直接启动与自动修复",
+            "excerpt": "候选无效、没有可用模型或修复后仍失败时自动回滚，并从同一个 Home 启动内置插件；聊天和设置不搬家。"
+          },
+          {
+            "heading": "## 🧩 Skills 与插件",
+            "excerpt": "桌面版使用独立的 `desktop` profile，不会覆盖已有 DSH 配置。"
+          },
+          {
+            "heading": "## 🧠 Codex 模型与推理强度",
+            "excerpt": "授权 grant 只由官方凭据服务读写并保存在本机 DSH Home，前端只读取\"是否已登录\"，不会收到 access token 或 refresh token。"
+          },
+          {
+            "heading": "## 🔐 安全与隐私",
+            "excerpt": "DSH Runtime 默认监听本机回环地址"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 🖥️ Harness AI 编程工作台",
+            "excerpt": "在同一个窗口中即可完成 AI 对话、代码修改、文件管理、Git 操作"
+          },
+          {
+            "heading": "## 🌿 Git 图谱",
+            "excerpt": "通过分支选择器和 Git 图谱查看分支关系、Commit 历史、当前仓库状态和分支泳道，帮助快速理解项目变化和代码提交历史。"
+          },
+          {
+            "heading": "## 📁 文件、预览与 SCM",
+            "excerpt": "**文件预览**：Markdown、HTML、代码、Diff、CSV、PDF、Office、图片和文本"
+          },
+          {
+            "heading": "## 📁 文件、预览与 SCM",
+            "excerpt": "**Git 变更**：查看真实 SCM 状态并执行 Stage / Unstage / Discard"
+          },
+          {
+            "heading": "## 📱 手机远程控制",
+            "excerpt": "手机端可以查看工作区、新建和查看会话、收发消息、切换模型、调整思考强度，并与桌面端保持同步。"
+          },
+          {
+            "heading": "## 🖥️ SSH 远程开发",
+            "excerpt": "侧边栏内置 SSH 面板，可以直接管理远程服务器，并与 Agent 共用连接配置。"
+          },
+          {
+            "heading": "## 🖥️ SSH 远程开发",
+            "excerpt": "在 Agent 对话中直接调用已配置的远程主机"
+          },
+          {
+            "heading": "## 🧠 Codex 模型与推理强度",
+            "excerpt": "模型切换时，桌面端会根据模型实际能力展示可用的推理强度档位，并自动处理对应配置。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "imsai-sh/awesome-deepseek-harness-plugins",
+      "practicalScore": 25,
+      "oracleScore": 26,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 5.5,
+          "gap": 4.5
+        },
+        "capabilityItems": {
+          "machine": 8,
+          "oracle": 3,
+          "gap": -5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**格式校验**：每个候选仓库都要通过静态校验——读取默认分支的 Git tree，检查 `package.json`、`dsh.bundle.patch` 字段，以及 patch 文件在同一棵 tree 中确实存在。**全程只读文件，绝不安装依赖、绝不执行仓库代码。** 校验不通过就不进目录。"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "修改或删除既有条目的 PR 同样会跑静态审查，但不会自动合并，需要维护者人工审核后手动合并。"
+          },
+          {
+            "heading": "## 插件分类",
+            "excerpt": "GitHub 对单个文件的渲染长度有上限，条目较多的分类只列出其中一部分"
+          },
+          {
+            "heading": "## 免责声明",
+            "excerpt": "插件由各自作者开发和维护，收录不构成安全、质量或维护状态背书。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "掉了 topic 也只在一次成功的全量对账后才下架。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "- **格式校验**：每个候选仓库都要通过静态校验——读取默认分支的 Git tree，检查 `package.json`、`dsh.bundle.patch` 字段，以及 patch 文件在同一棵 tree 中确实存在。**全程只读文件，绝不安装依赖、绝不执行仓库代码。** 校验不通过就不进目录。"
+          },
+          {
+            "heading": "## 免责声明",
+            "excerpt": "本项目是社区维护的插件索引。插件由各自作者开发和维护，收录不构成安全、质量或维护状态背书。"
+          },
+          {
+            "heading": "## 免责声明",
+            "excerpt": "安装插件会在本机运行第三方代码，请在安装前自行审阅源码和依赖。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**定时收集**：自动收录带 `dsh-plugin` topic 的 GitHub 仓库，增量抓取新建与新推送的仓库，并定期全量对账——长期不活跃的仓库不会被漏收，掉了 topic 也只在一次成功的全量对账后才下架。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**自动同步**：PR 合并后由 CI 自动同步目录到网站数据库并刷新本 README，贡献者和维护者都不需要手工改任何生成文件。"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "该 Skill 会检查插件仓库、生成唯一允许提交的目录 JSON、验证变更范围，并在获得授权后创建 PR。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "- **定时收集**：自动收录带 `dsh-plugin` topic 的 GitHub 仓库，增量抓取新建与新推送的仓库，并定期全量对账"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "验证变更范围，并在获得授权后创建 PR"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "新增条目的非草稿 PR 通过静态审查后会自动合并"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "cocode-agency/cocode",
+      "practicalScore": 47,
+      "oracleScore": 50,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 8.5,
+          "gap": 4.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# Cocode",
+            "excerpt": "**Project status:** Developer preview. Cocode is built on the DeepSeek Harness\n> developer preview. It is an independent distribution, not an official DeepSeek\n> product, and upstream compatibility may change."
+          },
+          {
+            "heading": "# Cocode",
+            "excerpt": "The repository supports source\n> builds on macOS, Windows, and Linux; the current release scripts target macOS\n> and Windows artifacts"
+          },
+          {
+            "heading": "# Cocode",
+            "excerpt": "this repository does not include a hosted backend or\n> a vendored Harness checkout."
+          },
+          {
+            "heading": "## Install and try it in five minutes",
+            "excerpt": "keep `@cocode-agency/tui` and\n`@cocode-agency/host-supervisor` on the same version line; do not mix versions from\ndifferent releases."
+          },
+          {
+            "heading": "## Install and try it in five minutes",
+            "excerpt": "A real terminal is required."
+          },
+          {
+            "heading": "## Two entry points, one session",
+            "excerpt": "Both attach to the same Host through `@cocode-agency/host-supervisor`, so they can share\nsessions and task state when they use the same `DSH_HOME`, profile, and Host\nconfiguration scope."
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "Two escape hatches\nwhen that cache goes stale:"
+          },
+          {
+            "heading": "### Cocode Nut: no API key to apply for",
+            "excerpt": "Prompts, code, and model responses are\n  not used for training or sold to third parties, and request content is not\n  retained beyond completing the call, billing, and necessary troubleshooting."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Which tools a session runs, what prompts it\ncarries, which capabilities are on — that is a plugin assembly called a preset,\nand you can read its `agent.cordis.yml` right in the interface."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Four presets\nship built in — Standard, PTC, Minimal, and Creator — and you copy one to make\nit yours."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Files, Git, a terminal, a built-in browser, and\ndiff previews sit alongside the session."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "What the agent changed and what it ran\nis right there next to you, and you can take over by hand at any point instead\nof carrying context between windows."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "GUI and TUI connect\nto the same Host and read and write the same session record."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "An official DeepSeek key, any OpenAI-compatible\nself-hosted or gateway endpoint, or Cocode's own model service, Cocode Nut — all\nthree are available, and you can switch between them."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "vlln/whale-girl",
+      "practicalScore": 26,
+      "oracleScore": 38,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 5,
+          "gap": 4
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 2,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# or local directory: dsh plugin --profile web add <path-to-whale-girl>",
+            "excerpt": "Hidden on onboarding pages."
+          },
+          {
+            "heading": "# or from source: cd desktop && npm install && cd src-tauri && cargo build --release",
+            "excerpt": "the in-page pet hides while it runs (presence contract) and returns after exit/crash (TTL 45s)."
+          },
+          {
+            "heading": "# or from source: cd desktop && npm install && cd src-tauri && cargo build --release",
+            "excerpt": "Shell: Tauri v2 (recommended, ~12MB); legacy Electron shell kept (`npm i -D electron`)."
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "changes **apply live, no restart**:"
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "**Not configurable** (changing XP / title thresholds would break the accumulation ledger)."
+          },
+          {
+            "heading": "## Characters",
+            "excerpt": "Every character ships **all 15 states**"
+          },
+          {
+            "heading": "## Characters",
+            "excerpt": "the button is **greyed out when the manifest has a single character** (\"No other characters available\")."
+          },
+          {
+            "heading": "## Contributing",
+            "excerpt": "15 sheets + manifest entries, validated by `verify-assets`"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Characters",
+            "excerpt": "🎭 \"Switch Character\" cycles characters (or set `whale-girl:character` in localStorage); the button is **greyed out when the manifest has a single character** (\"No other characters available\")."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "A persistent companion floating bottom-right"
+          },
+          {
+            "heading": "## Characters",
+            "excerpt": "🎭 \"Switch Character\" cycles characters"
+          },
+          {
+            "heading": "## Characters",
+            "excerpt": "Every character ships **all 15 states**"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "V1ki/dsh-plugin-subscriptions",
+      "practicalScore": 48,
+      "oracleScore": 67,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 6,
+          "oracle": 10,
+          "gap": 4
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 12,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Tokens live at `~/.dsh/plugins/subscriptions/auth.json` (mode 0600) and refresh automatically."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Only logged-in providers appear in the session model picker"
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Copilot exposes no usage endpoint, so its card shows no usage section."
+          },
+          {
+            "heading": "## Use",
+            "excerpt": "Not logged in? The provider stays out of the picker, and requests fail with `MISSING_CREDENTIAL` pointing at the Settings page; nothing else breaks."
+          },
+          {
+            "heading": "### Multiple accounts",
+            "excerpt": "A Claude account imported from Claude Code stays synced with the CLI's credential store"
+          },
+          {
+            "heading": "## Model pools",
+            "excerpt": "Members past 95% on any usage window are gated out"
+          },
+          {
+            "heading": "## Model pools",
+            "excerpt": "failures fail over before the first stream chunk with cooldowns (`retry-after` when the provider sends one)"
+          },
+          {
+            "heading": "## Proxy",
+            "excerpt": "The password is stored in `~/.dsh/plugins/subscriptions/proxy.json` (mode 0600) and is never returned to the browser."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Use your **ChatGPT (Codex)**, **Claude**, and **Grok (X Premium)** subscriptions as LLM providers in [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — no API keys."
+          },
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Codex and Grok log in via OAuth in the dsh web UI (Settings → Subscriptions); Claude imports credentials from an existing Claude Code session"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "Logged-in providers join the session model picker with their live model catalogs:"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "Models that advertise reasoning levels get an **Effort** selector in the same menu"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "Codex models whose catalog advertises the fast tier (the codex CLI's fast mode) get a **Speed** toggle in the composer's tool row"
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Logged-in cards also show **subscription usage** — per rate-limit window (5-hour session, weekly, and per-model weekly where the plan has one) with the used percentage, a progress bar, and the reset time"
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "- **`x_search`** tool (Grok) — xAI's hosted X search, returning `{ answer, citations }`."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "- **`image_generate`** tool (ChatGPT or Grok) — `gpt-image-2` via the Codex backend, or `grok-imagine-image-2.0` via `api.x.ai/v1/images/generations`."
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "anysearch-team/anysearch-dsh",
+      "practicalScore": 48,
+      "oracleScore": 25,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 4,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 1,
+          "gap": -11
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "Run one to five searches concurrently; an individual failure does not affect the other results."
+          },
+          {
+            "heading": "## Compatibility and limitations",
+            "excerpt": "DeepSeek Harness is in developer preview and may make compatibility-breaking changes."
+          },
+          {
+            "heading": "## Compatibility and limitations",
+            "excerpt": "URL extraction is exposed through Harness's provider-neutral `web_fetch`; the plugin does not add a duplicate `anysearch_extract` tool."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "an individual failure does not affect the other results."
+          },
+          {
+            "heading": "## Environment requirements",
+            "excerpt": "Requires Node.js 22.19 or Node.js 24+, pnpm 11.7, and DeepSeek Harness."
+          },
+          {
+            "heading": "## Development",
+            "excerpt": "The live AnySearch E2E suite is opt-in."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "Advanced search can return cleaned page content on demand for deeper research."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "Keep using Harness's native `web_search` and `web_fetch`"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Awesome-AI-Pedia/Awesome-AI-Pedia",
+      "practicalScore": 23,
+      "oracleScore": 8,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 0,
+          "gap": -1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3,
+          "gap": -9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [],
+        "capabilityItems": [
+          {
+            "heading": "### 🎯 核心特性",
+            "excerpt": "- **🔍 本地搜索** — 内置全文搜索，快速定位所需内容"
+          },
+          {
+            "heading": "## 📂 知识库分类",
+            "excerpt": "> 以下分类均对应仓库根目录的实际目录，可直接进入查看原始 Markdown。"
+          },
+          {
+            "heading": "## 🗂️ 项目结构",
+            "excerpt": "侧边栏由 `docs/.vitepress/utils/sidebar.ts` 自动扫描生成。"
+          },
+          {
+            "heading": "### 🎯 核心特性",
+            "excerpt": "- **🌙 暗黑主题** — 默认暗色界面，长时间阅读不刺眼"
+          },
+          {
+            "heading": "### 🎯 核心特性",
+            "excerpt": "- **🚀 自动部署** — 推送到 `master` 自动构建并发布到 GitHub Pages"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yzlnew/infra-skills",
+      "practicalScore": 44,
+      "oracleScore": 44,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 4,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3,
+          "gap": -9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# AI Infrastructure Agent Skills",
+            "excerpt": "> This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use."
+          },
+          {
+            "heading": "### Construction Methodology (Unless Otherwise Specified)",
+            "excerpt": "3. **Validation**: Test skill-generated code examples to ensure correctness"
+          },
+          {
+            "heading": "### Construction Methodology (Unless Otherwise Specified)",
+            "excerpt": "4. **Maintenance**: Regular updates based on latest official documentation"
+          },
+          {
+            "heading": "# AI Infrastructure Agent Skills",
+            "excerpt": "This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use."
+          },
+          {
+            "heading": "## License",
+            "excerpt": "Skills contain advanced technical content and assume familiarity with GPU programming, compiler design, and deep learning systems."
+          },
+          {
+            "heading": "### Construction Methodology (Unless Otherwise Specified)",
+            "excerpt": "Test skill-generated code examples to ensure correctness"
+          },
+          {
+            "heading": "## License",
+            "excerpt": "Skills are provided as-is for development purposes."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### TileLang Developer",
+            "excerpt": "Write high-performance GPU kernels using TileLang for NVIDIA, AMD, and Ascend hardware."
+          },
+          {
+            "heading": "### Megatron Memory Estimator",
+            "excerpt": "Estimate GPU memory usage for Megatron-based MoE and dense models."
+          },
+          {
+            "heading": "### SLIME User",
+            "excerpt": "Guide for using SLIME (LLM post-training framework for RL Scaling)."
+          },
+          {
+            "heading": "### TikZ Flowchart",
+            "excerpt": "Create professional flowcharts and architecture diagrams using LaTeX TikZ with standardized styles."
+          },
+          {
+            "heading": "### Material You Slides",
+            "excerpt": "Create presentation slide decks using Material You (Material Design 3) design language."
+          },
+          {
+            "heading": "### Anthropic Theme Flowchart",
+            "excerpt": "Create polished standalone HTML/CSS flowcharts with Anthropic-inspired pastel styling, reliable geometry, and deterministic connector routing."
+          },
+          {
+            "heading": "### HF Architecture TikZ",
+            "excerpt": "Generate Sebastian-Raschka-gallery-style TikZ architecture diagrams for any HuggingFace decoder-only LLM, with per-block parameter formulas and concrete numbers."
+          },
+          {
+            "heading": "### OpenAI Dotcom Viz",
+            "excerpt": "Build figures in OpenAI's blog / research / system-card \"dotcom\" visual style, emitted as self-contained HTML/SVG with zero dependencies."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "shanliuling/dsh-image-gen",
+      "practicalScore": 48,
+      "oracleScore": 22,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 0,
+          "gap": -3
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 4,
+          "gap": -8
+        }
+      },
+      "citations": {
+        "reliabilityItems": [],
+        "capabilityItems": [
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "💬 **原生对话生图与编辑**：直接在 DeepSeek Harness 对话中生成图片，也可以基于已有图片继续修改。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🔁 **连续多轮编辑**：支持复用当前会话中的上传图片、历史生成图和上一轮编辑结果继续迭代。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🖼️ **画廊与图片工具**：自动汇总历史图片，支持搜索、筛选、全屏预览、复制、下载与删除。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🎨 **多 Provider 支持**：兼容 Google Gemini、OpenAI Images / Compatible、Seedream、DashScope Qwen Image。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "💾 **会话与工作区保存**：图片接入 DSH Attachment / Conversation，并可自动保存到当前工作区。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "- 💬 **原生对话生图与编辑**：直接在 DeepSeek Harness 对话中生成图片，也可以基于已有图片继续修改。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "- 🔁 **连续多轮编辑**：支持复用当前会话中的上传图片、历史生成图和上一轮编辑结果继续迭代。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "- 🎨 **多 Provider 支持**：兼容 Google Gemini、OpenAI Images / Compatible、Seedream、DashScope Qwen Image。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ikalus1988/MisakaNet",
+      "practicalScore": 74,
+      "oracleScore": 64,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 9.5,
+          "gap": -0.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## What is this?",
+            "excerpt": "No prompt leaking, no raw logs stored."
+          },
+          {
+            "heading": "### Register for unlimited access",
+            "excerpt": "Debug context is stripped by default; only shown when enabled."
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E1 | CI verified | Automated tests |"
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E2 | PR merged | Code review |"
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E3 | Maintainer verified | Human review |"
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E4 | Production proven | Real-world usage |"
+          },
+          {
+            "heading": "### Register for unlimited access",
+            "excerpt": "Local stdio MCP is unlimited."
+          },
+          {
+            "heading": "### How it works",
+            "excerpt": "Do not send secrets or raw private logs. Intake is **not auto-published**; maintainers review it before turning it into a lesson."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## AI Agent Friendly",
+            "excerpt": "✅ **MCP Server** — 6 tools for search, lessons, intake"
+          },
+          {
+            "heading": "## What is this?",
+            "excerpt": "Agent hits an error → search lessons → get a fix path."
+          },
+          {
+            "heading": "## What is the failure-memory protocol?",
+            "excerpt": "**Search** — BM25 keyword retrieval across all lessons."
+          },
+          {
+            "heading": "### Agent compatibility",
+            "excerpt": "If your agent finds no good lesson, submit a failure case directly"
+          },
+          {
+            "heading": "### Integration surfaces",
+            "excerpt": "| MCP | Search, get lesson, submit intake | `python3 scripts/mcp_server.py` |"
+          },
+          {
+            "heading": "# MisakaNet",
+            "excerpt": "> MisakaNet searches 310+ failure lessons so your agent skips known bugs."
+          },
+          {
+            "heading": "## AI Agent Friendly",
+            "excerpt": "- ✅ **MCP Server** — 6 tools for search, lessons, intake"
+          },
+          {
+            "heading": "## What is the failure-memory protocol?",
+            "excerpt": "- **Search** — BM25 keyword retrieval across all lessons. Zero dependencies. Python stdlib only."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yjh051108/dsh-router-standard",
+      "practicalScore": 48,
+      "oracleScore": 28,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 5,
+          "oracle": 7,
+          "gap": 2
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## v0.3.0 — real-assembly-chain fixes",
+            "excerpt": "v0.3.0 fixes all of it,\nverified against `@deepseek-ai/dsh-agent-loop` (0.1.0-rc.7) event ordering:"
+          },
+          {
+            "heading": "## v0.3.0 — real-assembly-chain fixes",
+            "excerpt": "inserted into `decision.messages` at `agent/pre-step`: same request as the\n  user message, near-field, cache-neutral, zero extra round-trips."
+          },
+          {
+            "heading": "# spec 路由预设（深度思考优先）",
+            "excerpt": "loader 按 URL 缓存模块——原地覆盖文件内容不生效"
+          },
+          {
+            "heading": "# spec 路由预设（深度思考优先）",
+            "excerpt": "路由模式在首个请求锁定（路径承诺），中途切 GUI 模型/\n   改配置不影响已运行会话。"
+          },
+          {
+            "heading": "# spec 路由预设（深度思考优先）",
+            "excerpt": "`parentSession` 会话跳过路由层（社区 #5 修复），shell-less\n   子代理不再崩溃。"
+          },
+          {
+            "heading": "# spec 路由预设（深度思考优先）",
+            "excerpt": "首轮路由读 `agent/inbox/claimed` 的原始\n   消息文本并经 `classifyTask` 分类——首轮即真实 band（不再 weak 兜底）。"
+          },
+          {
+            "heading": "## Tests",
+            "excerpt": "node --test router.test.mjs   # 11 tests: classification, bands, personas, plan-section survival"
+          },
+          {
+            "heading": "## 当前状态（v1.19.1，2026-08-24 · 研发线，尚未发布）",
+            "excerpt": "## 当前状态（v1.19.1，2026-08-24 · 研发线，尚未发布）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What it does",
+            "excerpt": "reads the session's first REAL user message, classifies\nthe task (build → react / fix → spec / ambiguous → weak)"
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "on the first\nmodel request injects the matching persona while keeping the full prompt\nsections"
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "the first-turn core tool surface follows the band\n(spec=read/edit/glob/grep, react=read/write/edit, weak=read/write/edit, each\nplus the platform shell)."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "Weak-band sessions also get a near-field routing\nguide in the SAME request as every real user message."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "After the first durable tool call the full Standard catalog is exposed and the\nrouter stops touching anything."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "The mode is derived from durable session\nevents, so resume/reload keeps it. The plan-mode prompt section is preserved,\nso plan boundaries do not reset the model's focus."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "reads the session's first REAL user message, classifies\nthe task (build → react / fix → spec / ambiguous → weak), and on the first\nmodel request injects the matching persona while keeping the full prompt"
+          },
+          {
+            "heading": "# spec 路由预设（深度思考优先）",
+            "excerpt": "`personaFor(mode, modelId)` reads the session's model route and\nselects the measured optimum automatically"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ariestar/sivtr",
+      "practicalScore": 66,
+      "oracleScore": 61,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 快速开始",
+            "excerpt": "Linux 上 `cargo binstall` 默认安装静态 musl 构建（不依赖系统 GLIBC 版本），与 `install.sh` 同源。"
+          },
+          {
+            "heading": "## 远程访问",
+            "excerpt": "分享是 opt-in、只读，默认在数据离开本机前脱敏常见密钥。"
+          },
+          {
+            "heading": "## 远程访问",
+            "excerpt": "远程传输走加密 iroh；需要时会自动启动 daemon。"
+          },
+          {
+            "heading": "## 远程访问",
+            "excerpt": "未登记的 origin 会报错"
+          },
+          {
+            "heading": "# 日常使用：像本地一样读队友的记忆",
+            "excerpt": "owner 退出（`leave`）会解散整组。"
+          },
+          {
+            "heading": "# 或分步：",
+            "excerpt": "sivtr 不会修改注册表——hook 只写在你的 PowerShell profile 里。"
+          },
+          {
+            "heading": "## 远程访问",
+            "excerpt": "分享是 opt-in"
+          },
+          {
+            "heading": "## 远程访问",
+            "excerpt": "默认在数据离开本机前脱敏常见密钥。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 特性",
+            "excerpt": "Agent 直接调用 `sivtr_search` / `sivtr_show` / `sivtr_zoom` / `sivtr_filter` / `sivtr_status`，不用你粘贴日志。"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **带输出的 shell history**：记录 Bash、Zsh、PowerShell、Nushell 里的命令、stdout/stderr、退出码、目录和耗时。"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **一个搜索面覆盖本地工作**：终端输出 + 所有已注册 Agent provider"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **精确证据，而不是摘要**：每个命中都落到稳定 ref，可 show / zoom / filter，或交给下一个 Agent。"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **跨设备访问**：只读分享 workspace，用 `desk:...` ref 像读本地一样浏览另一台设备；多设备还能组成 `group`，成员间自动同步、一次 `sync` 拉齐。"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **一个搜索面覆盖本地工作**：终端输出 + 所有已注册 Agent provider（Codex / Claude Code / Cursor / Dsh / Gemini / Goose / Hermes / OpenCode / OpenClaw / Grok / Pi / Qoder / Qoder-CN / Qwen …）——MCP 或 CLI 都能用。"
+          },
+          {
+            "heading": "## 特性",
+            "excerpt": "- **人用 CLI 仍然在**：search / show / filter / nav，以及 TUI 浏览器——有用，但不是主叙事。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "d-dev0101/open-sea-skin",
+      "practicalScore": 41,
+      "oracleScore": 44,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 9,
+          "gap": -1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Recommended — install as a DSH plugin",
+            "excerpt": "This package is tested with DeepSeek Harness `0.1.0-rc.6`."
+          },
+          {
+            "heading": "## Install option 1 — Chrome or Edge extension",
+            "excerpt": "The extension does **not** replace Chrome or Edge's new-tab page, change the\nbrowser homepage, or interfere with an existing new-tab extension."
+          },
+          {
+            "heading": "## Install option 1 — Chrome or Edge extension",
+            "excerpt": "It verifies\nthe Harness title, root, and server-injected boot marker before changing a page,\nso other local development sites also remain untouched."
+          },
+          {
+            "heading": "## Install option 1 — Chrome or Edge extension",
+            "excerpt": "Values are saved with\n`chrome.storage.sync`."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "- A local-only runtime: three.js and Geist are vendored; the extension and\n  installers make no CDN or analytics requests."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "- 256×256 mesh (160×160 in low/reduced-motion mode), DPR cap 1.5, adaptive\n  render scale 0.5–1.0, 60/30/20 FPS caps, hidden-tab pause, distance-based\n  shader work skips, reduced skin bloom"
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "- Duplicate-render prevention across all installation methods, bilingual UI,\n  keyboard focus trapping, Escape close, ARIA labels, and\n  `prefers-reduced-motion` support."
+          },
+          {
+            "heading": "## Native Harness source plugin",
+            "excerpt": "The integration is tested against Harness commit\n`47f943859bef` (2026-08-13) and deliberately stops if upstream anchors have\nchanged."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What is included",
+            "excerpt": "- WebGPU + three.js 0.178.0 + TSL, five Gerstner waves, analytic normals, FBM\n  detail, Fresnel sky reflection, sun glitter, foam, fog, sky/cloud band,\n  bloom, and ACES tone mapping."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "- Twelve-minute daylight cycle; manual daylight adjustment pins the selected\n  time until automatic cycling is re-enabled."
+          },
+          {
+            "heading": "# Open Sea Skin",
+            "excerpt": "A self-contained WebGPU ocean skin for DeepSeek Harness. It keeps the original\nfive-wave Gerstner/TSL look, adds a translucent Harness theme"
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "WebGPU + three.js 0.178.0 + TSL, five Gerstner waves, analytic normals, FBM\n  detail, Fresnel sky reflection, sun glitter, foam, fog, sky/cloud band,\n  bloom, and ACES tone mapping."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "DPR cap 1.5, adaptive\n  render scale 0.5–1.0, 60/30/20 FPS caps, hidden-tab pause, distance-based\n  shader work skips, reduced skin bloom, and automatic low-end detection."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "Twelve-minute daylight cycle; manual daylight adjustment pins the selected\n  time until automatic cycling is re-enabled."
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "Duplicate-render prevention across all installation methods"
+          },
+          {
+            "heading": "## What is included",
+            "excerpt": "bilingual UI"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "cocode-agency/cocode",
+      "practicalScore": 47,
+      "oracleScore": 50,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 8.5,
+          "gap": 4.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# Cocode",
+            "excerpt": "**Project status:** Developer preview. Cocode is built on the DeepSeek Harness\n> developer preview. It is an independent distribution, not an official DeepSeek\n> product, and upstream compatibility may change."
+          },
+          {
+            "heading": "# Cocode",
+            "excerpt": "The repository supports source\n> builds on macOS, Windows, and Linux; the current release scripts target macOS\n> and Windows artifacts"
+          },
+          {
+            "heading": "# Cocode",
+            "excerpt": "this repository does not include a hosted backend or\n> a vendored Harness checkout."
+          },
+          {
+            "heading": "## Install and try it in five minutes",
+            "excerpt": "keep `@cocode-agency/tui` and\n`@cocode-agency/host-supervisor` on the same version line; do not mix versions from\ndifferent releases."
+          },
+          {
+            "heading": "## Install and try it in five minutes",
+            "excerpt": "A real terminal is required."
+          },
+          {
+            "heading": "## Two entry points, one session",
+            "excerpt": "Both attach to the same Host through `@cocode-agency/host-supervisor`, so they can share\nsessions and task state when they use the same `DSH_HOME`, profile, and Host\nconfiguration scope."
+          },
+          {
+            "heading": "### The `cocode` command",
+            "excerpt": "Two escape hatches\nwhen that cache goes stale:"
+          },
+          {
+            "heading": "### Cocode Nut: no API key to apply for",
+            "excerpt": "Prompts, code, and model responses are\n  not used for training or sold to third parties, and request content is not\n  retained beyond completing the call, billing, and necessary troubleshooting."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Which tools a session runs, what prompts it\ncarries, which capabilities are on — that is a plugin assembly called a preset,\nand you can read its `agent.cordis.yml` right in the interface."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Four presets\nship built in — Standard, PTC, Minimal, and Creator — and you copy one to make\nit yours."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "Files, Git, a terminal, a built-in browser, and\ndiff previews sit alongside the session."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "What the agent changed and what it ran\nis right there next to you, and you can take over by hand at any point instead\nof carrying context between windows."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "GUI and TUI connect\nto the same Host and read and write the same session record."
+          },
+          {
+            "heading": "## Why Cocode",
+            "excerpt": "An official DeepSeek key, any OpenAI-compatible\nself-hosted or gateway endpoint, or Cocode's own model service, Cocode Nut — all\nthree are available, and you can switch between them."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-data-agent",
+      "practicalScore": 63,
+      "oracleScore": 47,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 3.5,
+          "gap": -6.5
+        },
+        "capabilityItems": {
+          "machine": 11.5,
+          "oracle": 7.5,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- 🛡️ **严格只读保护**：推荐使用只读数据库账号，并在连接时开启“只读模式”，确保不会意外修改或删除业务数据。"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- 🔑 **凭据安全隔离**：连接密码仅在当前会话运行时使用，不记录在明文历史中，绝不上报远程服务器。"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- 💻 **纯本地执行**：数据查询与分析报告生成均在本地安全受控运行，全面守护企业商业机密。"
+          },
+          {
+            "heading": "## 常见问题",
+            "excerpt": "在只读保护下，任何写入、修改、删除（如 UPDATE, DELETE, DROP）等高危指令都会被严格拦截，保障生产数据绝对安全。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 产品亮点",
+            "excerpt": "- 💬 **零门槛对话即分析**：告别繁琐的 SQL 语法，直接用大白话提问（如“对比最近 30 天各渠道转化率”）。AI 会自动理解业务意图、探查库表结构、编写并执行查询、连续推演并输出清晰结论。"
+          },
+          {
+            "heading": "## 产品亮点",
+            "excerpt": "- 🏷️ **AI 驱动的业务口径治理**：智能扫描数据库，自动为库表和字段标注通俗易懂的业务含义，支持人工审核与指标定义，确保每一次分析都基于统一、准确的业务口径。"
+          },
+          {
+            "heading": "## 产品亮点",
+            "excerpt": "- 🖥️ **现代 Web 与高效终端双体验**：既可在直观的可视化 Web 界面中点击配置与浏览图表，也可在极客高效的命令行终端（dsh-tui）中一键唤起。"
+          },
+          {
+            "heading": "### 1. 多功能数据库工作台",
+            "excerpt": "Web 界面内置一站式数据库工作台，包含 **连接配置**、**库表浏览**、**数据治理** 与 **SQL 执行** 四大功能模块，方便在对话之余随时查验数据资产。"
+          },
+          {
+            "heading": "## 支持数据源",
+            "excerpt": "- 🐬 **关系型数据库**：MySQL, PostgreSQL, SQLite, Oracle, Microsoft SQL Server"
+          },
+          {
+            "heading": "## 支持数据源",
+            "excerpt": "- ⚡ **分析型数仓 / OLAP**：ClickHouse, Apache Doris, Apache Hive, Apache Impala"
+          },
+          {
+            "heading": "## 支持数据源",
+            "excerpt": "- 📁 **本地与轻量数据**：SQLite 数据文件（即开即用，无需额外服务）"
+          },
+          {
+            "heading": "## 产品亮点",
+            "excerpt": "- 🧠 **深度挖掘商业洞察**：不止是罗列查询数字，还能自动比较波动趋势、定位异常原因、识别高价值客群与畅销品类，把冷冰冰的数据转化为可直接落地的业务建议。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hust-open-atom-club/oh-dsh",
+      "practicalScore": 44,
+      "oracleScore": 32,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 3,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 6,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 主要能力",
+            "excerpt": "目录会标明插件实际生效的界面：安装可能在所有终端都成功，但某些插件只在 Web 或 Desktop 生效、在 TUI 不生效，界面上会明确区分。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "三端默认共同使用 `~/.ohdsh` 存放缓存、配置、会话、凭据与插件状态。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "插件在 Host 的最终图片\n能力校验处放行 DeepSeek V4，并在固定的 text-only 适配器序列化同一轮请求前，通过\n配置的视觉后端描述原生附件。不另加输入栏气泡或引用协议。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "安装可能在所有终端都成功，但某些插件只在 Web 或 Desktop 生效、在 TUI 不生效，界面上会明确区分。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "插件在 Host 的最终图片\n能力校验处放行 DeepSeek V4"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "每个 Make 目标只会暂存\n对应交互端的 Oh-DSH package，不会把其它交互端一起带入开发 runtime。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "某些插件只在 Web 或 Desktop 生效、在 TUI 不生效，界面上会明确区分。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "不另加输入栏气泡或引用协议。TUI 通过 Workspace\n图片路径或 URL 使用同一能力。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 主要能力",
+            "excerpt": "内置 Workspace、PTY 终端、浏览器、文件浏览、Side chat 与 Trajectory；面板可以折叠、固定、分屏或全屏展开。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "查看工作区改动与 commit diff，在代码行上添加 review comment，并在同一个侧边栏完成分支、提交和推送操作。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "Desktop、Web 与 TUI 都能检索、预览和安装插件，并共享同一套交易与恢复状态。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "<code>@oh-dsh/skins</code> 为 Desktop、Web 与 TUI 提供统一主题，并针对各界面的布局和可读性分别适配。"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "模型服务仍可按需运行在云端；Workspace、终端、\nGit Review、浏览器、文件、会话与插件状态由本地工作台统一组织。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "内置的 `@oh-dsh/vision` 为三端提供同一个 `view_image` 工具，让用户对 Workspace\n内的本地图片、HTTP(S) 图片或 image data URL 做 OCR、读图与界面诊断。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "三端共享会话、凭据、皮肤与插件缓存，同时保留独立 Profile。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "Desktop、Web 和 TUI 共享同一组 Agent preset；其中 `liangshen`（梁神模式）会在\n首轮保持 Minimal 双工具，首次工具调用后开放完整工具目录，压缩后重新锚定。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SepineTam/mcp-for-stata",
+      "practicalScore": 27,
+      "oracleScore": 35,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 5,
+          "oracle": 6,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 6,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### Key Features",
+            "excerpt": "Cross-platform support (macOS, Windows, Linux)"
+          },
+          {
+            "heading": "### Key Features",
+            "excerpt": "**[Security Guard](https://sepinetam.github.io/mcp-for-stata/security)**: Blocks dangerous commands (`!`, `shell`, `erase`, etc.)"
+          },
+          {
+            "heading": "### Key Features",
+            "excerpt": "**[RAM Monitoring](https://sepinetam.github.io/mcp-for-stata/monitoring)**: Prevents memory exhaustion with configurable limits"
+          },
+          {
+            "heading": "### Key Features",
+            "excerpt": "**Configurable data access boundaries**: Data info URL guard and optional direct `read_log` boundary"
+          },
+          {
+            "heading": "### Advanced - Claude Science",
+            "excerpt": "Claude Science runs MCP servers inside a strict sandbox that blocks access to the home directory (`~`) by default."
+          },
+          {
+            "heading": "### Advanced - Claude Science",
+            "excerpt": "Couldn't load tools: MCP error -32000: Connection closed\nFileNotFoundError: [Errno 2] No such file or directory"
+          },
+          {
+            "heading": "### Prerequisites",
+            "excerpt": "It displays basic information about your device and checks whether your setup is supported."
+          },
+          {
+            "heading": "### Key Features",
+            "excerpt": "Blocks dangerous commands (`!`, `shell`, `erase`, etc.)"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# MCP-for-Stata: Integrate Stata into your agent",
+            "excerpt": "Enable Claude Code, Codex, OpenClaw, and other AI agents to safely invoke Stata on your local device for data analysis."
+          },
+          {
+            "heading": "## 🆕 News",
+            "excerpt": "Standalone CLI tools for OpenClaw integration (`stata-mcp tool`)"
+          },
+          {
+            "heading": "## 🆕 News",
+            "excerpt": "Official plugin package with MCP server and Stata LSP integration"
+          },
+          {
+            "heading": "### Key Features",
+            "excerpt": "**Beta async `stata_do` execution**: Supports concurrent MCP calls for multi-client workflows"
+          },
+          {
+            "heading": "## Comparison",
+            "excerpt": "CSV, DTA, XLSX, SPSS handlers"
+          },
+          {
+            "heading": "## Comparison",
+            "excerpt": "Text + SMCL readers"
+          },
+          {
+            "heading": "## Comparison",
+            "excerpt": "Native (same tools as MCP server)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-liang-skin",
+      "practicalScore": 25,
+      "oracleScore": 21,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 4,
+          "gap": -6
+        },
+        "capabilityItems": {
+          "machine": 5,
+          "oracle": 6.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 交互规则",
+            "excerpt": "不支持推理或只有一个可选档位的模型不显示滑块。"
+          },
+          {
+            "heading": "## 交互规则",
+            "excerpt": "addressed subagent 不显示也不提交滑块。"
+          },
+          {
+            "heading": "## 外观开关",
+            "excerpt": "选择保存在当前浏览器本地，不会改动模型配置。"
+          },
+          {
+            "heading": "## 命令安装",
+            "excerpt": "当前版本已在 `0.1.0-rc.6` 上验证。"
+          },
+          {
+            "heading": "### 验证与重启",
+            "excerpt": "当前会话会中断，但 DSH 会话有磁盘持久化，重启后可以恢复。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 交互规则",
+            "excerpt": "档位直接读取当前模型的 `reasoning.efforts`，不写死数量或名称。"
+          },
+          {
+            "heading": "## 交互规则",
+            "excerpt": "任意 N 个档位均匀落在 0–30：两档为 `0 / 30`，三档为 `0 / 15 / 30`，五档为 `0 / 7.5 / 15 / 22.5 / 30`。"
+          },
+          {
+            "heading": "## 交互规则",
+            "excerpt": "拖动期间只做连续视觉预览；指针松开、键盘操作完成或控件失焦时，才吸附到最近档位并通过官方 ModelDirectory 提交该档位原始 ID。"
+          },
+          {
+            "heading": "## 外观开关",
+            "excerpt": "`滑动变祖`：显示滑块并启用人物、背景和自适应配色。"
+          },
+          {
+            "heading": "## 外观开关",
+            "excerpt": "`原生`：移除背景层、皮肤变量和滑块，恢复 Harness 原生界面。"
+          },
+          {
+            "heading": "## 灵感与素材来源",
+            "excerpt": "当前接入 24 张经过审核的人像锚点，滑动时直接切换最近锚点，不做图片交叉渐变。"
+          },
+          {
+            "heading": "## 外观开关",
+            "excerpt": "选择保存在当前浏览器本地，不会改动模型配置。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "EthanYoQ/Invoice-Downloader",
+      "practicalScore": 50,
+      "oracleScore": 38,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 9.5,
+          "gap": -0.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 6,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 🤖 双引擎 AI 提取架构",
+            "excerpt": "**Local Fallback**：本地正则规则，断网可用，零 API 消耗"
+          },
+          {
+            "heading": "## DeepSeek Harness 插件",
+            "excerpt": "插件支持 Windows x64 和 macOS Apple Silicon"
+          },
+          {
+            "heading": "## DeepSeek Harness 插件",
+            "excerpt": "授权码由 DSH 凭据服务保存，不写入插件设置或扫描日志。"
+          },
+          {
+            "heading": "### macOS（Apple Silicon）",
+            "excerpt": "此版本未签名、未公证；若 macOS 阻止打开，请在“系统设置 → 隐私与安全性”中确认仍要打开。"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "正常现象。当 AI 识别置信度不足时，系统自动放入 `Manual_Check` 队列，需人工确认。通常由图片模糊、非标准票据或加密 PDF 导致。"
+          },
+          {
+            "heading": "## 🛡️ 隐私与安全",
+            "excerpt": "所有邮件、发票文件均在**本地处理**，不上传任何服务器"
+          },
+          {
+            "heading": "## 🛡️ 隐私与安全",
+            "excerpt": "邮箱凭据在 Windows 通过 **DPAPI** 加密存储，在 macOS 通过 **Keychain** 存储"
+          },
+          {
+            "heading": "## 🛡️ 隐私与安全",
+            "excerpt": "GLM API 仅接收**发票图片**（Base64）用于文字识别，不发送邮件原文内容"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 🤖 | **双引擎 AI 识别** | Track A（OCR精确流）+ Track B（视觉降级流），自动切换，无需手动操作 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 🔍 | **四层智能漏斗** | 白名单域名 → 主题关键字 → 正文检测 → 二维码扫描，精准过滤非发票邮件 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 📄 | **链接发票自动恢复** | Playwright 自动打开百望云、税务平台链接，下载正式 PDF 存档 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 🧾 | **发票与凭证自动撮合** | 住宿发票/水单、打车发票/行程单自动配对并相邻命名归档 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 🪟 | **安静的后台处理** | URL 恢复 worker、Node 与 Chromium 全链路隐藏运行，不再批量弹出控制台窗口 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "| 🗂️ | **自然语言分类规则** | 支持\"滴滴大于100元放进大额\"这样的自定义规则 |"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "**双引擎 AI 识别** | Track A（OCR精确流）+ Track B（视觉降级流），自动切换，无需手动操作"
+          },
+          {
+            "heading": "## ✨ 核心亮点",
+            "excerpt": "**四层智能漏斗** | 白名单域名 → 主题关键字 → 正文检测 → 二维码扫描，精准过滤非发票邮件"
+          }
+        ]
+      }
+    }
+  ]
+}

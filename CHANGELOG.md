@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.8.3 — 2026-08-27
+
+- **实用证据解析器 V3（evidence-oracle 重写）**：`readme-signals.mjs` 作为 README 证据唯一解析器（capability/usage/usecase/output/reliability 五语义族 + io/code/media 结构性证据），经三轮对抗评审-修复循环（13 项灌水/绕过向量全部封堵并钉死回归，解析器 161/161、mall 23/23、500 项目扰动重放通过）；`readme_practical.parser_revision = 3`，索引全量 13,342 插件 r3 证据已上线。
+- **「实用」评分 V2**：退役由 README 长度、安装章节和代码围栏主导的旧公式，改用能力、实际使用、场景/工作流、演示/产出、可靠性五类确定性多语言证据；代码示例最多贡献 5/100，安装、配置、长度、热度、身份和类别均不参与。索引统一输出 `readme_practical.version = 2`，列表、详情、智能搜索与推荐只消费同一 canonical 分数；旧索引或缺失证据显示未知，不回退旧 80 分。快照生成拒绝把已有 v2 evidence 静默降级为旧 schema。
+
+- **插件身份与目录政策彻底解耦**：新增 `verified-plugin / verified-non-plugin / conflict / unknown` 技术身份和可审计 evidence；`exclusions.json` 的 market/leaderboard/目录排除只保留为收录政策，不再覆盖插件身份。`hoyyang/dsh-mall` 由 bundle/manifest/独立验证证据正确识别为插件，同时保留“不进入下游市场”的政策说明。
+- **退休不可靠的二元猜测**：名称、description、topic、npm 包名及普通 Cordis 依赖不再自动证明插件身份；根 package.json 未命中也不再持久化为非插件，避免 monorepo 误杀。明确正负证据冲突时显示“证据冲突”，证据不足保持“待判定”；非插件筛选不再混入未知项目。
+- **npm 下载统计新鲜度透明化**：下载缓存保存 npm 官方 point 响应的实际 `start/end` 区间与本地查询时间，详情页同时展示官方统计区间和本地查询时间；旧数值缓存自动刷新一次补齐元数据，数字仍完全来自 npm 官方 API，不再把 npm 会截断的 range 误称为“2019 起累计”。
+- **离线快照与评分兼容**：随包快照写入同一套身份 evidence、目录政策和扫描字段；评分 p99 人口通过独立兼容字段冻结 v1.8.2 口径，身份收紧不会在本期暗中改写五维评分。
+- **身份状态贯穿所有推荐链**：编辑精选、个性化推荐和工具的“推荐插件”只接纳 `verified-plugin`；非插件、未知与证据冲突项目仍可作为“其他相关”展示并明确标注，不再被包装成可推荐插件。按需 manifest 验证遇到 GitHub 限流时先持久化并返回本批已确认结果，客户端仅对未确认项按官方 reset 时间退避。
+
 ## 1.8.2 — 2026-08-27
 
 - **修复全新 profile 首次启动时远程缓存不生效**：awesome、标签、热度三条刷新通道此前直接写 `profiles/<profile>/dsh-mall/*.json`，父目录尚不存在会触发 `ENOENT`，并因后台静默降级延迟 24 小时再试；现统一由 derived-cache owner 先递归建目录再落盘，首次拉取即可立即应用。

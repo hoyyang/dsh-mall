@@ -1,0 +1,480 @@
+{
+ "reviews": [
+  {
+   "repo": "Viy1204/recruiting-copilot",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "一次一问的访谈，把「我要一个厉害的 XX」问成一份可执行的初筛标准——硬门槛、命脉技能、排除信号、目标公司、搜索词。同时产出对外 JD 与对内寻源笔记。",
+    "说一句「处理今天的招聘」，AI 就去查两个平台的未读、按你的标准主动搜人、初筛、经你确认后打招呼，然后补台账、出日报",
+    "一次深度调研说清市场供给、薪资水位、目标公司的人挖不挖得动，并附可推进名单。",
+    "直接丢本地简历，或让 AI 去飞书邮箱翻近期的猎聘 / BOSS 简历邮件，去重下载附件后走同一套 review、台账与面试档案流程。",
+    "查面试官忙闲、建带视频会议链接的日历日程、拉面试官进会、生成候选人邀约话术，面试档案自动同步。",
+    "每轮从命中的真实简历反向提取搜索词，回填关键词迭代表，下一轮搜索更准。",
+    "对外不可逆的动作（打招呼、点「不合适」、通知候选人）默认先经你确认，绝不自动拒人。",
+    "DSH Web 界面右侧是一只**能直接上手操作的浏览器**",
+    "安装后**重启 DSH 会话**，本仓库 `skills/` 下的 7 个 skill 就会出现在任意工作区的"
+   ],
+   "usageItems": [
+    "用你的 AI 工具打开这个目录，说：**「帮我初始化招聘工作区」**。",
+    "之后每天：用 AI 工具打开**你自己的工作区目录**，说 **「处理今天的招聘」**。",
+    "任何时候不确定该干什么，说一句 **「这套工具怎么用」**，AI 会按总目录带你走。",
+    "两个平台各扫码登录一次（登录态存在浏览器的 user-data-dir 里，一次能管很久）：",
+    "浏览器没起时在面板里点一下就能拉起"
+   ],
+   "usageActions": [
+    "`/recruit-init` —— 初始化工作区（首次一次）",
+    "`/recruit-grill <岗位>` —— 梳理某个岗位的要求",
+    "`/recruit-daily` —— 处理今天的招聘（日常也可以直接说「处理今天的招聘」）",
+    "`/recruit-mapping <岗位>` —— 深度盘点某岗的市场人才",
+    "`/resume-review` —— 评估本地简历，或收取飞书邮箱的猎聘 / BOSS 简历附件后评估",
+    "`/interview-schedule` —— 约面试：日历 + 视频会议 + 拉面试官，档案台账同步",
+    "`/ask-viy` —— 不知道该用哪个？问它"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [
+    "给 HR / 猎头用的一套 AI 招聘工作流"
+   ],
+   "outputs": [
+    "还能把日报推成一张飞书卡片（四个数字 + 重点人选 + 待你拍板，点按钮跳完整文档）",
+    "初始化后你会得到一个自足的招聘工作区（换任何 AI 工具打开都能接着干活）："
+   ],
+   "reliability": [
+    "**BOSS 现在默认有头**（真窗口，启动时会抢一次键盘焦点），**猎聘仍默认无头**。",
+    "而 Client Hints 仍说 `Google Chrome`，这个自相矛盾是零误报的信号。",
+    "被限期间**只有 web 端受限**，BOSS直聘 APP 和 PC 客户端照常能用，不必停工。",
+    "全部挂在 **CLI 进程自己的 CDP session** 上，**进程一退出就全部失效**。已实测确认。",
+    "一旦页面落到 403 / verify / security-check，host 立刻停掉自愈重启、停掉",
+    "面板接管需要 `@viyzhu/boss-cli-fork` ≥ 0.7.0、`@viyzhu/liepin-cli` ≥ 0.2.0",
+    "只读收取，不标已读、不移动 / 删除、不回复 / 转发；风险邮件和不可信附件不自动下载。",
+    "端口上已经有实例在跑时改这个变量不生效（那只会被直接复用）",
+    "**别设 `RECRUIT_BROWSER_HIDDEN=true`**——它是**统一覆盖开关**，会把 BOSS 一起拖进无头。"
+   ],
+   "media": [],
+   "concerns": [
+    "README 混合能力、可靠性与安全加固叙事；每条实质主张只归入单一语义族。",
+    "无显式输入/输出配对；操作型代码围栏均为安装/登录命令，未计入 codeExamples。"
+   ]
+  },
+  {
+   "repo": "omdsh-dev/dsh-lark",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "直接在聊天里给 Agent 派任务、看执行过程、切换工作区和模型。",
+    "遇到提问、计划确认或工具审批，也不用回到终端，直接在飞书里处理。",
+    "需要时，还能把多个 Agent 放进同一个群里协作。",
+    "| 持久会话 | 重启后可以恢复；后续消息继续当前上下文，`/new` 可以原地重开一个 |",
+    "| 会话隔离 | 可按聊天、话题或群成员划分独立 Agent 会话 |",
+    "| 多 Agent 协作 | 多个机器人拥有独立设置、凭据和 session，可以在同一个群里对话与交接任务 |",
+    "| 人机协作卡片 | 单选、多选或文字回答问题；批准计划或提出修改意见；允许或拒绝工具调用 |",
+    "| 斜杠命令 | 宿主自带的命令（`/plan`、`/compact` 等）直接进入 DSH 命令运行时 |",
+    "| 文件收发 | 人发文件进聊天，agent 在工作区里读；agent 的产物发回聊天，群聊里先弹审批卡 |"
+   ],
+   "usageItems": [
+    "用飞书扫码完成应用创建，然后私聊机器人，或在群里 @ 它即可开始。",
+    "给第二个飞书应用添加一套独立的 Agent：",
+    "把两个机器人加入同一个群后，它们可以通过 @ 把回合交给对方。"
+   ],
+   "usageActions": [
+    "| `/status` | 查看并刷新工作区、模型和 session；可用时包含上下文与 token 状态 |",
+    "| `/ws` | 查看可用工作区 |",
+    "| `/cd <名称或路径>` | 切换工作区 |",
+    "| `/get <路径>` | 把工作区里的文件发到聊天 |",
+    "| `/model use <provider/model>` | 直接切换模型 |",
+    "| `/permission <预设名>` | 直接切换权限预设 |",
+    "| `/new` | 原地开一个新会话，清空上下文，工作区和模型保持不变 |",
+    "| `/sessions <关键词>` | 按标题或 id 过滤列表 |",
+    "| `/stop` | 停止当前任务 |"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "## 日常运行\n\nmacOS 和采用 systemd 的 Linux 会使用用户级后台服务，关闭终端后仍可运行：\n\n```sh\ndsh-lark-channel status",
+    "### 添加更多 Agent\n\n给第二个飞书应用添加一套独立的 Agent：\n\n```sh\ndsh-lark-channel add reviewer"
+   ],
+   "usecases": [
+    "检查这个项目为什么构建失败。先给我计划，需要操作时让我确认。",
+    "让一个 Agent 完成修改后 @ 另一个 Agent 复核，后者也可以 @ 回去要求调整。"
+   ],
+   "outputs": [
+    "Agent 的执行过程会显示在飞书中；需要你参与时，会发送提问、计划或审批卡片。",
+    "终端会显示二维码。"
+   ],
+   "reliability": [
+    "连接异常时，插件会在限额和退避控制下自动重建 WebSocket，避免进程仍在但机器人已经静默离线。",
+    "会改变状态的卡片绑定原聊天，转发到其他聊天后不能操作原会话。",
+    "图片附件默认关闭；只有确认当前模型支持视觉时，才应开启 `attachImages`。",
+    "**没有关闭群聊审批的开关**，因为那会是提示注入外泄链的官方后门。",
+    "单文件上限默认 20 MiB，收发分别由 `maxReceiveFileBytes` / `maxSendFileBytes` 配置；",
+    "语音消息只落盘，不会被转写成文字。",
+    "原生思考过程需要飞书 PC 7.70、移动端 7.74 或更新版本；旧客户端可以使用 `output: 'stream'`。",
+    "DeepSeek Harness `0.1.0-rc.6` 或更新版本",
+    "默认最多连续进行 6 个机器人轮次；任何人发言都会恢复额度。",
+    "配置在启动时读取，修改后需要重启服务。"
+   ],
+   "media": [],
+   "concerns": [
+    "README 无显式输入/输出配对示例。",
+    "命令表行只记为 usageActions 结构证据，不重复计入语义族。"
+   ]
+  },
+  {
+   "repo": "hg1048596-pixel/dsh-recall-unread",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "撤回「已发送但尚未被模型读取」的文字消息。",
+    "在输入框上方（`conversation.input.dock` 插槽）列出所有已发送但模型尚未读取的插话消息（`placement: 'steering'`）。",
+    "**单条撤回**：每条消息显示预览文本 + 「撤回」按钮，点击后消息从对话中移除，并提示“已撤回一条消息”。",
+    "**全部撤回**：存在多条未读消息时提供「全部撤回」一键操作。"
+   ],
+   "usageItems": [
+    "确保插件已启用（安装后默认启用；可在插件市场/管理页开关）。",
+    "模型正在运行（如深度思考、长工具调用）时，用**插话发送**（默认快捷键：运行中发送即进入 steering）发出一条文字。",
+    "消息出现在对话尾部（带“待处理”标记），同时输入框上方出现「未读消息」条带。",
+    "点击该消息右侧的「撤回」——气泡与条带立即消失，提示“已撤回一条消息”。",
+    "有多条未读时，可点「全部撤回」一次性清空。"
+   ],
+   "usageActions": [
+    "点击该消息右侧的「撤回」——气泡与条带立即消失，提示“已撤回一条消息”。",
+    "有多条未读时，可点「全部撤回」一次性清空。"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "### 3. 急救开关：万一再出问题，一键进 DSH\n\n如果插件又导致启动红屏，**不用改任何配置**，禁用它即可正常进入 DSH：\n\n```powershell\n# 禁用撤回插件（自动备份 cordis.patch.yml），然后重启 DSH\npwsh -NoProfile -ExecutionPolicy Bypass -File tools/recall-killswitch.ps1"
+   ],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "仅能撤回 **尚未被模型读取**（仍在 inbox）的消息；一旦被认领即不可撤回。",
+    "排队消息（`queued`）官方队列坞已提供删除，本插件不重复覆盖。",
+    "受限于官方未提供“消息气泡级”插槽，撤回入口放在输入框上方的条带中，而非直接悬浮在气泡上。",
+    "动态插件不持久化；按「方式一」静态安装后随 DSH 启动自动加载，重启不丢失。",
+    "DSH 网页启动是 **fail-loud** 的：任何一个插件加载失败都会整屏显示",
+    "校验失败会**直接拒绝提交**，从源头杜绝回归。",
+    "**优雅降级**：撤回失败（消息已开始发送）时给出明确提示，不会破坏会话。"
+   ],
+   "media": [],
+   "concerns": [
+    "截图仅为注释占位，无已交付媒体。",
+    "无显式输入/输出配对示例。"
+   ]
+  },
+  {
+   "repo": "T-Auto/dsh-ecosystem-spec",
+   "inferredType": "standalone-nonplugin",
+   "capability": [
+    "对任意真实插件 manifest 做准入校验（与 conformance suite 共用同一套 admission 算法；会按需准备 dsh-std）：",
+    "`dsh-ecosystem-spec`还提供依赖链溯源，以及可选的正在实验中的插件热更新功能。",
+    "测试覆盖 manifest、Host Descriptor、event envelope、ledger 与 claim 的正反 fixture，以及 registry hash 漂移、契约坐标解析、required/optional 协商、授权状态、重复 command ID、保留 facet 和 ContentBlock payload 校验。"
+   ],
+   "usageItems": [
+    "如果您想把您所需的dsh上游api加入本adapter的覆盖范围，可以在本仓库提issue，tui团队在评估后会考虑是否将其纳入后续adapter映射维护。"
+   ],
+   "usageActions": [
+    "npm run validate:manifest -- --manifest ./path/to/dsh-plugin.json   # 可选 --host <host-descriptor.json> 与 --grant <permission>",
+    "pnpm test          # 在 dsh-TUI workspace 内（复用 workspace 安装的 @dsh-std/*）",
+    "npm run test:standalone   # 独立检出时（强制 vendor/dsh-std 回退路径）"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "对任意真实插件 manifest 做准入校验（与 conformance suite 共用同一套 admission 算法；会按需准备 dsh-std）：\n\n```sh\nnpm run validate:manifest"
+   ],
+   "usecases": [
+    "若你的插件想使用[dsh-TUI](https://github.com/ccch1mneyyy/dsh-TUI)团队维护的adapter达到dsh版本更新时免维护的便利性，请阅读并遵循此规范。"
+   ],
+   "outputs": [],
+   "reliability": [
+    "当前规范与测试均为 Draft / Experimental；在 Candidate/Stable 条件满足前，使用者只能声明“实验适配”。",
+    "使用非本adapter覆盖的接口范围无法保证后续dsh更新的的免维护性。",
+    "参考实现、TUI 本身或任何单一宿主只能提供 evidence，不能因为实现存在就成为标准或自我认证。",
+    "在进入 `Stable` 前，任何规范均不得暗示 ABI/API 永久稳定或“官方认证”。",
+    "pnpm 会因 `workspace:*` peerDependencies 预检失败，请改用 `npm run test:standalone`",
+    "所有进入 `dsh-TUI` 启动方式的插件、`dsh-TUI` 维护的插件市场与推荐列表，应满足 TUI 当前声明的准入版本与验证要求。"
+   ],
+   "media": [],
+   "concerns": [
+    "规范库无用户可见的成品输出；除 logo 与徽章外无媒体。",
+    "准入校验主张只归 capability，命令证据记入 usageActions/codeExamples。"
+   ]
+  },
+  {
+   "repo": "PensiveFei/dsh-secure-audit",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "Rule engine (English + Chinese) with LRU cache, fail-open timeout (configurable fail-closed), a pluggable model classifier",
+    "Returns `allow` / `review` / `block`, a `riskLevel`, and an `inputSha256` for replayable decisions.",
+    "Masks CN mobile numbers, CN ID cards, CN bank cards, emails, IPv4, API keys, and URL credentials. Output is safe to log or display.",
+    "Recursively redacts sensitive values inside JSON by key name (`api_key`, `token`, `secret`, `password`, `authorization`, ...) plus a PII fallback on other values.",
+    "11 read-only checks across config / sessions / plugins / paths / network / env / host, mapped to OWASP LLM + Agentic Top 10",
+    "Registered at runtime via the optional `skills` service; teaches the agent how to use the tools and explain verdicts."
+   ],
+   "usageItems": [
+    "Use it before handing tool-call arguments or session context to a third-party model.",
+    "Add the rule id from the `reasons` output to the plugin's `allowlist` config (see Configuration)."
+   ],
+   "usageActions": [
+    "Prompt-injection detection | `security_scan_text`",
+    "PII redaction | `security_redact_text`",
+    "Structured JSON redaction | `security_redact_json`",
+    "Local security audit | `security_audit`"
+   ],
+   "ioPairs": [
+    "{ \"text\": \"我的手机 13812345678，邮箱 zhangsan@example.com\" }\n// redacted: \"我的手机 138****5678，邮箱 zh***@example.com\""
+   ],
+   "codeExamples": [
+    "### Scan text for injection\n\n```jsonc\n// security_scan_text",
+    "### Redact PII\n\n```jsonc\n// security_redact_text",
+    "### Redact structured JSON\n\n`security_redact_json` redacts by key name first, then falls back to the PII engine on other values:\n\n```jsonc\n// security_redact_json",
+    "### Audit the local harness\n\n```jsonc\n// security_audit"
+   ],
+   "usecases": [],
+   "outputs": [
+    "a deterministic, redacted report with a self-checksum (`reportSha256`)"
+   ],
+   "reliability": [
+    "The plugin never writes, deletes, or executes anything on the audited system.",
+    "Fail-open by default: timeout downgrades to `allow` with an explicit warning, so the security feature cannot become an availability problem.",
+    "The injection rules are a fixed pattern table (English + Chinese).",
+    "Chinese names, addresses, and other\n  context-sensitive PII are NOT covered.",
+    "The permission checks read POSIX mode bits only; Windows ACLs are not inspected (Node has no native ACL API).",
+    "Live listening-port ground truth runs on **Linux only** (`/proc/net`);",
+    "Session-file PII sampling covers up to 10 files by default;",
+    "Tested against `@deepseek-ai/dsh-tools` 0.1.2-alpha.2 only.",
+    "Absence of findings does not imply the machine is secure.",
+    "Errors are sanitized: a failing check reports `status: \"error\"` with a generic message, no stack traces or internal paths."
+   ],
+   "media": [],
+   "concerns": [
+    "检测局限段落跨行断句，摘录保留最短逐字片段。",
+    "除工具用途外未陈述显式使用场景。"
+   ]
+  },
+  {
+   "repo": "HuanLinOTO/dsh-plugin-mineru",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文档解析工具。MinerU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。",
+    "解析本地文档并返回提取出的 markdown。内部自动完成：提交文件 → 轮询至完成 → 返回 markdown。",
+    "异步提交解析任务，立即返回 `task_id`。适合大文档或并行批量提交。",
+    "轮询异步任务状态，返回 `pending` / `processing` / `completed` / `failed`。",
+    "检查服务器健康状态、版本、队列深度与并发容量。"
+   ],
+   "usageItems": [],
+   "usageActions": [
+    "### `mineru_parse_document`（推荐）",
+    "### `mineru_submit_parse_job`",
+    "### `mineru_get_parse_status`",
+    "### `mineru_health`"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "内联返回给模型的 markdown 字符上限；超出时完整内容存到临时文件",
+    "请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MinerU 服务器地址。",
+    "API key 的环境变量名 / 凭据引用。测试实例无需鉴权。",
+    "单元测试（mock fetch，无需真实服务器）"
+   ],
+   "media": [],
+   "concerns": [
+    "README 以安装/配置参考为主，操作型证据较少。",
+    "五个解析工具外的配置表行不计证据。"
+   ]
+  },
+  {
+   "repo": "Moeblack/dsh-message-edit",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "为 DeepSeek Harness 补充基于事件溯源的「消息编辑与重生成」能力。",
+    "每次编辑、重生成或重试都会从目标回合之前创建一个新会话版本，原会话始终保留并可随时切回。",
+    "可编辑已落定的用户文本、`assistant.reasoning` 思考块与 `assistant.response` 回复文本。",
+    "从最后一条已落定助手回复所属回合之前分支，使用原用户输入重新生成。",
+    "在 Timeline 中选择任意历史回合重新执行。",
+    "`truncate`（默认）：只重新执行目标输入，删除该点之后的旧后续。",
+    "`preserve`：保留后续用户输入，并在新分支中依次重新执行；助手输出与工具链全部重新生成。",
+    "会话标题栏的 `←` 撤销当前原子效果，`→` 重施加最新直接子效果；Timeline 展示完整已知分支树、操作时间、编辑前后内容与当前版本。"
+   ],
+   "usageItems": [],
+   "usageActions": [
+    "`GET /message-edit?sessionId=<id>`：读取可编辑消息、可重试回合与完整版本树。",
+    "`POST /message-edit`：执行 `edit`、`reroll` 或 `retry`，返回已发布的新 Session ID。"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "不原地改写 Session 事件；历史是 append-only、deep-frozen。",
+    "不联动恢复或修改工作区文件、命令外部效果与既有产物。",
+    "不修改 DSH 引擎、apiproxy 或官方 UI 包。",
+    "外部观察者看不到半成品 Session，Agent 的回合计数也直接从完整历史初始化。",
+    "发布后调用 `ctx.sessions.flush()`，在 HTTP 操作成功前建立耐久性屏障。",
+    "构建基于 npm 发布的 `@deepseek-ai/*@0.1.0-rc.6` 类型与本地工具链"
+   ],
+   "media": [],
+   "concerns": [
+    "无显式使用场景、输出物、输入/输出配对；操作型围栏均为安装/构建命令，未计入。"
+   ]
+  },
+  {
+   "repo": "rison114514/dsh-endfield-ui",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "这个项目把终末地工业风视觉系统封装为 DeepSeek Harness 的独立 Cordis 插件，并提供可选的 Electron 桌面壳。",
+    "DeepSeek Harness 品牌开屏、黄色扫屏动画、暗色工业网格、左栏等高线纹理、低透明度旋转仪表圆环、黄灰工业边框、状态标签与灰黑选中卡片。",
+    "包含 Explorer、快速编辑、内嵌浏览器、终端、Git、任务与子代理页面；支持折叠和自由拖拽宽度。",
+    "集成 `dsh-shikitor@1.0.2`，支持 `@文件`、`#会话`、`$ Skills`、`/命令`补全，以及右栏快速编辑与中央深度编辑双入口。",
+    "`OBJECTIVE` 直接订阅 DSH 原生 Goal projection，与 `/goal` 和 GoalBar 共用同一份状态，支持编辑、暂停、恢复和清除，不建立第二套 Goal Store。",
+    "基于 DSH `0.1.1-rc.2` 的官方附件链路向 DeepSeek Vision 模型发送图片，不再依赖旧视觉理解插件。",
+    "macOS arm64 Electron 壳自动发现本机 DSH、装载内置插件、启动私有随机端口，并以单实例方式运行。",
+    "仓库同时提供远端 Bearer 与本地 stdio + OAuth 两种 GitHub MCP 连接方式。"
+   ],
+   "usageItems": [],
+   "usageActions": [
+    "验证：`node scripts/smoke-connector.mjs <dir>`（隔离 DSH_HOME，8/8 通过）。"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [
+    "打包产物：`desktop-app/release/DSH 终末地工作台-darwin-arm64/DSH 终末地工作台.app`（`1.0.0`，ad-hoc 签名，适用于 Apple Silicon Mac 本地使用）。"
+   ],
+   "reliability": [
+    "不修改 DSH 核心文件，不要求手工复制 CSS，也不需要追加 `--patch`。",
+    "不清理 `~/.dsh` 中的 Session、模型或用户设置；桌面壳退出时可靠回收它启动的唯一 DSH 子进程。",
+    "隔离 Profile 验证 `37/37` 通过。",
+    "本地 OAuth 的 token 只在服务器进程内存、dsh 重启需重新授权",
+    "避免 Electron 与浏览器同时写入同一会话。",
+    "保留单实例锁、30s 启动超时、「复制诊断信息」及退出/崩溃可靠回收子进程。"
+   ],
+   "media": [
+    {
+     "excerpt": "`dsh-packaged-final.jpg` / `dsh-settings-final.jpg`：界面预览。",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "封面横幅视为装饰性图像未计入；界面预览以其唯一图注计入 media。",
+    "安装方式的用户画像未作为 usecase 记录。"
+   ]
+  },
+  {
+   "repo": "MiaoQichuan/new-litigation-visualization",
+   "inferredType": "standalone-nonplugin",
+   "capability": [
+    "模型只负责读懂材料的意思，把哪一句是事实、哪几句属于同一件事判断出来",
+    "位置、尺寸、层数、字数容量则全部交给确定性的脚本，从 A4 纸的物理尺寸一路算到每一张卡片能写几个字。",
+    "把一张凌乱、或者一眼「AI 味」的诉讼图，重画成克制、专业、可直接进诉讼材料的图，\n源文件一并交给你，回头还能接着改。",
+    "把判决书、起诉状、答辩状、合同、证据目录、流水、聊天记录、扫描件、\n手机照片、甚至一段口述丢给它，它读完最多问你五个问题，然后出图。",
+    "时间、流程、关系。诉讼里要画的东西基本都落在这三类里",
+    "同一份语义地图，换一个风格标志就换一套表达，几何一个数都不动。"
+   ],
+   "usageItems": [
+    "律师只做两件事：上传原图，说一句提示词。",
+    "材料怎么顺手怎么给，不用先整理、不用改格式、不用自己先画一张。",
+    "它会先问你这张图用哪几份材料。",
+    "装完在有 shell 权限的环境里跑一次环境自检"
+   ],
+   "usageActions": [
+    "python3 plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/scripts/doctor.py",
+    "python3 plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/tests/run_checks.py",
+    "python3 plugins/mqc-nlv/skills/mqc-timeline-master/tests/run_checks.py"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "它会逐项告诉你缺什么、缺了会退化成\n什么样：\n\n```bash\npython3 plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/scripts/doctor.py",
+    "## 工程\n\n```bash\npython3 plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/tests/run_checks.py"
+   ],
+   "usecases": [
+    "手上已经有一张图（自己画的、别人给的、AI 生成的），想让它变好看又不变意思，用\n重画。手上只有材料、还没有图，用时间轴大师。",
+    "**奇川风** — 灰阶为底，一处深红标重点，向委托人与法官呈现。",
+    "**歸藏风** — 克莱因蓝，用于对外传播、讲课与分享。",
+    "要交法院就选白描：纯黑白线稿，复印、传真、黑白打印都不失真。",
+    "你只需要把材料丢给 agent、用中文说一句要什么。全程不写代码、不改配置、"
+   ],
+   "outputs": [
+    "五种格式同时交付：SVG（主交付物）、PNG（位图）、PPTX（原生对象，每个方框\n双击就能改字）、VSDX（ProcessOn / Visio / WPS）、drawio。五份都转写自同一份母版。",
+    "出图的同时会给一份 Word 三线表：图上每一个元素，出自材料的哪一份、哪一句。"
+   ],
+   "reliability": [
+    "这两个模块不联网、不调外部接口、不需要任何凭据，只读你给它的材料，只往你指定的\n目录写文件。",
+    "同一份材料换谁跑、跑几次，出来都是同一张图，换一个更弱的模型也一样。",
+    "卡片上每一段文字必须是原句删掉一些字之后剩下的样子：换一个词、\n调一次词序、补一个字，都会在出图之前被拦住。",
+    "没有文字层的材料它会先探测、再按 150 DPI 栅格化、然后逐页看图。",
+    "不缩字号、不截断、不硬塞，而是自己换一档：横向排不下就加层，仍排不下就转成纵向",
+    "退出码 0 = 全过。回归套件把已修复的问题固化成守卫。",
+    "第三方库缺席时退化，不是崩掉。",
+    "编号型是阶梯的底，**它总归给得出一张图**。",
+    "dsh 目前把 `allowed-tools` /\n`disallowed-tools` 当未知字段处理，技能内的工具约束需要你在 harness 层自行保证。"
+   ],
+   "media": [
+    {
+     "excerpt": "<img src=\"assets/modules.png\" width=\"100%\" alt=\"两个模块\"/>",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/how-it-works.png\" width=\"820\" alt=\"Skill 运行全过程\"/>",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-litigation-visual-redraw/assets/longform/seven-layouts.png\" width=\"820\" alt=\"三类七种图形\"/>",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-timeline-master/assets/screenshots/timeline-example.png\" width=\"880\" alt=\"时间轴成品示例\"/>",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-timeline-master/assets/longform/01-mathematics.png\" width=\"820\" alt=\"01 数学\"/>",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"plugins/mqc-nlv/skills/mqc-timeline-master/assets/longform/02-exact.png\" width=\"800\" alt=\"02 画准\"/>",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "七种布局的模式网格长图视为重复视图，不重复计数。",
+    "跨行断句摘录均保留逐字片段（含换行）。"
+   ]
+  },
+  {
+   "repo": "alingalingling/ui-status-label",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "为 **dsh Web** 聊天视图提供可配置的运行中轮次状态文案",
+    "插件把聊天视图运行状态栏的文案替换为你输入的文字"
+   ],
+   "usageItems": [
+    "点击页面左下角的**齿轮图标**，打开设置面板",
+    "在左侧导航选择 **General（通用）** 分区",
+    "找到「**运行状态文案**」一行，在输入框里输入你想要的文字",
+    "**输入即生效，无需保存**——下次智能体运行期间，聊天视图的状态行就会显示你输入的文字"
+   ],
+   "usageActions": [
+    "点击页面左下角的**齿轮图标**，打开设置面板",
+    "在左侧导航选择 **General（通用）** 分区",
+    "找到「**运行状态文案**」一行，在输入框里输入你想要的文字"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [
+    "聊天视图在轮次运行期间（等待首 token、工具执行、流式输出）显示的状态文案随之更新"
+   ],
+   "reliability": [
+    "本插件只面向浏览器交互面；headless/TUI profile 装它没有意义。",
+    "插件监听聊天视图的运行状态元素（官方标记 `role=\"status\"` + 硬编码 `Deep diving...`）",
+    "聊天视图直接渲染你配置的文案，DOM 注入自动让位，两者不会冲突。",
+    "无——设置行与服务只影响浏览器呈现；本包不会触及任何模型请求。",
+    "不要重复安装——`ui-status-label` settings 命名空间会注册两次。",
+    "git 安装即使跳过 `prepare` 也能直接用产物"
+   ],
+   "media": [],
+   "concerns": [
+    "仅徽章，无演示媒体。",
+    "无显式输入/输出配对示例。"
+   ]
+  }
+ ]
+}

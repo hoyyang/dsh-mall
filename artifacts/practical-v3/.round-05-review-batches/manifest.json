@@ -1,0 +1,194 @@
+{
+  "round": "round-05",
+  "source": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-05.ndjson",
+  "sourceSha256": "50ff8f13f4f7df35b341f630c78243a11b4d825095cb273e0df8fa1f6b942140",
+  "parserSha256": "38d93b813e7aff35268655fcb3ffbfd7061fc1ee34ef070a1ec8846b02b9ff5a",
+  "rubricSha256": "2d1240592b77ae1de9f3208167583fb7a30db329197bd902e26a4343e71e3f99",
+  "count": 100,
+  "uniqueRepos": 100,
+  "replayExact": true,
+  "batches": [
+    {
+      "number": "01",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-01.ndjson",
+      "sha256": "597404a237b6973729cb425b4af6e9878e0cafb0a50fb4052511f2679442e947",
+      "count": 10
+    },
+    {
+      "number": "02",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-02.ndjson",
+      "sha256": "5b60fd74502231b38c3080c9793117b554c9e3ab79f858ce886fa17bb41e85af",
+      "count": 10
+    },
+    {
+      "number": "03",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-03.ndjson",
+      "sha256": "871ffe045a1f2c8f96224fd90589cffb06c747d242f086295a693425e3d48c14",
+      "count": 10
+    },
+    {
+      "number": "04",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-04.ndjson",
+      "sha256": "4ab92c5c069a6765801e40c1f1db30ed6ac3d597b0cbd4ca750b511c238f1e01",
+      "count": 10
+    },
+    {
+      "number": "05",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-05.ndjson",
+      "sha256": "8b7d2fb8e07246c334ac3b944e87f14b1aef59dd33a7766a7fc51a05a02fb9ef",
+      "count": 10
+    },
+    {
+      "number": "06",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-06.ndjson",
+      "sha256": "96f39a3901c50185c19e9a5335ac45336ef69c83992b6dd0f33f50166ab25a72",
+      "count": 10
+    },
+    {
+      "number": "07",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-07.ndjson",
+      "sha256": "c67c35cef1260cbb36bad411bbe942eb94bd1dfc983e087caa1c308d669bdcaf",
+      "count": 10
+    },
+    {
+      "number": "08",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-08.ndjson",
+      "sha256": "fa91f649947e9aa1e8e7c2a588d93c74ea856ed8c769e32ae532d96345c7d028",
+      "count": 10
+    },
+    {
+      "number": "09",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-09.ndjson",
+      "sha256": "afa9fda23291269314f032dae601b8a011d82ed2601a2c374d9881ed7da290e5",
+      "count": 10
+    },
+    {
+      "number": "10",
+      "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-10.ndjson",
+      "sha256": "6ac7a037b495046c8727147be2211f5d124431fb2dcaf0f0d2181450625ce880",
+      "count": 10
+    }
+  ],
+  "jobs": [
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-01.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-01-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-01.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-01-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-02.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-02-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-02.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-02-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-03.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-03-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-03.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-03-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-04.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-04-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-04.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-04-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-05.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-05-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-05.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-05-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-06.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-06-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-06.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-06-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-07.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-07-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-07.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-07-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-08.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-08-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-08.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-08-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-09.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-09-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-09.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-09-b.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "a",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-10.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-10-a.json"
+    },
+    {
+      "round": "round-05",
+      "pass": "b",
+      "batch": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-05-review-batches/batch-10.ndjson",
+      "output": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/reviews/round-05-oracle-10-b.json"
+    }
+  ]
+}

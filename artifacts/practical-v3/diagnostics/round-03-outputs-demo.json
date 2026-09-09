@@ -1,0 +1,1425 @@
+{
+  "generatedAt": "2026-09-02T07:36:53.685Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-03.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "outputs-demo",
+  "question": "Diagnose outputItems under-extraction and media over/under-counting.",
+  "families": [
+    "outputItems",
+    "media"
+  ],
+  "under": [
+    {
+      "repo": "taxueseek/argo",
+      "practicalScore": 86,
+      "oracleScore": 76,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 3,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 证据评分（简版）",
+            "excerpt": "结果字段含 `selection`、`absorption`、`credibility_fast`、`evidence_flags` 等，方便 Agent 直接排序。"
+          },
+          {
+            "heading": "### 当前大致能力（v2.8.4）",
+            "excerpt": "深度研究只产 dossier（来源/覆盖/缺口/门禁），判断稿归 Agent"
+          },
+          {
+            "heading": "### 五种能力，通俗说",
+            "excerpt": "返回包带 `time_filtered` 统计"
+          },
+          {
+            "heading": "# 典型：命中 stock_query → 行情快照源",
+            "excerpt": "典型：命中 stock_query → 行情快照源"
+          },
+          {
+            "heading": "### 当前大致能力（v2.8.4）",
+            "excerpt": "dossier 输出 `local_sources`，本地一手计入一手命中（防 `no_sources` 假阴性）"
+          },
+          {
+            "heading": "### 当前大致能力（v2.8.4）",
+            "excerpt": "**wide_research 证据门禁（v2.8.2 新增）**：输出自带 `quality_gate_results`（`conclusion_cap` low/medium/high），与 dossier 同一套语义"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 它和「模型自带搜索 / AI 搜索 / 聚合搜索」比，强在哪",
+            "excerpt": "<img src=\"assets/readme/why-better.svg\" width=\"100%\" alt=\"左侧三种默认搜索给人看的结果，右侧 Argo 给 Agent 的可吸收证据 JSON\">"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "<img src=\"assets/readme/proof-routes.svg\" width=\"100%\" alt=\"四类真实路由：金融、影视、多语言、地理\">"
+          },
+          {
+            "heading": "## 它怎么工作",
+            "excerpt": "<img src=\"assets/readme/workflow.svg\" width=\"100%\" alt=\"查询 → 语言与域 → 多引擎召回 → RRF → 证据快评 → 统一 JSON\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "practicalScore": 53,
+      "oracleScore": 60,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 4.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "The result is a local explorer with files, functions, branches, and the path selected by the user."
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "The interface saves the three choices to the task."
+          },
+          {
+            "heading": "## CLI Example",
+            "excerpt": "The terminal profile returns a localhost app."
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "The diagram changes with the controls, making each variable's effect easier to explore than to describe."
+          },
+          {
+            "heading": "## CLI Example",
+            "excerpt": "It reaches the permission check in src/runtime/server.ts, then stops before\n  the connected tool runs because access has not been allowed."
+          }
+        ],
+        "media": [
+          {
+            "heading": "# DeepSeek Harness GenUI",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/assets/hero-en.png\" width=\"1280\" alt=\"DeepSeek Harness with an interactive day plan inline and a scientific model open in Canvas\">"
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/calendar-planner.jpg\" width=\"280\" alt=\"English interface for choosing three writing slots\">"
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/photosynthesis-explorer.jpg\" width=\"280\" alt=\"English interactive photosynthesis model with four causal controls\">"
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/code-path-explorer.jpg\" width=\"280\" alt=\"English source-grounded code path explorer returned from a CLI request\">"
+          },
+          {
+            "heading": "## Inline & Canvas",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/pengyue-polaron/deepseek-harness-genui/main/screenshots/en/code-path-inline.jpg\" width=\"620\" alt=\"An interactive code path shown inline in a DeepSeek Harness conversation\">"
+          },
+          {
+            "heading": "## Inline & Canvas",
+            "excerpt": "The DeepSeek Harness sidebar, conversation, and code-path explorer visible together in the right-side Canvas"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "practicalScore": 67,
+      "oracleScore": 61,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 1,
+          "oracle": 5,
+          "gap": 4
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 3. Figure artifact comparison",
+            "excerpt": "推荐产物包括 `preview.png`、`figure.svg`、`figure.pdf` 或 `figure.tiff`、源代码或矢量源文件、`caption.md` 和 `qa.md`。"
+          },
+          {
+            "heading": "### 4. Research report artifact comparison",
+            "excerpt": "推荐产物包括 `candidate-report.md`、`candidate-report.html`、`sources.json`、`evidence-table.md`、`claim-checks.md`、`limitations.md` 和 `summary.md`。"
+          },
+          {
+            "heading": "### 5. Image prompt/style artifact comparison",
+            "excerpt": "推荐产物包括 `prompt.md`、`style-card.md`、`composition.md`、`negative-prompt.md`、`render-notes.md`、`summary.md`"
+          },
+          {
+            "heading": "### 6. Web artifact comparison",
+            "excerpt": "每条候选输出 `site/index.html`、`desktop.png`、`mobile.png`、`qa.json`、`source.zip` 和候选说明。"
+          },
+          {
+            "heading": "### 7. Video artifact comparison",
+            "excerpt": "每条候选必须生成 `video.mp4`。"
+          },
+          {
+            "heading": "### 6. Web artifact comparison",
+            "excerpt": "Report 可切换桌面/移动端预览并直接打开成品页面。"
+          },
+          {
+            "heading": "## Report、winner 与 handoff",
+            "excerpt": "ForkProbe 的核心产物是本地 HTML report。文本模式展示每一路完整输出、耗时、token 估算和 AI 评审；"
+          },
+          {
+            "heading": "### 5. Image prompt/style artifact comparison",
+            "excerpt": "推荐产物包括 `prompt.md`、`style-card.md`、`composition.md`、`negative-prompt.md`、`render-notes.md`、`summary.md`，可选 `prompt.json`、`reference-usage.md`、`render-request.json` 和 `rendered.png`。"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "practicalScore": 48,
+      "oracleScore": 59,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 4,
+          "oracle": 7.5,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 1,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "Returns `{device, size, items:[{text, confidence, rect}]}` where rects are **pixel** boxes with a top-left origin, confidence-sorted and capped at ~40 KB"
+          },
+          {
+            "heading": "### UI-tree and row tools (`uiautomator`)",
+            "excerpt": "Dump the foreground app's `uiautomator` hierarchy as nodes — `type` (the class tail), `text`, `contentDesc`, `resourceId`, `bounds` in pixels, `enabled`, `focused`"
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "List the device's running processes (`ps -A`) as `{pid, name}`"
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "Parse `dumpsys meminfo <package>`: total PSS, the Java/native/graphics split, and the top categories"
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "Installed-app facts from `dumpsys package <package>`: version name and code, data directory, code path, first-install time, and the system flag."
+          },
+          {
+            "heading": "### UI-tree and row tools (`uiautomator`)",
+            "excerpt": "repeated same-shaped children become rows carrying an index, a pixel frame, the aggregated label, and the counters parsed out of that label"
+          },
+          {
+            "heading": "### Core tools",
+            "excerpt": "Capture a PNG and return a small JSON summary (path, bytes, dimensions, device)"
+          },
+          {
+            "heading": "## Performance",
+            "excerpt": "| Persistent screencap loop | ≈ 8 fps |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"./docs/images/dsh-android-overview.png\" alt=\"DSH Android — a live Android device inside the conversation\" width=\"100%\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "practicalScore": 56,
+      "oracleScore": 67,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2.5,
+          "oracle": 6,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 3,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 界面预览",
+            "excerpt": "悬浮卡同时展示触发条件、20 日历史方向频率、样本数、同场景对照和研究截止日"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "金线是供应商大师价值序列，蓝线是股价，红/绿带分别表示高估与低估区间。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "| 低位破低反包 | 20 日上涨 | 3,581 | **65.60%** | **+7.12%** | 65.75% | 显示 `包`；形态独立增量未证实 |"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "本轮通过数为 **0/16**，因此产品没有新增任何“已验证高胜率买点”。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "成功取得 5,809 只行情；其中 5,704 只达到至少 120 根预热要求，共分析 9,813,872 根有效可交易日 K"
+          },
+          {
+            "heading": "### 个股行情、估值与 K 线观察",
+            "excerpt": "报告逐一对账当前 10 类生产标记、22 个有效周期格、16 个冻结候选、matched 增量、置信区间及拟影子验证方向。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "研究请求 5,813 只当前及历史 A 股证券，成功取得 5,809 只行情；其中 5,704 只达到至少 120 根预热要求，共分析 9,813,872 根有效可交易日 K"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "| 极缩量后脱离平台 | 20 日上涨 | 22,495 | 47.68% | +0.84% | 49.53% | 明确否决为买点 |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见黑夜模式市场页](docs/assets/dashboard-dark.jpg)"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见个股详情与价值曲线](docs/assets/stock-detail-dark.jpg)"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见变盘点——低位破低反包、历史回测证据与显示开关](docs/assets/kline-turning-points.jpg)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh_workflow",
+      "practicalScore": 56,
+      "oracleScore": 57,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# 验证 bundle 已进入 profile 合成树",
+            "excerpt": "workflow 启动和 `run_workflow` 默认立即返回 `{ runId, status, jobId? }`，不会让一个长流程占住当前 turn；"
+          },
+          {
+            "heading": "### 与 KodaX workflow 对标的执行模型",
+            "excerpt": "- 稳定的 ProcessSnapshot、WorkflowOutcome 与 AgentResult 投影：包含 item/count/progress、失败与未验证结果、structured output、验证证据、路由、usage、artifact 和缓存重放来源。"
+          },
+          {
+            "heading": "## 它为 DSH 带来什么",
+            "excerpt": "| 并行结果散落在会话里 | run graph、事件、artifact、结果摘要和成本永久落盘 |"
+          },
+          {
+            "heading": "### 生命周期、持久化与续跑",
+            "excerpt": ".dsh/workflow-runs/<run-id>/"
+          },
+          {
+            "heading": "# 验证 bundle 已进入 profile 合成树",
+            "excerpt": "workflow 启动和 `run_workflow` 默认立即返回 `{ runId, status, jobId? }`，不会让一个长流程占住当前 turn"
+          },
+          {
+            "heading": "### 与 KodaX workflow 对标的执行模型",
+            "excerpt": "公共 `writeReviewPackets()` 从调用方已经捕获的 diff、约束和测试证据生成工作区内 content-addressed、不可覆写的分区文件"
+          },
+          {
+            "heading": "### 与 KodaX workflow 对标的执行模型",
+            "excerpt": "稳定的 ProcessSnapshot、WorkflowOutcome 与 AgentResult 投影：包含 item/count/progress、失败与未验证结果、structured output、验证证据、路由、usage、artifact 和缓存重放来源。"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "wink-run/tokenbank",
+      "practicalScore": 59,
+      "oracleScore": 62,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### Session trace (live proxy + session import)",
+            "excerpt": "Trace data appears on the **Dashboard** sliced by **app · provider · model · supply type · device · time**; the call log shows route result and latency per request."
+          },
+          {
+            "heading": "### Gateway lossless compression",
+            "excerpt": "- **Dashboard** shows compression count, tokens saved, and ratio; cloud merge across devices when signed in"
+          },
+          {
+            "heading": "### Resource hub: MCP · Skill · Prompt",
+            "excerpt": "Dashboard can export four poster styles (pro / cute / humor / minimal)"
+          },
+          {
+            "heading": "### Multi-account CLI & directory dispatch",
+            "excerpt": "Claude / Codex subscription meters; tray and app list show today’s usage"
+          },
+          {
+            "heading": "### Resource hub: MCP · Skill · Prompt",
+            "excerpt": "| **Work-portrait posters** | Dashboard can export four poster styles (pro / cute / humor / minimal) |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "### Gateway · one-click onboarding & toolbox",
+            "excerpt": "![Gateway · apps & toolbox](server/static/screenshots/gateway-apps.webp)"
+          },
+          {
+            "heading": "### Sessions · unified cross-app trace",
+            "excerpt": "![Gateway · sessions](server/static/screenshots/gateway-sessions.webp)"
+          },
+          {
+            "heading": "### Session Trace · step-level observability",
+            "excerpt": "![Session Trace](server/static/screenshots/session-trace.webp)"
+          },
+          {
+            "heading": "### Providers · personal compute + community sharing",
+            "excerpt": "![Providers](server/static/screenshots/providers.webp)"
+          },
+          {
+            "heading": "### Playground · agent orchestration",
+            "excerpt": "![Playground · Agent mode](server/static/screenshots/playground.webp)"
+          },
+          {
+            "heading": "### Usage · spend visibility",
+            "excerpt": "![Usage](server/static/screenshots/usage.webp)"
+          },
+          {
+            "heading": "### Contribute · earn from idle quota",
+            "excerpt": "![Contribute](server/static/screenshots/contribute.webp)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "practicalScore": 57,
+      "oracleScore": 58,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Quick Start",
+            "excerpt": "Local JSONL output is enabled by default under `~/.loongsuite-pilot/logs/output/` on Linux/macOS"
+          },
+          {
+            "heading": "## Operate Pilot",
+            "excerpt": "It shows live token, session, request, and tool counts, plus per-agent and per-provider breakdowns"
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "the caller writes `{sessionId, contentHash, contentPrefix, traceparent}` to `~/.loongsuite-pilot/acp-correlate/<sessionId>.jsonl` when it sends a prompt"
+          },
+          {
+            "heading": "## Output Data",
+            "excerpt": "LoongSuite Pilot emits a normalized GenAI event schema across all supported agents."
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "the upstream `traceparent` reaches Pilot via one of two schemes and is stamped onto collected records (`trace_id` on the turn, `parent_span_id` on the user-input event)"
+          },
+          {
+            "heading": "# LoongSuite Pilot",
+            "excerpt": "Built-in local dashboard — multi-agent token usage, sessions, requests, tools, models, providers, and repository activity at a glance."
+          },
+          {
+            "heading": "## Quick Start",
+            "excerpt": "Local JSONL output is enabled by default under `~/.loongsuite-pilot/logs/output/` on Linux/macOS and `%USERPROFILE%\\.loongsuite-pilot\\logs\\output\\` on Windows."
+          }
+        ],
+        "media": [
+          {
+            "heading": "# LoongSuite Pilot",
+            "excerpt": "<img src=\"docs/_assets/img/dashboard.png\" alt=\"LoongSuite Pilot local dashboard\" width=\"880\">"
+          },
+          {
+            "heading": "## Operate Pilot",
+            "excerpt": "<img src=\"docs/_assets/img/menubar.jpg\" alt=\"LoongSuite Pilot macOS menu bar app\" width=\"360\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "N0zoM1z0/th08",
+      "practicalScore": 27,
+      "oracleScore": 43,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 3.5,
+          "gap": -1.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Repository status",
+            "excerpt": "| Authored source | **Complete** | 1,107 / 1,107 functions are present in source |"
+          },
+          {
+            "heading": "## Repository status",
+            "excerpt": "| Strict authored comparison | **99.86% by bytes** | 1,105 / 1,107 functions are accepted as exact |"
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "The CI workflow publishes `th08-modern-linux-i386.tar.gz` as a portable\nActions artifact."
+          }
+        ],
+        "media": [
+          {
+            "heading": "# 東方永夜抄 ～ Imperishable Night",
+            "excerpt": "<img src=\"resources/progress.svg\" alt=\"TH08 exact-source and playable-platform progress\">"
+          },
+          {
+            "heading": "# 東方永夜抄 ～ Imperishable Night",
+            "excerpt": "Original Japanese TH08 1.00d title screen"
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "TH08 native Linux reconstruction starting and running on Kali Linux"
+          },
+          {
+            "heading": "#### Known Linux issue",
+            "excerpt": "Known Linux Stage 5 dynamic text texture tiling bug"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Stormycry-cryp/dsh-AuthInOne",
+      "practicalScore": 53,
+      "oracleScore": 53,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 2,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Verified capabilities",
+            "excerpt": "Real DSH session logs rebuilt 26,383 Token into KPI, heatmap, model, Provider, bucket, and cost projections"
+          },
+          {
+            "heading": "## Vision fallback",
+            "excerpt": "Successful auxiliary calls appear separately as **Vision-assist calls** and **Vision-assist Token** while retaining their actual Provider/model route."
+          },
+          {
+            "heading": "## Usage filters and accounting",
+            "excerpt": "Daily Token activity always renders the latest 365 dates as a seven-row calendar."
+          },
+          {
+            "heading": "## Verified capabilities",
+            "excerpt": "a real DeepSeek call populated Usage without exposing the key"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## Use this plugin when",
+            "excerpt": "![DeepSeek Harness Models settings with Provider state and OpenAI Codex account authorization](docs/assets/models-dark-desktop.png)"
+          },
+          {
+            "heading": "## Use this plugin when",
+            "excerpt": "![DeepSeek Harness Usage settings with token activity, model usage, and cost analytics](docs/assets/usage-light-desktop.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-crew",
+      "practicalScore": 61,
+      "oracleScore": 70,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 3,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 🧵 Native Progress UI",
+            "excerpt": "plus a claude-hud statusline segment: `⚙dsh 1▶pro 2m14s 21.7k/606 ✓3`"
+          },
+          {
+            "heading": "### Verify",
+            "excerpt": "Within about ten seconds you should see `smoke test passed — configuration OK`."
+          },
+          {
+            "heading": "### 🧵 Native Progress UI",
+            "excerpt": "a claude-hud statusline segment: `⚙dsh 1▶pro 2m14s 21.7k/606 ✓3`"
+          },
+          {
+            "heading": "## MCP tools",
+            "excerpt": "Progress is simultaneously mirrored to `~/.config/dsh-crew/status.d/` (one shard file per writer, can be read by statusline / external monitoring)."
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"./docs/images/dsh-crew-overview.png\" alt=\"DSH Crew — settings page\" width=\"100%\" />"
+          },
+          {
+            "heading": "## One run, two views",
+            "excerpt": "<img src=\"./docs/images/dsh-crew-host.png\" alt=\"Claude Code\" width=\"100%\" />"
+          },
+          {
+            "heading": "## One run, two views",
+            "excerpt": "<img src=\"./docs/images/dsh-crew-jobs.png\" alt=\"DSH Crew\" width=\"100%\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "practicalScore": 56,
+      "oracleScore": 46,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 1,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 反编译结果",
+            "excerpt": "`reports/` 技术报告通过结果页或任务 API 查询，不会进入下载 ZIP。"
+          },
+          {
+            "heading": "## 反编译结果",
+            "excerpt": "下载包是面向继续阅读和分析的干净工程："
+          },
+          {
+            "heading": "## 反编译结果",
+            "excerpt": "| 反编译结果已生成（`completed`）         | 核心结果存在且静态检查通过               | 可以继续分析，但不代表与原始源码一致 |"
+          },
+          {
+            "heading": "## 反编译结果",
+            "excerpt": "| 结果已生成，部分内容需检查（`partial`） | 已生成可下载结果，但部分内容无法完全确认 | 先阅读检查提示和报告"
+          },
+          {
+            "heading": "## 反编译结果",
+            "excerpt": "| 反编译未完成（`failed`）                | 核心步骤无法安全完成                     | 检查 AppID、文件完整性和错误提示"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"./ScreenShot.png\" alt=\"See Wxapkg V2 微信小程序反编译工具首页\" width=\"100%\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "melandlabs/opencontext",
+      "practicalScore": 68,
+      "oracleScore": 49,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Benchmarks",
+            "excerpt": "| LongMemEval-S | 97.6% | Long-term memory recall across long sessions"
+          },
+          {
+            "heading": "## Benchmarks",
+            "excerpt": "| LoCoMo-V2     | 97.4% | QA over long multimodal conversations"
+          },
+          {
+            "heading": "## Benchmarks",
+            "excerpt": "| BEAM @ 10M    | 67.0% | Factual recall at a 10M-token context window"
+          },
+          {
+            "heading": "## Benchmarks",
+            "excerpt": "| LongMemEval-S | 97.6% | Long-term memory recall across long sessions                      |"
+          },
+          {
+            "heading": "## Benchmarks",
+            "excerpt": "| BEAM @ 10M    | 67.0% | Factual recall at a 10M-token context window                      |"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "PerryLink/dsh-auto-review",
+      "practicalScore": 49,
+      "oracleScore": 53,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### Assertion families",
+            "excerpt": "Each case leaves a replayable session JSONL and a trace JSON beside `report.md`/`report.json`"
+          },
+          {
+            "heading": "### Assertion families",
+            "excerpt": "assertion results (including the prompt side-by-side diff), token usage, stress/bias metrics, and the review verdict are all written into the report files"
+          },
+          {
+            "heading": "### Assertion families",
+            "excerpt": "any drift is reported as a **side-by-side diff**, with `allowedChanges` regexes to whitelist intended edits"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "practicalScore": 27,
+      "oracleScore": 37,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 2,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "The model replies with `Annotation 1: …` … `Annotation N: …`, one per annotation, and every Annotation label in the reply is a hoverable chip showing the annotated passage and your note."
+          },
+          {
+            "heading": "## Interaction flow",
+            "excerpt": "Your bubble: question only + \"Annotations ×N\" chip (zero flicker)"
+          },
+          {
+            "heading": "## Interaction flow",
+            "excerpt": "Model receives: annotation block (number + passage + note) + your question"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/c3186efc-44d3-4e7f-9523-1902d9d037e9\" />"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/0b48ac02-4648-4b94-8d8f-344f8b7c25b4\" />"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/8b2610d0-3d00-41be-b314-bac2fe616787\" />"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9b66deea-3786-4296-9b0d-52873a15f5e1\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "JingbiaoMei/Tokdash",
+      "practicalScore": 70,
+      "oracleScore": 63,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### Statusline integration",
+            "excerpt": "[`statusline-minimal.sh`](docs/guides/statusline/statusline-minimal.sh) → one line: `[Claude Sonnet 4.6] 📁 myproject | 📊 12.3M ($4.56) today`"
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "`summary.active_time_estimated` is `true` and `summary.active_time_method` is `capped-inter-event-gap`."
+          },
+          {
+            "heading": "### Statusline integration",
+            "excerpt": "[Claude Sonnet 4.6] 📁 myproject | 📊 12.3M ($4.56) today"
+          },
+          {
+            "heading": "## Tokdash Companion Status Bar App",
+            "excerpt": "- Today's cost, tokens, messages, and month-to-date usage"
+          },
+          {
+            "heading": "### Statusline integration",
+            "excerpt": "[`statusline-full.sh`](docs/guides/statusline/statusline-full.sh) → a four-row dashboard with today + week totals and a top-3 per-tool breakdown"
+          },
+          {
+            "heading": "## Tokdash Companion Status Bar App",
+            "excerpt": "Today's cost, tokens, messages, and month-to-date usage"
+          },
+          {
+            "heading": "## Tokdash Companion Status Bar App",
+            "excerpt": "Combined totals and server-grouped quota from multiple Tokdash endpoints"
+          },
+          {
+            "heading": "## Tokdash Companion Status Bar App",
+            "excerpt": "Codex, Claude, Kimi, MiniMax, Antigravity, and Grok quota windows"
+          }
+        ],
+        "media": [
+          {
+            "heading": "### Client support matrix",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-overview-en-light.png\" alt=\"Tokdash overview dashboard - click for live demo\" width=\"860\" />"
+          },
+          {
+            "heading": "### Client support matrix",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-sessions-en-light.png\" alt=\"Tokdash sessions view - click for live demo\" width=\"860\" />"
+          },
+          {
+            "heading": "### Client support matrix",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-heatmap-en-light.png\" alt=\"Tokdash monthly usage heatmap - click for live demo\" width=\"860\" />"
+          },
+          {
+            "heading": "### Client support matrix",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-quota-en-light.png\" alt=\"Tokdash quota tracking - click for live demo\" width=\"860\" />"
+          },
+          {
+            "heading": "## Tokdash Companion Status Bar App",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/companion/demo-mac.png\" alt=\"Tokdash Companion Status Bar App on macOS\" width=\"360\" />"
+          },
+          {
+            "heading": "### Statusline integration",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-statusline.png\" alt=\"Tokdash statusline integration example\" width=\"900\" />"
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "THEWOLFWALKER/dsh-notifier",
+      "practicalScore": 45,
+      "oracleScore": 49,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 6.5,
+          "oracle": 0,
+          "gap": -6.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 5,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## Screenshots",
+            "excerpt": "![Dashboard](docs/screenshots/admin-dashboard.png)"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "![Notify](docs/screenshots/admin-notify.png)"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "![Bindings](docs/screenshots/admin-bindings.png)"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "![Sessions](docs/screenshots/admin-sessions.png)"
+          },
+          {
+            "heading": "## Screenshots",
+            "excerpt": "![Channels](docs/screenshots/admin-channels.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "orziz/odai",
+      "practicalScore": 63,
+      "oracleScore": 60,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 3,
+          "gap": -5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Evaluation",
+            "excerpt": "| GPT-5.6-sol / high | **144/144** | **96/96** | 80/96 | **+16** | 396,899 / 317,761 (+24.9%) |"
+          },
+          {
+            "heading": "## Evaluation",
+            "excerpt": "| DeepSeek V4 Pro / max (DSH) | **144/144** | **96/96** | 63/96 | **+33** | 2,131,373 / 1,652,030 (+29.0%) |"
+          },
+          {
+            "heading": "## Evaluation",
+            "excerpt": "All nine runners produced a positive paired gain."
+          },
+          {
+            "heading": "## Evaluation",
+            "excerpt": "Eight runners used more tokens with odai, while Gemini 3.6 used 38.2% fewer"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "Akimiya-z/codex-guard",
+      "practicalScore": 66,
+      "oracleScore": 57,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 3,
+          "gap": -5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 🤖 Codex Guard",
+            "excerpt": "| TODO / FIXME scan | ⚠️ 2 |"
+          },
+          {
+            "heading": "## Outputs",
+            "excerpt": "| `result` | `pass`, `fail`, or `skipped`. |"
+          },
+          {
+            "heading": "## Outputs",
+            "excerpt": "| `content-scan-coverage` | Text patches scanned / eligible files, such as `12/13`, or `disabled`. |"
+          },
+          {
+            "heading": "## 🤖 Codex Guard",
+            "excerpt": "❌ **Checks failed — review the findings before merging.**"
+          },
+          {
+            "heading": "## 🤖 Codex Guard",
+            "excerpt": "- `scripts/sync.js:4` — AWS Access Key ID `AKIA...MPLE`"
+          },
+          {
+            "heading": "## Outputs",
+            "excerpt": "| `findings-json` | JSON of the full report — pipe it into later steps to gate more or build dashboards. |"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "morluto/jacobian",
+      "practicalScore": 22,
+      "oracleScore": 35,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 4,
+          "oracle": 0.5,
+          "gap": -3.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Compute one bounded result",
+            "excerpt": "The second command returns the gcd and Bézout coefficients as JSON."
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "practicalScore": 45,
+      "oracleScore": 67,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 3,
+          "oracle": 0,
+          "gap": -3
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![任务台视图](功能展示/a.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![攻防评估模式](功能展示/2.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![代码审计模式](功能展示/3.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![二进制分析模式](功能展示/4.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![hunter 狩猎](功能展示/5.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![webshell 管理](功能展示/6.png)"
+          },
+          {
+            "heading": "## 效果展示",
+            "excerpt": "![AttackAtlas](功能展示/b.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PolinniZhong/dsh-omi-voice",
+      "practicalScore": 43,
+      "oracleScore": 32,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 3,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 使用",
+            "excerpt": "回复若只有这些内容，按钮呈禁用态并提示\"没有可朗读的内容\""
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"docs/assets/idle.png\" width=\"360\" alt=\"未朗读状态\">"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"docs/assets/reading.png\" width=\"360\" alt=\"朗读中状态\">"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "<img src=\"docs/assets/reading.gif\" width=\"480\" alt=\"点读 → 暂停 → 继续 演示\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "practicalScore": 73,
+      "oracleScore": 58,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 6,
+          "oracle": 3,
+          "gap": -3
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 6,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "Expected result: `status --json` reports `signed-in` and exits `0`"
+          },
+          {
+            "heading": "### Enable only the capability you intend to use",
+            "excerpt": "Generated images are saved as DSH attachments and shown in the Codex Connect result gallery."
+          },
+          {
+            "heading": "### 3. Find the Codex Connect card",
+            "excerpt": "a fresh installation shows **Not signed in** and a **Sign in with ChatGPT** button"
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "Expected result: `status --json` reports `signed-in` and exits `0`, while `doctor --json` prints one secret-free JSON document."
+          },
+          {
+            "heading": "### 2. Start Harness",
+            "excerpt": "Expected result: the Harness web UI opens for the selected profile."
+          },
+          {
+            "heading": "### 3. Find the Codex Connect card",
+            "excerpt": "Expected result: a fresh installation shows **Not signed in** and a **Sign in with ChatGPT** button."
+          },
+          {
+            "heading": "### Generate images with GPT Image",
+            "excerpt": "The completed image is stored as a DSH attachment and rendered directly in the conversation. The result card lets you review and copy the full prompt, download the image, and inspect image details."
+          },
+          {
+            "heading": "## Reauthentication, diagnostics, and conflicts",
+            "excerpt": "`doctor --json` emits exactly one secret-free JSON document with schema version 1, package/version/Node metadata, credential-file state and safe mode, capabilities, conflict status, and hints."
+          }
+        ],
+        "media": [
+          {
+            "heading": "### 3. Find the Codex Connect card",
+            "excerpt": "Collapsed English-localized Codex Connect entry under Harness plugin configuration"
+          },
+          {
+            "heading": "### 4. Sign in with ChatGPT",
+            "excerpt": "English-localized Codex Connect signed-in state inside Harness plugin configuration"
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "OpenAI Codex model group in the English-localized DeepSeek Harness model picker"
+          },
+          {
+            "heading": "### Composer controls for GPT Codex conversations",
+            "excerpt": "DeepSeek Harness Composer with the per-conversation Fast Mode lightning control and weekly quota bar"
+          },
+          {
+            "heading": "### Enable only the capability you intend to use",
+            "excerpt": "English-localized Codex Connect optional capability configuration after explicit opt-in"
+          },
+          {
+            "heading": "### Generate images with GPT Image",
+            "excerpt": "English-localized Codex Connect GPT Image result with preview, copyable prompt, download action, and image details"
+          },
+          {
+            "heading": "### 3. Find the Codex Connect card",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/franksong2702/dsh-codex-connect/main/docs/assets/en/plugin-entry.jpg\" alt=\"Collapsed English-localized Codex Connect entry under Harness plugin configuration\" width=\"586\">"
+          },
+          {
+            "heading": "### 4. Sign in with ChatGPT",
+            "excerpt": "<img src=\"https://raw.githubusercontent.com/franksong2702/dsh-codex-connect/main/docs/assets/en/oauth-status.jpg\" alt=\"English-localized Codex Connect signed-in state inside Harness plugin configuration\" width=\"720\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "dshplugin/dsh-plugin-hub",
+      "practicalScore": 48,
+      "oracleScore": 35,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 3.25,
+          "gap": -2.75
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## 什么是 DSH Plugin Hub",
+            "excerpt": "<img src=\"https://api.dsh-plugin.org/images/releases/1-3-8/dsh-plugin-hub-market-zh.png\" alt=\"DSH Plugin Hub 插件中心界面\" width=\"840\">"
+          },
+          {
+            "heading": "## 官网一览",
+            "excerpt": "<img src=\"docs/screenshots/dsh-plugin-hub-site-home.png\" alt=\"DSH Plugin 官网首页\" width=\"400\">"
+          },
+          {
+            "heading": "## 官网一览",
+            "excerpt": "<img src=\"docs/screenshots/dsh-plugin-hub-site-categories.png\" alt=\"DSH Plugin 分类展示\" width=\"400\">"
+          },
+          {
+            "heading": "## 功能一览",
+            "excerpt": "<img src=\"https://api.dsh-plugin.org/images/releases/1-3-8/dsh-plugin-hub-installed-zh.png\" alt=\"已安装插件列表\" width=\"400\">"
+          },
+          {
+            "heading": "## 功能一览",
+            "excerpt": "<img src=\"https://api.dsh-plugin.org/images/releases/1-3-8/dsh-plugin-hub-custom-install-zh.png\" alt=\"自定义安装\" width=\"400\">"
+          },
+          {
+            "heading": "## 功能一览",
+            "excerpt": "<img src=\"https://api.dsh-plugin.org/images/releases/1-3-8/dsh-plugin-hub-settings-zh.png\" alt=\"设置\" width=\"400\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "LaplaceYoung/oh-my-dsh",
+      "practicalScore": 39,
+      "oracleScore": 33,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 3,
+          "oracle": 0.5,
+          "gap": -2.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "**530** plugins · **3731** tests · **2183/2183** e2e registration checks · **6/6** live-session\nchecks against a real DeepSeek model."
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "starsstreaming/beautiCode",
+      "practicalScore": 41,
+      "oracleScore": 30,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        },
+        "media": {
+          "machine": 3,
+          "oracle": 0.75,
+          "gap": -2.25
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": [
+          {
+            "heading": "## 它是什么？",
+            "excerpt": "<img width=\"1280\" height=\"714\" alt=\"QQ20260818-205802\" src=\"https://github.com/user-attachments/assets/a9a18412-4c62-4083-ab49-d127f05e61c3\" />"
+          },
+          {
+            "heading": "# 未把 dsh 装到 PATH 时：",
+            "excerpt": "<img width=\"320\" alt=\"Windows 安装包\" src=\"https://github.com/user-attachments/assets/8c16eeb9-94d0-4f19-a816-b32fba8a110c\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "practicalScore": 56,
+      "oracleScore": 67,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2.5,
+          "oracle": 6,
+          "gap": 3.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 3,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 界面预览",
+            "excerpt": "悬浮卡同时展示触发条件、20 日历史方向频率、样本数、同场景对照和研究截止日"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "金线是供应商大师价值序列，蓝线是股价，红/绿带分别表示高估与低估区间。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "| 低位破低反包 | 20 日上涨 | 3,581 | **65.60%** | **+7.12%** | 65.75% | 显示 `包`；形态独立增量未证实 |"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "本轮通过数为 **0/16**，因此产品没有新增任何“已验证高胜率买点”。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "成功取得 5,809 只行情；其中 5,704 只达到至少 120 根预热要求，共分析 9,813,872 根有效可交易日 K"
+          },
+          {
+            "heading": "### 个股行情、估值与 K 线观察",
+            "excerpt": "报告逐一对账当前 10 类生产标记、22 个有效周期格、16 个冻结候选、matched 增量、置信区间及拟影子验证方向。"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "研究请求 5,813 只当前及历史 A 股证券，成功取得 5,809 只行情；其中 5,704 只达到至少 120 根预热要求，共分析 9,813,872 根有效可交易日 K"
+          },
+          {
+            "heading": "### 全市场回测与验证",
+            "excerpt": "| 极缩量后脱离平台 | 20 日上涨 | 22,495 | 47.68% | +0.84% | 49.53% | 明确否决为买点 |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见黑夜模式市场页](docs/assets/dashboard-dark.jpg)"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见个股详情与价值曲线](docs/assets/stock-detail-dark.jpg)"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "![Hanai Worth · 值见变盘点——低位破低反包、历史回测证据与显示开关](docs/assets/kline-turning-points.jpg)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Yan-Zero/dsh-std",
+      "practicalScore": 28,
+      "oracleScore": 30,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2,
+          "oracle": 0,
+          "gap": -2
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [],
+        "media": []
+      }
+    }
+  ]
+}

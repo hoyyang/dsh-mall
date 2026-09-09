@@ -1,0 +1,523 @@
+{
+  "reviews": [
+    {
+      "repo": "XieRW/dsh-beauty-skins",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "拉预览网格，点一张即应用，配色从壁纸提取",
+        "支持动态壁纸，也保留自定义选图。",
+        "点「自定义（选图）」，本地解码、取色、压成 WebP，图只存在本机 `~/.dsh/skins/`。",
+        "动态壁纸带「动态」角标，生效后在窗口里循环播放。"
+      ],
+      "usageItems": [
+        "设置 → 通用设置 → 皮肤。第一行仍是「自定义（选图）」「默认」「美女系列」；下面是壁纸预览网格，点一张即应用。",
+        "浏览器打开 `http://127.0.0.1:3080`，左下角**设置 → 通用设置 → 皮肤**。"
+      ],
+      "usageActions": [
+        "点「自定义（选图）」",
+        "点一张即应用"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "每张壁纸都会走和自定义选图同一套本地取色：解码、采样、压成 WebP 存进 `~/.dsh/skins/`，视频本身不落地，由 Host 代理播放。",
+        "- 源码级改动：覆盖 `packages/client/ui-theme` 并打宿主补丁，需要重新 `pnpm run build`。",
+        "- 基线 DSH `0.1.0-rc.7`。上游改界面结构时补丁可能打不上。",
+        "目录壁纸由 Host 代理 [哲风壁纸](https://haowallpaper.com) 的列表与媒体，浏览器不直连、也不内置肖像。",
+        "壁纸来自 [哲风壁纸](https://haowallpaper.com)，版权归原站及作者。"
+      ],
+      "media": [
+        {"excerpt": "![设置里点选美女系列壁纸](docs/screenshot.png)", "weight": 1},
+        {"excerpt": "<img src=\"docs/skin-1.png\" width=\"32%\" alt=\"皮肤预览 1\" />", "weight": 1},
+        {"excerpt": "<img src=\"docs/skin-2.png\" width=\"32%\" alt=\"皮肤预览 2\" />", "weight": 1},
+        {"excerpt": "<img src=\"docs/skin-3.png\" width=\"32%\" alt=\"皮肤预览 3\" />", "weight": 1},
+        {"excerpt": "<img src=\"docs/skin-4.png\" width=\"32%\" alt=\"皮肤预览 4\" />", "weight": 1},
+        {"excerpt": "<img src=\"docs/skin-5.png\" width=\"32%\" alt=\"皮肤预览 5\" />", "weight": 1}
+      ],
+      "concerns": [
+        "skin-6.png omitted because the weighted media cap of 6 was reached.",
+        "All code fences are install/uninstall procedures, so codeExamples is empty.",
+        "No ioPairs and no explicit scenario statements; outputs has no concrete text-described result."
+      ]
+    },
+    {
+      "repo": "tencent-connect/dsh-qqbot",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**基于 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) 的 QQ Bot 插件，将 DeepSeek AI 助手接入 QQ 私聊与群聊。**",
+        "首次启动时，插件检测到凭据未配置会自动进入扫码引导：终端输出二维码 → 手机 QQ 扫码绑定 → 凭据自动保存到 profile，后续启动无需再次扫码。",
+        "- **会话隔离** — 每个 QQ 私聊用户/群聊各一个独立 Agent",
+        "- **Preset 支持** — 可通过 `agent-presets` 服务挂载预设（工具集、prompt 等）",
+        "- **闲置回收** — 超时自动 dispose Agent，防止内存泄漏",
+        "- **Markdown 输出** — 回复以 Markdown 格式发送，支持代码块/表格感知切分",
+        "- **问答互动** — 支持 `ask_user_question`，单选生成内联按钮（点一个其余变灰）、多选回复编号，逐题推进 + 问题级超时"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "`/new`（别名 `/reset` `/clear`） | 开始新会话（清空上下文）",
+        "`/compact` | 压缩会话历史（摘要替换旧记录，保留上下文）",
+        "`/model` | 查看或切换模型",
+        "`/preset` | 查看或切换 agent preset（新会话生效）",
+        "`/stop` | 中止当前生成",
+        "`/bot-ping` | 连通性测试",
+        "`/bot-version` | 查看版本信息",
+        "`/bot-status` | 查看当前会话状态",
+        "`/bot-help` | 查看所有指令"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "sessionKey: `qqbot:${appId}:${scope}:${peerId}`，由 SHA-256 确定性派生 SessionId，重启后可恢复。",
+        "解析策略：进程内复用 → 持久化恢复 → 全新创建。",
+        "避免部分终端二维码渲染错位的问题。",
+        "`textChunkLimit` | number | `4500` | 单条消息最大字符数"
+      ],
+      "media": [
+        {"excerpt": "<img src=\"./docs/assets/qrcode.png\" alt=\"二维码扫码示意图\" width=\"280\" />", "weight": 1}
+      ],
+      "concerns": [
+        "QQ group/channel QR images excluded as community/contact decoration.",
+        "usageItems left empty: built-in command purposes are recorded once as usageActions command-reference rows.",
+        "No ioPairs, outputs, or explicit use-case scenarios; command/config fences are install/config and excluded from codeExamples."
+      ]
+    },
+    {
+      "repo": "titanwings/dsh-automation",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Create and manage schedules from DSH Web or any eligible root Agent.",
+        "- **DSH Web:** open **Automations** from the sidebar or the conversation tab to create a rule, pause or resume it, run it now, delete it, and inspect recent runs.",
+        "- **Any eligible root Agent:** ask in natural language. Six scoped tools let the Agent manage automations only for its exact workspace.",
+        "Create a one-shot, fixed-interval, daily, or weekly rule. Daily and weekly schedules use an IANA time zone; the friendly form is normalized into a validated RFC 5545 RRULE for persistence and inspection.",
+        "The Web form can follow the live global model or pin one provider/model pair.",
+        "a new Session ID and fresh root Agent;",
+        "the saved prompt, not the source conversation history;",
+        "a terminal result derived from the actual DSH turn end, not merely “message delivered.”",
+        "Runs progress through `queued`, `running`, and a terminal state such as `succeeded`, `failed`, `skipped`, or `cancelled`.",
+        "to archive completed, failed, cancelled, and other terminal run Sessions from the ordinary DSH conversation list",
+        "Plugin-level approval asks for human confirmation when an Agent creates or expands unattended future work."
+      ],
+      "usageItems": [
+        "1. Open a Session attached to the workspace you want to automate.",
+        "2. Open **Automations** from the sidebar, or select it next to Chat and Trajectory.",
+        "3. Enter a self-contained task, schedule, IANA time zone, model target, and permission boundary.",
+        "4. Use **Run now** once before relying on the schedule; inspect the resulting Session and run record."
+      ],
+      "usageActions": [
+        "1. Open a Session attached to the workspace you want to automate.",
+        "2. Open **Automations** from the sidebar, or select it next to Chat and Trajectory.",
+        "3. Enter a self-contained task, schedule, IANA time zone, model target, and permission boundary.",
+        "4. Use **Run now** once before relying on the schedule; inspect the resulting Session and run record."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Create a read-only automation called \"Weekday regression triage\" for this workspace."
+      ],
+      "usecases": [
+        "If a task depends on unstated chat history, needs an interactive approval halfway through, or should react to a file, HTTP, or process condition rather than time, it is not a good automation yet.",
+        "| Weekday regression triage | `read-only` | Inspect local test evidence, group failures, and leave a concise diagnosis in a new Session. |",
+        "| Weekly repository health report | `read-only` | Review stale TODOs, dependency manifests, ignored failures, and test gaps without changing the tree. |",
+        "| One-shot verification | `read-only` | Recheck a flaky failure later and preserve evidence outside the current chat. |",
+        "| Generated-code refresh | `workspace-write` | Rebuild a known generated artifact, run focused checks, and report the exact diff. |",
+        "| Maintenance fix window | `workspace-write` | Reproduce one bounded issue, make the smallest verified fix, and stop when acceptance checks pass. |"
+      ],
+      "outputs": [
+        "Each record keeps its definition revision, prompt and target snapshot, scheduled time, result Session ID, bounded summary, and structured error.",
+        "the Automations run history keeps the Session ID, summary, and error as an auditable inbox"
+      ],
+      "reliability": [
+        "- **No inherited authority.** A run receives no source-chat history, inbox, grant, or past approval.",
+        "- **Two permission modes only.** Rules may use `read-only` or `workspace-write`; unattended `danger-full-access` is not accepted.",
+        "- **Fail closed.** Each fresh Session uses approval policy `never`. A tool that still requires interactive approval fails instead of waiting forever or silently escalating.",
+        "- **Exact workspace scope.** Agent tools bind to the caller's canonical registered workspace; callers cannot supply an arbitrary target path.",
+        "- **No blind retries.** Once an Agent may have produced side effects, the plugin does not automatically retry it.",
+        "A due occurrence is recorded as `skipped(overlap)` if its previous run is queued or running.",
+        "Persisted `queued` or `running` records become `failed(host_interrupted)` on recovery; they are not secretly re-executed.",
+        "The Agent is cancelled after 60 minutes by default and the run is recorded as failed.",
+        "nonexistent DST wall times are skipped rather than shifted.",
+        "Retention removes only the oldest terminal records; queued and running records are never pruned."
+      ],
+      "media": [
+        {"excerpt": "![Automation dashboard showing workspace rules, next runs, and recent outcomes](docs/01-dashboard-en.png)", "weight": 1},
+        {"excerpt": "![Create form with schedule, time zone, and permission boundary](docs/02-create-en.png)", "weight": 1},
+        {"excerpt": "![Run history with a completed run, an interrupted failure, summaries, and result Session links](docs/03-run-history-en.png)", "weight": 1}
+      ],
+      "concerns": [
+        "docs/social-preview.png excluded as marketing/social art.",
+        "Version 0.1 limits list and test-suite coverage exceed the reliability cap and were not separately recorded.",
+        "No ioPairs; the agent prompt example shows a request only, with no response side."
+      ]
+    },
+    {
+      "repo": "skymecode/deepseek-harness-for-vscode",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Native VS Code workbench** — all interaction happens in the sidebar; the local Harness Gateway exposes only the loopback API transport, while the official WebUI is neither served nor embedded.",
+        "- **Detachable workbench** — open the same synchronized conversation UI in an editor-area panel and move it to another VS Code window when more space is needed.",
+        "- **Complete session workflow** — persistent history, create, switch, rename, fork, resume, archive/restore, export, and import sessions",
+        "- **Stable incremental rendering** — streamed updates preserve disclosure state and the reader's scroll position.",
+        "- **Conversation step timeline** — while a turn is in flight, a timeline spine runs down the left corridor of the transcript with a dot on every thinking, tool, and notice step",
+        "- **Session auto-naming** — new conversations get a concise single-line title derived from the first message; manual renames are never overwritten.",
+        "- **DeepSeek Harness-native reasoning** — thinking is presented in a native reasoning block that opens as deltas stream, follows the newest content, and collapses to a summary row once the block completes.",
+        "- **Editor context** — selected code appears as a removable context card; type `@` to fuzzy-search and attach workspace files without leaving the composer.",
+        "- **Native DSH plugin center** — search a curated catalog, filter by category, inspect installed plugins, or install an npm/GitHub/local/tarball package.",
+        "- **Zero-deployment runtime** — official `dsh`, pnpm, and standalone Node 22.22.3 are bundled in each platform VSIX and managed by the extension.",
+        "Marketplace cards classify known entries as **Agent compatible**, **Agent works · Web UI unavailable**, or **Official Web UI only**."
+      ],
+      "usageItems": [
+        "1. Open the project you want to work on.",
+        "2. Select the **DeepSeek Harness** icon in the Activity Bar.",
+        "3. Open **Connection settings** and configure DeepSeek Official or add a relay source.",
+        "4. Describe your task in the composer and send it.",
+        "Open the workbench with `Ctrl+Alt+H` on Windows/Linux or `Cmd+Alt+H` on macOS.",
+        "Open the **⊞ Plugins** button in the workbench header to browse repositories read directly from the [`dsh-plugin` GitHub topic](https://github.com/topics/dsh-plugin).",
+        "After changing the display language, run **Developer: Reload Window**."
+      ],
+      "usageActions": [
+        "DeepSeek Harness: Open Workbench",
+        "DeepSeek Harness: Open Workbench in New Window",
+        "DeepSeek Harness: Reload Workbench",
+        "DeepSeek Harness: Show Logs",
+        "DeepSeek Harness: Import Sessions",
+        "Developer: Reload Window"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- The Harness Gateway listens only on a random `127.0.0.1` port.",
+        "- The Webview uses a strict CSP and loads no remote scripts or iframes.",
+        "- Raw Markdown HTML is disabled, and rendered markup is sanitized through a DOMPurify allowlist.",
+        "- The API Key is never sent to the Webview or written to extension logs.",
+        "- Third-party DSH plugins are trusted Extension Host dependencies: they run outside the Agent sandbox. Review their source before installation.",
+        "Automatically attached selections are limited to 16 KB and are truncated when necessary.",
+        "UI-only themes and layout extensions cannot affect the native workbench, so their install button is disabled.",
+        "GitHub-only entries without curated metadata are marked **Compatibility unknown** until their installed manifest can be inspected.",
+        "this extension pins the official `@deepseek-ai/dsh@0.1.1-rc.2` package.",
+        "Platform-specific VSIX files are required because the bundled Node, PTY, and sandbox packages contain native binaries"
+      ],
+      "media": [
+        {"excerpt": "<img src=\"docs/images/workbench-preview.png\" alt=\"DeepSeek Harness native VS Code workbench\" width=\"460\">", "weight": 1},
+        {"excerpt": "<img src=\"docs/images/model-and-effort.png\" alt=\"Model, DSH mode, and reasoning effort controls\" width=\"300\">", "weight": 1},
+        {"excerpt": "<img src=\"docs/images/plugin-marketplace.png\" alt=\"Native DSH plugin marketplace\" width=\"500\">", "weight": 1}
+      ],
+      "concerns": [
+        "No ioPairs, usecases, or outputs; screenshots carry no further text outputs.",
+        "Hosted GitHub Actions build matrix covers only four of six platforms — beyond the reliability cap.",
+        "Command-reference rows recorded as command names only; configuration table excluded per install/config exclusion."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-notification",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "When a session finishes a turn, the browser shows a system notification (via the `Notification` API), so you can switch tabs and still know when DSH is done.",
+        "Per-outcome toggles and include/exclude keyword rules control exactly which completions notify.",
+        "the host contributes a session projection (a bounded summary of each session's last completed turn)",
+        "The section also grants browser permission and sends a test notification."
+      ],
+      "usageItems": [
+        "The settings section lives under **Settings > Notifications**."
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "new Notification(\"DSH finished\", { body: \"deploy done\" })"
+      ],
+      "reliability": [
+        "Notifications require the page to be open (the browser shows them while it is hidden, but not after the tab is closed) and Notification permission granted",
+        "a denied site permission cannot be overridden from inside the page.",
+        "a completion that happened while the page was disconnected is not re-notified on reconnect.",
+        "earlier turns are not matched.",
+        "the click action only focuses the window (no deep link to the turn).",
+        "Rule matching runs client-side against the projected content; the reply body never exceeds `maxBodyChars`.",
+        "the plugin writes nothing to the log and registers no model-facing tools.",
+        "notifications are UI-only and never enter a request."
+      ],
+      "media": [],
+      "concerns": [
+        "No media images in the README (only an ASCII diagram).",
+        "No ioPairs or explicit use cases; the notification example body is the only concrete output shown.",
+        "Settings table rows excluded as configuration evidence."
+      ]
+    },
+    {
+      "repo": "like-study1/Oh-My-DSH",
+      "inferredType": "catalog-list",
+      "capability": [
+        "本仓库以 GitHub `dsh-plugin` 主题为数据源，对生态全量插件实施周期性自动监测",
+        "**01 全量监测** — 每 4 小时自动抓取 GitHub `dsh-plugin` 主题全量快照，实时跟踪生态内仓库的新增、更名与归档状态，监测范围覆盖全部主题仓库。",
+        "**02 人工策展** — 在自动采集的基础上，对候选插件逐项核验，明确类型归属，撰写条目简介，确保目录信息准确、层次分明。",
+        "按功能领域划分十一大类，涵盖 Web UI 增强、Agent 能力、编码开发、消息通讯、视觉与多模态、皮肤与娱乐、合集与发行版等，条目兼容中英双语说明。",
+        "**04 活跃度信号** — 依据仓库最近提交时间，标注“活跃、关注、放缓、停更”四级信号，辅助研判插件维护状态与更新节奏。",
+        "**05 社区站点** — 依托 GitHub Pages 部署检索站点，支持关键词检索与分类筛选，便于快速定位目标插件。",
+        "**06 自动维护** — 同步脚本与持续集成流程协同运行，目录、数据、站点及变更记录同步更新，全过程无需人工干预。",
+        "收录结果以分类目录、数据文件与检索站点三种形态同步发布。",
+        "1. **主题登记** — 为插件仓库添加 `dsh-plugin` 主题标签，自动同步将在 4 小时内完成初筛，经人工策展核验后择优收录。",
+        "2. **提交申请** — 通过 [Issue](https://github.com/like-study1/Oh-My-DSH/issues) 登记，或修改 [`data/curated.json`](data/curated.json) 后提交 Pull Request"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "截至 2026-08-27 09:59（北京时间），本目录收录精选插件 **2100** 个，监测生态仓库 **2000** 个，累计获得 Star **879237**。"
+      ],
+      "reliability": [
+        "收录行为不代表 DSH 官方背书。",
+        "收录状态仅反映公开数据，不构成兼容性承诺；活跃度信号不等同于安全性结论。",
+        "使用者安装第三方插件前，应自行核验插件源码、权限范围、依赖关系、开源许可及最近更新时间。"
+      ],
+      "media": [],
+      "concerns": [
+        "Top-10 plugin table, category statistics, and linked ecosystem projects excluded per the catalog/linked-project ownership rule.",
+        "No ioPairs, usage steps, code examples, or media; the quick-use fence targets DSH itself, not catalog operation.",
+        "Star totals recorded only as a collection outcome of the catalog itself, not as plugin quality evidence."
+      ]
+    },
+    {
+      "repo": "2BingLing/dsh-market",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 5861 个插件 + 整合包通道）",
+        "- **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释",
+        "- **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选",
+        "- **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚",
+        "- **AI 安装（路由模式）** — 零 LLM 直装优先（配方缓存 / 解析命令 + 冒烟验证，75%+ 插件无需 AI）",
+        "- **推荐体系** — 冷启动问卷 / 新手友好 / 猜你喜欢（个性化画像）/ 场景推荐（读会话上下文，详见 [DSH 插件版](#dsh-插件版)）",
+        "- **整合包生态** — Web「整合包」分区 + 插件端整合包 Tab（浏览 / 条目解析率校验 / 装包入口）",
+        "- **零 token 常驻** — 插件版纯被动运行，不打开面板不消耗任何资源",
+        "- 首次打开有**冷启动问卷**：选你常用的场景与插件类型，立即得到精选 + 猜你喜欢",
+        "- 画像来自问卷 / 收藏 / GitHub 加星 / 已装插件，**全部保存在本机**",
+        "- 手动触发，读取当前会话标题与消息（**零 token**）→ 推荐\"现在这个场景该装什么\"",
+        "**两者的关系：仅共享同一份 `plugins.json` 数据**（每日 06:00 自动刷新星星与描述）"
+      ],
+      "usageItems": [
+        "| 找插件 | 搜索框中文关键词 / 标签多选 / 类型与评分筛选 |",
+        "| 看质量 | 卡片五边形雷达图 + 五维明细 + 推荐理由 |",
+        "| 装插件 | 详情页复制真实安装命令，或复制「AI 安装提示词」 |",
+        "| 已装 | 检测本机已装（skill 目录 + profile），一键卸载 |",
+        "| 收藏 | 星标收藏的插件，稍后安装 |",
+        "装完**重启 harness**，侧边栏底部出现「插件市场」入口。"
+      ],
+      "usageActions": [
+        "搜索框中文关键词 / 标签多选 / 类型与评分筛选",
+        "详情页复制真实安装命令，或复制「AI 安装提示词」",
+        "检测本机已装（skill 目录 + profile），一键卸载"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "DSH 生态增长极快，插件与技能散落在 GitHub 各处 —— **不知道哪个好用、怎么装、怎么组合成一套能干活的环境**",
+        "拿不准装不装？交给插件市场："
+      ],
+      "outputs": [],
+      "reliability": [
+        "打了 `dsh-plugin` topic 只是进入候选池的入场券——收录还需要仓库**确实是 DSH 插件**（有 SKILL.md 或 cordis 标记）。",
+        "3. 无 stars / 评分门槛——检测通过即收录",
+        "└─ 未通过（非插件）→ 不收录（可重新打开 issue 询问原因）",
+        "（高分精选需实用评分 ≥ 80）",
+        "需要配置时先向你确认"
+      ],
+      "media": [
+        {"excerpt": "![Web 版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-web.jpg)", "weight": 1},
+        {"excerpt": "![插件版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-plugin.jpg)", "weight": 1}
+      ],
+      "concerns": [
+        "Banner/section-forms SVG art and listed badges excluded as decorative; the two screenshots are repo-hosted via raw GitHub URLs.",
+        "AI 语义搜索 is a 即将上线 roadmap item and was excluded.",
+        "Cataloged third-party plugins' capabilities excluded per the catalog ownership rule; no ioPairs/outputs; dual Web-site + DSH-plugin form noted for the type judgment."
+      ]
+    },
+    {
+      "repo": "labring/sealos-skills",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Deploy projects to [Sealos Cloud](https://sealos.io) from your AI agent.",
+        "inspect a project, prepare missing deployment artifacts, connect Sealos Cloud databases and object storage for development, build or reuse a container image, ship the app to Sealos Cloud",
+        "One Sealos plugin installs the deploy, database, S3, canvas, app-builder, and supporting cloud-native skills from root `skills/**`",
+        "This repository is a dsh profile bundle over the same root `skills/**` source.",
+        "The eight root skills appear in the session skill catalog. Ask the agent to deploy to Sealos Cloud; it loads `sealos-deploy` (and sibling skills as needed) through the `skill` tool",
+        "- `sealos-database` — create, connect, and operate Sealos Cloud databases for development",
+        "- `sealos-canvas` — view deployed Sealos resources in a local read-only canvas UI",
+        "verify the actual Sealos App URL, logs, login/setup flow for web apps, and resource footprint before reporting the app as usable",
+        "Later runs can switch to an in-place update flow when an existing deployment is detected."
+      ],
+      "usageItems": [
+        "- **Codex CLI:** type `$sealos`",
+        "- **Codex App:** click the **+** button in the lower-left corner of the chat input, choose **Plugins**, then choose **Sealos**",
+        "After installation in Claude Code, use `/sealos`:",
+        "use the `sealos-canvas` skill through your installed plugin entry point for a local read-only view."
+      ],
+      "usageActions": [
+        "$sealos deploy this repo to Sealos Cloud",
+        "$sealos deploy /path/to/project",
+        "$sealos create a cloud Postgres database for this repo and wire DATABASE_URL",
+        "$sealos create private S3 object storage for uploads and wire env vars",
+        "/sealos show the resources created by the last deployment"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "$sealos deploy this repo to Sealos Cloud"
+      ],
+      "usecases": [
+        "For a local project or Devbox that needs a cloud database, the agent will:",
+        "For a local project or Devbox that needs S3-compatible object storage, the agent will:",
+        "For a repository already deployed by Sealos Deploy, the agent will:"
+      ],
+      "outputs": [
+        "4. Output and open the local UI address for inspection.",
+        "After a project has been deployed and `.sealos/state.json` contains verified `last_deploy` runtime evidence"
+      ],
+      "reliability": [
+        "The default bash sandbox blocks writes outside the workspace. Login writes `~/.sealos/kubeconfig`, so those commands need `sandbox_permissions: danger-full-access`.",
+        "Gemini CLI and Qwen Code manifests provide repository context through `CLAUDE.md`; they do not claim slash-command support.",
+        "Canvas stays plugin-pack mediated because it consumes verified deployment state.",
+        "For an actual deployment, you will still need a Sealos Cloud account and access to a container registry, but these do not need to be fully set up before the skill starts.",
+        "- write only the required local env key without exposing secrets in chat",
+        "- initialize S3 credentials only when needed and keep access keys out of chat",
+        "- make buckets public or rotate credentials only after confirmation",
+        "- manage public access only after confirmation",
+        "If the project has not been deployed yet, Sealos Canvas stops and directs the user to deploy the project first.",
+        "| OpenClaw / ClawHub | `clawhub install labring/sealos-skills` | Host command exposure depends on the ClawHub runtime |"
+      ],
+      "media": [
+        {"excerpt": "![Select the Sealos plugin in Codex App](./assets/codex-sealos.png)", "weight": 1}
+      ],
+      "concerns": [
+        "Many per-host install fences excluded as install evidence; the support matrix rows are partially config.",
+        "No ioPairs; prompt examples show requests without response sides.",
+        "Skill list recorded via representative rows; deploy/database/s3 step lists overlap the assigned usecase contexts."
+      ]
+    },
+    {
+      "repo": "AITabby/dockyard-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Dockyard DSH 把多个官方 OAuth / 官方客户端会话接入 DeepSeek Harness，提供一个统一的账号池、模型目录、额度状态和 provider-native 请求入口。",
+        "- **Codex** — 官方浏览器 OAuth、CLI fallback 和原生 Responses 请求链路。",
+        "- **Antigravity** — Google 官方浏览器 OAuth、官方本机会话、实时模型目录、额度/credits 和原生 Gemini SSE 请求链路。",
+        "- **Grok** — xAI 官方浏览器 OAuth、CLI fallback、实时模型目录、官方 Build credits 周期和 provider-native streaming 请求。",
+        "- **Claude** — Claude 官方浏览器 OAuth（支持带 state 的手动回调地址/授权码）、CLI fallback 与原生请求适配。",
+        "- **Cursor** — Cursor 官方浏览器登录轮询、CLI fallback 与原生请求适配。",
+        "- 在 DSH 内使用 `/dockyard` 命令管理账号和 provider。",
+        "- 支持手动选择、sticky session、round-robin 和 failover 账号池策略。",
+        "- 读取 provider 返回的实时模型目录、推理档位、套餐和额度窗口。",
+        "- 所有命令、模型选择和 LLM 生成都读取同一个 Dockyard runtime，不维护第二套账号池或额度缓存。",
+        "- 扫描本机已有的官方登录态；扫描和新增账号是两个独立操作，已有账号不会被“新增”静默重复导入。",
+        "- 点击“登录添加账号”直接打开 provider 官方浏览器授权页，选择账号并安全导入账号池；provider 不可用时保留 CLI fallback。"
+      ],
+      "usageItems": [
+        "新增账号流程是 `/dockyard login <provider>`（直接打开官方浏览器 OAuth）；如果要导入已有本机登录态，则使用 `/dockyard scan <provider>` 后再 `/dockyard add <provider>`，最后用 `/dockyard status` 和 `/dockyard models <provider>` 检查实时状态。"
+      ],
+      "usageActions": [
+        "/dockyard status",
+        "/dockyard scan [provider]",
+        "/dockyard add [provider] [candidateId]",
+        "/dockyard login <provider>",
+        "/dockyard refresh [provider]",
+        "/dockyard models <provider>",
+        "/dockyard policy <provider> <manual|sticky_session|round_robin|failover> [accountId]",
+        "/dockyard use <provider> <accountId>",
+        "/dockyard remove <provider> <accountId>"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "/dockyard status"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "如果对应的官方客户端、CLI 或 OAuth 源没有安装、没有登录，Dockyard 会返回明确的 unavailable/degraded 状态；不会用硬编码的账号、模型、版本、套餐或额度伪造可用结果。",
+        "- provider 的 OAuth endpoint、token response 或授权范围变化时，Dockyard 会显示 unavailable/degraded，不猜测未验证的字段。",
+        "- 原始 OAuth/token 不写入 Git、账号池快照或页面状态；运行时只传递 opaque credential reference。",
+        "- 浏览器 OAuth 的 refresh token 持久化在安全凭据存储中；支持 refresh 的 provider 会在重启后自动刷新短期 access token",
+        "- macOS 默认使用 Keychain；非 macOS 默认 credential store 会 fail closed，不会静默退回不安全的内存存储。",
+        "- 额度、模型、套餐、账号身份和过期时间都来自 provider 的实时结果；provider 不返回时保持 `unknown`/`null`。",
+        "- DSH 本身仍处于 developer preview，上游可能发生 breaking changes。",
+        "- Windows EXE 已完成构建但仍在上传和验证中；在发布页出现并完成验证前，请勿用于 Windows 生产环境。",
+        "Antigravity 的 Google OAuth client ID/secret 必须通过 `DOCKYARD_ANTIGRAVITY_CLIENT_ID` 和 `DOCKYARD_ANTIGRAVITY_CLIENT_SECRET` 提供，仓库不内置凭据",
+        "当前 bundle 已按 `@deepseek-ai/dsh@0.1.1-rc.2` 验证。"
+      ],
+      "media": [],
+      "concerns": [
+        "No media images in the README.",
+        "No ioPairs, outputs, or explicit use-case scenarios; bilingual duplicate claims counted once (Chinese versions).",
+        "Install/build fences excluded; the /dockyard fence recorded once as codeExamples command reference."
+      ]
+    },
+    {
+      "repo": "bruc3van/dsh-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "关闭窗口任务照跑、托盘常驻随点随开、Agent 跑在经过治理的执行环境里、插件安装走「先审查、再安装」的内置市场、连接与更新链路逐层加固。",
+        "- **长任务常驻桌面。** 关闭窗口不等于中断任务：应用驻留在托盘 / 菜单栏，Harness 服务继续在后台运行，随点随开",
+        "- **智能模式：复用你正在跑的实例。** 依次探测：`127.0.0.1:3080` 上的官方实例（含 `~/.dsh/profiles/web/cordis.patch.yml` 里配置的其他端口）→ PATH 上的 `dsh` → npx 缓存 → 内置运行时。",
+        "- **固定地址：连接你自行维护的 Web UI 地址。** 填地址直连，客户端不启动任何运行时",
+        "- **安全市场：先审查、再安装。** 随安装包发布的内置市场默认关闭、开启后才联网",
+        "「安全安装」不替你执行任何命令，而是把审查提示词交给 Agent 先读代码、确认干净后再用官方命令安装。",
+        "- **`node`、`dsh`、`pnpm` 始终可用**：发布版把它们发布到 `~/.dsh-desktop/bin`，并**追加**到运行时的 `PATH` 末尾。",
+        "「技能」页列出当前会话实际能解析到的技能，并标出每个技能的来源与调用策略。",
+        "（查看、停用/启用、卸载当前 profile 通过包安装的插件，也包括装了却没在加载的），下半是社区市场",
+        "卸载不是从列表里划掉：它先停用插件，再在这个 profile 里执行与官方 `dsh plugin remove` 相同的移除，锁文件和 node_modules 一并清掉。",
+        "- 发布版启动约 4 秒后会检查 GitHub Releases 上的新版本（12 小时内不重复自动检查）。"
+      ],
+      "usageItems": [
+        "4. 若任务需要读写文件，先添加一个项目文件夹；也可以直接新建会话。",
+        "- 点击托盘图标可以重新打开主窗口。",
+        "- 可通过托盘菜单，或 macOS 的应用菜单 / `Cmd+Q` 完全退出。",
+        "托盘菜单里的「重启客户端」会连同本地运行时一起重启，适合装完需要重启才生效的插件",
+        "也可在「设置 → 通用设置 → 应用更新」、托盘菜单或 macOS 应用菜单中手动检查"
+      ],
+      "usageActions": [
+        "点击托盘图标可以重新打开主窗口。",
+        "可通过托盘菜单，或 macOS 的应用菜单 / `Cmd+Q` 完全退出。",
+        "托盘菜单里的「重启客户端」会连同本地运行时一起重启",
+        "连接设置里有「安全市场」开关，关掉就会立即移除市场插件",
+        "5. 描述希望 Agent 完成的结果，然后发送消息。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "xattr -dr com.apple.quarantine \"/Applications/DSH Desktop.app\""
+      ],
+      "usecases": [
+        "| **智能模式**（默认） | 大多数本机用户 |",
+        "| **自定义** | 自行维护的 Web UI 实例（官方 dsh 目前只面向本机使用） |",
+        "- **连接已有的完整服务**：为专业开发准备。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "- **更新链路防劫持**：打包环境下，更新源地址与 GitHub API 地址、数据目录（`DSH_HOME`、`DSH_DESKTOP_HOME`）及连接探测开关均禁止被环境变量覆盖",
+        "应用内更新下载后先校验 SHA-256 再安装",
+        "- **窗口加固**：Electron 开启上下文隔离与沙箱、关闭 Node 集成，将页面导航限制在当前 Web UI 源站，外部链接交给系统浏览器打开。",
+        "- 本地 Web UI 意外退出时，客户端只会进行有限次数的重启，不会无限循环。",
+        "两个 harness 同时写同一份会话日志会造成永久损坏。",
+        "- 智能模式复用的 `127.0.0.1:3080` 官方实例失联时，客户端会自动改用自己启动的运行时",
+        "- 系统唤醒或长时间后台运行后若页面异常空白，客户端会在确认 Web UI 可达后自动重新加载。",
+        "暴露到网络的 `0.0.0.0` 绑定会被明确拒绝（会带来远程代码执行风险）",
+        "接入失败可自愈——插件在加载期抛错会让**整棵插件树**启动失败",
+        "macOS 的系统通知中心要求有效代码签名，因此当前临时签名包会自动把同一套 Web Notification 降级为 Dock 数字角标"
+      ],
+      "media": [
+        {"excerpt": "![DSH Desktop 首页：窗口里就是官方 Web UI 本体](docs/images/dsh-desktop-home.png)", "weight": 1},
+        {"excerpt": "![官方设置弹窗里的「桌面设置」：当前连接与四个来源开关、安全市场开关，以及客户端和内置 dsh 的版本](docs/images/dsh-desktop-setting.png)", "weight": 1},
+        {"excerpt": "![设置里的「安全市场」：按分类均衡发牌的精选目录，右上角显示市场自身版本](docs/images/marketplace.png)", "weight": 1},
+        {"excerpt": "![点「安全安装」后：审查提示词被填进新会话的输入框，停在这里等你按回车](docs/images/marketplace-sec-install.png)", "weight": 1},
+        {"excerpt": "![已安装面板：版本、启用状态，以及停用/启用与卸载](docs/images/marketplace-installed.png)", "weight": 1}
+      ],
+      "concerns": [
+        "FAQ route-comparison table and 相关项目 entries reference third-party/official projects; their capabilities excluded per linked-project ownership.",
+        "No ioPairs or text-described outputs; API-key setup steps excluded as configuration.",
+        "收录不代表安全背书 and unsigned-installer warnings beyond the reliability cap; the xattr fence is the only non-install command example."
+      ]
+    }
+  ]
+}

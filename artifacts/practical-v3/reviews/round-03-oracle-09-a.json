@@ -1,0 +1,566 @@
+{
+  "reviews": [
+    {
+      "repo": "btspoony/mstar-harness",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a TypeScript **Harness Workflow Engine** (`@mstar-harness/engine`) enforces deterministic workflow gates, while `mstar-*` judgment skills drive multi-agent code delivery.",
+        "- **Deterministic gates, enforced by a TS engine** — path/status/lease/dispatch/sdd/iteration/lint gates run in `@mstar-harness/engine`, not as prompt suggestions",
+        "- **One engine across hosts** — the same engine + skills power dsh (DeepSeek Harness), omp, OpenCode, Cursor, Kimi Code, ZCode, and Codex",
+        "| mstar CLI | `@mstar-harness/cli` — installer bootstrap + `mstar` workflow verbs |",
+        "Three entry shapes: **without iteration** (single plan / hotfix), **with iteration** (multi-plan Phase 1–5), or **audit & review** (read-only: discover what to do, or decide whether a change ships).",
+        "Enter PM, then run the per-plan cycle: `Prepare → Execute → QC → QA gate → Done`.",
+        "`/iteration-start [direction] [pause]` | Start a new iteration: Phase 1 (interactive grill-me), then auto-continue Phase 2→5.",
+        "`/iteration-loop [direction] [scale]` | Full Phase 1→5 autonomous (no grill-me).",
+        "| `/codebase-audit [keywords]` | Read-only survey of what's worth doing — prioritized, ready-to-execute plans;",
+        "Deep pre-merge review of a PR / branch / diff at three strengths",
+        "| `qa-engineer` | Acceptance when `QA gate: mandatory` |",
+        "| `qc-specialist` / `-2` / `-3` | QC trio |"
+      ],
+      "usageItems": [
+        "Load **`mstar-harness-core` first**, then topic skills on demand (`mstar-roles`).",
+        "| dsh (DeepSeek Harness) | `pm` skill (via the mstar skill provider; no auto-load) |",
+        "Puts the `mstar-harness` binary (short alias `mstar`) on PATH, so the engine-check commands the skills cite (`mstar status validate`, `mstar dispatch validate`, `mstar iteration gate`, …) actually run."
+      ],
+      "usageActions": [
+        "mstar status validate",
+        "mstar dispatch validate",
+        "mstar iteration gate",
+        "npx @mstar-harness/cli plugin validate",
+        "/iteration-drive",
+        "/codebase-audit [keywords]",
+        "/amazing-pr-review [pr\\|branch\\|scope] [quick\\|default\\|deep]"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Without a global install the harness still works and those checks stay advisory.",
+        "an unrelated third-party npm package named `mstar` claims the same command name.",
+        "The canonical invocation name stays `mstar-harness` — use the long name on any conflict.",
+        "Two read-only, advisory commands under one roof — they never edit source; findings can become plans for Prepare → Execute.",
+        "Process artifacts (`plans/`, `iterations/`, `status.json`, `workflows/`, `projects/`, `sdd/`, …) are gitignored; tracked results: `{HARNESS_DIR}/AGENTS.md`, `knowledge/`, `specs/`.",
+        "Repos with a non-default layout can declare every harness directory symbol in a gitignored **`.mstarc`**",
+        "Multi-PR input → first PR only; remaining PRs queued as audit todos (next session); suggest one session per PR.",
+        "**Recommended host** (best → usable): **dsh = omp ≥ OpenCode ≥ Cursor > Kimi = ZCode > Codex**",
+        "portable across any Agent Plugins v1.0.0 client"
+      ],
+      "media": [],
+      "concerns": [
+        "No images or ioPairs; the mermaid workflow is a diagram, not media evidence.",
+        "Install table cells span hosts and were excluded; remaining install fences excluded.",
+        "Skill catalog and role table beyond the capability cap; enforcement: hard is config guidance and was excluded."
+      ]
+    },
+    {
+      "repo": "Laplace-bit/dsh-smooth-stream",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**dsh-smooth-stream** 为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`）Web UI 带来流畅的流式渲染和丝滑滚动。",
+        "- **流畅渲染。** 文字边到边呈现，Markdown 结构持续更新，标题、列表、代码块和表格在流式过程中保持自然的阅读状态。",
+        "- **丝滑滚动。** 内容逐步变高时，页面沿连续的滚动轨迹平稳跟随，视线始终贴着正在生成的内容。",
+        "- **统一过渡。** 换行、代码块、表格和工具结果使用一致的过渡方式，正文、思考过程与工具输出衔接自然。",
+        "- **自适应节奏。** 渲染速度会根据输出速度和待显示内容调整，让慢速输出从容呈现，快速输出及时跟上。",
+        "- **启用丝滑流式渲染**（默认开启）：开启时由本插件接管回复和工具行的渲染与跟随；关闭后会撤销接管，完整使用 Harness 内置渲染。",
+        "- **完成后自动折叠**（默认开启）：回合处理完成后，把思考过程、工具调用、上下文注入和中间输出折叠为一行“已处理 X秒”摘要，只展示最终回复",
+        "- **显示渲染调试面板**（默认关闭）：在聊天页右侧显示实时渲染、帧率和滚动跟随数据，并开放流式揭示与滚动弹簧参数。",
+        "- **自动展开思考**：控制思考块在流式期间是否自动展开。"
+      ],
+      "usageItems": [
+        "在 Web 界面打开 **设置 → 插件 → 插件配置**，会看到一张 **丝滑流式（Smooth stream）** 卡片",
+        "点击摘要可随时展开或收起完整工作过程。",
+        "可随时**保存**当前组合、**放弃**未保存修改、**恢复默认**，或复制当前参数与指标。"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "Host 日志里应出现 `[dsh-smooth-stream] plugin loaded!`。"
+      ],
+      "reliability": [
+        "系统开启减少动态效果时直接显示完整文本、不接管跟随；帧率低于 30 fps 且回复在屏外时，揭示自动暂停、恢复后再补上。",
+        "该开关独立于“启用丝滑流式渲染”：无论由本插件还是内置渲染器负责对话，折叠都照常工作。",
+        "此功能取代外挂的 `dsh-auto-collapse` 插件，二者不要同时安装，否则会互相抢夺同一批 DOM 节点造成文字重叠。",
+        "其他插件通过自定义工具视图嵌入的内容（如 `dsh-pianist` 的钢琴卡片）不会被折叠——只有渲染为原生工具卡样式的调用才参与折叠。",
+        "纯文本回复（无思考、无工具）不会生成摘要行。",
+        "这些设置是用户级的持久化偏好，改完即生效，无需重启",
+        "只有当前 profile 明确把 `dsh-smooth-stream` 声明为 npm 依赖时，**更新**按钮才会对该 profile 执行固定的包更新",
+        "`link:` 或 `file:` 本地开发安装会显示为开发版本，更新按钮会保持禁用，避免覆盖你的源码目录。",
+        "旧版的 `mode`、`revealCharsPerSec`、`scrollSpeedPxPerSec` 和 `maxScrollSpeedPxPerSec` 字段仍可被加载，以兼容已有 profile"
+      ],
+      "media": [
+        {
+          "excerpt": "![左：未使用插件。右：使用 dsh-smooth-stream。](docs/compare.gif)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No ioPairs, usecases, or operational code examples (install/update fences excluded).",
+        "Preset table (realtime/balanced/silky) excluded as configuration.",
+        "Debug-panel tuning parameters described but not separately counted beyond the settings-page capability."
+      ]
+    },
+    {
+      "repo": "multica-ai/dsh-multica-runtime",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Private, out-of-tree runtime bridge between Multica and the public\n[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It exposes\na versioned JSONL protocol over stdio",
+        "- model and thinking-level discovery from DSH itself;",
+        "- committed text, reasoning, tool, result, and token-usage events;",
+        "- cooperative cancellation and durable session resume;",
+        "- headless one-shot approvals, with no interactive question surface.",
+        "narrowly forwards only Multica's server-minted `mat_` task token into DSH's\n  otherwise credential-scrubbed shell, so in-task `multica` commands retain",
+        "DSH telemetry is disabled by the bundle patch."
+      ],
+      "usageItems": [
+        "Multica discovers the profile only after `--probe` returns protocol version 1."
+      ],
+      "usageActions": [
+        "dsh --profile multica --probe",
+        "dsh --profile multica --list-models",
+        "dsh --profile multica --stdio"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "dsh --profile multica --probe"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- This repository contains only the Multica integration layer. It does not\n  vendor or redistribute DeepSeek Harness source code.",
+        "- Never commit API keys, MCP secrets, session logs, or generated profiles.",
+        "stdout is protocol-only; diagnostics go to stderr.",
+        "currently validated against `@deepseek-ai/dsh@0.1.0-rc.6` and its matching\n`@deepseek-ai/dsh-*` package family.",
+        "`DEEPSEEK_API_KEY` is read by DSH's credential provider at process runtime. It\nmust not be stored in this repository."
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness runtime online in Multica](docs/images/multica-dsh-runtime.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Minimal README; no ioPairs, usecases, or text-described outputs.",
+        "MCP translation and session-root contract bullets are partial continuations of one list and were represented by the recorded items.",
+        "Install/build fences excluded."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-open-in-vscode",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Open a workspace directory in VS Code straight from the DeepSeek Harness web\nGUI: every real Workspace row in the sidebar gains an **Open in VSCode** row\ninside its **…** overflow menu.",
+        "The client half uses the harness's `sidebar.workspaces.row-menu` slot when\n  available and falls back to a scoped compatibility adapter on the public\n  DSH `0.1.0-rc.6` build.",
+        "- The host half spawns the configured editor CLI on that directory\n  (`code <path>` by default), detached, so the editor outlives the server."
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "A missing executable fails loud with a fix hint; relative paths are refused.",
+        "| Open a workspace directory in the editor | Host (user gesture) | No — the user clicked the row |",
+        "The plugin has no tools, no settings namespace, and no model-facing surface",
+        "The plugin adds no tools, no skills, and no settings; it only opens the\ndirectory the user already opened in DSH.",
+        "It never reads or writes files\nitself.",
+        "On Windows, the default `code` command\n  also discovers standard per-user and system VS Code installations.",
+        "DSH `0.1.0-rc.6` or newer.",
+        "Restart the web server (`kill -TERM <pid>` and wait for exit — never\n`kill -9`, it tears the session zstd log mid-frame), then refresh the page."
+      ],
+      "media": [],
+      "concerns": [
+        "No media, ioPairs, usecases, outputs, or operational code examples; the user action (clicking the menu row) is recorded inside the capability excerpt.",
+        "Configuration table (command/args) excluded as config.",
+        "kill -TERM guidance recorded as reliability/known-issue evidence rather than a usageAction."
+      ]
+    },
+    {
+      "repo": "peiyuwang54/deepseek-harness-cli",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "<strong>DeepSeek CLI</strong> is an open-source coding agent powered by DeepSeek that runs locally in your terminal.",
+        "The command starts the Web UI at `http://127.0.0.1:3080` by default and opens it in the default browser for a local launch.",
+        "An SSH launch only prints the host URL because the SSH client or editor owns the local forwarded address.",
+        "Run a non-interactive task for scripts and CI with `deepseek exec`:",
+        "- Code reading, editing, shell tools, web search, skills, MCP, and subagents.",
+        "- Persistent sessions with resume, plan, goal, queued messages, and automatic context compaction.",
+        "- A Codex-style terminal UI with six theme palettes and English, Simplified Chinese, Traditional Chinese, Arabic, French, Russian, Spanish, Japanese, and Korean.",
+        "- Plugin-based profiles for terminal, headless automation, and the Web UI.",
+        "`doctor` also checks shipped profile overlays and presets, the optional Web frontend asset, installation channel, sandbox runner, truecolor, mouse input, clipboard support, and every enabled managed MCP connection.",
+        "Inspect and validate a profile's installed plugin bundles without starting it:",
+        "`source` shows the package directory and declared repository."
+      ],
+      "usageItems": [
+        "Then open a project directory and run `deepseek` to get started. The shorter `dsh` alias is also available:",
+        "On first launch, paste your DeepSeek API key into the masked prompt.",
+        "Use `/credentials` to inspect its source, replace it, or remove the saved value.",
+        "Use `/permissions` during a session, or pass `--sandbox` and `--ask-for-approval` for exact controls.",
+        "Use `/mcp` in a running session to inspect connected servers."
+      ],
+      "usageActions": [
+        "deepseek exec \"run the tests\"",
+        "deepseek exec --json \"review this repository\"",
+        "deepseek exec resume --last \"continue\"",
+        "deepseek --full-auto",
+        "deepseek --yolo",
+        "deepseek mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem .",
+        "deepseek mcp list",
+        "deepseek doctor",
+        "deepseek plugin --profile tui verify --json",
+        "deepseek completion zsh > ~/.zsh/completions/_deepseek"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "deepseek exec \"run the tests\"",
+        "deepseek doctor"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "`--yolo` disables both confinement and approval prompts, so use it only in an isolated environment.",
+        "The key is stored by the shared credential provider and never added to chat history.",
+        "An inherited environment value is read-only inside the CLI.",
+        "MCP probes start the configured server with a 5000 ms per-request timeout; `--mcp-timeout-ms` changes it.",
+        "Optional server failures and host capability checks are warnings; a required MCP server failure, missing runtime asset, or unsupported Node version is blocking.",
+        "`enable` and `disable` change the active Cordis bundle list and take effect on the next launch",
+        "This is DeepSeek Harness CLI. We keep iterating in sync with the official [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), and we look forward to your forks and stars."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\".github/deepseek-cli-splash.png\" alt=\"DeepSeek CLI terminal preview\" width=\"80%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Theme swatches SVG excluded as decorative art.",
+        "No ioPairs or text-described outputs; example prompts inside exec commands carry no response side.",
+        "Theme-swatch and language lists recorded once via the terminal-UI capability."
+      ]
+    },
+    {
+      "repo": "yxxbc/dsh-balance-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**DeepSeek Harness（DSH）插件** —— 余额监控 · 官方充值入口 · Miyu 风格用量统计 · 三方插件管理",
+        "| **余额监控** | 监控 DeepSeek API 余额（CNY / USD 双余额池），支持多账户并行查询；自动读取 DSH 凭据 `DEEPSEEK_API_KEY`，**无需手动填写** |",
+        "| **低余额告警** | CNY / USD 独立阈值（默认 ¥10 / $2，可配置），低于阈值时余额条标红提醒 |",
+        "| **一键充值** | 直达 DeepSeek 官方充值页 `platform.deepseek.com/top_up`，另有用量明细页入口 |",
+        "| **用量统计** | 1:1 复刻 [Miyu WebUI 用量页](https://github.com/SHORiN-KiWATA/Miyu/tree/main/web)：统计瓦片 / GitHub 贡献图风格用量日历 / 三段堆叠趋势柱状图 / 模型消耗环形图与明细表 / 最近 50 条调用记录 |",
+        "| **性能指标** | 轮次 · 步数 · LLM 时长 · 工具调用时长 · 首 token 平均延迟 · tok/s · 缓存命中率 |",
+        "| **三方插件管理** | 非官方（非 `@deepseek-ai`）Web 插件清单：包名 / 本地路径 / Bundle rev / 依赖，一键「打开目录」定位源码 |",
+        "| **设置持久化** | 配置自动保存到插件目录 `config.json`，重启后自动恢复 |",
+        "| **一键更新** | 在 DSH 插件面板内直接检查更新并一键更新，无需手动操作 |"
+      ],
+      "usageItems": [
+        "或在 DSH 面板内点击「检查更新」→「更新」（推荐）。"
+      ],
+      "usageActions": [
+        "点击「检查更新」→「更新」"
+      ],
+      "ioPairs": [
+        "直接问\"DeepSeek 余额还剩多少\"即可得到余额摘要"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "输入框右侧出现三个图标按钮即生效"
+      ],
+      "reliability": [
+        "A：静态插件持久安装，重启后仍在。自动读取的 `DEEPSEEK_API_KEY` 无需重配，重启后自动恢复。",
+        "A：DSH 侧边栏底部插槽会被官方 Cordis 面板插件独占整行。本插件入口固定在**输入框工具行右侧**，不依赖该插槽。",
+        "A：不会。Key 只保存在本机插件目录 `config.json` 中，界面仅显示掩码；源码与 README 中不含任何密钥。",
+        "A：npm 上存在他人同名包（`dsh-balance-plugin@0.1.0`），裸包名会装错。请使用一键脚本或 `github:` 源。"
+      ],
+      "media": [
+        {
+          "excerpt": "![输入框预览](assess/输入框预览.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![钱包设置页面](assess/钱包设置页面.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![用量统计界面-顶部](assess/用量统计界面-顶部.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![用量统计界面底部](assess/用量统计界面底部.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![三方插件管理界面](assess/三方插件管理界面.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "QQ group QR image excluded as community decoration.",
+        "Miyu reference is attribution inside the usage-stats capability; the linked project's own capabilities were not counted.",
+        "No usecases or code examples (install/update/uninstall script fences excluded)."
+      ]
+    },
+    {
+      "repo": "wenbin-wb/dsh-bridge",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**DeepSeek Harness 多通道远程访问与全域安全门禁插件**",
+        "**网页端树形目录选择器**：彻底解决手机/远程设备点击「添加工作区」在电脑端静默弹窗、移动端无感知的痛点；自动唤出响应式底部抽屉/弹窗树形目录浏览器",
+        "**IM 机器人 `/addworkspace` 指令**：微信 / QQ / 飞书 / Telegram 全面支持 `/addworkspace <电脑绝对路径>`，随时随地在聊天框注册并切换工作区。",
+        "- **局域网访问**：手机/平板扫码，同一 Wi-Fi 直接访问，躺着也能在手机上接着聊",
+        "- **Cloudflare 隧道**：一键暴露公网地址，随时随地连接；支持固定域名（Token 模式）重启 URL 永不变更与随 DSH 开机自启",
+        "- **微信 Bot（ClawBot / iLink）**：扫码登录微信个人号后，直接在微信里对话、控制 DeepSeek Harness 的 agent。",
+        "- **QQ Bot（OpenAPI v2）**：接入 QQ 机器人，私聊/群聊接收消息，发送 Markdown、按钮键盘和富媒体。",
+        "- **飞书 Bot（官方 WebSocket 长连接）**：接入飞书开放平台企业自建应用，私聊/群聊实时交互。",
+        "- **Telegram Bot（官方 Bot API + 代理支持）**：接入官方 Telegram 机器人，单聊/群聊实时交互。",
+        "- **📊 宿主系统运行监控看板**：实时掌控 CPU 核心与型号、系统总内存与实时占用率、Node 进程堆内存与 DSH 服务连续运行时间（Uptime）",
+        "- **🏷️ 会话重命名指令 `/rename <新标题>`**：在微信、QQ、飞书、Telegram 中随时修改当前会话名称并同步 Web 抽屉",
+        "- **🔍 网络连通性一键实时诊断**：一键排查本地反向代理端口、局域网 IPv4、Cloudflare Anycast 边缘延迟与国内 npmmirror 连通性"
+      ],
+      "usageItems": [
+        "1. 打开设置页「远程访问」→「IM 机器人」→ 选中「微信」",
+        "2. 点「扫码登录」，用微信扫二维码并按提示确认",
+        "3. 登录成功后，**向该微信 Bot 发送第一条消息即自动完成白名单授权**（一步到位）"
+      ],
+      "usageActions": [
+        "| `/sessions`（或 `/list`） | 列出会话（按工作区分组，带标题） |",
+        "| `/use N`（或 `/resume N`） | 切换到会话 N |",
+        "| `/rename <新标题>` | 重命名当前活动会话 |",
+        "| `/workspaces` | 列出可用工作区 |",
+        "| `/addworkspace <路径>` | 注册添加新的电脑工作区目录 |",
+        "| `/new <提示词>` | 新建会话并开始（当前工作区） |",
+        "| `/stop` | 停止当前任务 |",
+        "| `/end` | 结束当前会话 |",
+        "| `/status` | 查看 agent 状态与会话摘要 |",
+        "| `/yes` `/no`（或 `1`/`2`） | 回应权限审批请求 |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "touch ~/.dsh/dsh-bridge/reset-auth"
+      ],
+      "usecases": [
+        "手机扫个码，人不在电脑前也能继续用 DeepSeek Harness。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "**金融级安全引擎**：PBKDF2 + SHA-256 加盐哈希安全存储、30 天 HttpOnly SameSite 会话、单 IP 连续 5 次错误封禁 60 秒防暴力破解。",
+        "**文件系统与 RPC 深度加固**：文件树、驱动器与工作区注册 RPC 端点强制管理员鉴权；核心系统目录黑名单拦截",
+        "- 强制白名单：仅白名单内的微信用户能驱动 agent，其他人发的消息会被忽略、绝不喂给模型",
+        "- 审批默认拒绝：权限请求在规定时间（默认 10 分钟）内未回复 `/yes` 则自动拒绝",
+        "- 凭证存于 DSH 凭证服务，不落配置明文",
+        "**物理机免密直通**：运行 DSH 的宿主电脑（`127.0.0.1` / `localhost`）享有全局最高物理特权，**永不要求输入访问密码，设置面板永不会被锁定**；",
+        "插件将在毫秒级自动清空密码与策略并删除标记，瞬间恢复初始免密状态；",
+        "- 同一微信账号同一时间只允许一个 Bot 轮询（iLink 独占锁）；若同时使用 hermes-agent / OpenClaw 会互相 403。**请使用专用微信账号**承载 Bot",
+        "**会话无感恢复**：会话历史由 DSH 核心引擎持久化管理，重启后在聊天软件中发送消息或使用 `/resume` 命令即可自动恢复上下文并继续执行；",
+        "**配置永久持久化**：所有 IM 平台凭证、授权白名单、公网隧道自启选项与安全认证规则均保存在本地系统目录（`~/.dsh/dsh-bridge/`）"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/screenshots/remote-auth-login.jpg\" width=\"600\" alt=\"外部访问安全认证登录页\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/admin-lock-screen.jpg\" width=\"600\" alt=\"管理控制台防篡改锁定\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/remote-web-mobile.jpg\" width=\"22%\" alt=\"移动端新会话主页\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "![局域网扫码访问](docs/screenshots/lan-access.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/wechat-chat.jpg\" width=\"380\" alt=\"微信对话示例\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/feishu-chat.jpg\" width=\"380\" alt=\"飞书对话与卡片审批示例\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Banner excluded as decorative art; ~20 local screenshots exist and only 6 representative distinct views were kept due to the weighted media cap of 6.",
+        "Command tables repeat across WeChat/QQ/Feishu/Telegram; only the WeChat table rows were recorded to avoid translated/duplicate claims.",
+        "No ioPairs or text-described outputs; QQ/Feishu/Telegram capability bullets recorded but their detailed feature lists exceed the cap."
+      ]
+    },
+    {
+      "repo": "DDDMUC/dsh-free-search",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**DeepSeek Harness 免费搜索插件 —— 无需 API key，零成本，多引擎可切换。**",
+        "一个给 DeepSeek Harness (dsh) 添加多引擎搜索 provider 的插件，注册进 `ctx.web` seam。",
+        "- **多引擎可选**：DuckDuckGo（html/lite）、Bing、SearXNG（元搜索，支持自定义实例）、AnySearch、Exa、Tavily、Keenable、Perplexity、DeepSeek 官方",
+        "- **弹出式切换命令** —— 聊天框输入 `/free-search-engine`，弹出引擎选择窗口，点选即切换（等效设置页 + 保存）",
+        "- **引擎测试** —— `free_search_test` 工具让 agent 一键测试所有引擎",
+        "- **统一引擎回退** —— 任何引擎失败（付费/免费，缺 key/401/限流/网络）自动轮流尝试下一个引擎",
+        "- **时间过滤** —— `advanced_search` 工具支持 `timeRange`：固定档、自定义相对值、绝对日期三种形式",
+        "- **系统提示词注入** —— agent 知道当前用哪个引擎、哪些需要 key",
+        "- **结果缓存** —— 相同查询（含引擎/时间过滤参数）5 分钟内命中缓存（LRU 50 条），防免费引擎限流、省付费额度",
+        "- **网页抓取（web_fetch）** —— 让 agent 抓取网页内容（官方 `dsh-web-fetch-http` provider，纯 JS，零额外依赖）",
+        "- **平台搜索（platform_search）** —— 搜 GitHub / V2EX / B站 / Reddit / Hacker News / Stack Overflow / 维基百科 / npm（公开 API，零依赖）",
+        "- **干净集成** —— 实现官方 `WebSearchProvider` seam 接口，与官方插件共存"
+      ],
+      "usageItems": [
+        "安装后，打开 **设置 → 插件 → 可配置** 标签页 → **Free Search** 卡片（官方设置页）：",
+        "在聊天框输入 `/free-search-engine`，**弹出引擎选择窗口**（和 `/model` 选模型一样的交互），点选即切换，当前引擎会标记出来。",
+        "对 agent 说\"测试一下所有搜索引擎\"，它会调用 `free_search_test` 工具，逐个测试并报告：",
+        "让 agent 搜\"最近一周的新闻\"、\"这个月的发布\"、\"最近 3 天的消息\"、\"7 月以来的更新\"，它会调用 `advanced_search` 工具，带 `timeRange` 参数。"
+      ],
+      "usageActions": [
+        "/free-search-engine",
+        "powershell -File tools/switch-engine.ps1 -Engine bing"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "powershell -File tools/switch-engine.ps1 -Engine bing"
+      ],
+      "usecases": [
+        "- 没有（或不想用）DeepSeek 官方 key，",
+        "- 用的是 opencode-go 这类网关（其 OpenAI 兼容端点不支持 `web_search` 工具），"
+      ],
+      "outputs": [
+        "结果顶部注明实际生效的引擎（如 `Note: perplexity unavailable or failed, using exa.`）",
+        "- bing: OK (2 results, e.g. \"DeepSeek Harness developer preview...\")"
+      ],
+      "reliability": [
+        "| `bing` | Bing | 免费 | **默认引擎**，最稳定，中文优化（zh-CN） |",
+        "| `ddg` | DuckDuckGo HTML | 免费 | 偶发限流（反爬），解封自动恢复 |",
+        "exa/tavily/keenable 无 key 也会尝试，因为它们自带 keyless 免费额度",
+        "（直测当前引擎，不走回退链，付费引擎无 key 会明确报错）",
+        "⚠️ 注意：`web_fetch` 无 SSRF 防护，agent 理论上可访问内网地址——按需使用",
+        "重复副本会导致工具调度器失效。",
+        "| `reddit` | Reddit 帖子/讨论搜索（公开 JSON API；部分网络环境可能被 Reddit 反爬拦截） |",
+        "**\"最近似档位\"映射规则**：`≤2 天 → day`，`≤14 天 → week`，`≤90 天 → month`，否则 `year`。",
+        "DuckDuckGo 等引擎可能需要代理才能访问，而 Node.js 的 `fetch` 默认不走系统代理。",
+        "**不依赖 dsh-web-ui**，插件可独立使用。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-free1.png\" alt=\"免费引擎设置 (Bing)\" width=\"820\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-free.png\" alt=\"免费引擎设置\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-apikey.png\" alt=\"付费引擎设置\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Bilingual duplicate sections counted once (Chinese versions); the three unique screenshots appear in both language sections and were recorded once each.",
+        "Engine-chain priority for timeRange and the test-report fence exceed the recorded caps; the test example pairs a user request with a report across a fence boundary, so ioPairs stayed empty.",
+        "Proxy env fence and settings.yaml fence excluded as configuration."
+      ]
+    },
+    {
+      "repo": "01Virex/dsh-status-rotator",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Replaces the `Deep diving...` status line in the DeepSeek Harness (dsh) Web UI's turn footer with your own text: phase-aware switching, typewriter output, animated rainbow gradient (optional), timed rotation",
+        "- **Phase-aware**: three sets of phrases — `thinking` (just started) / `running` (after 15s) / `long` (past the threshold).",
+        "- **Typewriter effect**: phrases are typed out character by character, speed configurable, 0 disables it;",
+        "- **Real-time status engine**: subscribes to the dsh session snapshot (session list, conversation snapshot, model RPC, DOM clock fallback)",
+        "- **Live status pill**: a floating pill in the official `shell.overlay` seat, template-driven live info (`{model} · {phaseLabel} · {elapsed} · ⚡{tps} tok/s`), position/opacity configurable;",
+        "- **Browser tab title**: rotate `document.title` through your own templates (`⏳ {phase} {elapsed}`), restore the original title when idle (configurable);",
+        "- **Presets & scheduling**: multiple named phrase banks with their own config, switchable from the settings page or automatically by time-of-day / weekday rules;",
+        "- **Settings page**: a new \"Status Texts\" page in DSH's Settings, with visual editing for the Chinese/English × three-phase phrase banks, saves take effect immediately;",
+        "- **Hot reload**: while the page stays open it re-reads `config.json` periodically, and re-reads immediately when you switch back to the tab — no refresh needed to apply new phrases;",
+        "- **Multilingual**: phrases switch live between Chinese and English following Settings → Language, unknown languages fall back to Chinese;",
+        "- **Zero-intrusion targeting**: locates TurnStatus precisely by `role=\"status\"` + `aria-live=\"polite\"`, so it never touches code snippets in the chat history or other aria-live regions, and never touches the clock.",
+        "Phase changes swap the phrase immediately without waiting for the rotation interval. If a phase has no phrase group, it falls back automatically (running → thinking → any non-empty group)."
+      ],
+      "usageItems": [
+        "Open Settings in the bottom-left of DSH and a new **Status Texts** page appears in the navigation:",
+        "- **中文 / English** tabs, each with three text boxes for `thinking` / `running` / `long`, **one phrase per line**, blank lines are ignored;",
+        "Clicking \"Save Phrase Bank\" makes the browser `PUT` the full JSON to `/plugins/dsh-status-rotator/config.json`; the node half validates it and **writes it back atomically**"
+      ],
+      "usageActions": [
+        "node gen-config.cjs",
+        "node scripts/fetch-qq-group.cjs --url http://localhost:3000 --token your-token",
+        "node scripts/fetch-qq-group.cjs --input members.txt"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "node scripts/fetch-qq-group.cjs --url http://localhost:3000 --token your-token"
+      ],
+      "usecases": [],
+      "outputs": [
+        "| `{elapsed}` | elapsed time of the current turn, localized like the clock | `正在写代码 1分02秒…` |",
+        "when idle it shows `— · 空闲 · 0秒 · ⚡0 tok/s`"
+      ],
+      "reliability": [
+        "The elapsed-time clock (which appears after 15 seconds) is untouched.",
+        "Unknown placeholders are left as-is, so `{...}` in a phrase is safe.",
+        "if the session API is unavailable, they stay `—` but the plugin keeps working.",
+        "If the session API is unavailable (older dsh), the DOM clock drives phase/elapsed as a fallback and the live fields show `—` — no crash, no errors.",
+        "Submitted content is validated (phrases must be string arrays, presets/schedule must match their shapes); invalid content returns 400 and shows an error on the page, so the config file can't be corrupted.",
+        "saved edits are written into the **official dsh settings store** (`$DSH_HOME/settings.yaml`, namespace `status-rotator`) — the same store the rest of dsh uses for its settings, which **survives plugin upgrades**",
+        "The plugin-directory `config.json` remains as a compatibility mirror and fallback; a one-time import migrates an existing `config.json` into the settings store on first start.",
+        "If a localStorage override matches, the external `config.json` is silently suppressed; the new version logs a `[status-rotator] ⚠ localStorage override active` warning in the browser console",
+        "The generated file contains only the `zh.thinking` group: per this plugin's fallback rules, the thinking phase uses it directly and the other phases fall back to the same group.",
+        "`npm test` (or `node scripts/smoke-test.cjs`) loads `lib/client.js` in a Node sandbox and asserts the pure logic"
+      ],
+      "media": [],
+      "concerns": [
+        "No images, ioPairs, or usecases; JSON config examples excluded as configuration.",
+        "Template placeholder table partially represented (outputs row plus capability excerpt).",
+        "Phase trigger table (0~15s/15s~/≥60s) beyond the capability cap."
+      ]
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "在 Claude Code 里直接搜企业微信、飞书、钉钉、淘宝开放平台、小红书、抖音电商开放平台、微信小程序、微信小店、拼多多开放平台、有赞开放平台、微信支付、支付宝开放平台、京东商家开放平台",
+        "- **中文搜索准确** — jieba 分词 + FTS5 全文索引，`发送应用消息`、`access_token`、`40001` 都能搜到",
+        "在 DeepSeek Harness 中安装 SpecFusion 插件（自动注册 skill + 5 个原生搜索工具，无需 Bash + curl）：",
+        "**零配置** — 云端服务已部署好，安装 Skill 后即可使用，无需自建后端",
+        "所有 API 返回 Markdown 纯文本（`Content-Type: text/markdown`），可直接阅读。",
+        "| `GET /api/search?q=关键词&source=wecom&limit=5` | 搜索文档 |",
+        "| `GET /api/doc/{doc_id}` | 获取文档全文 |",
+        "| `GET /api/recent?source=wecom&days=7` | 最近更新的文档 |"
+      ],
+      "usageItems": [
+        "**方式一：直接提问**（提到企业微信、飞书、钉钉、淘宝、小红书、抖音电商、微信小程序、微信小店、拼多多、有赞、微信支付、支付宝、京东、SHEIN、得物、火山引擎、百炼、泛微、北森等关键词时自动触发）",
+        "**方式二：使用 `/specfusion` 命令**",
+        "安装完成。打开 Claude Code 或 Cursor，开始提问即可。"
+      ],
+      "usageActions": [
+        "/specfusion 企业微信发送应用消息",
+        "/specfusion feishu 获取用户列表",
+        "npx skills find \"feishu\""
+      ],
+      "ioPairs": [
+        "> 企业微信怎么发应用消息？\n\n  搜索到 3 篇相关文档：\n  1. 发送应用消息 — POST /cgi-bin/message/send"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "> 飞书如何创建审批实例？",
+        "> 企业微信的 access_token 怎么获取？",
+        "> 微信支付JSAPI下单接口怎么调？"
+      ],
+      "outputs": [
+        "**68,000+ 篇文档** — 企业微信 ~2,790 篇 + 飞书 ~4,260 篇 + 钉钉 ~2,760 篇 + 淘宝 ~6,960 篇 + 小红书 ~100 篇 + 抖音电商 ~1,400 篇"
+      ],
+      "reliability": [
+        "> **⚠️ 必须加 `-g` 参数！** 不加 `-g` 会安装到当前目录，只在该目录下生效。",
+        "| Cursor 找不到 | skills CLI 目前不会为 Cursor 创建规则文件 | 用上面的手动安装命令 |",
+        "| `limit` | 否 | 返回数量，默认 5，最大 20 |"
+      ],
+      "media": [],
+      "concerns": [
+        "No images; the terminal demo fence is recorded as the ioPair.",
+        "inferredType dsh-plugin reflects the shipped DSH plugin form; the repo is multi-form (skills CLI, manual skill install, Cursor rules, Docker self-host).",
+        "Self-deploy/sync fences excluded as configuration; the platform catalog table beyond the capability/outputs excerpts."
+      ]
+    }
+  ]
+}

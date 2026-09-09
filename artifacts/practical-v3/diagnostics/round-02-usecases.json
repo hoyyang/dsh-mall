@@ -1,0 +1,916 @@
+{
+  "generatedAt": "2026-09-02T03:17:19.322Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-02.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-production-scorer-evaluation-iteration-20.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "usecases",
+  "question": "Diagnose recurring deterministic usecaseItems misses and overcounts.",
+  "families": [
+    "usecaseItems"
+  ],
+  "under": [
+    {
+      "repo": "weijiafu14/pi2dsh",
+      "practicalScore": 53,
+      "oracleScore": 72,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 7,
+          "gap": 7
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Walkthrough: advanced MCP in your terminal",
+            "excerpt": "## Walkthrough: advanced MCP in your terminal"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "Use a ChatGPT / Claude / Copilot / Kimi subscription as a DSH model: `/login`, then the route and credential appear on their own"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "Private / domestic / proxy gateways that reject the `developer` role"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "The model runs a small team: delegate, background, steer mid-run, collect, resume with memory, stop for real, manage via `/pi-agents`, reopen across restarts"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "A text-only model answers questions about images — CLI and web, probe images included"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "Generate and edit images with a ChatGPT/Codex subscription; DSH approval and inline result included"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "`/btw <question>` runs a side thread in DSH's native subagent UI; your main conversation stays clean"
+          },
+          {
+            "heading": "## Examples",
+            "excerpt": "Use a ChatGPT / Claude / Copilot / Kimi subscription as a DSH model"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Unclecheng-li/DeepSec",
+      "practicalScore": 67,
+      "oracleScore": 74,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 内置角色",
+            "excerpt": "| `pentester` | standard | 标准渗透测试 |"
+          },
+          {
+            "heading": "### 内置角色",
+            "excerpt": "| `redteam` | deep | 红队深度攻击 |"
+          },
+          {
+            "heading": "### 内置角色",
+            "excerpt": "| `auditor` | standard | 安全审计（只读） |"
+          },
+          {
+            "heading": "### 内置角色",
+            "excerpt": "| `blueteam` | quick | 蓝队快速验证 |"
+          },
+          {
+            "heading": "### 内置角色",
+            "excerpt": "| `ctf_player` | quick | CTF 竞赛模式 |"
+          },
+          {
+            "heading": "## License",
+            "excerpt": "<sub>为那些交付 AI 生成代码的开发者而生 — 并在攻击者之前把它打破。</sub>"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "houyanchao/chatgpt-gemini-timeline",
+      "practicalScore": 36,
+      "oracleScore": 39,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Timeline是什么？",
+            "excerpt": "- 想回看某次提问，只能一路往上滚。"
+          },
+          {
+            "heading": "## Timeline是什么？",
+            "excerpt": "- 有价值的结论散落在不同会话里，事后很难再找到。"
+          },
+          {
+            "heading": "## Timeline是什么？",
+            "excerpt": "- 公式、代码、图表不好带走，复制粘贴也费事。"
+          },
+          {
+            "heading": "## Timeline是什么？",
+            "excerpt": "- 各平台输入习惯不一样，常用提示词和追问流程要反复操作。"
+          },
+          {
+            "heading": "## Timeline是什么？",
+            "excerpt": "- 插件数据困在单个浏览器里，换设备或换浏览器不好迁移。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SepineTam/mcp-for-stata",
+      "practicalScore": 27,
+      "oracleScore": 35,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Advanced - Claude Code",
+            "excerpt": "**Paper Replication**: Replicate empirical studies from economics papers"
+          },
+          {
+            "heading": "### Advanced - Claude Code",
+            "excerpt": "**Quick Hypothesis Testing**: Validate economic hypotheses through regression analysis"
+          },
+          {
+            "heading": "### Advanced - Claude Code",
+            "excerpt": "**Stata Learning Assistant**: Learn econometrics with step-by-step Stata explanations"
+          },
+          {
+            "heading": "### Advanced - Claude Code",
+            "excerpt": "**Code Organization**: Review and optimize existing Stata do-files"
+          },
+          {
+            "heading": "### Advanced - Claude Code",
+            "excerpt": "**Result Interpretation**: Understand complex statistical outputs and regression results"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "openma-ai/open-managed-agents",
+      "practicalScore": 55,
+      "oracleScore": 69,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# Open Managed Agents",
+            "excerpt": "A self-hosted Claude Managed Agents API implementation."
+          },
+          {
+            "heading": "# Open Managed Agents",
+            "excerpt": "An open-source, self-hosted Claude Tag-style workflow with BYOK model credentials."
+          },
+          {
+            "heading": "# Open Managed Agents",
+            "excerpt": "MCP, private tools, encrypted vaults, and durable sessions under your own deployment boundary."
+          },
+          {
+            "heading": "## Two ways to run OMA",
+            "excerpt": "OSS users, on-prem, no CF account, data-resident deploys"
+          },
+          {
+            "heading": "## Two ways to run OMA",
+            "excerpt": "Edge scale, no host management, already on CF"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "dream-num/dsh-univer-office",
+      "practicalScore": 60,
+      "oracleScore": 73,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Example requests",
+            "excerpt": "Create a simple payroll spreadsheet with employee, base salary, bonus, deduction, gross pay, and net pay columns. Calculate the totals automatically."
+          },
+          {
+            "heading": "### Example requests",
+            "excerpt": "Create a six-slide lesson deck about bubble sort. Explain the concept, each comparison pass, pseudocode, and complexity, and check every page for layout problems."
+          },
+          {
+            "heading": "### Example requests",
+            "excerpt": "Create a formal weekly project report with an executive summary, this week's progress, a risk table, next week's plan, headers, and footers, then export it as docx."
+          },
+          {
+            "heading": "### Example requests",
+            "excerpt": "Create a customer-tracking Base with company, contact, stage, expected value, and next action fields, plus a view grouped by stage."
+          },
+          {
+            "heading": "### Example requests",
+            "excerpt": "Create a sales Sheet and a summary Slide in the same .univer file, with the Slide chart reading the Sheet data."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yzlnew/infra-skills",
+      "practicalScore": 44,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Updating Skills",
+            "excerpt": "When frameworks release major updates:"
+          },
+          {
+            "heading": "# User request:",
+            "excerpt": "\"Write a FP16 matrix multiplication kernel optimized for A100\""
+          },
+          {
+            "heading": "# User request:",
+            "excerpt": "\"Estimate memory for DeepSeek-V3 with TP=8, PP=4, EP=8\""
+          },
+          {
+            "heading": "# User request:",
+            "excerpt": "\"Help me set up GRPO training for Qwen3-4B with multi-turn tool calling\""
+          },
+          {
+            "heading": "# User request:",
+            "excerpt": "\"Create a flowchart showing the FlashAttention-2 algorithm flow\""
+          },
+          {
+            "heading": "# User request:",
+            "excerpt": "\"Create a presentation deck about our AI infrastructure architecture\""
+          }
+        ]
+      }
+    },
+    {
+      "repo": "humblebanana/open-record-replay",
+      "practicalScore": 47,
+      "oracleScore": 64,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 2.5,
+          "oracle": 7.5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Why This Exists",
+            "excerpt": "- They depend on visible desktop UI."
+          },
+          {
+            "heading": "## Why This Exists",
+            "excerpt": "- They involve file pickers, menus, modals, or drag-and-drop."
+          },
+          {
+            "heading": "## Why This Exists",
+            "excerpt": "- They span multiple apps."
+          },
+          {
+            "heading": "## Why This Exists",
+            "excerpt": "- They depend on personal workspace layout or team-specific conventions."
+          },
+          {
+            "heading": "## Why This Exists",
+            "excerpt": "- They are easier to learn from a demonstration than from a written runbook."
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- Sending files or images through a desktop chat app."
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- Creating a document and sharing its link."
+          },
+          {
+            "heading": "## What You Can Record",
+            "excerpt": "- Opening a browser page, searching, and starting the right media."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SkillNerds/xskill",
+      "practicalScore": 55,
+      "oracleScore": 68,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# 可选。不写这段的话，三个阶段都继续用上面的 llm",
+            "excerpt": "希望能够自动将之前高频工作流串联成skill"
+          },
+          {
+            "heading": "# 可选。不写这段的话，三个阶段都继续用上面的 llm",
+            "excerpt": "每天有高强度的Agent运行需求"
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令"
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "改写现有的 python-memory-debug Skill，补充 Windows 排查步骤"
+          },
+          {
+            "heading": "#### 额外功能：即时生成或改写 Skill",
+            "excerpt": "根据这些用户的成功案例生成数据库迁移 Skill"
+          },
+          {
+            "heading": "# 可选。不写这段的话，三个阶段都继续用上面的 llm",
+            "excerpt": "2.每天有高强度的Agent运行需求"
+          },
+          {
+            "heading": "## 一人解决,全队复用",
+            "excerpt": "只要团队里有一个人在自己的会话里搞定了某个问题,这个解法就会变成一条技能——其他人的 agent 自动拿到。没人需要专门写文档。"
+          },
+          {
+            "heading": "# 可选。不写这段的话，三个阶段都继续用上面的 llm",
+            "excerpt": "1.希望能够自动将之前高频工作流串联成skill"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "bruc3van/awesome-dsh-plugin",
+      "practicalScore": 21,
+      "oracleScore": 42,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "30 秒选出一个插件"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "按分类浏览全部项目"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "看看作者们自己提交的新插件"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "用程序消费插件数据"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "收录或推荐你自己的插件"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "| 30 秒选出一个插件 | [精选推荐](#-精选推荐)：从「我想让 DSH 做什么」出发，按场景分组列出社区优秀插件 |"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "| 按分类浏览全部项目 | [CATALOG.md](./CATALOG.md)（全量目录）· [生态全景](#-生态全景)（分类概览） |"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "| 看看作者们自己提交的新插件 | [作者自荐](#-作者自荐)（首页最近 10 条）· [SHOWCASE.md](./SHOWCASE.md)（全部） |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "liustack/modsearch",
+      "practicalScore": 28,
+      "oracleScore": 42,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## See it work",
+            "excerpt": "Give it a blog link and ask what the post says."
+          },
+          {
+            "heading": "## See it work",
+            "excerpt": "Give it no target at all, just \"anything interesting in AI today?\"."
+          },
+          {
+            "heading": "## See it work",
+            "excerpt": "Ask dsh web for today's top AI stories."
+          },
+          {
+            "heading": "## See it work",
+            "excerpt": "Ask which Node.js line is still in maintenance."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "saya-ch/dsh-mobile",
+      "practicalScore": 54,
+      "oracleScore": 62,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 局域网访问",
+            "excerpt": "适合同一 Wi-Fi、以太网或手机热点，是默认且最简单的连接方式。"
+          },
+          {
+            "heading": "### 远程访问",
+            "excerpt": "适合手机离开电脑所在网络后使用。"
+          },
+          {
+            "heading": "## App 与手机浏览器",
+            "excerpt": "Android App | 日常使用"
+          },
+          {
+            "heading": "## App 与手机浏览器",
+            "excerpt": "手机浏览器  | 临时或跨平台访问"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-genui",
+      "practicalScore": 51,
+      "oracleScore": 61,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for an order or service dashboard"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for an audio or video reference"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for `plot` with a parameter"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for a short quiz"
+          },
+          {
+            "heading": "## 🧩 Capability map",
+            "excerpt": "Ask for `/panel` or `panel: true`"
+          },
+          {
+            "heading": "# 🎨 dsh-genui",
+            "excerpt": "Ask “how are this month’s orders doing?”"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "nutshellai-tech/mobius",
+      "practicalScore": 23,
+      "oracleScore": 46,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 2,
+          "oracle": 5.5,
+          "gap": 3.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "**On the web.** Zero install — open a browser on any device and the full Mobius workspace is ready instantly."
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "**On your phone.** XiaoMo goes wherever you go — chat with your agents, track progress, and approve decisions from anywhere. The iOS and Android apps are now fully available."
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "**On your desktop.** A native app that turns your PC into a Mobius workstation — read and write local project files directly, enroll this machine as a controllable node, and run multi-tab workflows."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Immersive Web Experiences"
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Financial News Wall"
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "World Cup Portal"
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "PPT Maker"
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Turn visual ideas into runnable extension apps."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "tingly-dev/tingly-box",
+      "practicalScore": 56,
+      "oracleScore": 52,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "- Execute tasks and queries from your phone or any device"
+          },
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "- Team collaboration with shared agent access"
+          },
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "- Monitor and control agents while away from your workstation"
+          },
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "Execute tasks and queries from your phone or any device"
+          },
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "Team collaboration with shared agent access"
+          },
+          {
+            "heading": "### Integration Guide",
+            "excerpt": "Monitor and control agents while away from your workstation"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "mrpulor-gh/nuphus-mcp",
+      "practicalScore": 37,
+      "oracleScore": 45,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### External browser (anti-detect / fingerprint browsers)",
+            "excerpt": "drive an **external browser** instead — e.g. an anti-detect / fingerprint\nbrowser"
+          },
+          {
+            "heading": "### Keeping logins: drive a browser that has your extensions & sessions",
+            "excerpt": "drive a browser carrying your own extensions /\nbookmarks / login state"
+          },
+          {
+            "heading": "### Keeping logins: drive a browser that has your extensions & sessions",
+            "excerpt": "operate the user's **currently running** real browser"
+          },
+          {
+            "heading": "### Keeping logins: drive a browser that has your extensions & sessions",
+            "excerpt": "Want `browser_*` tools to drive a browser carrying your own extensions /\nbookmarks / login state?"
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "zhoushoujianwork/easyeda-agent",
+      "practicalScore": 62,
+      "oracleScore": 77,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 4,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 特色:电路块库(一次贡献,永久收益)",
+            "excerpt": "**固定模块的外设电路可以直接照抄。** ESP32 自动下载电路、CH340 USB 烧录、按键去抖、\nUSB-HUB…这些电路的**内部拓扑是死的**,每次重画等于重趟坑。"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "### 实战展示:一份需求文档 → 三页原理图正式交付"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "一份需求文档 → AI 全自动画完 ESP32-S3 四层板"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "AI 从空白页开始生成原理图,再切到 PCB 完成布局、板框、铺铜和丝印。"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "**完整实战案例:[一份需求文档 → AI 全自动画完 ESP32-S3 四层板](docs/showcase-esp32-mini.md)**"
+          },
+          {
+            "heading": "### 原理图自动放置:两个引擎(模板 vs 官方)",
+            "excerpt": "### 原理图自动放置:两个引擎(模板 vs 官方)"
+          },
+          {
+            "heading": "### 特色:电路块库(一次贡献,永久收益)",
+            "excerpt": "固定模块的外设电路可以直接照抄。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "superdesigndev/superdesign-skill",
+      "practicalScore": 58,
+      "oracleScore": 56,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 5,
+          "gap": -5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# Core scenarios (what this skill handles)",
+            "excerpt": "1. **Design or improve UI** (feature/page/flow)"
+          },
+          {
+            "heading": "# Core scenarios (what this skill handles)",
+            "excerpt": "2. **Create a presentation** with an editable approved outline"
+          },
+          {
+            "heading": "# Core scenarios (what this skill handles)",
+            "excerpt": "3. **Create graphics** (posters, covers, social posts, and ads)"
+          },
+          {
+            "heading": "# Core scenarios (what this skill handles)",
+            "excerpt": "4. **Set or extract a design system**"
+          },
+          {
+            "heading": "# Core scenarios (what this skill handles)",
+            "excerpt": "5. **Generate supporting images or video**"
+          },
+          {
+            "heading": "## What is Superdesign?",
+            "excerpt": "- **Who it's for** — developers, indie hackers, and product/UI designers who want to go from idea to shippable UI fast without leaving their coding agent."
+          },
+          {
+            "heading": "### Example: Adding a \"Book Demo\" section to home page",
+            "excerpt": "### Example: Adding a \"Book Demo\" section to home page"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "liangmianya/dsh-synapse",
+      "practicalScore": 23,
+      "oracleScore": 24,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 4,
+          "oracle": 0,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    },
+    {
+      "repo": "elysia395/dsh-wallpaper-engine",
+      "practicalScore": 64,
+      "oracleScore": 65,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 6,
+          "oracle": 2,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 与 dsh-better-sidebar 的兼容适配",
+            "excerpt": "本插件的液态玻璃效果对 dsh-better-sidebar 的侧边栏面板做了专门适配"
+          },
+          {
+            "heading": "### 七个滑动条",
+            "excerpt": "如果在偏亮或花纹复杂的壁纸上 **文字或分割线看不清**"
+          },
+          {
+            "heading": "### 解码帧率上限（抽帧转码）",
+            "excerpt": "高帧率源（如 4K120 H.264）的硬解是 GPU 占用大头（4060 实测 1.0x 可达 60% Video Decode 占用）。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ikalus1988/MisakaNet",
+      "practicalScore": 74,
+      "oracleScore": 64,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 7,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 🔴 Debugging a real failure | [Search existing lessons](https://ikalus1988.github.io/MisakaNet/search/) before retrying |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 🤖 Building an AI agent / tool | Use lessons as [failure-memory](docs/mcp-quickstart.md) for your workflow |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 🧪 Using DeepSeekHarness | Connect the [DeepSeekHarness MCP adapter](docs/integration/deepseek-harness.md) as a recovery-memory plugin |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 🔧 Contributing a fix | Read [CONTRIBUTING.md](CONTRIBUTING.md) for code style + PR checklist, check [related lessons](https://ikalus1988.github.io/MisakaNet/search/), then open a small PR |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 📝 Sharing a failure case | Submit a [5-line failure note](https://github.com/Ikalus1988/MisakaNet/issues/new?template=lesson-feedback.yml) — no polished PR required |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 📊 Evaluating agent learning | Run the [benchmarks](scripts/retrieval_noisebench.py) and compare reuse behavior |"
+          },
+          {
+            "heading": "### Start here: choose your journey",
+            "excerpt": "| 💬 Reporting friction | [MCP intake](docs/integrations/mcp-remote.md) or [journey report #510](https://github.com/Ikalus1988/MisakaNet/issues/510) |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-ios",
+      "practicalScore": 63,
+      "oracleScore": 58,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 4,
+          "oracle": 1,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### OCR tools (Vision)",
+            "excerpt": "Use it when the accessibility tree is empty or degenerate, for text rendered as graphics (badge counts, prices baked into images), or to independently verify what is on screen."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "morluto/rea",
+      "practicalScore": 80,
+      "oracleScore": 73,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 7.5,
+          "gap": -2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Explain how a feature works when its source code is unavailable."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Reconstruct an app's authentication, storage, update, or networking flow."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Recover enough structure to document an undocumented format or interface."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Trace a suspicious behavior from a string or symbol to the code that implements it."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Run, checkpoint, resume, and reuse a content-addressed artifact investigation across two versions."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Analyze Swift and Objective-C metadata without manually untangling every mangled symbol."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Leave names, comments, and bookmarks in Hopper so human and agent analysis reinforce each other."
+          },
+          {
+            "heading": "## What agents can do",
+            "excerpt": "Investigate a feature you like and build a version tailored to your own product."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "op7418/pilot-harness",
+      "practicalScore": 33,
+      "oracleScore": 22,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 2.5,
+          "oracle": 0,
+          "gap": -2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    }
+  ]
+}

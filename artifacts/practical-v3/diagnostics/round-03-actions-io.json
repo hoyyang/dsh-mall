@@ -1,0 +1,1173 @@
+{
+  "generatedAt": "2026-09-02T07:36:53.680Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-03.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "actions-io",
+  "question": "Diagnose recurring deterministic misses in usageActions and ioPairs.",
+  "families": [
+    "usageActions",
+    "ioPairs"
+  ],
+  "under": [
+    {
+      "repo": "taxueseek/argo",
+      "practicalScore": 86,
+      "oracleScore": 76,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 7,
+          "gap": -3
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 金融",
+            "excerpt": "python3 scripts/search.py \"贵州茅台股价\" --explain"
+          },
+          {
+            "heading": "### 学术",
+            "excerpt": "python3 scripts/search.py \"transformer attention mechanism paper\" --json"
+          },
+          {
+            "heading": "### 研究与核验",
+            "excerpt": "python3 scripts/research.py \"2026 公募基金二季报 持仓结构\" --depth deep --json"
+          },
+          {
+            "heading": "### 研究与核验",
+            "excerpt": "python3 scripts/evidence.py \"同一查询\" --stdin --json"
+          },
+          {
+            "heading": "### 登录态专业搜索（ego-search，默认关闭）",
+            "excerpt": "python3 sub-skills/ego-search/scripts/ego_search.py enable"
+          },
+          {
+            "heading": "### 登录态专业搜索（ego-search，默认关闭）",
+            "excerpt": "python3 sub-skills/ego-search/scripts/ego_search.py status"
+          },
+          {
+            "heading": "### 方式三：git clone（开发 / 改源码）",
+            "excerpt": "python3 scripts/search.py --list-engines"
+          },
+          {
+            "heading": "### Agent 使用纪律（建议）",
+            "excerpt": "1. **高后果问题**（持仓、安全、是否属实）：search → 看快评分 → 对 top 结果 `fetch` → 再下结论"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "贵州茅台股价 | A 股行情域，优先快照源，够用就停"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "AAPL / 美股盘前 | 美股域，与 A 股分流"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "肖申克的救赎 主演 / Inception director | 影视域 → IMDb 等"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "梅西 俱乐部 / 库里 球队 | 体育域 → TheSportsDB 等"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "埃菲尔铁塔在哪 / where is Eiffel Tower | 地理实体 → OpenStreetMap 等"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "NASA founding year / 国务院职能 | 组织实体 → Wikidata 等"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "アニメ おすすめ / 한국 영화 추천 | 识别日/韩语 → 语言友好源，少塞中文专用站"
+          },
+          {
+            "heading": "## 问啥像啥",
+            "excerpt": "阿司匹林 分子式 | 化学域 → PubChem 类答案"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-tabbit",
+      "practicalScore": 34,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## What you get",
+            "excerpt": "The model loads it via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:"
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint"
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "the user is asked to restart Tabbit Browser once."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "Treats the runtime as available when multiple Tabbit instances are running; the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint instead of reporting the instance ambiguity as an unavailable runtime."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "The skill first runs the normal `tabbit-cli tasks` connection probe and requests no permission at all when it succeeds."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "does it ask the user to switch the current DSH session to Full Permission — and it then stops the task immediately, without retrying or continuing browser operations."
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-plugin",
+      "practicalScore": 34,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## What you get",
+            "excerpt": "The model loads it via `skill({ name: \"tabbit-browser\" })` or `/tabbit-browser`."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "Before the first browser operation in a task, the skill calls `tabbit_browser_install`:"
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint"
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "the user is asked to restart Tabbit Browser once."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "re-checks only after a Runtime/launcher failure or an installation change, via `refresh: true`."
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "Treats the runtime as available when multiple Tabbit instances are running; the agent sets `TABBIT_PLAYWRIGHT_INSTANCE` from the CLI's hint instead of reporting the instance ambiguity as an unavailable runtime."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "The skill first runs the normal `tabbit-cli tasks` connection probe and requests no permission at all when it succeeds."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "does it ask the user to switch the current DSH session to Full Permission — and it then stops the task immediately, without retrying or continuing browser operations."
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "seriousz158/dsh-memory",
+      "practicalScore": 41,
+      "oracleScore": 47,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "# Start DSH from this configured environment as well.",
+            "excerpt": "In DSH Settings, find **长期记忆** and leave the switch on to enable recall for the next model call."
+          },
+          {
+            "heading": "## Clear memory safely",
+            "excerpt": "1. Click **删除记忆**, read the affected paths, then click **继续**."
+          },
+          {
+            "heading": "## Clear memory safely",
+            "excerpt": "2. Enter exactly `删除记忆`, then click the final confirmation."
+          },
+          {
+            "heading": "## Optional idle-session sync",
+            "excerpt": "./integrations/dsh/dsh-memory-sync"
+          },
+          {
+            "heading": "## Settings and API",
+            "excerpt": "memory.clear({ confirmation: \"DELETE_MEMORY\" })"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## Settings and API",
+            "excerpt": "`status()` reports metadata such as `empty`, `dataFileCount`, `targetDirty`, and `recoverable`; it never returns the memory body."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Anionex/dsh-turn-rewind",
+      "practicalScore": 32,
+      "oracleScore": 50,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "create restore point"
+          },
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "preview exact path-level drift"
+          },
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "review a full or selective restore plan"
+          },
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "press the final restore button in the rewind dialog"
+          },
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "create rescue point → restore → verify"
+          },
+          {
+            "heading": "## User flow",
+            "excerpt": "shows a concise preview with a “view all files” action"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Renzic-Stone/DSH-EasyRewrite",
+      "practicalScore": 40,
+      "oracleScore": 41,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "# dsh-easyrewrite（DSH-EasyRewrite）",
+            "excerpt": "单击自己的消息气泡即可原位编辑"
+          },
+          {
+            "heading": "# dsh-easyrewrite（DSH-EasyRewrite）",
+            "excerpt": "点击复制键旁的撤回键可撤回该消息及其后的全部内容。"
+          },
+          {
+            "heading": "### 内联编辑（Rewrite）——已实现（M2）",
+            "excerpt": "Esc 取消 / Ctrl+Enter 确定"
+          },
+          {
+            "heading": "### 版本翻页器（< X >）——已实现（M3）",
+            "excerpt": "点击（或键盘 ←/→）切换版本"
+          },
+          {
+            "heading": "# dsh-easyrewrite（DSH-EasyRewrite）",
+            "excerpt": "单击自己的消息气泡即可原位编辑；点击复制键旁的撤回键可撤回该消息及其后的全部内容。"
+          },
+          {
+            "heading": "### 内联编辑（Rewrite）——已实现（M2）",
+            "excerpt": "单击气泡 → 原位编辑（保留原始 Markdown 原文），Esc 取消 / Ctrl+Enter 确定。"
+          },
+          {
+            "heading": "### 版本翻页器（< X >）——已实现（M3）",
+            "excerpt": "点击（或键盘 ←/→）切换版本，**后续上下文跟随版本变动**。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "× 取消撤回并恢复原草稿"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "practicalScore": 27,
+      "oracleScore": 37,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 3.5,
+          "gap": 3.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Interaction flow",
+            "excerpt": "Select assistant text ──▶ Toolbar \"Annotate\" ──▶ Write note / save empty ──▶ Blue numbered marker + highlight"
+          },
+          {
+            "heading": "## Interaction flow",
+            "excerpt": "\"Annotations ×N\" chip beside the input (hover to view / delete)"
+          },
+          {
+            "heading": "### Migrating from the old `@omdsh-dev` package name",
+            "excerpt": "dsh --profile web --dump-config | rg \"id: dsh-annotation\"   # must be exactly 1 line"
+          },
+          {
+            "heading": "### Migrating from the old `@omdsh-dev` package name",
+            "excerpt": "curl -s -o /dev/null -w '%{http_code}\\n' \"http://127.0.0.1:3080/plugins/@changfenhuang/dsh-annotation/client.js\"   # 200"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Select assistant text → toolbar \"Annotate\" → write your note (may be empty); dismiss by clicking elsewhere or pressing Esc"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "hover to view all annotations, remove them one by one"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "Press Enter and the annotation block goes to the model together with whatever question is in the input box."
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Sanqi-normal/dsh-webui-market-plugin",
+      "practicalScore": 29,
+      "oracleScore": 53,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 2,
+          "oracle": 5,
+          "gap": 3
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用",
+            "excerpt": "打开 **设置（Settings）→ 插件（Plugins）→ 插件市场（Plugin Market）**："
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "- 点 **详情** 查看该插件的官方安装命令（含目标 profile）"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "**一键更新全部**会把所有可更新插件依次加入队列；"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "打开 **设置（Settings）→ 插件（Plugins）→ 插件市场（Plugin Market）**"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "点 **详情** 查看该插件的官方安装命令（含目标 profile）"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "可取消排队项、终止执行项、查看每个任务的 pnpm 日志"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "队列头部「清空」可一键清除全部已完成/失败记录（逐条清除也支持）"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "**一键更新全部**会把所有可更新插件依次加入队列"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Awu12277/dsh-stock-watch",
+      "practicalScore": 38,
+      "oracleScore": 48,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 交互说明",
+            "excerpt": "⟳ 手动刷新"
+          },
+          {
+            "heading": "## 交互说明",
+            "excerpt": "点击行进详情"
+          },
+          {
+            "heading": "## 交互说明",
+            "excerpt": "K线 `+`/`−`/`重置` 缩放"
+          },
+          {
+            "heading": "## 交互说明",
+            "excerpt": "| 药丸 | 点击展开 · 按住拖动（拖到屏幕边缘自动吸附为半球，显示涨/跌家数）· 悬停弹出扇形菜单（行情分析/每日复盘/涨停分析，新开对话执行） |"
+          },
+          {
+            "heading": "## 交互说明",
+            "excerpt": "| 列表 | 分组 tab 切换 · 点击行进详情 · ⟳ 手动刷新 · — 折叠 · ☀️/🌙 切主题 |"
+          },
+          {
+            "heading": "## 交互说明",
+            "excerpt": "| 详情 | ← 返回 · 分时 / 日K / 周K / 月K 切换 · 📈 投资研究报告（新建对话一键分析）· 点击买入/卖出目标编辑 · K线 `+`/`−`/`重置` 缩放 |"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 功能特性",
+            "excerpt": "搜索「小米」「01810」→ 港股 `hk01810`"
+          },
+          {
+            "heading": "## 功能特性",
+            "excerpt": "搜索「510300」「沪深300ETF」→ 沪市 ETF"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "practicalScore": 45,
+      "oracleScore": 67,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 方式二：源码一键部署 CLI",
+            "excerpt": "node deploy.mjs"
+          },
+          {
+            "heading": "### 方式二：源码一键部署 CLI",
+            "excerpt": "node deploy.mjs --check"
+          },
+          {
+            "heading": "### 方式二：源码一键部署 CLI",
+            "excerpt": "node deploy.mjs --start"
+          },
+          {
+            "heading": "### 方式一：设置页管理台（推荐）",
+            "excerpt": "- 安装 / 更新 / 卸载十五个运行时插件；"
+          },
+          {
+            "heading": "# dsh-redteam-model",
+            "excerpt": "在 dsh web 的新会话中选择相应的模式即可开始任务。"
+          },
+          {
+            "heading": "### 方式一：设置页管理台（推荐）",
+            "excerpt": "打开 dsh web 设置页 → **Redteam Manager**"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### 方式二：源码一键部署 CLI",
+            "excerpt": "任一会话让模型调 `gates_list`，返回专业模式门禁 schema；"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "practicalScore": 48,
+      "oracleScore": 59,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 8,
+          "gap": -2
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Quick start",
+            "excerpt": "1. **Discover devices** — \"List the Android devices.\" → `android_devices`."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "2. **Start the stream** — \"Stream emulator-5554.\" → `android_boot`. The panel opens with the device live."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "3. **Tap on the video** — tap or drag directly on the panel, or let the agent drive: \"Open Settings, then tap Display.\" → `android_interact`"
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "4. **Build and run your app** — \"Build and run /path/to/MyApp.\" → `android_build_run`."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "5. **Read the logs** — \"Show the last two minutes of logcat for com.example.app.\" → `android_logs`."
+          },
+          {
+            "heading": "### Core tools",
+            "excerpt": "`android_screenshot` | Capture a PNG and return a small JSON summary (path, bytes, dimensions, device)"
+          },
+          {
+            "heading": "### Core tools",
+            "excerpt": "`android_list_apps` | List the packages installed on the device (`pm list packages`)"
+          },
+          {
+            "heading": "### Core tools",
+            "excerpt": "`android_launch_app` | Launch an installed app by `packageName`, or by `name` (a case-insensitive label substring resolved through the same listing)."
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## Quick start",
+            "excerpt": "\"List the Android devices.\" → `android_devices`"
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "\"Stream emulator-5554.\" → `android_boot`."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "\"Open Settings, then tap Display.\" → `android_interact`"
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "\"Build and run /path/to/MyApp.\" → `android_build_run`."
+          },
+          {
+            "heading": "## Quick start",
+            "excerpt": "\"Show the last two minutes of logcat for com.example.app.\" → `android_logs`."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "liyupi/dsh-kun-like-pet",
+      "practicalScore": 22,
+      "oracleScore": 27,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 方式二：直接预览动画（无需 DSH）",
+            "excerpt": "打开 `demo/index.html`（建议起个静态服务器，如 `npx serve .` 或 `python3 -m http.server`），即可查看全部 9 种动画并拖动互动。"
+          },
+          {
+            "heading": "## ✨ 特性",
+            "excerpt": "点击它会挥手打招呼"
+          },
+          {
+            "heading": "## ✨ 特性",
+            "excerpt": "`kun_pet_debug` 可随时查看状态机内部计数与轮询健康度"
+          },
+          {
+            "heading": "## 📁 项目结构",
+            "excerpt": "校验：`node scripts/validate.mjs`"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "## 🎮 状态 → 动作映射",
+            "excerpt": "| **任务完成** | 挥手 + 跳跃庆祝（第 3/4 行交替）＋ 系统音「你干嘛~哎哟」 | 完成啦！你干嘛~哎哟 |"
+          },
+          {
+            "heading": "## 🎮 状态 → 动作映射",
+            "excerpt": "| 点击 | 挥手（2.4s 反应） | 诶嘿~ |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "vlln/dsh-navbar",
+      "practicalScore": 28,
+      "oracleScore": 34,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Usage",
+            "excerpt": "**Pin**: hover an assistant message's action bar and click 📌 to pin that reply"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Click it to load the earlier messages — the rail then grows new nodes at the top."
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "hover an assistant message's action bar and click 📌 to pin that reply"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "hover for a preview, click to jump"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Click it to load the earlier messages"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "N0zoM1z0/th08",
+      "practicalScore": 27,
+      "oracleScore": 43,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 3,
+          "oracle": 5,
+          "gap": 2
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### Web",
+            "excerpt": "Select `th08.dat` and `thbgm.dat` from a legal TH08 installation in the\nlauncher."
+          },
+          {
+            "heading": "### Target executable",
+            "excerpt": "Supply your own original executable as `resources/th08.exe`:"
+          },
+          {
+            "heading": "### Target executable",
+            "excerpt": "Verify the private target before analysis or comparison:"
+          },
+          {
+            "heading": "### Analysis and live progress",
+            "excerpt": "Read current figures directly from the ledgers:"
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "On Debian or Ubuntu, build and run against the original game-data directory:"
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "After first-time setup, use the incremental launcher:"
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "Extract it and pass the original data directory:"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "eri64/dsh-claude-ux",
+      "practicalScore": 20,
+      "oracleScore": 36,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 启用",
+            "excerpt": "打开总开关并「保存并应用」后即时生效。"
+          },
+          {
+            "heading": "### 启用",
+            "excerpt": "浏览器访问本机 dsh web 的 `/_dsh/claude/status`"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### 启用",
+            "excerpt": "浏览器访问本机 dsh web 的 `/_dsh/claude/status`\n> （默认 `http://127.0.0.1:3080/_dsh/claude/status`），返回 `{\"ok\":true,...}` 即主机插件已加载。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "multica-ai/dsh-multica-runtime",
+      "practicalScore": 5,
+      "oracleScore": 29,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Local development",
+            "excerpt": "dsh --profile multica --probe"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "dsh --profile multica --list-models"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "dsh --profile multica --stdio"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "dsh --profile multica --probe\ndsh --profile multica --list-models\ndsh --profile multica --stdio"
+          }
+        ],
+        "ioPairs": []
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "FlashingChen/dsh-desktop-hub",
+      "practicalScore": 56,
+      "oracleScore": 39,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 8,
+          "oracle": 0.5,
+          "gap": -7.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 快速开始",
+            "excerpt": "3. **开始使用**：直接对话；需要外部工具时，到 MCP / Skills / Plugin Tab 管理。"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "Vladimir-Human/ru-marketplace-mcp",
+      "practicalScore": 57,
+      "oracleScore": 43,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 3,
+          "gap": -7
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## Quickstart",
+            "excerpt": "After connecting, run `marketplace-mcp doctor`."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "Run `marketplace-mcp doctor`\nfrom your own session for the current state."
+          },
+          {
+            "heading": "### Cross-marketplace — `compare_*`",
+            "excerpt": "| `compare_prices(query, per_source_limit, sources)` | Every marketplace at once, ranked         |"
+          },
+          {
+            "heading": "### Detsky Mir — `detmir_*`",
+            "excerpt": "| `detmir_categories(parent, limit, region)`      | Catalog tree, start here                      |"
+          },
+          {
+            "heading": "### Wildberries — `wb_*`",
+            "excerpt": "| `wb_root_info(nm_id)`                                  | Resolves `imt_id` (needed for reviews) plus colour variants |"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### Сравнение цен — `compare_*`",
+            "excerpt": "compare_prices(\"кроссовки мужские\")\n\n  wildberries      712 ₽   Кроссовки изи дышащие спортивные\n  wildberries      814 ₽   Зимние кроссовки теплые с мехом"
+          },
+          {
+            "heading": "### Сравнение цен — `compare_*`",
+            "excerpt": "compare_prices(\"кроссовки мужские\")\n\n  wildberries      712 RUB   Кроссовки изи дышащие спортивные\n  wildberries      814 RUB   Зимние кроссовки теплые с мехом"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "practicalScore": 43,
+      "oracleScore": 28,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 4,
+          "gap": -6
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用方式",
+            "excerpt": "/specfusion 企业微信发送应用消息"
+          },
+          {
+            "heading": "## 使用方式",
+            "excerpt": "/specfusion feishu 获取用户列表"
+          },
+          {
+            "heading": "### 方式一：skills CLI（推荐）",
+            "excerpt": "npx skills find \"feishu\""
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/search?q=关键词&source=wecom&limit=5` | 搜索文档 |"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/doc/{doc_id}` | 获取文档全文 |"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/sources` | 查看已接入文档源 |"
+          },
+          {
+            "heading": "## 使用方式",
+            "excerpt": "> /specfusion 企业微信发送应用消息\n> /specfusion feishu 获取用户列表"
+          },
+          {
+            "heading": "## 使用方式",
+            "excerpt": "> 飞书如何创建审批实例？"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "# SpecFusion",
+            "excerpt": "> 企业微信怎么发应用消息？\n\n  搜索到 3 篇相关文档：\n  1. 发送应用消息 — POST /cgi-bin/message/send"
+          },
+          {
+            "heading": "# SpecFusion",
+            "excerpt": "> 企业微信怎么发应用消息？\n\n  搜索到 3 篇相关文档：\n  1. 发送应用消息 — POST /cgi-bin/message/send\n  2. 接收消息与事件 — 被动回复消息\n  3. 消息类型及数据格式 — text/image/voice/..."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "labring/sealos-skills",
+      "practicalScore": 66,
+      "oracleScore": 53,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 4.5,
+          "gap": -5.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos deploy this repo to Sealos Cloud\n$sealos deploy /path/to/project\n$sealos deploy https://github.com/labring-sigs/kite"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos create a cloud Postgres database for this repo and wire DATABASE_URL\n$sealos create private S3 object storage for uploads and wire env vars"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "click the **+** button in the lower-left corner of the chat input, choose **Plugins**, then choose **Sealos**"
+          },
+          {
+            "heading": "### Test in Qoder",
+            "excerpt": "/sealos show the resources created by the last deployment"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos deploy this repo to Sealos Cloud"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos deploy /path/to/project"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos create a cloud Postgres database for this repo and wire DATABASE_URL"
+          },
+          {
+            "heading": "### Recommended: install in Codex",
+            "excerpt": "$sealos create private S3 object storage for uploads and wire env vars"
+          }
+        ],
+        "ioPairs": []
+      }
+    },
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "practicalScore": 73,
+      "oracleScore": 58,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 5,
+          "gap": -5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "### 4. Sign in with ChatGPT",
+            "excerpt": "Click **Sign in with ChatGPT** and complete the browser approval yourself."
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "uncheck the models you do not want to see, and select **Save changes**."
+          },
+          {
+            "heading": "### Network connection and proxy detection",
+            "excerpt": "Choose **Use this proxy** only after reviewing a candidate, then click **Save changes**."
+          },
+          {
+            "heading": "### Generate images with GPT Image",
+            "excerpt": "Turn on **Enable GPT Image generation** in the Codex Connect card and select **Save changes**."
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "Open Harness's normal model picker and select an `openai-codex` model for the agent or session you are using."
+          },
+          {
+            "heading": "### Generate images with GPT Image",
+            "excerpt": "3. Describe the image you want in ordinary language."
+          },
+          {
+            "heading": "### Version updates",
+            "excerpt": "dsh plugin --profile web update dsh-codex-connect"
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "dsh --profile web --dump-config"
+          }
+        ],
+        "ioPairs": [
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "dsh plugin --profile web exec dsh-codex-connect status --json\ndsh plugin --profile web exec dsh-codex-connect doctor --json\n```\n\nExpected result: `status --json` reports `signed-in` and exits `0`,"
+          },
+          {
+            "heading": "### 5. Choose a model and make one safe check",
+            "excerpt": "dsh --profile web --dump-config\n```\n\nExpected result: the configuration has exactly one `llm-openai-codex` row."
+          },
+          {
+            "heading": "### Generate images with GPT Image",
+            "excerpt": "3. Describe the image you want in ordinary language. The agent can expand that request into the prompt sent to GPT Image.\n4. The completed image is stored as a DSH attachment and rendered directly"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "practicalScore": 56,
+      "oracleScore": 46,
+      "familyGaps": {
+        "usageActions": {
+          "machine": 10,
+          "oracle": 5.5,
+          "gap": -4.5
+        },
+        "ioPairs": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "usageActions": [
+          {
+            "heading": "## 使用方法",
+            "excerpt": "选择 `.wxapkg` 文件；加密包填写 18 位 AppID（`wx` + 16 位小写十六进制字符）。"
+          },
+          {
+            "heading": "## 使用方法",
+            "excerpt": "点击“开始反编译”，等待系统自动处理。"
+          },
+          {
+            "heading": "## 使用方法",
+            "excerpt": "查看结果提示并下载只含 `src/` 的反编译结果。"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET`          | `/api/health`                    | 健康状态、版本和运行能力 |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `POST`         | `/api/compile`                   | 上传文件并创建任务       |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET`          | `/api/events?taskId=<id>`        | SSE 实时进度             |"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "| `GET` / `HEAD` | `/api/download/:taskId`          | 下载 ZIP 或检查是否就绪  |"
+          },
+          {
+            "heading": "### 在线使用",
+            "excerpt": "选择或拖入 `.wxapkg` 文件即可。"
+          }
+        ],
+        "ioPairs": []
+      }
+    }
+  ]
+}

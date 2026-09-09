@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-09-02T04:22:33.658Z",
+  "projectCount": 500,
+  "contract": {
+    "caps": {
+      "capability_items": 12,
+      "usage_items": 10,
+      "usage_actions": 10,
+      "io_pairs": 8,
+      "code_examples": 4,
+      "usecase_items": 10,
+      "output_items": 8,
+      "media": 6,
+      "reliability_items": 10
+    },
+    "scoreRange": [
+      0,
+      100
+    ],
+    "confidenceRange": [
+      0,
+      1
+    ],
+    "rubricCapScore": 100,
+    "positiveMarginalValueThroughCaps": true
+  },
+  "marginalValue": {
+    "capability_items": {
+      "cap": 12,
+      "minimumRawDimensionDelta": 1.883062
+    },
+    "usage_items": {
+      "cap": 10,
+      "minimumRawDimensionDelta": 0.723739
+    },
+    "usage_actions": {
+      "cap": 10,
+      "minimumRawDimensionDelta": 0.723739
+    },
+    "io_pairs": {
+      "cap": 8,
+      "minimumRawDimensionDelta": 0.452951
+    },
+    "code_examples": {
+      "cap": 4,
+      "minimumRawDimensionDelta": 1.140552
+    },
+    "usecase_items": {
+      "cap": 10,
+      "minimumRawDimensionDelta": 1.809348
+    },
+    "output_items": {
+      "cap": 8,
+      "minimumRawDimensionDelta": 0.679426
+    },
+    "media": {
+      "cap": 6,
+      "minimumRawDimensionDelta": 1.362005
+    },
+    "reliability_items": {
+      "cap": 10,
+      "minimumRawDimensionDelta": 1.357011
+    }
+  },
+  "issues": [],
+  "saturationCounts": {
+    "capability_items": 238,
+    "usage_items": 152,
+    "usage_actions": 65,
+    "io_pairs": 7,
+    "code_examples": 86,
+    "usecase_items": 19,
+    "output_items": 18,
+    "media": 93,
+    "reliability_items": 213
+  },
+  "diagnosticOnly": {
+    "minimum": 0,
+    "median": 43,
+    "maximum": 89,
+    "mean": 41.726
+  },
+  "pass": true
+}

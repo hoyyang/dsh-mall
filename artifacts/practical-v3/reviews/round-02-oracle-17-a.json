@@ -1,0 +1,396 @@
+{
+  "reviews": [
+    {
+      "repo": "Ychris12138/dsh-usage-stats",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 💳 | 统一账户卡片 | API 供应商显示余额，Token Plan 显示分窗口额度；面板一次只呈现当前供应商 |",
+        "| 📊 | Token 用量分析 | 今日、本月、累计、缓存命中率、月历热图，以及按日期/供应商/模型下钻 |",
+        "| 💰 | 估算费用与预算 | 按事件时间匹配历史价格，提供当前会话、日/月与 session 维度费用；可选日/月预算预警 |",
+        "| 🔄 | 后台监测 | 账户按 active/detail/background 自适应刷新；间隔可配置或完全关闭，本地 Token 聚合保持独立运行 |",
+        "| 🧩 | 可扩展适配器 | 支持 New API、Sub2API、通用余额模板，以及声明式 JSON Pointer 自定义查询 |",
+        "插件自动发现官方 DeepSeek 路由和 `llm-pi-ai` 中的 provider profile。",
+        "只要把 Sub2API 面板作为普通 provider 配置进 DSH（带入它的 API Key），插件会探测该 provider 的 `GET /api/v1/settings/public`。",
+        "面板的当前 provider 会保存在浏览器的命名空间 localStorage 中；刷新页面或重启 DSH 后恢复。",
+        "`warning.warnBelow` 与 `warning.criticalBelow` 是余额绝对值阈值。具有总额度的余额和 Token Plan 会自动产生 `normal / warning / critical` 剩余比例状态（默认 30% / 10%）。"
+      ],
+      "usageItems": [
+        "1. 点击侧边栏“用量/余额”。",
+        "2. 用“当前供应商”切换账户卡片；一次只显示一个 provider。",
+        "3. 使用 `‹` / `›` 切换月份，点击热图日期查看当天的 provider/model 明细。",
+        "4. 标题栏刷新会更新 Token、provider 列表，并强制刷新当前账户。"
+      ],
+      "usageActions": [
+        "1. 点击侧边栏“用量/余额”。",
+        "2. 用“当前供应商”切换账户卡片；一次只显示一个 provider。",
+        "3. 使用 `‹` / `›` 切换月份，点击热图日期查看当天的 provider/model 明细。",
+        "4. 标题栏刷新会更新 Token、provider 列表，并强制刷新当前账户。"
+      ],
+      "ioPairs": [
+        "| `GET` | `/api/usage-stats/usage` | 按日期/provider/model 聚合的 Token、派生费用、session 明细与日/月预算状态 |",
+        "| `GET` | `/api/usage-stats/providers` | provider 列表、account mode、adapter、状态与预警摘要 |",
+        "| `GET` | `/api/usage-stats/account?provider=<id>` | 当前 provider 的统一余额或 Token Plan 快照；`refresh=1` 强制刷新 |",
+        "| `GET` | `/api/usage-stats/balance?provider=<id>` | `0.1.x` 余额兼容路由 |",
+        "| `GET` | `/api/usage-stats/subscriptions` | `0.1.x` Token Plan 兼容路由 |",
+        "| `GET` | `/api/usage-stats/session-context?session=<id>` | 当前 live session 的 route/model/account 与同一增量 fold 的 session 费用快照 |",
+        "| `GET` | `/api/usage-stats/export/daily.csv` | secret-free daily provider/model CSV |",
+        "| `GET` | `/api/usage-stats/export/sessions.csv` | secret-free session CSV |"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "- `/api/usage-stats/export/daily.csv`：每天 × provider/model 的四类 Token 与完整费用估算。",
+        "- `/api/usage-stats/export/sessions.csv`：session 标题、provider/model 集合、Token、完整费用估算和最后活动时间。",
+        "- `/api/usage-stats/export.json`：带 `schemaVersion` 的完整聚合数据、公开 pricing provenance、预算和安全账户状态。"
+      ],
+      "reliability": [
+        "- API Key、OpenCode `auth.json`、Cookie 与管理 PAT 不会进入浏览器响应、插件缓存或日志。",
+        "金额只在 provider、model、事件时间与货币均能由内置价格规则可靠确定时计算；未知中转、订阅路线、无价格的 cache write 或混合币种会整体显示 `—`，不会展示部分费用或进行汇率换算。",
+        "没有公开账户接口的供应商仍会正常统计 Token；账户卡片会明确显示“不支持”，不会猜测余额。",
+        "只有 `/api/usage/token/` 返回 404/405 且配置了独立管理 PAT 才会 fallback；不会把推理 Token 当管理凭据。",
+        "声明式自定义查询只支持受限 GET + JSON Pointer，不执行 JavaScript：",
+        "- 自定义 monitor 默认要求 HTTPS、同源相对路径、手动 redirect 和 JSON 响应，body 上限为 1 MiB。",
+        "- 发凭据前会筛选域名的 IPv4/IPv6 解析结果并固定一个允许的连接地址，优先使用公网地址；HTTPS 域名解析到 `198.18.0.0/15` 时可作为 Clash/Mihomo 等代理的 synthetic fake-IP 使用。",
+        "- 九个端点仅接受 GET，并同时校验 peer socket 与 Host；支持 IPv4、IPv4-mapped IPv6 和 `[::1]:port`。",
+        "Token 统计值来自 `assistant/chunk` 或 `assistant/message` 中 provider-reported `usage`，不是本地估算。",
+        "- `validate:live` 会逐会话比较 raw artifact、`session.history`、插件端点与官方 token projection；缺文件或不一致会返回非零。"
+      ],
+      "media": [
+        {
+          "excerpt": "![dsh-usage-stats interface preview](docs/images/usage-panel.svg)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "wssfk12138/dsh-damage-pulse",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 精准计费 | 按 provider、model、缓存类型和北京时间峰谷价格计算每次真实费用 |",
+        "| 鲸鱼娘动态反馈 | 待机、眨眼、扣费受击、缓存未命中、余额耗尽与充值复活 |",
+        "| 主动提醒 | 每日预算、峰谷切换、缓存命中异常和鲸鱼娘通知气泡 |",
+        "| 微信通知 | 在详细设置中登录、管理 ClawBot，并接收少女风业务提醒 |",
+        "| 安全更新 | 检查 GitHub Release，验证版本、来源与 SHA-256 后再安装 |",
+        "- 合格调用写入本地持久账本；重启后可恢复历史统计和会话摘要，零成本记录不会污染账本。"
+      ],
+      "usageItems": [
+        "右键可隐藏鲸鱼娘或打开详细设置。",
+        "- **ClawBot 微信通知**：在详细设置中查看连接、认证与投递状态，完成二维码登录、刷新、重连、安全断开和测试消息发送。"
+      ],
+      "usageActions": [
+        "右键可隐藏鲸鱼娘或打开详细设置。",
+        "- **ClawBot 微信通知**：在详细设置中查看连接、认证与投递状态，完成二维码登录、刷新、重连、安全断开和测试消息发送。",
+        "| `GET /api/token-monitor/balance` | DeepSeek 账户余额（含 currency / 总余额 / 赠送余额） |",
+        "| `GET /api/token-monitor/usage?sessionId=` | 用量明细历史（可过滤会话） |",
+        "| `GET /api/token-monitor/usage-summary?range=` | 今日 / 7 天 / 30 天 / 全部时间的聚合统计 |",
+        "| `GET /api/token-monitor/charge-events?since=<seq>` | 严格递增的扣费事件流，驱动余额变化、飘字和受击动画 |",
+        "| `GET /api/token-monitor/notification-events?since=<seq>` | 预算、峰谷和缓存异常通知流 |",
+        "| `GET /api/token-monitor/wechat/status` | 查询微信连接、认证、投递和短时登录会话状态；设置页“刷新”会重新请求此端点 |",
+        "| `POST /api/token-monitor/wechat/login` | 创建二维码登录会话 |",
+        "| `POST /api/token-monitor/wechat/login/confirm` | 确认当前二维码登录状态 |"
+      ],
+      "ioPairs": [
+        "| `GET /api/token-monitor/balance` | DeepSeek 账户余额（含 currency / 总余额 / 赠送余额） |",
+        "| `GET /api/token-monitor/usage?sessionId=` | 用量明细历史（可过滤会话） |",
+        "| `GET /api/token-monitor/usage-summary?range=` | 今日 / 7 天 / 30 天 / 全部时间的聚合统计 |",
+        "| `GET /api/token-monitor/charge-events?since=<seq>` | 严格递增的扣费事件流，驱动余额变化、飘字和受击动画 |",
+        "| `GET /api/token-monitor/notification-events?since=<seq>` | 预算、峰谷和缓存异常通知流 |",
+        "| `GET /api/token-monitor/wechat/status` | 查询微信连接、认证、投递和短时登录会话状态；设置页“刷新”会重新请求此端点 |",
+        "| `POST /api/token-monitor/wechat/login` | 创建二维码登录会话 |",
+        "| `POST /api/token-monitor/wechat/login/confirm` | 确认当前二维码登录状态 |"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "- **单次用量行**：每次模型调用结束，在对话流中显示输入、缓存、输出、思考 Token 和精确金额。",
+        "- **会话累计条**：输入区持续显示当前会话累计 Token 与费用。",
+        "- **全局悬浮卡**：跨会话持续显示 DeepSeek 账户余额；今日消费与历史范围统计集中在详细设置概览中。",
+        "- **统计概览**：支持今日、近 7 天、近 30 天和全部时间，汇总消费金额、请求数、Token 总数、缓存命中 Token、缓存命中率和活跃天数。",
+        "- **中文大数单位**：概览按“万、千万、亿、万亿”逐级显示，千万级数字不再折算成两位数的“百万”；舍入跨越边界时会自动提升单位。",
+        "- 查询 DeepSeek 官方余额并每 60 秒校准；扣费事件到达时先逐笔更新显示余额，充值后以绿色反馈恢复金额。",
+        "- 峰谷标识每 30 秒刷新，峰时使用红色、谷时使用绿色提示。"
+      ],
+      "reliability": [
+        "- 同时依据 provider 与 model 判断计费资格，未知或不合格模型不会套用默认价格。",
+        "- 视觉模型直接使用 DeepSeek 返回的 usage 数据，不对图片 Token 重复估算。",
+        "- 使用 `sessionId + sourceEventSeq` 保证事件幂等，避免重放导致重复扣费。",
+        "- 余额查询失败或缺少 API Key 时显示明确状态；本地账本统计的今日消费不依赖余额接口成功。",
+        "- 所有业务通知开关默认关闭；旧配置从 v0、v1、v2、v3 迁移且缺少通知字段时，也会保守补为关闭。",
+        "设置更新使用 revision 防止多个页面互相覆盖，并兼容旧字段迁移。",
+        "安装前会校验 Release/tag 版本、资产名称、下载来源、重定向域名和 SHA-256，且只有识别到可安装 profile 时才执行安装。",
+        "本仓库从 `0.2.0` 起提供标准 DSH Host + Client 组合包和预编译产物，要求 DSH `0.1.0-rc.5` 及之后的兼容版本（含 `0.1.0-rc.6/rc.7/rc.8` 与 `0.1.1-rc.2`，与 package.json 声明的 peer 双版本段一致）。",
+        "- **旧版 / 社区自行打包或定制客户端**（没有该席位）：标准包内置严格 fail-closed 的兼容桥，只在能对原生会话行做唯一、无歧义匹配时显示金额；一旦检测到宿主已带正式席位标记、稳定会话标识或既有金额，立即整体停用，不会重复写入。",
+        "任一时刻只会选择一个 provider；微信未登录、超时或发送失败不会阻塞余额监控、计费和鲸鱼娘动画。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/dsh-damage-pulse-peak-valley-whale-poster.png\" alt=\"dsh-damage-pulse 实时用量、鲸鱼娘、提醒规则、微信通知与安全更新功能总览\" width=\"100%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/readme/whale-girl-idle-bite-finger.png\" alt=\"鲸鱼娘啃手指待机原画\" width=\"260\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/readme/whale-girl-critical-damage.png\" alt=\"鲸鱼娘严重扣费原画\" width=\"260\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/readme/dsh-damage-pulse-wechat-live.jpg\" alt=\"dsh-damage-pulse 通过 ClawBot 发送的微信通知实机截图\" width=\"520\">",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "NanmiCoder/dsh-auto-mode",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Routine project work runs directly inside the official `workspace-write` sandbox",
+        "only semantic risks outside that boundary are classified using the current DSH model and the direct user's instructions",
+        "genuine ambiguity asks once, and destructive access to critical paths is denied before execution.",
+        "The Web client registers its copy with DSH's official locale service.",
+        "Switching the DSH language updates the permission menus, active-mode control, General-settings selector, `/permission` picker description, and acknowledgement dialog without a restart.",
+        "Only an explicit one-shot widening may be approved automatically:",
+        "| **Allow** | unfamiliar sandboxed Bash/PowerShell, routine dependency installation, local Git commits, project work, builds, tests, type checks, audited DSH coordination tools |",
+        "| **Classify** | pre-session deletion, ephemeral downloaded-package execution, dangerous remote Git/database/service changes, sensitive reads, network transmission, external-system writes, exact sandbox widening |",
+        "| **Ask once** | genuinely ambiguous effect or authority, or manual review after three consecutive classifier failures; an escalation reuses the official exact approval instead of opening two dialogs |",
+        "Official in-process Subagents, Workflow `agent()` calls, Ralph `spawn` workers, and AgentTeams members inherit Auto and the workspace boundary through their live `parentSession` chain."
+      ],
+      "usageItems": [
+        "Refresh the Web UI, select **Auto** between Workspace Write and Full access, and acknowledge the risk notice."
+      ],
+      "usageActions": [
+        "Refresh the Web UI, select **Auto** between Workspace Write and Full access, and acknowledge the risk notice."
+      ],
+      "ioPairs": [
+        "| **Allow** | unfamiliar sandboxed Bash/PowerShell, routine dependency installation, local Git commits, project work, builds, tests, type checks, audited DSH coordination tools |",
+        "| **Classify** | pre-session deletion, ephemeral downloaded-package execution, dangerous remote Git/database/service changes, sensitive reads, network transmission, external-system writes, exact sandbox widening |",
+        "| **Ask once** | genuinely ambiguous effect or authority, or manual review after three consecutive classifier failures; an escalation reuses the official exact approval instead of opening two dialogs |",
+        "| **Deny** | root/home/DSH_HOME/system destruction, policy bypass, credential exfiltration, hidden dynamic deletion, and the first two consecutive classifier failures for a risky action |"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "Coding agents need broad access to build, test, and inspect a project without stopping every few steps."
+      ],
+      "outputs": [],
+      "reliability": [
+        "This plugin does not implement a sandbox.",
+        "The file sandbox does not restrict reads, network access, or external services; the Windows backend reports `partial` enforcement.",
+        "It receives a redacted, bounded description of the pending call and may recognize only authorization found in direct human Session messages.",
+        "Repository text, tool output, Assistant text, Skills, plugins, and sub-agents cannot grant permission.",
+        "| Multiple targets, globs, variables, piped operands, or nested-interpreter deletion | deny in the background and require one visible literal target per call |",
+        "| Filesystem root, Home, DSH_HOME, system, or credential-critical paths | deny unconditionally |",
+        "ephemeral runners such as `npx`, `bunx`, `pnpm dlx`, `yarn dlx`, and `npm exec` remain reviewed because they fetch and execute a package without first making it an ordinary project dependency.",
+        "Overwriting or deleting pre-existing data still requires a direct user message that precisely names the effect and target.",
+        "Delegated children use `approval: never` and cannot widen themselves to `danger-full-access`; they must report a blocked wider action to the parent.",
+        "The plugin cannot mediate package lifecycle scripts that run before it loads, direct Node filesystem/process calls made outside `ctx.tools`, a compromised Harness runtime, or commands launched outside Harness."
+      ],
+      "media": [],
+      "concerns": [
+        "The README's only image is a hero graphic, so it is omitted as potentially decorative."
+      ]
+    },
+    {
+      "repo": "ZSeven-W/dsh-noema",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`noema_import` reads the memory files of ten other AI coding tools",
+        "a Manage memories card searches, browses, adds, reviews, and deletes stored memories directly.",
+
+        "| `noema_recall` | Recall relevant memories for a query, with a token budget. |",
+        "| `noema_search` | Full-text search over stored memories. |",
+        "| `noema_browse` | Browse the PageIndex catalog for a topic or entity. |",
+        "| `noema_recall_graph` | Multi-hop recall through links and shared entities. |",
+        "| `noema_explain` | Explain why a memory was or was not recalled. |",
+        "| `noema_remember` | Save a durable fact, decision, constraint, or preference. |",
+        "| `noema_review_decide` | Accept, reject, edit, or merge a candidate. |",
+        "| `noema_forget` | Tombstone or hard-delete a memory. |",
+        "| `noema_policy_get` / `noema_policy_set` | Read or update the write policy. |",
+        "| `noema_status` | Server and tenant status: counts, index health, storage root. |"
+      ],
+      "usageItems": [
+        "- The `source` argument selects one tool, or omit it to run every source enabled in settings.",
+        "- The `path` argument selects the workspace root for project-scoped files (defaults to the session workspace; workspace files only load when the Import workspace files setting is on).",
+        "Open **Settings → Noema Memory**:",
+        "Run `pnpm run build` and the running DSH reloads the plugin entry automatically (the Noema server child is restarted by the reload) — no server restart.",
+        "**Client bundle** — `ppnpm run build:client` rewrites `lib/client.js`"
+      ],
+      "usageActions": [
+        "| `noema_recall` | Recall relevant memories for a query, with a token budget. |",
+        "| `noema_search` | Full-text search over stored memories. |",
+        "| `noema_browse` | Browse the PageIndex catalog for a topic or entity. |",
+        "| `noema_catalog` | Render the full memory catalog as markdown. |",
+        "| `noema_recall_graph` | Multi-hop recall through links and shared entities. |",
+        "| `noema_neighbors` | One graph hop from a memory. |",
+        "| `noema_explain` | Explain why a memory was or was not recalled. |",
+        "| `noema_remember` | Save a durable fact, decision, constraint, or preference. |",
+        "- The `source` argument selects one tool, or omit it to run every source enabled in settings.",
+        "- The `path` argument selects the workspace root for project-scoped files (defaults to the session workspace; workspace files only load when the Import workspace files setting is on)."
+      ],
+      "ioPairs": [
+        "| `noema_recall` | Recall relevant memories for a query, with a token budget. |",
+        "| `noema_search` | Full-text search over stored memories. |",
+        "| `noema_browse` | Browse the PageIndex catalog for a topic or entity. |",
+        "| `noema_catalog` | Render the full memory catalog as markdown. |",
+        "| `noema_recall_graph` | Multi-hop recall through links and shared entities. |",
+        "| `noema_neighbors` | One graph hop from a memory. |",
+        "| `noema_explain` | Explain why a memory was or was not recalled. |",
+        "| `noema_remember` | Save a durable fact, decision, constraint, or preference. |"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "so an Agent keeps durable knowledge across sessions instead of starting every conversation from zero."
+      ],
+      "outputs": [
+        "Each tool returns a uniform envelope `{ ok, tool, text }` where `text` carries the full server output.",
+        "<p align=\"center\"><sub>The Noema Memory settings page — import sources, memory management, and live server status</sub></p>",
+        "- The settings page exposes per-source checkboxes, an import-on-startup toggle, a file-size cap, and an Import now button with a last-run summary.",
+        "The status card shows server health with restart/stop actions, and the import section manages the nine memory sources."
+      ],
+      "reliability": [
+        "Memories persist as inspectable Markdown files under `NOEMA_ROOT` (default `~/.agent-memory/`).",
+        "The memory server stays up: idle timeout defaults to never, and a keep-alive loop restarts the `noema-mcp` child in the background when it crashes or exits, with a configurable check interval and restart backoff.",
+        "- Imports are deduplicated through a ledger at `$DSH_HOME/storages/dsh-noema-imports.json`, keyed by file path + section content — when several tools share one project `AGENTS.md`, each section is imported exactly once.",
+        "DSH's HMR machinery is fully usable once the plugin has been loaded once:",
+        "- **Settings** — every change made on the Noema Memory settings page applies live through the settings service.",
+        "A fresh plugin therefore needs exactly one server restart, after which the loop above is fully hot.",
+        "The e2e test runs against `noema/target/debug/noema-mcp` when present (it is skipped otherwise)."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-noema-overview.png\" alt=\"DSH Noema — memory settings page\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The README says the import section manages nine sources, but the source table lists ten source IDs."
+      ]
+    },
+    {
+      "repo": "lire1131/dsh-undo-savepoint",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| **密钥脱敏 + 本机 vault** | `.env` / 凭据进快照自动脱敏（结构保留），导出 ZIP 零泄露；真实值存本机 vault，本机回滚完整还原 |",
+        "| **快照时间线（Time Machine）** | 快照按日期分组卡片化（备注 / 标签芯片，尊重 `prefers-reduced-motion`）+ 文件级 diff（新增 / 删除行高亮、目录树导航、逐文件浏览）+ 一键回滚 |",
+        "| **一键诊断 `undo_doctor`** | 检查快照目录可写性、blob 完整性（缺失 / 孤儿）、设置文件健康、快照规模分布，输出 ok / warn / err 结构化报告与修复提示 |",
+        "`DSH_UNDO_LANG=zh|en` 强制指定；未设置时中文系统默认中文、否则英文。服务端输出、离线 CLI / GUI、WebUI 全部生效，词典源统一为 `lib/i18n/{zh,en}.json`。",
+        "**多 Profile**（v0.3.3 起）：插件从启动参数自动识别当前 profile（`dsh --profile mine` / `--profile=mine`；`dsh web` 回退为 `web`），并按当前 profile 工作：",
+        "- **快照仓库**：默认 `<快照根>/<当前 profile>/{auto,manual}`（按 profile 隔离）；作用域目录不存在而旧版平铺目录存在时自动回退平铺，旧快照不会「隐身」；",
+        "与官方启动器（`@deepseek-ai/dsh-home-paths`）解析完全一致——**`DSH_HOME` 环境变量优先**（空白视为未设置，支持 `~` / `~/` / `~\\` 前缀），否则回退 `<用户家目录>\\.dsh`。"
+      ],
+      "usageItems": [
+        "- **撤销**：头部「撤销」按钮 / `Ctrl+Alt+Z` / 对 AI 说「撤销上一步」。",
+        "- **恢复**：「恢复」按钮 / `Ctrl+Alt+Y`（仅当撤销后没有新操作）。",
+        "- **手动保存**：面板里「手动保存」/ 对 AI 说「保存快照」/ CLI `snapshot`。",
+        "- **回退到指定版本**：面板里点快照行「回退到此版本」；或对 AI 说「回退到 \\<id\\>」；或 CLI `restore -Id <id>`。",
+        "- **删除快照**：面板里点「删除」；或 CLI `remove -Id <id>`。",
+        "- **消息级撤销**：对话头部「对话撤回」，选择消息批次撤回其文件改动。",
+        "插件加载后还会自动在桌面创建「dsh-undo-savepoint」快捷方式，双击直接打开。",
+        "需要真正重建依赖时加 `-SyncDeps`（离线 CLI）、`sync_deps: true`（对话工具）或 `syncDeps: true`（REST），插件会执行 `pnpm install --frozen-lockfile`（无 lockfile 时普通 `pnpm install`）。"
+      ],
+      "usageActions": [
+        "- **撤销**：头部「撤销」按钮 / `Ctrl+Alt+Z` / 对 AI 说「撤销上一步」。",
+        "- **恢复**：「恢复」按钮 / `Ctrl+Alt+Y`（仅当撤销后没有新操作）。",
+        "- **手动保存**：面板里「手动保存」/ 对 AI 说「保存快照」/ CLI `snapshot`。",
+        "- **回退到指定版本**：面板里点快照行「回退到此版本」；或对 AI 说「回退到 \\<id\\>」；或 CLI `restore -Id <id>`。",
+        "- **删除快照**：面板里点「删除」；或 CLI `remove -Id <id>`。",
+        "- **消息级撤销**：对话头部「对话撤回」，选择消息批次撤回其文件改动。",
+        "node tools/undo-server.mjs     # 或双击 launch-undo.bat / .command / .sh / .desktop",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" list",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" snapshot -Label \"原因\"",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" undo"
+      ],
+      "ioPairs": [
+        "| `GET /api/undo/status` | `{canUndo, canRedo, total, bootAlert, safeModeActive, ...}` |",
+        "| `GET /api/undo/list` | 快照列表（含 location: manual/auto/legacy） |",
+        "| `GET /api/undo/diff` | `?id=<id>` 指定快照与当前的文件级结构化 diff |",
+        "| `GET /api/undo/tree` | 目录树 diff（按目录聚合，增 / 删 / 改着色） |",
+        "| `GET /api/undo/doctor` | 一键诊断（store 可写性 / blob 完整性 / settings / 规模） |",
+        "| `POST /api/undo/undo` | 撤销上一步；可选 body `{syncDeps: true}` 按还原后的 lockfile 重建 `node_modules` |",
+        "| `POST /api/undo/redo` | 恢复；可选 body `{syncDeps: true}` |",
+        "| `POST /api/undo/restore` | body `{id, syncDeps?}` 回退到指定版本 |"
+      ],
+      "codeExamples": [
+        "node tools/undo-server.mjs     # 或双击 launch-undo.bat / .command / .sh / .desktop",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" list",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" snapshot -Label \"原因\"",
+        "powershell -NoProfile -ExecutionPolicy Bypass -File \"tools\\dsh-undo-savepoint.ps1\" undo"
+      ],
+      "usecases": [
+        "| 上次异常退出，不知回退到哪 | WebUI / GUI 横幅显示 last-good 快照，一键回退 |",
+        "| **DSH 完全起不来** | 桌面「DSH撤销管理器」→ **安全模式**按钮（或 CLI `safe-mode -Label on`）→ 重启 DSH 保证能启动 |",
+        "| 崩溃横幅提示会话损坏 | 对话 / CLI：`undo_scan quarantine=true` 修复（或离线 `dsh-undo.ps1 scan --fix`） |",
+        "| 恢复后可能缺插件（跨机） | 恢复报告预检提示；先装插件或进安全模式 |",
+        "| 配置「突然变了」 | CLI `recent` / 对话 `undo_recent` 查回滚日志 |",
+        "| 撤销涉及插件 / 挂载 | 报告提示「重启 DSH 后生效」 |"
+      ],
+      "outputs": [
+        "快照对象是 DSH 的启动关键配置：`cordis.patch.yml`、`package.json`、`cordis.yml`、`pnpm-workspace.yaml`、`pnpm-lock.yaml`（profile 下）",
+        "| 手动库 | `<快照根>\\manual\\` | 手动保存的快照（永不自动清理） |",
+        "| 自动库 | `<快照根>\\auto\\` | 自动快照、启动基线、撤销后悔档（自动档保留最近 20 份） |",
+        "| 快照对比：文件列表 + 变更统计（+8 / -2）+ 行级差异高亮 | 局外设置：防抖 / 保留数量 / 脱敏模式 / 目录选择 / 桌面快捷方式 |",
+        "| `GET /api/undo/status` | `{canUndo, canRedo, total, bootAlert, safeModeActive, ...}` |",
+        "| `GET /api/undo/list` | 快照列表（含 location: manual/auto/legacy） |",
+        "| `GET /api/undo/diff` | `?id=<id>` 指定快照与当前的文件级结构化 diff |",
+        "| `GET /api/undo/tree` | 目录树 diff（按目录聚合，增 / 删 / 改着色） |"
+      ],
+      "reliability": [
+        "v0.4.0 起核心抽取为纯 Node 零依赖模块（`lib/core.mjs` / `lib/zip.mjs`），外围按平台分发，Windows / macOS / Linux 三平台可用：",
+        "> CI 为三平台矩阵（`windows/ubuntu/macos × node[20,22]`）。ZIP 导出 / 导入由纯 Node 零依赖 `lib/zip.mjs` 实现（deflate / 存储、CRC32、UTF-8），不引入运行时依赖，与 PowerShell 互操作已双向验证。",
+        "安装失败不影响已经还原的配置文件。",
+        "> ⚠️ 快照含 `.env` 等配置副本，可能含密钥——不要外传。",
+        "插件代码树超限时**只记清单 + 标记 `[truncated]` 告警，不丢任何数据**，可手动快照 / 导出兜底。",
+        "- **撤销语义**：自动快照在变更**之后**生成，所以「恢复最新存档」是空操作；真实撤销 = 回退到与当前状态**内容不同**的最新快照；全部相同则明确提示「没有可撤销的变化」。",
+        "- **撤销不会撤销掉自己**：恢复 `cordis.patch.yml` 后自动检查并重新写入 dsh-undo-savepoint 挂载条。",
+        "- **自动存档不误伤撤销**：watcher 记录恢复操作写入的内容哈希，恢复动作自己的文件变化不会被自动存档（否则会挡住 redo）；真实变更照常存档。",
+        "- **格式互通**：Node 插件与 PowerShell 工具共用快照仓库与 manifest 格式；Windows PowerShell 5.1 与 PowerShell 7 均兼容。",
+        "node tools\\smoke-test.mjs     :: 189 项逻辑测试（快照/撤销/重做/存储分流/无变化提示/消息级撤销/孤儿GC/zip互操）"
+      ],
+      "media": [
+        {
+          "excerpt": "![header](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-header.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![panel](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@95230c2/docs/shots/webui-panel.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![settings](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-settings-section.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![gui](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@95230c2/docs/shots/gui-main.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![safemode](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/safe-mode-confirm.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![msgundo](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/message-undo.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![webdiff](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-diff.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![note](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-note.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![guidiff](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/gui-diff.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![guisettings](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/gui-settings.png)",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "reviews": [
+    {
+      "repo": "PM-Shawn/Abu-Cowork",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Autonomous Agent** — More than chat: plans, invokes tools, reads/writes files, executes commands, and completes complex tasks end-to-end",
+        "- **Interactive questions** — When Abu needs you to decide (pick an approach, provide a parameter), it pops an option card above the composer; single or multi-select, with an \"Other\" free-text row",
+        "- **Self-Evolving Skills** — After you run a multi-step complex flow, Abu proactively offers \"want to crystallize this into a skill?\" — one click drafts it, you review, you accept.",
+        "- **Projects** — Promote a workspace into a Project: conversations in the same direction auto-aggregate; each project gets its own default model, skill set, and MCP connectors",
+        "- **Multi-Agent Parallel Execution** — Run up to 5 background agents simultaneously, each executing tasks independently with real-time progress tracking",
+        "- **Browser Automation** — Zero-setup built-in browser for ordinary web tasks, plus an optional Chrome extension bridge for existing tabs and signed-in sessions",
+        "- **Computer Use** — Screenshot + mouse/keyboard control for desktop-level tasks, with sensitive app blocking, dangerous key interception, and a 5-minute session timeout",
+        "- **Scheduled Tasks** — Cron-based scheduling (e.g., daily AI news digest at 9 AM); runs missed while the app was closed are replayed in time order on next launch",
+        "- **Provider Management** — Add, edit, delete, reorder providers with connection health checks and latency detection",
+        "- **Model Selector** — Switch models on-the-fly during conversations with capability badges (vision, tool use, web search, thinking, image generation, long context)",
+        "- **Image Generation** — Built-in DALL-E 2 / DALL-E 3 support, plus any custom image-generation endpoint",
+        "- **Auto-Compaction** — Intelligently compresses long conversation history while preserving key context"
+      ],
+      "usageItems": [
+        "Return to the main screen, use the model selector to pick your preferred model, and start chatting.",
+        "- **Theme switching** — Light / dark / system, via Settings → Appearance",
+        "Turn Abu into your team bot — just @Abu in your chat:",
+        "left-click opens main window, right-click menu, drag-to-edge dock",
+        "Export any conversation to JSON in one click"
+      ],
+      "usageActions": [
+        "Organize the files on my desktop by type",
+        "Extract the tables from this PDF and generate an Excel file",
+        "Every morning at 9 AM, search for the latest AI news and generate a daily digest",
+        "Use the frontend design skill to create a product landing page",
+        "Create a weekly report PPT for this week"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "**Try these prompts:**\n\n```\nOrganize the files on my desktop by type",
+        "### Build\n\n```bash\nnpm run dist:electron",
+        "### Testing\n\n```bash\nnpm test              # Run tests"
+      ],
+      "usecases": [
+        "Organize the files on my desktop by type",
+        "Extract the tables from this PDF and generate an Excel file",
+        "Every morning at 9 AM, search for the latest AI news and generate a daily digest",
+        "Use the frontend design skill to create a product landing page",
+        "Create a weekly report PPT for this week"
+      ],
+      "outputs": [
+        "- **Diagnostic Bundle Export** — When something breaks, package logs / config / version info in one click (API keys and paths auto-redacted) and send it to the maintainer",
+        "Build artifacts are written to `release-electron/`."
+      ],
+      "reliability": [
+        "with [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) among the first integration targets. Stable releases currently use Abu's native harness.",
+        "- **Plan Mode** — For high-risk steps (delete / overwrite / send / install), Abu first presents a step-by-step plan and waits for you to click \"Confirm & run\"",
+        "- **Labs** — In-progress features, off by default, opt-in, may change or be removed (currently hosting: Desktop Pet)",
+        "- **HTTP Fetch** — Built-in safety gateway: URL length cap, embedded credential blocking, cloud metadata endpoint blocking, 10 MB download limit, 60-second timeout — no more raw `curl` blind spots",
+        "- **OS Sandbox** — macOS Seatbelt (`sandbox-exec`) / Windows PowerShell ConstrainedLanguage isolates shell command file access",
+        "- **Network Isolation** — Local proxy + domain whitelist + private-network toggle to control every outbound request",
+        "- **Path & Command Safety** — Sensitive directories (system folders, SSH keys, etc.) blocked by default; dangerous commands (`rm -rf /`, etc.) caught statically",
+        "- **Encrypted API Key Storage** — Windows DPAPI / macOS AES-256-GCM with a hardware-UUID-derived key; keys are no longer written to localStorage in plaintext",
+        "- **Cross-Platform** — Supports macOS (Apple Silicon / Intel) and Windows",
+        "The Windows installer is current-user only and does not need administrator rights, but remains Authenticode-unsigned; SmartScreen may require **More info → Run anyway**."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-execution.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-web-pages.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-doc-edit.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-plan-mode.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-multi-agent.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-diagnostic.en.png\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The README says DeepSeek Harness integration is still in progress and stable releases use Abu's native harness.",
+        "Install, provider configuration, and build prerequisites were excluded."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-genui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **Registry channel**: when the host exposes the `fence-registry` extension point (newer dsh builds), fences register through the host's streaming render pipeline and behave seamlessly with the host;",
+        "Since 0.7.2 it **supports streaming rendering**: components appear as the model writes them — the first finished component shows up immediately, no need to wait for the whole reply.",
+        "- **30+ components**: cards, tables, charts, forms, tabs, accordions, file trees, timelines, diffs…",
+        "- **Native media**: audio and video play inline from browser-reachable http(s) or same-origin relative URLs, with user-controlled playback, video posters/aspect ratios, and visible failure states",
+        "- **ECharts integration**: the `echart` node renders full ECharts charts with theme-aware colors, tooltips, and legends.",
+        "- **Quiz**: `quiz` grades on click with explanation and retry; with `action`, the answer is also sent back to the model (grading stays local and instant)",
+        "- **State persistence**: answers, submission locks, and input values are saved per \"session + content fingerprint\" — refresh or reopen restores everything;",
+        "- **Form semantics**: `input` Enter / `textarea` Ctrl+Enter submits immediately (`submit:true`), no blur needed; fields with an `id` are collected into the submit's `fields`",
+        "- **Event loop**: buttons/switches/inputs/dropdowns/checkboxes/radios/textareas/quizzes carry `action`; click or blur sends back to the model, which updates the UI;",
+        "- **Tool channel**: the `render_ui` tool renders the same spec as a card in the tool row (deliverable-style UI goes through the tool, answer-style UI through the fence)",
+        "- **Session panel**: a persistent dock above the composer; `render_ui` / `panel: true` fences update the same surface in place; `/panel` opens it from the client"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "Ask for an order or service dashboard",
+        "Ask for an audio or video reference",
+        "Ask for `plot` with a parameter",
+        "Ask for a short quiz",
+        "Ask for `/panel` or `panel: true`",
+        "Dragging sliders redraws the curve locally and immediately.",
+        "click or blur sends back to the model",
+        "just say \"output it with dsh-ui\""
+      ],
+      "ioPairs": [
+        "Ask “how are this month’s orders doing?” and the answer can include a sortable data panel, a native video, a draggable plot, a local quiz, or a persistent session panel"
+      ],
+      "codeExamples": [
+        "## 📄 Example\n\nThe model outputs this fence (written for the browser — you don't need to read it):\n\n```dsh-ui\n{\"title\":\"Order overview\",\"items\":[",
+        "### ECharts example\n\n```dsh-ui\n{\"title\":\"Q1 Revenue\",\"items\":["
+      ],
+      "usecases": [
+        "Ask for an order or service dashboard",
+        "Ask for an audio or video reference",
+        "Ask for `plot` with a parameter",
+        "Ask for a short quiz",
+        "Ask for `/panel` or `panel: true`"
+      ],
+      "outputs": [
+        "Real output: refresh/reset controls, time-range selection, statistics, charts, and a service table live inside the assistant reply.",
+        "Real output: `plot` renders curves while sliders, reset, and animation controls update the graph locally.",
+        "Real output: typography, grid, card, and row/column primitives combine into a hierarchy the model can describe declaratively."
+      ],
+      "reliability": [
+        "The host still owns **client activation** and must provide the `slots` and `sessions` services.",
+        "successful activation always prints `[genui] client active; fence-channel=registry|dom`.",
+        "- **Secrets ban**: GenUI must never ask for passwords, API keys, access tokens, recovery codes, or other secrets;",
+        "buttons without one render disabled (kills the \"looks clickable, does nothing\" fake button)",
+        "- **Self-healing & limits**: every fence passes a spec guard — bad nodes are silently dropped, numbers clamped, strings truncated; the whole tree is capped at 200 nodes / 8 nesting levels",
+        "- **Chart error self-healing**: mermaid failures auto-retry with repairs (strip backticks, quote Chinese/space labels, remove `<br/>`) before degrading to source; a broken chart never hits the screen",
+        "- **Accessibility**: tabs/accordions/switches/progress bars carry full ARIA and keyboard navigation (arrow keys switch tabs, Home/End jump)",
+        "- **Zero intrusion**: without the plugin, fences are just code blocks — no errors, no session pollution",
+        "- **Chat UI goes blank when rendering a dsh-ui fence?** Your dsh is too old — update dsh first, then reinstall the plugin.",
+        "Hosts without the asset routes degrade to source/load-error hints — update dsh."
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/f5db33ec-7471-4d4a-a85b-79c9962ab4ef",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase-panel.png\" width=\"92%\" alt=\"Real dsh-genui monitoring panel rendered inside a DSH conversation\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase-plot.png\" width=\"76%\" alt=\"Real dsh-genui function plot with draggable parameter sliders\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase.png\" width=\"76%\" alt=\"Real dsh-genui layout and card component composition\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Install, migration, profile configuration, and development setup commands were excluded.",
+        "The capability reference contains a joined ECharts/function-plots line, so only unambiguous exact substrings were used."
+      ]
+    },
+    {
+      "repo": "tingly-dev/tingly-box",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Agent-First Model Gateway** – Unified endpoint for agents — seamlessly bridge OpenAI, Anthropic, Google Gemini, and more with automatic protocol translation and native agent compatibility",
+        "- **Agent Profiles** - Run agent like Claude Code with individual profiles, each profile can work with different model and agent config",
+        "- **Multi-Tenant API Tokens** – Isolate data per user with dedicated API tokens — each user gets their own usage tracking, provider access, and configuration",
+        "- **Smart Routing Engine** – Intelligently route requests across models and tokens based on cost, speed, or custom policies — far beyond simple load balancing",
+        "- **Flexible Authentication** – Support for both API keys and OAuth providers (Claude.ai, Codex, etc.) — use your existing quotas anywhere",
+        "- **Visual Control Plane** – Intuitive web UI to manage providers, routes, aliases, models, and remote bots at a glance — no config files needed",
+        "- **Client-Side Usage Analytics** – Track token consumption, latency, cost estimates, and model selection per request — directly from your client",
+        "| Protocol Adaptation              | ✅ Supported | Supports official Anthropic/OpenAI APIs with bidirectional conversion |",
+        "| Cache Hit Optimization           | ✅ Supported | Improves cache hit rates for DeepSeek requests                        |",
+        "| Vision Proxy                     | ✅ Supported | Enables DeepSeek to understand and process images                     |",
+        "| Web Search                       | ✅ Supported | Calls official Web tools through the Anthropic endpoint               |",
+        "| 1M Context Window                | ✅ Supported | Enables one-click setup for 1M context                                |"
+      ],
+      "usageItems": [
+        "Then open `http://localhost:12580` in your browser."
+      ],
+      "usageActions": [
+        "- Execute tasks and queries from your phone or any device",
+        "- Team collaboration with shared agent access",
+        "- Monitor and control agents while away from your workstation",
+        "Then open `http://localhost:12580` in your browser."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "<summary><strong>OpenAI SDK</strong></summary>\n\n```python\nfrom openai import OpenAI",
+        "<summary><strong>Anthropic SDK</strong></summary>\n\n```python\nfrom anthropic import Anthropic"
+      ],
+      "usecases": [
+        "- Execute tasks and queries from your phone or any device",
+        "- Team collaboration with shared agent access",
+        "- Monitor and control agents while away from your workstation"
+      ],
+      "outputs": [
+        "The output binary is written to `./build/tingly-box`."
+      ],
+      "reliability": [
+        "> **Announcement:** Here is [fault record](https://github.com/tingly-dev/tingly-box/discussions/626). Please update to the latest version to resolve known issues.",
+        "- **Blazing Fast Performance** – Adds typically **< 1ms** of overhead — get flexibility without latency tax",
+        "> Tingly Box proxies requests transparently for SDKs and CLI tools.",
+        "the frontend requires an auth token to log in.",
+        "**Mock mode** – no running backend required, uses built-in fixture data:",
+        "> The GUI build is not yet publicly released. Skip this step unless you are specifically working on the desktop app."
+      ],
+      "media": [
+        {
+          "excerpt": "![Tingly Box Web UI Demo](./docs/hero.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Tingly Box Web UI Demo](./docs/images/output.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Agent Integration Demo](./docs/images/5-claude-code.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Remote Control Demo](./docs/images/7-remote.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![OAuth Provider Demo](./docs/images/3-connect-ai.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Dashboard](./docs/images/1-dashboard.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Install, dependency setup, and provider or bot configuration instructions were excluded.",
+        "The README points to a separate guardrails document but does not state those guardrail behaviors directly, so they were omitted."
+      ]
+    },
+    {
+      "repo": "Zhiyuan-Fan/Awesome-DeepSeek-Harness-Plugins",
+      "inferredType": "catalog-list",
+      "capability": [
+        "Every entry links to its canonical GitHub repository",
+        "> Inclusion: public, useful, maintained, and clearly built for DSH.",
+        "**Taxonomy:** Models & Providers · Tools & Skills · Sessions & Storage · Loops & Scheduling · Runtime & Sandboxes · UI & Clients · Integrations · Developer & Operations",
+        "The taxonomy follows the capability seams defined by the [official Harness overview](https://www.deepseek.com/harness/en/)."
+      ],
+      "usageItems": [
+        "**Browse:** [Models & Providers](#models--providers) · [Tools & Skills](#tools--skills) · [Sessions & Storage](#sessions--storage) · [Loops & Scheduling](#loops--scheduling)",
+        "Open a pull request, or add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "usageActions": [
+        "Open a pull request, or add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Explore tools, skills, model providers, memory, automation, runtimes, desktop clients, browser integrations, and developer utilities."
+      ],
+      "outputs": [
+        "A concise, daily-curated directory of public plugins and extensions for [DeepSeek Harness](https://www.deepseek.com/harness/en/) (DSH)"
+      ],
+      "reliability": [
+        "This list is reviewed daily by a local Codex scheduled task using public sources only."
+      ],
+      "media": [],
+      "concerns": [
+        "All linked-project capabilities, commands, screenshots, compatibility claims, and reliability claims were excluded under catalog ownership.",
+        "Stars and star-based ranking were excluded."
+      ]
+    },
+    {
+      "repo": "linhay/harmony-next.skills",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "本仓库把这些不确定性变成**可定位、可跳转、可验证的本地文件查询**。",
+        "- **完全离线检索**：不依赖模型记忆，先命中文档路径再读取正文",
+        "- **为 Agent 工作流设计**：按 `SKILL.md → KITS/TASK_MAP → INDEX` 层层递进检索",
+        "| [`commandline_tools_manager.py`](./harmony-next/scripts/commandline_tools_manager.py) | Command Line Tools 下载与安装 | `python3 harmony-next/scripts/commandline_tools_manager.py install ...` |",
+        "| [`device_evidence_bundle.py`](./harmony-next/scripts/device_evidence_bundle.py) | 设备证据采集与 WebView DevTools 转发诊断 | `python3 harmony-next/scripts/device_evidence_bundle.py webview-devtools ...` |",
+        "| [`device_ui_action.py`](./harmony-next/scripts/device_ui_action.py) | 单次 UI 操作与前后证据采集 | `python3 harmony-next/scripts/device_ui_action.py tap ...` |",
+        "| [`ux_audit_pipeline.py`](./harmony-next/scripts/ux_audit_pipeline.py) | 一键离线 UI/UX 体检 | `python3 harmony-next/scripts/ux_audit_pipeline.py doctor ...` |",
+        "| [`profiler_trace_audit.py`](./harmony-next/scripts/profiler_trace_audit.py) | 离线 Trace 性能审计 | `python3 harmony-next/scripts/profiler_trace_audit.py audit ...` |",
+        "| [`hvd_manager.py`](./harmony-next/scripts/hvd_manager.py) | HVD 设备管理 | `python3 harmony-next/scripts/hvd_manager.py doctor ...` |"
+      ],
+      "usageItems": [
+        "**使用本 skill**：先按 `SKILL.md → KITS.md / TASK_MAP.md → INDEX.md` 命中文档路径，再打开目标 Markdown，最后给出代码片段和 `hdc` / `uitest` / wrapper 脚本验证命令。"
+      ],
+      "usageActions": [
+        "`python3 harmony-next/scripts/device_evidence_bundle.py webview-devtools ...`",
+        "`python3 harmony-next/scripts/device_ui_action.py tap ...`",
+        "`python3 harmony-next/scripts/ux_audit_pipeline.py doctor ...`",
+        "`python3 harmony-next/scripts/profiler_trace_audit.py audit ...`",
+        "`python3 harmony-next/scripts/hvd_manager.py doctor ...`",
+        "python3 harmony-next/scripts/check_packaging_docs.py",
+        "python3 harmony-next/scripts/reference_compat.py check"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## 🧭 推荐检索路径\n\n```text\nSKILL.md → KITS.md / TASK_MAP.md → INDEX.md → 目标 Markdown",
+        "## 🔧 维护与贡献\n\n参考库更新后运行校验：\n\n```bash\npython3 harmony-next/scripts/check_packaging_docs.py"
+      ],
+      "usecases": [
+        "- **ArkTS / ArkUI 开发**：组件、装饰器、状态管理、UIAbility 等 API 确认与示例",
+        "- **NDK / C API**：头文件对应真实文档、跨语言调用、CMake 配置",
+        "- **IDE / 工具链 / 调试**：签名、模拟器、真机调试、性能分析与发布流程",
+        "- **DevEco 模拟器自动化**：免 IDE 启动、HVD、`hdc`/`uitest` 自动化、抓包诊断",
+        "- **DevEco IDE 私有能力**：CodeGenie、ArkUI Inspector、离线 trace 审计、UI/UX 体检",
+        "- **Agent 工程化集成**：作为 Gemini CLI、Claude Code、Codex 的本地知识检索层"
+      ],
+      "outputs": [
+        "| [`references/templates/empty-ability-app`](./harmony-next/references/templates/empty-ability-app/) | 可复制的 HarmonyOS NEXT smoke fixture（最小工程） |"
+      ],
+      "reliability": [
+        "> 面向 API 12-23 的本地知识源，覆盖 ArkTS、ArkUI、NDK、工具链、调试、发布与多端适配。",
+        "- **私有能力隔离**：DevEco 模拟器、IDE 未公开接口单独成章，默认先验证版本和风险",
+        "> 本仓库当前还不是 Codex plugin；`npx skills` 只会把 skill 安装到 Codex 可扫描的 skill 目录，不会安装 MCP/tools/apps。",
+        "Bundle 只注册 `harmony-next` skill 及其离线参考资源，不安装 MCP、tools 或 apps。",
+        "涉及 **DevEco 模拟器、IDE 私有接口、设备日志、截图、抓包、HVD 创建/删除**等操作时，**必须先阅读对应的私有接口文档**。",
+        "- 执行前验证 DevEco / Emulator / SDK 版本和命令能力",
+        "- 明确产物目录、脱敏边界和失败时的 `blocked` 输出",
+        "- 非交互模式下的执行策略、超时与脱敏契约",
+        "规则：默认只做静态只读分析（插件 XML、jar、配置、离线 trace 等）；启动 IDE/GUI、本地服务、设备连接、MCP 配置等需记录目标、产物和脱敏边界；",
+        "离线 trace 审计和 UI/UX 体检只使用已验证的 wrapper 脚本和规则子集。"
+      ],
+      "media": [],
+      "concerns": [
+        "Install commands and host path configuration were excluded.",
+        "Unreleased changelog entries were excluded as roadmap material."
+      ]
+    }
+  ]
+}

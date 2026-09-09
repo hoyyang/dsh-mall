@@ -1,0 +1,4736 @@
+{
+  "generatedAt": "2026-09-02T02:43:24.756Z",
+  "parser": "/Users/hoy/Desktop/DSH/dsh-market-index/scripts/readme-signals.mjs",
+  "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-01.ndjson",
+  "ratingsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-01-adjudicated-ratings.json",
+  "count": 100,
+  "gates": {
+    "spearman": {
+      "value": 0.68,
+      "threshold": 0.75,
+      "pass": false
+    },
+    "topQuartileRecall": {
+      "value": 0.52,
+      "threshold": 0.8,
+      "pass": false
+    },
+    "severeFalseNegativeRate": {
+      "value": 0.05,
+      "maximum": 0.05,
+      "pass": true
+    },
+    "severeFalsePositiveRate": {
+      "value": 0.03,
+      "maximum": 0.05,
+      "pass": true
+    },
+    "within20Share": {
+      "value": 0.89,
+      "threshold": 0.8,
+      "pass": true
+    }
+  },
+  "diagnostics": {
+    "meanScore": 58.44,
+    "meanHuman": 62.73,
+    "meanError": -4.29,
+    "meanAbsoluteError": 10.19,
+    "dimensionSpearman": {
+      "capability": 0.326,
+      "usage": 0.612,
+      "usecases": 0.449,
+      "demo": 0.511,
+      "reliability": 0.318
+    },
+    "byType": {
+      "catalog-list": {
+        "n": 6,
+        "meanError": -10,
+        "severeFalseNegativeRate": 0.167,
+        "severeFalsePositiveRate": 0
+      },
+      "dsh-plugin": {
+        "n": 33,
+        "meanError": -5.758,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0
+      },
+      "standalone-nonplugin": {
+        "n": 59,
+        "meanError": -3.102,
+        "severeFalseNegativeRate": 0.051,
+        "severeFalsePositiveRate": 0.051
+      },
+      "unclear": {
+        "n": 2,
+        "meanError": 2,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      }
+    }
+  },
+  "severeFalseNegatives": [
+    {
+      "repo": "awesome-dsh-plugin/awesome-dsh-plugin",
+      "type": "catalog-list",
+      "score": 13,
+      "human": 58,
+      "error": -45,
+      "dimensions": {
+        "capability": 0,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.611,
+          "coverage": 0.222,
+          "fallbackShare": 0
+        }
+      },
+      "concern": "Curation relies on volunteer PR review; entries are author claims, not independent verification."
+    },
+    {
+      "repo": "hyhmrright/brooks-lint",
+      "type": "dsh-plugin",
+      "score": 52,
+      "human": 82,
+      "error": -30,
+      "dimensions": {
+        "capability": 18.75,
+        "usage": 18.886751345948127,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.784,
+          "coverage": 0.667,
+          "fallbackShare": 0.098
+        }
+      },
+      "concern": "Live model-quality numbers flagged single-run; platform coverage partly file-layout-verified only."
+    },
+    {
+      "repo": "tong-io/tongflow",
+      "type": "standalone-nonplugin",
+      "score": 45,
+      "human": 74,
+      "error": -29,
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.505553499465135,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 10,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.71,
+          "coverage": 0.556,
+          "fallbackShare": 0.136
+        }
+      },
+      "concern": "Desktop app is a cloud shell; GPU plugins need Modal token; per-node claims hard to verify."
+    },
+    {
+      "repo": "Alisa0808/vox-director",
+      "type": "standalone-nonplugin",
+      "score": 35,
+      "human": 61,
+      "error": -26,
+      "dimensions": {
+        "capability": 10.825317547305483,
+        "usage": 15.505553499465135,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 10,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.764,
+          "coverage": 0.556,
+          "fallbackShare": 0.027
+        }
+      },
+      "concern": "Requires paid Atlas Cloud API; no free path; no tests or troubleshooting section in README."
+    },
+    {
+      "repo": "PicGo/PicGo-Core",
+      "type": "standalone-nonplugin",
+      "score": 27,
+      "human": 52,
+      "error": -25,
+      "dimensions": {
+        "capability": 0,
+        "usage": 17.618802153517006,
+        "usecases": 0,
+        "demo": 9.181980515339465,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 8,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 7,
+        "media": 0.5,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.778,
+          "coverage": 0.556,
+          "fallbackShare": 0
+        }
+      },
+      "concern": "README thin beyond commands; deeper behavior deferred to external docs."
+    }
+  ],
+  "severeFalsePositives": [
+    {
+      "repo": "mem9-ai/mem9",
+      "type": "standalone-nonplugin",
+      "score": 83,
+      "human": 61,
+      "error": 22,
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.189718779350343,
+        "usecases": 20,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 6,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.876,
+          "coverage": 0.778,
+          "fallbackShare": 0.025
+        }
+      },
+      "concern": "No screenshots/demo of dashboard; benchmark harness without results; hosted API needs account."
+    },
+    {
+      "repo": "freestylefly/wesight",
+      "type": "standalone-nonplugin",
+      "score": 86,
+      "human": 64,
+      "error": 22,
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.65685424949238,
+        "usecases": 14.142135623730951,
+        "demo": 13.6475800154489,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 3,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.924,
+          "coverage": 0.889,
+          "fallbackShare": 0.041
+        }
+      },
+      "concern": "Feature-list heavy; usage steps mostly install/dev build; Windows installer unsigned."
+    },
+    {
+      "repo": "agentrq/agentrq",
+      "type": "standalone-nonplugin",
+      "score": 82,
+      "human": 62,
+      "error": 20,
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.302967433402216,
+        "usecases": 11.547005383792515,
+        "demo": 11.102010693241116,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 2,
+        "outputItems": 1,
+        "media": 3.5,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.921,
+          "coverage": 0.889,
+          "fallbackShare": 0.047
+        }
+      },
+      "concern": "Screenshots/GIFs hosted externally; much feature detail off-repo; no test/CI evidence."
+    }
+  ],
+  "rows": [
+    {
+      "repo": "nexu-io/open-design",
+      "type": "standalone-nonplugin",
+      "score": 90,
+      "human": {
+        "repo": "nexu-io/open-design",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 22,
+        "usecases": 17,
+        "demo": 11,
+        "reliability": 9,
+        "total": 81,
+        "confidence": "high",
+        "evidence": "Desktop+CLI, MCP for16 agents, BYOK proxy,100+ skills,151 design systems,277 plugins,6 artifact types,4 export formats, lint gate",
+        "concern": "Some roadmap items unchecked; CLI count (26) exceeds table rows; heavy marketing framing",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 14.142135623730951,
+        "demo": 15,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 8,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.932,
+          "coverage": 0.889,
+          "fallbackShare": 0.025
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "ruvnet/ruflo",
+      "type": "standalone-nonplugin",
+      "score": 75,
+      "human": {
+        "repo": "ruvnet/ruflo",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 17,
+        "usecases": 15,
+        "demo": 7,
+        "reliability": 9,
+        "total": 68,
+        "confidence": "medium",
+        "evidence": "35 plugins,100+ agents, swarm, HNSW memory w/ benchmarks, federation+PII pipeline, web UI, GOAP planner, MCP server",
+        "concern": "Some features link to issue roadmaps not shipped state; accuracy/download claims unverifiable",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 17.49268621275256,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "error": 7
+    },
+    {
+      "repo": "amruthpillai/reactive-resume",
+      "type": "standalone-nonplugin",
+      "score": 50,
+      "human": {
+        "repo": "amruthpillai/reactive-resume",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 14,
+        "usecases": 10,
+        "demo": 8,
+        "reliability": 8,
+        "total": 61,
+        "confidence": "high",
+        "evidence": "Live preview, PDF/JSON/DOCX export,14 templates, drag-drop ordering, custom sections, AI integration, JSON Resume import, passkey/2FA",
+        "concern": "Bullet feature claims lack depth/screenshots; AI integration scope unspecified",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 10.771539823176038,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 5.669467095138408
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 2,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.822,
+          "coverage": 0.667,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "esengine/DeepSeek-Reasonix",
+      "type": "standalone-nonplugin",
+      "score": 54,
+      "human": {
+        "repo": "esengine/DeepSeek-Reasonix",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 18,
+        "usecases": 9,
+        "demo": 6,
+        "reliability": 11,
+        "total": 64,
+        "confidence": "high",
+        "evidence": "Config-driven; CLI/TUI, desktop, VS Code via ACP; MCP plugins, sidecars; dual executor+planner; checkpoints/rewind; run/setup usage; SHA256SUMS; recovery docs.",
+        "concern": "Demo is one embedded video; no output examples; breadth of claims unverifiable from README.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8,
+        "usecases": 8.16496580927726,
+        "demo": 4.5,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 7,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.767,
+          "coverage": 0.556,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "volcengine/OpenViking",
+      "type": "standalone-nonplugin",
+      "score": 66,
+      "human": {
+        "repo": "volcengine/OpenViking",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 18,
+        "usecases": 12,
+        "demo": 10,
+        "reliability": 9,
+        "total": 72,
+        "confidence": "high",
+        "evidence": "viking:// FS, L0/L1/L2 tiers, recursive retrieval, session memory; ov ls/tree/find/grep; 11+ integrations; LoCoMo 24-82%, tau2 +11.87pp; benchmark scripts",
+        "concern": "Setup depth on external docs; Helper/VikingBot beta",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 18.75,
+        "usage": 12.082482904638631,
+        "usecases": 15.275252316519467,
+        "demo": 9,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 7,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 3.5,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.783,
+          "coverage": 0.667,
+          "fallbackShare": 0.1
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "Molunerfinn/PicGo",
+      "type": "standalone-nonplugin",
+      "score": 47,
+      "human": {
+        "repo": "Molunerfinn/PicGo",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 13,
+        "usecases": 12,
+        "demo": 8,
+        "reliability": 8,
+        "total": 60,
+        "confidence": "high",
+        "evidence": "7 built-in hosts, plugins (S3/R2/MinIO), auto-copy links, drag/paste/hotkey upload, HTTP API, Agent skills + dsh plugin, editor integrations",
+        "concern": "Scope frozen (no new hosts); Linux untested; dev mode unstable per README",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.265986323710904,
+        "usecases": 0,
+        "demo": 7.794228634059947,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.722,
+          "coverage": 0.444,
+          "fallbackShare": 0
+        }
+      },
+      "error": -13
+    },
+    {
+      "repo": "titanwings/distilly",
+      "type": "unclear",
+      "score": 64,
+      "human": {
+        "repo": "titanwings/distilly",
+        "inferredType": "unclear",
+        "capability": 19,
+        "usage": 14,
+        "usecases": 13,
+        "demo": 9,
+        "reliability": 7,
+        "total": 62,
+        "confidence": "high",
+        "evidence": "3 person families,9 data sources,6-layer persona, correction layer, auto-archive/rollback, celebrity research pipeline,8 agent hosts",
+        "concern": "Explicitly 'still a demo version'; no tests/CI shown; gallery evidence external",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 12.959821682894596,
+        "usecases": 0,
+        "demo": 14.366563145999496,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 5,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 4,
+        "media": 6,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.803,
+          "coverage": 0.667,
+          "fallbackShare": 0.061
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "nocobase/nocobase",
+      "type": "standalone-nonplugin",
+      "score": 68,
+      "human": {
+        "repo": "nocobase/nocobase",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 13,
+        "demo": 7,
+        "reliability": 6,
+        "total": 59,
+        "confidence": "medium",
+        "evidence": "WYSIWYG no-code + AI employees, MCP/HTTP/CLI/skills interfaces, field-level permissions, audit logs, plugin microkernel, nb CLI",
+        "concern": "Claims production-readiness without evidence; usage depth thin; media hosted externally",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 10.771539823176038,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 2,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 4.5,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "titanwings/colleague-skill",
+      "type": "unclear",
+      "score": 64,
+      "human": {
+        "repo": "titanwings/colleague-skill",
+        "inferredType": "unclear",
+        "capability": 19,
+        "usage": 14,
+        "usecases": 13,
+        "demo": 9,
+        "reliability": 7,
+        "total": 62,
+        "confidence": "high",
+        "evidence": "Same project as distilly:3 families,9 sources,6-layer persona, correction layer, archives, celebrity pipeline,8 hosts, arXiv report",
+        "concern": "README mirrors distilly entry; 'demo version' caveat; no test evidence",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 12.959821682894596,
+        "usecases": 0,
+        "demo": 14.366563145999496,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 5,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 4,
+        "media": 6,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.803,
+          "coverage": 0.667,
+          "fallbackShare": 0.061
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "freestylefly/awesome-gpt-image-2",
+      "type": "catalog-list",
+      "score": 85,
+      "human": {
+        "repo": "freestylefly/awesome-gpt-image-2",
+        "inferredType": "catalog-list",
+        "capability": 19,
+        "usage": 16,
+        "usecases": 17,
+        "demo": 13,
+        "reliability": 6,
+        "total": 71,
+        "confidence": "high",
+        "evidence": "538 cases in9 categories,20+ templates, atomic prompt schema, npm agent skill, gallery site w/ auth+billing, featured cases w/ images",
+        "concern": "Third-party curated content, not original tooling; no tests/CI; heavy sponsor/marketing sections",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 11.547005383792515,
+        "demo": 12.286335345030997,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 2,
+        "outputItems": 1.5,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.921,
+          "coverage": 0.889,
+          "fallbackShare": 0.047
+        }
+      },
+      "error": 14
+    },
+    {
+      "repo": "anywhere-labs/dsh-desktop",
+      "type": "dsh-plugin",
+      "score": 59,
+      "human": {
+        "repo": "anywhere-labs/dsh-desktop",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 8,
+        "demo": 6,
+        "reliability": 9,
+        "total": 56,
+        "confidence": "medium",
+        "evidence": "Shipped Win/macOS DSH shell: window/tray/terminal/updater, Setup Wizard, built-in plugin market, LAN access, plugin services.",
+        "concern": "README identical to deepseek-harness-desktop (entry14); detail deferred to linked docs.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 11.547005383792515,
+        "demo": 7.794228634059947,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.639,
+          "coverage": 0.444,
+          "fallbackShare": 0.167
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "Tencent/WeKnora",
+      "type": "standalone-nonplugin",
+      "score": 84,
+      "human": {
+        "repo": "Tencent/WeKnora",
+        "inferredType": "standalone-nonplugin",
+        "capability": 24,
+        "usage": 20,
+        "usecases": 17,
+        "demo": 12,
+        "reliability": 12,
+        "total": 85,
+        "confidence": "high",
+        "evidence": "Shipped v0.7.2: RAG Q&A, ReAct agent, Wiki Mode w/ graph+rollback, 20+ LLMs, 10 IM channels, 29-tool MCP, CLI, RBAC; API docs, screenshots.",
+        "concern": "Claims mostly changelog-derived; enterprise RBAC/ingestion scale exceeds README evidence.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 8.16496580927726,
+        "demo": 14.366563145999496,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 1,
+        "outputItems": 4,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.911,
+          "coverage": 0.889,
+          "fallbackShare": 0.066
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "Nagi-ovo/voyager",
+      "type": "standalone-nonplugin",
+      "score": 45,
+      "human": {
+        "repo": "Nagi-ovo/voyager",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 13,
+        "usecases": 10,
+        "demo": 6,
+        "reliability": 8,
+        "total": 59,
+        "confidence": "medium",
+        "evidence": "Shipped ext: folder drag-drop, prompt vault, Drive/iCloud sync, timeline nav, Mermaid render, Claude/ChatGPT ports, DSH Prompt Manager.",
+        "concern": "Bullet claims w/ guide-link usage; thin demo; DSH one integration among Gemini/Claude/ChatGPT.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.265986323710904,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.647,
+          "coverage": 0.444,
+          "fallbackShare": 0.15
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "anywhere-labs/deepseek-harness-desktop",
+      "type": "dsh-plugin",
+      "score": 59,
+      "human": {
+        "repo": "anywhere-labs/deepseek-harness-desktop",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 8,
+        "demo": 6,
+        "reliability": 9,
+        "total": 56,
+        "confidence": "medium",
+        "evidence": "Shipped Win/macOS DSH shell: window/tray/terminal/updater, Setup Wizard, built-in plugin market, LAN access, plugin services.",
+        "concern": "README identical to anywhere-labs/dsh-desktop (entry11); detail deferred to linked docs.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 11.547005383792515,
+        "demo": 7.794228634059947,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.639,
+          "coverage": 0.444,
+          "fallbackShare": 0.167
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "tt-a1i/archify",
+      "type": "standalone-nonplugin",
+      "score": 78,
+      "human": {
+        "repo": "tt-a1i/archify",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 21,
+        "usecases": 15,
+        "demo": 12,
+        "reliability": 13,
+        "total": 84,
+        "confidence": "medium",
+        "evidence": "Typed JSON IR->HTML/SVG; 5 diagram types, dark/light, Before/Delta/After receipts, PNG/SVG/WebM exports; CLI validate/preview/deliver.",
+        "concern": "Version -dev; Proof Lab external; validation receipts self-run, not third-party verified.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 15.309310892394862,
+        "usage": 18.65685424949238,
+        "usecases": 14.142135623730951,
+        "demo": 15,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 8,
+        "media": 6,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.933,
+          "coverage": 0.889,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "walkinglabs/learn-harness-engineering",
+      "type": "standalone-nonplugin",
+      "score": 71,
+      "human": {
+        "repo": "walkinglabs/learn-harness-engineering",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 18,
+        "usecases": 14,
+        "demo": 8,
+        "reliability": 10,
+        "total": 69,
+        "confidence": "high",
+        "evidence": "14 lectures + 8 projects + templates (AGENTS.md, feature_list.json, init.sh), harness-creator skill, audit-harness.sh, 15 languages.",
+        "concern": "Educational content, not tooling; effectiveness cites external experiments, no measured outcomes.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.505553499465135,
+        "usecases": 11.547005383792515,
+        "demo": 10.477510207059694,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 2,
+        "outputItems": 1,
+        "media": 3,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.864,
+          "coverage": 0.889,
+          "fallbackShare": 0.161
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "awesome-dsh-plugin/awesome-dsh-plugin",
+      "type": "catalog-list",
+      "score": 13,
+      "human": {
+        "repo": "awesome-dsh-plugin/awesome-dsh-plugin",
+        "inferredType": "catalog-list",
+        "capability": 20,
+        "usage": 12,
+        "usecases": 8,
+        "demo": 5,
+        "reliability": 13,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "Generated list: ~22 categories, entries checked installable (dsh.bundle per PR), dsh-find-plugin, removal policy, yml contribution flow.",
+        "concern": "Curation relies on volunteer PR review; entries are author claims, not independent verification.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.611,
+          "coverage": 0.222,
+          "fallbackShare": 0
+        }
+      },
+      "error": -45
+    },
+    {
+      "repo": "EverMind-AI/EverOS",
+      "type": "standalone-nonplugin",
+      "score": 53,
+      "human": {
+        "repo": "EverMind-AI/EverOS",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 19,
+        "usecases": 15,
+        "demo": 6,
+        "reliability": 11,
+        "total": 72,
+        "confidence": "high",
+        "evidence": "Local-first Markdown+SQLite+LanceDB memory: CLI, REST add/flush/search, keyword+hybrid search, rerank, reflection, wiki; curl quickstart.",
+        "concern": "Gallery leans on external demos/coming-soon; embedding/rerank need extra providers.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 6.25,
+        "usage": 20.302967433402216,
+        "usecases": 20,
+        "demo": 6.3639610306789285,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.825,
+          "coverage": 0.667,
+          "fallbackShare": 0.016
+        }
+      },
+      "error": -19
+    },
+    {
+      "repo": "MemTensor/MemOS",
+      "type": "standalone-nonplugin",
+      "score": 58,
+      "human": {
+        "repo": "MemTensor/MemOS",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 17,
+        "usecases": 13,
+        "demo": 7,
+        "reliability": 10,
+        "total": 68,
+        "confidence": "medium",
+        "evidence": "Graph memory API, MemScheduler, feedback correction; local plugin (SQLite FTS5+vector) for DSH/OpenClaw/Hermes, cloud plugin; benchmarks.",
+        "concern": "Benchmarks self-reported; DSH plugin one integration; core is hosted server/cloud service.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 23.385358667337133,
+        "usage": 21,
+        "usecases": 8.16496580927726,
+        "demo": 5.5113519212621505,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 10,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 1.5,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.801,
+          "coverage": 0.667,
+          "fallbackShare": 0.066
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "YaoApp/yao",
+      "type": "standalone-nonplugin",
+      "score": 30,
+      "human": {
+        "repo": "YaoApp/yao",
+        "inferredType": "standalone-nonplugin",
+        "capability": 9,
+        "usage": 6,
+        "usecases": 7,
+        "demo": 3,
+        "reliability": 4,
+        "total": 29,
+        "confidence": "medium",
+        "evidence": "Self-hosted multi-device agent platform: workspaces, conversation-to-task board, open API (SSE/WebSocket), DSH integration; docs links.",
+        "concern": "README is a stub: no feature, usage, API or install evidence beyond one diagram and links.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 13.975424859373685,
+        "usage": 3.265986323710904,
+        "usecases": 8.16496580927726,
+        "demo": 4.5,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2.5,
+        "usageItems": 1,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.677,
+          "coverage": 0.444,
+          "fallbackShare": 0.091
+        }
+      },
+      "error": 1
+    },
+    {
+      "repo": "yjh051108/dsh-routing-suite",
+      "type": "dsh-plugin",
+      "score": 30,
+      "human": {
+        "repo": "yjh051108/dsh-routing-suite",
+        "inferredType": "dsh-plugin",
+        "capability": 13,
+        "usage": 5,
+        "usecases": 3,
+        "demo": 6,
+        "reliability": 8,
+        "total": 35,
+        "confidence": "medium",
+        "evidence": "dev_* injector tools + router presets: per-model persona, weak routing, plan-mode retention, dev_router tools; changelog; P1-P23 metrics (96%/0-100%)",
+        "concern": "Post-install usage is preset selection only; methodology outside README",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 24.206145913796355,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 5.669467095138408
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.582,
+          "coverage": 0.222,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "zhu1090093659/dsh-web",
+      "type": "dsh-plugin",
+      "score": 69,
+      "human": {
+        "repo": "zhu1090093659/dsh-web",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 18,
+        "usecases": 13,
+        "demo": 10,
+        "reliability": 11,
+        "total": 74,
+        "confidence": "high",
+        "evidence": "Perf HUD, cron task board, QR mobile remote, SSH ops, describe_image, git worktrees, LiangShen preset, rescue mode; FAQ and known limits",
+        "concern": "Breadth vs depth unverifiable; several plugins are external third-party integrations",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.08248290463863,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.817,
+          "coverage": 0.667,
+          "fallbackShare": 0.033
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "zhu1090093659/dsh-web-ui",
+      "type": "dsh-plugin",
+      "score": 69,
+      "human": {
+        "repo": "zhu1090093659/dsh-web-ui",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 18,
+        "usecases": 13,
+        "demo": 10,
+        "reliability": 11,
+        "total": 74,
+        "confidence": "high",
+        "evidence": "Perf HUD, cron task board, QR mobile remote, SSH ops, describe_image, git worktrees, LiangShen preset, rescue mode; FAQ and known limits",
+        "concern": "Breadth vs depth unverifiable; several plugins are external third-party integrations",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.08248290463863,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.817,
+          "coverage": 0.667,
+          "fallbackShare": 0.033
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "Q00/ouroboros",
+      "type": "standalone-nonplugin",
+      "score": 86,
+      "human": {
+        "repo": "Q00/ouroboros",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 16,
+        "usecases": 13,
+        "demo": 11,
+        "reliability": 11,
+        "total": 74,
+        "confidence": "high",
+        "evidence": "Interview→seed→evolve loop; ambiguity gate; 3-stage eval; PAL router; 21 agents; 13 runtimes; MCP; demo GIFs + metrics in-repo",
+        "concern": "Metrics self-reported; dense philosophy framing; depends on third-party agent hosts",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 17.32050807568877,
+        "demo": 9,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 4.5,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.863,
+          "coverage": 0.778,
+          "fallbackShare": 0.051
+        }
+      },
+      "error": 12
+    },
+    {
+      "repo": "ZSeven-W/openpencil",
+      "type": "standalone-nonplugin",
+      "score": 73,
+      "human": {
+        "repo": "ZSeven-W/openpencil",
+        "inferredType": "standalone-nonplugin",
+        "capability": 24,
+        "usage": 17,
+        "usecases": 14,
+        "demo": 10,
+        "reliability": 11,
+        "total": 76,
+        "confidence": "high",
+        "evidence": "Prompt-to-canvas, agent teams, style guides, MCP, codegen×8, Figma import, git merge, collab, decks, CLI; measured perf (10k-node ~0.68s)",
+        "concern": "Standalone tool, not DSH-centric; demo video external; plugin system still on roadmap",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16.265986323710905,
+        "usecases": 20,
+        "demo": 0,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 7,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.814,
+          "coverage": 0.667,
+          "fallbackShare": 0.039
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "Devin-AXIS/iPolloWork",
+      "type": "standalone-nonplugin",
+      "score": 52,
+      "human": {
+        "repo": "Devin-AXIS/iPolloWork",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18,
+        "usage": 7,
+        "usecases": 9,
+        "demo": 4,
+        "reliability": 7,
+        "total": 45,
+        "confidence": "medium",
+        "evidence": "Multi-engine workbench (OpenCode/DSH/Codex-MCP), unified plugin/Skill lifecycle, tasks, DSH Design/PPT/Video plugins",
+        "concern": "No in-README demos or metrics; source-available license restricts >3 users",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 22.534695471649933,
+        "usage": 12.618802153517006,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 12.677313820927749
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 6.5,
+        "usageItems": 9,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.746,
+          "coverage": 0.556,
+          "fallbackShare": 0.064
+        }
+      },
+      "error": 7
+    },
+    {
+      "repo": "crafter-station/petdex",
+      "type": "standalone-nonplugin",
+      "score": 41,
+      "human": {
+        "repo": "crafter-station/petdex",
+        "inferredType": "standalone-nonplugin",
+        "capability": 15,
+        "usage": 12,
+        "usecases": 10,
+        "demo": 3,
+        "reliability": 6,
+        "total": 46,
+        "confidence": "high",
+        "evidence": "Gallery, CLI (install/submit/auth), native floater w/ 9 animation states, pet format spec, public manifest API, admin review, Discord bot",
+        "concern": "Codex-focused, not DSH; no in-README demos; gallery/downloads external",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.505553499465135,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 8,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.664,
+          "coverage": 0.444,
+          "fallbackShare": 0.116
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "xiaobright/dsh-anchored-standard",
+      "type": "dsh-plugin",
+      "score": 68,
+      "human": {
+        "repo": "xiaobright/dsh-anchored-standard",
+        "inferredType": "dsh-plugin",
+        "capability": 21,
+        "usage": 14,
+        "usecases": 11,
+        "demo": 12,
+        "reliability": 10,
+        "total": 68,
+        "confidence": "high",
+        "evidence": "7 modes; context-gate, tool-bootstrap, dshx gateway, wire tool_choice=none; config reference, verify checklist, tests; Project2 98/99/99",
+        "concern": "Dev stopped (maintenance only); pinned to one rc/commit; independent replications unresolved",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 17.67766952966369,
+        "usage": 16.543605595440507,
+        "usecases": 12.909944487358056,
+        "demo": 6,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 2.5,
+        "outputItems": 8,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.837,
+          "coverage": 0.778,
+          "fallbackShare": 0.104
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "liustack/modlens",
+      "type": "dsh-plugin",
+      "score": 56,
+      "human": {
+        "repo": "liustack/modlens",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 15,
+        "usecases": 12,
+        "demo": 10,
+        "reliability": 9,
+        "total": 66,
+        "confidence": "high",
+        "evidence": "read_image tool, (modlens vision) model entries, 6 providers+4 CLIs w/ failover, key rotation, structured evidence, CLI config/doctor",
+        "concern": "No-PR single-author policy; demo assets external; run claims not independently verifiable",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.265986323710904,
+        "usecases": 0,
+        "demo": 13.6475800154489,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 3,
+        "media": 6,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.751,
+          "coverage": 0.556,
+          "fallbackShare": 0.054
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "strukto-ai/mirage",
+      "type": "standalone-nonplugin",
+      "score": 35,
+      "human": {
+        "repo": "strukto-ai/mirage",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 18,
+        "usecases": 7,
+        "demo": 4,
+        "reliability": 7,
+        "total": 57,
+        "confidence": "medium",
+        "evidence": "Mounts (S3/Slack/Redis...), ~50 backends, two-layer cache, CLI create/execute/snapshot/load, register_cli, sandbox, Python/TS quickstarts.",
+        "concern": "No explicit use cases, demos, or troubleshooting; sandbox and limits only mentioned in passing.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 10.825317547305483,
+        "usage": 12.302967433402216,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 5.669467095138408
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 0,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.758,
+          "coverage": 0.556,
+          "fallbackShare": 0.04
+        }
+      },
+      "error": -22
+    },
+    {
+      "repo": "agentscope-ai/ReMe",
+      "type": "dsh-plugin",
+      "score": 74,
+      "human": {
+        "repo": "agentscope-ai/ReMe",
+        "inferredType": "dsh-plugin",
+        "capability": 21,
+        "usage": 21,
+        "usecases": 15,
+        "demo": 11,
+        "reliability": 11,
+        "total": 79,
+        "confidence": "medium",
+        "evidence": "Memory-as-file: BM25+vectors+wikilinks, auto_memory/resource/index/dream, CLI/HTTP/MCP/Python, 6 agent integrations; 5-min demo; benchmarks",
+        "concern": "Embeddings/LLM features optional; benchmarks self-reported; heavy scope for a memory add-on",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 12.5,
+        "usage": 19.53197264742181,
+        "usecases": 14.142135623730951,
+        "demo": 12.794733192202056,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2,
+        "usageItems": 10,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 3,
+        "outputItems": 2,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.919,
+          "coverage": 0.889,
+          "fallbackShare": 0.05
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "edison7009/EchoBird",
+      "type": "standalone-nonplugin",
+      "score": 68,
+      "human": {
+        "repo": "edison7009/EchoBird",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18,
+        "usage": 9,
+        "usecases": 12,
+        "demo": 10,
+        "reliability": 7,
+        "total": 56,
+        "confidence": "high",
+        "evidence": "Tauri app: 4 scenarios, Model Nexus hub, one-click model switch for ~20 tools (rewrites native config); demo GIF + screenshots",
+        "concern": "Mostly scenario list; no workflow steps or test evidence; install/launch instructions dominate",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 7.302967433402215,
+        "usecases": 16.32993161855452,
+        "demo": 14.019960159204453,
+        "reliability": 5.669467095138408
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 4,
+        "outputItems": 3.5,
+        "media": 6,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.833,
+          "coverage": 0.667,
+          "fallbackShare": 0
+        }
+      },
+      "error": 12
+    },
+    {
+      "repo": "whiteguo233/OpenBiliClaw",
+      "type": "standalone-nonplugin",
+      "score": 84,
+      "human": {
+        "repo": "whiteguo233/OpenBiliClaw",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 21,
+        "usecases": 16,
+        "demo": 12,
+        "reliability": 12,
+        "total": 84,
+        "confidence": "medium",
+        "evidence": "12-platform discovery agent: soul profile, probes, explainable recs, extension/desktop/DSH plugin, CLI, local SQLite, 1900+ tests; GIF",
+        "concern": "Broad parity claims; some executors unverified on real accounts; regressions self-reported",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.348469228349536,
+        "usecases": 20,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.845,
+          "coverage": 0.778,
+          "fallbackShare": 0.088
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.7",
+      "type": "dsh-plugin",
+      "score": 61,
+      "human": {
+        "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.7",
+        "inferredType": "dsh-plugin",
+        "capability": 18,
+        "usage": 16,
+        "usecases": 12,
+        "demo": 8,
+        "reliability": 10,
+        "total": 64,
+        "confidence": "low",
+        "evidence": "Skill pack: 9 modules, fast/full/loop passes, jspace.py ledger (note/seam/ship/resume), verify_suite, tests, benchmark tables, CI",
+        "concern": "Mechanisms described abstractly; benchmarks self-reported single-model; effect sizes modest",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.745,
+          "coverage": 0.556,
+          "fallbackShare": 0.065
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.6",
+      "type": "dsh-plugin",
+      "score": 61,
+      "human": {
+        "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.6",
+        "inferredType": "dsh-plugin",
+        "capability": 18,
+        "usage": 16,
+        "usecases": 12,
+        "demo": 8,
+        "reliability": 10,
+        "total": 64,
+        "confidence": "low",
+        "evidence": "Skill pack: 9 modules, fast/full/loop passes, jspace.py ledger (note/seam/ship/resume), verify_suite, tests, benchmark tables, CI",
+        "concern": "Repo named V3.6 but README content identical to V3.7 entry — version drift",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.745,
+          "coverage": 0.556,
+          "fallbackShare": 0.065
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "foryourhealth111-pixel/Vibe-Skills",
+      "type": "dsh-plugin",
+      "score": 44,
+      "human": {
+        "repo": "foryourhealth111-pixel/Vibe-Skills",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 12,
+        "usecases": 9,
+        "demo": 10,
+        "reliability": 10,
+        "total": 61,
+        "confidence": "medium",
+        "evidence": "Skill discovery, L/XL planning, per-module assignment, TDD, execution records, 17-check acceptance; ML case 10/10 17/17; troubleshooting; receipts.",
+        "concern": "Case and verification evidence lives in linked docs; no test outputs or samples in README itself.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 8.838834764831844,
+        "usage": 6.531972647421808,
+        "usecases": 20,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 4,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.698,
+          "coverage": 0.444,
+          "fallbackShare": 0.048
+        }
+      },
+      "error": -17
+    },
+    {
+      "repo": "omdsh-dev/DSH-better-sidebar",
+      "type": "dsh-plugin",
+      "score": 57,
+      "human": {
+        "repo": "omdsh-dev/DSH-better-sidebar",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 19,
+        "usecases": 9,
+        "demo": 12,
+        "reliability": 14,
+        "total": 76,
+        "confidence": "high",
+        "evidence": "Dual workbench: file tree, editor, Mermaid/HTML preview, sandboxed browser, PTY, Git, side chat; API sample; ~12 screenshots; limits/FAQ/security; tests.",
+        "concern": "README changelog-heavy; explicit use cases thin vs feature enumeration.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.653,
+          "coverage": 0.444,
+          "fallbackShare": 0.138
+        }
+      },
+      "error": -19
+    },
+    {
+      "repo": "imsai-sh/zhuzhiliao",
+      "type": "standalone-nonplugin",
+      "score": 39,
+      "human": {
+        "repo": "imsai-sh/zhuzhiliao",
+        "inferredType": "standalone-nonplugin",
+        "capability": 13,
+        "usage": 9,
+        "usecases": 5,
+        "demo": 5,
+        "reliability": 6,
+        "total": 38,
+        "confidence": "high",
+        "evidence": "Single-file HTML toy: sampled audio loop, string physics, synth fallback, devicemotion mode, local count; live demo",
+        "concern": "Not open source (restricted license, no redistribution); toy scope; demo external-only",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 16.535945694153693,
+        "usage": 10.189718779350343,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 12.677313820927749
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 5,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.602,
+          "coverage": 0.444,
+          "fallbackShare": 0.241
+        }
+      },
+      "error": 1
+    },
+    {
+      "repo": "chuspeeism/dashi-taskboard",
+      "type": "standalone-nonplugin",
+      "score": 42,
+      "human": {
+        "repo": "chuspeeism/dashi-taskboard",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 18,
+        "usecases": 11,
+        "demo": 3,
+        "reliability": 12,
+        "total": 63,
+        "confidence": "medium",
+        "evidence": "HTTP API powers UI, taskctl CLI, Codex Skill; CDP injection; taskctl examples; LAN/Cloudflare share; SSE sync; check suite; signing policy; LAN auth limits.",
+        "concern": "Codex-only integration; LAN mode unauthenticated; demo is a single product screenshot.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 8.838834764831844,
+        "usage": 18.65685424949238,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.811,
+          "coverage": 0.667,
+          "fallbackShare": 0.045
+        }
+      },
+      "error": -21
+    },
+    {
+      "repo": "ccch1mneyyy/dsh-TUI",
+      "type": "dsh-plugin",
+      "score": 52,
+      "human": {
+        "repo": "ccch1mneyyy/dsh-TUI",
+        "inferredType": "dsh-plugin",
+        "capability": 17,
+        "usage": 14,
+        "usecases": 10,
+        "demo": 8,
+        "reliability": 9,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "TUI plugin: pixel-whale bar, TPS gauge, thought streaming, double-Esc rewind, /resume /compact /btw, themes, vim, VS Code; screenshots, CI",
+        "concern": "Public beta; browser/compter-use extensions lack detail; many badges are popularity signals",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 19.764235376052373,
+        "usage": 11.385450338040846,
+        "usecases": 0,
+        "demo": 8.418729120241368,
+        "reliability": 12.677313820927749
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 5,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3.5,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.729,
+          "coverage": 0.556,
+          "fallbackShare": 0.098
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "dsh-market/dsh-market",
+      "type": "dsh-plugin",
+      "score": 45,
+      "human": {
+        "repo": "dsh-market/dsh-market",
+        "inferredType": "dsh-plugin",
+        "capability": 23,
+        "usage": 17,
+        "usecases": 11,
+        "demo": 7,
+        "reliability": 10,
+        "total": 68,
+        "confidence": "high",
+        "evidence": "Shipped: catalog browse/search, themes, install, backup/restore, updates, hot toggles, diagnostics, load-order; in-repo demo screenshot.",
+        "concern": "Mostly feature enumeration; few procedural walkthroughs; demo is a single static screenshot.",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.645,
+          "coverage": 0.333,
+          "fallbackShare": 0.043
+        }
+      },
+      "error": -23
+    },
+    {
+      "repo": "zilliztech/memsearch",
+      "type": "dsh-plugin",
+      "score": 74,
+      "human": {
+        "repo": "zilliztech/memsearch",
+        "inferredType": "dsh-plugin",
+        "capability": 23,
+        "usage": 21,
+        "usecases": 17,
+        "demo": 8,
+        "reliability": 10,
+        "total": 79,
+        "confidence": "high",
+        "evidence": "Auto-capture, 3-layer recall, hybrid BM25+dense+RRF, dedup, live watcher, skill distillation, CLI+Python API, verify steps.",
+        "concern": "Demo media hosted externally; benchmark/reliability evidence not shown in README.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 10,
+        "demo": 7.794228634059947,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1.5,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.865,
+          "coverage": 0.778,
+          "fallbackShare": 0.047
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "GCWing/BitFun",
+      "type": "standalone-nonplugin",
+      "score": 47,
+      "human": {
+        "repo": "GCWing/BitFun",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18,
+        "usage": 14,
+        "usecases": 14,
+        "demo": 11,
+        "reliability": 9,
+        "total": 66,
+        "confidence": "medium",
+        "evidence": "Mini Apps UI, self-hosted sync, coding/office modes, MCP/Skills/Hooks tiers, flashgrep, KV-cache; in-repo screenshots and charts.",
+        "concern": "Benchmarks are single-run with caveats; roadmap items labeled in-progress; no test evidence.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 12.677313820927749
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.634,
+          "coverage": 0.333,
+          "fallbackShare": 0.065
+        }
+      },
+      "error": -19
+    },
+    {
+      "repo": "Small-tailqwq/dsh-deep-whale",
+      "type": "dsh-plugin",
+      "score": 23,
+      "human": {
+        "repo": "Small-tailqwq/dsh-deep-whale",
+        "inferredType": "dsh-plugin",
+        "capability": 12,
+        "usage": 7,
+        "usecases": 6,
+        "demo": 10,
+        "reliability": 9,
+        "total": 44,
+        "confidence": "high",
+        "evidence": "Two shipped skins with in-repo light/dark previews plus skin-manager (mutual exclusion, hot reload); thorough troubleshooting.",
+        "concern": "README is install/troubleshooting heavy; little post-install usage or use-case depth.",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 6.25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.628,
+          "coverage": 0.333,
+          "fallbackShare": 0.077
+        }
+      },
+      "error": -21
+    },
+    {
+      "repo": "Jesseovo/last30days-skill-cn",
+      "type": "standalone-nonplugin",
+      "score": 53,
+      "human": {
+        "repo": "Jesseovo/last30days-skill-cn",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18,
+        "usage": 18,
+        "usecases": 14,
+        "demo": 7,
+        "reliability": 11,
+        "total": 68,
+        "confidence": "high",
+        "evidence": "8 CN platforms, API->Playwright->public->Bing degradation, scoring, 7 emit modes incl HTML, --diagnose, 214 tests, CST dating, old-mac compat mode.",
+        "concern": "Crawler may break as platforms anti-bot; test count undetailed; no output screenshots.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 10,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.692,
+          "coverage": 0.444,
+          "fallbackShare": 0.061
+        }
+      },
+      "error": -15
+    },
+    {
+      "repo": "Alisa0808/vox-director",
+      "type": "standalone-nonplugin",
+      "score": 35,
+      "human": {
+        "repo": "Alisa0808/vox-director",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 9,
+        "demo": 11,
+        "reliability": 8,
+        "total": 61,
+        "confidence": "medium",
+        "evidence": "B/A/C-roll pipelines, approval gates, voice cloning, live model fetch; quick-start prompt; embedded video +4 films; models-and-gotchas; auto-retry.",
+        "concern": "Requires paid Atlas Cloud API; no free path; no tests or troubleshooting section in README.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 10.825317547305483,
+        "usage": 15.505553499465135,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 10,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.764,
+          "coverage": 0.556,
+          "fallbackShare": 0.027
+        }
+      },
+      "error": -26
+    },
+    {
+      "repo": "hyhmrright/brooks-lint",
+      "type": "dsh-plugin",
+      "score": 52,
+      "human": {
+        "repo": "hyhmrright/brooks-lint",
+        "inferredType": "dsh-plugin",
+        "capability": 23,
+        "usage": 18,
+        "usecases": 17,
+        "demo": 12,
+        "reliability": 12,
+        "total": 82,
+        "confidence": "medium",
+        "evidence": "6 modes, R1-R6/T1-T6 risks, config presets, SARIF, CI gates; reproducible parser benchmark, 57-scenario evals, demo GIF + worked example.",
+        "concern": "Live model-quality numbers flagged single-run; platform coverage partly file-layout-verified only.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 18.75,
+        "usage": 18.886751345948127,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.784,
+          "coverage": 0.667,
+          "fallbackShare": 0.098
+        }
+      },
+      "error": -30
+    },
+    {
+      "repo": "AdamPlatin123/awesome-dsh-plugins",
+      "type": "catalog-list",
+      "score": 63,
+      "human": {
+        "repo": "AdamPlatin123/awesome-dsh-plugins",
+        "inferredType": "catalog-list",
+        "capability": 20,
+        "usage": 16,
+        "usecases": 14,
+        "demo": 10,
+        "reliability": 12,
+        "total": 72,
+        "confidence": "high",
+        "evidence": "1258 repos indexed, k8s runtime-tested (1179 ok/874 fail), curated lists, 13 categories, dated reports, L0-L4 method.",
+        "concern": "Directory repo; per-plugin claims depend on external reports and third-party code.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 19.764235376052373,
+        "usage": 8,
+        "usecases": 11.547005383792515,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 6,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.685,
+          "coverage": 0.556,
+          "fallbackShare": 0.185
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "Tencent/BrowserSkill",
+      "type": "dsh-plugin",
+      "score": 45,
+      "human": {
+        "repo": "Tencent/BrowserSkill",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 10,
+        "demo": 6,
+        "reliability": 7,
+        "total": 56,
+        "confidence": "medium",
+        "evidence": "bsk CLI/daemon + extension bridge, tab-borrowing, human-in-loop; dsh plugin with browser_* tools and overlay; architecture diagram.",
+        "concern": "README install-focused; no tests or verification evidence; demo video external.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 17.67766952966369,
+        "usage": 18.65685424949238,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.741,
+          "coverage": 0.556,
+          "fallbackShare": 0.074
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "dsh-tauri-desk/deepseek-harness-desktop",
+      "type": "standalone-nonplugin",
+      "score": 45,
+      "human": {
+        "repo": "dsh-tauri-desk/deepseek-harness-desktop",
+        "inferredType": "standalone-nonplugin",
+        "capability": 16,
+        "usage": 9,
+        "usecases": 8,
+        "demo": 9,
+        "reliability": 8,
+        "total": 50,
+        "confidence": "high",
+        "evidence": "Tauri2 desktop: bundled Node/core, multi-version core, profile isolation, plugin panel, presets, CLI shim, self-update; in-repo screenshots.",
+        "concern": "Explicitly dev-preview; usage beyond launch is thin; demo mostly marketing banner.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 5.656854249492381,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11.5,
+        "usageItems": 3,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.682,
+          "coverage": 0.444,
+          "fallbackShare": 0.081
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "mem9-ai/mem9",
+      "type": "standalone-nonplugin",
+      "score": 83,
+      "human": {
+        "repo": "mem9-ai/mem9",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 16,
+        "usecases": 13,
+        "demo": 3,
+        "reliability": 6,
+        "total": 61,
+        "confidence": "high",
+        "evidence": "Go server API: memory CRUD, hybrid search, ingest, webhooks, space chains;3 backends; CLI;7 agent plugins; dashboard; e2e scripts.",
+        "concern": "No screenshots/demo of dashboard; benchmark harness without results; hosted API needs account.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.189718779350343,
+        "usecases": 20,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 6,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.876,
+          "coverage": 0.778,
+          "fallbackShare": 0.025
+        }
+      },
+      "error": 22
+    },
+    {
+      "repo": "GanyuanRan/Aegis",
+      "type": "standalone-nonplugin",
+      "score": 64,
+      "human": {
+        "repo": "GanyuanRan/Aegis",
+        "inferredType": "standalone-nonplugin",
+        "capability": 14,
+        "usage": 15,
+        "usecases": 14,
+        "demo": 6,
+        "reliability": 12,
+        "total": 61,
+        "confidence": "high",
+        "evidence": "Skills (goal, grill-me, TDD, first-principles, retirement) + doctor/update scripts;15+ host guides; in-repo A/B benchmark results.",
+        "concern": "Self-reported advisory benchmark (arm-hidden); most host integrations pending smoke tests.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.348469228349536,
+        "usecases": 11.547005383792515,
+        "demo": 4.5,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.856,
+          "coverage": 0.778,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "alvinunreal/openpets",
+      "type": "standalone-nonplugin",
+      "score": 70,
+      "human": {
+        "repo": "alvinunreal/openpets",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 19,
+        "usecases": 16,
+        "demo": 8,
+        "reliability": 10,
+        "total": 76,
+        "confidence": "high",
+        "evidence": "Desktop app;9 official plugins; SDK v3 (sandbox, permissions, test harness); CLI scaffold/validate; MCP server,3 tools; agent integrations.",
+        "concern": "Demo is embedded images we cannot verify; macOS builds unsigned; no published test results.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.802,
+          "coverage": 0.667,
+          "fallbackShare": 0.063
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "platonai/Browser4",
+      "type": "standalone-nonplugin",
+      "score": 80,
+      "human": {
+        "repo": "platonai/Browser4",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 20,
+        "usecases": 13,
+        "demo": 3,
+        "reliability": 12,
+        "total": 70,
+        "confidence": "high",
+        "evidence": "CLI: snapshot refs, click/fill, X-SQL htmlsnapshot, crawl/swarm/loop, agent run, state; decision-tree usage guide; amazon compare demo; MockSite; doctor.",
+        "concern": "Demos external-only (YouTube); WebMiner Commercial is paid; README marketing-heavy.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 14.142135623730951,
+        "demo": 5.5113519212621505,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 1.5,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.851,
+          "coverage": 0.778,
+          "fallbackShare": 0.075
+        }
+      },
+      "error": 10
+    },
+    {
+      "repo": "Anionex/agent-vision-toolkit",
+      "type": "standalone-nonplugin",
+      "score": 77,
+      "human": {
+        "repo": "Anionex/agent-vision-toolkit",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 20,
+        "usecases": 17,
+        "demo": 9,
+        "reliability": 8,
+        "total": 75,
+        "confidence": "high",
+        "evidence": "glance/ground/detect/trace/crop CLIs + OCR; vision-skills playbooks (UI/graphic restore, GUI); Codex/Claude proxy; Pi/OpenCode extensions.",
+        "concern": "Verification claims are self-reported; no CI/test artifacts or reproducible harness visible.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.08248290463863,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "paean-ai/deeptide",
+      "type": "standalone-nonplugin",
+      "score": 62,
+      "human": {
+        "repo": "paean-ai/deeptide",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 15,
+        "usecases": 7,
+        "demo": 8,
+        "reliability": 8,
+        "total": 57,
+        "confidence": "medium",
+        "evidence": "Agent CLI+GUI: tools, slash commands, hooks, memory, sub-agents, custom md commands, plan mode, research; doctor; local-echo mode; 6 samples; failure-mode docs.",
+        "concern": "CLI engine is upstream redirect; no tests shown; tool/command claims inherited from zero-cli.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 11.385450338040846,
+        "usecases": 8.16496580927726,
+        "demo": 2.6832815729997477,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 1,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.792,
+          "coverage": 0.667,
+          "fallbackShare": 0.083
+        }
+      },
+      "error": 5
+    },
+    {
+      "repo": "agentrq/agentrq",
+      "type": "standalone-nonplugin",
+      "score": 82,
+      "human": {
+        "repo": "agentrq/agentrq",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 16,
+        "usecases": 15,
+        "demo": 4,
+        "reliability": 5,
+        "total": 62,
+        "confidence": "medium",
+        "evidence": "Go backend, MCP+CoreMCP, Vue3 UI; task board, cron scheduling, event workflows, tool history, on-device STT; MCP tools; ACP/Codex gateways.",
+        "concern": "Screenshots/GIFs hosted externally; much feature detail off-repo; no test/CI evidence.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.302967433402216,
+        "usecases": 11.547005383792515,
+        "demo": 11.102010693241116,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 2,
+        "outputItems": 1,
+        "media": 3.5,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.921,
+          "coverage": 0.889,
+          "fallbackShare": 0.047
+        }
+      },
+      "error": 20
+    },
+    {
+      "repo": "TencentCloudBase/CloudBase-AI-Toolkit",
+      "type": "standalone-nonplugin",
+      "score": 58,
+      "human": {
+        "repo": "TencentCloudBase/CloudBase-AI-Toolkit",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 16,
+        "usecases": 14,
+        "demo": 4,
+        "reliability": 6,
+        "total": 61,
+        "confidence": "high",
+        "evidence": "npm MCP server (local/hosted/cloud) + skills + IDE plugins; DB, functions, auth, storage, hosting ops; new-tool changelog; evaluation study.",
+        "concern": "Most docs/demos on external site; needs paid CloudBase env; no tests visible.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.771,
+          "coverage": 0.556,
+          "fallbackShare": 0.014
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "NanmiCoder/dsh-agent-teams",
+      "type": "dsh-plugin",
+      "score": 52,
+      "human": {
+        "repo": "NanmiCoder/dsh-agent-teams",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 18,
+        "usecases": 15,
+        "demo": 6,
+        "reliability": 11,
+        "total": 72,
+        "confidence": "high",
+        "evidence": "DSH plugin: team protocol, 11 tools, durable sub-agents, scheduler, Web UI panel, quality gates, named profiles, /agent-teams command.",
+        "concern": "File-backed single-process state; concurrent teams uncoordinated; models may skip state updates.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 10.825317547305483,
+        "usage": 18.886751345948127,
+        "usecases": 16.32993161855452,
+        "demo": 0,
+        "reliability": 5.669467095138408
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 10,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 4,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.804,
+          "coverage": 0.667,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": -20
+    },
+    {
+      "repo": "bowenliang123/dsh-context",
+      "type": "dsh-plugin",
+      "score": 43,
+      "human": {
+        "repo": "bowenliang123/dsh-context",
+        "inferredType": "dsh-plugin",
+        "capability": 23,
+        "usage": 15,
+        "usecases": 4,
+        "demo": 6,
+        "reliability": 8,
+        "total": 56,
+        "confidence": "medium",
+        "evidence": "Composition bar, per-request trend, events, file activity, agent network, context browser with diff; /context command; real-session figures; coverage notes.",
+        "concern": "Feature tour only, no explicit use cases; screenshots external-hosted, not viewable in README.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 16.535945694153693,
+        "usage": 11.150774800938814,
+        "usecases": 0,
+        "demo": 15,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 2,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 8,
+        "media": 6,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.767,
+          "coverage": 0.556,
+          "fallbackShare": 0.021
+        }
+      },
+      "error": -13
+    },
+    {
+      "repo": "Tiger3807861189/DeepSeek-V4-J-Space-Capability-Realization-Report",
+      "type": "standalone-nonplugin",
+      "score": 17,
+      "human": {
+        "repo": "Tiger3807861189/DeepSeek-V4-J-Space-Capability-Realization-Report",
+        "inferredType": "standalone-nonplugin",
+        "capability": 5,
+        "usage": 3,
+        "usecases": 2,
+        "demo": 6,
+        "reliability": 7,
+        "total": 23,
+        "confidence": "medium",
+        "evidence": "9-benchmark A/B tables (HLE, Terminal-Bench 2.1, DeepSWE, GAIA) with accuracy and wall-clock/token deltas; subset sizes stated.",
+        "concern": "Results report for an external suite; no product usage or demos of J-Space itself.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 8.838834764831844,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.444,
+          "coverage": 0.222,
+          "fallbackShare": 0.333
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "MemTensor/memmy-agent",
+      "type": "standalone-nonplugin",
+      "score": 62,
+      "human": {
+        "repo": "MemTensor/memmy-agent",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 17,
+        "usecases": 10,
+        "demo": 6,
+        "reliability": 10,
+        "total": 63,
+        "confidence": "medium",
+        "evidence": "Cross-agent memory, history onboarding, desktop/CLI/TUI/API, MCP/Skills; CLI commands, systemd, config sample; tests; explicit error over fake memories.",
+        "concern": "Trial/BYOK monetization prominent; single GIF demo; comparison table is positioning, not evidence.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 7,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.807,
+          "coverage": 0.667,
+          "fallbackShare": 0.053
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "sunchaokun/PPT-Design-Skill",
+      "type": "standalone-nonplugin",
+      "score": 75,
+      "human": {
+        "repo": "sunchaokun/PPT-Design-Skill",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 20,
+        "usecases": 15,
+        "demo": 10,
+        "reliability": 10,
+        "total": 77,
+        "confidence": "high",
+        "evidence": "Three modes with runnable code (generate_ppt, kpi_card, extract_design_dna), QA pipeline, delivery checklist, six case decks with previews.",
+        "concern": "Generation depends on external pptx-designer package; visual quality not independently verifiable.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8,
+        "usecases": 20,
+        "demo": 11.683281572999748,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 10,
+        "outputItems": 1,
+        "media": 6,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.808,
+          "coverage": 0.667,
+          "fallbackShare": 0.051
+        }
+      },
+      "error": -2
+    },
+    {
+      "repo": "MeteorNOX/DeepSeek-Balance-Whale-Widget",
+      "type": "dsh-plugin",
+      "score": 63,
+      "human": {
+        "repo": "MeteorNOX/DeepSeek-Balance-Whale-Widget",
+        "inferredType": "dsh-plugin",
+        "capability": 15,
+        "usage": 12,
+        "usecases": 8,
+        "demo": 6,
+        "reliability": 9,
+        "total": 50,
+        "confidence": "medium",
+        "evidence": "Widget features (60s refresh, ledger/token usage modes, per-turn cost), HTTP endpoints, verification curls, FAQ, migration path, MIT.",
+        "concern": "Single-purpose widget; realtime mode needs manual session token; accuracy depends on API key.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.886751345948127,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.821,
+          "coverage": 0.667,
+          "fallbackShare": 0.025
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "ysr666/dsh-vision-router",
+      "type": "dsh-plugin",
+      "score": 88,
+      "human": {
+        "repo": "ysr666/dsh-vision-router",
+        "inferredType": "dsh-plugin",
+        "capability": 24,
+        "usage": 22,
+        "usecases": 12,
+        "demo": 10,
+        "reliability": 12,
+        "total": 80,
+        "confidence": "high",
+        "evidence": "14 tools with artifacts, 5-tier provider fallback chain, quick-start, pixel-loop 2.54% diff, troubleshooting, security notes.",
+        "concern": "Free fallback rate-limited (2 req/min); complexity may exceed most users' needs.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.08248290463863,
+        "usecases": 19.148542155126762,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 5.5,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.862,
+          "coverage": 0.778,
+          "fallbackShare": 0.054
+        }
+      },
+      "error": 8
+    },
+    {
+      "repo": "Anil-matcha/awesome-dsh-plugin",
+      "type": "catalog-list",
+      "score": 14,
+      "human": {
+        "repo": "Anil-matcha/awesome-dsh-plugin",
+        "inferredType": "catalog-list",
+        "capability": 4,
+        "usage": 3,
+        "usecases": 3,
+        "demo": 1,
+        "reliability": 4,
+        "total": 15,
+        "confidence": "medium",
+        "evidence": "Curated ~200-entry catalog (19 categories), one-line plugin descriptions, security warning, verify-before-submit rule, plugin-dev steps.",
+        "concern": "Mangled formatting; no CI, freshness, or verification evidence beyond submit rule.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 2.8867513459481287,
+        "usecases": 0,
+        "demo": 3.1819805153394642,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0.5,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "PicGo/PicGo-Core",
+      "type": "standalone-nonplugin",
+      "score": 27,
+      "human": {
+        "repo": "PicGo/PicGo-Core",
+        "inferredType": "standalone-nonplugin",
+        "capability": 15,
+        "usage": 15,
+        "usecases": 7,
+        "demo": 6,
+        "reliability": 9,
+        "total": 52,
+        "confidence": "high",
+        "evidence": "CLI set (upload, server, cloud auth status exit codes, get, uploader manage), node API examples, JSON outputs, Typora support.",
+        "concern": "README thin beyond commands; deeper behavior deferred to external docs.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 17.618802153517006,
+        "usecases": 0,
+        "demo": 9.181980515339465,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 8,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 7,
+        "media": 0.5,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.778,
+          "coverage": 0.556,
+          "fallbackShare": 0
+        }
+      },
+      "error": -25
+    },
+    {
+      "repo": "vostride/agent-qa",
+      "type": "standalone-nonplugin",
+      "score": 57,
+      "human": {
+        "repo": "vostride/agent-qa",
+        "inferredType": "standalone-nonplugin",
+        "capability": 13,
+        "usage": 10,
+        "usecases": 8,
+        "demo": 4,
+        "reliability": 7,
+        "total": 42,
+        "confidence": "medium",
+        "evidence": "Features (self-healing, memory, action cache, Docker hooks, BYO LLM), quickstart commands, CLI run example, npm/CI badges.",
+        "concern": "Usage mostly setup-level; demo and docs external; no inline evidence of test outputs.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 18.75,
+        "usage": 18.834940080824023,
+        "usecases": 8.16496580927726,
+        "demo": 0,
+        "reliability": 11.338934190276817
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 4,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.822,
+          "coverage": 0.667,
+          "fallbackShare": 0.023
+        }
+      },
+      "error": 15
+    },
+    {
+      "repo": "mindscale-noah/MindMemOS",
+      "type": "standalone-nonplugin",
+      "score": 61,
+      "human": {
+        "repo": "mindscale-noah/MindMemOS",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18,
+        "usage": 15,
+        "usecases": 12,
+        "demo": 9,
+        "reliability": 10,
+        "total": 64,
+        "confidence": "medium",
+        "evidence": "HTTP/SDK/CLI examples (memory add/search, skills.evolve), OpenClaw/DSH plugin flows, local/cloud deploy, four benchmark tables.",
+        "concern": "Requires self-host stack or cloud key; benchmarks README-reported without linked artifacts.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.302967433402216,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11.5,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.812,
+          "coverage": 0.667,
+          "fallbackShare": 0.042
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "tong-io/tongflow",
+      "type": "standalone-nonplugin",
+      "score": 45,
+      "human": {
+        "repo": "tong-io/tongflow",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 16,
+        "usecases": 15,
+        "demo": 10,
+        "reliability": 10,
+        "total": 74,
+        "confidence": "high",
+        "evidence": "Node catalog (~90 capabilities), ~45 plugins with model lists, ABI+SDK, Docker/self-host steps, demo media, dsh plugin.",
+        "concern": "Desktop app is a cloud shell; GPU plugins need Modal token; per-node claims hard to verify.",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.505553499465135,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 10,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.71,
+          "coverage": 0.556,
+          "fallbackShare": 0.136
+        }
+      },
+      "error": -29
+    },
+    {
+      "repo": "Anil-matcha/awesome-deepseek-harness",
+      "type": "catalog-list",
+      "score": 14,
+      "human": {
+        "repo": "Anil-matcha/awesome-deepseek-harness",
+        "inferredType": "catalog-list",
+        "capability": 4,
+        "usage": 3,
+        "usecases": 3,
+        "demo": 1,
+        "reliability": 4,
+        "total": 15,
+        "confidence": "medium",
+        "evidence": "README text identical to awesome-dsh-plugin (same MD5): categorized ~200-entry catalog, security warning, verification contribution standard.",
+        "concern": "Exact duplicate of awesome-dsh-plugin README; no distinct maintenance or verification evidence.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 2.8867513459481287,
+        "usecases": 0,
+        "demo": 3.1819805153394642,
+        "reliability": 8.017837257372731
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0.5,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "0xsline/awesome-deepseek-harness",
+      "type": "catalog-list",
+      "score": 0,
+      "human": {
+        "repo": "0xsline/awesome-deepseek-harness",
+        "inferredType": "catalog-list",
+        "capability": 5,
+        "usage": 4,
+        "usecases": 3,
+        "demo": 1,
+        "reliability": 5,
+        "total": 18,
+        "confidence": "medium",
+        "evidence": "Largest catalog (~450 entries, 21 categories) from hub + dsh-plugin topic; install docs, hand-maintained standard, placeholder/WIP labels, org-access caveat.",
+        "concern": "Scale unverifiable; many dsh-external links may be placeholder/inaccessible; no automated checks.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0,
+          "coverage": 0,
+          "fallbackShare": 0
+        }
+      },
+      "error": -18
+    },
+    {
+      "repo": "xyTom/coding-tools-mcp",
+      "type": "standalone-nonplugin",
+      "score": 70,
+      "human": {
+        "repo": "xyTom/coding-tools-mcp",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 19,
+        "usecases": 16,
+        "demo": 8,
+        "reliability": 11,
+        "total": 74,
+        "confidence": "high",
+        "evidence": "18 named tools, 3 permission modes, stdio+HTTP, Landlock, Docker sandbox, Cloudflare Worker control plane, desktop GUI, telemetry opt-out.",
+        "concern": "Demo video external; dogfood token-drop figure not reproducible from README alone.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.348469228349536,
+        "usecases": 11.547005383792515,
+        "demo": 3.1819805153394642,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 0.5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.876,
+          "coverage": 0.778,
+          "fallbackShare": 0.027
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "freestylefly/wesight",
+      "type": "standalone-nonplugin",
+      "score": 86,
+      "human": {
+        "repo": "freestylefly/wesight",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20,
+        "usage": 13,
+        "usecases": 12,
+        "demo": 9,
+        "reliability": 10,
+        "total": 64,
+        "confidence": "medium",
+        "evidence": "Desktop console: 9 agent engines, unified providers, Feishu IM hub, runtime dashboard, skills marketplace, tasks, pet; signed macOS builds.",
+        "concern": "Feature-list heavy; usage steps mostly install/dev build; Windows installer unsigned.",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.65685424949238,
+        "usecases": 14.142135623730951,
+        "demo": 13.6475800154489,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 3,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.924,
+          "coverage": 0.889,
+          "fallbackShare": 0.041
+        }
+      },
+      "error": 22
+    },
+    {
+      "repo": "xmanrui/dsh-im",
+      "type": "dsh-plugin",
+      "score": 65,
+      "human": {
+        "repo": "xmanrui/dsh-im",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 19,
+        "usecases": 12,
+        "demo": 3,
+        "reliability": 13,
+        "total": 69,
+        "confidence": "high",
+        "evidence": "9 IM channels, multi-bot; streaming replies; 20+ commands w/ examples; per-channel file limits; access modes; Office connector (SSE/lease); tests; secrets.",
+        "concern": "One screenshot; nine channels unverifiable from README; proxy setup friction.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.751,
+          "coverage": 0.556,
+          "fallbackShare": 0.054
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "Anionex/dsh-vision-toolkit",
+      "type": "dsh-plugin",
+      "score": 62,
+      "human": {
+        "repo": "Anionex/dsh-vision-toolkit",
+        "inferredType": "dsh-plugin",
+        "capability": 20,
+        "usage": 19,
+        "usecases": 16,
+        "demo": 10,
+        "reliability": 11,
+        "total": 76,
+        "confidence": "high",
+        "evidence": "10 vision tools + vision-skills skill (5 playbooks), paste-image routing, isolated Python runtime, settings test, artifact previews.",
+        "concern": "Depends on upstream toolkit snapshot; external rating badges excluded from scoring.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.76,
+          "coverage": 0.556,
+          "fallbackShare": 0.036
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "toby-bridges/api-relay-audit",
+      "type": "dsh-plugin",
+      "score": 80,
+      "human": {
+        "repo": "toby-bridges/api-relay-audit",
+        "inferredType": "dsh-plugin",
+        "capability": 19,
+        "usage": 18,
+        "usecases": 15,
+        "demo": 7,
+        "reliability": 12,
+        "total": 71,
+        "confidence": "high",
+        "evidence": "14-step audit, 4 query families, 3 profiles, 22 CLI flags, DSH/OpenClaw/Hermes distributions, Markdown reports with verdicts.",
+        "concern": "Output evidence mostly linked docs; 808-test figure not verifiable from README alone.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 17.73933715413101,
+        "usecases": 16.32993161855452,
+        "demo": 6,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 4,
+        "outputItems": 6,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.814,
+          "coverage": 0.778,
+          "fallbackShare": 0.149
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "vshulcz/deja-vu",
+      "type": "standalone-nonplugin",
+      "score": 65,
+      "human": {
+        "repo": "vshulcz/deja-vu",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 20,
+        "usecases": 15,
+        "demo": 11,
+        "reliability": 12,
+        "total": 80,
+        "confidence": "high",
+        "evidence": "Indexes 20 harnesses' history; MCP recall/blame/fix tools, hooks, redaction, sync/handoff, embeddings, in-repo benches with CI gate.",
+        "concern": "Benchmark numbers require external docs to verify; Windows path flagged less battle-tested.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.886751345948127,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.817,
+          "coverage": 0.667,
+          "fallbackShare": 0.033
+        }
+      },
+      "error": -15
+    },
+    {
+      "repo": "hellowind777/helloagents",
+      "type": "standalone-nonplugin",
+      "score": 82,
+      "human": {
+        "repo": "hellowind777/helloagents",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 19,
+        "usecases": 12,
+        "demo": 6,
+        "reliability": 12,
+        "total": 70,
+        "confidence": "medium",
+        "evidence": "14 skills, 11 chat commands, plan packages + PRD structure, STATE recovery, evidence artifacts, CLI lifecycle across 5 CLIs, npm test suite.",
+        "concern": "Demo limited to two images; much behavior is rule/prompt-level, hard to verify.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 14.142135623730951,
+        "demo": 6.3639610306789285,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.884,
+          "coverage": 0.778,
+          "fallbackShare": 0.01
+        }
+      },
+      "error": 12
+    },
+    {
+      "repo": "shaobeichen/dsh-pocket",
+      "type": "dsh-plugin",
+      "score": 61,
+      "human": {
+        "repo": "shaobeichen/dsh-pocket",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 16,
+        "usecases": 14,
+        "demo": 8,
+        "reliability": 11,
+        "total": 71,
+        "confidence": "medium",
+        "evidence": "LAN QR + cloudflared tunnel, dual 8-digit passwords, rate limiting, WebSocket streaming, brotli compression, mobile UI, 43 tests.",
+        "concern": "Usage steps brief; tunnel behavior depends on cloudflared; phone-interface screenshots limited.",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 14.651436661751749,
+        "usecases": 0,
+        "demo": 6.3639610306789285,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.826,
+          "coverage": 0.667,
+          "fallbackShare": 0.016
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "ccch1mneyyy/working-activity",
+      "type": "dsh-plugin",
+      "score": 56,
+      "human": {
+        "repo": "ccch1mneyyy/working-activity",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 18,
+        "usecases": 4,
+        "demo": 8,
+        "reliability": 10,
+        "total": 62,
+        "confidence": "medium",
+        "evidence": "Working-line (pi+DSH): tool activity, progress, narration, warnings, cost/token stats, presets, doctor, commands; known limitations; no telemetry; tests.",
+        "concern": "No explicit use cases; feature-list README; no screenshots, only inline text examples.",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.722,
+          "coverage": 0.444,
+          "fallbackShare": 0
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "Electricitysheep/dsh-handbook",
+      "type": "standalone-nonplugin",
+      "score": 88,
+      "human": {
+        "repo": "Electricitysheep/dsh-handbook",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 15,
+        "usecases": 15,
+        "demo": 10,
+        "reliability": 11,
+        "total": 70,
+        "confidence": "high",
+        "evidence": "15 chapters, PDFs, cheatsheet, FAQ, plugin template, config reference; benchmark data, real case outputs, honest limitations",
+        "concern": "Docs project; much content is dsh install/config; value sits in linked chapters, not README itself",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 16.32993161855452,
+        "demo": 10.897366596101028,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 4,
+        "outputItems": 0.5,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.91,
+          "coverage": 0.889,
+          "fallbackShare": 0.069
+        }
+      },
+      "error": 18
+    },
+    {
+      "repo": "sandbaseai/sandbase-harness",
+      "type": "standalone-nonplugin",
+      "score": 81,
+      "human": {
+        "repo": "sandbaseai/sandbase-harness",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 22,
+        "usecases": 13,
+        "demo": 8,
+        "reliability": 13,
+        "total": 79,
+        "confidence": "high",
+        "evidence": "Local runtime: /v1 API, SQLite, SSE replay,4 sandboxes, MCP toolsets, SDK, Console, DSH bridge; CLI/curl/SDK examples, agent YAML",
+        "concern": "Primary identity is standalone runtime, not DSH plugin; DSH integration requires source checkout",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 8.16496580927726,
+        "demo": 11.683281572999748,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 1,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.925,
+          "coverage": 0.889,
+          "fallbackShare": 0.038
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "vibeinging/dsh-desktop",
+      "type": "standalone-nonplugin",
+      "score": 53,
+      "human": {
+        "repo": "vibeinging/dsh-desktop",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 14,
+        "usecases": 8,
+        "demo": 9,
+        "reliability": 12,
+        "total": 64,
+        "confidence": "medium",
+        "evidence": "Desktop distribution: macOS/Windows builds,15 default bundles, update precheck/recovery, plugin market, worktree, agent-teams; screenshots",
+        "concern": "Most defaults are third-party bundles; own code contribution hard to gauge; use cases implicit",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 16.535945694153693,
+        "usage": 12.18882689691419,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 4,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.712,
+          "coverage": 0.556,
+          "fallbackShare": 0.132
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "superdesigndev/treg",
+      "type": "standalone-nonplugin",
+      "score": 64,
+      "human": {
+        "repo": "superdesigndev/treg",
+        "inferredType": "standalone-nonplugin",
+        "capability": 24,
+        "usage": 23,
+        "usecases": 15,
+        "demo": 8,
+        "reliability": 13,
+        "total": 83,
+        "confidence": "high",
+        "evidence": "2,895 endpoints/60 providers; CLI search/call/run/shell, teams, credential ladder, OAuth, health checks, self-host config, 521 tests",
+        "concern": "Hosted service at treg.to is external; README-local proof limited to source, tests, and CLI docs",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 8.16496580927726,
+        "demo": 0,
+        "reliability": 9.819805060619656
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.833,
+          "coverage": 0.667,
+          "fallbackShare": 0
+        }
+      },
+      "error": -19
+    },
+    {
+      "repo": "chainbase-labs/Agentkey",
+      "type": "standalone-nonplugin",
+      "score": 64,
+      "human": {
+        "repo": "chainbase-labs/Agentkey",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 15,
+        "usecases": 18,
+        "demo": 6,
+        "reliability": 12,
+        "total": 73,
+        "confidence": "high",
+        "evidence": "10-task use-case table;40+ agent detection, DSH MCP integration with verification,7 capability domains, update/uninstall docs",
+        "concern": "Hosted subscription service; core server external; README heavy on install/config for many clients",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 17.67766952966369,
+        "usage": 7.302967433402215,
+        "usecases": 20,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4,
+        "usageItems": 0,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.761,
+          "coverage": 0.556,
+          "fallbackShare": 0.033
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "adoresever/graph-memory",
+      "type": "dsh-plugin",
+      "score": 62,
+      "human": {
+        "repo": "adoresever/graph-memory",
+        "inferredType": "dsh-plugin",
+        "capability": 23,
+        "usage": 16,
+        "usecases": 9,
+        "demo": 10,
+        "reliability": 13,
+        "total": 71,
+        "confidence": "high",
+        "evidence": "Native Cordis plugin: typed graph, dual-path recall, SQLite/FTS5/vectors,4 gm_* tools, token budget;130 tests,75% token benchmark",
+        "concern": "Extraction depends on auxiliary-model stability; Pro workbench read-only; npm publish pending",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 6.531972647421808,
+        "usecases": 0,
+        "demo": 15,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 8,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.765,
+          "coverage": 0.556,
+          "fallbackShare": 0.025
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "Nagi-ovo/dsh-ads",
+      "type": "dsh-plugin",
+      "score": 18,
+      "human": {
+        "repo": "Nagi-ovo/dsh-ads",
+        "inferredType": "dsh-plugin",
+        "capability": 10,
+        "usage": 4,
+        "usecases": 5,
+        "demo": 7,
+        "reliability": 6,
+        "total": 32,
+        "confidence": "medium",
+        "evidence": "4 ad slots (sidebar/chat/inference/right-bottom), zh/en modes live-switch, 20s rotation, per-ad toggles, topic feed; in-repo screenshots",
+        "concern": "Satire plugin; post-install usage thin; video demo is another project's",
+        "adjudication": "lower-total independent rereview"
+      },
+      "dimensions": {
+        "capability": 8.838834764831844,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.54,
+          "coverage": 0.222,
+          "fallbackShare": 0.143
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "lencx/Minke",
+      "type": "standalone-nonplugin",
+      "score": 55,
+      "human": {
+        "repo": "lencx/Minke",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 14,
+        "usecases": 8,
+        "demo": 10,
+        "reliability": 11,
+        "total": 66,
+        "confidence": "high",
+        "evidence": "Agent Browser with human takeover, WeChat/Telegram/Discord remote,3 verified routes, terminal, local models, SHA-256 updater; screenshots",
+        "concern": "Pre-release notarization caveats; remote routes depend on external Tailscale/Cloudflare setup",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 8.16496580927726,
+        "demo": 9,
+        "reliability": 12.677313820927749
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.691,
+          "coverage": 0.444,
+          "fallbackShare": 0.063
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "fufankeji/deepseek-harness-studio",
+      "type": "standalone-nonplugin",
+      "score": 88,
+      "human": {
+        "repo": "fufankeji/deepseek-harness-studio",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22,
+        "usage": 14,
+        "usecases": 18,
+        "demo": 13,
+        "reliability": 12,
+        "total": 79,
+        "confidence": "high",
+        "evidence": "Plugin center + agent finder, preset square (7 workflows,9 skills), FF-LLM Wiki app, vision routing, local models, skins; real screenshots",
+        "concern": "Roadmap separated from shipped but preview-stage desktop; many features ride on DSH core",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.65685424949238,
+        "usecases": 20,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 3,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.849,
+          "coverage": 0.778,
+          "fallbackShare": 0.08
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "mnemon-dev/mnemon",
+      "type": "standalone-nonplugin",
+      "score": 71,
+      "human": {
+        "repo": "mnemon-dev/mnemon",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 13,
+        "usecases": 12,
+        "demo": 7,
+        "reliability": 9,
+        "total": 62,
+        "confidence": "high",
+        "evidence": "Four-graph store, remember/link/recall, dedup, decay+GC, receipts, named stores, embeddings; hooks to16+ runtimes; FAQ commands",
+        "concern": "Usage mostly auto-deployed skills; few direct user commands; details in linked docs",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13,
+        "usecases": 11.547005383792515,
+        "demo": 6.3639610306789285,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 10,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.833,
+          "coverage": 0.667,
+          "fallbackShare": 0
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "alibaba/anolisa",
+      "type": "standalone-nonplugin",
+      "score": 45,
+      "human": {
+        "repo": "alibaba/anolisa",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21,
+        "usage": 11,
+        "usecases": 13,
+        "demo": 8,
+        "reliability": 5,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "10 components (Token-less, AgentSight, ws-ckpt, Sec Core...); measured65.8%/47.3%/62.9% token cuts, us latencies; stats commands",
+        "concern": "Usage mostly via external docs links; no in-README test/CI evidence; videos hosted externally",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.652,
+          "coverage": 0.333,
+          "fallbackShare": 0.029
+        }
+      },
+      "error": -13
+    },
+    {
+      "repo": "Devin-AXIS/deepseek-design",
+      "type": "dsh-plugin",
+      "score": 71,
+      "human": {
+        "repo": "Devin-AXIS/deepseek-design",
+        "inferredType": "dsh-plugin",
+        "capability": 22,
+        "usage": 15,
+        "usecases": 13,
+        "demo": 3,
+        "reliability": 5,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "3 plugins:28 video templates, design tokens, element editing, Ask AI, PDF/PPTX/video export, conflict-safe writes;5-step loop documented",
+        "concern": "No demo media or test/CI evidence in README; core Studio lives in external repo",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 20.302967433402216,
+        "usecases": 8.16496580927726,
+        "demo": 2.6832815729997477,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.858,
+          "coverage": 0.778,
+          "fallbackShare": 0.061
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "Minglink/dsh-infinite-gen-2",
+      "type": "dsh-plugin",
+      "score": 42,
+      "human": {
+        "repo": "Minglink/dsh-infinite-gen-2",
+        "inferredType": "dsh-plugin",
+        "capability": 17,
+        "usage": 7,
+        "usecases": 7,
+        "demo": 1,
+        "reliability": 5,
+        "total": 37,
+        "confidence": "medium",
+        "evidence": "order:100 prompt segment, profile tool, refusal countermeasures, green status bar, uninstall scripts; prompt reusable in other CLIs",
+        "concern": "Jailbreak-focused; promotional README, no tests/CI/screenshots; relies on manual install scripts",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 2.8867513459481287,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 13.887301496588272
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": 5
+    },
+    {
+      "repo": "hashgraph-online/hol-guard",
+      "type": "standalone-nonplugin",
+      "score": 69,
+      "human": {
+        "repo": "hashgraph-online/hol-guard",
+        "inferredType": "standalone-nonplugin",
+        "capability": 24,
+        "usage": 20,
+        "usecases": 16,
+        "demo": 9,
+        "reliability": 11,
+        "total": 80,
+        "confidence": "high",
+        "evidence": "Per-agent hook contracts; command test/explain, receipts, approvals, TOTP gates; scanner rubric+SARIF+sample output; pytest, CI matrix",
+        "concern": "Extensive marketing (stars, registry links); much validation self-referential via its own scanner",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 8.16496580927726,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.759,
+          "coverage": 0.667,
+          "fallbackShare": 0.149
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "xiaods/k8e",
+      "type": "standalone-nonplugin",
+      "score": 61,
+      "human": {
+        "repo": "xiaods/k8e",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 18,
+        "usecases": 14,
+        "demo": 7,
+        "reliability": 6,
+        "total": 68,
+        "confidence": "high",
+        "evidence": "gVisor/Kata/Firecracker, warm pool, CAS snapshots, eBPF egress; CLI run/create/write/read/approve w/ examples; API keys w/ TTL",
+        "concern": "Sub-500ms/E2B-compat claims unmeasured in README; make test is the only test evidence",
+        "adjudication": "primary was lower/equal"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16.265986323710905,
+        "usecases": 0,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.813,
+          "coverage": 0.667,
+          "fallbackShare": 0.041
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "Lum1104/dsh-browser",
+      "type": "dsh-plugin",
+      "score": 74,
+      "human": {
+        "repo": "Lum1104/dsh-browser",
+        "inferredType": "dsh-plugin",
+        "capability": 21,
+        "usage": 12,
+        "usecases": 11,
+        "demo": 8,
+        "reliability": 10,
+        "total": 62,
+        "confidence": "high",
+        "evidence": "Full tool set (snapshot/click/type/navigate...), text-only inventory, delta+masked fields;60-run benchmark30/30,5.32s vs6.67s; bridge auth",
+        "concern": "Usage leans on install/troubleshooting; demo media hosted as GitHub attachments",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16.921769586919222,
+        "usecases": 12.909944487358056,
+        "demo": 4.5,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 5,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 2.5,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.881,
+          "coverage": 0.778,
+          "fallbackShare": 0.015
+        }
+      },
+      "error": 12
+    },
+    {
+      "repo": "FSMargoo/dsh-at-file",
+      "type": "dsh-plugin",
+      "score": 48,
+      "human": {
+        "repo": "FSMargoo/dsh-at-file",
+        "inferredType": "dsh-plugin",
+        "capability": 15,
+        "usage": 10,
+        "usecases": 8,
+        "demo": 6,
+        "reliability": 7,
+        "total": 46,
+        "confidence": "high",
+        "evidence": "Picker ranking, arrow-nav, Exact/Regex filters, ignore lists, config options, escape rejection;3 in-repo screenshots; test/check/build",
+        "concern": "Superseded by official built-in @file feature; maintenance declared best-effort",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.348469228349536,
+        "usecases": 0,
+        "demo": 7.794228634059947,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 6,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.767,
+          "coverage": 0.556,
+          "fallbackShare": 0.021
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "syncable-dev/memtrace-public",
+      "type": "standalone-nonplugin",
+      "score": 59,
+      "human": {
+        "repo": "syncable-dev/memtrace-public",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23,
+        "usage": 14,
+        "usecases": 15,
+        "demo": 9,
+        "reliability": 8,
+        "total": 69,
+        "confidence": "medium",
+        "evidence": "25+ MCP tools,17 skills,6 temporal scoring modes; benchmark table w/ reproducible suite; telemetry opt-out;10+ agent matrix",
+        "concern": "Private-beta waitlist access; proprietary EULA, closed-source core; benchmarks self-reported",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 19.148542155126762,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 5.5,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.621,
+          "coverage": 0.333,
+          "fallbackShare": 0.091
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "EthanYoQ/AI-Novel-Writer",
+      "type": "standalone-nonplugin",
+      "score": 54,
+      "human": {
+        "repo": "EthanYoQ/AI-Novel-Writer",
+        "inferredType": "standalone-nonplugin",
+        "capability": 19,
+        "usage": 10,
+        "usecases": 12,
+        "demo": 6,
+        "reliability": 8,
+        "total": 55,
+        "confidence": "high",
+        "evidence": "Chapter-scoped generation, batch1-10 tasks, snapshot review flow, SQLite FTS, OpenAI/Gemini protocols; UI screenshots; DSH MVP plugin",
+        "concern": "DSH plugin explicitly early MVP (<10% of desktop app); installers unsigned; NovelAI flow unverified",
+        "adjudication": "single primary review"
+      },
+      "dimensions": {
+        "capability": 24.206145913796355,
+        "usage": 0,
+        "usecases": 8.16496580927726,
+        "demo": 6.3639610306789285,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.686,
+          "coverage": 0.444,
+          "fallbackShare": 0.073
+        }
+      },
+      "error": -1
+    }
+  ],
+  "pass": false
+}

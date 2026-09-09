@@ -1,0 +1,1767 @@
+{
+  "generatedAt": "2026-09-02T03:17:19.323Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-02.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-production-scorer-evaluation-iteration-20.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "outputs-demo",
+  "question": "Diagnose outputItems under-extraction and media over/under-counting.",
+  "families": [
+    "outputItems",
+    "media"
+  ],
+  "under": [
+    {
+      "repo": "csyangwen/dsh-memory-evolve",
+      "practicalScore": 57,
+      "oracleScore": 75,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 8,
+          "gap": 8
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 场景：多台电脑共享项目记忆（记忆同步）",
+            "excerpt": "项目关键记忆、项目日志、归档、项目待办跨设备一致"
+          },
+          {
+            "heading": "## 场景二：多项目并行开发，每件事都不丢（待办 + 项目日志 + 本地搜索）",
+            "excerpt": "同时开 3 个项目也不乱——每个项目的记忆、待办、文档线索各归各的目录，问一句就能捡起来。"
+          },
+          {
+            "heading": "## 场景三：一个人指挥一群 AI 干活（内部团队）",
+            "excerpt": "任务交接、唤醒、冲突预警全链路自动化，房间消息留痕可查。"
+          },
+          {
+            "heading": "## 场景四：重活派给外部 AI 代理（外部外援）",
+            "excerpt": "完成后结果摘要**自动写入项目日志与今日日志**——派出去的活自动变成你的记忆资产。"
+          },
+          {
+            "heading": "## 场景五：内外协同——一支队伍，两种兵种",
+            "excerpt": "一条「外部主刀 → 内部集成 → 测试验收 → 你确认」的完整流水线。"
+          },
+          {
+            "heading": "## 场景九：给每个会话配一个隐形评审员（会话评审）",
+            "excerpt": "- **记录可查**：评审记录 JSONL 持久化，面板「记录」可追溯。"
+          },
+          {
+            "heading": "## 场景十：散落的素材，一块画板装下（无限画板）",
+            "excerpt": "AI 放的便签落在画板中央虚线区，拖到想要的位置即可。"
+          },
+          {
+            "heading": "## 场景八：离开电脑也能用（手机访问 + 会话筛选 + 通知）",
+            "excerpt": "通知直接落到**网页右上角的铃铛**——未读数字徽标 + 弹窗列表，能看到「哪个会话发来什么」"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "TencentCloud/tencentmeeting-cli",
+      "practicalScore": 50,
+      "oracleScore": 63,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 1,
+          "oracle": 8,
+          "gap": 7
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "#### `auth status`",
+            "excerpt": "查看当前登录状态，包括 OpenId、AccessToken / RefreshToken 的过期状态和剩余有效时间。"
+          },
+          {
+            "heading": "## 全局标志",
+            "excerpt": "| `--format` | — | `json` | 输出格式：`json`（紧凑格式）\\| `json-pretty`（缩进格式） |"
+          },
+          {
+            "heading": "## 全局标志",
+            "excerpt": "| `--compact` | — | `false` | 精简输出模式：仅保留关键字段，过滤冗余字段以降低响应体积，适用于查询/列表类命令 |"
+          },
+          {
+            "heading": "#### `record permission-apply-prepare` — 预览录制权限申请",
+            "excerpt": "| `preview.approval_name` | 申请类型文案 |\n| `preview.subject` | 会议标题 |\n| `preview.file_owner` | 录制所有者名称 |\n| `preview.apply_note` | 权限申请备注信息 |\n| `preview.applicant` | 申请人名称 |"
+          },
+          {
+            "heading": "#### `record permission-apply-commit` — 提交录制权限申请",
+            "excerpt": "| `unique_id` | 申请 ID |\n| `status` | 审批状态 |\n| `message` | 审批状态描述 |\n| `approval_url` | 审批链接 |\n| `share_text` | 申请说明描述 |"
+          },
+          {
+            "heading": "#### `report job-result` — 获取异步任务结果",
+            "excerpt": "| `status` | 任务状态：\"成功\"、\"失败\"、\"处理中\" |\n| `url` | 文件下载链接（状态为 \"成功\" 时返回，有效期 2 小时） |\n| `error_msg` | 错误信息（状态为 \"失败\" 时返回） |"
+          },
+          {
+            "heading": "# 导出日志并上传到服务器（需要登录）",
+            "excerpt": "output log saved to: ~/tmeet_ts_20260410_153000.zip"
+          },
+          {
+            "heading": "### 1. 登录授权",
+            "excerpt": "执行后会自动尝试打开系统默认浏览器跳转到授权 URL；若无默认浏览器，则输出授权 URL，手动在浏览器中打开完成扫码授权。CLI 自动轮询结果（超时 5 分钟），凭证加密保存到本地。"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "huiliyi37/dsh-tianshu-tui",
+      "practicalScore": 52,
+      "oracleScore": 52,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 6.5,
+          "gap": 6.5
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 0.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 会话管理",
+            "excerpt": "| 恢复面板 | 启动时把可恢复会话列表写入滚动区 |"
+          },
+          {
+            "heading": "### 输入面",
+            "excerpt": "附件图片显示 `📎 N images` 标记"
+          },
+          {
+            "heading": "### 渲染与投影",
+            "excerpt": "已结算的工具结果按 harness presenter 意图渲染为滚动区卡片"
+          },
+          {
+            "heading": "### 渲染与投影",
+            "excerpt": "turn 结束（非中断）且有工具调用时落 dim 摘要行（`turn N · 读X 改Y · 耗时`）"
+          },
+          {
+            "heading": "### 渲染与投影",
+            "excerpt": "终态以 `✓`/`✗`/`◌` 条目落入滚动区。"
+          },
+          {
+            "heading": "### 渲染与投影",
+            "excerpt": "顶部栏（cwd + git 分支 + 模型）"
+          },
+          {
+            "heading": "### 渲染与投影",
+            "excerpt": "metrics 行（模型 / token 用量 / 缓存命中率）"
+          },
+          {
+            "heading": "### 会话管理",
+            "excerpt": "| `/export` | 把当前会话转录导出为 Markdown 文件 |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# dsh-tianshu-tui — DeepSeek Harness coding 终端",
+            "excerpt": "![dsh-tianshu-tui](docs/promo.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wssfk12138/dsh-damage-pulse",
+      "practicalScore": 55,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 6.5,
+          "gap": 6.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 4,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "- **单次用量行**：每次模型调用结束，在对话流中显示输入、缓存、输出、思考 Token 和精确金额。"
+          },
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "- **会话累计条**：输入区持续显示当前会话累计 Token 与费用。"
+          },
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "- **全局悬浮卡**：跨会话持续显示 DeepSeek 账户余额；今日消费与历史范围统计集中在详细设置概览中。"
+          },
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "- **统计概览**：支持今日、近 7 天、近 30 天和全部时间，汇总消费金额、请求数、Token 总数、缓存命中 Token、缓存命中率和活跃天数。"
+          },
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "- **中文大数单位**：概览按“万、千万、亿、万亿”逐级显示，千万级数字不再折算成两位数的“百万”；舍入跨越边界时会自动提升单位。"
+          },
+          {
+            "heading": "### 余额、峰谷与悬浮交互",
+            "excerpt": "- 查询 DeepSeek 官方余额并每 60 秒校准；扣费事件到达时先逐笔更新显示余额，充值后以绿色反馈恢复金额。"
+          },
+          {
+            "heading": "### 余额、峰谷与悬浮交互",
+            "excerpt": "- 峰谷标识每 30 秒刷新，峰时使用红色、谷时使用绿色提示。"
+          },
+          {
+            "heading": "### 三层用量与历史统计",
+            "excerpt": "每次模型调用结束，在对话流中显示输入、缓存、输出、思考 Token 和精确金额。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# dsh-damage-pulse",
+            "excerpt": "<img src=\"docs/assets/dsh-damage-pulse-peak-valley-whale-poster.png\" alt=\"dsh-damage-pulse 实时用量、鲸鱼娘、提醒规则、微信通知与安全更新功能总览\" width=\"100%\">"
+          },
+          {
+            "heading": "## 鲸鱼娘",
+            "excerpt": "<img src=\"docs/assets/readme/whale-girl-idle-bite-finger.png\" alt=\"鲸鱼娘啃手指待机原画\" width=\"260\">"
+          },
+          {
+            "heading": "## 鲸鱼娘",
+            "excerpt": "<img src=\"docs/assets/readme/whale-girl-critical-damage.png\" alt=\"鲸鱼娘严重扣费原画\" width=\"260\">"
+          },
+          {
+            "heading": "## 提醒与微信通知",
+            "excerpt": "<img src=\"docs/assets/readme/dsh-damage-pulse-wechat-live.jpg\" alt=\"dsh-damage-pulse 通过 ClawBot 发送的微信通知实机截图\" width=\"520\">"
+          },
+          {
+            "heading": "## 鲸鱼娘",
+            "excerpt": "<img src=\"docs/assets/readme/whale-girl-idle-bite-finger.png\" alt=\"鲸鱼娘啃手指待机原画\" width=\"260\"><br>"
+          },
+          {
+            "heading": "## 鲸鱼娘",
+            "excerpt": "<img src=\"docs/assets/readme/whale-girl-critical-damage.png\" alt=\"鲸鱼娘严重扣费原画\" width=\"260\"><br>"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "alaliqing/claude-paper",
+      "practicalScore": 46,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2,
+          "oracle": 7.5,
+          "gap": 5.5
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Features",
+            "excerpt": "- **Adaptive learning materials** - Generates README, summary, insights, Q&A based on paper complexity"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Code demonstrations** - Clean implementations with Jupyter notebooks and original code integration"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── meta.json                     # Paper metadata (title, authors, etc.)"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── README.md                     # Quick navigation and overview"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── summary.md                    # Detailed summary"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── insights.md                   # Key insights (most important!)"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── qa.md                         # Learning questions"
+          },
+          {
+            "heading": "## Paper Storage Structure",
+            "excerpt": "│       ├── images/                       # Extracted figures and tables"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# Claude Paper",
+            "excerpt": "<img src=\"assets/screenshot1.png\" alt=\"Library View\" width=\"100%\"/>"
+          },
+          {
+            "heading": "# Claude Paper",
+            "excerpt": "<img src=\"assets/screenshot2.png\" alt=\"Reading View\" width=\"100%\"/>"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "bruc3van/awesome-dsh-plugin",
+      "practicalScore": 21,
+      "oracleScore": 42,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 0,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 🗺️ 生态全景",
+            "excerpt": "[CATALOG.md](./CATALOG.md)——目录按类目分册，索引页列出每一册。"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "[data/market.json](./data/market.json) 是给下游市场（如 DSH 桌面端插件市场）消费的精选小文件——在快照与 curation 之上过滤、清洗并按类目均衡发牌（≤600 条、≤500 KB）"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "首页只放经过人工筛选的精选推荐与自荐预览；[CATALOG.md](./CATALOG.md) 及其分类分册收录全部经核实的仓库"
+          },
+          {
+            "heading": "## 📣 作者自荐",
+            "excerpt": "首页只展示**最近 10 条**，完整列表见 [SHOWCASE.md](./SHOWCASE.md)。"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "理由逐条记录在 [data/curated.json](./data/curated.json)"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "[data/market.json](./data/market.json)——面向下游市场的精选文件（≤500 KB，见[接口规范](https://github.com/bruc3van/dsh-desktop-safe-market/blob/master/docs/market-json-spec.md)）"
+          },
+          {
+            "heading": "# 🐳 Awesome DSH Plugins",
+            "excerpt": "[机器可读数据](./data/repositories.json)"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "[CATALOG.md](./CATALOG.md) 及其分类分册收录全部经核实的仓库"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "lire1131/dsh-undo-savepoint",
+      "practicalScore": 70,
+      "oracleScore": 78,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0.5,
+          "oracle": 6,
+          "gap": 5.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 4.75,
+          "gap": -0.25
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 快照内容与存储",
+            "excerpt": "快照对象是 DSH 的启动关键配置：`cordis.patch.yml`、`package.json`、`cordis.yml`、`pnpm-workspace.yaml`、`pnpm-lock.yaml`（profile 下）"
+          },
+          {
+            "heading": "## 快照内容与存储",
+            "excerpt": "| 手动库 | `<快照根>\\manual\\` | 手动保存的快照（永不自动清理） |"
+          },
+          {
+            "heading": "## 快照内容与存储",
+            "excerpt": "| 自动库 | `<快照根>\\auto\\` | 自动快照、启动基线、撤销后悔档（自动档保留最近 20 份） |"
+          },
+          {
+            "heading": "### 局外 WebUI（推荐，全平台）",
+            "excerpt": "| 快照对比：文件列表 + 变更统计（+8 / -2）+ 行级差异高亮 | 局外设置：防抖 / 保留数量 / 脱敏模式 / 目录选择 / 桌面快捷方式 |"
+          },
+          {
+            "heading": "## REST API（WebUI 的后端）",
+            "excerpt": "| `GET /api/undo/status` | `{canUndo, canRedo, total, bootAlert, safeModeActive, ...}` |"
+          },
+          {
+            "heading": "## REST API（WebUI 的后端）",
+            "excerpt": "| `GET /api/undo/list` | 快照列表（含 location: manual/auto/legacy） |"
+          },
+          {
+            "heading": "## REST API（WebUI 的后端）",
+            "excerpt": "| `GET /api/undo/diff` | `?id=<id>` 指定快照与当前的文件级结构化 diff |"
+          },
+          {
+            "heading": "## REST API（WebUI 的后端）",
+            "excerpt": "| `GET /api/undo/tree` | 目录树 diff（按目录聚合，增 / 删 / 改着色） |"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 预览",
+            "excerpt": "![header](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-header.png)"
+          },
+          {
+            "heading": "## 预览",
+            "excerpt": "![panel](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@95230c2/docs/shots/webui-panel.png)"
+          },
+          {
+            "heading": "## 预览",
+            "excerpt": "![settings](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-settings-section.png)"
+          },
+          {
+            "heading": "## 预览",
+            "excerpt": "![gui](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@95230c2/docs/shots/gui-main.png)"
+          },
+          {
+            "heading": "## 崩溃急救速查（按场景选工具）",
+            "excerpt": "![safemode](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/safe-mode-confirm.png)"
+          },
+          {
+            "heading": "## 使用（DSH 内）",
+            "excerpt": "![msgundo](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/message-undo.png)"
+          },
+          {
+            "heading": "## 使用（DSH 内）",
+            "excerpt": "![webdiff](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-diff.png)"
+          },
+          {
+            "heading": "## 使用（DSH 内）",
+            "excerpt": "![note](https://cdn.jsdelivr.net/gh/lire1131/dsh-undo-savepoint@master/docs/shots/webui-note.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "nutshellai-tech/mobius",
+      "practicalScore": 23,
+      "oracleScore": 46,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 4.75,
+          "gap": -1.25
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Auto Research",
+            "excerpt": "A research goal becomes a multi-agent system, not a single Q&A."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Each extension comes with a frontend, backend handler, data directory, and an invocation entry point, ready to keep evolving."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Turn visual ideas into runnable extension apps."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Track live market narratives."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Data-rich sports portal."
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "Presentations from topics and materials."
+          },
+          {
+            "heading": "## Self-Evolving",
+            "excerpt": "real code, UI, plugins, or workflow updates"
+          },
+          {
+            "heading": "## Team Collaboration",
+            "excerpt": "Human members, AI agents, tasks, and deliverables in one view."
+          }
+        ],
+        "media": [
+          {
+            "heading": "## Self-Evolving",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-agent-os.gif\" alt=\"Self-evolving Agent OS demo\" width=\"480\" />"
+          },
+          {
+            "heading": "## Auto Research",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-research.gif\" alt=\"Auto Research demo\" width=\"480\" />"
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo.jpg\" alt=\"XiaoMo assistant interface\" width=\"720\" />"
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo-app.jpg\" alt=\"XiaoMo on mobile\" width=\"720\" />"
+          },
+          {
+            "heading": "## XiaoMo",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo-desktop-v2.png\" alt=\"XiaoMo desktop app\" width=\"720\" />"
+          },
+          {
+            "heading": "## Team Collaboration",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-team-collab.gif\" alt=\"Team collaboration demo\" width=\"480\" />"
+          },
+          {
+            "heading": "## Self-Incubating Extensions",
+            "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-extensions.gif\" alt=\"Extensions demo\" width=\"480\" />"
+          },
+          {
+            "heading": "## Serve Every Scenario and Project",
+            "excerpt": "<img src=\"https://github.com/user-attachments/assets/4c948e53-5c8e-4ae5-8eb3-d3ca035908c9\" alt=\"Interface layouts: regular, copilot, server co-op, and auto research\" width=\"480\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "zhoushoujianwork/easyeda-agent",
+      "practicalScore": 62,
+      "oracleScore": 77,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2.5,
+          "oracle": 7,
+          "gap": 4.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 为什么做这个",
+            "excerpt": "- 产物、截图、DRC 结果、审计日志都是一等输出。"
+          },
+          {
+            "heading": "## 核心能力 & 特色",
+            "excerpt": "| 产物 | BOM(补 LCSC C 号)、网表、导出、原生截图、审计日志、录制→回放 |"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "**3 页原理图 / 26 个真实 LCSC 库件 / 18 网黄金表逐脚全对 / 复用 6 个电路块 /\n8 个分区框 + 7 条电路说明**,分区框、区名与电路说明全部由算法计算落位,逐页"
+          },
+          {
+            "heading": "## 能力清单(已支持)",
+            "excerpt": "一次调用 **`sch read`**(器件+网络+检查)、**BOM**/**网表**导出(自动补 LCSC C 号)、页面导图 SVG/PNG/PDF。"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "> 19 器件原理图 + 四层 PCB(GND 内电层/VCC 电源层/天线禁铜/四角 M3),\n> `pcb drc` Connection/Clearance 双归零、`pcb check` 0、`layout-lint` 100/100,附原生截图与全流程复盘。"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "并在真实 EasyEDA 画布上验证(DRC 31 → 3、No-Connection 归零)"
+          },
+          {
+            "heading": "## 为什么做这个",
+            "excerpt": "产物、截图、DRC 结果、审计日志都是一等输出。"
+          },
+          {
+            "heading": "## 核心能力 & 特色",
+            "excerpt": "BOM(补 LCSC C 号)、网表、导出、原生截图、审计日志、录制→回放"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "![easyeda-agent workflow](docs/assets/easyeda-agent-workflow.svg)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "![P1 电源页:AMS1117 LDO 降压,分区框 + 区名 + 电路说明由算法落位](docs/images/sch-p1-power.png)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "![P2 主控页:ESP32 WROOM 最小系统 + 按键 + LED,三个分区框](docs/images/sch-p2-mcu.png)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "![P3 USB 页:CH340 + USB-C + 自动下载电路,四个分区框](docs/images/sch-p3-usb.png)"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "<img src=\"docs/assets/demo-schematic-generation.gif\" width=\"420\" alt=\"AI 在 EasyEDA 中从空白页生成原理图\"/>"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "<img src=\"docs/assets/demo-pcb-layout.gif\" width=\"420\" alt=\"AI 在 EasyEDA 中完成 PCB 布局、板框和铺铜\"/>"
+          },
+          {
+            "heading": "### 实战展示:一份需求文档 → 三页原理图正式交付",
+            "excerpt": "<img src=\"docs/assets/demo-esp32-board.png\" width=\"560\" alt=\"ESP32-S3 成品板:4层电源平面 + 圆角板框 + 位号对齐\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "QCYTSN/dsh-dafeiyu",
+      "practicalScore": 44,
+      "oracleScore": 53,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 5.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 怎么使用？",
+            "excerpt": "- 项目目录名称，例如 `dsh-dafeiyu`"
+          },
+          {
+            "heading": "## 怎么使用？",
+            "excerpt": "- 当前阶段，例如“分析阶段”“实现阶段”“验证阶段”"
+          },
+          {
+            "heading": "## 怎么使用？",
+            "excerpt": "- 当前待办，例如“完善项目文档”"
+          },
+          {
+            "heading": "## 怎么使用？",
+            "excerpt": "- 真实进度，例如“已完成 3/5 步”"
+          },
+          {
+            "heading": "## 怎么使用？",
+            "excerpt": "- 等待、完成或错误提示"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# DSH 大肥鱼 🐋",
+            "excerpt": "![DSH 大肥鱼在真实任务中显示项目状态](docs/images/dsh-bigfish-running.png)"
+          },
+          {
+            "heading": "## 状态展示",
+            "excerpt": "![大肥鱼思考状态](docs/images/status-thinking.png)"
+          },
+          {
+            "heading": "## 状态展示",
+            "excerpt": "![大肥鱼等待用户确认](docs/images/status-waiting.png)"
+          },
+          {
+            "heading": "## 状态展示",
+            "excerpt": "![大肥鱼任务完成](docs/images/status-success.png)"
+          },
+          {
+            "heading": "## 状态展示",
+            "excerpt": "![大肥鱼错误状态](docs/images/status-error.png)"
+          },
+          {
+            "heading": "## 状态展示",
+            "excerpt": "![大肥鱼工作状态](docs/images/status-working.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "dream-num/dsh-univer-office",
+      "practicalScore": 60,
+      "oracleScore": 73,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 5.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# DSH × Univer Office",
+            "excerpt": "Deliver spreadsheets as Excel (`.xlsx`), documents as Word (`.docx`), and presentations as PowerPoint (`.pptx`) files when needed."
+          },
+          {
+            "heading": "## See it in action",
+            "excerpt": "The agent created this spreadsheet from a natural-language request, then added conditional formatting and a chart in the same conversation."
+          },
+          {
+            "heading": "### 3. Review it in the conversation",
+            "excerpt": "- Changes appear in a live, movable preview window while the agent works."
+          },
+          {
+            "heading": "### 3. Review it in the conversation",
+            "excerpt": "- Review cards remain in the conversation and can be folded or opened fullscreen later."
+          },
+          {
+            "heading": "## Built-in tools",
+            "excerpt": "| `univer_screenshot` | Render supported content as PNG images for review |"
+          },
+          {
+            "heading": "## See it in action",
+            "excerpt": "The result can be previewed, revised, merged into the current version, or discarded in place."
+          },
+          {
+            "heading": "## Built-in tools",
+            "excerpt": "`univer_screenshot` | Render supported content as PNG images for review"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## See it in action",
+            "excerpt": "[![Play the DSH × Univer Office demo](docs/assets/readme/nike-presentation-demo.png)](https://www.youtube.com/watch?v=k-2zW_CMiew)"
+          },
+          {
+            "heading": "## See it in action",
+            "excerpt": "![Reviewing a spreadsheet with conditional formatting and a chart in DSH](docs/assets/readme/chart-and-formatting.png)"
+          },
+          {
+            "heading": "### 2. Follow the result live while the agent works",
+            "excerpt": "![A live spreadsheet window while the agent works](docs/assets/readme/live-worktree.png)"
+          },
+          {
+            "heading": "### 3. Approve or discard the changes in the conversation",
+            "excerpt": "![The spreadsheet review card after the task completes](docs/assets/readme/review-result.png)"
+          },
+          {
+            "heading": "### Generate a presentation from one request",
+            "excerpt": "![Reviewing a bubble sort teaching presentation in DSH](docs/assets/readme/presentation-review.png)"
+          },
+          {
+            "heading": "#### 2. Follow and verify the pages while the agent works",
+            "excerpt": "![A live presentation window while the agent works](docs/assets/readme/presentation-live.png)"
+          },
+          {
+            "heading": "### 1. Describe the task in natural language",
+            "excerpt": "![Asking the agent to create a class score sheet](docs/assets/readme/spreadsheet-request.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "toolclub/dsh-agent-team-gui",
+      "practicalScore": 54,
+      "oracleScore": 61,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 6,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Run Center and Token usage",
+            "excerpt": "The Run Center exposes foreground/background\nstate, live phase, elapsed time, child IDs, complete outputs, bounded handoffs, stop, linked whole\nor member retry, export, filters, and retention-safe clear."
+          },
+          {
+            "heading": "## Run Center and Token usage",
+            "excerpt": "Coverage is explicitly\n**full**, **partial**, or **unavailable** at run and retry-attempt level. Before a provider reports a\nsample, the UI says **Metering…** instead of showing a false zero."
+          },
+          {
+            "heading": "## Quality gate and background runs",
+            "excerpt": "Background runs return a\nshort acknowledgement and stay visible in the plugin Run Center; when the official DSH Jobs service\nis present, the same run is also registered there with a shared cancel hook."
+          },
+          {
+            "heading": "## Versions, recipes, and definition backup",
+            "excerpt": "Each saved team version includes immutable snapshots of all referenced member definitions."
+          },
+          {
+            "heading": "## Versions, recipes, and definition backup",
+            "excerpt": "Definition exports include member system prompts and model route names. Run exports additionally\ninclude the user task and member outputs."
+          },
+          {
+            "heading": "# dsh-agent-team-gui",
+            "excerpt": "the lead model plans the work, runs a bounded dependency graph,\nand synthesizes the result."
+          },
+          {
+            "heading": "## Quality gate and background runs",
+            "excerpt": "short acknowledgement and stay visible in the plugin Run Center;"
+          },
+          {
+            "heading": "## Versions, recipes, and definition backup",
+            "excerpt": "Definition exports include member system prompts and model route names."
+          }
+        ],
+        "media": [
+          {
+            "heading": "# dsh-agent-team-gui",
+            "excerpt": "![Manage a persistent multi-model team in DeepSeek Harness Settings](assets/v0.5-teams-settings.png)"
+          },
+          {
+            "heading": "## First team in five steps",
+            "excerpt": "![Choose Team, Solo, or Inherited beside the normal composer](assets/v0.5-composer-mode.png)"
+          },
+          {
+            "heading": "## Run Center and Token usage",
+            "excerpt": "![Inspect the DAG, member state, review rounds, and Token buckets](assets/v0.5-run-center.png)"
+          },
+          {
+            "heading": "## Run Center and Token usage",
+            "excerpt": "![Compare durable usage and completion insights without fabricated prices](assets/v0.5-insights.png)"
+          },
+          {
+            "heading": "## Versions, recipes, and definition backup",
+            "excerpt": "![Preview a recipe, conflicts, affected teams, and primary/fallback route remapping](assets/v0.5-recipes.png)"
+          },
+          {
+            "heading": "### Team",
+            "excerpt": "![The primary path remains usable on a narrow viewport](assets/v0.5-narrow.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "GraySilver/dsh-evolve-modes",
+      "practicalScore": 47,
+      "oracleScore": 63,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 0.75,
+          "gap": -1.25
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 功能简述",
+            "excerpt": "正常 · 标准 · 关 · 进化 开"
+          },
+          {
+            "heading": "### 默认设置",
+            "excerpt": "完成 3 次父 Agent 回复\n        ↓\n隔离的学习请求\n        ↓\n待审阅提议\n        ├─ 应用 → 写入全局 learned instructions\n        └─ 忽略 → 不改变后续行为"
+          },
+          {
+            "heading": "### 验收审查",
+            "excerpt": "Met\nGap\nUnverified\nEvidence\nConcrete follow-up"
+          },
+          {
+            "heading": "### 验收审查",
+            "excerpt": "审查报告会显示在对应的助手回复下方。"
+          },
+          {
+            "heading": "### 提议必须经过人工确认",
+            "excerpt": "已批准规则会写入带有 `<dsh-evolve-modes-learned-instructions>` 标记的 system prompt section，并在 Trajectory 中投影相同内容。"
+          },
+          {
+            "heading": "### 提议必须经过人工确认",
+            "excerpt": "查看每条提议的类别、推断类型和原始用户证据"
+          },
+          {
+            "heading": "### 提议必须经过人工确认",
+            "excerpt": "从每次变更前自动创建的备份中恢复。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "### 默认设置",
+            "excerpt": "![自进化模式全局设置](https://raw.githubusercontent.com/GraySilver/dsh-evolve-modes/main/assets/evolve-modes-review.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ikalus1988/MisakaNet",
+      "practicalScore": 74,
+      "oracleScore": 64,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 2,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### Register for unlimited access",
+            "excerpt": "Returns `node_id` + `token`."
+          },
+          {
+            "heading": "### Agent compatibility",
+            "excerpt": "The intake becomes a maintainer-visible GitHub issue for review."
+          },
+          {
+            "heading": "### How it works",
+            "excerpt": "Maintainers review accepted contributions and convert them into draft lessons"
+          },
+          {
+            "heading": "### How it works",
+            "excerpt": "unsolved failure families show up on the public [demand board](workers/README.md#insights-endpoints-issue-591)"
+          },
+          {
+            "heading": "## What is the failure-memory protocol?",
+            "excerpt": "Markdown file with problem → root cause → fix → verify."
+          },
+          {
+            "heading": "### Register for unlimited access",
+            "excerpt": "Returns `node_id` + `token`. Use token for unlimited remote searches."
+          },
+          {
+            "heading": "### How it works",
+            "excerpt": "6. Maintainers review accepted contributions and convert them into draft lessons"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# MisakaNet",
+            "excerpt": "<img src=\"promotional/misaka-compare.jpg\" width=\"720\" alt=\"MisakaNet — Before: 30+ min manual debugging vs After: 0.02s with MCP\"/>"
+          },
+          {
+            "heading": "### See it in 8 seconds",
+            "excerpt": "![Search lesson demo](promotional/search%20lesson.gif)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PC2005-cloud/dsh-pet",
+      "practicalScore": 39,
+      "oracleScore": 69,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "归一化 2160×1215 统一站立居中 → step03/"
+          },
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "转码 640×360 播放变体 → step04/"
+          },
+          {
+            "heading": "## 运行效果",
+            "excerpt": "宠物实际运行在 DSH Web 界面中的样子："
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "完整透明视频见插件包 `dsh-pet/assets/webm/`（VP9-alpha，Chrome/Edge/Firefox）与 `dsh-pet/assets/mov/`（HEVC-alpha，Safari）"
+          },
+          {
+            "heading": "### ① 提示词 → 源视频",
+            "excerpt": "生成结果按动作各存一个 mp4，放入 `video/`。"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "- 输入：`dsh-pet/assets/webm/*.webm`；**输出直接写回 `dsh-pet/assets/mov/`**"
+          },
+          {
+            "heading": "# mov 由 workflow 用 actions/checkout 拿到本仓库直接编码，与素材同仓，不跨仓库",
+            "excerpt": "- 校验：自动检查产物 `hvc1` tag + alpha 通道真实存在，并打包上传为 artifact（`dsh-pet-hevc-alpha`）"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## 运行效果",
+            "excerpt": "<img src=\"assets/screenshots/dsh-pet-running-1.png\" width=\"380\" alt=\"dsh-pet 运行效果 1\" title=\"dsh-pet 运行效果 1\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/daiji-huxi-xiuxian.gif\" width=\"160\" alt=\"待机呼吸休闲\" title=\"待机呼吸休闲\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/pangxie-zoulu.gif\" width=\"160\" alt=\"螃蟹走路\" title=\"螃蟹走路\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/dianji-huiying-kaixin-yuedong.gif\" width=\"160\" alt=\"点击回应-开心跃动\" title=\"点击回应-开心跃动\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/beishubiao-tuozhuai-xuankong-fankui.gif\" width=\"160\" alt=\"被鼠标拖拽悬空反馈\" title=\"被鼠标拖拽悬空反馈\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/qian-dai-man-yi.gif\" width=\"160\" alt=\"余额-钱袋满溢\" title=\"余额-钱袋满溢\">"
+          },
+          {
+            "heading": "## 效果预览",
+            "excerpt": "<img src=\"dsh-pet/assets/preview/youxian-hengga.gif\" width=\"160\" alt=\"悠闲哼歌\" title=\"悠闲哼歌\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yogsoth-ai/de-anthropocentric-research-engine",
+      "practicalScore": 53,
+      "oracleScore": 45,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## ⚡ What It Does",
+            "excerpt": "Produces a structured North Star without human hand-holding"
+          },
+          {
+            "heading": "## ⚡ What It Does",
+            "excerpt": "- 📏 **Executable Research Specs** — machine-readable documents with checkbox progress tracking, quantified completion criteria, backtrack conditions, and session recovery."
+          },
+          {
+            "heading": "### 🧠 Context Management: Memory Across Sessions",
+            "excerpt": "`context-init` creates a named context file at campaign start"
+          },
+          {
+            "heading": "### 🧠 Context Management: Memory Across Sessions",
+            "excerpt": "`context-checkpoint` appends ≥500 lines of process + results after each strategy"
+          },
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "Full Research Spec written, self-reviewed, saved to"
+          },
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "Final output: complete research design document"
+          },
+          {
+            "heading": "## ⚡ What It Does",
+            "excerpt": "- 📏 **Executable Research Specs** — machine-readable documents with checkbox progress tracking, quantified completion criteria, backtrack conditions, and session recovery. Another CC instance picks up where you left off"
+          },
+          {
+            "heading": "### What a Session Looks Like",
+            "excerpt": "Full Research Spec written, self-reviewed, saved to\n     docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md"
+          }
+        ],
+        "media": []
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "bruc3van/awesome-dsh-plugin",
+      "practicalScore": 21,
+      "oracleScore": 42,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 0,
+          "gap": -6
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 🗺️ 生态全景",
+            "excerpt": "[CATALOG.md](./CATALOG.md)——目录按类目分册，索引页列出每一册。"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "[data/market.json](./data/market.json) 是给下游市场（如 DSH 桌面端插件市场）消费的精选小文件——在快照与 curation 之上过滤、清洗并按类目均衡发牌（≤600 条、≤500 KB）"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "首页只放经过人工筛选的精选推荐与自荐预览；[CATALOG.md](./CATALOG.md) 及其分类分册收录全部经核实的仓库"
+          },
+          {
+            "heading": "## 📣 作者自荐",
+            "excerpt": "首页只展示**最近 10 条**，完整列表见 [SHOWCASE.md](./SHOWCASE.md)。"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "理由逐条记录在 [data/curated.json](./data/curated.json)"
+          },
+          {
+            "heading": "## 🧭 用户索引",
+            "excerpt": "[data/market.json](./data/market.json)——面向下游市场的精选文件（≤500 KB，见[接口规范](https://github.com/bruc3van/dsh-desktop-safe-market/blob/master/docs/market-json-spec.md)）"
+          },
+          {
+            "heading": "# 🐳 Awesome DSH Plugins",
+            "excerpt": "[机器可读数据](./data/repositories.json)"
+          },
+          {
+            "heading": "## 🔍 我们如何维护这个列表",
+            "excerpt": "[CATALOG.md](./CATALOG.md) 及其分类分册收录全部经核实的仓库"
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "humblebanana/open-record-replay",
+      "practicalScore": 47,
+      "oracleScore": 64,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 2.5,
+          "gap": -5.5
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Output Artifacts",
+            "excerpt": "runs/sessions/<session-id>/\n├── session.json\n├── events.jsonl\n├── orr_session.json\n└── recording_manifest.json"
+          },
+          {
+            "heading": "## Quick Demo",
+            "excerpt": "skill-inputs/<session-id>/\n├── README.md\n├── events.jsonl\n└── session.json"
+          },
+          {
+            "heading": "## Output Artifacts",
+            "excerpt": "`session.json` records the recording boundary, timing, and event path. `events.jsonl` is the source of truth for what happened during the demonstration."
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "ZJU-LLMs/OpenStory",
+      "practicalScore": 52,
+      "oracleScore": 44,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        },
+        "media": {
+          "machine": 5,
+          "oracle": 1,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## 🌟  重要新闻",
+            "excerpt": "你的每一次抉择都会衍生全新剧情分支，体验不断变化的故事冒险。"
+          },
+          {
+            "heading": "## 🌟 核心特性",
+            "excerpt": "系统能够根据性格设定与环境变化，自动生成跌宕起伏、精彩绝伦且极具戏剧张力与冲击力的推演剧情！"
+          },
+          {
+            "heading": "#### 红楼梦",
+            "excerpt": "系统会初始化 `Ray` 的运行时环境。"
+          },
+          {
+            "heading": "#### 红楼梦",
+            "excerpt": "构建并加载所有的插件、配置文件和《红楼梦》人物数据。"
+          },
+          {
+            "heading": "#### 红楼梦",
+            "excerpt": "启动 API Server，默认监听在 `0.0.0.0:8000`。"
+          },
+          {
+            "heading": "## 🛠️ 数据生成",
+            "excerpt": "`profile_generator.py`：基于 `database.jsonl` 过滤存活角色并生成唯一的编码 ID 与基础设定。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "### 4. 访问可视化界面",
+            "excerpt": "![Frontend Preview](assets/frontend.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "EverMind-AI/SkillCorpus",
+      "practicalScore": 45,
+      "oracleScore": 56,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 7,
+          "gap": -1
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 2.5,
+          "gap": -3.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Results",
+            "excerpt": "| OpenClaw × Qwen3.5-27B | 8.8 → **13.0** | 81.2 → **83.1** | 65.2 → **66.7** |"
+          },
+          {
+            "heading": "## Results",
+            "excerpt": "| OpenClaw × Qwen3.5-397B | 11.1 → **16.9** | 82.2 → **84.0** | 65.7 → **67.0** |"
+          },
+          {
+            "heading": "## Results",
+            "excerpt": "| Raven × Qwen3.5-27B | 10.0 → **16.5** | 82.6 → **83.8** | 66.9 → **70.8** |"
+          },
+          {
+            "heading": "## Results",
+            "excerpt": "| Raven × Qwen3.5-397B | 9.2 → **22.6** | 84.0 → **85.2** | 68.8 → **73.2** |"
+          },
+          {
+            "heading": "## Results",
+            "excerpt": "| **Pooled ∆** | **+7.5**±2.3 (z=3.2) | **+1.51**±0.49 (z=3.1) | **+2.79**±0.70 (z=4.0) |"
+          },
+          {
+            "heading": "# export OPENAI_BASE_URL=https://openrouter.ai/api/v1   # OPENAI_BASE_URL + --model openai/gpt-4o-mini",
+            "excerpt": "→ built a prompt of 36,742 chars with the skill bodies injected"
+          },
+          {
+            "heading": "## Public artifacts",
+            "excerpt": "the downloadable 1,000-skill sample — `skills.parquet` + `attachments.tar.zst` + dataset card; the full catalog is served by SkillHub"
+          },
+          {
+            "heading": "## Results",
+            "excerpt": "The gain is largest where the task needs procedural knowledge the model does not already have\n(SkillsBench), and smallest on open-ended economic tasks it can already do (GDPVal)."
+          }
+        ],
+        "media": [
+          {
+            "heading": "## What SkillCorpus gives you",
+            "excerpt": "https://github.com/user-attachments/assets/4d9a3241-df13-4b20-9798-fb7920069995"
+          },
+          {
+            "heading": "## Public artifacts",
+            "excerpt": "<img src=\"docs/assets/taxonomy.png\" alt=\"16-class distribution over the 96,401 active skills\" width=\"58%\">"
+          },
+          {
+            "heading": "## How it works",
+            "excerpt": "<img src=\"docs/assets/pipeline.png\" alt=\"SkillCorpus: curated skills are matched to a task and injected into an agent before execution\" width=\"100%\">"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-openpencil",
+      "practicalScore": 50,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 4.5,
+          "gap": -3.5
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 1,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 🖼️ Exact Multi-Frame Previews",
+            "excerpt": "the first top-level frame as a large replay-safe PNG, plus a horizontally scrollable thumbnail rail, click-to-select, and previous/next navigation for multi-frame documents."
+          },
+          {
+            "heading": "## Design Tools",
+            "excerpt": "then atomically publishes with `createIfAbsent` and returns an editable presentation."
+          },
+          {
+            "heading": "## Agent Design Workflow",
+            "excerpt": "Every published generation result is one presentation containing the exact final PNG preview and a document-scoped editable grant"
+          },
+          {
+            "heading": "## Result Metadata",
+            "excerpt": "`image`: PNG path, preview/download URLs, and real width/height;"
+          },
+          {
+            "heading": "## Result Metadata",
+            "excerpt": "`frames`: every exact-rendered top-level frame in active-page order, including its node id/name/index and signed PNG URLs;"
+          },
+          {
+            "heading": "## Result Metadata",
+            "excerpt": "`document`: source action path plus immutable snapshot URL, bytes, and SHA-256;"
+          },
+          {
+            "heading": "## Design Tools",
+            "excerpt": "Creates an immutable, content-addressed `.op` snapshot"
+          }
+        ],
+        "media": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "<img src=\"./docs/images/dsh-openpencil-overview.png\" alt=\"DSH OpenPencil — multi-frame preview and sidebar editor\" width=\"100%\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZJU-REAL/Polaris",
+      "practicalScore": 52,
+      "oracleScore": 55,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 7,
+          "oracle": 4,
+          "gap": -3
+        },
+        "media": {
+          "machine": 0,
+          "oracle": 0.5,
+          "gap": 0.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "compiles a cross-linked wiki page (TL;DR, method, reusable ideas, concept backlinks)."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "deduplicated semantically, and funneled to a candidate pool. A deep Research Proposal builder then hardens the winner with a plan-execute-verify loop."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "a judge produces an Elo tournament ranking."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "Figures are generated and VLM-checked."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "server-side tectonic compilation to a live PDF preview."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "then multi-perspective top-venue reviewer agents and a meta-review."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "then extracts full text (PyMuPDF) and compiles a cross-linked wiki page (TL;DR, method, reusable ideas, concept backlinks)."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "A console gives each run a task map and a terminal you can talk to mid-stream."
+          }
+        ],
+        "media": [
+          {
+            "heading": "## Demo",
+            "excerpt": "https://github.com/user-attachments/assets/388972c1-7ffa-45f2-94c4-07f388379ba2"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "summer1238/dsh-remote-web-gateway",
+      "practicalScore": 32,
+      "oracleScore": 37,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 2,
+          "oracle": 1,
+          "gap": -1
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 3,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### **看进度 · 继续对话 · 查看结果 · 处理需要你确认的操作**",
+            "excerpt": "手机看到的是 DSH。"
+          },
+          {
+            "heading": "### 🔄 **更新提醒**",
+            "excerpt": "发现新版本后通知你，由你确认安装，不偷偷重启正在工作的 DSH。"
+          }
+        ],
+        "media": [
+          {
+            "heading": "# **手机里的 DSH，不是“缩小版 Windows”**",
+            "excerpt": "![DSH Remote Web Gateway](docs/assets/mobile-showcase-zh.png)"
+          },
+          {
+            "heading": "# **能连上只是第一步，安全才是默认设计。**",
+            "excerpt": "![DSH Remote Web Gateway](docs/assets/security-model-zh.png)"
+          },
+          {
+            "heading": "# **它到底怎么连接？**",
+            "excerpt": "![DSH Remote Web Gateway](docs/assets/architecture-zh.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "morluto/rea",
+      "practicalScore": 80,
+      "oracleScore": 73,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 8,
+          "oracle": 5.5,
+          "gap": -2.5
+        },
+        "media": {
+          "machine": 1,
+          "oracle": 1,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### CLI or agent?",
+            "excerpt": "derives an artifact comparison, and records a changed-behavior report."
+          },
+          {
+            "heading": "## Current status",
+            "excerpt": "ordered events return typed decisions, actions, captured aliases, transition journals, final state, and exact limit use without echoing request or captured values."
+          },
+          {
+            "heading": "## Advanced process-capture setup",
+            "excerpt": "The comparison reports each observed dimension separately and identifies the\nfirst terminal, interaction, exit, filesystem, protocol, process, or shim\ndivergence."
+          },
+          {
+            "heading": "### Node and Electron V8 Inspector observation",
+            "excerpt": "PR CI\npublishes generated API documentation as the `api-docs` workflow artifact."
+          },
+          {
+            "heading": "## Current status",
+            "excerpt": "Record every successful result as deterministic Evidence v2 with artifact and provider identity, confidence, authority, limitations, and locations."
+          },
+          {
+            "heading": "## Current status",
+            "excerpt": "Build bounded function dossiers with pseudocode, assembly, CFG edges, comments, calls, references, strings, and names."
+          },
+          {
+            "heading": "### Requirements",
+            "excerpt": "`rea doctor --json` is read-only and distinguishes unsupported hosts, missing dependencies, a missing local analysis engine, configuration drift, and healthy checks."
+          },
+          {
+            "heading": "## Current status",
+            "excerpt": "Validate finite replay machines without launching a target through `run_replay_machine` or `rea run-replay-machine`;"
+          }
+        ],
+        "media": [
+          {
+            "heading": "### Reverse engineer anything with agents, from app behavior down to native binaries.",
+            "excerpt": "<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "vlln/whale-girl",
+      "practicalScore": 26,
+      "oracleScore": 38,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 7.5,
+          "oracle": 5,
+          "gap": -2.5
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "A persistent companion floating bottom-right: draggable, feedable, playable —"
+          },
+          {
+            "heading": "# or local directory: dsh plugin --profile web add <path-to-whale-girl>",
+            "excerpt": "the pet appears bottom-right"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "completed tasks, sessions, and companionship time accrue into seniority levels,\n  titles, and memories."
+          },
+          {
+            "heading": "# or local directory: dsh plugin --profile web add <path-to-whale-girl>",
+            "excerpt": "status bar (seniority level / task count / recent shared memories)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Chomping / ball toss (`eat`/`play`) → joy (`joy`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Naps (`sleep`); wakes on interaction (`wake`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Cheers (`celebrate`)"
+          },
+          {
+            "heading": "## Usage",
+            "excerpt": "Startled (`error`) → disappointed (`disappointed`)"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## State Preview",
+            "excerpt": "![idle](docs/preview/idle.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![working](docs/preview/working.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![celebrate](docs/preview/celebrate.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![error](docs/preview/error.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![joy](docs/preview/joy.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![sleep](docs/preview/sleep.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![eat](docs/preview/eat.gif)"
+          },
+          {
+            "heading": "## State Preview",
+            "excerpt": "![play](docs/preview/play.gif)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "V1ki/dsh-plugin-subscriptions",
+      "practicalScore": 48,
+      "oracleScore": 67,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 3.5,
+          "oracle": 4.5,
+          "gap": 1
+        },
+        "media": {
+          "machine": 6,
+          "oracle": 3.5,
+          "gap": -2.5
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## Demo",
+            "excerpt": "The `image_generate` tool renders its result inline in the conversation:"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "the same prompt through GPT (`gpt-image-2`, top) and Grok (`grok-imagine-image-2.0`, bottom)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "The `video_generate` tool plays the generated clip inline:"
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "with the used percentage, a progress bar, and the reset time, plus a Refresh button."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Images are saved under `~/.dsh/plugins/subscriptions/images/` and the paths returned."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "MP4s are saved under `~/.dsh/plugins/subscriptions/videos/`, the path returned, and the clip plays inline in the conversation."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "the used percentage, a progress bar, and the reset time"
+          }
+        ],
+        "media": [
+          {
+            "heading": "## Demo",
+            "excerpt": "![Subscriptions settings page](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/subscriptions.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![Model picker with subscription models](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-picker.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![Reasoning effort selector](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-effort.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![Speed toggle with the Standard/Fast menu open](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/speed-toggle.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![image_generate renders the image inline](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-inline.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![image_generate with provider gpt vs grok](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-providers.png)"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "![video_generate plays the clip inline](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/video-generate-inline.png)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "anysearch-team/anysearch-dsh",
+      "practicalScore": 48,
+      "oracleScore": 25,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 0,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "Through Harness's built-in `web_search`, AnySearch returns results with titles, snippets, and URLs for easy citation."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "Through Harness's built-in `web_fetch`, AnySearch Extract retrieves and cleans the content of a specific public HTTP(S) URL."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "AnySearch returns results with titles, snippets, and URLs for easy citation."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "Advanced search can return cleaned page content on demand for deeper research."
+          }
+        ],
+        "media": []
+      }
+    },
+    {
+      "repo": "imsai-sh/awesome-deepseek-harness-plugins",
+      "practicalScore": 25,
+      "oracleScore": 26,
+      "familyGaps": {
+        "outputItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        },
+        "media": {
+          "machine": 2,
+          "oracle": 0,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "outputItems": [
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "生成唯一允许提交的目录 JSON"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "自动同步目录到网站数据库并刷新本 README"
+          }
+        ],
+        "media": []
+      }
+    }
+  ]
+}

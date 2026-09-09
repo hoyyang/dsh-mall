@@ -1,0 +1,4074 @@
+{
+  "generatedAt": "2026-09-02T03:19:41.034Z",
+  "snapshotPath": "/Users/hoy/Desktop/DSH/dsh-mall/data/registry-snapshot.json",
+  "readmesPath": "/tmp/dsh-mall-practical-eval/readmes.ndjson",
+  "population": 11971,
+  "cohortSize": 100,
+  "cohorts": [
+    {
+      "id": "round-01",
+      "selection": "GitHub stars ranks 1-100 from fixed snapshot",
+      "startRank": 1,
+      "endRank": 100,
+      "count": 100,
+      "maximumStars": 91791,
+      "minimumStars": 443,
+      "blindPath": "artifacts/practical-v3/blind/round-01.ndjson",
+      "blindSha256": "839c9caad26d804ab4251d157a6f77e5a9528036f38cbece913639d1b3537ae6",
+      "entries": [
+        {
+          "rank": 1,
+          "repo": "nexu-io/open-design",
+          "stars": 91791,
+          "catalogIndex": 0,
+          "pluginStatus": "conflict",
+          "category": "session"
+        },
+        {
+          "rank": 2,
+          "repo": "ruvnet/ruflo",
+          "stars": 69486,
+          "catalogIndex": 1,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 3,
+          "repo": "amruthpillai/reactive-resume",
+          "stars": 41785,
+          "catalogIndex": 2,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 4,
+          "repo": "esengine/DeepSeek-Reasonix",
+          "stars": 35192,
+          "catalogIndex": 3,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 5,
+          "repo": "volcengine/OpenViking",
+          "stars": 33568,
+          "catalogIndex": 4,
+          "pluginStatus": "unknown",
+          "category": "memory"
+        },
+        {
+          "rank": 6,
+          "repo": "Molunerfinn/PicGo",
+          "stars": 27033,
+          "catalogIndex": 5,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 7,
+          "repo": "titanwings/distilly",
+          "stars": 24015,
+          "catalogIndex": 6,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 8,
+          "repo": "nocobase/nocobase",
+          "stars": 23877,
+          "catalogIndex": 7,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 9,
+          "repo": "titanwings/colleague-skill",
+          "stars": 23817,
+          "catalogIndex": 8,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 10,
+          "repo": "freestylefly/awesome-gpt-image-2",
+          "stars": 21289,
+          "catalogIndex": 9,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 11,
+          "repo": "anywhere-labs/dsh-desktop",
+          "stars": 20724,
+          "catalogIndex": 10,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 12,
+          "repo": "Tencent/WeKnora",
+          "stars": 20700,
+          "catalogIndex": 11,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 13,
+          "repo": "Nagi-ovo/voyager",
+          "stars": 19848,
+          "catalogIndex": 12,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 14,
+          "repo": "anywhere-labs/deepseek-harness-desktop",
+          "stars": 19403,
+          "catalogIndex": 13,
+          "pluginStatus": "conflict",
+          "category": "other"
+        },
+        {
+          "rank": 15,
+          "repo": "tt-a1i/archify",
+          "stars": 17903,
+          "catalogIndex": 14,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 16,
+          "repo": "walkinglabs/learn-harness-engineering",
+          "stars": 14236,
+          "catalogIndex": 15,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 17,
+          "repo": "awesome-dsh-plugin/awesome-dsh-plugin",
+          "stars": 12944,
+          "catalogIndex": 16,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 18,
+          "repo": "EverMind-AI/EverOS",
+          "stars": 12452,
+          "catalogIndex": 17,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 19,
+          "repo": "MemTensor/MemOS",
+          "stars": 11012,
+          "catalogIndex": 18,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 20,
+          "repo": "YaoApp/yao",
+          "stars": 7783,
+          "catalogIndex": 19,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 21,
+          "repo": "yjh051108/dsh-routing-suite",
+          "stars": 6812,
+          "catalogIndex": 20,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 22,
+          "repo": "zhu1090093659/dsh-web",
+          "stars": 6183,
+          "catalogIndex": 21,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 23,
+          "repo": "zhu1090093659/dsh-web-ui",
+          "stars": 5796,
+          "catalogIndex": 22,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 24,
+          "repo": "Q00/ouroboros",
+          "stars": 5681,
+          "catalogIndex": 23,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 25,
+          "repo": "ZSeven-W/openpencil",
+          "stars": 5673,
+          "catalogIndex": 24,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 26,
+          "repo": "Devin-AXIS/iPolloWork",
+          "stars": 4924,
+          "catalogIndex": 25,
+          "pluginStatus": "verified-non-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 27,
+          "repo": "crafter-station/petdex",
+          "stars": 3981,
+          "catalogIndex": 26,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 28,
+          "repo": "xiaobright/dsh-anchored-standard",
+          "stars": 3775,
+          "catalogIndex": 27,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 29,
+          "repo": "liustack/modlens",
+          "stars": 3696,
+          "catalogIndex": 28,
+          "pluginStatus": "verified-plugin",
+          "category": "vision"
+        },
+        {
+          "rank": 30,
+          "repo": "strukto-ai/mirage",
+          "stars": 3569,
+          "catalogIndex": 29,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 31,
+          "repo": "agentscope-ai/ReMe",
+          "stars": 3356,
+          "catalogIndex": 30,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 32,
+          "repo": "edison7009/EchoBird",
+          "stars": 3130,
+          "catalogIndex": 31,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 33,
+          "repo": "whiteguo233/OpenBiliClaw",
+          "stars": 3049,
+          "catalogIndex": 32,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 34,
+          "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.7",
+          "stars": 3012,
+          "catalogIndex": 33,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 35,
+          "repo": "Tiger3807861189/J-Space-Cognition-Suite-V3.6",
+          "stars": 2993,
+          "catalogIndex": 34,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 36,
+          "repo": "foryourhealth111-pixel/Vibe-Skills",
+          "stars": 2971,
+          "catalogIndex": 35,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 37,
+          "repo": "omdsh-dev/DSH-better-sidebar",
+          "stars": 2968,
+          "catalogIndex": 36,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 38,
+          "repo": "imsai-sh/zhuzhiliao",
+          "stars": 2864,
+          "catalogIndex": 37,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 39,
+          "repo": "chuspeeism/dashi-taskboard",
+          "stars": 2656,
+          "catalogIndex": 38,
+          "pluginStatus": "conflict",
+          "category": "skill"
+        },
+        {
+          "rank": 40,
+          "repo": "ccch1mneyyy/dsh-TUI",
+          "stars": 2593,
+          "catalogIndex": 39,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 41,
+          "repo": "dsh-market/dsh-market",
+          "stars": 2504,
+          "catalogIndex": 40,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 42,
+          "repo": "zilliztech/memsearch",
+          "stars": 2497,
+          "catalogIndex": 41,
+          "pluginStatus": "unknown",
+          "category": "memory"
+        },
+        {
+          "rank": 43,
+          "repo": "GCWing/BitFun",
+          "stars": 1817,
+          "catalogIndex": 42,
+          "pluginStatus": "verified-non-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 44,
+          "repo": "Small-tailqwq/dsh-deep-whale",
+          "stars": 1743,
+          "catalogIndex": 43,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 45,
+          "repo": "Jesseovo/last30days-skill-cn",
+          "stars": 1622,
+          "catalogIndex": 44,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 46,
+          "repo": "Alisa0808/vox-director",
+          "stars": 1522,
+          "catalogIndex": 45,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 47,
+          "repo": "hyhmrright/brooks-lint",
+          "stars": 1417,
+          "catalogIndex": 46,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 48,
+          "repo": "AdamPlatin123/awesome-dsh-plugins",
+          "stars": 1402,
+          "catalogIndex": 47,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 49,
+          "repo": "Tencent/BrowserSkill",
+          "stars": 1379,
+          "catalogIndex": 48,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 50,
+          "repo": "dsh-tauri-desk/deepseek-harness-desktop",
+          "stars": 1241,
+          "catalogIndex": 49,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 51,
+          "repo": "mem9-ai/mem9",
+          "stars": 1201,
+          "catalogIndex": 50,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 52,
+          "repo": "GanyuanRan/Aegis",
+          "stars": 1131,
+          "catalogIndex": 51,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 53,
+          "repo": "alvinunreal/openpets",
+          "stars": 1126,
+          "catalogIndex": 52,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 54,
+          "repo": "platonai/Browser4",
+          "stars": 1112,
+          "catalogIndex": 53,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 55,
+          "repo": "Anionex/agent-vision-toolkit",
+          "stars": 1108,
+          "catalogIndex": 54,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 56,
+          "repo": "paean-ai/deeptide",
+          "stars": 1095,
+          "catalogIndex": 55,
+          "pluginStatus": "verified-non-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 57,
+          "repo": "agentrq/agentrq",
+          "stars": 1090,
+          "catalogIndex": 56,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 58,
+          "repo": "TencentCloudBase/CloudBase-AI-Toolkit",
+          "stars": 1080,
+          "catalogIndex": 57,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 59,
+          "repo": "NanmiCoder/dsh-agent-teams",
+          "stars": 1074,
+          "catalogIndex": 58,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 60,
+          "repo": "bowenliang123/dsh-context",
+          "stars": 1074,
+          "catalogIndex": 59,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 61,
+          "repo": "Tiger3807861189/DeepSeek-V4-J-Space-Capability-Realization-Report",
+          "stars": 1035,
+          "catalogIndex": 60,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 62,
+          "repo": "MemTensor/memmy-agent",
+          "stars": 1008,
+          "catalogIndex": 61,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 63,
+          "repo": "sunchaokun/PPT-Design-Skill",
+          "stars": 999,
+          "catalogIndex": 62,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 64,
+          "repo": "MeteorNOX/DeepSeek-Balance-Whale-Widget",
+          "stars": 997,
+          "catalogIndex": 63,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 65,
+          "repo": "ysr666/dsh-vision-router",
+          "stars": 997,
+          "catalogIndex": 64,
+          "pluginStatus": "verified-plugin",
+          "category": "vision"
+        },
+        {
+          "rank": 66,
+          "repo": "Anil-matcha/awesome-dsh-plugin",
+          "stars": 989,
+          "catalogIndex": 65,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 67,
+          "repo": "PicGo/PicGo-Core",
+          "stars": 980,
+          "catalogIndex": 66,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 68,
+          "repo": "vostride/agent-qa",
+          "stars": 960,
+          "catalogIndex": 67,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 69,
+          "repo": "mindscale-noah/MindMemOS",
+          "stars": 952,
+          "catalogIndex": 68,
+          "pluginStatus": "unknown",
+          "category": "memory"
+        },
+        {
+          "rank": 70,
+          "repo": "tong-io/tongflow",
+          "stars": 938,
+          "catalogIndex": 69,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 71,
+          "repo": "Anil-matcha/awesome-deepseek-harness",
+          "stars": 924,
+          "catalogIndex": 70,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 72,
+          "repo": "0xsline/awesome-deepseek-harness",
+          "stars": 909,
+          "catalogIndex": 71,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 73,
+          "repo": "xyTom/coding-tools-mcp",
+          "stars": 900,
+          "catalogIndex": 72,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 74,
+          "repo": "freestylefly/wesight",
+          "stars": 894,
+          "catalogIndex": 73,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 75,
+          "repo": "xmanrui/dsh-im",
+          "stars": 888,
+          "catalogIndex": 74,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 76,
+          "repo": "Anionex/dsh-vision-toolkit",
+          "stars": 834,
+          "catalogIndex": 75,
+          "pluginStatus": "verified-plugin",
+          "category": "vision"
+        },
+        {
+          "rank": 77,
+          "repo": "toby-bridges/api-relay-audit",
+          "stars": 809,
+          "catalogIndex": 76,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 78,
+          "repo": "vshulcz/deja-vu",
+          "stars": 729,
+          "catalogIndex": 77,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 79,
+          "repo": "hellowind777/helloagents",
+          "stars": 695,
+          "catalogIndex": 78,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 80,
+          "repo": "shaobeichen/dsh-pocket",
+          "stars": 689,
+          "catalogIndex": 79,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 81,
+          "repo": "ccch1mneyyy/working-activity",
+          "stars": 653,
+          "catalogIndex": 80,
+          "pluginStatus": "conflict",
+          "category": "dev"
+        },
+        {
+          "rank": 82,
+          "repo": "Electricitysheep/dsh-handbook",
+          "stars": 649,
+          "catalogIndex": 81,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 83,
+          "repo": "sandbaseai/sandbase-harness",
+          "stars": 633,
+          "catalogIndex": 82,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 84,
+          "repo": "vibeinging/dsh-desktop",
+          "stars": 632,
+          "catalogIndex": 83,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 85,
+          "repo": "superdesigndev/treg",
+          "stars": 621,
+          "catalogIndex": 84,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 86,
+          "repo": "chainbase-labs/Agentkey",
+          "stars": 597,
+          "catalogIndex": 85,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 87,
+          "repo": "adoresever/graph-memory",
+          "stars": 576,
+          "catalogIndex": 86,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 88,
+          "repo": "Nagi-ovo/dsh-ads",
+          "stars": 558,
+          "catalogIndex": 87,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 89,
+          "repo": "lencx/Minke",
+          "stars": 553,
+          "catalogIndex": 88,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 90,
+          "repo": "fufankeji/deepseek-harness-studio",
+          "stars": 528,
+          "catalogIndex": 89,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 91,
+          "repo": "mnemon-dev/mnemon",
+          "stars": 519,
+          "catalogIndex": 90,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 92,
+          "repo": "alibaba/anolisa",
+          "stars": 512,
+          "catalogIndex": 91,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 93,
+          "repo": "Devin-AXIS/deepseek-design",
+          "stars": 508,
+          "catalogIndex": 92,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 94,
+          "repo": "Minglink/dsh-infinite-gen-2",
+          "stars": 492,
+          "catalogIndex": 93,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 95,
+          "repo": "hashgraph-online/hol-guard",
+          "stars": 485,
+          "catalogIndex": 94,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 96,
+          "repo": "xiaods/k8e",
+          "stars": 480,
+          "catalogIndex": 95,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 97,
+          "repo": "Lum1104/dsh-browser",
+          "stars": 469,
+          "catalogIndex": 96,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 98,
+          "repo": "FSMargoo/dsh-at-file",
+          "stars": 465,
+          "catalogIndex": 97,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 99,
+          "repo": "syncable-dev/memtrace-public",
+          "stars": 461,
+          "catalogIndex": 98,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 100,
+          "repo": "EthanYoQ/AI-Novel-Writer",
+          "stars": 443,
+          "catalogIndex": 99,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        }
+      ]
+    },
+    {
+      "id": "round-02",
+      "selection": "GitHub stars ranks 101-200 from fixed snapshot",
+      "startRank": 101,
+      "endRank": 200,
+      "count": 100,
+      "maximumStars": 442,
+      "minimumStars": 114,
+      "blindPath": "artifacts/practical-v3/blind/round-02.ndjson",
+      "blindSha256": "2723cf0d96e42bf7106b56aad607970354d7740f0dd2d3f1404bf4b3d6cb4a1c",
+      "entries": [
+        {
+          "rank": 101,
+          "repo": "superdesigndev/superdesign-skill",
+          "stars": 442,
+          "catalogIndex": 100,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 102,
+          "repo": "Ikalus1988/MisakaNet",
+          "stars": 430,
+          "catalogIndex": 101,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 103,
+          "repo": "houyanchao/chatgpt-gemini-timeline",
+          "stars": 427,
+          "catalogIndex": 102,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 104,
+          "repo": "PC2005-cloud/dsh-pet",
+          "stars": 426,
+          "catalogIndex": 103,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 105,
+          "repo": "yogsoth-ai/de-anthropocentric-research-engine",
+          "stars": 388,
+          "catalogIndex": 104,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 106,
+          "repo": "ZJU-LLMs/OpenStory",
+          "stars": 385,
+          "catalogIndex": 105,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 107,
+          "repo": "WYH66666666/DSH-Transparent-UI-Plugin",
+          "stars": 375,
+          "catalogIndex": 106,
+          "pluginStatus": "unknown",
+          "category": "theme"
+        },
+        {
+          "rank": 108,
+          "repo": "text2future/flowix",
+          "stars": 374,
+          "catalogIndex": 107,
+          "pluginStatus": "conflict",
+          "category": "memory"
+        },
+        {
+          "rank": 109,
+          "repo": "yjh051108/dsh-router-standard",
+          "stars": 372,
+          "catalogIndex": 108,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 110,
+          "repo": "morluto/rea",
+          "stars": 370,
+          "catalogIndex": 109,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 111,
+          "repo": "PM-Shawn/Abu-Cowork",
+          "stars": 349,
+          "catalogIndex": 110,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 112,
+          "repo": "omdsh-dev/dsh-genui",
+          "stars": 346,
+          "catalogIndex": 111,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 113,
+          "repo": "tingly-dev/tingly-box",
+          "stars": 344,
+          "catalogIndex": 112,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 114,
+          "repo": "Zhiyuan-Fan/Awesome-DeepSeek-Harness-Plugins",
+          "stars": 339,
+          "catalogIndex": 113,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 115,
+          "repo": "linhay/harmony-next.skills",
+          "stars": 337,
+          "catalogIndex": 114,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 116,
+          "repo": "Unclecheng-li/DeepSec",
+          "stars": 336,
+          "catalogIndex": 115,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 117,
+          "repo": "Minara-AI/minara-skills",
+          "stars": 331,
+          "catalogIndex": 116,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 118,
+          "repo": "alaliqing/claude-paper",
+          "stars": 326,
+          "catalogIndex": 117,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 119,
+          "repo": "zhoushoujianwork/easyeda-agent",
+          "stars": 301,
+          "catalogIndex": 118,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 120,
+          "repo": "whitelonng/dshcode",
+          "stars": 291,
+          "catalogIndex": 119,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 121,
+          "repo": "bruc3van/awesome-dsh-plugin",
+          "stars": 287,
+          "catalogIndex": 120,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 122,
+          "repo": "anysearch-team/anysearch-dsh",
+          "stars": 287,
+          "catalogIndex": 121,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 123,
+          "repo": "nutshellai-tech/mobius",
+          "stars": 286,
+          "catalogIndex": 122,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 124,
+          "repo": "hust-open-atom-club/oh-dsh",
+          "stars": 282,
+          "catalogIndex": 123,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 125,
+          "repo": "vlln/whale-girl",
+          "stars": 279,
+          "catalogIndex": 124,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 126,
+          "repo": "V1ki/dsh-plugin-subscriptions",
+          "stars": 273,
+          "catalogIndex": 125,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 127,
+          "repo": "liustack/modsearch",
+          "stars": 272,
+          "catalogIndex": 126,
+          "pluginStatus": "verified-plugin",
+          "category": "browser"
+        },
+        {
+          "rank": 128,
+          "repo": "Awesome-AI-Pedia/Awesome-AI-Pedia",
+          "stars": 268,
+          "catalogIndex": 127,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 129,
+          "repo": "QCYTSN/dsh-dafeiyu",
+          "stars": 261,
+          "catalogIndex": 128,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 130,
+          "repo": "howmp/dsh-pentest",
+          "stars": 256,
+          "catalogIndex": 129,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 131,
+          "repo": "ericshang98/Perfect-Web-Clone",
+          "stars": 255,
+          "catalogIndex": 130,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 132,
+          "repo": "Ariestar/sivtr",
+          "stars": 253,
+          "catalogIndex": 131,
+          "pluginStatus": "unknown",
+          "category": "memory"
+        },
+        {
+          "rank": 133,
+          "repo": "ZSeven-W/dsh-ios",
+          "stars": 253,
+          "catalogIndex": 132,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 134,
+          "repo": "SepineTam/mcp-for-stata",
+          "stars": 253,
+          "catalogIndex": 133,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 135,
+          "repo": "op7418/pilot-harness",
+          "stars": 252,
+          "catalogIndex": 134,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 136,
+          "repo": "openma-ai/open-managed-agents",
+          "stars": 250,
+          "catalogIndex": 135,
+          "pluginStatus": "verified-non-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 137,
+          "repo": "mrpulor-gh/nuphus-mcp",
+          "stars": 248,
+          "catalogIndex": 136,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 138,
+          "repo": "csyangwen/dsh-memory-evolve",
+          "stars": 247,
+          "catalogIndex": 137,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 139,
+          "repo": "kelai141/dsh-mobile-apk",
+          "stars": 244,
+          "catalogIndex": 138,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 140,
+          "repo": "omdsh-dev/dsh-mnemon",
+          "stars": 239,
+          "catalogIndex": 139,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 141,
+          "repo": "huiliyi37/dsh-tianshu-tui",
+          "stars": 238,
+          "catalogIndex": 140,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 142,
+          "repo": "liangmianya/dsh-synapse",
+          "stars": 237,
+          "catalogIndex": 141,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 143,
+          "repo": "hikariming/dshfind",
+          "stars": 227,
+          "catalogIndex": 142,
+          "pluginStatus": "verified-non-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 144,
+          "repo": "TencentCloud/tencentmeeting-cli",
+          "stars": 225,
+          "catalogIndex": 143,
+          "pluginStatus": "verified-non-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 145,
+          "repo": "shanliuling/dsh-image-gen",
+          "stars": 222,
+          "catalogIndex": 144,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 146,
+          "repo": "EverMind-AI/SkillCorpus",
+          "stars": 218,
+          "catalogIndex": 145,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 147,
+          "repo": "libukai/awesome-deepseek-harness",
+          "stars": 213,
+          "catalogIndex": 146,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 148,
+          "repo": "ZJU-REAL/Polaris",
+          "stars": 212,
+          "catalogIndex": 147,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 149,
+          "repo": "Nagi-ovo/dsh-visualize",
+          "stars": 210,
+          "catalogIndex": 148,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 150,
+          "repo": "ningbainb/deepseek-harness-desktop",
+          "stars": 205,
+          "catalogIndex": 149,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 151,
+          "repo": "Aisland-SJL/dsh-worktable",
+          "stars": 205,
+          "catalogIndex": 150,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 152,
+          "repo": "Han-1413141/dsh-cost-meter",
+          "stars": 203,
+          "catalogIndex": 151,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 153,
+          "repo": "Dominic789654/awesome-deepseek-harness",
+          "stars": 202,
+          "catalogIndex": 152,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 154,
+          "repo": "Inference1/clarify-intent-and-establish-shared-understanding",
+          "stars": 199,
+          "catalogIndex": 153,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 155,
+          "repo": "zenstory-ai/oh-story-dsh",
+          "stars": 197,
+          "catalogIndex": 154,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 156,
+          "repo": "elysia395/dsh-wallpaper-engine",
+          "stars": 193,
+          "catalogIndex": 155,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 157,
+          "repo": "d-dev0101/open-sea-skin",
+          "stars": 192,
+          "catalogIndex": 156,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 158,
+          "repo": "imsai-sh/awesome-deepseek-harness-plugins",
+          "stars": 191,
+          "catalogIndex": 157,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 159,
+          "repo": "shanliuling/skills-link",
+          "stars": 190,
+          "catalogIndex": 158,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 160,
+          "repo": "Ruler4396/dsh-launcher",
+          "stars": 181,
+          "catalogIndex": 159,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 161,
+          "repo": "tinqiao-oss/engramory",
+          "stars": 171,
+          "catalogIndex": 160,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 162,
+          "repo": "omdsh-dev/dsh-data-agent",
+          "stars": 171,
+          "catalogIndex": 161,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 163,
+          "repo": "pulseaiclub/phi",
+          "stars": 171,
+          "catalogIndex": 162,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 164,
+          "repo": "Nagi-ovo/dsh-find-plugins",
+          "stars": 169,
+          "catalogIndex": 163,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 165,
+          "repo": "worldwonderer/oh-story-dsh",
+          "stars": 169,
+          "catalogIndex": 164,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 166,
+          "repo": "weijiafu14/pi2dsh",
+          "stars": 169,
+          "catalogIndex": 165,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 167,
+          "repo": "cocofhu/anime-find",
+          "stars": 163,
+          "catalogIndex": 166,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 168,
+          "repo": "cocode-agency/cocode",
+          "stars": 157,
+          "catalogIndex": 167,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 169,
+          "repo": "dream-num/dsh-univer-office",
+          "stars": 157,
+          "catalogIndex": 168,
+          "pluginStatus": "verified-plugin",
+          "category": "docs"
+        },
+        {
+          "rank": 170,
+          "repo": "zhaoolee/notes",
+          "stars": 154,
+          "catalogIndex": 169,
+          "pluginStatus": "conflict",
+          "category": "skill"
+        },
+        {
+          "rank": 171,
+          "repo": "saya-ch/dsh-mobile",
+          "stars": 154,
+          "catalogIndex": 170,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 172,
+          "repo": "zh667/TokenLedger",
+          "stars": 153,
+          "catalogIndex": 171,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 173,
+          "repo": "ZSeven-W/dsh-openpencil",
+          "stars": 153,
+          "catalogIndex": 172,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 174,
+          "repo": "yjh051108/dsh-super-injector",
+          "stars": 150,
+          "catalogIndex": 173,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 175,
+          "repo": "bradeGithub/DSH-Plugins-Marketplace",
+          "stars": 147,
+          "catalogIndex": 174,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 176,
+          "repo": "liebaojun/MakoCode",
+          "stars": 145,
+          "catalogIndex": 175,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 177,
+          "repo": "yzlnew/infra-skills",
+          "stars": 144,
+          "catalogIndex": 176,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 178,
+          "repo": "ChisaAlter/Deepseek-Harness-Desktop",
+          "stars": 141,
+          "catalogIndex": 177,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 179,
+          "repo": "humblebanana/open-record-replay",
+          "stars": 140,
+          "catalogIndex": 178,
+          "pluginStatus": "verified-non-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 180,
+          "repo": "Totoro-qaq/dsh-plugin-bridge",
+          "stars": 140,
+          "catalogIndex": 179,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 181,
+          "repo": "kingOfSoySauce/dsh-liang-skin",
+          "stars": 137,
+          "catalogIndex": 180,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 182,
+          "repo": "drewnekota/cetus",
+          "stars": 136,
+          "catalogIndex": 181,
+          "pluginStatus": "verified-non-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 183,
+          "repo": "liceses/dsh-gitbash-preset",
+          "stars": 135,
+          "catalogIndex": 182,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 184,
+          "repo": "summer1238/dsh-remote-web-gateway",
+          "stars": 135,
+          "catalogIndex": 183,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 185,
+          "repo": "EthanYoQ/Invoice-Downloader",
+          "stars": 134,
+          "catalogIndex": 184,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 186,
+          "repo": "oil-oil/dsh-oil-creator",
+          "stars": 134,
+          "catalogIndex": 185,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 187,
+          "repo": "toolclub/dsh-agent-team-gui",
+          "stars": 131,
+          "catalogIndex": 186,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 188,
+          "repo": "GraySilver/dsh-evolve-modes",
+          "stars": 129,
+          "catalogIndex": 187,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 189,
+          "repo": "hyqibot/A-share-Ai",
+          "stars": 128,
+          "catalogIndex": 188,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 190,
+          "repo": "Ychris12138/dsh-usage-stats",
+          "stars": 126,
+          "catalogIndex": 189,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 191,
+          "repo": "Ayase34/gal-view",
+          "stars": 125,
+          "catalogIndex": 190,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 192,
+          "repo": "wssfk12138/dsh-damage-pulse",
+          "stars": 125,
+          "catalogIndex": 191,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 193,
+          "repo": "NanmiCoder/dsh-auto-mode",
+          "stars": 124,
+          "catalogIndex": 192,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 194,
+          "repo": "ZSeven-W/dsh-noema",
+          "stars": 124,
+          "catalogIndex": 193,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 195,
+          "repo": "lire1131/dsh-undo-savepoint",
+          "stars": 120,
+          "catalogIndex": 194,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 196,
+          "repo": "beancookie/awesome-dsh-plugin",
+          "stars": 120,
+          "catalogIndex": 195,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 197,
+          "repo": "SkillNerds/xskill",
+          "stars": 119,
+          "catalogIndex": 196,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 198,
+          "repo": "Vladimir-Human/humanizer-ru",
+          "stars": 117,
+          "catalogIndex": 197,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 199,
+          "repo": "RevolutionLA/dsh-dream-skin",
+          "stars": 115,
+          "catalogIndex": 198,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 200,
+          "repo": "Nwflower/dsh-chat-import",
+          "stars": 114,
+          "catalogIndex": 199,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        }
+      ]
+    },
+    {
+      "id": "round-03",
+      "selection": "GitHub stars ranks 201-300 from fixed snapshot",
+      "startRank": 201,
+      "endRank": 300,
+      "count": 100,
+      "maximumStars": 112,
+      "minimumStars": 52,
+      "blindPath": "artifacts/practical-v3/blind/round-03.ndjson",
+      "blindSha256": "0fc5e7007e8146e09dae9f9d40d096e7600980633e78d19bb3c0cf05a88c56ec",
+      "entries": [
+        {
+          "rank": 201,
+          "repo": "PerryLink/dsh-auto-review",
+          "stars": 112,
+          "catalogIndex": 200,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 202,
+          "repo": "shengsheng90/DSH-taskboard",
+          "stars": 111,
+          "catalogIndex": 201,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 203,
+          "repo": "Sikao-Engine/KimiX",
+          "stars": 111,
+          "catalogIndex": 202,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 204,
+          "repo": "taxueseek/argo",
+          "stars": 111,
+          "catalogIndex": 203,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 205,
+          "repo": "ZSeven-W/dsh-crew",
+          "stars": 110,
+          "catalogIndex": 204,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 206,
+          "repo": "volcengine/ark-cli",
+          "stars": 109,
+          "catalogIndex": 205,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 207,
+          "repo": "Mars-Sea/dsh-commandcode-provider",
+          "stars": 108,
+          "catalogIndex": 206,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 208,
+          "repo": "HanaAyane/dsh-reasoning-effort",
+          "stars": 107,
+          "catalogIndex": 207,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 209,
+          "repo": "pengyue-polaron/deepseek-harness-genui",
+          "stars": 107,
+          "catalogIndex": 208,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 210,
+          "repo": "seriousz158/dsh-memory",
+          "stars": 107,
+          "catalogIndex": 209,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 211,
+          "repo": "ZSeven-W/dsh-android",
+          "stars": 105,
+          "catalogIndex": 210,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 212,
+          "repo": "alibaba/loongsuite-pilot",
+          "stars": 103,
+          "catalogIndex": 211,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 213,
+          "repo": "hancao97/hanai-investment-dsh",
+          "stars": 102,
+          "catalogIndex": 212,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 214,
+          "repo": "Sanqi-normal/dsh-webui-market-plugin",
+          "stars": 101,
+          "catalogIndex": 213,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 215,
+          "repo": "omdsh-dev/dsh-annotation",
+          "stars": 101,
+          "catalogIndex": 214,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 216,
+          "repo": "Anionex/dsh-turn-rewind",
+          "stars": 101,
+          "catalogIndex": 215,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 217,
+          "repo": "Fishquito7/dsh-skill-mcp-panel",
+          "stars": 100,
+          "catalogIndex": 216,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 218,
+          "repo": "orziz/odai",
+          "stars": 100,
+          "catalogIndex": 217,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 219,
+          "repo": "kingOfSoySauce/dsh-skin-market",
+          "stars": 99,
+          "catalogIndex": 218,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 220,
+          "repo": "omdsh-dev/dsh_workflow",
+          "stars": 98,
+          "catalogIndex": 219,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 221,
+          "repo": "zuorn/Tydora",
+          "stars": 98,
+          "catalogIndex": 220,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 222,
+          "repo": "Tabbit-Browser/dsh-tabbit",
+          "stars": 96,
+          "catalogIndex": 221,
+          "pluginStatus": "verified-plugin",
+          "category": "browser"
+        },
+        {
+          "rank": 223,
+          "repo": "Tabbit-Browser/dsh-plugin",
+          "stars": 91,
+          "catalogIndex": 222,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 224,
+          "repo": "liguobao/deepseek-harness-remote",
+          "stars": 91,
+          "catalogIndex": 223,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 225,
+          "repo": "N0zoM1z0/th08",
+          "stars": 90,
+          "catalogIndex": 224,
+          "pluginStatus": "unknown",
+          "category": "fun"
+        },
+        {
+          "rank": 226,
+          "repo": "Leslie-SSS/seeWxapkg",
+          "stars": 90,
+          "catalogIndex": 225,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 227,
+          "repo": "oil-oil/dsh-vision",
+          "stars": 87,
+          "catalogIndex": 226,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 228,
+          "repo": "1692775560/dsh-Mimir-Academic-research",
+          "stars": 87,
+          "catalogIndex": 227,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 229,
+          "repo": "Renzic-Stone/DSH-EasyRewrite",
+          "stars": 86,
+          "catalogIndex": 228,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 230,
+          "repo": "liyupi/dsh-kun-like-pet",
+          "stars": 85,
+          "catalogIndex": 229,
+          "pluginStatus": "verified-non-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 231,
+          "repo": "LayneChai/superpowers-dsh",
+          "stars": 85,
+          "catalogIndex": 230,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 232,
+          "repo": "chokwinlee/deepseek-harness-desktop",
+          "stars": 85,
+          "catalogIndex": 231,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 233,
+          "repo": "awesome-dsh-plugin/dsh-find-plugin",
+          "stars": 84,
+          "catalogIndex": 232,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 234,
+          "repo": "dhicoc/dsh-reverse-skill",
+          "stars": 83,
+          "catalogIndex": 233,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 235,
+          "repo": "Hilbert-beinghappy/seektty",
+          "stars": 83,
+          "catalogIndex": 234,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 236,
+          "repo": "pingfanfan/hello-dsh",
+          "stars": 82,
+          "catalogIndex": 235,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 237,
+          "repo": "wink-run/tokenbank",
+          "stars": 82,
+          "catalogIndex": 236,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 238,
+          "repo": "Alex-Yanggg/awesome-DSH-plugin",
+          "stars": 81,
+          "catalogIndex": 237,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 239,
+          "repo": "e2mcc/dsh-popout-sidebar",
+          "stars": 80,
+          "catalogIndex": 238,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 240,
+          "repo": "mishibeikejie/zat-dsh-engine",
+          "stars": 79,
+          "catalogIndex": 239,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 241,
+          "repo": "XieRW/dsh-beauty-skins",
+          "stars": 79,
+          "catalogIndex": 240,
+          "pluginStatus": "unknown",
+          "category": "theme"
+        },
+        {
+          "rank": 242,
+          "repo": "AITabby/dockyard-dsh",
+          "stars": 79,
+          "catalogIndex": 241,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 243,
+          "repo": "titanwings/dsh-automation",
+          "stars": 78,
+          "catalogIndex": 242,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 244,
+          "repo": "tencent-connect/dsh-qqbot",
+          "stars": 78,
+          "catalogIndex": 243,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 245,
+          "repo": "skymecode/deepseek-harness-for-vscode",
+          "stars": 78,
+          "catalogIndex": 244,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 246,
+          "repo": "bruc3van/dsh-desktop",
+          "stars": 76,
+          "catalogIndex": 245,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 247,
+          "repo": "2BingLing/dsh-market",
+          "stars": 76,
+          "catalogIndex": 246,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 248,
+          "repo": "labring/sealos-skills",
+          "stars": 75,
+          "catalogIndex": 247,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 249,
+          "repo": "omdsh-dev/dsh-notification",
+          "stars": 74,
+          "catalogIndex": 248,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 250,
+          "repo": "like-study1/Oh-My-DSH",
+          "stars": 73,
+          "catalogIndex": 249,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 251,
+          "repo": "Vladimir-Human/ru-marketplace-mcp",
+          "stars": 72,
+          "catalogIndex": 250,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 252,
+          "repo": "cpj-dev/dsh-plugin-cc",
+          "stars": 72,
+          "catalogIndex": 251,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 253,
+          "repo": "Jayden-X-L/forkprobe",
+          "stars": 70,
+          "catalogIndex": 252,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 254,
+          "repo": "Noob-stupid/dsh-plugin-hub",
+          "stars": 70,
+          "catalogIndex": 253,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 255,
+          "repo": "kuangre123/codex-switch",
+          "stars": 68,
+          "catalogIndex": 254,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 256,
+          "repo": "hanshenmesen/dsh-turn-delete",
+          "stars": 68,
+          "catalogIndex": 255,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 257,
+          "repo": "starsstreaming/beautiCode",
+          "stars": 67,
+          "catalogIndex": 256,
+          "pluginStatus": "conflict",
+          "category": "theme"
+        },
+        {
+          "rank": 258,
+          "repo": "LX2000WASD/dsh-web-plugin-manager",
+          "stars": 67,
+          "catalogIndex": 257,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 259,
+          "repo": "morluto/jacobian",
+          "stars": 67,
+          "catalogIndex": 258,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 260,
+          "repo": "Lyn-77/ProMentor",
+          "stars": 66,
+          "catalogIndex": 259,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 261,
+          "repo": "ZASENJC/dsh-plugins-store",
+          "stars": 66,
+          "catalogIndex": 260,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 262,
+          "repo": "Awu12277/dsh-stock-watch",
+          "stars": 66,
+          "catalogIndex": 261,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 263,
+          "repo": "feibi-mochi/deepseek-harness-control-center",
+          "stars": 65,
+          "catalogIndex": 262,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 264,
+          "repo": "SeaOf0/dsh-redteam-model",
+          "stars": 65,
+          "catalogIndex": 263,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 265,
+          "repo": "eri64/dsh-claude-ux",
+          "stars": 64,
+          "catalogIndex": 264,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 266,
+          "repo": "JingbiaoMei/Tokdash",
+          "stars": 63,
+          "catalogIndex": 265,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 267,
+          "repo": "THEWOLFWALKER/dsh-notifier",
+          "stars": 63,
+          "catalogIndex": 266,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 268,
+          "repo": "Akimiya-z/codex-guard",
+          "stars": 63,
+          "catalogIndex": 267,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 269,
+          "repo": "mexiaosqwq/dsh-web-mobile",
+          "stars": 63,
+          "catalogIndex": 268,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 270,
+          "repo": "PerryLink/dsh-memento",
+          "stars": 63,
+          "catalogIndex": 269,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 271,
+          "repo": "c3ll256/dsh-toy",
+          "stars": 62,
+          "catalogIndex": 270,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 272,
+          "repo": "dclichang2022/dsh-green-meter",
+          "stars": 61,
+          "catalogIndex": 271,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 273,
+          "repo": "Stormycry-cryp/dsh-AuthInOne",
+          "stars": 61,
+          "catalogIndex": 272,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 274,
+          "repo": "openma-ai/Martty",
+          "stars": 61,
+          "catalogIndex": 273,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 275,
+          "repo": "PolinniZhong/dsh-omi-voice",
+          "stars": 61,
+          "catalogIndex": 274,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 276,
+          "repo": "melandlabs/opencontext",
+          "stars": 60,
+          "catalogIndex": 275,
+          "pluginStatus": "unknown",
+          "category": "memory"
+        },
+        {
+          "rank": 277,
+          "repo": "vlln/dsh-navbar",
+          "stars": 59,
+          "catalogIndex": 276,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 278,
+          "repo": "Yan-Zero/dsh-std",
+          "stars": 59,
+          "catalogIndex": 277,
+          "pluginStatus": "conflict",
+          "category": "other"
+        },
+        {
+          "rank": 279,
+          "repo": "cofy-x/axern",
+          "stars": 57,
+          "catalogIndex": 278,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 280,
+          "repo": "vlln/plugin-registry",
+          "stars": 57,
+          "catalogIndex": 279,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 281,
+          "repo": "btspoony/mstar-harness",
+          "stars": 57,
+          "catalogIndex": 280,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 282,
+          "repo": "wenbin-wb/dsh-bridge",
+          "stars": 57,
+          "catalogIndex": 281,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 283,
+          "repo": "Laplace-bit/dsh-smooth-stream",
+          "stars": 56,
+          "catalogIndex": 282,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 284,
+          "repo": "multica-ai/dsh-multica-runtime",
+          "stars": 56,
+          "catalogIndex": 283,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 285,
+          "repo": "peiyuwang54/deepseek-harness-cli",
+          "stars": 55,
+          "catalogIndex": 284,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 286,
+          "repo": "yxxbc/dsh-balance-plugin",
+          "stars": 55,
+          "catalogIndex": 285,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 287,
+          "repo": "wxkingstar/SpecFusion",
+          "stars": 55,
+          "catalogIndex": 286,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 288,
+          "repo": "DDDMUC/dsh-free-search",
+          "stars": 55,
+          "catalogIndex": 287,
+          "pluginStatus": "verified-plugin",
+          "category": "browser"
+        },
+        {
+          "rank": 289,
+          "repo": "01Virex/dsh-status-rotator",
+          "stars": 55,
+          "catalogIndex": 288,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 290,
+          "repo": "omdsh-dev/dsh-open-in-vscode",
+          "stars": 54,
+          "catalogIndex": 289,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 291,
+          "repo": "fwerkor/local-shell-mcp",
+          "stars": 54,
+          "catalogIndex": 290,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 292,
+          "repo": "modusensus/dsh-mneme",
+          "stars": 54,
+          "catalogIndex": 291,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 293,
+          "repo": "yyh-001/dsh-meme",
+          "stars": 53,
+          "catalogIndex": 292,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 294,
+          "repo": "FlashingChen/dsh-desktop-hub",
+          "stars": 53,
+          "catalogIndex": 293,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 295,
+          "repo": "franksong2702/dsh-codex-connect",
+          "stars": 53,
+          "catalogIndex": 294,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 296,
+          "repo": "dshplugin/dsh-plugin-hub",
+          "stars": 52,
+          "catalogIndex": 295,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 297,
+          "repo": "yuc16/PatentRadar",
+          "stars": 52,
+          "catalogIndex": 296,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 298,
+          "repo": "LaplaceYoung/oh-my-dsh",
+          "stars": 52,
+          "catalogIndex": 297,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 299,
+          "repo": "whiteguo233/dsh-openbiliclaw",
+          "stars": 52,
+          "catalogIndex": 298,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 300,
+          "repo": "xiincs/deepseek-harness-desktop",
+          "stars": 52,
+          "catalogIndex": 299,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        }
+      ]
+    },
+    {
+      "id": "round-04",
+      "selection": "GitHub stars ranks 301-400 from fixed snapshot",
+      "startRank": 301,
+      "endRank": 400,
+      "count": 100,
+      "maximumStars": 52,
+      "minimumStars": 29,
+      "blindPath": "artifacts/practical-v3/blind/round-04.ndjson",
+      "blindSha256": "05640f0ac1e6ebc75fe15ea6e07e69061c35f927ca240b20a9c5739564544d9d",
+      "entries": [
+        {
+          "rank": 301,
+          "repo": "sandbaseai/sandbase-skills",
+          "stars": 52,
+          "catalogIndex": 300,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 302,
+          "repo": "heartleo/hn-cli",
+          "stars": 52,
+          "catalogIndex": 301,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 303,
+          "repo": "Fishsb/dsh-prompt-enhancer",
+          "stars": 52,
+          "catalogIndex": 302,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 304,
+          "repo": "dream12347/dsh-session-manager",
+          "stars": 52,
+          "catalogIndex": 303,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 305,
+          "repo": "PerryLink/dsh-permission-rules",
+          "stars": 52,
+          "catalogIndex": 304,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 306,
+          "repo": "HeiGeAi/deepseek-harness-skin",
+          "stars": 51,
+          "catalogIndex": 305,
+          "pluginStatus": "unknown",
+          "category": "theme"
+        },
+        {
+          "rank": 307,
+          "repo": "kanghelyu/dsh-deepseek-flow",
+          "stars": 50,
+          "catalogIndex": 306,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 308,
+          "repo": "AgentDebugX/AgentDebugX",
+          "stars": 50,
+          "catalogIndex": 307,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 309,
+          "repo": "anweat/dsh-web-search-pro",
+          "stars": 50,
+          "catalogIndex": 308,
+          "pluginStatus": "verified-plugin",
+          "category": "browser"
+        },
+        {
+          "rank": 310,
+          "repo": "lamost423/dsh-maze",
+          "stars": 50,
+          "catalogIndex": 309,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 311,
+          "repo": "JingxuanC/causal-memory",
+          "stars": 49,
+          "catalogIndex": 310,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 312,
+          "repo": "a179-sanae/dsh-auto-collapse",
+          "stars": 49,
+          "catalogIndex": 311,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 313,
+          "repo": "whyihaveyou/dsh-suite",
+          "stars": 49,
+          "catalogIndex": 312,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 314,
+          "repo": "Fisfzy/dsh-ego-browser",
+          "stars": 49,
+          "catalogIndex": 313,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 315,
+          "repo": "Tyan66666/billion-context-dsh",
+          "stars": 48,
+          "catalogIndex": 314,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 316,
+          "repo": "Ephemeral-AI-Lab/dsh-plugins",
+          "stars": 47,
+          "catalogIndex": 315,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 317,
+          "repo": "xgone/dsh-remote",
+          "stars": 47,
+          "catalogIndex": 316,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 318,
+          "repo": "lamost423/dsh-trace-compare",
+          "stars": 47,
+          "catalogIndex": 317,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 319,
+          "repo": "xi-zhao/OpenQuantum",
+          "stars": 47,
+          "catalogIndex": 318,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 320,
+          "repo": "Phant0Meow/dsh-meow-memory",
+          "stars": 47,
+          "catalogIndex": 319,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 321,
+          "repo": "Yan-Zero/dsh-codex",
+          "stars": 45,
+          "catalogIndex": 320,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 322,
+          "repo": "ymh0000123/dsh-theme-endfield",
+          "stars": 45,
+          "catalogIndex": 321,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 323,
+          "repo": "PerryLink/dsh-mcp-panel",
+          "stars": 45,
+          "catalogIndex": 322,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 324,
+          "repo": "flizzywine/dsh-tavern",
+          "stars": 45,
+          "catalogIndex": 323,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 325,
+          "repo": "hanelalo/browser-bridge",
+          "stars": 44,
+          "catalogIndex": 324,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 326,
+          "repo": "ChangedenCZD/dsh-minimal-turbo",
+          "stars": 43,
+          "catalogIndex": 325,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 327,
+          "repo": "zenx0x/allinluna",
+          "stars": 43,
+          "catalogIndex": 326,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 328,
+          "repo": "PivotStackIntelligence/dsh-github",
+          "stars": 43,
+          "catalogIndex": 327,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 329,
+          "repo": "openma-ai/deepseek-harness-tui",
+          "stars": 42,
+          "catalogIndex": 328,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 330,
+          "repo": "Yts1919/dsh-vision-complete",
+          "stars": 42,
+          "catalogIndex": 329,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 331,
+          "repo": "Viy1204/recruiting-copilot",
+          "stars": 42,
+          "catalogIndex": 330,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 332,
+          "repo": "omdsh-dev/dsh-lark",
+          "stars": 42,
+          "catalogIndex": 331,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 333,
+          "repo": "hg1048596-pixel/dsh-recall-unread",
+          "stars": 42,
+          "catalogIndex": 332,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 334,
+          "repo": "T-Auto/dsh-ecosystem-spec",
+          "stars": 42,
+          "catalogIndex": 333,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 335,
+          "repo": "PensiveFei/dsh-secure-audit",
+          "stars": 42,
+          "catalogIndex": 334,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 336,
+          "repo": "HuanLinOTO/dsh-plugin-mineru",
+          "stars": 41,
+          "catalogIndex": 335,
+          "pluginStatus": "verified-plugin",
+          "category": "docs"
+        },
+        {
+          "rank": 337,
+          "repo": "Moeblack/dsh-message-edit",
+          "stars": 41,
+          "catalogIndex": 336,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 338,
+          "repo": "rison114514/dsh-endfield-ui",
+          "stars": 41,
+          "catalogIndex": 337,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 339,
+          "repo": "MiaoQichuan/new-litigation-visualization",
+          "stars": 40,
+          "catalogIndex": 338,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 340,
+          "repo": "alingalingling/ui-status-label",
+          "stars": 40,
+          "catalogIndex": 339,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 341,
+          "repo": "Nyasers/dsh-hanako",
+          "stars": 40,
+          "catalogIndex": 340,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 342,
+          "repo": "edonadei/caliper",
+          "stars": 39,
+          "catalogIndex": 341,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 343,
+          "repo": "zimodzh/dsh-plugin-dev-skills",
+          "stars": 39,
+          "catalogIndex": 342,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 344,
+          "repo": "hellodigua/dsh-emoji",
+          "stars": 39,
+          "catalogIndex": 343,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 345,
+          "repo": "MichengAI/dsh-codex-desktop",
+          "stars": 39,
+          "catalogIndex": 344,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 346,
+          "repo": "opencues/opencues",
+          "stars": 39,
+          "catalogIndex": 345,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 347,
+          "repo": "xiehuan123/dsh-deepread",
+          "stars": 38,
+          "catalogIndex": 346,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 348,
+          "repo": "MoFeng2223/dsh-claude-provider",
+          "stars": 38,
+          "catalogIndex": 347,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 349,
+          "repo": "sorsama/deepseek-harness-mobile",
+          "stars": 38,
+          "catalogIndex": 348,
+          "pluginStatus": "verified-non-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 350,
+          "repo": "runzhliu/deepseek-harness-docker",
+          "stars": 38,
+          "catalogIndex": 349,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 351,
+          "repo": "MichengAI/dsh-codex-ui",
+          "stars": 38,
+          "catalogIndex": 350,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 352,
+          "repo": "FuRongJun-1999/dsh-memory",
+          "stars": 38,
+          "catalogIndex": 351,
+          "pluginStatus": "verified-plugin",
+          "category": "agi"
+        },
+        {
+          "rank": 353,
+          "repo": "flymysql/dsh-remote",
+          "stars": 37,
+          "catalogIndex": 352,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 354,
+          "repo": "CAPTAIN1275/dsh-ui-web",
+          "stars": 36,
+          "catalogIndex": 353,
+          "pluginStatus": "conflict",
+          "category": "tools"
+        },
+        {
+          "rank": 355,
+          "repo": "HsiangNianian/dsh-auto-continue",
+          "stars": 36,
+          "catalogIndex": 354,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 356,
+          "repo": "songyang0603/ds-spec-loop",
+          "stars": 36,
+          "catalogIndex": 355,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 357,
+          "repo": "bihangchi9-creator/dsh-lark-bridge",
+          "stars": 36,
+          "catalogIndex": 356,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 358,
+          "repo": "6Mikao9/dsh-wsl-workspace",
+          "stars": 36,
+          "catalogIndex": 357,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 359,
+          "repo": "h4dex/opc-nexus",
+          "stars": 36,
+          "catalogIndex": 358,
+          "pluginStatus": "verified-non-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 360,
+          "repo": "xuedai-mayi/dsh-wenshan",
+          "stars": 36,
+          "catalogIndex": 359,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 361,
+          "repo": "william-jin-cmu/dsh-vision",
+          "stars": 35,
+          "catalogIndex": 360,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 362,
+          "repo": "keleus/deepseek-pet",
+          "stars": 35,
+          "catalogIndex": 361,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 363,
+          "repo": "feiyang-dev/dsh-usage-plugin",
+          "stars": 35,
+          "catalogIndex": 362,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 364,
+          "repo": "AX1202/ax-feishu-bridge",
+          "stars": 35,
+          "catalogIndex": 363,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 365,
+          "repo": "Sutera-Diffusus/dsh-whale-musume",
+          "stars": 35,
+          "catalogIndex": 364,
+          "pluginStatus": "conflict",
+          "category": "fun"
+        },
+        {
+          "rank": 366,
+          "repo": "morluto/flameox",
+          "stars": 35,
+          "catalogIndex": 365,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 367,
+          "repo": "PKUfudawei/dsh-capability-menu",
+          "stars": 35,
+          "catalogIndex": 366,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 368,
+          "repo": "jing-hy/picturereader",
+          "stars": 34,
+          "catalogIndex": 367,
+          "pluginStatus": "verified-plugin",
+          "category": "vision"
+        },
+        {
+          "rank": 369,
+          "repo": "Chinesezjc/dsh-interconnect",
+          "stars": 34,
+          "catalogIndex": 368,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 370,
+          "repo": "zhuiyueya/dsh-im-gateway",
+          "stars": 34,
+          "catalogIndex": 369,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 371,
+          "repo": "openguardrails/openguardrails",
+          "stars": 34,
+          "catalogIndex": 370,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 372,
+          "repo": "PlutoKeating/dsh-lark-bot",
+          "stars": 34,
+          "catalogIndex": 371,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 373,
+          "repo": "jjxjjjjiik-bot/dsh-chat-timeline",
+          "stars": 34,
+          "catalogIndex": 372,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 374,
+          "repo": "Gin-7/dsh-pet-remielle",
+          "stars": 34,
+          "catalogIndex": 373,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 375,
+          "repo": "not-big-dog/DSH-pipeline-kernel",
+          "stars": 33,
+          "catalogIndex": 374,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 376,
+          "repo": "yuukiLike/zeromd",
+          "stars": 33,
+          "catalogIndex": 375,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 377,
+          "repo": "zhu168/dsh-save-money",
+          "stars": 33,
+          "catalogIndex": 376,
+          "pluginStatus": "conflict",
+          "category": "workflow"
+        },
+        {
+          "rank": 378,
+          "repo": "hellodigua/dsh-share",
+          "stars": 33,
+          "catalogIndex": 377,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 379,
+          "repo": "MarvekG/deepseek-harness-model-config",
+          "stars": 33,
+          "catalogIndex": 378,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 380,
+          "repo": "Rain-kl/dsh-preset-plus",
+          "stars": 33,
+          "catalogIndex": 379,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 381,
+          "repo": "skyf0xx/hedgehog",
+          "stars": 32,
+          "catalogIndex": 380,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 382,
+          "repo": "PerryLink/dsh-plugin-guide",
+          "stars": 32,
+          "catalogIndex": 381,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 383,
+          "repo": "dickpy/dsh-imagegen",
+          "stars": 32,
+          "catalogIndex": 382,
+          "pluginStatus": "verified-plugin",
+          "category": "vision"
+        },
+        {
+          "rank": 384,
+          "repo": "ChenRuoT/dsh-sidebar-qa",
+          "stars": 31,
+          "catalogIndex": 383,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 385,
+          "repo": "lxzy-7/dsh-plugin-guard",
+          "stars": 31,
+          "catalogIndex": 384,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 386,
+          "repo": "beiyege-01/dsh-voice-ai-girlfriend",
+          "stars": 31,
+          "catalogIndex": 385,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 387,
+          "repo": "chen731215-dev/dsh-tavern",
+          "stars": 31,
+          "catalogIndex": 386,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 388,
+          "repo": "xiajiajun516/dsh-config-manager",
+          "stars": 31,
+          "catalogIndex": 387,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 389,
+          "repo": "the-beating-light-of-the-nail/dsh-meme-hub",
+          "stars": 30,
+          "catalogIndex": 388,
+          "pluginStatus": "unknown",
+          "category": "fun"
+        },
+        {
+          "rank": 390,
+          "repo": "lhh010/dsh-ui-whale",
+          "stars": 30,
+          "catalogIndex": 389,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 391,
+          "repo": "dundunhan/dsh-video-lens",
+          "stars": 30,
+          "catalogIndex": 390,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 392,
+          "repo": "Links2008/DeepSeek-Harness-Desktop",
+          "stars": 30,
+          "catalogIndex": 391,
+          "pluginStatus": "verified-non-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 393,
+          "repo": "cosyncing/cosyncing",
+          "stars": 30,
+          "catalogIndex": 392,
+          "pluginStatus": "verified-non-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 394,
+          "repo": "SenmuuuuW/dsh-whale-report",
+          "stars": 30,
+          "catalogIndex": 393,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 395,
+          "repo": "jsdvjx/dsh-strata",
+          "stars": 30,
+          "catalogIndex": 394,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 396,
+          "repo": "Nexus-Aethra/DSHBox",
+          "stars": 29,
+          "catalogIndex": 395,
+          "pluginStatus": "conflict",
+          "category": "session"
+        },
+        {
+          "rank": 397,
+          "repo": "Anionex/dsh-computer-use",
+          "stars": 29,
+          "catalogIndex": 396,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 398,
+          "repo": "Aik358/dsh-auto-memory",
+          "stars": 29,
+          "catalogIndex": 397,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 399,
+          "repo": "taptap/instant-games-open-mcp",
+          "stars": 29,
+          "catalogIndex": 398,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 400,
+          "repo": "Ewnscat-ya/dsh-client-ui-skin-denia",
+          "stars": 29,
+          "catalogIndex": 399,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        }
+      ]
+    },
+    {
+      "id": "round-05",
+      "selection": "GitHub stars ranks 401-500 from fixed snapshot",
+      "startRank": 401,
+      "endRank": 500,
+      "count": 100,
+      "maximumStars": 29,
+      "minimumStars": 21,
+      "blindPath": "artifacts/practical-v3/blind/round-05.ndjson",
+      "blindSha256": "50ff8f13f4f7df35b341f630c78243a11b4d825095cb273e0df8fa1f6b942140",
+      "entries": [
+        {
+          "rank": 401,
+          "repo": "HiWhaleW/dsh-toolbox",
+          "stars": 29,
+          "catalogIndex": 400,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 402,
+          "repo": "slywalker2006/dsh-passwords",
+          "stars": 29,
+          "catalogIndex": 401,
+          "pluginStatus": "verified-plugin",
+          "category": "security"
+        },
+        {
+          "rank": 403,
+          "repo": "Blank-not-black/dsh-Remote",
+          "stars": 29,
+          "catalogIndex": 402,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 404,
+          "repo": "ExElectron/dsh-gov-portal",
+          "stars": 28,
+          "catalogIndex": 403,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 405,
+          "repo": "BeforeWave/dsh-with-chatgpt",
+          "stars": 28,
+          "catalogIndex": 404,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 406,
+          "repo": "amlyczz/dsh-lark-link",
+          "stars": 28,
+          "catalogIndex": 405,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 407,
+          "repo": "omdsh-dev/dsh-plugin-check",
+          "stars": 28,
+          "catalogIndex": 406,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 408,
+          "repo": "dshbox/cordis-rs",
+          "stars": 28,
+          "catalogIndex": 407,
+          "pluginStatus": "unknown",
+          "category": "dev"
+        },
+        {
+          "rank": 409,
+          "repo": "wqty123/dsh-browser",
+          "stars": 28,
+          "catalogIndex": 408,
+          "pluginStatus": "verified-plugin",
+          "category": "browser"
+        },
+        {
+          "rank": 410,
+          "repo": "kejixiaoliang/awesome-dsh-plugins",
+          "stars": 27,
+          "catalogIndex": 409,
+          "pluginStatus": "unknown",
+          "category": "theme"
+        },
+        {
+          "rank": 411,
+          "repo": "loadingvx/deepseek-harness-workbench-plugin",
+          "stars": 27,
+          "catalogIndex": 410,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 412,
+          "repo": "UNLINEARITY/dsh-code",
+          "stars": 27,
+          "catalogIndex": 411,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 413,
+          "repo": "dqsjqian/Aria",
+          "stars": 27,
+          "catalogIndex": 412,
+          "pluginStatus": "unknown",
+          "category": "workflow"
+        },
+        {
+          "rank": 414,
+          "repo": "lhh010/dsh-minigames",
+          "stars": 27,
+          "catalogIndex": 413,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 415,
+          "repo": "WEP-56/DSH-Launcher",
+          "stars": 27,
+          "catalogIndex": 414,
+          "pluginStatus": "verified-non-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 416,
+          "repo": "Make0209/dsh-usage-stats",
+          "stars": 27,
+          "catalogIndex": 415,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 417,
+          "repo": "dsh-tui/dsh-tui",
+          "stars": 27,
+          "catalogIndex": 416,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 418,
+          "repo": "omdsh-dev/dsh-toolkit",
+          "stars": 27,
+          "catalogIndex": 417,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 419,
+          "repo": "left0ver/dsh-file-review",
+          "stars": 27,
+          "catalogIndex": 418,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 420,
+          "repo": "SLin-code/dsh-custom-skin",
+          "stars": 27,
+          "catalogIndex": 419,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 421,
+          "repo": "WeirdSky924/agent-handoff-skill",
+          "stars": 26,
+          "catalogIndex": 420,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 422,
+          "repo": "iamaanahmad/everything-kiro",
+          "stars": 26,
+          "catalogIndex": 421,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 423,
+          "repo": "biociao/dsh-science",
+          "stars": 26,
+          "catalogIndex": 422,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 424,
+          "repo": "xiaoshihou514/dsh-desktop-pet",
+          "stars": 26,
+          "catalogIndex": 423,
+          "pluginStatus": "conflict",
+          "category": "fun"
+        },
+        {
+          "rank": 425,
+          "repo": "WM-CODER/custom-first-control-prompt",
+          "stars": 26,
+          "catalogIndex": 424,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 426,
+          "repo": "ARFCON/dsh-hotplug-hub",
+          "stars": 26,
+          "catalogIndex": 425,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 427,
+          "repo": "PGZXB/dsh-feishu",
+          "stars": 26,
+          "catalogIndex": 426,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 428,
+          "repo": "taxueseek/dsh-files",
+          "stars": 26,
+          "catalogIndex": 427,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 429,
+          "repo": "zexadev/dsh-tether",
+          "stars": 25,
+          "catalogIndex": 428,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 430,
+          "repo": "lzszq/dsh-scholar",
+          "stars": 25,
+          "catalogIndex": 429,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 431,
+          "repo": "yyyyukari/dsh-plugin-workshop",
+          "stars": 25,
+          "catalogIndex": 430,
+          "pluginStatus": "verified-plugin",
+          "category": "market"
+        },
+        {
+          "rank": 432,
+          "repo": "AtlasCloudAI/atlas-cloud-skills",
+          "stars": 25,
+          "catalogIndex": 431,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 433,
+          "repo": "kuangre123/iosdev",
+          "stars": 25,
+          "catalogIndex": 432,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 434,
+          "repo": "AcidGr/dsh-web-lan-access",
+          "stars": 25,
+          "catalogIndex": 433,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 435,
+          "repo": "limbo947/dsh-recall-plugin",
+          "stars": 25,
+          "catalogIndex": 434,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 436,
+          "repo": "HuanLinOTO/dsh-plugin-better-sidebar-plugin-office",
+          "stars": 25,
+          "catalogIndex": 435,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 437,
+          "repo": "sugarforever/dsh-lark",
+          "stars": 25,
+          "catalogIndex": 436,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 438,
+          "repo": "liguobao/dsh-desktop",
+          "stars": 25,
+          "catalogIndex": 437,
+          "pluginStatus": "unknown",
+          "category": "tools"
+        },
+        {
+          "rank": 439,
+          "repo": "geml-spec/geml",
+          "stars": 25,
+          "catalogIndex": 438,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 440,
+          "repo": "yunxiiQwQ/dsh-maid-whale-webUI",
+          "stars": 25,
+          "catalogIndex": 439,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 441,
+          "repo": "Walvez/dsh-codex-sync",
+          "stars": 25,
+          "catalogIndex": 440,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 442,
+          "repo": "agi-fans/oh-my-dsh",
+          "stars": 25,
+          "catalogIndex": 441,
+          "pluginStatus": "conflict",
+          "category": "other"
+        },
+        {
+          "rank": 443,
+          "repo": "lsz-asd/dsh-plugin-session-delete",
+          "stars": 24,
+          "catalogIndex": 442,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 444,
+          "repo": "834063245-creator/HoloGram",
+          "stars": 24,
+          "catalogIndex": 443,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 445,
+          "repo": "omdsh-dev/dsh-custom-tool",
+          "stars": 24,
+          "catalogIndex": 444,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 446,
+          "repo": "147228/dsh-xiaoyao-skins",
+          "stars": 24,
+          "catalogIndex": 445,
+          "pluginStatus": "conflict",
+          "category": "theme"
+        },
+        {
+          "rank": 447,
+          "repo": "Xuxchloris/deepseek-harness-sdr-plugin",
+          "stars": 24,
+          "catalogIndex": 446,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 448,
+          "repo": "weinibuliu/deepseek-harness-vsc-extension",
+          "stars": 24,
+          "catalogIndex": 447,
+          "pluginStatus": "verified-non-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 449,
+          "repo": "Ericwong5021/deepseek-plugin-store",
+          "stars": 24,
+          "catalogIndex": 448,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 450,
+          "repo": "chenw2759-wq/dsh-IDE",
+          "stars": 24,
+          "catalogIndex": 449,
+          "pluginStatus": "conflict",
+          "category": "dev"
+        },
+        {
+          "rank": 451,
+          "repo": "lehhair/dsh-diff-viewer",
+          "stars": 24,
+          "catalogIndex": 450,
+          "pluginStatus": "verified-plugin",
+          "category": "git"
+        },
+        {
+          "rank": 452,
+          "repo": "a735624258/dsh-skill-picker",
+          "stars": 24,
+          "catalogIndex": 451,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 453,
+          "repo": "Tasihi89/dsh-talk-map",
+          "stars": 24,
+          "catalogIndex": 452,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 454,
+          "repo": "JUANWANG-BUAA/dsh-full-remote",
+          "stars": 24,
+          "catalogIndex": 453,
+          "pluginStatus": "verified-plugin",
+          "category": "remote"
+        },
+        {
+          "rank": 455,
+          "repo": "niiang/dsh-kimino-theme",
+          "stars": 24,
+          "catalogIndex": 454,
+          "pluginStatus": "conflict",
+          "category": "theme"
+        },
+        {
+          "rank": 456,
+          "repo": "limuyang2/agent-team",
+          "stars": 24,
+          "catalogIndex": 455,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 457,
+          "repo": "ADWMC/helm-d",
+          "stars": 24,
+          "catalogIndex": 456,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 458,
+          "repo": "10086ggqq/dsh_theme_terraria",
+          "stars": 24,
+          "catalogIndex": 457,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 459,
+          "repo": "WSL043/dsh-codex-subscription",
+          "stars": 24,
+          "catalogIndex": 458,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 460,
+          "repo": "crazywoola/dsh-balance",
+          "stars": 23,
+          "catalogIndex": 459,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 461,
+          "repo": "enchangcui340-cloud/dsh-whale-balance",
+          "stars": 23,
+          "catalogIndex": 460,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 462,
+          "repo": "Tommy00748/dsh-theme-cyberpunk2077",
+          "stars": 23,
+          "catalogIndex": 461,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 463,
+          "repo": "chaos-03x/dsh-agy",
+          "stars": 23,
+          "catalogIndex": 462,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 464,
+          "repo": "dhicoc/dsh-chinese-traditional-wisdom-skill",
+          "stars": 23,
+          "catalogIndex": 463,
+          "pluginStatus": "verified-plugin",
+          "category": "skill"
+        },
+        {
+          "rank": 465,
+          "repo": "xmutfyh/dsh-plugin-writing-guard",
+          "stars": 23,
+          "catalogIndex": 464,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 466,
+          "repo": "Lxiayu/DshCockpit",
+          "stars": 23,
+          "catalogIndex": 465,
+          "pluginStatus": "verified-non-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 467,
+          "repo": "pengpengyi92/dsh-quant",
+          "stars": 23,
+          "catalogIndex": 466,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 468,
+          "repo": "JustGenius-s/DSH-Desktop",
+          "stars": 23,
+          "catalogIndex": 467,
+          "pluginStatus": "verified-non-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 469,
+          "repo": "bill9109/dsh-web-ui-notify",
+          "stars": 23,
+          "catalogIndex": 468,
+          "pluginStatus": "verified-plugin",
+          "category": "notify"
+        },
+        {
+          "rank": 470,
+          "repo": "bill9109/dsh-drag-and-drop",
+          "stars": 23,
+          "catalogIndex": 469,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 471,
+          "repo": "MichengAI/dsh-archive-manager",
+          "stars": 23,
+          "catalogIndex": 470,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 472,
+          "repo": "PensiveFei/deep-read-summarize",
+          "stars": 23,
+          "catalogIndex": 471,
+          "pluginStatus": "verified-plugin",
+          "category": "workflow"
+        },
+        {
+          "rank": 473,
+          "repo": "amlyczz/dsh-agy-link",
+          "stars": 23,
+          "catalogIndex": 472,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 474,
+          "repo": "PolinniZhong/dsh-personal-center",
+          "stars": 22,
+          "catalogIndex": 473,
+          "pluginStatus": "verified-plugin",
+          "category": "usage"
+        },
+        {
+          "rank": 475,
+          "repo": "william-jin-cmu/dsh-stickers",
+          "stars": 22,
+          "catalogIndex": 474,
+          "pluginStatus": "verified-plugin",
+          "category": "fun"
+        },
+        {
+          "rank": 476,
+          "repo": "HuanLinOTO/dsh-plugin-pet-rs",
+          "stars": 22,
+          "catalogIndex": 475,
+          "pluginStatus": "unknown",
+          "category": "notify"
+        },
+        {
+          "rank": 477,
+          "repo": "morluto/leantoken",
+          "stars": 22,
+          "catalogIndex": 476,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 478,
+          "repo": "lehhair/dsh-mobile",
+          "stars": 22,
+          "catalogIndex": 477,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 479,
+          "repo": "LaplaceYoung/dsh-qq2006",
+          "stars": 22,
+          "catalogIndex": 478,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 480,
+          "repo": "YunTaiHua/illusion-agent",
+          "stars": 22,
+          "catalogIndex": 479,
+          "pluginStatus": "unknown",
+          "category": "model"
+        },
+        {
+          "rank": 481,
+          "repo": "dingyi222666/dsh-focus-chat",
+          "stars": 22,
+          "catalogIndex": 480,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 482,
+          "repo": "THU-MAIC/dsh-openmaic",
+          "stars": 22,
+          "catalogIndex": 481,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 483,
+          "repo": "ZRui-C/dsh-computer-use",
+          "stars": 22,
+          "catalogIndex": 482,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 484,
+          "repo": "techysy/deepseek-harness-fnos",
+          "stars": 22,
+          "catalogIndex": 483,
+          "pluginStatus": "unknown",
+          "category": "other"
+        },
+        {
+          "rank": 485,
+          "repo": "JUSTMONIKA2022/dsh-sandbox-escalation-fix",
+          "stars": 22,
+          "catalogIndex": 484,
+          "pluginStatus": "verified-plugin",
+          "category": "session"
+        },
+        {
+          "rank": 486,
+          "repo": "Aisland-SJL/dsh-usage",
+          "stars": 22,
+          "catalogIndex": 485,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 487,
+          "repo": "bugmaker2/dsh-plugin-template",
+          "stars": 22,
+          "catalogIndex": 486,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 488,
+          "repo": "Qinling-Melon-Farmers/dsh-memoir",
+          "stars": 22,
+          "catalogIndex": 487,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 489,
+          "repo": "magian1127/deepseek-harness-zh_pro",
+          "stars": 22,
+          "catalogIndex": 488,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 490,
+          "repo": "yoli-mi/dsh-client-ui-custom",
+          "stars": 22,
+          "catalogIndex": 489,
+          "pluginStatus": "verified-plugin",
+          "category": "theme"
+        },
+        {
+          "rank": 491,
+          "repo": "ZSeven-W/dsh-harbor",
+          "stars": 22,
+          "catalogIndex": 490,
+          "pluginStatus": "verified-plugin",
+          "category": "other"
+        },
+        {
+          "rank": 492,
+          "repo": "upstash/skills",
+          "stars": 22,
+          "catalogIndex": 491,
+          "pluginStatus": "verified-plugin",
+          "category": "tools"
+        },
+        {
+          "rank": 493,
+          "repo": "SnowCrescenter-tech/dsh-milestone",
+          "stars": 22,
+          "catalogIndex": 492,
+          "pluginStatus": "verified-plugin",
+          "category": "ui"
+        },
+        {
+          "rank": 494,
+          "repo": "MichengAI/dsh-skills-manager",
+          "stars": 22,
+          "catalogIndex": 493,
+          "pluginStatus": "verified-plugin",
+          "category": "dev"
+        },
+        {
+          "rank": 495,
+          "repo": "KelaoHu/dsh-lowtide",
+          "stars": 22,
+          "catalogIndex": 494,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        },
+        {
+          "rank": 496,
+          "repo": "ali-meoo/meoo-cli",
+          "stars": 21,
+          "catalogIndex": 495,
+          "pluginStatus": "unknown",
+          "category": "skill"
+        },
+        {
+          "rank": 497,
+          "repo": "huiliyi37/dsh-tianshu-build",
+          "stars": 21,
+          "catalogIndex": 496,
+          "pluginStatus": "unknown",
+          "category": "session"
+        },
+        {
+          "rank": 498,
+          "repo": "alexchenzl/dsh-plugin-directory",
+          "stars": 21,
+          "catalogIndex": 497,
+          "pluginStatus": "unknown",
+          "category": "market"
+        },
+        {
+          "rank": 499,
+          "repo": "LoserFox/distill",
+          "stars": 21,
+          "catalogIndex": 498,
+          "pluginStatus": "verified-plugin",
+          "category": "memory"
+        },
+        {
+          "rank": 500,
+          "repo": "raullenchai/rapid-mlx-dsh-provider",
+          "stars": 21,
+          "catalogIndex": 499,
+          "pluginStatus": "verified-plugin",
+          "category": "model"
+        }
+      ]
+    }
+  ]
+}

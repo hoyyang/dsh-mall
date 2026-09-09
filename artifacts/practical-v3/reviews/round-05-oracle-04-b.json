@@ -1,0 +1,512 @@
+{
+  "reviews": [
+    {
+      "repo": "yyyyukari/dsh-plugin-workshop",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "侧栏常驻入口**：官方「新会话」按钮正下方，同款样式（DOM 克隆官方按钮，宽/窄侧栏自适应）",
+        "关键词搜索（支持中文，自动映射英文）、★最热 / ⏰最新",
+        "**飙升榜时间窗口**（近 7/30/90 天新建 + 热度排序，Steam Trending 近似）",
+        "默认「插件话题」（`topic:dsh-plugin`）；搜索结果自动排除官方 harness 等核心仓库",
+        "全站模式自带**插件特征验证**（检查 `package.json` 的 `dsh` 字段 / `cordis.yml` 等，走 raw CDN 不耗 API 额度）",
+        "工具栏「📦 已安装」视图——合并 profile 依赖/激活行/本地预设展示本机插件（类型、激活状态、安装来源）",
+        "描述一键切换原文/中文机翻，README 可整篇翻译（Google 翻译接口，自动缓存）",
+        "详情页自动预检仓库结构，给出「可直接安装 / 有风险 / 建议手动」三级评级",
+        "特殊结构（多包 monorepo、非插件仓库、带构建脚本等）自动降级为**作者给出的安装方式**",
+        "从 README 提取安装命令，可复制，绝不自动执行",
+        "星数/fork/语言/许可证/创建时间、README 轻量渲染、手动安装命令、GitHub 直达",
+        "实时显示 GitHub 搜索剩余额度与恢复倒计时"
+      ],
+      "usageItems": [
+        "时间下拉选 近7天/近30天/近90天飙升 + ★最热",
+        "直接输入「天气」「翻译」等中文词，自动映射英文关键词",
+        "工具栏「描述中文」；详情页「翻译 README」",
+        "详情页「一键安装（订阅）/ 更新到最新 / 卸载」，按仓库类型自动选择安装路径（需要本机 git，缺失时会提示）",
+        "点击打开浮层"
+      ],
+      "usageActions": [
+        "时间下拉选 近7天/近30天/近90天飙升 + ★最热",
+        "直接输入「天气」「翻译」等中文词，自动映射英文关键词",
+        "工具栏「描述中文」；详情页「翻译 README」",
+        "详情页「一键安装（订阅）/ 更新到最新 / 卸载」",
+        "点击打开浮层"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "找 DSH 插件 | 默认即「插件话题」列表（`topic:dsh-plugin` 收录的仓库）",
+        "看飙升榜",
+        "中文搜索",
+        "看中文描述",
+        "安装/更新/卸载插件"
+      ],
+      "outputs": [
+        "激活后侧栏「新会话」下方出现「🧩 插件工坊」",
+        "成功后自动重启 dsh web 刷新插件表"
+      ],
+      "reliability": [
+        "pnpm remove 失败则不动文件、不留失效链接",
+        "缺 git 时界面明确提示",
+        "不执行任何第三方代码；Token 仅存 localStorage",
+        "严格输入校验 + 自定义头 CSRF 防护",
+        "GitHub 搜索 API（匿名 10 次/分）"
+      ],
+      "media": [],
+      "concerns": [
+        "使用表的需求列标签（看飙升榜/中文搜索等）作为用例场景偏薄，按最小片段引用",
+        "安装命令与 Roadmap 小节按规则计零"
+      ]
+    },
+    {
+      "repo": "AtlasCloudAI/atlas-cloud-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Complete API reference for image generation, video generation, LLM chat, media upload, and quick generation",
+        "All 9 MCP tools documented",
+        "Ready-to-use code templates in Python, Node.js/TypeScript, and cURL",
+        "Popular model IDs with pricing info",
+        "OpenAI SDK compatibility guide for LLM models",
+        "**Route selection first** — text-to-video, storyboard-image-to-video, asset-reference-to-video, first-and-last-frame, or extending an existing clip",
+        "how to assign people / product / scene / style / audio references so identity holds across shots",
+        "Every reference ships in English and Simplified Chinese; Chinese requests follow a dedicated Chinese workflow",
+        "It writes one prompt **spec** — scope, locks, staging, end states — separately from the dialect that expresses it, then compiles that spec for whichever video model you can actually call.",
+        "Each model carries a measured profile (reference syntax, limits, timing adherence, default-bias behaviour)",
+        "submits through Atlas Cloud (MCP, CLI or REST)"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "**Image Generation** | `POST /api/v1/model/generateImage`",
+        "**Video Generation** | `POST /api/v1/model/generateVideo`",
+        "**Audio — TTS & Music** | `POST /api/v1/model/generateAudio`",
+        "**Speech-to-Text (ASR)** | `POST /api/v1/model/generateAudio`",
+        "**3D Generation** | `POST /api/v1/model/generateImage`",
+        "**LLM Chat** | `POST /v1/chat/completions`",
+        "**Upload Media** | `POST /api/v1/model/uploadMedia`",
+        "**Quick Generate** | Auto model search + submit",
+        "**Search Models** | Fuzzy search by keyword"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "🛍️ [**Product Render → 30-Second Ad**](library/motion/product-render-to-ad.md) — turn a product still into a short ad clip",
+        "🎭 [**Character Sheet → Multi-Shot AI Drama**](library/motion/character-to-drama.md) — one character, consistent across shots",
+        "📱 [**Long Video → Vertical Short**](library/social/long-to-vertical-short.md) — reframe + animate for TikTok / Reels / Shorts",
+        "Use it when a job needs shot planning rather than a single prompt",
+        "The same brief has to run on several models, or the target model is not available yet and the work must proceed elsewhere",
+        "You are building a model-comparison matrix and need the prompts to differ only by dialect",
+        "A prompt must survive a model swap instead of being rewritten"
+      ],
+      "outputs": [],
+      "reliability": [
+        "Error handling, retry strategy, and best practices",
+        "verifies model availability before a billable run",
+        "the skill probes what it does not know, degrades the spec to what the model supports, and reports every degrade"
+      ],
+      "media": [],
+      "concerns": [
+        "Seedance/Kling 促销段落与自动生成的模型目录按营销/目录信息计零",
+        "More Atlas Cloud Tools 下的 cli/mcp-server/comfyui 等按关联项目计零",
+        "两个 skill 的双语声明为重复主张，只计一次",
+        "所有代码围栏均为安装/配置，codeExamples 为空"
+      ]
+    },
+    {
+      "repo": "kuangre123/iosdev",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "本仓库提供通用的 iOS App 开发与上架流程技能（面向中国区）",
+        "内容涵盖上架前关键清单、常见审核注意事项、隐私合规与 ATS 配置建议，以及订阅/IAP 的创建与测试",
+        "`SKILL.md`：技能触发与输出结构（输入 `iosdev` 即可调用）",
+        "`iosdev-cn.skill`：可分发的技能包"
+      ],
+      "usageItems": [
+        "在 Codex 中输入触发词 `iosdev` 即可调用"
+      ],
+      "usageActions": [
+        "在 Codex 中输入触发词 `iosdev`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "帮助开发者快速梳理从开发、构建、签名、测试到 App Store Connect 提交与审核的全流程"
+      ],
+      "outputs": [],
+      "reliability": [],
+      "media": [],
+      "concerns": [
+        "README 极简，无 ioPairs/codeExamples/media 证据"
+      ]
+    },
+    {
+      "repo": "AcidGr/dsh-web-lan-access",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "uses the webserver's official index-tap extension point (`webServer.tapIndex`) to inject a small polyfill (RFC 4122 v4 built on `crypto.getRandomValues`, which **is** available on insecure origins) as the first script in `<head>`",
+        "On secure origins the polyfill is a no-op.",
+        "its bundle patch sets the webserver bind host to `0.0.0.0` directly",
+        "It also widens the `/api` trust fence automatically.",
+        "The bundle patch re-derives the `/api` trust fence from **every non-internal IPv4** the host currently has — LAN (`192.168.x`), **Tailscale (`100.x`)**, and VPN interfaces"
+      ],
+      "usageItems": [
+        "open `http://<server-ip>:3080` or `http://<tailscale-ip>:3080`",
+        "add your own names if you want to browse by name instead of IP",
+        "Then open `http://<server-ip>:3080` from another device — sessions and models must load."
+      ],
+      "usageActions": [
+        "curl http://127.0.0.1:3080/ | grep lan-access-polyfill   # must match",
+        "open `http://<server-ip>:3080` or `http://<tailscale-ip>:3080`",
+        "add your own names if you want to browse by name instead of IP"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "curl http://127.0.0.1:3080/ | grep lan-access-polyfill   # must match"
+      ],
+      "usecases": [
+        "When the UI is served over plain HTTP from a non-loopback address — a LAN IP, a Tailscale IP, or a hostname"
+      ],
+      "outputs": [
+        "sessions/models load"
+      ],
+      "reliability": [
+        "No product source modified; fully reversible",
+        "Version-independent (it only transforms the served `index.html`)",
+        "Platform-independent (Linux / macOS / Windows / Android)",
+        "a small set of sensitive API methods (`settings.*`, `credentials.*`, `llm.discoverModels`) is **pinned to loopback** regardless of `trustedHosts`",
+        "chat/sessions/models still work, but the **Settings pages (including the plugin-config cards) and credentials UI show empty/errors**",
+        "Binding `0.0.0.0` makes the agent reachable without authentication by **anyone** on the same network (`/api` is an origin fence, not a login)",
+        "The fence compares the `Host` header **literally**: a MagicDNS short name (`http://myhost:3080`) is *not* the full domain — list the short name on its own line, or every `/api` call returns 403",
+        "a static list replaces the row's default expression, so it will not merge with `--trusted-host`"
+      ],
+      "media": [],
+      "concerns": [
+        "安装与 trustedHosts patch 围栏均为配置，计零",
+        "sessions/models load 的两种表述（load 与 must load）为重复主张，只计一次"
+      ]
+    },
+    {
+      "repo": "limbo947/dsh-recall-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "撤回的不只是聊天记录，agent 改过的文件也一并回到原样",
+        "快照存在独立的影子 git 仓库里，你的分支、暂存区、未提交改动统统不受影响",
+        "快照始终存在 `$DSH_HOME` 下，不会往项目里塞任何东西",
+        "快照与回退不受项目 `.gitattributes` 的 EOL 转换影响——LF/CRLF 换行、`$Id$`、二进制内容原样往返",
+        "撤回一次后还能再撤到更早；撤回时被覆盖的文件也一直找得回来",
+        "通过 DSH 官方 `sessions.fork` 机制把会话切到该消息之前",
+        "按 **工作区 → 会话 → 快照** 三级树形展示，支持展开/折叠与搜索",
+        "撤回产生的会话按 fork 链聚成「版本家族」（v1/v2/v3）",
+        "快照走 git delta 压缩，是增量不是整目录拷贝"
+      ],
+      "usageItems": [
+        "鼠标悬停任意**插件启用后发送**的用户消息（含 agent 运行中插入的转向指令消息）",
+        "点击 → 确认面板展示将变更的文件清单（修改 / 恢复 / 删除）",
+        "点「确认回退」→ 文件恢复到该消息发送前的状态",
+        "打开「**设置 → 插件配置 → 撤回插件 → 快照管理**」可看到树形列表",
+        "打开「**设置 → 插件配置 → 撤回插件**」卡片（默认收起，点卡片头展开）即可可视化编辑快照排除项",
+        "输入路径或模式回车即加、常用模式（`dist/`、`*.log`、`.env` 等）一键追加"
+      ],
+      "usageActions": [
+        "鼠标悬停任意**插件启用后发送**的用户消息（含 agent 运行中插入的转向指令消息）",
+        "点「确认回退」→ 文件恢复到该消息发送前的状态",
+        "git --git-dir=\"<store>\\git\\.git\" tag -l",
+        "git --git-dir=\"<store>\\git\\.git\" ls-tree -r --name-only snap-<消息ID>",
+        "重启后硬刷新页面（Ctrl+Shift+R）"
+      ],
+      "ioPairs": [
+        "鼠标悬停任意**插件启用后发送**的用户消息（含 agent 运行中插入的转向指令消息），复制按钮左侧出现「↶ 撤回」。",
+        "点「确认回退」→ 文件恢复到该消息发送前的状态；视图切到新会话（该消息及之后的对话移除），原会话归档、随时可找回。"
+      ],
+      "codeExamples": [
+        "git --git-dir=\"<store>\\git\\.git\" tag -l"
+      ],
+      "usecases": [],
+      "outputs": [
+        "视图切到新会话（该消息及之后的对话移除），原会话归档、随时可找回"
+      ],
+      "reliability": [
+        "目标工作区的 agent 正在运行时拒绝预览与撤回",
+        "插件启用前的历史消息没有快照，不显示撤回按钮",
+        "会话第一条用户消息无法回退对话（仅文件回退）",
+        "工作区内嵌套的其他 git 仓库（子目录自带 `.git`）无法索引",
+        "超过 100MB 的大文件自动跳过",
+        "快照失败按根因分类（git 缺失 / 磁盘满 / 无权限 / 锁冲突 / 目录冲突）并给出可行动提示",
+        "连续 3 次失败起指数退避熔断（冷却后自动重试）",
+        "回退中途失败时自动恢复到回退前状态，救援也失败则给出可直接复制执行的手动恢复命令",
+        "与会话的沙箱权限无关（workspace-write / read-only 会话照常快照与回退）",
+        "仅当 home 本身不可写（如指到只读盘）才降级到项目内 `.dsh-recall-snapshots`"
+      ],
+      "media": [
+        {"excerpt": "![悬停出现撤回按钮](docs/screenshots/recall-button.png)", "weight": 1},
+        {"excerpt": "![确认面板 · 变更文件清单](docs/screenshots/confirm-panel-1.png)", "weight": 1},
+        {"excerpt": "![设置页](docs/screenshots/settings-exclude-2.png)", "weight": 1}
+      ],
+      "concerns": [
+        "功能亮点与详细章节（快照维护/树形管理）多处重复同一主张，按一次计",
+        "配置项表格描述的行为（回填输入框等）按配置计零",
+        "macOS 尚未真机实测的限制在 10 条上限内未收录"
+      ]
+    },
+    {
+      "repo": "HuanLinOTO/dsh-plugin-better-sidebar-plugin-office",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "为 better-sidebar 的编辑器提供 Office 三件套文件预览（`.docx` / `.xlsx` / `.pptx`）",
+        "`docx`：`.docx`，docx-preview 保真渲染（样式/图片/表格，Alt+滚轮缩放）",
+        "`xlsx`：`.xlsx`，Univer sheets 预设（数据 + 公式 + 合并单元格 + 列宽/行高）",
+        "`pptx`：`.pptx`，@aiden0z/pptx-renderer 浏览器原生预览（翻页导航）",
+        "Side card 设置页自动显示这三个 viewer 的启用开关",
+        "客户端组件自包含：自带 locale（中/英）与 CSS，不依赖 better-sidebar 的 client 内部实现"
+      ],
+      "usageItems": [
+        "在文件资源管理器中打开任意 `.docx` / `.xlsx` / `.pptx`，预览器自动命中",
+        "Side card 设置页 →「文件预览」清单中可见 `docx / xlsx / pptx` 三张卡片，可单独启用/禁用"
+      ],
+      "usageActions": [
+        "在文件资源管理器中打开任意 `.docx` / `.xlsx` / `.pptx`，预览器自动命中",
+        "可单独启用/禁用"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "预览正常渲染"
+      ],
+      "reliability": [
+        "加载/渲染失败回退到「下载查看」链接",
+        "既有文件路由行为不变（扩展名匹配优先于 binary-download / code 兜底）",
+        "需要 better-sidebar `>= 0.6.0`（已移除内置 office viewer 的版本），否则会与内置 `docx/xlsx/pptx` 注册冲突（`already registered`）",
+        "不应出现 Node builtin 引用"
+      ],
+      "media": [],
+      "concerns": [
+        "开发/检查命令均为构建期操作，codeExamples 为空",
+        "dshfind.com 卡片图按徽章/装饰计零"
+      ]
+    },
+    {
+      "repo": "sugarforever/dsh-lark",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "安装后，用户可以直接从飞书或 Lark 与 Harness Agent 对话，并继续使用 Harness 中配置的模型、工具、系统提示和会话存储",
+        "通过 WebSocket 长连接接收消息，不需要公网服务器、域名或 Webhook 回调地址",
+        "单聊和普通群聊按聊天复用 Harness Session",
+        "话题群按线程使用独立 Harness Session",
+        "回复会关联原始消息，并保留在原来的话题线程中",
+        "群聊默认需要 @机器人，单聊默认开放",
+        "可以通过白名单限制群聊和单聊用户",
+        "可以沿用 Harness 默认模型，也可以为飞书渠道指定模型",
+        "官方 SDK 负责连接、自动重连、消息去重、过期事件过滤、同一聊天的串行处理、消息格式转换和发送回复",
+        "这里可以配置 App ID、App Secret、飞书或 Lark 域名、访问策略和 Agent 参数",
+        "配置或凭据变化后，插件会关闭旧 WebSocket 和会话资源，再创建新的 channel，不需要重启 Harness",
+        "选择 Provider 后，Model 下拉框只显示该 Provider 的模型"
+      ],
+      "usageItems": [
+        "发送一条普通文本消息",
+        "使用 `@机器人` 加上问题",
+        "在 Harness **Settings → 飞书与 Lark** 保存后查看其中的 Runtime 状态",
+        "把机器人加入群聊"
+      ],
+      "usageActions": [
+        "在飞书中打开机器人",
+        "发送一条普通文本消息",
+        "使用 `@机器人` 加上问题",
+        "把机器人加入群聊"
+      ],
+      "ioPairs": [
+        "2. 发送一条普通文本消息。\n3. 等待 Harness 完成当前 Agent turn。\n4. 机器人会回复这次 turn 最后生成的 assistant 文本。",
+        "2. 使用 `@机器人` 加上问题。\n3. 机器人会回复触发它的那条消息。"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "对于 CI、容器或服务部署，也可以继续使用环境变量",
+        "本地电脑、内网服务器和没有公网入口的开发环境都可以运行"
+      ],
+      "outputs": [
+        "机器人会回复这次 turn 最后生成的 assistant 文本",
+        "机器人会回复触发它的那条消息"
+      ],
+      "reliability": [
+        "会话标识经过 SHA-256 处理，不会把原始 `chat_id` 写进 Session ID",
+        "Harness 内部错误不会直接发送给飞书用户",
+        "`$DSH_HOME/.credentials.yaml` 是权限为 `0600` 的明文 YAML，不是加密保险库；同一 OS 用户运行的进程仍可读取",
+        "插件不会记录 App ID 和 App Secret",
+        "重复事件会在 SDK 的去重窗口内被忽略",
+        "超过五分钟的延迟事件不会当作新消息处理",
+        "一个飞书应用不宜同时运行多个长连接消费者。平台可能在连接之间分发事件，导致单个实例只能收到部分消息",
+        "兼容范围从 `0.1.0-rc.6` 开始，并通过 CI 持续验证最新发布的 Harness 版本",
+        "回复只读取当前消息之后产生的 assistant 文本，不会误发上一轮回答",
+        "运行期间如果网络中断，官方 SDK 会尝试重新连接"
+      ],
+      "media": [],
+      "concerns": [
+        "绝大多数围栏为安装/配置命令，codeExamples 为空",
+        "内部错误不外发与异常堆栈不外发为同一主张，只计一次"
+      ]
+    },
+    {
+      "repo": "liguobao/dsh-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Ready-to-use packages with no separate Node.js, npm, or `npx` setup.",
+        "Bundled, version-matched DeepSeek Harness, Remote, and File Viewer components.",
+        "Read-only previews for source code, text, Markdown, images, PDFs, CSV, JSON, and YAML.",
+        "Remote session access from another authorized computer, phone, tablet, or browser.",
+        "Plugin discovery and installation from npm or GitHub.",
+        "Workspace actions for VS Code, Cursor, VSCodium, Zed, and the system file manager.",
+        "runs it locally in a hardened Electron window on Windows, macOS, and Linux",
+        "Built-in update checks for new DSH Desktop releases with SHA-256 verification."
+      ],
+      "usageItems": [
+        "Open DSH Desktop and wait for Harness to start",
+        "Add or select a workspace",
+        "Start a session",
+        "Use the **Plugins** menu to browse or manage plugins",
+        "Restart Harness after changing plugins"
+      ],
+      "usageActions": [
+        "Open DSH Desktop and wait for Harness to start",
+        "Add or select a workspace",
+        "Start a session",
+        "Use the **Plugins** menu to browse or manage plugins",
+        "Restart Harness after changing plugins"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Local-only Harness service, restricted Electron renderers, and external links opened in the system browser.",
+        "Harness can read and modify files in selected workspaces and execute commands with the permissions you grant.",
+        "Plugins run with the same local permissions as Harness, so install only sources you trust.",
+        "macOS packages are Developer ID signed and notarized. Windows may still show a SmartScreen warning.",
+        "DeepSeek Harness is currently a developer preview and may introduce breaking changes.",
+        "The Android client APK version follows the bundled Remote component.",
+        "Installers should be built on their target operating system."
+      ],
+      "media": [],
+      "concerns": [
+        "Quick start 第 2 步（配置 API key）为配置步骤，计零",
+        "AppImage/开发围栏均为安装/构建命令，计零"
+      ]
+    },
+    {
+      "repo": "geml-spec/geml",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "`geml list`, `geml find` and `geml get` address the Markdown you already have — nothing is converted, no new files, your `.md` stays `.md`",
+        "a deterministic grammar that maps directly to an abstract syntax tree (AST), so programs and LLMs perform atomic block-level create/read/update/delete",
+        "partial patches and idempotent updates replace whole-file rewrites",
+        "Writes land as byte splices with whole-document re-validation — the tree serves reading and validation, and every untouched byte is guaranteed unchanged.",
+        "Native cross-document, cross-fragment component references.",
+        "Change the source node once and every reference follows — no version skew.",
+        "A strict validator with precise error locations and actionable repair feedback.",
+        "a section cuts three ways: --head | --intro | --body",
+        "edits **one block at a time** instead of rewriting whole files",
+        "same server also answers \"who calls this\" — four read-only `geml_codemap_*` tools",
+        "`geml_revert` restores one block, the rest of the file byte-identical"
+      ],
+      "usageItems": [
+        "read ONE section, not the file",
+        "search block content -> an address, not a line number",
+        "roll ONE block back",
+        "replace that block, forking another",
+        "validate only: diagnostics + exit code",
+        "CALL FIRST: every block, its address, kind, lines"
+      ],
+      "usageActions": [
+        "geml list   doc.geml",
+        "geml find   \"words\" doc.geml",
+        "geml get    doc.geml '#hello'",
+        "geml set    doc.geml '#license' --in template.geml#mit",
+        "geml add    doc.geml --after '#intro' --in snippet.geml",
+        "geml revert doc.geml '#plan' --rev -1",
+        "geml check  doc.geml"
+      ],
+      "ioPairs": [
+        "geml find   \"words\" doc.geml                             # search block content -> an address, not a line number",
+        "geml replace README.md 'old text' 'new text'    # swap a string, told which block held it",
+        "Then just ask for the change you want — \"fix the Q3 row in the FY26 table\" — and\nthe agent addresses that one block."
+      ],
+      "codeExamples": [
+        "geml list    README.md                          # every section, as an address"
+      ],
+      "usecases": [
+        "**Turn a codebase into a document** — the whole call graph as a tree of GEML documents, browsable",
+        "**Feed a RAG / agent framework** — block-level loaders (one chunk per block, carrying `block_id`) + agent editing tools",
+        "**Use it from DeepSeek Harness** — the geml MCP server plus the authoring and code-graph skills, one installable bundle",
+        "**Read it in the browser** — open any raw `.geml` link and it renders in place: computed tables, charts, Mermaid, math, with diagnostics as a banner",
+        "**Write it in your editor** — syntax highlighting + build-time reference checking",
+        "**Try it without installing anything** — edit on the left, live render on the right"
+      ],
+      "outputs": [
+        "Only that section enters the agent’s context — a couple of KB, not the whole ~40 KB file."
+      ],
+      "reliability": [
+        "Every mutation is re-parsed before it writes and refused if it would break the\ndocument — which is what makes editing unattended safe.",
+        "Paths stay confined to `--root`, which a client cannot widen.",
+        "A dangling `#id` is an error with a non-zero exit.",
+        "**1,300+** unit tests today, plus the conformance corpus, round-trip serialization and end-to-end CLI runs, with coverage CI-gated at ≥**95%** lines / statements / functions / branches.",
+        "A processor must degrade gracefully on constructs it does not recognize (spec §8.2)",
+        "`text/geml` is not registered with IANA yet",
+        "some things you can write in Markdown you cannot write here",
+        "*Cost: rendering may need to read several files, and must degrade gracefully when it can't.*",
+        "required to parse clean on every test run",
+        "is what holds separate implementations compatible"
+      ],
+      "media": [],
+      "concerns": [
+        "Key features #2 等处存在疑似乱改写句子，仅引用可逐字核对的行",
+        "CLI 动词围栏与开场围栏重复 list 操作，codeExamples 只记一处",
+        "徽章与 logo 图按规则计零"
+      ]
+    },
+    {
+      "repo": "yunxiiQwQ/dsh-maid-whale-webUI",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "提供亮暗双主题、海洋插画壁纸、手绘边框，以及随 DSH 启停的原生 Windows 鲸鱼桌宠",
+        "无需另外安装 Python 或 Node：桌宠帮助程序已包含在插件包中",
+        "工作 | Agent 编辑文件、使用普通工具或处于通用工作阶段",
+        "等待确认 | Agent 提问、请求审批或任务被阻塞",
+        "成功 | 任务正常完成时短暂播放",
+        "错误 | 工具失败、任务异常结束或达到限制",
+        "摸头 | 单击桌宠上半部，或双击桌宠",
+        "多会话同时活动时，显示优先级为：等待确认 → 错误 → 工作 → 思考 → 空闲。",
+        "交互动作结束后，桌宠会回到最新的 Agent 状态。"
+      ],
+      "usageItems": [
+        "请前往 **设置 → 插件 → 插件配置 → 鲸鱼桌宠** 检查启用开关",
+        "工作区面板右下角的鲸鱼按钮也可即时启停桌宠",
+        "同一时间建议只启用一个界面主题"
+      ],
+      "usageActions": [
+        "检查启用开关",
+        "即时启停桌宠",
+        "单击桌宠上半部，或双击桌宠",
+        "按住桌宠移动超过拖动阈值",
+        "单击桌宠主体区域",
+        "单击桌宠右侧尾巴区域"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "主题会在启动后自动应用，桌宠也会自动出现"
+      ],
+      "reliability": [
+        "原生桌宠仅支持 Windows；单独使用 Web UI 主题不受此限制",
+        "插件仅使用 DSH 官方客户端插件机制，不修改 DeepSeek Harness 源码，也不介入模型请求",
+        "桌宠不存储密钥、不截图、无遥测、不新增网络端口，只响应 DSH 自身事件"
+      ],
+      "media": [
+        {"excerpt": "![无对话页面的亮色主题](maid-whale-webui/preview/theme-light.png)", "weight": 1},
+        {"excerpt": "![无对话页面的暗色主题](maid-whale-webui/preview/theme-dark.png)", "weight": 1},
+        {"excerpt": "<img src=\"maid-whale-webui/preview/pet-working.png\" alt=\"鲸鱼桌宠工作状态预览\" width=\"480\">", "weight": 1}
+      ],
+      "concerns": [
+        "Pet 触发表的动作列同时作为交互操作记入 usageActions（结构性重叠允许）",
+        "安装/更新/卸载围栏按规则计零"
+      ]
+    }
+  ]
+}

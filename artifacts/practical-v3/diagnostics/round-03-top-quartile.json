@@ -1,0 +1,1085 @@
+{
+  "generatedAt": "2026-09-02T06:25:30.966Z",
+  "k": 25,
+  "predictedCutoff": 52,
+  "oracleCutoff": 53,
+  "misses": [
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "score": 48,
+      "oracle": 67,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -19,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.611,
+          "coverage": 0.333,
+          "fallbackShare": 0.111
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 7,
+        "usageActions": 6.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 3,
+        "outputItems": 6,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "score": 31,
+      "oracle": 67,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -36,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.64,
+          "coverage": 0.333,
+          "fallbackShare": 0.053
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 3.5,
+        "usageActions": 3,
+        "ioPairs": 0.5,
+        "codeExamples": 0.5,
+        "usecaseItems": 6.5,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "score": 37,
+      "oracle": 61,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -24,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 6,
+        "usageItems": 0,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.687,
+          "coverage": 0.556,
+          "fallbackShare": 0.182
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 5,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 5,
+        "outputItems": 5,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "score": 49,
+      "oracle": 60,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -11,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.818,
+          "coverage": 0.667,
+          "fallbackShare": 0.031
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 2.5,
+        "usageActions": 3.5,
+        "ioPairs": 1,
+        "codeExamples": 2,
+        "usecaseItems": 5,
+        "outputItems": 4,
+        "media": 4.5,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "orziz/odai",
+      "score": 46,
+      "oracle": 60,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -14,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.595,
+          "coverage": 0.333,
+          "fallbackShare": 0.143
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 11.5,
+        "usageItems": 6,
+        "usageActions": 6.5,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 2.5,
+        "outputItems": 3,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "bruc3van/dsh-desktop",
+      "score": 41,
+      "oracle": 59,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -18,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.803,
+          "coverage": 0.667,
+          "fallbackShare": 0.061
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 3.5,
+        "usageActions": 3.5,
+        "ioPairs": 0,
+        "codeExamples": 0.5,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "score": 49,
+      "oracle": 58,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -9,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 5,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.732,
+          "coverage": 0.556,
+          "fallbackShare": 0.091
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 4,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 5,
+        "outputItems": 3,
+        "media": 2,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh_workflow",
+      "score": 49,
+      "oracle": 57,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -8,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 6,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.714,
+          "coverage": 0.444,
+          "fallbackShare": 0.016
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 5,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 1.5,
+        "usecaseItems": 2,
+        "outputItems": 3.5,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Fishquito7/dsh-skill-mcp-panel",
+      "score": 33,
+      "oracle": 55,
+      "predictedMembership": 0,
+      "oracleMembership": 1,
+      "membershipGap": 1,
+      "error": -22,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.652,
+          "coverage": 0.333,
+          "fallbackShare": 0.029
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 6.5,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 1.5,
+        "media": 1,
+        "reliabilityItems": 9.5,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "PerryLink/dsh-auto-review",
+      "score": 51,
+      "oracle": 53,
+      "predictedMembership": 0,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.6666666666666666,
+      "error": -2,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 3,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.74,
+          "coverage": 0.556,
+          "fallbackShare": 0.076
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 4.5,
+        "usageActions": 4,
+        "ioPairs": 1.5,
+        "codeExamples": 2.5,
+        "usecaseItems": 1.5,
+        "outputItems": 2,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Sanqi-normal/dsh-webui-market-plugin",
+      "score": 29,
+      "oracle": 53,
+      "predictedMembership": 0,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.6666666666666666,
+      "error": -24,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 9,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.756,
+          "coverage": 0.556,
+          "fallbackShare": 0.043
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5.5,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0.5,
+        "outputItems": 1.5,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Stormycry-cryp/dsh-AuthInOne",
+      "score": 46,
+      "oracle": 53,
+      "predictedMembership": 0,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.6666666666666666,
+      "error": -7,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 10,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.674,
+          "coverage": 0.444,
+          "fallbackShare": 0.097
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 4,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 5,
+        "outputItems": 3,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    }
+  ],
+  "extras": [
+    {
+      "repo": "Noob-stupid/dsh-plugin-hub",
+      "score": 62,
+      "oracle": 45,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 17,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.828,
+          "coverage": 0.667,
+          "fallbackShare": 0.011
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 3,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0.5,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "skymecode/deepseek-harness-for-vscode",
+      "score": 61,
+      "oracle": 52,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 9,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.761,
+          "coverage": 0.556,
+          "fallbackShare": 0.033
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 4.5,
+        "usageActions": 5.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "FlashingChen/dsh-desktop-hub",
+      "score": 59,
+      "oracle": 39,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 20,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 4,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.766,
+          "coverage": 0.556,
+          "fallbackShare": 0.024
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 1.5,
+        "usageActions": 0.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "liguobao/deepseek-harness-remote",
+      "score": 58,
+      "oracle": 52,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 6,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 10,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 3,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.878,
+          "coverage": 0.778,
+          "fallbackShare": 0.022
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 6.5,
+        "usageItems": 6.5,
+        "usageActions": 5.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1.5,
+        "outputItems": 0.5,
+        "media": 6,
+        "reliabilityItems": 9.5,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "score": 57,
+      "oracle": 46,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 11,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.815,
+          "coverage": 0.667,
+          "fallbackShare": 0.038
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 6,
+        "usageItems": 5,
+        "usageActions": 5.5,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 1,
+        "outputItems": 2.5,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "cofy-x/axern",
+      "score": 55,
+      "oracle": 40,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 15,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 9,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 1.5,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.819,
+          "coverage": 0.667,
+          "fallbackShare": 0.028
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 1.5,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1.5,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "Vladimir-Human/ru-marketplace-mcp",
+      "score": 54,
+      "oracle": 43,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 11,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.744,
+          "coverage": 0.556,
+          "fallbackShare": 0.068
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 0.5,
+        "usageActions": 3,
+        "ioPairs": 1,
+        "codeExamples": 1.5,
+        "usecaseItems": 0.5,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "whiteguo233/dsh-openbiliclaw",
+      "score": 53,
+      "oracle": 44,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 9,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.705,
+          "coverage": 0.444,
+          "fallbackShare": 0.034
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 0.5,
+        "usageActions": 0.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 5.5,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "feibi-mochi/deepseek-harness-control-center",
+      "score": 52,
+      "oracle": 49,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 3,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.763,
+          "coverage": 0.556,
+          "fallbackShare": 0.029
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 11.5,
+        "usageItems": 3.5,
+        "usageActions": 2.5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1.5,
+        "outputItems": 1.5,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "score": 52,
+      "oracle": 28,
+      "predictedMembership": 1,
+      "oracleMembership": 0,
+      "membershipGap": 1,
+      "error": 24,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 6,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.809,
+          "coverage": 0.667,
+          "fallbackShare": 0.049
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 2,
+        "usageActions": 4,
+        "ioPairs": 1,
+        "codeExamples": 0,
+        "usecaseItems": 2,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "DDDMUC/dsh-free-search",
+      "score": 68,
+      "oracle": 53,
+      "predictedMembership": 1,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.33333333333333337,
+      "error": 15,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 2.5,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 4,
+        "usageActions": 2,
+        "ioPairs": 1,
+        "codeExamples": 0,
+        "usecaseItems": 2,
+        "outputItems": 2,
+        "media": 3,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "chokwinlee/deepseek-harness-desktop",
+      "score": 59,
+      "oracle": 53,
+      "predictedMembership": 1,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.33333333333333337,
+      "error": 6,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9,
+        "usageItems": 10,
+        "usageActions": 9,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.766,
+          "coverage": 0.556,
+          "fallbackShare": 0.023
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 4.5,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    },
+    {
+      "repo": "labring/sealos-skills",
+      "score": 59,
+      "oracle": 53,
+      "predictedMembership": 1,
+      "oracleMembership": 0.6666666666666666,
+      "membershipGap": 0.33333333333333337,
+      "error": 6,
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.843,
+          "coverage": 0.778,
+          "fallbackShare": 0.092
+        }
+      },
+      "oracleEvidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 3.5,
+        "usageActions": 4.5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 3,
+        "outputItems": 1,
+        "media": 1,
+        "reliabilityItems": 9.5,
+        "confidence": {
+          "overall": 1,
+          "coverage": 1,
+          "fallbackShare": 0
+        }
+      }
+    }
+  ]
+}

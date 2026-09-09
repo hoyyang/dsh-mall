@@ -38,12 +38,16 @@ export interface HtmlRepo {
  * language from the repository cards.
  */
 export declare function fetchTopicPages(cb?: SearchCallbacks): Promise<HtmlRepo[]>;
+export declare class GithubRateLimitError extends Error {
+    readonly retryAfterMs: number;
+    constructor(message: string, retryAfterMs: number);
+}
 /**
- * Deep verdict: does this repo look like a real dsh plugin? Reads the repo
- * root package.json and checks the dsh bundle/client fields and cordis
- * dependencies. null = undecidable (404 / rate limited / unreadable).
+ * Deep positive verdict: root package.json contains an authoritative DSH
+ * bundle/client manifest contract. null means absent or undecidable — absence
+ * at the root is never a non-plugin verdict because the repo may be a monorepo.
  */
-export declare function packageJsonVerdict(token: string, repo: string): Promise<boolean | null>;
+export declare function packageJsonVerdict(token: string, repo: string): Promise<true | null>;
 export declare function getRepoTopics(token: string, repo: string): Promise<{
     names: string[];
     rate: RateInfo;

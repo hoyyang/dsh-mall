@@ -1,0 +1,318 @@
+{
+  "reviews": [
+    {
+      "repo": "omdsh-dev/dsh-mnemon",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| **Search** | Concurrent provider-native recall | Read-only |",
+        "A clean task Agent qualifies, routes, deduplicates, distills, and writes behind Host controls",
+        "Hard rules filter providers; a task Agent resolves only genuine ambiguity",
+        "| **Sidebar WebUI** | Status, Runtime, Documents, Memory Spaces, Provider services, visualization, and confirmation surfaces |",
+        "| **Conversation UI** | Turn memory, Save to memory, exact navigation to the corresponding page |",
+        "| **Headless** | Runtime injection, Document search, Memory Space tools, workspace routing, and supervised writes without a WebUI |"
+      ],
+      "usageItems": [
+        "Open **Memory System → Status** and verify dsh-mnemon, Mnemon Native, Runtime, Documents, and enabled Providers.",
+        "Open **Memory Spaces → Overview → Create Memory Space** and choose an enabled Provider explicitly.",
+        "Submit one stable, future-useful candidate through **Remember**.",
+        "Open **Recall**, run a direct search, then run **Agent query** against the same question.",
+        "Return to the conversation, expand **Turn memory**, and follow one exact tool link."
+      ],
+      "usageActions": [
+        "Open **Memory System → Status** and verify dsh-mnemon, Mnemon Native, Runtime, Documents, and enabled Providers.",
+        "Open **Memory Spaces → Overview → Create Memory Space** and choose an enabled Provider explicitly.",
+        "Submit one stable, future-useful candidate through **Remember**.",
+        "Open **Recall**, run a direct search, then run **Agent query** against the same question.",
+        "Return to the conversation, expand **Turn memory**, and follow one exact tool link."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "| **Runtime** | Preferences, collaboration rules, project conventions, environment facts | Compact `USER.md` / `MEMORY.md` projection on every turn | Deterministic dsh-mnemon Host |",
+        "| **Documents** | Designs, investigations, procedures, postmortems, handoffs | Search first, full Markdown on demand | Deterministic dsh-mnemon Host |",
+        "| **Memory Spaces** | Cross-session facts, decisions, entities, relations | Bounded recall from active spaces | Mnemon Native or an external Provider |"
+      ],
+      "outputs": [
+        "A clean top-level task Agent receives bounded evidence and writes an answer",
+        "Saves a routing receipt",
+        "Local title/description only",
+        "A task Agent creates a searchable cold reference before the Host moves the original",
+        "Expands exact recall, write, and Document-search activity; each item navigates to its source"
+      ],
+      "reliability": [
+        "Current instructions, repository files, and live tool results always outrank historical memory.",
+        "Task Agents do not reuse or consume the main conversation history.",
+        "raw image bytes are never copied into memory.",
+        "dsh-mnemon never invents graph edges, deletion semantics, or enumerable content for an engine that does not provide them.",
+        "Node 20 lacks host primitives used by rc.2.",
+        "Provider credentials are mode `0600` under `<storageRoot>/state/memory-providers.json`. They are never returned to the browser, smart-selection Agent, or Mnemon Pack.",
+        "Host calls use argument arrays with shell disabled, bounded output, timeouts, cancellation, schema validation, path boundaries, locks, and revisions.",
+        "Disabling a Provider clears its local catalog metadata but never deletes remote data.",
+        "Changing scope never migrates, merges, or deletes an old root automatically.",
+        "There is no deterministic secret scanner yet. Never store keys, tokens, private keys, or raw sensitive logs in any tier."
+      ],
+      "media": [
+        {
+          "excerpt": "Full dsh-mnemon v0.2.0 WebUI walkthrough with scrolling and button interactions",
+          "weight": 1
+        },
+        {
+          "excerpt": "Edit a candidate before dispatching an independent task Agent",
+          "weight": 1
+        },
+        {
+          "excerpt": "Read-only Agent answer grounded in bounded multi-provider evidence",
+          "weight": 1
+        },
+        {
+          "excerpt": "Choose a Provider while creating a Memory Space",
+          "weight": 1
+        },
+        {
+          "excerpt": "Choose manual or smart Provider placement",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Provider “Best fit” rows were omitted because they describe linked engines rather than dsh-mnemon itself.",
+        "The README does not show an explicit paired request and response suitable for ioPairs."
+      ]
+    },
+    {
+      "repo": "huiliyi37/dsh-tianshu-tui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "实时渲染、只增滚动转录",
+        "`/fork` 探索分支",
+        "`/rewind` 回退（会话截断 + 可选文件回退）",
+        "`/export` 导出 Markdown 转录",
+        "中轮转向（`/steer` / `Ctrl+T`）",
+        "剪贴板粘贴（`Ctrl+V` / 终端菜单粘贴）",
+        "以终端图形协议内联渲染（kitty / iTerm2）",
+        "grok 风格 slash 下拉菜单（模糊前缀匹配、MRU 排序、ghost 预览）",
+        "`@`-路径 Tab 补全与 `@mention` 展开",
+        "带内联 `diff` 预览的挂起审批卡片",
+        "think 通道以实时头行流动、在滚动区折叠为紧凑行",
+        "`/doctor` 终端诊断"
+      ],
+      "usageItems": [
+        "- `/preset` —— 列出每套预设的能力与工具集，`*` 标当前项；footer / 欢迎顶栏也会显示当前短名（标准 / PTC / 极简 / 创造）。说过话后还附最近一次请求的 `wire:` 工具面",
+        "- `/preset <id>` —— 切换到指定预设（仅空白会话可换：先 `/session new` 再切；`ptc`/`creative` 是 `code`/`cordis` 的别名）",
+        "| `/theme [name]` | 切换主题 |",
+        "| `/density` | 切换紧凑工具卡渲染 |",
+        "| `/lsp` | 切换 LSP 诊断面板（agent 触碰文件时自动拉取该文件诊断；诊断徽标上工具卡） |",
+        "| `/status` | 切换状态面板（goal/todos/plan 投影 + 会话汇总段） |",
+        "| `/skills` | 切换技能浏览面板 |",
+        "| `/tasks` | 任务窗格（后台任务） |",
+        "| `/subagents` | 委派树面板 |",
+        "| `/workflow` | workflow 运行面板 |"
+      ],
+      "usageActions": [
+        "- `/preset` —— 列出每套预设的能力与工具集，`*` 标当前项；footer / 欢迎顶栏也会显示当前短名（标准 / PTC / 极简 / 创造）。说过话后还附最近一次请求的 `wire:` 工具面",
+        "- `/preset <id>` —— 切换到指定预设（仅空白会话可换：先 `/session new` 再切；`ptc`/`creative` 是 `code`/`cordis` 的别名）",
+        "| `/theme [name]` | 切换主题 |",
+        "| `/density` | 切换紧凑工具卡渲染 |",
+        "| `/lsp` | 切换 LSP 诊断面板（agent 触碰文件时自动拉取该文件诊断；诊断徽标上工具卡） |",
+        "| `/status` | 切换状态面板（goal/todos/plan 投影 + 会话汇总段） |",
+        "| `/skills` | 切换技能浏览面板 |",
+        "| `/tasks` | 任务窗格（后台任务） |",
+        "| `/subagents` | 委派树面板 |",
+        "| `/workflow` | workflow 运行面板 |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "| 恢复面板 | 启动时把可恢复会话列表写入滚动区 |",
+        "附件图片显示 `📎 N images` 标记",
+        "已结算的工具结果按 harness presenter 意图渲染为滚动区卡片",
+        "turn 结束（非中断）且有工具调用时落 dim 摘要行（`turn N · 读X 改Y · 耗时`）",
+        "终态以 `✓`/`✗`/`◌` 条目落入滚动区。",
+        "顶部栏（cwd + git 分支 + 模型）",
+        "metrics 行（模型 / token 用量 / 缓存命中率）"
+      ],
+      "reliability": [
+        "**不要把它装配进 oh-my-tianshu（`@huiliyi37` 生态，CLI 为 `@huiliyi37/dsh-tianshu`）的 tui profile**。",
+        "**可同时安装、互不干扰**",
+        "TUI 自身不注册任何 prompt、工具或上下文面；用户输入成为普通日志消息，所有渲染状态都派生自会话事件。",
+        "两者皆无则图片不发送并警告。",
+        "未装配插件时，已发送图片无法再次询问，同角度重复描述会再次调用视觉模型；视觉桥仍覆盖一次性提交时描述路径。",
+        "server 初始化慢于超时（默认 2s）时静默无诊断，下次触碰文件重拉",
+        "大仓库 tsserver 常驻内存（懒启动缓解，无空闲回收）",
+        "切会话不重启 server（rootUri 沿用首会话 cwd）",
+        "未装配时相关命令与面板 fails loud 报不可用，绝不静默吞，也不阻塞 TUI 启动。"
+      ],
+      "media": [
+        {
+          "excerpt": "![dsh-tianshu-tui](docs/promo.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The host-harness capability section was omitted because the README says those packages are not distributed with this bundle.",
+        "No qualifying non-install operational code fence or explicit input/output pair is shown."
+      ]
+    },
+    {
+      "repo": "liangmianya/dsh-synapse",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把同一工作区中的会话、追问和分支组织成一张可浏览、可拖拽、可缩放的地图",
+        "按 DSH 原生 fork 关系连接卡片，不制造另一套会话历史。",
+        "选中回答中的文字可直接带入新的追问",
+        "常用补充词可编辑"
+      ],
+      "usageItems": [
+        "启动后，在 DSH 顶部切换到 **会话地图**。",
+        "在 DSH 原生对话中，通过顶部的 **会话地图** 进入 Synapse；返回 **对话** 后，仍是同一个 DSH 会话。"
+      ],
+      "usageActions": [
+        "启动后，在 DSH 顶部切换到 **会话地图**。",
+        "在 DSH 原生对话中，通过顶部的 **会话地图** 进入 Synapse；返回 **对话** 后，仍是同一个 DSH 会话。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "同时保留 DSH 原生会话作为唯一事实来源。",
+        "Synapse 复用现有的 DSH Web Server，不会启动第二个应用或代理系统。",
+        "DSH session log 保存真实会话内容；Synapse 只投影已提交的事件。",
+        "Synapse 的画布布局数据保存在 `$DSH_HOME/synapse/`，删除它不会删除 DSH 会话。",
+        "插件不修改 prompt、模型请求、工具 schema、provider 路由或可复用 KV-cache 前缀。",
+        "内置 patch 仅支持 DSH 的 `web` profile。"
+      ],
+      "media": [
+        {
+          "excerpt": "![Synapse 会话地图：链条、分支和右侧详情](docs/images/synapse-map.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DSH 原生对话与会话地图入口](docs/images/native-webui.jpg)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The main README contains no non-install operational code example, explicit input/output pair, or explicit scenario beyond feature operation."
+      ]
+    },
+    {
+      "repo": "hikariming/dshfind",
+      "inferredType": "catalog-list",
+      "capability": [
+        "- **🧩 Plugin marketplace** — a live index of DSH plugins, automatically aggregated from the GitHub topic [`dsh-plugin`](https://github.com/topics/dsh-plugin)."
+      ],
+      "usageItems": [
+        "pnpm gen:data",
+        "Add the `dsh-plugin` topic to your **public** GitHub repository."
+      ],
+      "usageActions": [
+        "pnpm gen:data",
+        "Add the `dsh-plugin` topic to your **public** GitHub repository."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### Regenerating plugin & ranking data\n\nPlugin and ranking data are generated from the GitHub topic `dsh-plugin` (requires the [GitHub CLI](https://cli.github.com)):\n\n```bash\npnpm gen:data"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "A scheduled job syncs the topic every day at 02:17 UTC, so a newly tagged repo shows up in the marketplace within about a day — no issue or PR needed.",
+        "If it still isn't listed after two syncs, open an issue: the repo may have been filtered as off-topic, or it may be private/archived."
+      ],
+      "media": [],
+      "concerns": [
+        "Lessons, guides, rankings, and friend-link capabilities were omitted under catalog ownership rules.",
+        "The README shows no qualifying catalog media or explicit paired request and response."
+      ]
+    },
+    {
+      "repo": "TencentCloud/tencentmeeting-cli",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- 📅 **会议管理** — 创建、查询、更新、取消会议，支持周期性会议，管理受邀成员",
+        "- 🎬 **录制管理** — 查询录制列表、获取下载地址、智能纪要、转写详情与搜索",
+        "- 📊 **参会报告** — 查询参会人列表、等候室成员记录",
+        "- 👥 **通讯录** — 按用户名/职位/部门检索企业通讯录成员",
+        "- 🛠️ **问题排查** — 导出本地日志，支持按时间范围过滤，打包为 zip 文件",
+        "通过邮箱地址反查用户详细信息，支持批量查询多个邮箱。",
+        "通过手机号反查用户详细信息，支持批量查询多个手机号。",
+        "会中控制相关命令，用于在会议进行中对参会成员执行呼叫、踢出等管理操作。",
+        "管理会议中等候室成员，支持三种操作类型：",
+        "将 Agent 在使用 CLI 过程中遇到的问题或建议上报至服务器，便于后续优化工具能力。",
+        "异步导出会议参会成员明细"
+      ],
+      "usageItems": [
+        "如需禁用自动打开浏览器，可使用 `--no-browser` 参数：`tmeet auth login --no-browser`",
+        "仅传入需要修改的字段，未传入的字段保持不变。",
+        "`--meeting-id` 和 `--meeting-code` 二选一，`--meeting-id` 优先级更高。",
+        "| `--page-token` | string | 分页游标。**首次查询不传**；后续翻页请将上一次响应中的 `next_page_token` 传入 |",
+        "受邀成员通过用户 `open_id` 指定，可通过 `contact search` 命令查询获得。",
+        "**展示给用户二次确认后**再执行 `record permission-apply-commit` 真正提交申请。",
+        "获取 `job_id` 后，需每隔 5 秒调用 `report job-result` 轮询任务状态",
+        "`--users` / `--sip-users` / `--pstn-users` **三者至少必填一种**",
+        "注意：bool 类型显式设为 false 时必须使用等号语法 --allow-rejoin=false，不能写成 --allow-rejoin false"
+      ],
+      "usageActions": [
+        "tmeet auth login",
+        "tmeet meeting create --subject <主题> --start <开始时间> --end <结束时间> [选项]",
+        "tmeet meeting search [选项]",
+        "tmeet record search [选项]",
+        "tmeet record permission-apply-prepare --meeting-record-id <录制ID> [选项]",
+        "tmeet report participants-export --meeting-id <会议ID> [选项]",
+        "tmeet report job-result --job-id <任务ID>",
+        "tmeet control waiting-room --meeting-id <会议ID> --operate-type <操作类型> [选项]",
+        "tmeet tshoot log [选项]",
+        "tmeet tshoot feedback --category <分类> --intent <原始意图> [选项]"
+      ],
+      "ioPairs": [
+        "申请录制权限前先调用本命令获取审批文案/会议主题/录制所有者等信息，**展示给用户二次确认后**再执行 `record permission-apply-commit` 真正提交申请。",
+        "1. 提交导出任务，获取 job_id\n   tmeet report participants-export --meeting-id \"6953553464429888300\"\n\n2. 每隔 5 秒调用 job-result 轮询任务状态\n   tmeet report job-result --job-id <job_id>"
+      ],
+      "codeExamples": [
+        "#### `meeting create` — 创建会议\n\n```bash\ntmeet meeting create --subject <主题> --start <开始时间> --end <结束时间> [选项]",
+        "#### `record smart-minutes` — 获取智能纪要\n\n```bash\ntmeet record smart-minutes --record-file-id <文件ID> [选项]",
+        "#### `contact search` — 搜索企业通讯录成员\n\n按用户名搜索企业通讯录成员，支持通过职位或部门进一步过滤搜索结果。\n\n```bash\ntmeet contact search --username <用户名> [选项]",
+        "#### `tshoot log` — 导出本地日志\n\n将本地日志打包为 zip 文件，输出到 `~/tmeet_ts_{datetime}.zip`，可用于问题排查。支持按时间范围过滤，不传时间参数则导出全部日志。\n\n```bash\ntmeet tshoot log [选项]"
+      ],
+      "usecases": [
+        "# 创建每周重复会议（共 10 次）",
+        "# 仅修改周期性会议中某一场子会议的时间（不修改周期规则）",
+        "# 按转写内容关键词搜索",
+        "# 用户名 + 部门过滤",
+        "# 导出周期性会议某个子会议的参会成员",
+        "# 将会中成员移回等候室",
+        "# 导出指定时间范围内的日志",
+        "# 反馈：找不到匹配工具",
+        "# 反馈：工具调用返回错误",
+        "# 反馈：一般性建议"
+      ],
+      "outputs": [
+        "查看当前登录状态，包括 OpenId、AccessToken / RefreshToken 的过期状态和剩余有效时间。",
+        "| `--format` | — | `json` | 输出格式：`json`（紧凑格式）\\| `json-pretty`（缩进格式） |",
+        "| `--compact` | — | `false` | 精简输出模式：仅保留关键字段，过滤冗余字段以降低响应体积，适用于查询/列表类命令 |",
+        "| `preview.approval_name` | 申请类型文案 |\n| `preview.subject` | 会议标题 |\n| `preview.file_owner` | 录制所有者名称 |\n| `preview.apply_note` | 权限申请备注信息 |\n| `preview.applicant` | 申请人名称 |",
+        "| `unique_id` | 申请 ID |\n| `status` | 审批状态 |\n| `message` | 审批状态描述 |\n| `approval_url` | 审批链接 |\n| `share_text` | 申请说明描述 |",
+        "| `status` | 任务状态：\"成功\"、\"失败\"、\"处理中\" |\n| `url` | 文件下载链接（状态为 \"成功\" 时返回，有效期 2 小时） |\n| `error_msg` | 错误信息（状态为 \"失败\" 时返回） |",
+        "output log saved to: ~/tmeet_ts_20260410_153000.zip"
+      ],
+      "reliability": [
+        "- 🔒 **安全存储** — 凭证使用 AES-256-GCM 加密，明文不落盘",
+        "- 🖥️ **跨平台** — 支持 macOS、Linux、Windows",
+        "原先的 `--page` / `--pos` / `--size` 参数被标记为 **deprecated**，仍可使用但不再推荐，未来版本可能移除。",
+        "当未传入 `--page-token` 且同时传入了旧分页参数（如 `--page`、`--pos`）时，CLI 会按旧模式发起请求（`page_type=0`）；否则一律按新模式（`page_type=1`）发起请求。",
+        "`record transcript-get` / `record transcript-paragraphs` / `record transcript-search` 暂不支持基于 `--page-token` 的新分页方案。",
+        "以下三组参数**任选其一**（均不传则报错）：",
+        "`--start` 和 `--end` 必须同时传入或同时不传。",
+        "所有时间参数均使用 **ISO 8601** 格式，例如 `2026-04-10T14:00+08:00`。响应中的时间戳字段会自动转换为 ISO 8601 格式展示。",
+        "AI仍可能因模型幻觉、提示词注入、投毒攻击、执行偏差不可控等原因，导致数据泄露、越权操作等执行非预期操作的高风险后果",
+        "若怀疑泄露或需停用，请立即执行登出命令 `tmeet auth logout`。"
+      ],
+      "media": [],
+      "concerns": [
+        "The README has no meaningful non-badge media.",
+        "ioPairs is limited to workflows that explicitly state both the request and returned value or response-driven next step."
+      ]
+    }
+  ]
+}

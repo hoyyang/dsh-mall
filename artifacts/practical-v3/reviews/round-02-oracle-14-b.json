@@ -1,0 +1,351 @@
+{
+  "reviews": [
+    {
+      "repo": "yjh051108/dsh-super-injector",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "不碰 patch / package.json / bundles 列表、不重启进程。**注入即完整生效（host 工具 + client UI）。**",
+        "- 🤖 **自动 watch**：注入即自动监听插件目录，改代码 build 后约 1.5 秒自动重载（无需手动触发）",
+        "- 🧪 **开发侧挂区（staging）+ 持久化**：测试工具挂\"后侧\"不进 tools schema、缓存零污染；`dev_stage_promote` 一键转正；staging 落盘，**自重载/重启后转正工具自动恢复**",
+        "- 🧹 **一键卸载**：`dev_uninject_plugin` fiber 全清理（工具/监听/路由/client 表）→ 清注入清单 → 删 junction，免重启",
+        "- 🛠️ **路由自愈**：`dev_clear_routes` 直捣 webserver 内部路由表，热重载残留的孤儿路由免重启清除",
+        "- 🔁 **重启自动恢复**：注入清单持久化（`~/.dsh/super-injector/registry.json`），web 重启后自动归位",
+        "| `dev_injected_list` | 列出注入清单 |",
+        "| `dev_install_package` | 热装配本地 bundle 插件（profile package.json + junction + loader.create，重启后由 bundles 列表正常装配） |",
+        "| `dev_stage_promote` | 一键转正：侧挂工具挂前侧正式注册（唯一一次缓存刷新） |"
+      ],
+      "usageItems": [
+        "**装模组**：拿到插件包（package.json + lib/ 产物）→ 对 AI 说 `dev_inject_plugin`（参数 = 插件包绝对路径）→ 当场生效（下一 step 工具可见）。",
+        "**开发迭代**：改代码 → build → 自动 watch 约 1.5 秒自动重载（或 `dev_reload_package`）→ 验证 → 稳定后 `dev_stage_promote` 一键转正。",
+        "**卸载**：`dev_uninject_plugin`（参数 = 包名子串）→ 工具/监听/路由/client 表全清，免重启。"
+      ],
+      "usageActions": [
+        "#    对 AI 说：dev_scaffold_plugin {\"dir\": \"D:/dev/my-plugin\", \"name\": \"my-plugin\", \"form\": \"daemon-loop\", \"description\": \"...\"}",
+        "#    对 AI 说：dev_build_plugin {\"dir\": \"D:/dev/my-plugin\"}",
+        "#    对 AI 说：dev_release_plugin {\"dir\": \"D:/dev/my-plugin\", \"version\": \"0.1.0\"}",
+        "# 注入即活：dev_inject_plugin {\"dir\": \"D:/dev/my-plugin\"}",
+        "5. **自检**：改完代码跑一次 `dev_self_test`，确保注入/重载/自重载/预检/卸载全链路不退化",
+        "**开发迭代**：改代码 → build → 自动 watch 约 1.5 秒自动重载（或 `dev_reload_package`）→ 验证 → 稳定后 `dev_stage_promote` 一键转正。",
+        "**卸载**：`dev_uninject_plugin`（参数 = 包名子串）→ 工具/监听/路由/client 表全清，免重启。"
+      ],
+      "ioPairs": [
+        "**装模组**：拿到插件包（package.json + lib/ 产物）→ 对 AI 说 `dev_inject_plugin`（参数 = 插件包绝对路径）→ 当场生效（下一 step 工具可见）。",
+        "**卸载**：`dev_uninject_plugin`（参数 = 包名子串）→ 工具/监听/路由/client 表全清，免重启。"
+      ],
+      "codeExamples": [
+        "### 30 行写一个\"会思考的插件\"（守护循环最小示例）\n\n```ts\nimport type { Context } from 'cordis'"
+      ],
+      "usecases": [
+        "装/换成品模组、自主开发闭环（写 → build → 注入 → 热重载）",
+        "### 30 行写一个\"会思考的插件\"（守护循环最小示例）"
+      ],
+      "outputs": [
+        "- 📊 **操作自检**：每次注入/重载/安装返回 `host ✓ / client ✓` 双验证；`dev_plugin_status` 含操作成功率统计",
+        "# 2. 构建打包（探测 DSH_CHECKOUT → tsc host → tsdown client（如声明）→ npm pack → tgz）",
+        "# 3. 发布（gh release create v<version> + tgz）"
+      ],
+      "reliability": [
+        "- 作死压力测试：连环自杀/坏语法/悬空 junction/循环注入卸载——**零崩溃零残留**",
+        "- **免杀进程恢复**：失败 → touch patch（include.refresh 进程内重装配）→ 6 秒复活",
+        "- **DSH 正式版兼容**：0.1.0-rc.6 一行不改直接运行（peerDeps 范围声明实证）",
+        "- 🛡️ **失败可重试**：`hasActiveEntry` 权威防重 + 失败残留缓存自动清理 + 残留 entry 自动清理",
+        "1. **资源注册必须挂 `ctx.effect`**（工具/路由/监听）——热重载/卸载才能自动清理，否则僵尸残留（注入器自己踩过）",
+        "4. **提示词注入遵守缓存原则**：静态文本 + order 靠前（静态到头）；动态内容走消息尾（动态到尾）；严禁动态拼接进 system——**system 前缀任何动态变化 = 整个会话缓存全量 miss**（命中便宜 10 倍）",
+        "- **插件包必须自带依赖链接**：`lib/` 里 `import '@deepseek-ai/dsh-tools'` 等从包自身 `node_modules` 解析——照 build.sh 建 junction 到 checkout 包（如 `node_modules/@deepseek-ai/dsh-tools → <checkout>/packages/core/tools`）；",
+        "- **失败 import 会毒化重试**：loadCache 残留残缺 job 导致同名重载复用失败态——注入前 `purgeCache` 清理；",
+        "- **资源注册必须挂 `ctx.effect`**：`reloadPackage` 重建失败若报 `duplicate / already registered`，说明资源是裸注册——挂 `ctx.effect` 后热重载才能正确清理重建；",
+        "- **client 操作必须用完整包名**：`client-modules.processOne` 对 `entry.options.name` 精确匹配，传短名会静默注册失败；"
+      ],
+      "media": [],
+      "concerns": []
+    },
+    {
+      "repo": "liebaojun/MakoCode",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **角色立绘系统**：常陆茉子 + 朝武芳乃双角色，超 110 张 PNG 表情立绘",
+        "- **动态位置状态机**：说话者居中放大，听者侧移缩小，0.7s 平滑过渡",
+        "- **场景背景**：6 张和风场景（和室/浴室/餐厅/道场/旅店/神社），1.5s 淡入淡出",
+        "- **BGM 系统**：30+ 首千恋万花原声 BGM，按场景自动切换",
+        "- **打字机效果**：逐字显示 + Markdown 渲染 + KaTeX 公式支持",
+        "- 30 条预生成问候语音（GPT-SoVITS TTS）",
+        "- 独立音量控制",
+        "一键切换 9 家 AI 供应商：",
+        "- 内置人设 Markdown 编辑器（主设定 + 世界观双标签）\n- 支持修改角色性格、说话风格、世界观背景",
+        "- 设置面板一键打开 Skills / 插件文件夹",
+        "- 文件上传（图片/文档/代码等，50MB 限制）",
+        "- 应用内检查更新 + 后台下载\n- NSIS 静默安装，无需手动重装"
+      ],
+      "usageItems": [
+        "- 33 条快捷指令（输入 `/` 触发）"
+      ],
+      "usageActions": [
+        "- 33 条快捷指令（输入 `/` 触发）",
+        "# 4. 启动\nnpm start",
+        "npm run build        # 完整 NSIS 安装器 → dist/",
+        "npm run build:dir    # 仅解压版（调试用）"
+      ],
+      "ioPairs": [
+        "3. 测试连接 → 进入茉子的世界",
+        "npm run build        # 完整 NSIS 安装器 → dist/",
+        "npm run build:dir    # 仅解压版（调试用）"
+      ],
+      "codeExamples": [
+        "### 构建安装器\n\n```bash\nnpm run build        # 完整 NSIS 安装器 → dist/"
+      ],
+      "usecases": [],
+      "outputs": [
+        "npm run build        # 完整 NSIS 安装器 → dist/",
+        "npm run build:dir    # 仅解压版（调试用）"
+      ],
+      "reliability": [
+        "- 语音缓存管理（FIFO 200MB 上限）",
+        "- 保存后新会话生效",
+        "本软件使用 AI 大语言模型生成对话内容，其输出可能包含不准确或不适当的信息。用户应自行判断。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/main-menu.png\" alt=\"MakoCode 主界面\" width=\"700\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/chat.png\" alt=\"茉子对话界面，AI 实时聊天\" width=\"700\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/preset-modal.png\" alt=\"LLM 供应商预设弹窗，一键填充 API 配置\" width=\"500\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/setup-wizard.png\" alt=\"茉子对话气泡引导安装\" width=\"400\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/api-config.png\" alt=\"API 地址/Key/模型配置界面\" width=\"400\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/character-editor.png\" alt=\"修改茉子人设的 Markdown 编辑器界面\" width=\"700\">",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "yzlnew/infra-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Write high-performance GPU kernels using TileLang for NVIDIA, AMD, and Ascend hardware.",
+        "Estimate GPU memory usage for Megatron-based MoE and dense models.",
+        "Guide for using SLIME (LLM post-training framework for RL Scaling).",
+        "Create professional flowcharts and architecture diagrams using LaTeX TikZ with standardized styles.",
+        "Create presentation slide decks using Material You (Material Design 3) design language.",
+        "Create polished standalone HTML/CSS flowcharts with Anthropic-inspired pastel styling, reliable geometry, and deterministic connector routing.",
+        "Generate Sebastian-Raschka-gallery-style TikZ architecture diagrams for any HuggingFace decoder-only LLM, with per-block parameter formulas and concrete numbers.",
+        "Build figures in OpenAI's blog / research / system-card \"dotcom\" visual style, emitted as self-contained HTML/SVG with zero dependencies."
+      ],
+      "usageItems": [
+        "Skills automatically activate when relevant tasks are detected.",
+        "```bash\n# Run all tests from project root\npytest\n\n# Run tests for specific skill\npytest tests/tilelang-developer/\n\n# Run specific test file\npytest tests/tilelang-developer/test_gemm.py\n```",
+        "1. Update skill source files (SKILL.md, references/) with latest information\n2. Run validation tests to ensure examples are correct\n3. Commit and tag new version",
+        "Open an issue with:\n- Framework/tool name\n- Use cases and scenarios\n- Link to official documentation",
+        "1. Fork the repository\n2. Update skill source files\n3. Run validation tests\n4. Submit PR with changelog"
+      ],
+      "usageActions": [
+        "pytest",
+        "pytest tests/tilelang-developer/",
+        "pytest tests/tilelang-developer/test_gemm.py",
+        "Open an issue with:",
+        "4. Submit PR with changelog"
+      ],
+      "ioPairs": [
+        "# User request:\n\"Write a FP16 matrix multiplication kernel optimized for A100\"\n\n# Claude loads tilelang-developer skill and generates:\n# - Complete TileLang kernel code",
+        "# User request:\n\"Estimate memory for DeepSeek-V3 with TP=8, PP=4, EP=8\"\n\n# Claude loads megatron-memory-estimator skill and provides:\n# - Detailed memory breakdown (model, optimizer, activations)",
+        "# User request:\n\"Help me set up GRPO training for Qwen3-4B with multi-turn tool calling\"\n\n# Claude loads slime-user skill and provides:\n# - Environment setup instructions",
+        "# User request:\n\"Create a flowchart showing the FlashAttention-2 algorithm flow\"\n\n# Claude loads tikz-flowchart skill and generates:\n# - Professional LaTeX TikZ diagram with standardized colors",
+        "# User request:\n\"Create a presentation deck about our AI infrastructure architecture\"\n\n# Claude loads material-you-slides skill and generates:\n# - Self-contained HTML file with Material Design 3 styling"
+      ],
+      "codeExamples": [
+        "### Testing Skills\n\nValidate code examples in skills:\n\n```bash\n# Run all tests from project root\npytest"
+      ],
+      "usecases": [
+        "\"Write a FP16 matrix multiplication kernel optimized for A100\"",
+        "\"Estimate memory for DeepSeek-V3 with TP=8, PP=4, EP=8\"",
+        "\"Help me set up GRPO training for Qwen3-4B with multi-turn tool calling\"",
+        "\"Create a flowchart showing the FlashAttention-2 algorithm flow\"",
+        "\"Create a presentation deck about our AI infrastructure architecture\""
+      ],
+      "outputs": [
+        "**Example Output:** [QAT Flowchart](gallery/qat_flowchart.pdf) | [Anthropic Theme](gallery/tikz_flowchart_anthropic_theme.png)",
+        "**Example Output:** [SLIME RL Training Slides](gallery/slime_rl_slides.pdf)",
+        "**Example Output:** [Review Demo PNG](gallery/anthropic_theme_flowchart_review_demo.png)",
+        "**Example Output:** [DeepSeek-V4-Flash PNG](hf-architecture-tikz/examples/deepseek-v4-flash/deepseek-v4-flash.png) | [PDF](hf-architecture-tikz/examples/deepseek-v4-flash/deepseek-v4-flash.pdf)"
+      ],
+      "reliability": [
+        "This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use.",
+        "3. **Validation**: Test skill-generated code examples to ensure correctness",
+        "4. **Maintenance**: Regular updates based on latest official documentation",
+        "Skills contain advanced technical content and assume familiarity with GPU programming, compiler design, and deep learning systems."
+      ],
+      "media": [
+        {
+          "excerpt": "![TikZ Flowchart Anthropic Theme](gallery/tikz_flowchart_anthropic_theme.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Anthropic Theme Flowchart Review Demo](gallery/anthropic_theme_flowchart_review_demo.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DeepSeek-V4-Flash Architecture](hf-architecture-tikz/examples/deepseek-v4-flash/deepseek-v4-flash.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "ChisaAlter/Deepseek-Harness-Desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **官方界面** — 对话、工具调用、审批就是 `dsh web`，没有另做一套聊天页。",
+        "- **启动器** — 冷启动先开启动器（更新询问、导入、版本、插件问诊）；托盘可随时再打开。",
+        "- **Git** — 标题栏切分支、提交、推送、开变更请求。",
+        "第三方思考强度",
+        "最新一条用户消息可改完再发。",
+        "- **扩展** — 设置里管理 MCP、技能和插件。市场是桌面自有的设置分区（内置精选目录与安装引擎，源自 [dsh-market](https://github.com/dsh-market/dsh-market) 的产品形态但已与上游分离），没有独立窗口。",
+        "- **桌面壳** — 关闭进托盘、自动更新"
+      ],
+      "usageItems": [
+        "- **文件与终端** — `Ctrl+\\` 打开右栏（Files / Diff / Browser / Agents）；`` Ctrl+` `` 打开底栏终端，选区可送进对话。",
+        "- **外观** — 浅色 / 深色主题。壁纸在外观里选或点「浏览」打开图库（分类、搜索、收藏，确认后按窗口比例裁切）；毛玻璃和像素化也在外观里调。",
+        "`Ctrl+,` 打开设置。",
+        "macOS 把 `$HOME/.dsh/sessions` 拷到 `~/Library/Application Support/Deepseek-Harness-Desktop/dsh-home/sessions`（附件同理）。拷完后打开**当时聊天用的工作区路径**。"
+      ],
+      "usageActions": [
+        "`Ctrl+\\` 打开右栏（Files / Diff / Browser / Agents）",
+        "`` Ctrl+` `` 打开底栏终端",
+        "`Ctrl+,` 打开设置。",
+        "推荐冷启动进入 **启动器 → 导入**。",
+        "`pnpm run build:lib:client`",
+        "npm test              # 桌面壳单测",
+        "npm run dist          # Windows 安装包",
+        "npm run dist:mac      # macOS 安装包（须在 macOS 上）"
+      ],
+      "ioPairs": [
+        "Harness 挂了会回到故障页并自动重启。",
+        "主模型不识图时走官方兜底。",
+        "npm run dist          # Windows 安装包",
+        "npm run dist:mac      # macOS 安装包（须在 macOS 上）"
+      ],
+      "codeExamples": [
+        "启动器不可用时的 Windows PowerShell 兜底：\n\n```powershell\n$old = \"$env:USERPROFILE\\.dsh\""
+      ],
+      "usecases": [],
+      "outputs": [
+        "npm run dist          # Windows 安装包",
+        "npm run dist:mac      # macOS 安装包（须在 macOS 上）"
+      ],
+      "reliability": [
+        "- **独立家目录** — 会话、设置、市场插件只在应用数据下的 `dsh-home`，不读、不迁、不改官方 CLI 的 `~/.dsh`。",
+        "- **终端资源** — Ghostty wasm / 字体打进安装包；源码启动缺资源则拒绝启动。",
+        "- **识图与网关** — 自定义网关不再误写官方 `DEEPSEEK_*`；主模型不识图时走官方兜底。",
+        "**升级后不会自动带上旧对话，侧栏可能是空的。** 请先完全退出应用（托盘也要退）。推荐冷启动进入 **启动器 → 导入**。不要拷 `profiles`。旧 rc 的 SQLite 会话库与本版不兼容，不要硬开。",
+        "Harness 挂了会回到故障页并自动重启。",
+        "用户插件把启动弄挂时，启动器可以按包禁用或先跳过用户插件。",
+        "需要 Windows 10+ 或 macOS 14+（Apple Silicon），Node 22.19+ / 24+，pnpm 11。",
+        "第一次 `setup:harness` 会构建随仓库提供的 `vendor/deepseek-harness`，比较慢。安装版和源码启动会互相抢锁，开发前先退出已安装的应用。",
+        "npx 兜底是官方 `@deepseek-ai/dsh@0.1.1-rc.1`，不含标题栏、Git、右栏 surfaces 和底栏终端；那些只在源码启动和安装包路径里。",
+        "对外发布前必须对 **CI windows artifact**（与即将上传的 Setup 同一 SHA）走完 [生产验收表](docs/qa/production-acceptance-test-cases.md)；本机 `npm run dist` 不能当那张表的 Pass。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshot-home.jpg\" alt=\"主界面\" width=\"920\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot-surfaces.jpg\" alt=\"对话与右栏\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot-wallpaper.jpg\" alt=\"背景图\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot-themes.jpg\" alt=\"主题库\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot-appearance.jpg\" alt=\"外观设置\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "humblebanana/open-record-replay",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "captures a user's real desktop actions into structured artifacts such as `session.json` and `events.jsonl`",
+        "validates the recording quality",
+        "packages the evidence for an agent's skill creation flow",
+        "The recorder can capture:\n\n- `window.changed`\n- `mouse.click`\n- `mouse.drag`\n- `keyboard.text_input`\n- `keyboard.submit`\n- `selection.changed`",
+        "- app/window attribution\n- UI targets\n- selected items\n- Accessibility tree or diff context"
+      ],
+      "usageItems": [
+        "Check macOS permissions:\n\n```bash\nnode bin/orr.js permissions check\n```",
+        "Request missing permissions:\n\n```bash\nnode bin/orr.js permissions request\n```",
+        "Start a recording:\n\n```bash\nnode bin/orr.js record start --name send-file-demo --out runs --request-permissions\n```",
+        "Now demonstrate the workflow on your Mac. For example:\n\n1. Open a desktop chat app.\n2. Choose a recipient or channel.\n3. Attach a local file.\n4. Confirm the upload.\n5. Send a short follow-up message.",
+        "When finished, stop the recording:\n\n```bash\nnode bin/orr.js record stop latest\n```",
+        "Validate the evidence:\n\n```bash\nnode bin/orr.js session validate-recording latest\n```",
+        "Prepare a skill input package:\n\n```bash\nnode bin/orr.js skill prepare latest --runs runs --out skill-inputs\n```",
+        "Give this directory to the current agent's skill creation flow."
+      ],
+      "usageActions": [
+        "node bin/orr.js permissions check",
+        "node bin/orr.js permissions request",
+        "node bin/orr.js record start --name send-file-demo --out runs --request-permissions",
+        "node bin/orr.js record stop latest",
+        "node bin/orr.js session validate-recording latest",
+        "node bin/orr.js skill prepare latest --runs runs --out skill-inputs",
+        "node bin/orr.js session list",
+        "node bin/orr.js session inspect latest",
+        "node bin/orr.js session events latest"
+      ],
+      "ioPairs": [
+        "A[\"User demonstrates a macOS workflow\"] --> B[\"Open Record/Replay records events\"]",
+        "B --> C[\"session.json + events.jsonl\"]",
+        "node bin/orr.js skill prepare latest --runs runs --out skill-inputs\n```\n\nThe package will be written to:\n\n```text\nskill-inputs/<session-id>/\n├── README.md\n├── events.jsonl\n└── session.json"
+      ],
+      "codeExamples": [
+        "Start a recording:\n\n```bash\nnode bin/orr.js record start --name send-file-demo --out runs --request-permissions",
+        "When finished, stop the recording:\n\n```bash\nnode bin/orr.js record stop latest",
+        "Validate the evidence:\n\n```bash\nnode bin/orr.js session validate-recording latest",
+        "Prepare a skill input package:\n\n```bash\nnode bin/orr.js skill prepare latest --runs runs --out skill-inputs"
+      ],
+      "usecases": [
+        "- Sending files or images through a desktop chat app.",
+        "- Creating a document and sharing its link.",
+        "- Opening a browser page, searching, and starting the right media.",
+        "- Moving between browser and desktop apps.",
+        "- Repeating a UI process that is not covered by a clean API or connector."
+      ],
+      "outputs": [
+        "runs/sessions/<session-id>/\n├── session.json\n├── events.jsonl\n├── orr_session.json\n└── recording_manifest.json",
+        "skill-inputs/<session-id>/\n├── README.md\n├── events.jsonl\n└── session.json"
+      ],
+      "reliability": [
+        "`events.jsonl` is the primary evidence. Screenshots are not part of the current core recording path.",
+        "- macOS.\n- Node.js 18+.\n- Swift toolchain / Xcode Command Line Tools.\n- Accessibility permission.\n- Input Monitoring permission.",
+        "The core recorder does not require Screen Recording.",
+        "Recordings are local by default, but `events.jsonl` can contain sensitive data:",
+        "Review recordings before sharing them. Do not publish raw recordings that contain secrets, private documents, customer data, internal URLs, or personal information.",
+        "Open Record/Replay is alpha software.",
+        "The stable public path is recording, validation, and skill input packaging.",
+        "Future work may include richer adapters or optional visual evidence. They are not part of the current stable public path."
+      ],
+      "media": [],
+      "concerns": []
+    }
+  ]
+}

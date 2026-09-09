@@ -1,0 +1,262 @@
+{
+  "reviews": [
+    {
+      "repo": "SepineTam/mcp-for-stata",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Enable Claude Code, Codex, OpenClaw, and other AI agents to safely invoke Stata on your local device for data analysis.",
+        "Standalone CLI tools for OpenClaw integration (`stata-mcp tool`)",
+        "Official plugin package with MCP server and Stata LSP integration",
+        "**Beta async `stata_do` execution**: Supports concurrent MCP calls for multi-client workflows",
+        "CSV, DTA, XLSX, SPSS handlers"
+      ],
+      "usageItems": [
+        "If you want to check whether your device is supported, you can run:\n```bash\nuvx stata-mcp doctor\n```\n\nIt displays basic information about your device and checks whether your setup is supported.",
+        "you can type `claude` and type `/mcp` to find the status."
+      ],
+      "usageActions": [
+        "uvx stata-mcp doctor",
+        "type `claude` and type `/mcp` to find the status."
+      ],
+      "ioPairs": [
+        "If you want to check whether your device is supported, you can run:\n```bash\nuvx stata-mcp doctor\n```\n\nIt displays basic information about your device and checks whether your setup is supported."
+      ],
+      "codeExamples": [
+        "uvx stata-mcp doctor"
+      ],
+      "usecases": [
+        "**Paper Replication**: Replicate empirical studies from economics papers",
+        "**Quick Hypothesis Testing**: Validate economic hypotheses through regression analysis",
+        "**Stata Learning Assistant**: Learn econometrics with step-by-step Stata explanations",
+        "**Code Organization**: Review and optimize existing Stata do-files",
+        "**Result Interpretation**: Understand complex statistical outputs and regression results"
+      ],
+      "outputs": [
+        "Automatic log capture and error reporting"
+      ],
+      "media": [],
+      "reliability": [
+        "Cross-platform support (macOS, Windows, Linux)",
+        "**[Security Guard](https://sepinetam.github.io/mcp-for-stata/security)**: Blocks dangerous commands (`!`, `shell`, `erase`, etc.)",
+        "**[RAM Monitoring](https://sepinetam.github.io/mcp-for-stata/monitoring)**: Prevents memory exhaustion with configurable limits",
+        "**Configurable data access boundaries**: Data info URL guard and optional direct `read_log` boundary",
+        "Claude Science runs MCP servers inside a strict sandbox that blocks access to the home directory (`~`) by default.",
+        "Couldn't load tools: MCP error -32000: Connection closed\nFileNotFoundError: [Errno 2] No such file or directory"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "op7418/pilot-harness",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**A real desktop app** — Electron packages the local Harness runtime for macOS, Windows, and Linux, owns native window behavior, and provides a recovery screen when startup needs attention.",
+        "**A calmer CodePilot-inspired interface** — consistent tokens, radii, menus, hover states, settings cards, Markdown, conversation/trajectory navigation, and platform-aware title bars.",
+        "**Provider and model management** — connect supported providers, declare an OpenAI-compatible endpoint, manage credentials separately from settings, browse the live model catalog, and identify image-capable models.",
+        "Workspace Files | Right sidebar, file count, branch summary, row actions, and <code>@path</code> insertion",
+        "Reminder summary | Active reminder count and nearest scheduled time in Session hover details",
+        "**Reversible customization** — disabling the CodePilot theme row removes its product mark and visual overrides so the stock Harness presentation can take over again."
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "the <code>/export</code> command."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "Session export | Per-Session ZIP export from the Trajectory toolbar and <code>/export</code>"
+      ],
+      "media": [],
+      "reliability": [
+        "Because notarization is not enabled yet, Gatekeeper may still block the first launch;",
+        "If macOS reports that the signed app is damaged, delete it, verify the Release checksum, and download it again instead of bypassing the warning.",
+        "Windows and Linux preview installers remain unsigned.",
+        "Formal macOS files must pass Developer ID verification before publication",
+        "Files and Reminder summary require the Pilot Harness UI slot contracts included in Pilot Harness v0.1.0; older upstream Harness builds can install their bundles but cannot render those two UI contributions.",
+        "A merge conflict opens or refreshes a GitHub Issue and stops before changing `main`;",
+        "missing macOS signing secrets also open an issue and leave the verified source synchronized without publishing an unsigned release."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "openma-ai/open-managed-agents",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "When you need custom behavior — different caching, compaction, context engineering — write your own:",
+        "When attached to a session, each store is mounted into the sandbox at\n`/mnt/memory/<store_name>/`. The agent reads and writes it with the\n**standard file tools** (bash/read/write/edit/glob/grep)",
+        "OMA registers any [Model Context Protocol](https://modelcontextprotocol.io) server attached to an agent.",
+        "At session start the platform mounts everything under `/home/user/.skills/{name}/` in the sandbox **and inlines the SKILL.md body directly into the system prompt**",
+        "**Tools never see your tokens.**",
+        "Make an agent a member of your Linear workspace with its own identity, avatar, and `@autocomplete` slot.",
+        "Give an agent its own GitHub App with a real bot identity — assignable on issues, requestable as a reviewer on PRs, posts comments under its own `@<slug>[bot]` handle.",
+        "Publish an agent into a Slack workspace as a dedicated bot — `@mention`able in channels, replies in threads, joins DMs, hosts the AI assistant pane.",
+        "Per-tenant LLM credentials. An agent references one by setting `agent.model = \"<model_id>\"`",
+        "`schedule` / `cancel_schedule` / `list_schedules` | Cron-style self-wakeup for long-running agents",
+        "`call_agent_*` | Callable Agents (multi-agent delegation)"
+      ],
+      "usageItems": [
+        "Smoke test the harness end-to-end:",
+        "For long-lived sessions use `GET /v1/sessions/$SESSION/events/stream` — replays history on connect, never closes.",
+        "Deploy it:",
+        "Create a skill (JSON; files inlined):",
+        "For large skills with binaries: `POST /v1/skills/upload` multipart with `file=<my-skill.zip>`.",
+        "Add the label to any issue/PR to engage the bot for every subsequent activity on that thread; remove the label to mute."
+      ],
+      "usageActions": [
+        "curl localhost:8787/health",
+        "GET /v1/sessions/$SESSION/events/stream",
+        "oma deploy --harness my-harness.ts --agent agent_abc123",
+        "POST /v1/skills",
+        "oma memory stores create \"User Preferences\"",
+        "oma memory write <store-id> /preferences/formatting.md --content \"Always use tabs.\"",
+        "oma linear rules create <pub-id> --label triage --state Backlog --project \"Inbox\"",
+        "Add the label to any issue/PR to engage the bot for every subsequent activity on that thread; remove the label to mute."
+      ],
+      "ioPairs": [
+        "curl localhost:8787/health\n# → {\"status\":\"ok\",\"backends\":{\"db\":\"sqlite ...\"}, ...}",
+        "# Inside the sandbox: curl https://api.github.com/user → 200, Authorization injected at the network layer"
+      ],
+      "codeExamples": [
+        "curl localhost:8787/health",
+        "oma deploy --harness my-harness.ts --agent agent_abc123",
+        "oma memory stores create \"User Preferences\"",
+        "oma linear rules create <pub-id> --label triage --state Backlog --project \"Inbox\""
+      ],
+      "usecases": [
+        "A self-hosted Claude Managed Agents API implementation.",
+        "An open-source, self-hosted Claude Tag-style workflow with BYOK model credentials.",
+        "MCP, private tools, encrypted vaults, and durable sessions under your own deployment boundary.",
+        "OSS users, on-prem, no CF account, data-resident deploys",
+        "Edge scale, no host management, already on CF"
+      ],
+      "outputs": [
+        "# Send a turn AND stream the reply token-by-token in one shot",
+        "URL → markdown via Workers AI; auto-summarized when `agent.aux_model` is set, raw saved to `/workspace/.web/`"
+      ],
+      "media": [],
+      "reliability": [
+        "Stateless: crash → rebuild from event log → resume",
+        "Credentials never enter the sandbox; the outbound resolver matches by host and injects at forward time.",
+        "Tool discovery is bounded at 15 s per server; one bad server logs and skips, the rest stay live.",
+        "lose it and every encrypted row is unreadable — back it up",
+        "100KB\ncap per memory. 30-day version retention with the most-recent version per\nmemory always preserved.",
+        "Attach to an agent with the **object form** — a bare string array silently does not bind:",
+        "destructive ops (`pr.merge`, `repo.branch.delete`, `workflow.dispatch`, `release.create`, `*.delete`) require explicit opt-in",
+        "Mid-flow failures stay resumable from Console (`pending_setup` → `credentials_filled` → `awaiting_install` → `live`)",
+        "`subprocess` (default, no isolation), `litebox` (Firecracker), `daytona`, `e2b`, or `boxrun`. Use an isolated backend for untrusted agents.",
+        "Create runs a 6-second probe so a bad key fails loudly, not at first turn."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "mrpulor-gh/nuphus-mcp",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "screen size, screenshot (PNG/base64), window list,\n  window activate/screenshot/move/resize/info, mouse click/drag/scroll/position,\n  keyboard input/hotkey, clipboard write/clean",
+        "Used together they give AI agents **both\n  semantic understanding\n  and pixel-precise coordinates**",
+        "navigate, snapshot (accessibility tree with `@N`\n  refs), click, type, exec, scroll, extract, screenshot, evaluate,\n  back/forward, wait_for, cookies get/set/import, upload, tabs, downloads",
+        "To\ndrive an **external browser** instead — e.g. an anti-detect / fingerprint\nbrowser — start it with a debugging port and point the server at it:",
+        "Provide the browser identity and the server re-resolves the live\nport automatically on the next tool call:",
+        "`desktop_perceive` runs PaddleOCR and YOLO icon detection locally with ONNX\nRuntime.",
+        "Supported MCP methods: `initialize`, `notifications/initialized`, `ping`,\n`tools/list`, `tools/call`."
+      ],
+      "usageItems": [
+        "Open it, log into the sites you want to\nstay signed in once — the state persists to that profile and every subsequent\n`browser_*` call carries those sessions.",
+        "use the desktop OCR + mouse/keyboard chain\n(`desktop_perceive` / `desktop_*` tools) — visually click, type and read the\nscreen without CDP",
+        "Run DSH in the desktop session of the machine you want controlled.",
+        "# quick smoke test"
+      ],
+      "usageActions": [
+        "echo '{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\"}}}' | nuphus-mcp",
+        "Open it, log into the sites you want to\nstay signed in once",
+        "use the desktop OCR + mouse/keyboard chain",
+        "Run DSH in the desktop session of the machine you want controlled."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "echo '{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\"}}}' | nuphus-mcp"
+      ],
+      "usecases": [
+        "drive an **external browser** instead — e.g. an anti-detect / fingerprint\nbrowser",
+        "drive a browser carrying your own extensions /\nbookmarks / login state",
+        "operate the user's **currently running** real browser"
+      ],
+      "outputs": [
+        "The server reads newline-delimited JSON from stdin and writes JSON-RPC\nresponses to stdout. Logs go to stderr."
+      ],
+      "media": [],
+      "reliability": [
+        "destructive tools are annotated per the MCP spec; optional\n  strict-confirm mode; path validation for screenshots, uploads, and file drags.",
+        "The server auto-detects an\n  installed browser; if none is found, `browser_*` tools return a clear error.",
+        "Desktop input requires Accessibility permission (System Settings → Privacy & Security → Accessibility)",
+        "Partial — window/input capabilities are limited",
+        "when it is not configured\nthe tool returns a clear error instead of silently failing.",
+        "attach failures are hard errors (no silent fallback into the wrong\nbrowser). The external browser belongs to you — the server never kills it on\nexit.",
+        "Chrome's official security change, `--remote-debugging-port` and\n`--remote-debugging-pipe` are **ignored against the default user data\ndirectory**",
+        "Download\nfailures return a clear error with manual instructions. YOLO is optional at\nruntime: if its download fails, perceive still returns OCR elements and reports\n`yolo_available: false`",
+        "By default write\ntools run **without** confirmation; we strongly recommend enabling strict\nconfirmation so destructive operations require an explicit `\"confirm\": true`\nargument from the client",
+        "cargo test -p nuphus-mcp          # protocol + security + vision + models tests (60)"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "kelai141/dsh-mobile-apk",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "it boots a full dsh web agent that can really execute bash.",
+        "bundling node + git + bash +\n  coreutils + dsh + plugins + pnpm + python/perl/ruby; first launch extracts in 2–4 min\n  (`refreshSnapshot`), engine listens on `127.0.0.1:3080`; fully offline.",
+        "**Search (grep/glob)** — mobile ripgrep platform package (android-arm64, pcre2/NEON full-featured).",
+        "**Mobile UI** — responsive plugin (drawer/sheet on phones); adjustable font size, immersive status\n  bar, dark theme.",
+        "**Online runtime updates** — manifest-driven snapshot swap (download → sha256 → atomic switch →\n  auto-restart); the running runtime can update itself without an APK update.",
+        "**SAF bridge** — `pickDirectory` maps the picked tree to a real path (`/storage/emulated/0/…`).",
+        "**Device access** — All Files Access; Shizuku probe example.",
+        "`copyText` | (text) → boolean | native clipboard write (WebView `clipboard.writeText` is always rejected; page falls back to this)",
+        "`pickDirectory` | (callbackId) | SAF tree picker; result async via `window.__dshBridge.onDirectoryPicked(callbackId, path)`",
+        "`pickImage` | (callbackId) | SAF image picker; result async via the same callback"
+      ],
+      "usageItems": [
+        "Test trigger: `adb shell am start -n com.dsharnessmobile.shell/.MainActivity -a com.dsharnessmobile.shell.action.UPDATE`;\nstatus is written to `files/update-status.txt`."
+      ],
+      "usageActions": [
+        "`downloadDebugLogs` | () | exports engine logs + environment info (zipped, system download/share dialog)",
+        "`restartEngine` | () | restarts the engine process (EngineService watchdog brings it back)",
+        "`reloadWebUI` | () | reloads the Web UI",
+        "`openConsole` | () | opens the built-in console",
+        "`revokeAdbPair` | () | revoke pairing (disconnect + delete adbkey + clear state; audited) (preview)",
+        "adb shell am start -n com.dsharnessmobile.shell/.MainActivity -a com.dsharnessmobile.shell.action.UPDATE"
+      ],
+      "ioPairs": [
+        "`version` | () → string | app version (`0.13.0-preview`) for feature detection",
+        "`checkEngine` | () → string | probes 127.0.0.1:3080; JSON `{running, latencyMs, error?}`",
+        "`getAdbState` | () → string | ADB authorization state view (gate state machine): JSON `{fullAccess, allowSwitch, paired, wirelessDebugOn, message}` (preview)",
+        "`adbShell` | (cmd) → string | ADB shell primitive: JSON `{ok, stdout?, stderr?, guidance?}`; fail-closed when not authorized (preview)"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "**File-to-session (F5)** — \"Open with / Share\" auto-jumps into this app and forces a fresh temp\n  workspace session for the file",
+        "usable\n  for diagnostics even when the engine is down.",
+        "default `http://10.0.2.2:8899/manifest.json`\n   for emulator testing"
+      ],
+      "outputs": [
+        "**Notifications** — automatic task-completion notifications (engine event bridge + watchdog\n  consumer); system notification chain incl. authorization requests.",
+        "`downloadDebugLogs` | () | exports engine logs + environment info (zipped, system download/share dialog)",
+        "# output: out\\v0.13.0\\dsh-mobile-apk-v<ver>-<abi>.apk",
+        "status is written to `files/update-status.txt`."
+      ],
+      "media": [],
+      "reliability": [
+        "**0.13.0-preview — preview release**: unstable, intended for community validation — do not rely on it in production.",
+        "**ADB is not complete**: pairing / port auto-scan / execution are preview UI screens — the real ADB channel is under development and completes in the 0.13.0 official release.",
+        "**most of them are likely unavailable or buggy on phones** (mobile vs desktop differ in WebView engine / filesystem / permission model / runtime).",
+        "first launch extracts in 2–4 min",
+        "foreground service + 5s watchdog (auto-restarts a hung engine) + 3s UI monitor\n  poll + crash auto-rollback gate (UndoGate).",
+        "Downloads the snapshot, verifies SHA-256, extracts to a staging dir (never touching the live tree),\n   atomically swaps `usr` → `usr-old` → new `usr`",
+        "A mismatched snapshot crashes the engine at startup — node ELF\n`EM_X86_64` vs `EM_AARCH64`.",
+        "any failure rejects the build.",
+        "`adbShell` | (cmd) → string | ADB shell primitive: JSON `{ok, stdout?, stderr?, guidance?}`; fail-closed when not authorized (preview)",
+        "arm64 and x86_64 are both verified end-to-end; APKs are distributed per-ABI (the embedded snapshot\nis arch-specific). A 16KB-page build must be produced on a 16KB device"
+      ],
+      "concerns": []
+    }
+  ]
+}

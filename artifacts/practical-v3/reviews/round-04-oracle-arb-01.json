@@ -1,0 +1,575 @@
+{
+  "reviews": [
+    {
+      "repo": "sandbaseai/sandbase-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "it runs with your agent's existing search tools,\nships a worked evidence-ledger example, and includes an offline validator",
+        "Each Skill defines a repeatable workflow, evidence rules, and output format.",
+        "Cross-validate research with host search tools and optional Tavily, Exa, Scholar, and Cloudsway coverage",
+        "Search tweets, track trends, analyze users, monitor sentiment",
+        "Advanced web search with content extraction and site mapping",
+        "Search scholarly papers with AI-powered explanations",
+        "Benchmark pricing against competitors",
+        "Detect and assess crises before they escalate",
+        "Audit website content, structure, and SEO health",
+        "The bundle mounts the packaged `marketing/` and `research/` directories through\nDSH's filesystem Skill provider while preserving the default Skill roots.",
+        "The agent executes the workflow, validates structured evidence, and delivers the result"
+      ],
+      "usageItems": [
+        "# Try it without installing: generate the complete Skill prompt",
+        "# \"Fact-check this claim with independent sources and validate the evidence ledger\""
+      ],
+      "usageActions": [
+        "npx skills use sandbaseai/sandbase-skills@multi-source-search",
+        "gh skill preview sandbaseai/sandbase-skills research/multi-source-search",
+        "python3 research/multi-source-search/scripts/validate_report.py \\\n  examples/verifiable-research-report.json",
+        "npx skills find \"research\" --owner sandbaseai",
+        "npx skills add sandbaseai/sandbase-skills --list"
+      ],
+      "ioPairs": [
+        "python3 research/multi-source-search/scripts/validate_report.py \\\n  examples/verifiable-research-report.json\n# VALID: 3 source(s), 1 claim(s), 2 provider(s)"
+      ],
+      "codeExamples": [
+        "npx skills use sandbaseai/sandbase-skills@multi-source-search",
+        "python3 research/multi-source-search/scripts/validate_report.py \\\n  examples/verifiable-research-report.json\n# VALID: 3 source(s), 1 claim(s), 2 provider(s)",
+        "npx skills find \"research\" --owner sandbaseai"
+      ],
+      "usecases": [
+        "“Compare sentiment and recurring complaints for Brand A and Brand B on X this month.”",
+        "“Verify the strongest evidence for and against this market claim.”",
+        "“Track three competitors’ pricing, launches, content, and social activity.”",
+        "“Build a writer-ready brief for this target keyword.”",
+        "“Assess this engineering team’s open-source activity.”",
+        "“Map the leading channels and audience questions in this niche.”"
+      ],
+      "outputs": [
+        "Source-linked posts, trends, accounts, and a structured comparison",
+        "Cross-checked web and academic findings with disagreements called out",
+        "A dated competitive-intelligence brief with observed changes",
+        "Search intent, competing pages, required subtopics, and differentiation angles",
+        "Repository, language, contribution, star, and activity analysis",
+        "Video and channel discovery, transcript evidence, and comment themes",
+        "# VALID: 3 source(s), 1 claim(s), 2 provider(s)"
+      ],
+      "reliability": [
+        "Skills work with any agent that implements the Agent Skills specification",
+        "The validator rejects unknown or duplicate sources, inflated confidence, unused\nevidence, and high-confidence claims that still have a declared conflict.",
+        "It runs\noffline and checks internal consistency; it does not claim that a source is true.",
+        "`multi-source-search` needs no SandBase account when the host agent already provides\nsearch and page-reading tools.",
+        "set `SANDBASE_API_KEY` in your environment—never in a prompt or committed file.",
+        "Its generated Skill copy is checked against the canonical source in CI.",
+        "The single-Skill installer and the bundle both run directly from the GitHub source,\nso no npm publication or SandBase account is required.",
+        "python3 scripts/skillpack.py validate\npython3 -m unittest discover -s tests -v"
+      ],
+      "media": [
+        { "excerpt": "![Multi-source search workflow: search capabilities, source-origin tracing, evidence ledger, and offline validation](assets/multi-source-search-workflow.svg)", "weight": 1 }
+      ],
+      "concerns": [
+        "Skill Catalog tables list 88 skills; only representative distinct capability rows were recorded, catalog length itself contributes zero.",
+        "Linked SandBase CLI / SandBase Harness / DSH Plugin Store ecosystem capabilities excluded per linked-project rule.",
+        "inferredType ambiguous: ships as an installable DSH bundle but targets many agents, so standalone-nonplugin is diagnostic only.",
+        "Most fenced commands are install/config and excluded; only preview/use/find/validate operations recorded."
+      ]
+    },
+    {
+      "repo": "flizzywine/dsh-tavern",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "它可以直接导入酒馆人物卡，也可以从小说、剧本和人物素材中制作新卡。",
+        "正文与候选项分开生成。正文只负责讲好故事，候选项则提供多种人物行动和场景变化，不会混入正文。",
+        "- 独立总结人物姿势，保持人物位置、动作和状态前后一致；",
+        "- 注入 Guide，为当前会话添加持续生效的剧情或写作要求；",
+        "剧本模式可以为人物卡绑定小说、剧本或故事大纲，让剧本作为故事主线持续牵引剧情。",
+        "每一轮只参考当前剧情附近的剧本内容，不会一次性把整份剧本塞给模型。系统会记录当前剧情进度，并根据后续情节推荐更贴近主线的行动。",
+        "卡片模式是游玩前的对话式资源工作台，用于制作、理解和维护人物卡、世界书、预设与剧本。",
+        "- **人物卡库**：导入、导出和编辑 SillyTavern PNG / JSON 人物卡，管理世界书与剧本绑定；",
+        "支持人物卡正则美化与 HTML 展示；支持 MVU，变量由后台 Agent 更新，状态栏常驻右侧面板。",
+        "Tavern Profile 保持开放。你可以自行编写、安装和组合 DSH 插件；更新 dsh-tavern 时，用户添加的插件与配置会被保留，不会被安装程序整体覆盖。",
+        "dsh-tavern 只在需要时注入必要上下文，并把不同任务拆成短而明确的调用，减少无效的 Token 消耗和等待时间。"
+      ],
+      "usageItems": [
+        "运行 `dsh-tavern open` 可重新打开；也可运行 `dsh-tavern status`，复制显示的完整访问地址",
+        "更新 DSH 本体不需要运行 `dsh-tavern update`；这个命令只用于更新 dsh-tavern 的插件内容。"
+      ],
+      "usageActions": [
+        "启动：\n\n```bash\ndsh-tavern start\n```",
+        "dsh-tavern stop",
+        "dsh-tavern restart",
+        "dsh-tavern update",
+        "运行 `dsh-tavern open` 可重新打开",
+        "可点击对话顶部的“日志”下载 Session 与 MVU 执行记录；"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "启动：\n\n```bash\ndsh-tavern start\n```",
+        "停止：\n\n```bash\ndsh-tavern stop\n```",
+        "重启：\n\n```bash\ndsh-tavern restart\n```",
+        "更新：\n\n```bash\ndsh-tavern update\n```"
+      ],
+      "usecases": [
+        "适合不想单独配置运行环境和管理服务的用户。",
+        "适合希望通过浏览器访问、自己管理服务的用户。"
+      ],
+      "outputs": [
+        "正文下方显示本轮变量更新结果，右侧“酒馆状态”面板持续展示人物卡状态栏。",
+        "把状态文本渲染为正文内的酒馆面板。",
+        "使用 DeepSeek V4 Flash 测试时，一轮交互平均等待时间约为 15 秒。"
+      ],
+      "reliability": [
+        "> 本版适配 DSH `0.1.2-alpha.2`。允许使用其他版本，但 DSH 更新较激进，可能导致本插件异常，请自行斟酌。",
+        "缺少依赖或所需接口时会明确提示。",
+        "Android 可借助 [DSHA](https://github.com/qiannianhuanxiang/DSHA) 实验性部署，目前不保证稳定可用。",
+        "请先安装 [DSH Desktop](https://github.com/anywhere-labs/deepseek-harness-desktop) **2.0.2 或更高版本**（支持 Windows x64 和 macOS，暂不支持 Linux）。",
+        "需要 Node.js 22.19 或更高版本。",
+        "两者使用同一套 Tavern Profile 和数据，请勿同时运行。",
+        "旧版内置更新失败时，也直接运行上面的命令：它会获取最新安装器，绕过本地旧更新脚本。",
+        "更新时优先使用 Git 增量同步；Git 不可用或同步失败时才下载完整 ZIP。",
+        "复制显示的完整访问地址（含鉴权 token，请勿分享）。不要只输入不带 token 的地址，以免出现鉴权提示。",
+        "新增执行记录从更新后开始收集，无法补录旧故障。"
+      ],
+      "media": [
+        { "excerpt": "![dsh-tavern 整体界面：左侧会话、中间游玩、右侧酒馆状态](docs/images/readme/overview.png)", "weight": 1 },
+        { "excerpt": "![自由游玩的独立候选项、Guide 与人物姿势](docs/images/readme/free-play-candidates.png)", "weight": 1 },
+        { "excerpt": "![剧本模式的正文、剧情进度与召回片段](docs/images/readme/script-mode.png)", "weight": 1 },
+        { "excerpt": "![卡片工作台的六种起始任务](docs/images/readme/card-workbench.png)", "weight": 1 },
+        { "excerpt": "![MVU 人物卡的变量更新结果与右侧酒馆状态栏](docs/images/readme/mvu-status-panel.png)", "weight": 1 },
+        { "excerpt": "![阿芙拉人物卡正则美化效果](docs/images/readme/regex-html-rendering.png)", "weight": 1 }
+      ],
+      "concerns": [
+        "9 screenshots exist but media weighted cap is 6; rewrite-body / card-libraries / card-editor views omitted.",
+        "All install/update/Node/pnpm fenced commands are install-family and excluded from usage/code families.",
+        "API-key setup step is configuration and omitted; Android update/repair button steps treated as maintenance and omitted.",
+        "No explicit paired input/output examples, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-lark",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "直接在聊天里给 Agent 派任务、看执行过程、切换工作区和模型。",
+        "遇到提问、计划确认或工具审批，也不用回到终端，直接在飞书里处理。",
+        "可以切换真实工作区和模型，执行 Harness 已有的命令与工具。",
+        "模型提问、计划审阅和工具审批都会回到当前聊天，按钮或文字都能作答。",
+        "不同聊天、话题和工作区可以保留各自的会话。",
+        "一条命令添加更多机器人，让它们在群聊中通过 @ 交接回合，并用轮数上限防止无限对话。",
+        "| 持久会话 | 重启后可以恢复；后续消息继续当前上下文，`/new` 可以原地重开一个 |",
+        "| 接续已有会话 | `/sessions` 列出这个工作区里可以接续的会话——自己的历史，以及网页端/命令行开的——点一行就切过去；`/cd`、`/new` 会回到自动派生的会话 |",
+        "| 原生执行过程 | 在飞书中查看推理、工具调用和结果，最终答案单独发送 |",
+        "| 文件收发 | 人发文件进聊天，agent 在工作区里读；agent 的产物发回聊天，群聊里先弹审批卡 |",
+        "| 会话隔离 | 可按聊天、话题或群成员划分独立 Agent 会话 |",
+        "渠道自带文案会按每位读者的飞书语言显示中文或英文。"
+      ],
+      "usageItems": [
+        "终端会显示二维码。用飞书扫码完成应用创建，然后私聊机器人，或在群里 @ 它即可开始。",
+        "检查这个项目为什么构建失败。先给我计划，需要操作时让我确认。",
+        "用 `npx` 启动的话，这些命令同样要带 `npx dsh-lark-channel@latest` 前缀——工具会按你实际的启动方式打印提示，读到什么就能直接粘贴。",
+        "让一个 Agent 完成修改后 @ 另一个 Agent 复核，后者也可以 @ 回去要求调整。"
+      ],
+      "usageActions": [
+        "| `/status` | 查看并刷新工作区、模型和 session；可用时包含上下文与 token 状态 |",
+        "| `/cd <名称或路径>` | 切换工作区 |",
+        "| `/get <路径>` | 把工作区里的文件发到聊天 |",
+        "| `/model use <provider/model>` | 直接切换模型 |",
+        "| `/permission <预设名>` | 直接切换权限预设 |",
+        "| `/sessions <关键词>` | 按标题或 id 过滤列表 |",
+        "| `/stop` | 停止当前任务 |",
+        "dsh-lark-channel status\ndsh-lark-channel logs -f\ndsh-lark-channel restart\ndsh-lark-channel stop",
+        "dsh-lark-channel add reviewer",
+        "dsh-lark-channel remove reviewer"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "npx dsh-lark-channel@latest start",
+        "dsh-lark-channel status\ndsh-lark-channel logs -f\ndsh-lark-channel restart\ndsh-lark-channel stop",
+        "dsh-lark-channel add reviewer"
+      ],
+      "usecases": [],
+      "outputs": [
+        "Agent 的执行过程会显示在飞书中；需要你参与时，会发送提问、计划或审批卡片。",
+        "命令会写入新实例、重启服务并显示二维码。"
+      ],
+      "reliability": [
+        "连接异常时，插件会在限额和退避控制下自动重建 WebSocket，避免进程仍在但机器人已经静默离线。",
+        "无需公网服务器，也无需配置回调地址。",
+        "- Node.js `^22.19.0 || >=24`\n- DeepSeek Harness `0.1.0-rc.6` 或更新版本",
+        "原生思考过程需要飞书 PC 7.70、移动端 7.74 或更新版本；旧客户端可以使用 `output: 'stream'`。",
+        "图片附件默认关闭；只有确认当前模型支持视觉时，才应开启 `attachImages`。",
+        "**没有关闭群聊审批的开关**，因为那会是提示注入外泄链的官方后门。",
+        "第 4 次会被直接拒绝并告诉模型等前面几个先有结果。这个数字不可配置",
+        "单文件上限默认 20 MiB，收发分别由 `maxReceiveFileBytes` / `maxSendFileBytes` 配置",
+        "语音消息只落盘，不会被转写成文字。",
+        "默认最多连续进行 6 个机器人轮次；任何人发言都会恢复额度。"
+      ],
+      "media": [],
+      "concerns": [
+        "No explicit scenario/persona section, so usecases is empty.",
+        "常用命令 table rows only partially sampled (cap 10); /ws, /model, /model reset, /new, /help rows omitted as duplicates of capability descriptions.",
+        "No README images or videos, so media is empty.",
+        "dsh-lark-channel upgrade treated as update/maintenance and omitted from usage/code families."
+      ]
+    },
+    {
+      "repo": "yuukiLike/zeromd",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "zeromd simply keeps this local knowledge base in sync across all your devices.",
+        "- **macOS ↔ iOS**: iCloud auto-sync (seconds)",
+        "- **macOS ↔ GitHub**: Git timed sync (every 5 min, only when changes exist)",
+        "sync.sh auto-discovers the vault by scanning for `.git` in the iCloud Obsidian directory.",
+        "With no language specified, `gmd help` and `gmd doctor` use your macOS preferred language."
+      ],
+      "usageItems": [
+        "**Git sync**: Wait 5 minutes or run `gmd sync`, then check GitHub for new commits. Run `gmd status` to see current state."
+      ],
+      "usageActions": [
+        "gmd                      # check sync status (same as gmd status)",
+        "gmd doctor               # health check, diagnose issues",
+        "gmd sync                 # manual sync now",
+        "gmd log                  # view last 20 log entries",
+        "gmd setup                # smart setup (idempotent, skips completed steps)",
+        "gmd help                 # compact help (Chinese, English, or Japanese)"
+      ],
+      "ioPairs": [
+        "**Mac → iPhone**: Create a note on Mac, it should appear on iPhone within 30 seconds.",
+        "**iPhone → Mac**: Write something on iPhone, it should appear on Mac within 30 seconds."
+      ],
+      "codeExamples": [
+        "gmd doctor               # health check, diagnose issues",
+        "gmd sync                 # manual sync now"
+      ],
+      "usecases": [
+        "Windows users can `git clone` the repo and use [obsidian-git](https://github.com/denolehov/obsidian-git) for sync."
+      ],
+      "outputs": [],
+      "reliability": [
+        "If you use HTTPS and GitHub rejects your credentials, zeromd now reports that as an HTTPS auth error instead of a generic push failure.",
+        "it creates a local `zeromd-backup-<timestamp>` branch first, then force-resets local `main` to `origin/main`.",
+        "**Sync issues?** Run `gmd doctor` to diagnose.",
+        "**Background task stopped?** Rerun `gmd setup`. **Switching vaults?** Run `gmd init`.",
+        "**HTTPS auth failed?** GitHub no longer accepts account passwords for Git operations. Update the HTTPS credentials your system Git uses, or switch the repo to SSH.",
+        "Your notes are not affected. iCloud sync continues. Only auto-push to GitHub stops.",
+        "Pure bash test suite, zero dependencies. Run it after any change to `scripts/`. All tests must pass before submitting a PR.",
+        "| macOS off, iOS edits can't push | Auto-syncs when Mac wakes up |",
+        "| GitHub down | Local + iCloud dual backup |",
+        "To avoid conflicts, the primary command is `gmd` (git + md). If `md` is not taken in your shell, it works too — both point to the same script."
+      ],
+      "media": [],
+      "concerns": [
+        "Installer branches and curl one-liner are install steps and excluded from usage/code families.",
+        "Sync-verification steps recorded as ioPairs rather than duplicated in outputs.",
+        "Only badge images exist; no meaningful non-badge media, so media is empty.",
+        "Obsidian+iCloud vault prerequisite is an installation prerequisite without a stated runtime boundary, so omitted."
+      ]
+    },
+    {
+      "repo": "skyf0xx/hedgehog",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Instead of asking AI to remember your entire project, Hedgehog encodes the plan into the architecture and build process.",
+        "- **BMAD for planning** — turn an idea into a clear brief, requirements, and architecture",
+        "- **TDD and progressive layering** — build one tested layer at a time",
+        "- **Mechanical enforcement** — use tooling and phase gates instead of trusting the AI to follow instructions",
+        "- **Deterministic scaffolding** — generate boilerplate and schemas instead of asking the AI to write it freehand",
+        "**Every task** Hedgehog generates **is a node** with [explicit dependencies in sqlite](BUILD_GRAPH.md).",
+        "Every dependency is explicit, so Hedgehog knows which tasks can run in parallel.",
+        "Hedgehog reaches for your editor's own Language Server Protocol integration to see what depends on what.",
+        "- **Impact known before editing**: every task checks what depends on it before it changes anything",
+        "Where a piece of code has one correct shape, Hedgehog generates it instead of asking the AI to write it freehand.",
+        "Hedgehog also adopts onto a repo it didn't build. It reads the repo and proposes a layer chain that verifies with the repo's own test/lint/build commands."
+      ],
+      "usageItems": [
+        "Then open a project and describe what you want to build and mention `hedgehog`.",
+        "Mention `Hedgehog` whenever you want to build something with it."
+      ],
+      "usageActions": [
+        "npx @skyf0xx/hedgehog graph # show graph",
+        "npx @skyf0xx/hedgehog update"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "npx @skyf0xx/hedgehog graph # show graph"
+      ],
+      "usecases": [
+        "A fixed TypeScript stack with a backend-first, test-driven build order:",
+        "A structured pipeline for producing distinctive, production-quality landing pages:",
+        "Local-first simple mobile compatible web  apps: trackers, journals, planners, etc:",
+        "Tools, hooks, and extensions for DSH's Cordis-based agent framework:",
+        "A CLI, a library, a browser extension, a data pipeline, etc. gets its build order."
+      ],
+      "outputs": [],
+      "reliability": [
+        "- **Verification matches the real surface**: tests target what actually changed",
+        "Every layer is verified before the next begins.",
+        "- **More correct**: the same input always produces the same, tested output",
+        "On a fresh project with no warm pnpm store, that first install can take\nseveral minutes.",
+        "This refreshes the installed agents and skills in a specific repo (note, not vendor skills)",
+        "The tooling enforces architectural boundaries so correctness does not depend on the AI remembering instructions."
+      ],
+      "media": [
+        { "excerpt": "![Hedgehog - build software the right way, one step at a time](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/hero.jpg)", "weight": 1 },
+        { "excerpt": "![Just describe what you want](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/handoff.jpg)", "weight": 1 },
+        { "excerpt": "![Small steps, big leverage: small context loops, continuous verification, traceable evolution, sustainable velocity](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/small-steps.jpg)", "weight": 1 },
+        { "excerpt": "![The Hedgehog build graph](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/graph.jpg)", "weight": 1 },
+        { "excerpt": "![Comparison](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/comparison.jpg)", "weight": 1 },
+        { "excerpt": "![Deterministic code generation](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/deterministic.jpg)", "weight": 1 }
+      ],
+      "concerns": [
+        "No concrete described output artifacts, so outputs is empty; loop/graph text fences are process descriptions, not outputs.",
+        "7 meaningful images exist but media weighted cap is 6; why.jpg omitted.",
+        "All plugin-marketplace/git-clone install commands excluded from usage/code families.",
+        "Node >=22.5.0 appears only as an installation prerequisite, so omitted."
+      ]
+    },
+    {
+      "repo": "ChenRuoT/dsh-sidebar-qa",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "划选任意文本 → 点击「提问」→ 右侧面板问答",
+        "- **🔗 独立会话**：自动创建同工作区独立 DSH 会话（`❓<主题>`），可继续、可归档，主对话零打断",
+        "- **📝 划选提问**：对话中划选任意文本 → 浮层「提问」→ 右侧面板内嵌问答，全程不跳转大窗口；**侧边栏面板收起时也会自动展开**，「提问」永远有可见反馈",
+        "把划选文本以 `>` 引用块**追加**进当前会话的主输入框并聚焦（光标落在引用块下方），**不新建会话、不打开侧边栏**",
+        "- **🧠 智能摘要**：快速无思考模型把主对话上下文压缩成小摘要，与划选引文一起注入首条消息",
+        "- **🔀 三种上下文策略**：每次提问可在「全量继承（fork+缓存命中）/ 压缩 / 机械裁切」间切换，面板内选择器 + 配置默认值双入口",
+        "- **🪆 嵌套追问**：在追问对话里再划选提问，生成子追问，层层嵌套",
+        "- **🏷️ 两段式命名**：划选首行占位命名 → 首次回答完成后基于「问题 + 回答」自动提炼 ≤15 字最终标题",
+        "- **🌏 中英双语**：界面文案与模型侧提示词跟随 DSH 语言设置实时切换（无需刷新）；**回答语言跟随你提问/划选的内容**，不被界面语言绑架",
+        "外部插件可以打开追问 tab 并**预填引文**（不经本插件的划选浮层）"
+      ],
+      "usageItems": [
+        "在任意对话（主对话或追问对话）中划选一段文本，浮层会给出两个按钮",
+        "右侧「追问」面板变成一条**内嵌对话**：引文/问题在侧边栏内流式回答，输入框固定在下方面板底部，**不会跳转到子对话大窗口**。",
+        "回答过程中可在输入框继续追问（Enter 发送、Shift+Enter 换行），所有问答都在侧边栏内完成。"
+      ],
+      "usageActions": [
+        "点击浮层「提问」。",
+        "输入框左侧的**上下文策略** chip 可选择策略（默认取配置 `historyStrategy`）",
+        "行尾的「移除」按钮将其从记录中清除"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "ctx.betterSidebar.openTab(\n  { type: 'dsh-sidebar-qa:ask', meta: { quote: { text: '选中的内容', role: 'user' } } },\n)"
+      ],
+      "usecases": [],
+      "outputs": [
+        "面板底部的**输入框复用 DSH 主对话的输入栏外观**（同一套设计 token 的圆角胶囊卡片）",
+        "旧背景压成**最多 3 句话**（目标 / 当前进度 / 未决事项），近期只保留最近 2 条且每段强截断（≤400 字符）"
+      ],
+      "reliability": [
+        "`dsh-better-sidebar` **必须安装**（未安装时本插件**不激活**，无任何 UI/行为，也不创建会话），且需 **`0.16.0` 及以上**",
+        "宿主 DSH 需 **`0.1.2-alpha.1` 及以上**（`engines.dsh: >=0.1.2-alpha.1`，本插件的浏览器侧 RPC 走该版本引入的 Remote 服务 `ctx.remote.session`；更早的 DSH 上插件**静默不激活**，请留在 `dsh-sidebar-qa@0.4.0`）。",
+        "摘要失败/无渠道时自动降级为「仅近期对话 + 引文 + 问题」，问答不中断；全量继承失败（主对话正在回答）时自动降级为压缩模式。",
+        "**模型座不会写主对话**：新追问 + 压缩/裁切时它是**本地草稿**",
+        "新追问 + 全量继承时**只读置灰**（fork 子会话沿用主对话模型，正是前缀缓存命中的前提，如需换模型请改用压缩/裁切）",
+        "写入经 `/sidebarqa/api/config.update` 带 revision 乐观锁（多窗口冲突时提示重试）",
+        "已归档/已删除的追问**置灰标记状态**，可一键从记录中移除（连同整棵子树清理映射，不影响 DSH 侧会话）",
+        "缺少 locale 服务时回退浏览器语言，再回退 en。",
+        "pnpm test       # vitest 单测（injection / summarize / answer / store / title / meta-quote / history-scope / history-time / model-menu / model-seat / context-meter",
+        "追问会话内的后续消息默认不带主对话上下文（只有首条携带）。"
+      ],
+      "media": [
+        { "excerpt": "<img alt=\"dsh-sidebar-qa demo\" src=\"https://github.com/ChenRuoT/dsh-sidebar-qa/releases/download/v0.1.0/demo.gif\" width=\"100%\" />", "weight": 1 }
+      ],
+      "concerns": [
+        "No explicit scenario/use-case section, so usecases is empty.",
+        "Changelog entries excluded per changelog rule.",
+        "The openTab code fence targets external plugin developers; recorded as the only non-install code example.",
+        "Architecture tree and key-data-flow ASCII diagrams treated as implementation facts, not user-visible evidence."
+      ]
+    },
+    {
+      "repo": "beiyege-01/dsh-voice-ai-girlfriend",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "点一下麦克风，她听你说话、跟你拌嘴、把回答一字一句念给你听",
+        "- ⚡ **嘴快**：你说完话，她 0.5 秒内开口 —— FunASR 中文识别只要 150ms、TTS 几乎秒开，反应比你还快",
+        "- 🎧 **耳朵挑**：-35dB 噪声门 + silero VAD 双重把关 —— 风扇、键盘、电视声统统进不来，只有你说话她才理",
+        "- 📱 **粘人**：她的回复自动推到你的 **QQ**（文本 + 语音 + 图片）—— 你不在电脑前，她也能找到你",
+        "- 👧 **会动**：右侧数字人窗口，空闲时发呆、说话时开口 —— 一个会呼吸的 AI，不是冷冰冰的对话框",
+        "**流式数字人**（DUIX）把你的回复实时生成口播视频",
+        "- 🔊 **声音是你的**：TTS 声音克隆（OmniVoice，600+ 语言），音色由你给的参考音频决定，或直接用参数设计音色",
+        "内置了**多个音色预设**，工具行「🎙️ 音色」按钮可随时切换（说话的声音立即变化，无需重启）。",
+        "**段级抢占**：对话中来了更新的回复，当前长任务的剩余段自动让位（已生成段保留），最新回复永远最快开始。",
+        "**麦克风打断**：你开始说话（点麦克风/插话）时数字人视频立即停止播放——只停播放，生成任务与已存视频不受影响。",
+        "生成的口播视频保留最近 200 条（`GET /api/dh/history` 可回看）。"
+      ],
+      "usageItems": [
+        "1. 点**麦克风**：开始连续聆听（每句自动识别发送；再点一下停止）",
+        "2. 点**⚡**：插话（亮，默认）/ 排队（灭）——说话打断回复 vs 回复读完再自动接上",
+        "3. 点**👧**：显示/隐藏女友动画窗；窗口可拖宽、双击换边",
+        "4. 点**🎭**：数字人开关——开：回复生成口播视频，TTS+画面同步播放（分段续接）；关：接近即时的纯语音朗读",
+        "5. 点**🔊**：开/关语音朗读",
+        "6. **QQ 对话**：手机 QQ 主号给小号发消息即可（需已按「十、QQ 双向对话」配置）"
+      ],
+      "usageActions": [
+        "生成状态用 `GET http://127.0.0.1:8765/api/dh/status` 查看（done 且带 video_url 即为就绪）",
+        "不想自动起 NapCat（比如你要在电脑上正常用主号 QQ）：`bridge\\start-all.cmd nq`（跳过 NapCat，QQ 双向聊天不工作）。"
+      ],
+      "ioPairs": [
+        "从桥接发测试：`POST /api/qq/send {\"text\":\"你好\",\"voice\":true}` → 主号收到文本+语音",
+        "发图片：`POST /api/qq/image {\"path\":\"C:/path/to/a.png\"}` → 主号收到图片",
+        "http://127.0.0.1:8765/api/health\n```\n\n看到 `{\"status\":\"ok\", ...}` 就说明桥接起来了"
+      ],
+      "codeExamples": [
+        "venv-speech\\Scripts\\python.exe bridge\\smoke_tts.py --text \"你好，我是小雅。\"",
+        "wsl -d Ubuntu-22.04 -- bash ~/omnivoice-wsl/start_server.sh",
+        "bridge\\start-bridge.cmd"
+      ],
+      "usecases": [],
+      "outputs": [
+        "结束后项目根目录会生成 `tts_out.wav`，播放它——**能听到克隆音色的声音，说明 TTS 链路通了**。",
+        "| 克隆首轮出音 | 18.3s | **1.6s** |",
+        "| 热态出音 | ~2.2s | **~1.3s** |",
+        "**提速技巧**（实测：7.3s 音频 20.1s → 14.1s，约 -30%）："
+      ],
+      "reliability": [
+        "**没有 NVIDIA 显卡就装不了本项目**（模型推理依赖 CUDA GPU）。",
+        "全链路（TTS + 数字人同时工作）实测峰值约 **15GB**，16GB 显存基本吃满；OmniVoice 与 DUIX 建议错峰",
+        "**部署前提**：Windows 11 + WSL2（Ubuntu 22.04）。",
+        "WSL2 系统里若有旧 nvcc（如 12.8）会干扰 flashinfer 的 CUDA 版本检测，启动服务前必须设置 `CUDA_HOME` 指向 cu13 的 nvcc 目录。",
+        "Windows 的 localhost 转发在本机 WSL2 网络模式下失效，必须用 IP。",
+        "别给小号**自己**发语音（QQ 不支持自己给自己发语音）；② 语音必须 **silk 格式**（`pip install pilk`，桥接已内置转换），mp3 base64 发不出去",
+        "配成 WebSocket 服务器会抢 8765 端口失败",
+        "3. **第一次 TTS 很慢（10~60s）** → 正常。模型首次懒加载 + 预热，之后每句约 0.5s 出音。",
+        "4. **STT 偶尔识别为空** → FunASR 对超短语音/纯噪声会返回空结果被丢弃",
+        "5. **桥接启动但模型加载失败** → 检查 `bridge-config.json` 里 `tts.model_name` 路径是否存在"
+      ],
+      "media": [
+        { "excerpt": "> - [口播视频效果 ①](https://www.douyin.com/user/self?from_tab_name=main&modal_id=7676326565919149339)", "weight": 0.5 },
+        { "excerpt": "> - [口播视频效果 ②](https://www.douyin.com/user/self?from_tab_name=main&modal_id=7678063553395412259)", "weight": 0.5 }
+      ],
+      "concerns": [
+        "No explicit scenario/use-case section, so usecases is empty.",
+        "Only externally hosted Douyin demo-video links exist (no embedded images); counted as externally hosted media at weight 0.5 each, otherwise media would be empty.",
+        "Long install/troubleshooting FAQ list only partially sampled (cap 10); port-conflict, voice-mismatch and rendering entries omitted.",
+        "Configuration-table steps (bridge-config.json edits) are config and omitted."
+      ]
+    },
+    {
+      "repo": "xiajiajun516/dsh-config-manager",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Backup, restore, export, import, migrate and sync your complete DeepSeek Harness (DSH) configuration",
+        "- ⏰ **Scheduled full backups** — automatic, on your own cadence (6h / 12h / 24h / 7d / custom weekly), secrets never included",
+        "- ☁️ **Git / WebDAV** configuration sync",
+        "- 🛒 **Configuration market** — browse & one-click install shared configs",
+        "- ↩️ Automatic snapshot and rollback before restore",
+        "| 👀 | **Preview before import** | Full preview first — **never touches your config silently** |",
+        "| 🗺️ | **Path auto-mapping** | Detects dead absolute paths and lets you remap them |",
+        "| 📸 | **Snapshot restore** | Undo an import: whole-file restore + uninstall added plugins (CLI & GUI) |",
+        "| 🗂️ | **Profiles** | Save multiple setups (Work / Personal) and switch anytime — preview + auto-backup + rollback |",
+        "| 🤖 | **Agent tools** | Backup / snapshot / restore / sync right from an agent session |",
+        "The `dsh-config-manager` **CLI is completely independent of the DSH runtime** (pure Node + the core engine, **zero `@deepseek-ai/*` imports** — it runs even when the DSH peer packages are broken or missing).",
+        "- **Push preview before uploading** — the Push button first shows a read-only preview of what will be sent"
+      ],
+      "usageItems": [
+        "  1. Open DSH → Settings → \"Backup & Migration\"\n  2. Click \"Export Configuration\" → choose \"Quick Export\"",
+        "  1. Open DSH → \"Backup & Migration\" → \"Import Configuration\"\n  2. Select the ZIP → wait for analysis → review the \"Import Preview\"",
+        "  3. Path issues? → choose new paths (batch mapping supported)\n  4. Conflicts? → choose Keep Current / Use Imported",
+        "The agent calls them when the task matches — e.g. \"back up my config\", \"what snapshots do I have\", \"restore to that snapshot\", \"sync to my repo\" or \"show me the remote diff\"."
+      ],
+      "usageActions": [
+        "dsh-config-manager help                                        # list all commands & options",
+        "dsh-config-manager snapshots [--data-dir <dir>]                # list snapshots (newest first)",
+        "dsh-config-manager restore [--id <id>] [--dry-run]",
+        "dsh-config-manager reinstall [--version <v>] [--yes] [--list]",
+        "dsh-config-manager reinstall --list",
+        "dsh-config-manager restore --dry-run                          # preview the plan (zero writes)",
+        "dsh-config-manager restore --id <snapshot-id>                 # execute (current files are backed up first)",
+        "dsh-config-manager reinstall --wipe-config",
+        "dsh-config-manager reinstall --yes",
+        "dsh-config-manager reinstall --dry-run"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "dsh-config-manager restore --id <snapshot-id>                 # execute (current files are backed up first)",
+        "dsh-config-manager reinstall --dry-run"
+      ],
+      "usecases": [
+        "Create a portable backup of your DSH settings, model providers, plugins, MCP servers, skills, agent presets, profiles and workspace — one ZIP file, no secret values included by default.",
+        "Export your current DSH environment as a single ZIP and import it on a new Windows, macOS or Linux machine.",
+        "Move your complete DeepSeek Harness setup without manually reinstalling plugins, MCP servers and skills.",
+        "Keep portable configuration synchronized between machines through a private Git repository or WebDAV — secrets never sync.",
+        "Turn on scheduled backups (6h / 12h / 24h / 7d — or a **custom weekly weekday & time**) and DSH quietly keeps a fresh full backup of your configuration in the background",
+        "Browse the built-in official market for ready-made configurations (model providers, plugins, MCP servers, skills, agent presets…), preview what would be imported (dry-run), and install with one click",
+        "**A typical rescue flow** when DSH won't start:"
+      ],
+      "outputs": [
+        "> Output: `dsh-config-<date>.zip` with manifest + per-category data + SHA-256 checksums.",
+        "  3. You get dsh-config-2026-08-14.zip (the report confirms no secrets inside)",
+        "✓ 18 settings will be updated    ✓ 6 plugins already installed\n⚠ 2 plugins need installation    ⚠ 3 secrets need re-entry\n⚠ 1 path needs mapping           ⚠ 2 conflicts need attention",
+        "the result page lists what needs a DSH restart (per plugin/MCP), credentials to re-enter, and failed/skipped items you can retry",
+        "Exit code is `1` if any action failed; the report honestly lists restored / removedPlugins / manualHints / failed / skipped."
+      ],
+      "reliability": [
+        "> ⚠️ **Security first**: no secrets (API Key / Token / Password) are exported by default.",
+        "**A ZIP is untrusted input**: defends against Zip Slip, malicious paths, zip bombs, corrupt archives — any trigger rejects the whole file",
+        "**Logs are fully redacted** — secret values never reach logs",
+        "> Note: a \"decide later / review\" option is intentionally **not** offered — an undecided conflict would block the import from proceeding.",
+        "**Encrypted backups**: a lost password means the `secrets.enc` can't be decrypted (by design — keep your password safe)",
+        "1. **Installing / updating plugins or MCP takes effect after restarting DSH**",
+        "2. **Some UI state is not migrated** (e.g. task board data, panel widths — they live in the browser, not in DSH's config files)",
+        "A checksum mismatch rejects the import outright (protects against corruption or tampering).",
+        "Items are deduplicated by stable IDs (plugin ID / MCP name / skill name…); existing items are skipped.",
+        "| ❌ Unsupported | Schema beyond the supported range (cannot import) |"
+      ],
+      "media": [
+        { "excerpt": "![One-click Export](assets/screenshot-export.png)", "weight": 1 },
+        { "excerpt": "![Import Preview](assets/screenshot-import-preview.png)", "weight": 1 },
+        { "excerpt": "![Snapshot Restore](assets/screenshot-snapshots.png)", "weight": 1 },
+        { "excerpt": "![Remote Sync](assets/screenshot-sync.png)", "weight": 1 },
+        { "excerpt": "![Configuration Market](assets/screenshot-market.png)", "weight": 1 }
+      ],
+      "concerns": [
+        "No explicit paired input/output example, so ioPairs is empty; the preview block is recorded as an output instead.",
+        "Emergency backup before reinstall wipe and remaining known-limitation items omitted at cap 10.",
+        "pnpm minimumReleaseAge troubleshooting is install-environment guidance and omitted.",
+        "Compatibility table partial/good rows collapse into the Unsupported boundary row recorded."
+      ]
+    },
+    {
+      "repo": "lhh010/dsh-ui-whale",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DSH Web UI 的常驻像素鲸鱼伙伴插件：会话标题栏（标题行右侧）常驻一只小鲸鱼，随会话快照实时反应——**零核心改动**。",
+        "- **平时（空闲）**：隔一会儿眨一次眼（约 5 秒）；偶尔摆一下尾巴（约 11 秒一次，0-1-2-3-4-3-2-1-0 来回）；偶尔动动胸鳍（约 7 秒一次，0-1-2-1-0 来回）。",
+        "- **睡觉**：连续空闲 **10 秒**后入睡——头顶灰色「Z」按 **0-1-2-3-4-5-1-2-3-4-5-1-…** 循环（先静止姿态 0 一次，再上浮→渐小→淡出 1-5 反复）；睡觉期间动鱼鳍和甩尾巴照常",
+        "- **思考 / 运行 / 工作中**：尾巴持续摆动 + 胸鳍持续扑动 + 眨眼更频繁。",
+        "- **回合完成时**：头顶喷水庆祝——水花按**单向 0-1-2-3-4-5-6** 喷起散开（不反向），喷完结束。"
+      ],
+      "usageItems": [
+        "- **点击鲸鱼**：左上角冒出一颗粉色爱心，从小变大再消失（**单向 0-1-2-3-0**），期间其它动作照常进行；再点一次会重新从小爱心开始。"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "0809 运行中的 `dsh web` 的 `window.__DSH_BOOT__` 清单包含 `@dsh-external/dsh-ui-whale`，标题栏鲸鱼正常渲染——眨眼/摆尾/思考/喷水/睡觉动画与点击爱心均实测可用。"
+      ],
+      "reliability": [
+        "> **你的 DSH 版本决定装哪个插件版本**（装错会崩：常见症状 `useConversation is not a function`）",
+        "同时兼容 snapshot0807（`snapshots/20260807T130646Z`）、snapshot0808（`snapshots/20260808T121140Z`）、snapshot0809（`snapshots/20260809T140917Z`）、snapshot0810（`snapshots/20260810T155924Z`）",
+        "本插件 v0.3.8 起内置**兼容性自诊断**：apply 时探测所需客户端 API,不满足时不再崩溃,而是在页面右下角渲染修复指引横幅(点击可关闭),提示升级 DSH 或更新插件。",
+        "缺失会抛 `ClientPackageCompositionError` 并**拒绝启动 `dsh web`**——升级快照或改源码后必须重新 `pnpm run build` 再启动，否则浏览器拉到的是旧 `lib/client.js`。",
+        "顶层 `dshClient` 字段读不到会静默丢出 boot 图——无日志、无报错",
+        "typecheck、34 个单测与构建全绿",
+        "无——纯浏览器端 UI 呈现：不进入模型请求、不增加提示词内容、不改任何工具 schema。"
+      ],
+      "media": [
+        { "excerpt": "![dsh-ui-whale 完整演示](docs/dsh-ui-whale-demo.gif)", "weight": 1 },
+        { "excerpt": "<img src=\"docs/眨眼.gif\" alt=\"眨眼\" width=\"200\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/摆尾巴.gif\" alt=\"摆尾巴\" width=\"200\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/摆腹鳍.gif\" alt=\"摆腹鳍\" width=\"200\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/喷水花.gif\" alt=\"喷水花\" width=\"200\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/冒爱心.gif\" alt=\"冒爱心\" width=\"200\">", "weight": 1 }
+      ],
+      "concerns": [
+        "7 demo/action GIFs plus an mp4 exist but media weighted cap is 6; 睡觉.gif and the mp4 link omitted.",
+        "Click interaction is the only non-install operation, so usageActions/ioPairs/codeExamples are empty; version-mapping install commands excluded.",
+        "Version-mapping table rows are changelog-like and only the compatibility boundary claims were recorded.",
+        "Art/rendering implementation details (22-frame sprites, CSS box-shadow layers) excluded as architecture facts without separate user-visible behavior."
+      ]
+    }
+  ]
+}

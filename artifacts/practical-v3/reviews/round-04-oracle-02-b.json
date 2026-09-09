@@ -1,0 +1,581 @@
+{
+  "reviews": [
+    {
+      "repo": "JingxuanC/causal-memory",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Forward simulation: predicts outcomes (safe/warning/danger)",
+        "Contrastive: compares recorded outcomes of two alternatives; renders same-context branches (natural experiments) when they exist; every verdict logs a falsifiable prediction",
+        "Logs `decision → outcome` as a causal edge with relation type; optional `context` records the world state — same task_tag + context becomes a comparable branch (fork)",
+        "Multi-hop backward traversal through the causal graph",
+        "Immutable SWR 2.0: produces a delta + clone (original graph untouched), with full\naudit log.",
+        "The `causal_edges` table is never compacted — it lives outside the agent's context\nwindow.",
+        "The distiller extracts structured memories from raw conversations:",
+        "Mined meta edges: similar_to / repeated / contradicts / refines",
+        "Reconstructive retrieval: Markov-blanket subgraph → coherent narrative, with optional N-way calibration",
+        "All 14 memory operations are also available as a Python package",
+        "[dsh-plugin/](dsh-plugin/) mounts all 16 causal-memory tools onto DSH's\n`ctx.tools` with clean names (no `mcp__` prefix)",
+        "Good decisions rank higher; Bellman propagates to parents"
+      ],
+      "usageItems": [
+        "causal-memory sleep --dry-run   # preview what would change",
+        "causal-memory sleep             # run consolidation cycle",
+        "GET /debug/recall?query=...     run a recall now, return the full JSON trace",
+        "| `record_decision` | After acting on a decision |",
+        "| `search_causal` | Before a non-trivial decision |",
+        "| `intervention_query` | **Before taking an action** |",
+        "| `trace_cause` | When something fails |",
+        "| `counterfactual_query` | When choosing between options |",
+        "| `prediction_report` | Periodic calibration check |"
+      ],
+      "usageActions": [
+        "causal-memory sleep --dry-run   # preview what would change",
+        "causal-memory sleep             # run consolidation cycle",
+        "./target/release/causal-memory http --port 9938   # MCP Streamable HTTP",
+        "GET /metrics                    Prometheus text (RED + recall metrics)",
+        "GET /healthz / /readyz          liveness / readiness (readiness probes the store)"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Sleep consolidation\n\n```bash\ncausal-memory sleep --dry-run   # preview what would change",
+        "### HTTP transport (remote agents, multi-agent shared memory)\n\n```bash\n./target/release/causal-memory http --port 9938   # MCP Streamable HTTP",
+        "```python\nfrom causal_memory import CausalMemory",
+        "./target/release/causal-memory-amc --db-dir amc_data --port 8787 --write-mode raw"
+      ],
+      "usecases": [
+        "### HTTP transport (remote agents, multi-agent shared memory)",
+        "**30-second single scene** — the agent is about to `git push --no-verify`;"
+      ],
+      "outputs": [
+        "| 5 | **45%** | **100%** |",
+        "**Key result: C7 update 50% → 100% (+50pp, 20/20 questions) and it holds at\ndoubled sample size.**",
+        "| Compaction survival | 100% | 45% | External table = immune to compaction |",
+        "✅ Multi-session multi-pass retrieval (LongMemEval multi-session 42.9% → 57.9%, same-codebase)"
+      ],
+      "reliability": [
+        "✅ 368/368 tests passing + clippy clean",
+        "`/healthz` / `/readyz` stay open on purpose — kubelet probes cannot send",
+        "Without the token, do not expose\nthe port to the public internet.",
+        "Plain\n> `cargo build -p causal-memory-py --release` fails to link — the Xcode CLT\n> Python ships no `libpython3.9` dylib",
+        "The C6 gap (20% vs mem0 30%) is the remaining open\nlimitation",
+        "causal-memory performs competitively but\n**does not beat mem0**",
+        "without them the bindings degrade gracefully to\nBM25-only retrieval",
+        "❌ 7×24 production deployment validation"
+      ],
+      "media": [
+        {
+          "excerpt": "[![30-second danger-warning demo](docs/demo/causal-memory-danger-30s.gif)](docs/demo/causal-memory-danger-30s.mp4)",
+          "weight": 1
+        },
+        {
+          "excerpt": "[![21-second demo](docs/demo/causal-memory-demo.gif)](docs/demo/causal-memory-demo.mp4)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![architecture](docs/architecture.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Tool-count statements are inconsistent across the README (14 tools, 16 tools, 17 MCP tools), so per-tool counts were not used as evidence.",
+        "Repository bundles a DSH native plugin (dsh-plugin/) and a Hermes plugin, but the core project is a standalone Rust MCP memory system; typed as standalone-nonplugin.",
+        "Comparison tables describing mem0/Zep/Letta/HeLa-Mem treated as linked-project claims and excluded."
+      ]
+    },
+    {
+      "repo": "a179-sanae/dsh-auto-collapse",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把会话里的工具卡片与 Think 推理块自动折叠成一行摘要，让界面只保留模型说的话。",
+        "每个回合完成后，工作过程收成一行 `已处理 X秒`，只留模型最终正文",
+        "相邻工具组合并，正文输出是硬边界（不会跨正文合并）",
+        "展开 `已思考` 后，连续思考合并为一个三级思考行（标题 `Think · 第一句`）",
+        "**可配置状态提示词**：在 设置 → 插件 → 插件配置 中可以编辑“状态提示词”，默认 `Deep sleeping...`",
+        "**可逆**：卸载（HMR stop）时完整还原所有折叠/隐藏/改写。",
+        "同一个 `assistant-step` 原地补正文、React 换节点和历史乱序挂载都会重新协调",
+        "除 tool-call 外，顶层 `command` / `manual-compaction`、context 和纯图片 final 都按同一回合语义处理。"
+      ],
+      "usageItems": [
+        "点击展开完整工作流程（上下文注入 → 思考 → 工具调用 → 过程正文 → 最终正文）",
+        "点击展开/收起",
+        "点击展开合并内容块"
+      ],
+      "usageActions": [
+        "点击展开完整工作流程（上下文注入 → 思考 → 工具调用 → 过程正文 → 最终正文）",
+        "点击展开/收起",
+        "点击展开合并内容块"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "test/             fake DOM 契约、竞态、会话切换与 40 组乱序排列回归",
+        "`prefers-reduced-motion` 下停止动画（过渡动画同样禁用）",
+        "失败自动恢复旧 bundle",
+        "依次执行 TypeScript 检查、构建和全部回归测试。"
+      ],
+      "media": [
+        {
+          "excerpt": "![折叠效果](assets/screenshot.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit use-case scenarios, input/output examples, or operational code fences beyond install/build commands; arrays left empty rather than inferred.",
+        "The 近期亮点-style changelog-like content was treated as feature description only where it states currently shipped behavior."
+      ]
+    },
+    {
+      "repo": "whyihaveyou/dsh-suite",
+      "inferredType": "catalog-list",
+      "capability": [
+        "880+ 精选插件，CI **每小时**刷新数据、**每天**把收录的包真实装进临时 profile 重测兼容性",
+        "`@dsh-suite/plugin-manager` 在 DSH Web UI 的设置页里加一个 **Store** 标签：逛目录、搜索、看徽章、一键安装，全程不用离开 DSH。",
+        "每个条目带一枚徽章，CI 每天对照最新 DSH 版本重测（静态 peer 比对 → 安装检查 → 配置组装，三层均无需 key）",
+        "版本号由 npm 徽章实时拉取 `latest`，永不过时；目录表格则由 hourly bot 每小时刷新。",
+        "共 1812 个条目，按分类分表、类内按 ⭐ 降序。",
+        "`npm create dsh-plugin` 一条命令生成可跑的 `dsh.bundle` + Cordis 骨架",
+        "回合完成 / 出错 / 待审批时，把通知推到 IM webhook（飞书 / 企业微信 / 钉钉 / Slack / Discord / 自定义）+ 本机系统通知。",
+        "把 append-only 会话日志导出成人读的 Markdown / HTML，按来源分组渲染（系统提示 / 思维链 / 工具调用 / 子agent）。",
+        "多 agent 会话共享任务看板：跨 subagent 创建/认领/更新/查询任务，基于 append-only 会话日志持久化。",
+        "中文开箱即用预设全家桶：小红书笔记助手 / 中文文案润色 / 日报周报生成器，一键应用到官方 Agent presets，无需重启、选择器立即可见。"
+      ],
+      "usageItems": [
+        "想提名新条目，用[收录申请](.github/ISSUE_TEMPLATE/plugin-submission.md)模板开 issue。"
+      ],
+      "usageActions": [
+        "open https://whyihaveyou.github.io/dsh-suite/zh.html",
+        "npm create dsh-plugin@latest my-plugin",
+        "想提名新条目，用[收录申请](.github/ISSUE_TEMPLATE/plugin-submission.md)模板开 issue。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## 快速开始\n\n```bash\n# 1. 逛目录网站"
+      ],
+      "usecases": [],
+      "outputs": [
+        "机器可读的每日结果见 [`data/compat-report.json`](data/compat-report.json)，工作流见 [`.github/workflows/compat.yml`](.github/workflows/compat.yml)。"
+      ],
+      "reliability": [
+        "| 🟢 ok | 已实测与最新 DSH 版本兼容 |",
+        "| 🔴 broken | 与最新 DSH 版本不兼容 |",
+        "| ⚪ unknown | 尚未实测（首次收录） |"
+      ],
+      "media": [
+        {
+          "excerpt": "[![dsh-suite 目录网站](https://whyihaveyou.github.io/dsh-suite/preview/2026-08-14/home-zh.png)](https://whyihaveyou.github.io/dsh-suite/zh.html)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![DSH Web UI 里的插件商店 Store 标签页](site/assets/store-tab.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The large plugin catalog tables describe linked third-party projects; per rubric their capabilities, stars and screenshots were excluded and only the catalog's own discovery/curation/validation behavior counted.",
+        "First-party (@dsh-suite/*) plugin descriptions were counted as the project's own shipped capabilities.",
+        "The externally hosted catalog-site preview image was weighted 0.5."
+      ]
+    },
+    {
+      "repo": "Fisfzy/dsh-ego-browser",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "以 **32 个结构化 `ego_*` 工具**驱动浏览器",
+        "agent 后台操作网页时，你能像看直播一样看到它正在浏览的每个页面，还能直接操作它。",
+        "监控窗鼠标**直接操作**真实浏览器（点击/拖拽/滚动回传 CDP）",
+        "下载捕获 `ego_download` / 人机验证检测 `ego_captcha`/`ego_page_info`",
+        "登录态落盘持久化 `ego_auth_flush`",
+        "agent 操作 DSH 自身界面时同样实时可见、可接手",
+        "SSE 实时推流 + 标签条 + 历史抽屉 + 监控窗鼠标直操",
+        "实时观察窗注册为**侧边栏原生 Tab**",
+        "`resolveEgoEnv` 自动探测 Chrome/Edge/Brave，内置 `--no-sandbox` wrapper，root / Docker / 无显示器免配置"
+      ],
+      "usageItems": [
+        "右下角 **🌐 常驻小球** → 点开",
+        "**主画面**：agent 当前页面实况；点击/拖动/滚轮直接操作页面，Ctrl+滚轮缩放视图、Ctrl+拖动平移，双击复位。",
+        "点击画面后可直接键盘输入，支持中文 IME、粘贴、Tab/Enter/方向键及 Ctrl/Cmd 快捷键。",
+        "**标签页条**：顶部横排，点选切换，`×` 关闭。",
+        "**历史抽屉**（🕘）：按时间回看访问轨迹。"
+      ],
+      "usageActions": [
+        "右下角 **🌐 常驻小球** → 点开",
+        "点击/拖动/滚轮直接操作页面"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "**文献 / 数据抓取**：让 agent 登录知网 / 谷歌学术翻页收集，你在观察窗看着它滚动、点下一页、下载 PDF，中途卡住立刻能发现。",
+        "**表单与登录**：agent 填表到一半，观察窗弹出验证码——你直接接管把验证码点了，再交还给 agent 继续。",
+        "**QA / 冒烟测试**：让 agent 在自己产品上点一圈，观察窗等于一台\"会说话的录屏\"，顺手还能回看历史轨迹。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "本版本针对 **DeepSeek Harness ≥ `0.1.2-alpha.1`** 适配",
+        "headless 会话仍可用 `ego_*` 工具，仅无观察窗",
+        "底层 ego-lite 宿主仍是非 Windows 官方支持的社区移植，复杂多步流程稳定性可能弱于 macOS。",
+        "普通 `pnpm install` 可能在解析 `@deepseek-ai/*` peer 时失败",
+        "Linux 用 CDP `DOMSnapshot` 重建语义树，非 macOS 内核级，复杂 iframe/画布场景可能降级。",
+        "未合并的社区 PR，跨 CLI 调用间可能丢 tab/空间状态",
+        "Chrome 运行期 Cookie 仅优雅关闭时落盘，强杀重启需重登。",
+        "macOS 首次使用需要“屏幕录制”权限；X11 需要 Chromium 与 FFmpeg 共享 `DISPLAY`；Wayland 缺少 Portal/PipeWire 输入时会提示切回 CDP。",
+        "冷启动自动重试（只重试 CDP 瞬态，不吞真错）、worker 单实例守卫 + 崩溃自动重启"
+      ],
+      "media": [],
+      "concerns": [
+        "The 近期亮点 section is changelog-style and was not used for evidence.",
+        "No repository-hosted demonstration images/GIFs in the README (only marketplace badges), so media is empty.",
+        "Comparison rows about the other same-name plugin (Da1dr1em/dsh-ego-browser) and upstream ego-lite were treated as linked-project claims and excluded."
+      ]
+    },
+    {
+      "repo": "Tyan66666/billion-context-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**billion-context-dsh** 给模型一个 `compress` 工具：由 LLM 决定**何时**、**压缩什么**，写成高保真摘要",
+        "自动策略只 *nudge*（提醒），是否压缩、何时压缩由模型决定",
+        "压缩范围成为 checkpoint 节点，原文保留在 append-only 会话日志中；`decompress` 可恢复",
+        "再次压缩某块的摘要节点 = 蒸馏该块（tier 2），蒸馏 tier-2 块得 tier 3",
+        "由内核的压力决策在 `agent/pre-step` 注入——效率通知 + 上下文分解 + 压缩规则"
+      ],
+      "usageItems": [
+        "| `compress` | 用你书写的紧凑摘要替换 seq 范围（边界自动平衡到 tool-call/result 配对点）",
+        "| `decompress` | 恢复已压缩块的原始内容（只读）；接受 acp_status 显示的 `bN` 或 compaction id |",
+        "| `search_context` | 按关键词搜索压缩块摘要与原文（acp-kernel hybrid 检索：词干化 + CJK bigram + 模糊）",
+        "CONTEXT BREAKDOWN（tool/text/summaries 占可见总量）+ 压缩块账本 + nudge 决策行",
+        "| `/acp` | 从命令栏执行 status / compress / decompress"
+      ],
+      "usageActions": [
+        "| `compress` | 用你书写的紧凑摘要替换 seq 范围（边界自动平衡到 tool-call/result 配对点）",
+        "| `decompress` | 恢复已压缩块的原始内容（只读）；接受 acp_status 显示的 `bN` 或 compaction id |",
+        "| `search_context` | 按关键词搜索压缩块摘要与原文（acp-kernel hybrid 检索：词干化 + CJK bigram + 模糊）",
+        "| `/acp` | 从命令栏执行 status / compress / decompress"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "请勿将两者用于工程化 / 生产环境**——预期会有破坏性变更与粗糙之处。",
+        "包声明 peer 依赖 `@deepseek-ai/dsh-compaction` 为\n> `^0.1.0-rc.6 || ^0.1.1-rc.1`",
+        "旧发布的包在 DSH 0.1.1-rc.x 上装不上，\n> 升级到含本次修复的新版本即可。",
+        "**每个 agent 只留一个上下文管理器。** 两个后端同时 provide `ctx.compaction` 会冲突——同一 realm 内切勿并存。",
+        "占位符拼写错误会在引擎启动时抛错（fail-fast）",
+        "探测失败会在宿主日志与 `/acp` 面板提示（`restart to re-probe`）",
+        "混用会把宿主账本扣成负数、卡死中文会话",
+        "npm test            # node --import tsx --test tests/*.test.ts"
+      ],
+      "media": [],
+      "concerns": [
+        "The only media is a third-party Bilibili video about the upstream ACP philosophy (README states it is not made by this project) and does not demonstrate this port, so media is empty.",
+        "No explicit use-case scenarios, paired input/output examples, or non-install code fences; arrays left empty rather than inferred.",
+        "Configuration table and prompt-customization sections treated as config, not evidence."
+      ]
+    },
+    {
+      "repo": "Ephemeral-AI-Lab/dsh-plugins",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Codex-compatible `exec_command` and `write_stdin` tools with persistent command sessions.",
+        "Run shell commands like a Codex-style agent: start long-running processes,\npoll for output, and send input to persistent sessions.",
+        "Session-scoped recurring alarms, loop tools, slash commands, and a web UI.",
+        "Loops resume with the session\nand keep each alarm independent from the others.",
+        "Deterministic mock model turns and replay commands routed through the real DSH AgentLoop and ToolRuntime.",
+        "Session discovery, bounded reads, creation, and delivery through session tools and `/sessions`.",
+        "Reuses a file-backed Codex ChatGPT login through the existing `openai-codex` pi-ai provider.",
+        "Reuses a file-backed Grok subscription login through the existing `xai` pi-ai provider."
+      ],
+      "usageItems": [
+        "Exercise deterministic mock model turns through `/mock run` and `/mock replay`",
+        "Create durable, session-local recurring prompts that can be managed through\nagent tools, `/loop` commands, and the web UI."
+      ],
+      "usageActions": [
+        "`/mock run` and `/mock replay`",
+        "`/loop` commands",
+        "`/sessions`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "PTY transport is used\nby default with a configured pipe fallback when PTY allocation is unavailable.",
+        "API, and UI surface may change before a stable release."
+      ],
+      "media": [],
+      "concerns": [
+        "README is mostly install commands and a package index; no media, use cases, outputs, or io pairs are stated, so those arrays are empty.",
+        "The dsh-mock instability statement appears twice (list and section); recorded once."
+      ]
+    },
+    {
+      "repo": "xgone/dsh-remote",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "在 `dsh web` 前增加完整的账号密码认证 + MFA\n（两步验证）门禁",
+        "未登录访问任何路径都得到自包含的登录页；`/api` 与 WebSocket 全部要求有效\n  会话 Cookie。",
+        "把选择器替换为 **browse 后端**——选择/新建工作区变成\n  **浏览器内的目录对话框**（双栏目录视图 + 面包屑 + 新建文件夹）。",
+        "兼容标准认证器**：Google Authenticator、1Password、Authy 等（RFC 6238，6 位 / 30 秒）。",
+        "扫码绑定**：开启时展示二维码（SVG，实测可扫）+ 手动密钥 + otpauth 链接 + 10 个一次性备用码",
+        "输入满 6 位数字**自动验证**",
+        "管理员可用自己的密码为任意账号禁用 MFA（找回路径）。",
+        "本插件在远程（非 loopback）浏览器上拦截该 RPC，改为在\n**右侧边栏面板**中显示",
+        "Markdown 使用界面同款渲染器排版，图片 / PDF / 视频内联显示，文本与代码等宽预览，目录可逐级点击浏览",
+        "支持同时打开**多个面板**，自动上下等分分割",
+        "均提供中英双语，跟随 **DSH 应用语言设置**",
+        "WebSocket 全通**：事件下行流（`events.mux` / `events.host`）经认证后正常建立。"
+      ],
+      "usageItems": [
+        "未登录访问会看到**登录页**（自包含页面，非 SPA）；",
+        "由于还没有任何账号，登录页处于**引导模式**：标题为\"创建首个管理员账号\"；",
+        "输入用户名和密码（至少 6 位），点击创建",
+        "在认证器中输入当前 6 位动态码 → 自动验证并启用；",
+        "之后每次登录都需 密码 + 动态码（或备用码）。",
+        "用管理员账号打开 **Settings → 登录与账号 →\n> 允许的目录**，把工作区所在目录添加进去即可"
+      ],
+      "usageActions": [
+        "重启后，浏览器打开 `http://127.0.0.1:3080`：",
+        "未登录时访问任意路径 → 登录页；直接调用 `/api` → 403；",
+        "在认证器中输入当前 6 位动态码 → 自动验证并启用；",
+        "用管理员账号打开 **Settings → 登录与账号 →",
+        "验证：`curl http://127.0.0.1:3080/auth/me` 应返回"
+      ],
+      "ioPairs": [
+        "验证：`curl http://127.0.0.1:3080/auth/me` 应返回\n> `{\"authEnabled\":true,\"bootstrap\":false,\"authenticated\":true,...}`。",
+        "未登录时访问任意路径 → 登录页；直接调用 `/api` → 403；",
+        "| POST | `/auth/login` | 登录；有 MFA 时返回 `{mfaRequired, mfaToken}`（不签 Cookie） |"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "经反向代理（nginx / ssh 隧道 / Tailscale / Frp 等）暴露后，外部浏览器\n  登录即可使用全部功能",
+        "服务器没有本地浏览器时，UI 的「创建管理员」引导（仅限 loopback）无法使用。"
+      ],
+      "outputs": [
+        "# 期望输出类似：['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app', '@xgone/dsh-remote']"
+      ],
+      "reliability": [
+        "HMAC-SHA256 签名的 HttpOnly Cookie（可配过期时间、Secure、SameSite）；",
+        "scrypt 哈希（`N=16384,r=8,p=1`）+ 常量时间比较，绝不落盘明文。",
+        "登录失败按「IP + 用户名」限速（默认 15 分钟窗口内 5 次）。",
+        "仅本机（loopback）可提交，防止远程抢先注册。",
+        "根账号不可删除、不可改角色，只能重置密码（防止误删唯一管理员锁死）。",
+        "每用户独立工作区/会话（多租户数据隔离）——DSH 核心是单租户",
+        "Web 表面禁用 HMR，改配置后**必须重启 `dsh web`**；",
+        "所有读取都做 realpath 校验，符号链接逃逸与 `..` 穿越一律拒绝；",
+        "范围外的路径面板会提示\n`cannot display file (outside-roots)`。"
+      ],
+      "media": [
+        {
+          "excerpt": "![登录页](docs/login-zh.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![账号管理设置页](docs/settings-zh.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The nginx config fence is deployment configuration and was excluded from codeExamples.",
+        "Several 常见问题 rows describe fixes already shipped in specific versions; only the current-behavior statements were used."
+      ]
+    },
+    {
+      "repo": "lamost423/dsh-trace-compare",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把 Agent 真实的干活过程完整画出来、并分析给你看。",
+        "**迷宫**——主干路径、失败支路、折返点落在同一根时间轴上；空闲自动折叠、密集段自动聚合成「×N」徽标",
+        "**数据轨道**——每一步的工具调用密度、Token 脉冲（缓存背景 + 未缓存输入/推理/输出增量柱）、上下文压力曲线",
+        "**执行分析**——失败恢复链（原样重试 / 换参数 / 换工具 / 未恢复）、工具结果矩阵、耗时分位散点。",
+        "**多会话对比**——同一任务在不同模型上的 2~5 次跑同轴对比：轮次对齐、手动锚点、支路盘点。",
+        "**回放**——最高 300× 重放整场执行",
+        "模型派生的 dsh 子代理会话画成主干上分出的聚合支路节点",
+        "**搜索与过滤**：工具行提供「只看失败/重试」开关、按工具类型过滤、命令与返回内容全文搜索",
+        "**导出**：一键导出当前视图（含缩放窗口与过滤淡化状态）为 SVG 或 2x PNG",
+        "整页 UI（上传区、图例、泳道统计、对齐线、支路盘点、悬停卡、详情面板、错误提示）中英双语"
+      ],
+      "usageItems": [
+        "两个入口：会话内的「**实时迷宫**」页签（随当前会话实时生长），侧边栏的「**执行迷宫**」（上传 session log 单看或对比）。",
+        "悬停任意节点或弧线快速预览；**点击**在右侧打开固定详情面板",
+        "滚轮以光标为中心横向缩放，拖拽平移，双击空白处或「⤢ 整图」按钮复位",
+        "「🔗 加锚点」后在任意两条泳道各点一个节点，钉一条带时差标注的对比线",
+        "「📋 支路盘点」打开按轮次的盘点表",
+        "要看全会话用「Session log 下载 → 上传对比」。"
+      ],
+      "usageActions": [
+        "滚轮以光标为中心横向缩放，拖拽平移，双击空白处或「⤢ 整图」按钮复位",
+        "「🔗 加锚点」后在任意两条泳道各点一个节点，钉一条带时差标注的对比线",
+        "要看全会话用「Session log 下载 → 上传对比」。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "适合钉住语义等价但轮次错位的时刻。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "所有数字都是对判定数据的确定性聚合，不调 LLM；每个判定带依据、每个结论可回溯到证据",
+        "超过 60 秒没有任何步骤/工具活动的区间（比如两轮对话之间你在思考）压缩成一条带 `⏸` 标注的细缝，标明省略了多久",
+        "窗口边缘残留的更早轮次步骤会被丢弃并标注「⏮ 另有 N 步更早历史未加载」",
+        "日志没有 usage 时标签诚实回退为「推理 N 段（日志未报 token 用量）」",
+        "**失败特征只扫开头与末尾窗口**（v0.2.3 起）：真实报错要么从开头开始说、要么是追加在末尾的 stderr 段",
+        "已对官方 `0.1.0-rc.6`（构建 + 全量测试）与 `rc.8`（插槽/类型核对 + 实机验收）验证",
+        "宿主 `0.1.2` 重新拆分了客户端包、并换掉了会话快照的数据模型，两条线的插件不通用",
+        "解析与渲染全部在浏览器端完成，上传的日志内容不会到达宿主。"
+      ],
+      "media": [
+        {
+          "excerpt": "![执行迷宫：迷宫 + 数据轨道 + 执行分析，一屏读懂一场 8.6 小时的真实会话](assets/maze-hero.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![密集会话：整图态聚合徽标 → 点击放大 → 标签补齐 → 点开失败详情](assets/maze-zoom.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![轨道悬停：Token 分层数字 → 上下文占用 → 压缩事件前后对比](assets/maze-tracks.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![点失败链任意一条：缩放定位到那次失败，弹出完整命令、报错返回与判定依据](assets/maze-drilldown.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![对比：同一任务的两次真实跑 → 支路盘点按轮次列差额 → 点行缩放到该轮](assets/maze-compare.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![回放：300× 重放一场 8.6 小时的会话](assets/maze-replay.gif)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Repository renamed from dsh-trace-compare to dsh-maze; review keyed by the batch repo name.",
+        "Marketplace/listing badges contribute zero and were excluded from media.",
+        "No paired input/output examples or non-install code fences; ioPairs and codeExamples left empty."
+      ]
+    },
+    {
+      "repo": "xi-zhao/OpenQuantum",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "让 Agent 分析量子电路、查询量子云后端、运行算法，再把结果和完整过程交还给你。",
+        "你可以直接使用已经集成的 Qiskit、FieldQKit、本源量子（OriginQ / QPanda）、QMClaw 超导测控和量子算法能力。",
+        "它把完整的量子 Agent 工作台放进原生桌面窗口，并提供系统托盘、原生终端和桌面通知；",
+        "配置好消息渠道后，你可以直接在微信或飞书里发出一条消息，让同一个 OpenQuantum Agent 去调用量子工具。",
+        "它在固定扇区内运行二量子位无噪声 statevector VQE，再用独立程序检查能量、态矢、收敛轨迹和数值残差。",
+        "检查密度矩阵合法性、纯度、部分转置谱和 negativity，并物化可回放的验收报告",
+        "运行 rotated surface-code X/Z memory 采样与 MWPM 解码，报告逻辑错误数、标准误和 Wilson 区间",
+        "把目标函数和线性等式约束编译成 QUBO，检查 penalty 是否足够，再比较经典最优与 QAOA",
+        "判断转译或重写前后的无测量 unitary 电路是严格等价、相位等价、不等价还是没有确定信息",
+        "OpenQuantum 会把用户请求、Skill 加载、工具调用、权限状态和返回结果连成一条清晰的执行轨迹。",
+        "运行小规模 statevector 电路、有限 shots 与 density-matrix 噪声仿真"
+      ],
+      "usageItems": [
+        "浏览器打开 <http://127.0.0.1:3000>。",
+        "还没有配置模型时，也可以先运行本地量子示例。",
+        "运行 `npm run mcp:qpanda-runtime:setup` 检出固定审阅提交，在设置中心配置 `QPANDA3_API_KEY` 并手动开启后，即可连接悟空真机。"
+      ],
+      "usageActions": [
+        "浏览器打开 <http://127.0.0.1:3000>。",
+        "npm run demo:quantum-ground-state",
+        "npm run mcp:qiskit:probe"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "还没有配置模型时，也可以先运行本地量子示例。\n\n```bash\nnpm run demo:quantum-ground-state"
+      ],
+      "usecases": [
+        "普通用户可以从自然语言开始，研究机构可以组织科研工作流，量子公司也可以在这套基础上继续开发自己的产品。",
+        "高校实验室可以沉淀自己的科研流程，算法团队和工具作者也可以把新的方法交给更多人使用。"
+      ],
+      "outputs": [
+        "<td align=\"center\"><strong>-1.85727503 Ha</strong><br /><sub>VQE 能量</sub></td>",
+        "<strong>通过</strong><br /><sub>科学验收</sub>",
+        "GHZ-3、QFT-3、BV-4 三个案例全部与锁定 manifest 匹配",
+        "参考模型得到赋值 `[0, 1]`、最优值 -2.0，和独立枚举一致",
+        "`p=0` 时 0/100；`p=0.01`、seed 123 时 59/1000，95% 区间约 4.60%–7.54%"
+      ],
+      "reliability": [
+        "这些结果证明的是固定输入下的本地执行与计算级 observations，不自动证明量子优势、QEC threshold 或真实硬件性能。",
+        "结果始终标记为 simulation / not_evaluated",
+        "新增能力在 Result Package 和 Session Event Log 来源链没有物化时会明确保留 `provenance.not_checked`",
+        "硬件任务和付费服务按需开启。后端发现类能力保持只读",
+        "Harness 不允许监听 `0.0.0.0`，因此这不是远程服务器暴露方式。",
+        "不要使用 `npm install -g dsh-plugin-desktop` 或 `npx dsh-plugin-desktop` 代替上面的命令：那会启动上游默认客户端",
+        "Web 与 Desktop 共用 `.openquantum/dsh` 中的本地状态，请先停止 `npm run dev` 再切换到桌面客户端。",
+        "消息平台的 Token 只保存在被 Git 忽略的 CC Connect 本地配置中。",
+        "密钥保存在本地环境或 DeepSeek Harness 凭据库中，项目配置只保留凭据引用。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/openquantum-quantum-result.jpg\" width=\"720\" alt=\"OpenQuantum 运行量子基态任务并完成科学检查\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/openquantum-quantum-settings.jpg\" width=\"100%\" alt=\"OpenQuantum 量子组件设置中心\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/openquantum-trajectory.jpg\" width=\"100%\" alt=\"OpenQuantum Harness 量子任务执行轨迹\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The integrated third-party tools (Qiskit, OriginQ, IonQ, etc.) are described in an integration table; only OpenQuantum's own integration-level abilities were counted, not the upstream tools' standalone capabilities.",
+        "Typed as standalone-nonplugin: an application built on DeepSeek Harness rather than a DSH plugin package."
+      ]
+    },
+    {
+      "repo": "Phant0Meow/dsh-meow-memory",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "每个工作区维护一份结构化记忆数据库（`.dsh-meow/memory.db`，基于 `node:sqlite`）。",
+        "**七层记忆**（`soul` = AI 自身 / `user` = 用户基本信息与偏好 / `project` = 项目信息，",
+        "**首轮注入（长期记忆块）**：第一条用户消息前注入固定格式",
+        "**每消息关键词命中**：从第二条用户消息起，每条真实用户消息都检索",
+        "`memory_remember/search/update/project` 带 project 参数即锚定",
+        "会话被压缩（手动 `/compact` 或 token 压力自动触发）后，下一个用户\n  消息轮自动重新注入长期记忆快照",
+        "窗口空闲 ≥ `idleMinutes`（默认 **180 分钟 = 3 小时**）即进入允许\n  触发状态",
+        "**反思**：单次任务内连续 ≥7 个工具 step 后，插件询问模型自上次整理以来是否有值得记忆的内容。",
+        "`memory_search`（BM25 × 近期权重，支持 level/project/status/days 过滤，默认 top10 = 前 5 条",
+        "在输入框敲 `/dream` 立即手动唤起本窗口的记忆整理",
+        "首轮长期记忆 / 每消息关键词命中的注入文本在前端\n  折叠成「▸ 已注入记忆（长期记忆/关键词命中）」横条",
+        "\"dream 整理过记忆且之后无新对话\n  新信息\"的会话行显示**淡黄色小月牙 🌙**"
+      ],
+      "usageItems": [
+        "左侧边栏该会话行的「…」\n  菜单里点一下**「跳过梦境整理记忆」**即可，再点**「取消跳过梦境整理记忆」**恢复。",
+        "点开可查看\n  注入全文；",
+        "卡片内 Think / tool call / 上下文注入均可点开查看细节。"
+      ],
+      "usageActions": [
+        "在输入框敲 `/dream` 立即手动唤起本窗口的记忆整理",
+        "左侧边栏该会话行的「…」"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "自动去重合并，返回读回确认：关键词/项目归属",
+        "返回检索元数据视图：\n  归属 + 完整 id + 相对时间 + 关键词列表，不含原文",
+        "todo 输出「已完成：」最近 5 条 +「To do list：」",
+        "显示「新增记忆 N 条」/「记忆梦境任务」",
+        "「可能相关的记忆，仅供参考：」前缀注入"
+      ],
+      "reliability": [
+        "`node:sqlite`（Node ≥22.13 默认可用；22.5–22.12 需 `--experimental-sqlite`）",
+        "npm run test           # 228 项逻辑测试：db / bm25 / migrate / inject / reflect / dream / tools / apply",
+        "pnpm ≥10 默认会阻止安装期的构建脚本：首次 `add` 可能失败并提示 `allowBuilds`",
+        "dream 防重复**：check 门（DB 原子 60s 检查节流）+ start 幂等抢占（`dream_pending`）+",
+        "最后工具是 `memory_*` 视为已主动记忆、不重复反思；被取消的轮次绝不触发。",
+        "无 live agent 且超过 24h 的旧窗口、以及已归档\n  的会话，均不处理。"
+      ],
+      "media": [],
+      "concerns": [
+        "README contains no images/GIFs/videos; media is empty.",
+        "Install and configuration fences dominate the code blocks and were excluded from codeExamples per the rubric."
+      ]
+    }
+  ]
+}

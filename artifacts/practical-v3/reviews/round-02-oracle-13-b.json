@@ -1,0 +1,368 @@
+{
+  "reviews": [
+    {
+      "repo": "cocode-agency/cocode",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Four presets\nship built in — Standard, PTC, Minimal, and Creator — and you copy one to make\nit yours.",
+        "Files, Git, a terminal, a built-in browser, and\ndiff previews sit alongside the session.",
+        "GUI and TUI connect\nto the same Host and read and write the same session record.",
+        "An official DeepSeek key, any OpenAI-compatible\nself-hosted or gateway endpoint, or Cocode's own model service, Cocode Nut — all\nthree are available, and you can switch between them."
+      ],
+      "usageItems": [
+        "Open a workspace and ask the agent to inspect a file or explain the project.",
+        "Run `make` with no arguments to list every target.",
+        "cocode version                   # Show Cocode and bundled DSH versions",
+        "cocode gui                       # Open the GUI",
+        "cocode tui                       # Open the TUI",
+        "cocode plugin list               # List plugins in the default cocode profile",
+        "cocode host status               # Inspect the shared Host without starting it",
+        "cocode host stop                 # Stop Host and Supervisor when no clients hold leases",
+        "cocode doctor                    # Check TUI, Supervisor, and Host connectivity"
+      ],
+      "usageActions": [
+        "Open a workspace and ask the agent to inspect a file or explain the project.",
+        "Run `make` with no arguments to list every target.",
+        "cocode version                   # Show Cocode and bundled DSH versions",
+        "cocode gui                       # Open the GUI",
+        "cocode tui                       # Open the TUI",
+        "cocode plugin list               # List plugins in the default cocode profile",
+        "cocode host status               # Inspect the shared Host without starting it",
+        "cocode host stop                 # Stop Host and Supervisor when no clients hold leases",
+        "cocode doctor                    # Check TUI, Supervisor, and Host connectivity"
+      ],
+      "ioPairs": [
+        "cocode version                   # Show Cocode and bundled DSH versions",
+        "cocode plugin list               # List plugins in the default cocode profile",
+        "cocode host status --json        # Print machine-readable status",
+        "cocode doctor                    # Check TUI, Supervisor, and Host connectivity"
+      ],
+      "codeExamples": [
+        "cocode version                   # Show Cocode and bundled DSH versions",
+        "DSH_FORCE_RESTAGE=1 make dev gui        # refresh the cache"
+      ],
+      "usecases": [
+        "A terminal client for keyboard-first and remote work. SSH into a machine and keep pushing tasks with no graphical environment required.",
+        "# Browser-only GUI, useful for design-system work",
+        "# The Host on its own, for wire-protocol debugging"
+      ],
+      "outputs": [],
+      "reliability": [
+        "Developer preview. Cocode is built on the DeepSeek Harness\n> developer preview. It is an independent distribution, not an official DeepSeek\n> product, and upstream compatibility may change.",
+        "The repository supports source\n> builds on macOS, Windows, and Linux; the current release scripts target macOS\n> and Windows artifacts",
+        "A real terminal is required.",
+        "For every release, keep `@cocode-agency/tui` and\n`@cocode-agency/host-supervisor` on the same version line; do not mix versions from\ndifferent releases.",
+        "Remove credentials and\n   private session data before sharing diagnostics.",
+        "DSH_DISABLE_RUNTIME_CACHE=1 make dev gui  # isolated runtime, no cache",
+        "Prompts, code, and model responses are\n  not used for training or sold to third parties, and request content is not\n  retained beyond completing the call, billing, and necessary troubleshooting.",
+        "Identity tokens are stored in `account.yaml` under `~/.cocode`, and the personal\ninference key is owned by the Host credentials service. Neither enters the\nsession log."
+      ],
+      "media": [
+        {
+          "excerpt": "[![Cocode desktop workspace showing a DeepSeek Harness session](https://cocode.agency/product/gui-screenshot.webp)](https://cocode.agency/#gui)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "[![Cocode terminal interface showing a DeepSeek Harness session](https://cocode.agency/product/tui-screenshot.webp)](https://cocode.agency/#tui)",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "zhaoolee/notes",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "一个锤子便签风格的导出器，预览与图片导出支持**暖白纸感**、**深夜便签**、**iPhone 备忘录深浅模式**和 **Bear 极简排版**。",
+        "完美复刻锤子便签网页版和PC版，支持多便签，分类存储。",
+        "支持PC端和手机版，多端数据同步，支持公网部署",
+        "支持图片插入。",
+        "API原生封装支持Hermes Agent，OpenClaw直接通过skill驱动管理便签",
+        "支持接入DeepSeek润色书写内容，语法标点检查，重点加粗，复杂概念通俗化释义。"
+      ],
+      "usageItems": [
+        "在 DeepSeek Harness 对话中说：**把我们的对话导出成便签**， 智能体会自动整理当前对话并调用插件生成便签。",
+        "只要你喜欢，可以把底部的「锤子便签」改成「凿子便签」或「榔头便签」",
+        "登陆后，复制一行专属链接，粘贴给Hermes Agent或OpenClaw，即可获取包含登身份认证的skill包，实现人机协同",
+        "在手机的网页写完，直接一键粘贴到公众号即可发送，文本格式和图片，统统自动处理好！"
+      ],
+      "usageActions": [
+        "在 DeepSeek Harness 对话中说：**把我们的对话导出成便签**， 智能体会自动整理当前对话并调用插件生成便签。",
+        "只要你喜欢，可以把底部的「锤子便签」改成「凿子便签」或「榔头便签」",
+        "登陆后，复制一行专属链接，粘贴给Hermes Agent或OpenClaw，即可获取包含登身份认证的skill包，实现人机协同",
+        "在手机的网页写完，直接一键粘贴到公众号即可发送，文本格式和图片，统统自动处理好！"
+      ],
+      "ioPairs": [
+        "联网获取最近一周 AI 相关的新闻，将新闻转化为 markdown 生成便签图片，把便签图片绝对路径返回给我，把图片往“下载”文件夹复制一份"
+      ],
+      "codeExamples": [
+        "联网获取最近一周 AI 相关的新闻，将新闻转化为 markdown 生成便签图片，把便签图片绝对路径返回给我，把图片往“下载”文件夹复制一份"
+      ],
+      "usecases": [
+        "可用来分享与openclaw的对话记录。",
+        "可以给AI分配一个账号，人类分配一个账号"
+      ],
+      "outputs": [
+        "支持直接导出便签为图片，或复制为markdown格式进行分享。",
+        "支持一键下载包含图片的Markdown资源包",
+        "支持下载为html离线查看",
+        "支持下载文章，包含网页，markdown以及管理的图片资源"
+      ],
+      "reliability": [
+        "自带浏览器持久化，关闭页面也不会丢失数据。",
+        "数据严格隔离",
+        "`storage/images` 保存图片和导出的 PNG，\n`storage/data` 保存账号与云端工作区，两者都应持久化和备份。",
+        "公网部署应使用 HTTPS 反向代理。"
+      ],
+      "media": [
+        {
+          "excerpt": "![](./README.assets/a1cc07be6396cb67288b2cebacc26b6746aa0409d976f230b762fcc467706ccc.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](./README.assets/ef2ef8e599f5afb747e1c78f8bbb38bc4ce8209070cb699552607507dac63b6b.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](./README.assets/b66a25f62ae0f1ab7f0ef0f71540594ac5c2a4c57b63bbfa4e693693fafb61dc.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](./README.assets/e8549f76a4254c998d4b8aa2eb5be0bef5ecfcf3ddd56ee119cb159f993a3d67.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](./README.assets/6cfa5f69414ba904b1211b9fa1147209967c6010a6a69b4c8567a7ba90fdbfff.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](./README.assets/44a5d5ab4aad2f44f713be9d06275c7bf8a8c73f22c124af7675bfbe81d17adb.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "saya-ch/dsh-mobile",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "让手机浏览器或 Android App 通过局域网，或可选的 Tailscale Funnel、cpolar 远程通道连接电脑",
+        "同一份会话、工作区、消息和工具，实时同步。",
+        "会话抽屉、工具详情、设置、提问卡片和输入栏都按手机重新组织。",
+        "**三种配对方式**：扫码、配对链接、密钥。",
+        "局域网与远程访问分别启停、分别管理设备",
+        "不安装 App 也可以访问",
+        "也可以让手机端调用电脑端的能力，比如实时读取电脑状态",
+        "Android App 只是 Kotlin WebView 薄壳，不内置另一份网页；手机浏览器访问的是同一页面。"
+      ],
+      "usageItems": [
+        "让手机和电脑连接同一个局域网，在 DeepSeek Harness 左下角打开 **移动访问 → 局域网**。",
+        "如果尚未开启，点击 **开启局域网访问**；随后点击 **生成并复制密钥**，面板会显示配对二维码。",
+        "在 Android App 中进入 **局域网访问**，扫描发现电脑并点击设备，再扫描二维码或粘贴配对密钥。",
+        "点击 **复制配对链接**，在手机浏览器中打开；首次访问需要按浏览器提示手动信任插件证书。",
+        "在 DeepSeek Harness 左下角打开 **移动访问 → 远程**，选择一种连接方式：",
+        "状态变为“远程访问已就绪”后，点击 **生成远程配对二维码**。",
+        "在 Android App 中进入 **远程访问**，扫描二维码完成独立配对。",
+        "不使用时可以关闭远程访问，局域网连接不会受影响。"
+      ],
+      "usageActions": [
+        "让手机和电脑连接同一个局域网，在 DeepSeek Harness 左下角打开 **移动访问 → 局域网**。",
+        "如果尚未开启，点击 **开启局域网访问**；随后点击 **生成并复制密钥**，面板会显示配对二维码。",
+        "在 Android App 中进入 **局域网访问**，扫描发现电脑并点击设备，再扫描二维码或粘贴配对密钥。",
+        "点击 **复制配对链接**，在手机浏览器中打开；首次访问需要按浏览器提示手动信任插件证书。",
+        "在 DeepSeek Harness 左下角打开 **移动访问 → 远程**，选择一种连接方式：",
+        "状态变为“远程访问已就绪”后，点击 **生成远程配对二维码**。",
+        "在 Android App 中进入 **远程访问**，扫描二维码完成独立配对。",
+        "不使用时可以关闭远程访问，局域网连接不会受影响。",
+        "/mobile 把手机端做成老式终端的样子，让消息像终端输出一样逐行滚动",
+        "/mobile 为手机端添加赛博朋克风格的电脑监控面板，实时显示电脑的 CPU、内存和磁盘占用"
+      ],
+      "ioPairs": [
+        "/mobile 把手机端做成老式终端的样子，让消息像终端输出一样逐行滚动",
+        "/mobile 为手机端添加赛博朋克风格的电脑监控面板，实时显示电脑的 CPU、内存和磁盘占用"
+      ],
+      "codeExamples": [
+        "/mobile 把手机端做成老式终端的样子，让消息像终端输出一样逐行滚动",
+        "/mobile 为手机端添加赛博朋克风格的电脑监控面板，实时显示电脑的 CPU、内存和磁盘占用"
+      ],
+      "usecases": [
+        "适合同一 Wi-Fi、以太网或手机热点，是默认且最简单的连接方式。",
+        "适合手机离开电脑所在网络后使用。",
+        "Android App | 日常使用",
+        "手机浏览器  | 临时或跨平台访问"
+      ],
+      "outputs": [
+        "配对完成后会建立持久设备信任。以后打开 App 会自动发现并连接，切换 Wi-Fi、热点或 DHCP 地址通常不需要重新配对。",
+        "保存后手机端自动生效。"
+      ],
+      "reliability": [
+        "DSH Mobile 0.2.2 是 DeepSeek Harness 社区插件，适配 DeepSeek Harness 0.1.1 系列（已验证 0.1.1-rc.2）；原生 App 仅支持 Android。",
+        "从 0.1.3 或更早 App 升级时需卸载旧版并重新配对一次；旧版 App 仍可使用 0.2.2 的局域网功能。",
+        "配对设备被视为完全信任，可以操作电脑上的 DSH；建议只在可信的家庭、办公局域网或可信 VPN 中使用。",
+        "远程服务可能受带宽和连接限额影响",
+        "Tailscale Funnel 覆盖范围广，但在中国大陆网络下可能不稳定。",
+        "当前托管的远程组件支持 Windows x64。",
+        "`host.mjs` 与本机程序拥有相同权限；仅创建和运行你理解并信任的电脑端扩展。",
+        "局域网监听只用于可信家庭、办公网络或可信热点；不要自行做端口转发。",
+        "cpolar 仅在用户确认后下载固定官方版本并校验大小和 SHA-256；不会安装系统服务、写入 PATH 或设置开机启动，插件清理会删除其托管文件。",
+        "插件启动时会检查 DSH Host 版本和移动布局所需的前端依赖，遇到未经验证的版本会直接报错而不是带病启动；CI 也会持续跟踪 DSH 主分支的布局契约。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/saya-ch/dsh-mobile/main/assets/screenshots/lan-access.png\" width=\"82%\" alt=\"DSH Mobile 局域网访问、配对二维码与设备管理\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/saya-ch/dsh-mobile/main/assets/screenshots/remote-access.png\" width=\"82%\" alt=\"DSH Mobile 远程访问与通道选择\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/saya-ch/dsh-mobile/main/assets/screenshots/crt-terminal-2.png\" width=\"22%\" alt=\"/mobile 定制为老式终端界面\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/saya-ch/dsh-mobile/main/assets/screenshots/cyberpunk-monitor-2.png\" width=\"22%\" style=\"margin-left:10px\" alt=\"/mobile 定制为赛博朋克监控面板\">",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "zh667/TokenLedger",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "按 provider 的 `baseURL` 归一化 origin 分组——同一站的多把 key 合成一行，站名就是域名，不是你自己起的路由别名",
+        "用量按会话启动时所在的目录分组——工作区注册过的用它的标题，没注册过的用目录名，子目录里起的会话照样算进去",
+        "DeepSeek 官方、New API、Sub2API，每个账户一把普通 key 即可；不限额度的 key 报\"已用\"而不是假余额",
+        "5 小时 / 每周 / 每月各自滚动、各自重置，每个窗口一条进度条和一个重置时刻",
+        "今日/本月/累计三窗口、按站点/模型下钻、缓存命中率、一年活跃度热力图（悬停看当天模型构成）",
+        "生效日期分段的费率表、分桶计价、峰谷时段；未定价的模型显示破折号而不是 0",
+        "中转站跑的是哪套程序由路由指纹自动判定，第一次查余额时探测一次并记住。",
+        "Sub2API 的 `/v1/usage` 有三种形态，面板都认"
+      ],
+      "usageItems": [
+        "/tokenledger                      # 全部时间",
+        "/tokenledger 7                    # 最近 7 天",
+        "/tokenledger 30 api.example.com   # 某个中转站，最近 30 天",
+        "/tokenledger site                 # 列出发现到的中转站",
+        "/tokenledger site add <路由名> <地址>",
+        "/tokenledger site rm <路由名>",
+        "/tokenledger reindex              # 丢弃索引，从头重建"
+      ],
+      "usageActions": [
+        "/tokenledger                      # 全部时间",
+        "/tokenledger 7                    # 最近 7 天",
+        "/tokenledger 30 api.example.com   # 某个中转站，最近 30 天",
+        "/tokenledger site                 # 列出发现到的中转站",
+        "/tokenledger site add <路由名> <地址>",
+        "/tokenledger site rm <路由名>",
+        "/tokenledger export csv 30        # 导出",
+        "/tokenledger diagnostics          # 索引健康度",
+        "/tokenledger reindex              # 丢弃索引，从头重建"
+      ],
+      "ioPairs": [
+        "`/tokenledger diagnostics` 会打印当前的路由归属和索引里的路由"
+      ],
+      "codeExamples": [
+        "/tokenledger                      # 全部时间",
+        "import { foldUsage, bySite, byModel } from \"dsh-tokenledger\";"
+      ],
+      "usecases": [
+        "面板除了「按站点」「按模型」，还有一段「按项目」：这个月的钱，是哪个项目烧的。",
+        "中转站分布里可能出现一行「未知路由」。它的意思是：**这些请求走的路由，现在的 provider 配置里找不到了**——改过名、删掉了，或者当时用的是另一台机器上的配置。",
+        "包也可作为库使用，供 DSH 之外的消费者："
+      ],
+      "outputs": [
+        "CSV / JSON 导出，索引健康度，归因不上的行数单独列出",
+        "这几家订阅接口都没有公开 schema。字段位置不对时，卡片会**说出它去哪儿找过**，而不是留一张空卡——那句话可以直接反馈给我们。",
+        "没有 cwd 的会话单独一行标成「未记录目录」，**不会被丢掉**"
+      ],
+      "reliability": [
+        "插件不会把 API Key 或上游原始响应发送到浏览器。",
+        "**请求失败了照样扣费。** 用量除了挂在 `assistant/message` 上，也会从 `assistant/chunk` 的 `{type:'usage'}` 流出。",
+        "**同一个 `(turn, step)` 会被报告两次。** 后来的样本是**替换**前一个，不是累加",
+        "归不上的记为显式 `unknown`，绝不猜。",
+        "`inputTokens`、`cacheReadTokens`、`cacheWriteTokens` 三个桶**互斥**，相加才是计费输入；`reasoningTokens` 是 `outputTokens` 的**子集**",
+        "归属在**折叠时**写死进记录，历史永不重写。中转站集合发生变化时会丢弃索引并全量重建",
+        "提示词、工具参数、响应正文既不读也不存。",
+        "key 由宿主的 credentials 服务按引用（`apiKeyEnv`）在请求时解析、用完即弃，始终走 `Authorization` 头，绝不进 URL 查询串。浏览器永远拿不到 key。",
+        "拒绝非 GET，并同时校验 **peer socket 地址**（不可伪造）与 Host 头。",
+        "用量折叠有三个地方容易错，都有测试覆盖（`test/usage.test.js`）"
+      ],
+      "media": [
+        {
+          "excerpt": "![TokenLedger 面板](docs/images/panel.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "ZSeven-W/dsh-openpencil",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "\"Open interactive canvas\" lazily mounts the read-only OpenPencil Web SDK with pan, zoom, and fit",
+        "selection, layers, properties, drawing tools, undo/redo, and explicit save semantics",
+        "The tool card and managed editor follow DSH's Chinese/English locale and light/dark theme without reloading the editing session.",
+        "Starts an owner-scoped private draft, returns a compact runtime-matched canvas/build contract, and immediately opens the same live draft in the sidebar",
+        "Applies serialized semantic QuickJS batches to the draft",
+        "Runs native quality or resolved-layout inspection, or creates an exact PNG that the model can open with image reading and review visually.",
+        "Discards the unpublished draft without creating the target file.",
+        "Applies a transactional `batch_design` program to generate or restructure nodes on an existing live canvas.",
+        "Modifies an explicit node or the single node selected by the user.",
+        "Reads the exact nodes selected in the live editor canvas."
+      ],
+      "usageItems": [
+        "Preserve it, never re-fetch fields it already returned",
+        "only explicit mobile, phone, iOS, Android, 移动, or 手机 wording selects a mobile canvas.",
+        "Use `openpencil_pipeline_context` at most once for a specifically missing guideline/kit, never as repeated reassurance.",
+        "Create the complete structural skeleton in the first batch and continue directly into content",
+        "One meaningful draft screenshot is normally enough before finalization",
+        "Open the PNG with image reading, fix visible clipping, hierarchy, spacing, typography, controls, contrast, and legibility, then continue.",
+        "After finalization, take a separate new exact screenshot and have the model review it visually",
+        "Use `openpencil_create` and `openpencil_edit` only for an existing live canvas.",
+        "Their edits remain unsaved until the editor Save action."
+      ],
+      "usageActions": [
+        "Preserve it, never re-fetch fields it already returned",
+        "Use `openpencil_pipeline_context` at most once for a specifically missing guideline/kit, never as repeated reassurance.",
+        "Create the complete structural skeleton in the first batch and continue directly into content",
+        "Open the PNG with image reading, fix visible clipping, hierarchy, spacing, typography, controls, contrast, and legibility, then continue.",
+        "After finalization, take a separate new exact screenshot and have the model review it visually",
+        "Use `openpencil_create` and `openpencil_edit` only for an existing live canvas.",
+        "Requirement → private draft → semantic batches → exact PNG review and repairs → quality-gated atomic publish"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Compatible fast path for simple jobs",
+        "For production design, use the fast path `openpencil_pipeline_begin`",
+        "Within the same running DSH service, switching browsers or reloading can recover a strictly parsed durable publication"
+      ],
+      "outputs": [
+        "the first top-level frame as a large replay-safe PNG, plus a horizontally scrollable thumbnail rail, click-to-select, and previous/next navigation for multi-frame documents.",
+        "Creates an immutable, content-addressed `.op` snapshot",
+        "Every published generation result is one presentation containing the exact final PNG preview and a document-scoped editable grant"
+      ],
+      "reliability": [
+        "Image and document grants are signed, hash-bound capabilities. Browser metadata never exposes an arbitrary host path",
+        "Publication never overwrites an existing path, and aborts or failed batches leave no empty target behind.",
+        "If they are absent or invalid, PNG preview remains available and no canvas button is advertised.",
+        "The managed daemon is loopback-only, inherits the supervisor's stdin lifetime, validates browser origins, and is closed when the editor session ends.",
+        "Published installations provide six native package targets: `darwin-arm64`, `darwin-x64`, `linux-arm64`, `linux-x64`, `win32-arm64`, and `win32-x64`; both Linux packages target glibc.",
+        "If DSH reloads or unloads the plugin while the canvas is dirty, the host keeps an opaque local recovery draft for up to seven days.",
+        "Cross-device canvas synchronization requires both the PC/DSH native runtime and the mobile app to be updated to the same OpenPencil release line",
+        "If the source changes outside the editor, the plugin reports a conflict instead of overwriting it.",
+        "DSH `0.1.1-rc.2` does not persist browser presentation metadata for tools nested under PTC/Code Mode.",
+        "The exact gallery covers top-level frames on the active page; the interactive canvas remains the way to inspect inactive pages and nested nodes."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-openpencil-overview.png\" alt=\"DSH OpenPencil — multi-frame preview and sidebar editor\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    }
+  ]
+}

@@ -5,7 +5,6 @@
  */
 
 const API = 'https://api.github.com'
-const RAW = 'https://raw.githubusercontent.com'
 export const UA = 'dsh-mall'
 
 export interface RateInfo {
@@ -202,25 +201,36 @@ export async function fetchTopicPages(cb: SearchCallbacks = {}): Promise<HtmlRep
   return [...repos.values()]
 }
 
+export class GithubRateLimitError extends Error {
+  constructor(message: string, public readonly retryAfterMs: number) {
+    super(message)
+    this.name = 'GithubRateLimitError'
+  }
+}
+
 /**
- * Deep verdict: does this repo look like a real dsh plugin? Reads the repo
- * root package.json and checks the dsh bundle/client fields and cordis
- * dependencies. null = undecidable (404 / rate limited / unreadable).
+ * Deep positive verdict: root package.json contains an authoritative DSH
+ * bundle/client manifest contract. null means absent or undecidable — absence
+ * at the root is never a non-plugin verdict because the repo may be a monorepo.
  */
-export async function packageJsonVerdict(token: string, repo: string): Promise<boolean | null> {
-  const res = await fetch(RAW + '/' + repo + '/HEAD/package.json', { headers: { 'user-agent': UA }, signal: AbortSignal.timeout(15_000) })
-  if (res.status === 403 || res.status === 429 || res.status === 404 || res.status === 451) return null
+export async function packageJsonVerdict(token: string, repo: string): Promise<true | null> {
+  const res = await fetch(API + '/repos/' + repo + '/contents/package.json', {
+    headers: { ...headers(token), accept: 'application/vnd.github.raw+json' },
+    signal: AbortSignal.timeout(15_000),
+  })
+  lastRate = rateInfo(res.headers)
+  if (res.status === 404 || res.status === 451) return null
+  if (res.status === 403 || res.status === 429) {
+    const reset = res.headers.get('x-ratelimit-reset')
+    const wait = reset !== null ? Math.max(0, Number(reset) * 1000 - Date.now()) : 60_000
+    throw new GithubRateLimitError('GitHub rate limit (HTTP ' + res.status + '); resets in ' + Math.round(wait / 1000) + 's', wait)
+  }
   if (!res.ok) return null
   try {
     const pkg = (await res.json()) as Record<string, unknown>
     const dsh = pkg.dsh
     if (dsh !== null && typeof dsh === 'object' && (('bundle' in (dsh as object)) || ('client' in (dsh as object)))) return true
-    const deps = { ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}), ...(pkg.peerDependencies ?? {}) }
-    for (const key of Object.keys(deps)) {
-      if (key === '@deepseek-ai/cordis' || key.startsWith('@deepseek-ai/dsh-') || key === 'cosmokit') return true
-    }
-    if (Array.isArray(pkg.keywords) && (pkg.keywords as unknown[]).includes('dsh-plugin')) return true
-    return false
+    return null
   } catch {
     return null
   }

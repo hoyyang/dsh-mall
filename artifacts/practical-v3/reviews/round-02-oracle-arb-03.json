@@ -1,0 +1,309 @@
+{
+  "reviews": [
+    {
+      "repo": "ZJU-REAL/Polaris",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "The Research Wiki ingests papers from OpenAlex, Semantic Scholar, and arXiv.",
+        "Idea Forge runs multi-signal gap analysis over the knowledge base (concept co-occurrence holes, extracted paper limitations, trend velocity, survey gaps) to drive retrieval-planned idea generation.",
+        "Configurable-persona reviewer agents debate pairwise; a judge produces an Elo tournament ranking.",
+        "Agents write and run code on real GPU servers, iterate on metrics",
+        "The Paper Writer opens a multi-file LaTeX project (NeurIPS, ICLR, ACL templates) with a CodeMirror 6 editor, real-time collaborative editing (CRDT), and server-side tectonic compilation to a live PDF preview.",
+        "Line-by-line citation verification (existence: exact, minor, or fabricated; support: supported, partial, or unsupported) plus deterministic fact-checking of every number against the experiment record",
+        "**PolarisBuddy, an in-app assistant.** A global companion that rides along on every page: a Claude\n  Code-style multi-turn tool loop (streamed over SSE, with tool cards and inline figures) over the same",
+        "A single registry of read-only tools (literature, knowledge, project state,\n  manuscripts, external search) is exposed both internally to the agent loop and externally as an\n  **MCP server** (Streamable HTTP and stdio)",
+        "**Real-time everywhere.** SSE for agent streaming and Voyage progress; WebSocket for review\n  discussions, approval notifications, experiment log tracking, and collaborative editing.",
+        "**Multi-user and RBAC.** JWT auth (fastapi-users), invite-code registration, role-based access, and\n  per-call token/cost accounting attributed to user, project, and voyage.",
+        "All model calls go through one layer; a DB-backed routing table\n  maps each research stage to a provider, a model, and a reasoning-effort level",
+        "Polaris ships as a desktop app for macOS, Windows, and Linux."
+      ],
+      "usageItems": [
+        "sign in at\n<http://101.37.174.109:8080> with the username `guest` and the password `zjuguest123`.",
+        "make desktop-dev            # build the frontend and run the shell (app:// protocol)",
+        "make desktop-dist           # package an unsigned installer for the current platform",
+        "make test                   # backend pytest + frontend build",
+        "make lint                   # ruff check + tsc --noEmit"
+      ],
+      "usageActions": [
+        "sign in at\n<http://101.37.174.109:8080> with the username `guest` and the password `zjuguest123`.",
+        "make desktop-dev            # build the frontend and run the shell (app:// protocol)",
+        "make desktop-dist           # package an unsigned installer for the current platform",
+        "make test                   # backend pytest + frontend build",
+        "make lint                   # ruff check + tsc --noEmit"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "It is built for a research lab",
+        "Research tasks are long-running by nature: a cold-start literature backfill takes hours, an experiment\nruns for days."
+      ],
+      "outputs": [
+        "then extracts full text (PyMuPDF) and compiles a cross-linked wiki page (TL;DR, method, reusable ideas, concept backlinks).",
+        "A console gives each run a task map and a terminal you can talk to mid-stream.",
+        "every plan, action, and verdict is retained and\n> replayable in the UI."
+      ],
+      "reliability": [
+        "The heavy lifting (crawling, parsing, deduplication, metric parsing,\n> citation matching) is deterministic code.",
+        "The Experiment Lab uses per-user, Fernet-encrypted SSH credentials to reach the lab's GPU servers.",
+        "experiment numbers may only come from real `ExperimentRun` metrics and citations must map to real knowledge-base entries.",
+        "A fabricated citation forces a non-pass.",
+        "worker crashes mid-run, the Voyage resumes from its last checkpoint after a health check.",
+        "attached to the run and auto-pause it when exceeded",
+        "The built-in fake provider is structurally disabled in production",
+        "The builds are **neither signed nor notarized**",
+        "The Electron shell (`src/desktop/`) is a shell plus a small local process, not an offline build"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/388972c1-7ffa-45f2-94c4-07f388379ba2",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "ningbainb/deepseek-harness-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "在同一个窗口中即可完成 AI 对话、代码修改、文件管理、Git 操作、任务执行、模型切换和插件扩展。",
+        "内置任务看板，可以管理：\n\n**待规划 → 待办 → 进行中 → 已完成 / 已失败**",
+        "通过分支选择器和 Git 图谱查看分支关系、Commit 历史、当前仓库状态和分支泳道，帮助快速理解项目变化和代码提交历史。",
+        "**文件预览**：Markdown、HTML、代码、Diff、CSV、PDF、Office、图片和文本",
+        "**编辑与保存**：源码 / 预览切换以及分屏操作",
+        "**Git 变更**：查看真实 SCM 状态并执行 Stage / Unstage / Discard",
+        "手机端可以查看工作区、新建和查看会话、收发消息、切换模型、调整思考强度，并与桌面端保持同步。",
+        "侧边栏内置 SSH 面板，可以直接管理远程服务器，并与 Agent 共用连接配置。",
+        "输入区域下方可以实时查看：\n\n- TPS 生成速度\n- LLM 请求耗时\n- 上下文占用\n- Cache 命中率\n- Input Token\n- Output Token",
+        "桌宠会根据 Agent 的思考、工作、等待和完成状态自动切换不同动画，同时支持互动、命名、拖拽和隐藏。"
+      ],
+      "usageItems": [
+        "输入框可以直接搜索并插入已安装 Skills。",
+        "通过桌面端二维码即可连接当前 Harness 工作区。",
+        "可以通过扩展坞扫码完成连接，让 QQ 私聊和群聊与本机 Harness 联动。",
+        "桌面版内置多套主题，并支持先预览、再应用。"
+      ],
+      "usageActions": [
+        "输入框可以直接搜索并插入已安装 Skills。",
+        "通过桌面端二维码即可连接当前 Harness 工作区。",
+        "可以通过扩展坞扫码完成连接，让 QQ 私聊和群聊与本机 Harness 联动。",
+        "桌面版内置多套主题，并支持先预览、再应用。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "适合周期性的开发、维护和自动化工作。"
+      ],
+      "outputs": [
+        "任务可以直接交给 DSH Agent Session 执行，并保存 Task Run 与 Evidence。"
+      ],
+      "reliability": [
+        "支持 **Windows 10 / 11 x64**",
+        "完整 Profile 失败时原样重试一次，不先停用插件，也不把“外来插件”当作启动阻断条件。",
+        "确认为插件或配置问题后，可调用用户已经配置的模型在私有事务工作区生成候选；只有通过注册检查的修改才会原子应用。",
+        "没有模型或可用 Key 时不会调用云端模型，页面明确显示无模型状态并继续同 Home 内置插件回退；Tools capability 按当前 Runtime 能力安全处理。",
+        "候选无效、没有可用模型或修复后仍失败时自动回滚，并从同一个 Home 启动内置插件；聊天和设置不搬家。",
+        "2.3–2.7、3.0.1 与干净安装 Home 加上故障注入，必须在未签名的 unpacked 候选上通过 direct-start matrix，之后才能生成安装器。",
+        "桌面版使用独立的 `desktop` profile，不会覆盖已有 DSH 配置。",
+        "授权 grant 只由官方凭据服务读写并保存在本机 DSH Home，前端只读取\"是否已登录\"，不会收到 access token 或 refresh token。",
+        "DSH Runtime 默认监听本机回环地址",
+        "导出的诊断信息会对 Token、Secret、Cookie、路径、Prompt、Session 和 Tool Result 等内容进行脱敏"
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness Desktop 主界面与 Skills 技能库](docs/screenshots/13-hero-main.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![任务看板](docs/screenshots/09-task-board.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![任务定时执行](docs/screenshots/10-task-board-detail-cron.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Git 图谱](docs/screenshots/04-git-graph.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![右侧面板](docs/screenshots/19-right-panel.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![移动端聊天](docs/screenshots/22-mobile-chat.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Ruler4396/dsh-launcher",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "开机自启 · 独立小窗口（WebView2）· 自动拉起服务并等待就绪",
+        "主题跟随 · 窗口位置记忆 · dsh 延迟更新（不打断会话）"
+      ],
+      "usageItems": [
+        "**遇到问题？** 运行 `check-prereq.cmd`"
+      ],
+      "usageActions": [
+        "**遇到问题？** 运行 `check-prereq.cmd`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "DeepSeek Harness 的 Windows 轻量启动器：双击即用，不用敲命令。"
+      ],
+      "outputs": [
+        "出错弹窗带错误码，统一日志 `~/.dsh\\dsh-launcher\\dsh.log`",
+        "`DshWeb.exe --diagnose` 一键导出信息脱敏诊断包"
+      ],
+      "reliability": [
+        "本项目意在打造一个舒适的 dsh 原版体验，不添加文件面板、内置终端等额外功能，一切交给dsh的插件，由用户自行决定。",
+        "dsh 是完整服务，必须常驻node.js。"
+      ],
+      "media": [
+        {
+          "excerpt": "![浅色模式](assets/screenshot-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![深色模式](assets/screenshot-dark.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The three lifetime modes are attributed to the separately linked dsh-launcher-lifetime plugin and were excluded."
+      ]
+    },
+    {
+      "repo": "zh667/TokenLedger",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "按 provider 的 `baseURL` 归一化 origin 分组——同一站的多把 key 合成一行，站名就是域名，不是你自己起的路由别名",
+        "用量按会话启动时所在的目录分组——工作区注册过的用它的标题，没注册过的用目录名，子目录里起的会话照样算进去",
+        "从宿主的 provider 配置里读出中转站，不用你再填一遍。只读 `baseURL`，绝不碰旁边的凭据",
+        "DeepSeek 官方、New API、Sub2API，每个账户一把普通 key 即可；不限额度的 key 报\"已用\"而不是假余额",
+        "5 小时 / 每周 / 每月各自滚动、各自重置，每个窗口一条进度条和一个重置时刻",
+        "今日/本月/累计三窗口、按站点/模型下钻、缓存命中率、一年活跃度热力图（悬停看当天模型构成）",
+        "生效日期分段的费率表、分桶计价、峰谷时段；未定价的模型显示破折号而不是 0"
+      ],
+      "usageItems": [
+        "/tokenledger                      # 全部时间",
+        "/tokenledger 7                    # 最近 7 天",
+        "/tokenledger 30 api.example.com   # 某个中转站，最近 30 天",
+        "/tokenledger site                 # 列出发现到的中转站",
+        "/tokenledger export csv 30        # 导出",
+        "/tokenledger diagnostics          # 索引健康度",
+        "/tokenledger reindex              # 丢弃索引，从头重建"
+      ],
+      "usageActions": [
+        "/tokenledger                      # 全部时间",
+        "/tokenledger 7                    # 最近 7 天",
+        "/tokenledger 30 api.example.com   # 某个中转站，最近 30 天",
+        "/tokenledger site                 # 列出发现到的中转站",
+        "/tokenledger export csv 30        # 导出",
+        "/tokenledger diagnostics          # 索引健康度",
+        "/tokenledger reindex              # 丢弃索引，从头重建"
+      ],
+      "ioPairs": [
+        "| `GET /api/tokenledger/usage?days=&site=` | 整个面板的数据：三窗口合计、按天/模型/站点、一年活跃度与逐日模型构成、账户列表、索引诊断 |",
+        "| `GET /api/tokenledger/balance?account=` | 某个账户的余额 |"
+      ],
+      "codeExamples": [
+        "## 命令 / Commands\n\n面板能回答的问题，命令行都能回答——两边读的是同一批查询，不存在第二套聚合。\n\n```bash\n/tokenledger                      # 全部时间",
+        "包也可作为库使用，供 DSH 之外的消费者：\n\n```js\nimport { foldUsage, bySite, byModel } from \"dsh-tokenledger\";",
+        "## 开发 / Development\n\n```bash\nnpm test          # 含浏览器半边——它能在 Node 里被物化和测试"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**请求失败了照样扣费。** 用量除了挂在 `assistant/message` 上，也会从 `assistant/chunk` 的 `{type:'usage'}` 流出。",
+        "**同一个 `(turn, step)` 会被报告两次。** 后来的样本是**替换**前一个，不是累加；替换时必须从**原先归属的那一天和那条路由**里减回去。",
+        "归不上的记为显式 `unknown`，绝不猜。",
+        "`inputTokens`、`cacheReadTokens`、`cacheWriteTokens` 三个桶**互斥**，相加才是计费输入；`reasoningTokens` 是 `outputTokens` 的**子集**，只做展示，加进总数就是重复计费。",
+        "归属在**折叠时**写死进记录，历史永不重写。中转站集合发生变化时会丢弃索引并全量重建——否则新认出的站会显示成\"你刚开始用它\"。",
+        "**从不读取内容。** 只有计数和标识符：token 数、模型名、provider 路由名、站点域名。提示词、工具参数、响应正文既不读也不存。",
+        "**凭据只在宿主侧。** key 由宿主的 credentials 服务按引用（`apiKeyEnv`）在请求时解析、用完即弃，始终走 `Authorization` 头，绝不进 URL 查询串。浏览器永远拿不到 key。",
+        "**回环防护。** 两个 HTTP 端点注册为 exact 路由，因此位于 RPC 信任边界**之外**，处理器自己设防：拒绝非 GET，并同时校验 **peer socket 地址**（不可伪造）与 Host 头。",
+        "文件不存在、读不动、格式变了，一律当作\"没有凭据\"，安静退回，不会因此报错。",
+        "字段位置不对时，卡片会**说出它去哪儿找过**，而不是留一张空卡——那句话可以直接反馈给我们。"
+      ],
+      "media": [
+        {
+          "excerpt": "![TokenLedger 面板](docs/images/panel.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The README states that the panel screenshot uses demonstration data and a locally simulated relay."
+      ]
+    },
+    {
+      "repo": "yzlnew/infra-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Create polished standalone HTML/CSS flowcharts with Anthropic-inspired pastel styling, reliable geometry, and deterministic connector routing.",
+        "Generate Sebastian-Raschka-gallery-style TikZ architecture diagrams for any HuggingFace decoder-only LLM, with per-block parameter formulas and concrete numbers.",
+        "Build figures in OpenAI's blog / research / system-card \"dotcom\" visual style, emitted as self-contained HTML/SVG with zero dependencies."
+      ],
+      "usageItems": [
+        "# Run all tests from project root\npytest",
+        "# Run tests for specific skill\npytest tests/tilelang-developer/",
+        "# Run specific test file\npytest tests/tilelang-developer/test_gemm.py",
+        "Update skill source files (SKILL.md, references/) with latest information",
+        "Run validation tests to ensure examples are correct",
+        "Commit and tag new version"
+      ],
+      "usageActions": [
+        "# Run all tests from project root\npytest",
+        "# Run tests for specific skill\npytest tests/tilelang-developer/",
+        "# Run specific test file\npytest tests/tilelang-developer/test_gemm.py",
+        "Update skill source files (SKILL.md, references/) with latest information",
+        "Run validation tests to ensure examples are correct",
+        "Commit and tag new version"
+      ],
+      "ioPairs": [
+        "\"Write a FP16 matrix multiplication kernel optimized for A100\"\n\n# Claude loads tilelang-developer skill and generates:\n# - Complete TileLang kernel code",
+        "\"Estimate memory for DeepSeek-V3 with TP=8, PP=4, EP=8\"\n\n# Claude loads megatron-memory-estimator skill and provides:\n# - Detailed memory breakdown (model, optimizer, activations)",
+        "\"Help me set up GRPO training for Qwen3-4B with multi-turn tool calling\"\n\n# Claude loads slime-user skill and provides:\n# - Environment setup instructions",
+        "\"Create a flowchart showing the FlashAttention-2 algorithm flow\"\n\n# Claude loads tikz-flowchart skill and generates:\n# - Professional LaTeX TikZ diagram with standardized colors",
+        "\"Create a presentation deck about our AI infrastructure architecture\"\n\n# Claude loads material-you-slides skill and generates:\n# - Self-contained HTML file with Material Design 3 styling"
+      ],
+      "codeExamples": [
+        "### Testing Skills\n\nValidate code examples in skills:\n\n```bash\n# Run all tests from project root\npytest"
+      ],
+      "usecases": [
+        "\"Write a FP16 matrix multiplication kernel optimized for A100\"",
+        "\"Estimate memory for DeepSeek-V3 with TP=8, PP=4, EP=8\"",
+        "\"Help me set up GRPO training for Qwen3-4B with multi-turn tool calling\"",
+        "\"Create a flowchart showing the FlashAttention-2 algorithm flow\"",
+        "\"Create a presentation deck about our AI infrastructure architecture\""
+      ],
+      "outputs": [],
+      "reliability": [
+        "This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use.",
+        "Test skill-generated code examples to ensure correctness",
+        "Skills are provided as-is for development purposes.",
+        "Skills contain advanced technical content and assume familiarity with GPU programming, compiler design, and deep learning systems."
+      ],
+      "media": [
+        {
+          "excerpt": "![TikZ Flowchart Anthropic Theme](gallery/tikz_flowchart_anthropic_theme.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Anthropic Theme Flowchart Review Demo](gallery/anthropic_theme_flowchart_review_demo.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DeepSeek-V4-Flash Architecture](hf-architecture-tikz/examples/deepseek-v4-flash/deepseek-v4-flash.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "SGLang Developer and vLLM Developer are marked planned and were excluded."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-09-09T01:43:33.020Z",
+  "parserPath": "/Users/hoy/Desktop/DSH/dsh-market-index/scripts/readme-signals.mjs",
+  "cohortCount": 5,
+  "projectCount": 500,
+  "invariant": "README length, installation/configuration, duplicate text, irrelevant fences, marketing prose, and decorative media cannot materially inflate Practical V3.",
+  "results": {
+    "installConfig": {
+      "changed": 0,
+      "p95AbsoluteDelta": 0,
+      "maximumAbsoluteDelta": 0,
+      "p95Maximum": 0,
+      "absoluteMaximum": 0,
+      "pass": true,
+      "examples": []
+    },
+    "duplicateDocument": {
+      "changed": 0,
+      "p95AbsoluteDelta": 0,
+      "maximumAbsoluteDelta": 0,
+      "p95Maximum": 0,
+      "absoluteMaximum": 0,
+      "pass": true,
+      "examples": []
+    },
+    "irrelevantFence": {
+      "changed": 1,
+      "p95AbsoluteDelta": 0,
+      "maximumAbsoluteDelta": 1,
+      "p95Maximum": 0,
+      "absoluteMaximum": 2,
+      "pass": true,
+      "examples": [
+        {
+          "repo": "WYH66666666/DSH-Transparent-UI-Plugin",
+          "before": 22,
+          "after": 23,
+          "delta": 1
+        }
+      ]
+    },
+    "marketingProse": {
+      "changed": 0,
+      "p95AbsoluteDelta": 0,
+      "maximumAbsoluteDelta": 0,
+      "p95Maximum": 0,
+      "absoluteMaximum": 2,
+      "pass": true,
+      "examples": []
+    },
+    "decorativeMedia": {
+      "changed": 0,
+      "p95AbsoluteDelta": 0,
+      "maximumAbsoluteDelta": 0,
+      "p95Maximum": 0,
+      "absoluteMaximum": 0,
+      "pass": true,
+      "examples": []
+    }
+  },
+  "pass": true
+}

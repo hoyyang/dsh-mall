@@ -1,0 +1,340 @@
+{
+  "reviews": [
+    {
+      "repo": "superdesigndev/superdesign-skill",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "after the first real-codebase design, the skill remembers the project, draft, extracted components, and budgeted source-context bundle so later unchanged iterations resume without repeating codebase discovery.",
+        "- **Search prompt library** (style/components/pages)",
+        "- **Get prompt details** — read the compact index first, then fetch the full body only for the slug(s) you pick",
+        "- **Extract a site's design DNA from a URL** (style guide, tokens, content, brand, clone)",
+        "- Create project (optionally seed a baseline draft from an HTML template via `--template`)",
+        "- Create design draft",
+        "- Iterate design draft (replace / branch)",
+        "- Plan flow pages → execute flow pages",
+        "- Fetch specific design draft",
+        "- Create a presentation from an approved ordered slide outline",
+        "- Read stored presentation outline and preferences for safe iteration",
+        "- List reusable Project Brand Assets"
+      ],
+      "usageItems": [
+        "1. Investigate existing UI, workflow",
+        "2. Setup design system file if not exist yet",
+        "3. Requirements gathering: ask the user using the session's available user-input mechanism; if none is available, ask in chat (optionally use Inspiration tools when needed)",
+        "4. Ask user whether ready to design in superdesign OR implement UI directly",
+        "1. Check if `.superdesign/replica_html_template/` already contains a matching file",
+        "2. If exists: reuse it or update to reflect the latest existing UI",
+        "3. If not exists: create the neww file",
+        "1. Investigate the existing design and ask targeted questions about requirements and taste using the session's available user-input mechanism; if none is available, ask in chat",
+        "3.5 Share design title & preview URL → collect feedback → iterate"
+      ],
+      "usageActions": [
+        "/superdesign help me redesign this settings page so it doesn't look like default AI slop",
+        "/superdesign set up a design system from my current codebase",
+        "/superdesign improve the design of my dashboard",
+        "/superdesign create an 8-slide presentation about our product launch",
+        "superdesign search-prompts --query \"<keyword>\"",
+        "superdesign get-prompts --slugs \"<slug>\" --full",
+        "superdesign extract-website --url https://example.com --design-md",
+        "superdesign create-project --title \"X\" --template ./index.html",
+        "superdesign iterate-design-draft --draft-id <id> -p \"dark theme\" -p \"minimal\" -p \"bold\" --mode branch",
+        "superdesign get-design --draft-id <draftId> --output ./design.html"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Use it\n\nJust talk to your agent:\n\n```\n/superdesign help me redesign this settings page so it doesn't look like default AI slop",
+        "- **Search prompt library** (style/components/pages)\n\n  ```bash\n  superdesign search-prompts --query \"<keyword>\"",
+        "#### Design multiple page OR a full user journey\n\nExecute:\n\n```bash\nsuperdesign execute-flow-pages \\",
+        "#### Get HTML reference from a draft\n\n```bash\nsuperdesign get-design --draft-id <draftId> --output ./design.html"
+      ],
+      "usecases": [
+        "- **Who it's for** — developers, indie hackers, and product/UI designers who want to go from idea to shippable UI fast without leaving their coding agent.",
+        "1. **Design or improve UI** (feature/page/flow)",
+        "3. **Create graphics** (posters, covers, social posts, and ads)",
+        "5. **Generate supporting images or video**",
+        "### Example: Adding a \"Book Demo\" section to home page"
+      ],
+      "outputs": [
+        "- `.superdesign/design-system.md` (product context + UX flows + visual design, adapted to references)",
+        "→ Note: `draftId` in the response is the baseline draft."
+      ],
+      "reliability": [
+        "Since superdesign doesn't have access to your codebase directly, this is important context",
+        "The replica_html_template must contain **ONLY UI that currently exists in the codebase**.",
+        "Read each command's default output directly — it is agent-optimized (compact TOON plus `help[]` next-step hints)."
+      ],
+      "media": [
+        {
+          "excerpt": "[![Superdesign skill demo](https://i.ytimg.com/vi/AZYJWyWZ6pQ/maxresdefault.jpg)](https://youtu.be/AZYJWyWZ6pQ)",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Ikalus1988/MisakaNet",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "> MisakaNet searches 310+ failure lessons so your agent skips known bugs.",
+        "- ✅ **MCP Server** — 6 tools for search, lessons, intake",
+        "- **Search** — BM25 keyword retrieval across all lessons. Zero dependencies. Python stdlib only.",
+        "**🔥 New: No-account MCP intake.** If your agent finds no good lesson, submit a failure case directly",
+        "MisakaNet turns individual debugging sessions into shared, searchable knowledge."
+      ],
+      "usageItems": [
+        "1. Run `python3 scripts/misakanet_cli.py smoke` — verify it works",
+        "2. Search for a failure you've hit: `python3 search_knowledge.py \"your error here\"`",
+        "3. Found nothing? [Submit a 5-line failure note →](https://github.com/Ikalus1988/MisakaNet/issues/new?template=lesson-feedback.yml)",
+        "**Stuck on a failure?** Search the lessons before opening a PR:",
+        "Use skills when you want an agent to do something. Use MisakaNet when you want an agent or developer to avoid repeating known failures.",
+        "**For Humans:** Open the [control terminal](https://misakanet.org/), register your Agent, let it learn."
+      ],
+      "usageActions": [
+        "python3 scripts/misakanet_cli.py smoke",
+        "python3 search_knowledge.py \"your error here\"",
+        "python3 search_knowledge.py \"<query>\"",
+        "python3 scripts/queue_lesson.py --title \"...\" --domain \"...\" \"...\"",
+        "python3 -m misakanet.tools.dashboard",
+        "python3 scripts/mcp_server.py"
+      ],
+      "ioPairs": [
+        "**Problem:** ChromaDB SQLite backend fails on NTFS-mounted WSL paths.\n**Fix:** Move DB to ext4: `mv ~/.chromadb /mnt/ext4/`.\n**Verify:** `python3 -c \"import chromadb; c=chromadb.Client(); print(c.heartbeat())\"`.",
+        "**Problem:** WSL terminal paste swallows underscores under high load.\n**Fix:** Use tmux or pipe stdin via temp script files.\n**Verify:** `echo \"test_underscore_command\"` shows correct output.",
+        "**Problem:** Robot hard-aborts instead of pausing on error.\n**Fix:** Use `POST_ERR(..., ERR_PAUSE)` (value 1) instead of `ERR_ABORT` (value 2).\n**Verify:** Robot pauses, system stays responsive."
+      ],
+      "codeExamples": [
+        "**Option 1 — Remote MCP (no install, no account):**\n\nIf your agent can make HTTP requests, it can use MisakaNet right now:\n\n```bash\ncurl -sS https://misakanet.org/mcp \\",
+        "### Register for unlimited access\n\nLocal stdio MCP is unlimited. For remote HTTP MCP, register to get a token:\n\n```bash\ncurl -sS https://misakanet.org/mcp \\"
+      ],
+      "usecases": [
+        "| 🔴 Debugging a real failure | [Search existing lessons](https://ikalus1988.github.io/MisakaNet/search/) before retrying |",
+        "| 🤖 Building an AI agent / tool | Use lessons as [failure-memory](docs/mcp-quickstart.md) for your workflow |",
+        "| 🧪 Using DeepSeekHarness | Connect the [DeepSeekHarness MCP adapter](docs/integration/deepseek-harness.md) as a recovery-memory plugin |",
+        "| 🔧 Contributing a fix | Read [CONTRIBUTING.md](CONTRIBUTING.md) for code style + PR checklist, check [related lessons](https://ikalus1988.github.io/MisakaNet/search/), then open a small PR |",
+        "| 📝 Sharing a failure case | Submit a [5-line failure note](https://github.com/Ikalus1988/MisakaNet/issues/new?template=lesson-feedback.yml) — no polished PR required |",
+        "| 📊 Evaluating agent learning | Run the [benchmarks](scripts/retrieval_noisebench.py) and compare reuse behavior |",
+        "| 💬 Reporting friction | [MCP intake](docs/integrations/mcp-remote.md) or [journey report #510](https://github.com/Ikalus1988/MisakaNet/issues/510) |"
+      ],
+      "outputs": [
+        "Returns `node_id` + `token`. Use token for unlimited remote searches.",
+        "The intake becomes a maintainer-visible GitHub issue for review.",
+        "6. Maintainers review accepted contributions and convert them into draft lessons"
+      ],
+      "reliability": [
+        "No prompt leaking, no raw logs stored.",
+        "| E1 | CI verified | Automated tests |",
+        "| E2 | PR merged | Code review |",
+        "| E3 | Maintainer verified | Human review |",
+        "| E4 | Production proven | Real-world usage |",
+        "Do not send secrets or raw private logs.",
+        "| DeepSeek Harness | MCP adapter | ✅ Supported |",
+        "⚠️ **Always sandbox your Agent before executing retrieved commands.** Lessons are community-contributed — review before run.",
+        "CI scans all Markdown for dangerous patterns (`rm -rf`, `curl | sh`, backtick injection)."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"promotional/misaka-compare.jpg\" width=\"720\" alt=\"MisakaNet — Before: 30+ min manual debugging vs After: 0.02s with MCP\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Search lesson demo](promotional/search%20lesson.gif)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "houyanchao/chatgpt-gemini-timeline",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "| 对话导航 | 在页面右侧生成时间轴，每个节点对应一次用户提问，支持点击跳转、键盘导航、回到底部和提问时间标签。 |",
+        "| 问题列表 | 将当前会话中的问题集中展示，支持跳转、收藏和标记重点，适合按问题维度回顾长对话。 |",
+        "| 收藏与归档 | 支持收藏单条问答或整页会话，并使用文件夹、备注和搜索进行管理。部分平台支持在原生侧边栏中展示收藏入口。 |",
+        "| 输入增强 | 支持提示词库、快捷追问、智能 Enter 行为、输入框动画和常用设置入口。 |",
+        "| 阅读与复制 | 支持文本高亮、LaTeX / MathML 公式复制、Mermaid 图表预览和代码块辅助操作。 |",
+        "| 代码运行 | 支持 JavaScript、TypeScript、SQL、HTML、JSON、Markdown 等常见代码块的运行或预览。 |",
+        "| 数据管理 | 支持 JSON 导入导出、Google Drive 备份与恢复，用于数据迁移和多设备同步。 |",
+        "| 个性化设置 | 支持时间轴主题色、对话宽度调整、多语言界面和细粒度功能开关。 |"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "- 想回看某次提问，只能一路往上滚。",
+        "- 有价值的结论散落在不同会话里，事后很难再找到。",
+        "- 公式、代码、图表不好带走，复制粘贴也费事。",
+        "- 各平台输入习惯不一样，常用提示词和追问流程要反复操作。",
+        "- 插件数据困在单个浏览器里，换设备或换浏览器不好迁移。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "| ChatGPT | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | - |",
+        "| Gemini | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 |",
+        "| DeepSeek | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | - |",
+        "| Claude | 支持 | 支持 | 支持 | - | 支持 | - | 支持 | - |",
+        "| Kimi | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | - |",
+        "| Qwen 国际版 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | 支持 | - |",
+        "| NotebookLM | - | 支持 | 支持 | - | 支持 | - | - | - |",
+        "公式复制、代码运行和 Mermaid 图表能力不依赖特定 AI 平台。只要页面中存在可识别内容，扩展会尽量提供对应操作。",
+        "Timeline 的核心数据默认保存在浏览器本地，包括收藏、文件夹、提示词、设置项、时间标签和笔记内容。",
+        "可选的 Google Drive 同步只会在用户主动授权后使用，并用于备份和恢复扩展数据。扩展不会收集、上传或分享用户的对话内容和个人信息。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./READMEIMAGE/index.png\" alt=\"Timeline 功能预览\" width=\"840\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The DeepSeek Harness section points to a separate repository, so that linked project's claims and installation details were excluded."
+      ]
+    },
+    {
+      "repo": "PC2005-cloud/dsh-pet",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **动画链**：每个动画（含待机）播完立即按权重选下一个（权重配置于 `config.jsonc`，默认 idle 10 / turn 5 / move 5 + 动作分类权重），首尾相接永不停止",
+        "- **多开**：可配置同时显示多个宠物，每只宠物独立的大小与位置（设置页「桌宠配置」添加/删除）",
+        "- **屏幕漫游**：朝 facing 方向行走，先检查空间、不走出屏幕",
+        "- **点击/拖拽**：点击有回应动画，可拖到任意位置",
+        "- **左右朝向**：所有动画可镜像，人物可朝左/朝右",
+        "- **落地对齐**：动画统一脚底线，宠物始终站在地面上",
+        "- **流畅切换**：双缓冲交叉淡入，切换无空白帧",
+        "- **DeepSeek 官方（`deepseek-official`）**：气泡显示账户余额（如 `余额 ¥8.79`）；余额按 ¥20 满额折算成已用百分比，分 6 档播放动画（钱袋满溢 → 金袋叮当 → 钱袋如常 → 数金皱眉 → 袋空如洗 → 分文不剩）",
+        "- **OpenCode Zen Go（`opencode-go`）**：气泡显示 5h/周/月 三个额度窗口中最先告急的一个（如 `周额度已用 88%` / `2.5 天重置`），同样按已用百分比分档",
+        "- **按宠物开关**：`pets[i].balanceEnabled`（必填布尔）控制该宠物是否触发余额动画/显示气泡；全部宠物关闭时自动跳过余额轮询"
+      ],
+      "usageItems": [
+        "用 AI 视频生成工具（如可灵、Runway、豆包等，本项目素材即由豆包生成），按 `prompts/桌面宠物 10 秒动作提示词.md` 的配方，一个动作生成一段 10 秒绿幕视频：",
+        "- 视频比例 16:9，背景纯绿幕（#00FF00）",
+        "- 人物位置/大小固定（头顶 ~20% 高度、脚底 ~85% 高度）",
+        "- 动作全程在画幅内，首尾帧为标准正面站立",
+        "- 每段动画按秒分解（0-10s 各阶段动作）",
+        "step02（透明视频）有**两条路线，按需二选一**（默认自动、人人可复现；效果不佳可用 PR 手工抠像覆盖）：",
+        "# 手动触发仓库的 hevc-alpha workflow（Settings → Actions → Workflows → Run workflow）",
+        "如果你有 Mac（或 macOS 虚拟机），**无需 GitHub Actions**，本地直接跑同样的编码脚本即可："
+      ],
+      "usageActions": [
+        "python watermark_step01.py",
+        "python chroma_step02.py",
+        "python pr_import_step02.py",
+        "python normalize_step03.py",
+        "python encode_thumbs.py",
+        "chmod +x scripts/encode_hevc_alpha.sh",
+        "./scripts/encode_hevc_alpha.sh dsh-pet/assets/webm dsh-pet/assets/mov",
+        "cp step04/*.webm dsh-pet/assets/webm/"
+      ],
+      "ioPairs": [
+        "① 提示词（配方）    →  ② 素材生成链（引擎）  →  ③ 插件（成品）\nAI 生成动画的配方     源视频 → 透明动画的管线    运行在 DSH 里的宠物",
+        "python pr_import_step02.py   # pr/*.mov → step02/（透明 webm，覆盖该动作自动抠像结果）",
+        "编码脚本：`scripts/encode_hevc_alpha.sh`（ffmpeg 仅解码 webm → BGRA 帧管线 → Swift `hevc_alpha_encoder.swift` 走 AVAssetWriter `hevcWithAlpha` 原生 API）",
+        "输入：`dsh-pet/assets/webm/*.webm`；**输出直接写回 `dsh-pet/assets/mov/`**"
+      ],
+      "codeExamples": [
+        "### ② 源视频 → 透明动画（素材链）\n\nstep02（透明视频）有**两条路线，按需二选一**（默认自动、人人可复现；效果不佳可用 PR 手工抠像覆盖）：\n\n```sh\ncd scripts",
+        "> 如果你有 Mac（或 macOS 虚拟机），**无需 GitHub Actions**，本地直接跑同样的编码脚本即可：\n> ```sh\n> chmod +x scripts/encode_hevc_alpha.sh",
+        "### ③ 动画 → 插件\n\n```sh\n# 把 step04 的播放变体同步进插件包（webm 直接 cp）\ncp step04/*.webm dsh-pet/assets/webm/",
+        "### 🎯 双格式发布（一个包名，dist-tag 区分）\n\n同一 npm 包 `dsh-pet`，按浏览器分两个发布版本（素材目录 `assets/webm` / `assets/mov` 各只打进对应版本，包体各瘦一半）：\n\n```sh\ncd dsh-pet"
+      ],
+      "usecases": [
+        "任何人 clone 本仓库，都可以**从零生成自己的桌面宠物**——换角色、换动作、换风格，全流程可复现。"
+      ],
+      "outputs": [
+        "生成结果按动作各存一个 mp4，放入 `video/`。",
+        "- 输入：`dsh-pet/assets/webm/*.webm`；**输出直接写回 `dsh-pet/assets/mov/`**",
+        "- 校验：自动检查产物 `hvc1` tag + alpha 通道真实存在，并打包上传为 artifact（`dsh-pet-hevc-alpha`）",
+        "完整透明视频见插件包 `dsh-pet/assets/webm/`（VP9-alpha，Chrome/Edge/Firefox）与 `dsh-pet/assets/mov/`（HEVC-alpha，Safari）"
+      ],
+      "reliability": [
+        "> **兼容性**：本插件在 dsh **`0.1.1-rc.2`** 下开发并测试（`dsh --version` 可查看你的版本）。建议使用相同版本；其他版本如遇问题欢迎反馈。",
+        "> 注：`prepare:webm` / `prepare:mov` 才产出可安装的 lib（注入播放扩展名）；直接用 `tsdown` 裸构建会留下占位符，动画无法播放。",
+        "本项目全部采用路线 B**（97 个动作均为 PR 手工抠像）",
+        "Safari 不认 webm alpha**（渲染黑底），只支持 **HEVC-with-Alpha mov**",
+        "而该编码器（`hevcWithAlpha`，AVFoundation）**只有 macOS 有，Windows/Linux 产不出**",
+        "Chrome / Edge / Firefox 播放格式（VP9-alpha）",
+        "注：动画为透明背景；GIF 预览中透明部分显示为页面底色，实际 webm 播放为透明。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/dsh-pet-running-1.png\" width=\"380\" alt=\"dsh-pet 运行效果 1\" title=\"dsh-pet 运行效果 1\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"dsh-pet/assets/preview/pangxie-zoulu.gif\" width=\"160\" alt=\"螃蟹走路\" title=\"螃蟹走路\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"dsh-pet/assets/preview/youxian-hengga.gif\" width=\"160\" alt=\"悠闲哼歌\" title=\"悠闲哼歌\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"dsh-pet/assets/preview/dianji-huiying-kaixin-yuedong.gif\" width=\"160\" alt=\"点击回应-开心跃动\" title=\"点击回应-开心跃动\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"dsh-pet/assets/preview/beishubiao-tuozhuai-xuankong-fankui.gif\" width=\"160\" alt=\"被鼠标拖拽悬空反馈\" title=\"被鼠标拖拽悬空反馈\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"dsh-pet/assets/preview/qian-dai-man-yi.gif\" width=\"160\" alt=\"余额-钱袋满溢\" title=\"余额-钱袋满溢\">",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "yogsoth-ai/de-anthropocentric-research-engine",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- 📚 **Deep literature acquisition** — multi-pass academic paper discovery via Semantic Scholar, citation chaining, snowball sampling, cross-database verification. Not keyword search — systematic coverage",
+        "- 🔍 **Gap discovery at scale** — 15+ gap detection methods (coverage analysis, white-space identification, niche mapping, boundary unfolding) that find what the field is missing, not what you tell it to find",
+        "- 💡 **Structured hypothesis formation** — abductive, inductive, and deductive generation pipelines with falsifiability audits and competing hypothesis matrices",
+        "- 🎨 **31+ ideation methods** — SCAMPER, component surgery, cross-domain collision, biomimicry, TRIZ contradiction resolution, morphological analysis, concept blending, lateral thinking, and more",
+        "- ⚔️ **Adversarial stress testing** — multi-perspective attack, sacred cow hunting, assumption destruction, worst-case design, winner stress testing. Ideas must survive attack before acceptance",
+        "- 🔬 **Convergence & synthesis** — multi-criteria scoring, Pareto frontier construction, pairwise ranking, structured consensus, dialectical synthesis across competing threads",
+        "- 🧪 **Experiment design** — full experimental methodology generation (factor-level design, parameter screening, sensitivity analysis) ready for execution",
+        "- 🌐 **7 MCP integrations** — Semantic Scholar, Brave Search, Tavily, Keenable, AlphaXiv, Apify web scraping, and Wiki Vault for persistent knowledge graphs",
+        "- **executing-specs** runs a spec stage-by-stage with context protocol, deviation tracking, and backtrack handling",
+        "- **research-catalog** is the \"strategy book\" — CC reads it before generating any spec to understand what campaigns and strategies are available"
+      ],
+      "usageItems": [
+        "The human's role: approve the spec (including its backtrack conditions and recommended campaign combinations) before execution begins.",
+        "To execute the spec later, invoke `/executing-specs`."
+      ],
+      "usageActions": [
+        "Use DARE to turn this research direction into an executable Research Spec: ...",
+        "/de-anthropocentric-research-engine",
+        "/executing-specs docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "2. Ask Codex to use DARE for a research task:\n\n   ```text\n   Use DARE to turn this research direction into an executable Research Spec: ...",
+        "4. Invoke the entry point:\n\n   ```bash\n   /de-anthropocentric-research-engine",
+        "### What a Session Looks Like\n\n```bash\nYou: /de-anthropocentric-research-engine"
+      ],
+      "usecases": [
+        "cold-start from zero, warm-start from vague interest, or hot-start from specific question.",
+        "Research campaigns span multiple sessions."
+      ],
+      "outputs": [
+        "Produces a structured North Star without human hand-holding",
+        "- 📏 **Executable Research Specs** — machine-readable documents with checkbox progress tracking, quantified completion criteria, backtrack conditions, and session recovery. Another CC instance picks up where you left off",
+        "Full Research Spec written, self-reviewed, saved to\n     docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md",
+        "Final output: complete research design document"
+      ],
+      "reliability": [
+        "Each layer has a single concern and calls only the layer directly below it.",
+        "This strict layering means every component is independently testable, replaceable, and composable.",
+        "- ±10% deviation rules: CC can adjust within bounds, must document deviations",
+        "Session recovery is automatic: read the spec, find the first unchecked box, read the latest context checkpoint, resume.",
+        "The tradeoff is that execution depends entirely on CC's ability to follow complex multi-step instructions",
+        "Requires Node.js 22 or newer."
+      ],
+      "media": [],
+      "concerns": [
+        "The README labels the control plane as 8 orchestrator skills while the adjacent diagram labels it 9 skills."
+      ]
+    }
+  ]
+}

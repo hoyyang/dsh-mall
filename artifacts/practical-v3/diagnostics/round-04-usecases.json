@@ -1,0 +1,784 @@
+{
+  "generatedAt": "2026-09-02T09:20:07.184Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-04.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-04-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-04-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "usecases",
+  "question": "Diagnose recurring deterministic usecaseItems misses and overcounts.",
+  "families": [
+    "usecaseItems"
+  ],
+  "under": [
+    {
+      "repo": "sandbaseai/sandbase-skills",
+      "practicalScore": 61,
+      "oracleScore": 65,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 6,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Compare sentiment and recurring complaints for Brand A and Brand B on X this month.”"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Verify the strongest evidence for and against this market claim.”"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Track three competitors’ pricing, launches, content, and social activity.”"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Build a writer-ready brief for this target keyword.”"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Assess this engineering team’s open-source activity.”"
+          },
+          {
+            "heading": "## Try a Real Workflow",
+            "excerpt": "“Map the leading channels and audience questions in this niche.”"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "edonadei/caliper",
+      "practicalScore": 67,
+      "oracleScore": 74,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 5,
+          "gap": 5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "- Is my agent still working the same with this new model?"
+          },
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "- Did my prompt edit improved the skill?"
+          },
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "- Does my skill fire when it should, and stay quiet when it needs to not trigger?"
+          },
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "- Is the skill worth the context? Or would the base agent pass without it?"
+          },
+          {
+            "heading": "# Compare the runs. Did your skill improve it?",
+            "excerpt": "- Which agent (Claude Code, Codex, Pi, or Hermes) runs this skill more reliably?"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "MiaoQichuan/new-litigation-visualization",
+      "practicalScore": 34,
+      "oracleScore": 56,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 两个模块怎么选",
+            "excerpt": "手上已经有一张图（自己画的、别人给的、AI 生成的），想让它变好看又不变意思，用\n重画。手上只有材料、还没有图，用时间轴大师。"
+          },
+          {
+            "heading": "### 出来的图",
+            "excerpt": "要交法院就选白描：纯黑白线稿，复印、传真、黑白打印都不失真。"
+          },
+          {
+            "heading": "### 七种布局 × 三种风格",
+            "excerpt": "**奇川风** — 灰阶为底，一处深红标重点，向委托人与法官呈现。"
+          },
+          {
+            "heading": "### 七种布局 × 三种风格",
+            "excerpt": "**歸藏风** — 克莱因蓝，用于对外传播、讲课与分享。"
+          },
+          {
+            "heading": "### 装与跑",
+            "excerpt": "你只需要把材料丢给 agent、用中文说一句要什么。全程不写代码、不改配置、"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "chen731215-dev/dsh-tavern",
+      "practicalScore": 37,
+      "oracleScore": 42,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "- **想保持角色一致性**：建好角色卡后尽量少改；要调整时直接改酒馆面板，下一次回复就生效，不用重开聊天"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "- **想开新剧情/新角色**：用「＋ 新建」建空白预设，配新角色卡，**新开会话**选择它——老会话的角色不受影响"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "- **角色卡和世界书分开管理**：角色卡管\"是谁\"，世界书管\"世界长什么样\"，分开维护更清晰"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "- **记忆让剧情连贯**：配合「记忆总结」功能，AI 会记住之前的剧情，修改角色卡后依然保持连贯"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "**想保持角色一致性**：建好角色卡后尽量少改；要调整时直接改酒馆面板，下一次回复就生效，不用重开聊天"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "**想开新剧情/新角色**：用「＋ 新建」建空白预设，配新角色卡，**新开会话**选择它——老会话的角色不受影响"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "**角色卡和世界书分开管理**：角色卡管\"是谁\"，世界书管\"世界长什么样\"，分开维护更清晰"
+          },
+          {
+            "heading": "### 5️⃣ 使用建议",
+            "excerpt": "**成人内容**：在酒馆面板启用「成人模式」，并搭配成人词条预设（如破限词条）使用"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xiehuan123/dsh-deepread",
+      "practicalScore": 54,
+      "oracleScore": 64,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 1.5,
+          "oracle": 5,
+          "gap": 3.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "| `quick` | \"What is this article about?\" at a glance |"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "| `deep` (default) | Reading one article carefully |"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "| `map` | Research, fact-checking before citing |"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "| `feynman` | Truly learning it and teaching it to others |"
+          },
+          {
+            "heading": "## Five modes compared",
+            "excerpt": "| `book` | Whole books / very long texts |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xi-zhao/OpenQuantum",
+      "practicalScore": 58,
+      "oracleScore": 61,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "普通用户可以从自然语言开始，研究机构可以组织科研工作流，量子公司也可以在这套基础上继续开发自己的产品。"
+          },
+          {
+            "heading": "## 从一个真实任务开始",
+            "excerpt": "下面是一段 OpenQuantum 的实际运行记录。Agent 完成了一次二量子位基态任务，先用 VQE 求解，再用独立计算检查结果。"
+          },
+          {
+            "heading": "## 可以连接哪些量子后端",
+            "excerpt": "后端发现类能力保持只读，适合先了解设备、拓扑和校准信息，再决定是否进入真实任务流程。"
+          },
+          {
+            "heading": "## 让微信成为量子计算的入口",
+            "excerpt": "手机负责提出问题，OpenQuantum 负责连接工具，DeepSeek Harness 负责把整个过程可靠地跑起来。"
+          },
+          {
+            "heading": "## 一起建设 OpenQuantum",
+            "excerpt": "高校实验室可以沉淀自己的科研流程，算法团队和工具作者也可以把新的方法交给更多人使用。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "JingxuanC/causal-memory",
+      "practicalScore": 61,
+      "oracleScore": 68,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Demo",
+            "excerpt": "**30-second single scene** — the agent is about to `git push --no-verify`;"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "A 21-second hands-on demo (real memory store, no mocks): pre-action warning"
+          },
+          {
+            "heading": "### HTTP transport (remote agents, multi-agent shared memory)",
+            "excerpt": "### HTTP transport (remote agents, multi-agent shared memory)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "FuRongJun-1999/dsh-memory",
+      "practicalScore": 54,
+      "oracleScore": 65,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 灵枢（AEIS）× DeepSeek Harness · 白箱智能研究平台（AGI 研究人员向）",
+            "excerpt": "目标用户是**对 AGI 有需要的研究人员**（白箱智能 / 可解释性 / 协议工程 / 记忆机制 / 扮演论研究者）"
+          },
+          {
+            "heading": "## AGI 需要什么 · 灵枢提供了什么",
+            "excerpt": "角色扮演总 OOC / 记不住设定 / 世界观矛盾"
+          },
+          {
+            "heading": "### 🎮 一分钟自测你的 AI 记忆系统",
+            "excerpt": "**给普通人的互动评估页**：15 道选择题测你的 AI 助手记忆能力（存储/检索/判断/信噪比/安全），"
+          },
+          {
+            "heading": "## 灵枢（AEIS）× DeepSeek Harness · 白箱智能研究平台（AGI 研究人员向）",
+            "excerpt": "目标用户是**对 AGI 有需要的研究人员**（白箱智能 / 可解释性 / 协议工程 / 记忆机制 / 扮演论研究者），不是面向普通用户的消费级插件。"
+          },
+          {
+            "heading": "## AGI 需要什么 · 灵枢提供了什么",
+            "excerpt": "| 角色扮演总 OOC / 记不住设定 / 世界观矛盾 | **扮演一致性**（角色） |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "jing-hy/picturereader",
+      "practicalScore": 59,
+      "oracleScore": 50,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "#### 三种模式的路线策略",
+            "excerpt": "适用：敏感图片（身份证、合同、私人截图）、离线、零外部流量审计场景。"
+          },
+          {
+            "heading": "#### 三种模式的路线策略",
+            "excerpt": "适用：需要高准确率与可复现结论的场景（审图、校对、数据分析）。"
+          },
+          {
+            "heading": "## 三模式（使用模式）",
+            "excerpt": "| **智能模式**（默认） | 允许，但先本地看图再决定 | 先 `image_scan` 快速看，文字→OCR、简单图→本地、复杂图才 `vision_analyze` 外呼 | 日常，省轮数与耗时 |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xgone/dsh-remote",
+      "practicalScore": 44,
+      "oracleScore": 59,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 1. 远程访问 dsh",
+            "excerpt": "- **外网/局域网可用**：经反向代理（nginx / ssh 隧道 / Tailscale / Frp 等）暴露后，外部浏览器"
+          },
+          {
+            "heading": "### 9. 无浏览器服务器（headless / Linux）安装",
+            "excerpt": "服务器没有本地浏览器时，UI 的「创建管理员」引导（仅限 loopback）无法使用。"
+          },
+          {
+            "heading": "### 1. 远程访问 dsh",
+            "excerpt": "经反向代理（nginx / ssh 隧道 / Tailscale / Frp 等）暴露后，外部浏览器\n  登录即可使用全部功能"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "flizzywine/dsh-tavern",
+      "practicalScore": 49,
+      "oracleScore": 66,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### DSH Desktop 桌面版（推荐）",
+            "excerpt": "适合不想单独配置运行环境和管理服务的用户。"
+          },
+          {
+            "heading": "### 命令行版",
+            "excerpt": "适合希望通过浏览器访问、自己管理服务的用户。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ChangedenCZD/dsh-minimal-turbo",
+      "practicalScore": 24,
+      "oracleScore": 20,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 模式对比",
+            "excerpt": "纯文件编辑 / 命令行操作的简单任务"
+          },
+          {
+            "heading": "## 模式对比",
+            "excerpt": "复杂、多步骤任务，追求高质量输出"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-lark",
+      "practicalScore": 51,
+      "oracleScore": 62,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 添加更多 Agent",
+            "excerpt": "例如，让一个 Agent 完成修改后 @ 另一个 Agent 复核，后者也可以 @ 回去要求调整。"
+          },
+          {
+            "heading": "### 添加更多 Agent",
+            "excerpt": "如果希望飞书和 `dsh web` 共用同一个 profile："
+          },
+          {
+            "heading": "## 可以这样开始",
+            "excerpt": "检查这个项目为什么构建失败。先给我计划，需要操作时让我确认。"
+          },
+          {
+            "heading": "### 添加更多 Agent",
+            "excerpt": "让一个 Agent 完成修改后 @ 另一个 Agent 复核，后者也可以 @ 回去要求调整。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "songyang0603/ds-spec-loop",
+      "practicalScore": 39,
+      "oracleScore": 37,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# ds-spec-loop",
+            "excerpt": "helps coding agents keep requirements, decisions, implementation, tests, and documentation consistent while building features, fixing bugs, changing architecture or interfaces"
+          },
+          {
+            "heading": "# ds-spec-loop",
+            "excerpt": "`ds-spec-loop` helps coding agents keep requirements, decisions, implementation, tests, and documentation consistent while building features, fixing bugs, changing architecture or interfaces"
+          },
+          {
+            "heading": "### Invoke the Skill",
+            "excerpt": "Write a proposal without implementing it:"
+          },
+          {
+            "heading": "### Invoke the Skill",
+            "excerpt": "Review without modifying:"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "AgentDebugX/AgentDebugX",
+      "practicalScore": 70,
+      "oracleScore": 70,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 2.5,
+          "oracle": 4,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# AgentDebugX",
+            "excerpt": "The project is designed for researchers and engineers building complex LLM\nagents: multi-agent systems, tool-using agents, computer-use agents, benchmark\nrunners, and local agent development workflows."
+          },
+          {
+            "heading": "### 3. Enable LLM-backed diagnosis",
+            "excerpt": "For difficult multi-step or ambiguous failures, DeepDebug runs the complete\ndiagnosis workflow and automatically packages its evidence-backed fix as a\nstandard retry directive:"
+          },
+          {
+            "heading": "### 4. Execute the Rerun stage",
+            "excerpt": "For repeated, Docker, or remote reruns, keep the application's complete Agent\nenvironment running as an HTTP runner service."
+          },
+          {
+            "heading": "### 4. Execute the Rerun stage",
+            "excerpt": "For prompt experiments only, `--simulate` enables the previous LLM-generated\ntrajectory flow."
+          },
+          {
+            "heading": "### Optional: launch the local console",
+            "excerpt": "Install the UI extra only when a visual inspection workflow is useful:"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "h4dex/opc-nexus",
+      "practicalScore": 57,
+      "oracleScore": 49,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# OPC-Nexus · 数字员工 AI Box",
+            "excerpt": "面向个人工作室和小公司的本地优先 AI 工作台：老板下令，Hermes 理解和调度，数字员工执行，系统交付真实成果。"
+          },
+          {
+            "heading": "## 主要能力",
+            "excerpt": "- 简单需求直达回答；复杂需求走“澄清 -> 计划 -> 批准 -> 派工 -> 交付”。"
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "yuukiLike/zeromd",
+      "practicalScore": 35,
+      "oracleScore": 31,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 5.5,
+          "oracle": 0,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Architecture",
+            "excerpt": "Windows users can `git clone` the repo and use [obsidian-git](https://github.com/denolehov/obsidian-git) for sync."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SenmuuuuW/dsh-whale-report",
+      "practicalScore": 41,
+      "oracleScore": 52,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 6,
+          "oracle": 0.5,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Why DeepTrace",
+            "excerpt": "Agent 跑完之后，真正难回答的问题不是\"它做了什么\"，而是："
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Sutera-Diffusus/dsh-whale-musume",
+      "practicalScore": 87,
+      "oracleScore": 55,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 5,
+          "oracle": 0,
+          "gap": -5
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    },
+    {
+      "repo": "anweat/dsh-web-search-pro",
+      "practicalScore": 48,
+      "oracleScore": 57,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 5.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 日常网页搜索 | `web_search_pro` | 默认按配置顺序回退；需要强制刷新时传 `fresh=true` |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 语义研究、社区观点 | `web_search_pro` + `exa` | 有 API Key 时走原生 Exa API；只有 Exa MCP 连接时自动经 `mcporter` 回退 |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 已知 URL 的批量正文 | `web_exa_contents` | 直接调用 Exa `/contents`，必须配置 `EXA_API_KEY` |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 登录后页面或私有论坛 | `browserBindings` + AuthProfile | Cookie 保存在本地 storageState，按域名授权，默认只读 |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 页面改版、懒加载 | `platformRules` 或 RulePack | 优先改选择器；需要等待/点击/滚动时再使用有界 RulePack |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 有限泛爬取 | `browser_crawl` | 匿名、默认同源；调用参数不能突破浏览器插件的页数/深度预算 |"
+          },
+          {
+            "heading": "## 快速使用与适用情形",
+            "excerpt": "| 外部模型生成油猴脚本 | `browser_script_validate` → `browser_userscript_run` | 强制 `@match`、`@grant none`、禁用 `@require`；仅 `unrestricted` 跳过审批 |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "xiajiajun516/dsh-config-manager",
+      "practicalScore": 84,
+      "oracleScore": 77,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 6,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Backup DeepSeek Harness configuration",
+            "excerpt": "Create a portable backup of your DSH settings, model providers, plugins, MCP servers, skills, agent presets, profiles and workspace — one ZIP file, no secret values included by default."
+          },
+          {
+            "heading": "### Restore DeepSeek Harness on another machine",
+            "excerpt": "Export your current DSH environment as a single ZIP and import it on a new Windows, macOS or Linux machine."
+          },
+          {
+            "heading": "### Migrate DSH configuration to a new computer",
+            "excerpt": "Move your complete DeepSeek Harness setup without manually reinstalling plugins, MCP servers and skills."
+          },
+          {
+            "heading": "### Sync DSH configuration across machines",
+            "excerpt": "Keep portable configuration synchronized between machines through a private Git repository or WebDAV — secrets never sync."
+          },
+          {
+            "heading": "### Schedule automatic full backups",
+            "excerpt": "Turn on scheduled backups (6h / 12h / 24h / 7d — or a **custom weekly weekday & time**) and DSH quietly keeps a fresh full backup of your configuration in the background"
+          },
+          {
+            "heading": "### Discover & install configurations from the marketplace",
+            "excerpt": "Browse the built-in official market for ready-made configurations (model providers, plugins, MCP servers, skills, agent presets…), preview what would be imported (dry-run), and install with one click"
+          },
+          {
+            "heading": "# preview the exact plan without running anything",
+            "excerpt": "**A typical rescue flow** when DSH won't start:"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Fisfzy/dsh-ego-browser",
+      "practicalScore": 60,
+      "oracleScore": 49,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 6,
+          "oracle": 3.5,
+          "gap": -2.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "- **文献 / 数据抓取**：让 agent 登录知网 / 谷歌学术翻页收集，你在观察窗看着它滚动、点下一页、下载 PDF，中途卡住立刻能发现。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "- **表单与登录**：agent 填表到一半，观察窗弹出验证码——你直接接管把验证码点了，再交还给 agent 继续。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "- **QA / 冒烟测试**：让 agent 在自己产品上点一圈，观察窗等于一台\"会说话的录屏\"，顺手还能回看历史轨迹。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "- **看 agent 操作 DSH 自身**（self-observation）：agent 在管理会话 / 调设置时，观察窗同样全程可见、可接手。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "**文献 / 数据抓取**：让 agent 登录知网 / 谷歌学术翻页收集，你在观察窗看着它滚动、点下一页、下载 PDF，中途卡住立刻能发现。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "**表单与登录**：agent 填表到一半，观察窗弹出验证码——你直接接管把验证码点了，再交还给 agent 继续。"
+          },
+          {
+            "heading": "### 几个常见的上手场景",
+            "excerpt": "**QA / 冒烟测试**：让 agent 在自己产品上点一圈，观察窗等于一台\"会说话的录屏\"，顺手还能回看历史轨迹。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "zenx0x/allinluna",
+      "practicalScore": 68,
+      "oracleScore": 46,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 4.5,
+          "oracle": 3.5,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# When should I use it?",
+            "excerpt": "All in Luna is a good fit for:\n\n- large features;"
+          },
+          {
+            "heading": "# When should I use it?",
+            "excerpt": "- work spanning frontend / backend / tests / docs;\n- major refactors;"
+          },
+          {
+            "heading": "# When should I use it?",
+            "excerpt": "If you are fixing one typo, explaining one function, changing one CSS rule, or doing another tiny linear task, using the current agent directly is usually faster."
+          },
+          {
+            "heading": "# When should I use it?",
+            "excerpt": "All in Luna is a good fit for:\n\n- large features;\n- work spanning frontend / backend / tests / docs;\n- major refactors;\n- migrations;"
+          },
+          {
+            "heading": "# When should I use it?",
+            "excerpt": "- long-running coding sessions;\n- work where one blocker should not stop the whole project;"
+          },
+          {
+            "heading": "## 7. Bring your own workflow",
+            "excerpt": "Connect **Research Routes** for research-oriented work."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "william-jin-cmu/dsh-vision",
+      "practicalScore": 14,
+      "oracleScore": 26,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 1,
+          "oracle": 0,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    }
+  ]
+}

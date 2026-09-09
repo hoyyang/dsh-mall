@@ -1,0 +1,620 @@
+{
+  "reviews": [
+    {
+      "repo": "ZASENJC/dsh-plugins-store",
+      "inferredType": "catalog-list",
+      "capability": [
+        "自动收录同时带有 `dsh-plugin` 与 `deepseek-harness` Topic 的公开仓库，并排除归档仓库、Fork 和宿主应用",
+        "提供独立的 [目录](https://dshmk.com/)、[已验证](https://dshmk.com/verified)和 [排行榜](https://dshmk.com/ranking)页面，支持搜索、分类、筛选和排序",
+        "排行榜支持 24 小时 Star 增速、最多 Star、最新发布和最近更新；项目详情展示分类依据、同标签项目和验证进度",
+        "每 30 分钟自动同步 GitHub 仓库数据",
+        "配套 DSH Web 插件支持通过 `/store`、设置页和 Agent 会话浏览市场，并在用户明确请求和确认后安装、更新或移除 Web profile 插件",
+        "独立验证流程先对固定 SHA 做源码特征分类，再只对分类后的待验证目录进入一次性 Linux 沙箱。",
+        "项目分类优先使用仓库公开的 GitHub Topics，并与站内词典和词根规则比对。",
+        "商店提供公开、只读的完整目录接口："
+      ],
+      "usageItems": [
+        "- 无需鉴权，不接收查询参数。",
+        "目录约每 30 分钟刷新一次。请使用 `schemaVersion` 判断响应是否兼容，不要依赖仓库数组顺序。",
+        "判断当前验证状态时，只应使用 `repositories[].validation.overall === \"verified\"`。",
+        "使用 `curl` 获取目录并读取基础信息："
+      ],
+      "usageActions": [
+        "使用 `curl` 获取目录并读取基础信息：",
+        "判断当前验证状态时，只应使用 `repositories[].validation.overall === \"verified\"`。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "curl --fail --silent --show-error \\",
+        "const response = await fetch('https://api.dshmk.com/', {"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "收录仅表示仓库同时出现在 `dsh-plugin` 与 `deepseek-harness` Topic，且未被识别为归档仓库、Fork 或宿主应用，不代表项目已经通过安装、兼容性、安全性或质量验证。",
+        "目录同步模块只读取公开仓库元数据，不执行第三方代码；可选 DSH Web 插件只会在用户阅读风险提示并明确确认后发起安装。",
+        "沙箱无商店密钥、非 root、资源受限，安装、激活、入口导入和 `apply` 调用均在隔离环境中完成；失败结果带错误码进入人工复核，不会进入源码排除名单。",
+        "只有绑定当前仓库 ID、SHA、DSH 版本、平台和验证器版本的通过结果才显示“已验证”；该标记不等于完整安全审计或官方背书。",
+        "- 返回整个目录，不提供服务端搜索、筛选或分页；调用方应在本地处理。",
+        "标签不足时，项目会保留为“其他”或“待识别”，不会根据名称强行推断。",
+        "验证没有新结果或执行失败时，发布流程继续使用最近一次成功状态，不会中断网站更新。",
+        "未提供 Token 时会受到 GitHub API 的较低请求限额约束。"
+      ],
+      "media": [
+        {
+          "excerpt": "![DSH 插件市场截图 1](https://img.qunq.de/file/1786921693044_Screenshot%202026-08-17%20at%2006-31-01.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![DSH 插件市场截图 2](https://img.qunq.de/file/1786921688782_Screenshot%202026-08-17%20at%2006-31-10.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![DSH 插件市场截图 3](https://img.qunq.de/file/1786921698410_Screenshot%202026-08-17%20at%2006-31-17.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![DSH 插件市场截图 4](https://img.qunq.de/file/1786921702563_Screenshot%202026-08-17%20at%2006-33-37.png)",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "![DSH 插件市场截图 5](https://img.qunq.de/file/1786921703878_Screenshot%202026-08-17%20at%2006-52-47.png)",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Screenshots are hosted on an external image host (img.qunq.de), so each was weighted 0.5.",
+        "Catalog ownership rule applied: no third-party plugin capabilities exist in this README to exclude; the companion Web plugin is part of this repo.",
+        "Header banner and community QR-code images excluded as decoration/contact info."
+      ]
+    },
+    {
+      "repo": "Awu12277/dsh-stock-watch",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "A 股自选股实时行情**盯盘插件**：在 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）Web 界面的**右上角**显示一个可折叠弹窗，实时监控自选股行情、切换分组、查看分时与 K 线、设置买卖目标价。",
+        "**胶囊可拖动**：按住「📈 自选股」药丸可拖到屏幕任意位置，面板随之跟随（右边缘对齐）；展开后按住面板头部也可拖动；位置持久化到 localStorage。",
+        "**多分组自选股**：分组 tab 切换（分组名 + 股票数），配置存浏览器 `localStorage`（首次自动从 `~/.stocking/settings.json` 迁移）",
+        "- **实时行情列表**：名称 / 代码、现价、涨跌幅、分时迷你折线、目标价触发标记（买入 / 卖出 / 等待 / -），每 10s 自动刷新（带倒计时）",
+        "**价格变动闪烁**：列表行数据刷新时，若当前价格 ≠ 上次价格，自动红/绿闪烁（涨→红、跌→绿）",
+        "- **分时视图**：全天分钟价格线（红涨绿跌）+ 黄色均价线（VWAP）+ 昨收虚线基准",
+        "- **K 线视图**：日 K / 周 K / 月 K 前复权蜡烛图 + 成交量柱",
+        "- **目标价可编辑**：详情页点击「买入目标 / 卖出目标」进入输入框（数字 + 两位小数、留空清除、回车确认 / Esc 取消），即时重算触发标记并持久化",
+        "**胶囊悬浮扇形菜单**：鼠标移到胶囊（含贴边吸附态）触发 **GSAP 扇形动画**，展开 **📊 行情分析 / 📅 每日复盘 / 🚀 涨停分析** 三个选项",
+        "- **安装时自动注入技能**：插件首次启动时把自带的 `investment-research`、`frontend-design` 两个技能复制到用户技能目录 `~/.agents/skills/`",
+        "- **暗色 / 浅色主题**：CSS 变量两套配色，默认暗色，☀️/🌙 一键切换（图表配色联动）"
+      ],
+      "usageItems": [
+        "| 药丸 | 点击展开 · 按住拖动（拖到屏幕边缘自动吸附为半球，显示涨/跌家数）· 悬停弹出扇形菜单（行情分析/每日复盘/涨停分析，新开对话执行） |",
+        "| 列表 | 分组 tab 切换 · 点击行进详情 · ⟳ 手动刷新 · — 折叠 · ☀️/🌙 切主题 |",
+        "| 详情 | ← 返回 · 分时 / 日K / 周K / 月K 切换 · 📈 投资研究报告（新建对话一键分析）· 点击买入/卖出目标编辑 · K线 `+`/`−`/`重置` 缩放 |"
+      ],
+      "usageActions": [
+        "| 药丸 | 点击展开 · 按住拖动（拖到屏幕边缘自动吸附为半球，显示涨/跌家数）· 悬停弹出扇形菜单（行情分析/每日复盘/涨停分析，新开对话执行） |",
+        "| 列表 | 分组 tab 切换 · 点击行进详情 · ⟳ 手动刷新 · — 折叠 · ☀️/🌙 切主题 |",
+        "| 详情 | ← 返回 · 分时 / 日K / 周K / 月K 切换 · 📈 投资研究报告（新建对话一键分析）· 点击买入/卖出目标编辑 · K线 `+`/`−`/`重置` 缩放 |"
+      ],
+      "ioPairs": [
+        "搜索「小米」「01810」→ 港股 `hk01810`",
+        "搜索「510300」「沪深300ETF」→ 沪市 ETF"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "（CDN 懒加载，失败自动降级为自绘 SVG）",
+        "Host 端使用 Node 原生 `fetch` 直连（部署即使未挂载 web fetch provider 或沙箱封锁网络，本插件也不受影响）。",
+        "「每日复盘」仅在 **15:00–次日 9:00** 可点击，交易时段置灰并提示\"还未收盘\"",
+        "（已存在则跳过、不覆盖用户版本；`DSH_STOCK_WATCH_NO_SKILLS=1` 可禁用，`DSH_STOCK_WATCH_SKILLS_DIR` 可改目标目录）",
+        "- 首次打开自动从 `~/.stocking/settings.json` 一次性迁移（失败则用默认分组），之后 localStorage 为唯一数据源",
+        "按钮带防抖（进行中禁用，防连点重复建会话）"
+      ],
+      "media": [
+        {
+          "excerpt": "![pill](screenshots/pill.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![list-dark](screenshots/list-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![minute](screenshots/detail-minute-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![kline](screenshots/detail-kline-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![light](screenshots/light.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit use-case scenarios, code examples, or textual outputs beyond feature prose.",
+        "Market data comes from Tencent finance endpoints shared with the author's stocking CLI project; stocking's own behavior was not counted."
+      ]
+    },
+    {
+      "repo": "feibi-mochi/deepseek-harness-control-center",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Official DeepSeek** — live balance (60s global refresh with fast boot retries), an estimated current-session cost (not an official bill) locked to the price active for each usage event",
+        "**Vision model accounting** — `deepseek-v4-flash-vision-exp` is priced like V4 Flash; image tokens reported by the Harness are included with text tokens.",
+        "**v4 peak/off-peak ring clock** — a resident 24-hour sidebar footer widget for `v4-flash`, `v4-pro`, and `v4-flash-vision-exp`.",
+        "**Official pricing sync** — periodically checks the official DeepSeek pricing page and applies only a fully validated table.",
+        "**Z.ai Coding Plan quotas** — a generic official-plan adapter monitors configured Global and China plans without exposing credentials.",
+        "**Provider-aware composer surfaces** — the chip and sidebar clock follow the session's selected provider/model.",
+        "**Third-party total** — current-session tokens (input / cache read / output). No balance guessing, no cost math, zero configuration.",
+        "**Move, dock, and scale** — drag the chip freely, preview nearby snap targets, use compact horizontal or vertical layouts, adjust its scale from the control panel",
+        "**Floating window mode** — detach the detail panel into a draggable window with a remembered position, or minimize it directly to a freely movable dot; the dot turns red below the threshold.",
+        "**Low-balance alert** — below the threshold the chip turns red with a breathing animation and fires one desktop notification; it resets automatically once the balance recovers.",
+        "**Clear current-session wallet data** — one button clears only the open conversation's token/cost records; it does not delete the conversation"
+      ],
+      "usageItems": [
+        "Open the wallet panel → **Account Management（账户管理）** to add accounts (name + API key), switch the active one, or remove them.",
+        "1. Click the wallet or peak/off-peak card to open its control panel; open the Harness settings card for health and compatibility checks.",
+        "3. Turn the official recharge button off when you need a smaller card; official and third-party rows can also be shown independently.",
+        "4. Drag the card to any open area. If it is hard to find after a layout change, use **Reset/Dock（归位/停靠）** in the panel to return it to the sidebar."
+      ],
+      "usageActions": [
+        "Click the wallet or peak/off-peak card to open its control panel",
+        "Drag the card to any open area.",
+        "use **Reset/Dock（归位/停靠）** in the panel to return it to the sidebar"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "so the current workflow can answer three questions at a glance: **How much official balance remains? What has this conversation used? Does anything need attention?**"
+      ],
+      "outputs": [
+        "`Balance ¥5.89 · Session ¥0.72 · Official 18.8M | Third-party 800K · ↗ Recharge`"
+      ],
+      "reliability": [
+        "Costs are estimates; the API-returned balance is authoritative.",
+        "Collection begins after upgrading to v0.3.2; older aggregate counters have no trustworthy dates and are not backfilled.",
+        "The last row describes intended compatibility, not a claim that every browser/OS/wrapper combination was physically tested.",
+        "If system notifications are unavailable or denied, reminders fall back to an in-page notice",
+        "| Permanent deletion | Opt-in and host-gated. The wallet never advertises the action unless the host implements the matching session deletion path. |",
+        "| Recharge | The URL is hardcoded to the official `https://platform.deepseek.com/top_up` and is not user-configurable (anti-phishing). |",
+        "An encrypted `.bak` recovers a missing, corrupt, or undecryptable primary file; if neither copy can be read, writes are locked instead of overwriting account data.",
+        "If `DEEPSEEK_API_KEY` is supplied by the launching environment, switching is refused with a clear error",
+        "Network failures retain the last validated rule (or the built-in rule before the first successful sync); an unrecognized page structure is marked for review instead of silently changing billing.",
+        "| Model surface | No tools registered, no prompt injection, zero token cost. |"
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or any media despite a UI-centric plugin; no paired input/output examples or non-install code fences.",
+        "The pricing-timeline tables describe DeepSeek's official prices (external facts used by the plugin) and were treated as plugin accounting behavior rather than outputs."
+      ]
+    },
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "基于 [dsh](https://www.npmjs.com/package/@deepseek-ai/dsh) web 实现的九个 redteam 安全研究工作模式（预设）及其运行时插件，自包含、可离线部署。",
+        "每个模式自包含四层资产：**persona**（角色/认识论/边界/报告纪律）→ **playbook**（方法论与门禁文本契约）→ **skills**（可加载技能）→ **refs/**（外部知识库，原文索引化，零本机路径）。",
+        "| `dsh-stage-gate` | `stage_gate`/`gates_list` 工具：八模式 32 道阶段门的结构校验（文件/标记/表格/哈希登记），判定写入 `gate-log.md`",
+        "| `dsh-sec-enforce` | 确定性工具拦截（guard 四连）：报告门（gate-log 无 PASS 或目标准则未全 met 不许写 reports/）、写边界（不出任务工作区）、高危命令先问后做、裸奔扫描限速",
+        "| `dsh-refusal-guard` | 拒答检测与一次性临近性再注入（强/弱两级检测、工具轮豁免、3 轮冷却）",
+        "| `dsh-product-subagents` | `subagent_claude_code`/`subagent_codex` provider：无头 spawn 本机 claude/codex CLI，跨 harness 复核按建议项由用户触发",
+        "| `dsh-redteam-results` | 会话标签页「redteam 成果」：任务台账作战大屏 + 五板式成果页（发现/资产/台账/时间线/云攻击路径），九模式**跨会话**聚合与时间范围筛选",
+        "| `dsh-hunter` | 会话标签页「hunter 狩猎」：FOFA / Hunter / Quake 三平台资产搜索（统一 DSL 自动转平台语法、分页与限额导出、API key 独立存储）",
+        "| `dsh-session-pulse` | 会话状态面板（九模式）：头部右上角任务进度 chip（任务清单实时汇总 done/total + 进度条，全部完成转绿）+ 子代理 chip",
+        "| `dsh-scanner-tools` | 本机扫描器封装：nuclei/httpx/ffuf + 声明式注册表十三工具",
+        "- 一键部署九个安全模式（空目录使用整体链接；已有实体 `.agent-presets` 时写入管理器持有的实体副本）；",
+        "- 安装 / 更新 / 卸载十五个运行时插件；"
+      ],
+      "usageItems": [
+        "在 dsh web 的新会话中选择相应的模式即可开始任务。",
+        "打开 dsh web 设置页 → **Redteam Manager**，即可：",
+        "任一会话让模型调 `gates_list`，返回专业模式门禁 schema；"
+      ],
+      "usageActions": [
+        "在 dsh web 的新会话中选择相应的模式即可开始任务。",
+        "打开 dsh web 设置页 → **Redteam Manager**"
+      ],
+      "ioPairs": [
+        "任一会话让模型调 `gates_list`，返回专业模式门禁 schema；"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "| `pentest` 渗透测试 | Web/API/app/小程序黑盒渗透：侦察、枚举、漏洞验证与报告 |",
+        "| `code-audit` 代码审计 | 白盒源码审计，可 RCE 主线（上传/未授权/组合/反序列化/溢出等七类） |",
+        "| `binary-analysis` 二进制分析 | 病毒分析、逆向破解、脱壳还原 |",
+        "| `av-evasion` 免杀对抗 | 攻击视角的免杀研究：载荷开发与本地实验循环",
+        "| `incident-response` 应急溯源 | Windows/Linux 应急响应与攻击溯源：证据保全→失陷排查→攻击链时间线还原→定性→处置建议→报告 |",
+        "| `cloud-security` 云安全攻防 | 云平台（AWS/Azure/GCP/阿里云/腾讯云/华为云）与云原生（K8s/容器/Serverless/CI-CD）渗透",
+        "| `ctf-solver` CTF 解题 | CTF 竞赛解题：题面登记、模块路由（web/pwn/reverse/crypto/misc 等）、解题循环、flag 台账与复盘 |"
+      ],
+      "outputs": [],
+      "reliability": [
+        "> **请勿用于非法行为。** 本项目仅面向已获得书面授权的安全测试、CTF 竞赛、漏洞赏金与安全研究场景（见文末免责声明）。",
+        "写入 profile 前会备份声明，安装失败时恢复 `package.json` 与 lockfile；卸载子插件只移除运行态声明，不会删除源码。",
+        "仅当该文件不存在时安装；已存在则**不覆盖**，安装输出会提示如何自行改用本包版本。",
+        "机器差异项（可选，缺失自动降级）：`claude`/`codex` CLI",
+        "5. 未过报告门就写 `reports/` 会被 sec-enforce 拦截并指路。",
+        "3. pentest/attack-defense/cloud-security/ctf-solver 会话可见 `nuclei_scan` 等扫描工具（其余模式不可见 = preset 平面正确）；",
+        "- 在获得目标系统所有者书面授权的前提下使用；"
+      ],
+      "media": [
+        {
+          "excerpt": "![任务台视图](功能展示/a.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![攻防评估模式](功能展示/2.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![代码审计模式](功能展示/3.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![hunter 狩猎](功能展示/5.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![webshell 管理](功能展示/6.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![AttackAtlas](功能展示/b.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Seven effect screenshots exist; the weighted media cap (6) required selecting six — 功能展示/4.png (二进制分析模式) omitted.",
+        "All code fences are installation/deployment commands; no operational examples, textual outputs, or demo GIFs.",
+        "Cited upstream cookbooks (Linux/Windows INCIDENT-RESPONSE-COOKBOOK) acknowledged but their content not counted."
+      ]
+    },
+    {
+      "repo": "eri64/dsh-claude-ux",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**区域风控（可反向）**：检测目标用户（时区、系统/浏览器语言、中文字体、代理、代理/中转域名黑名单、公网 IP 归属、WebRTC IP 一致性）。",
+        "`regionTarget` 选 `cn` = 风控中国用户（Claude 原版行为），选 `non-cn` = **反向风控**（检测到不是中国人就风控）。",
+        "命中后按惩罚阶梯处置：拒绝文案（带尝试计数）→ 达到 `refusalEndsAfter` 次数后结束会话（Chat ended 面板 + 服务端持续拒绝，重启后依然生效）",
+        "- **自主性**：用户持续辱骂或反复要求严重有害内容时，先警告、再主动结束对话；自伤/他伤风险消息永不触发结束（对齐 Claude 的公开限制）。",
+        "辱骂判定采用**词表秒判 + LLM 语境兜底**：强词（傻逼/fuck 等）直接判；弱词（垃圾/闭嘴等）与未命中消息由独立 LLM 请求做语境裁决",
+        "分类模型可直接从 **DSH 已配置的模型目录**下拉选择，或留空跟随会话主模型。",
+        "- **隐写通道**：系统提示词日期格式（`2026-06-30` ↔ `2026/06/30`）编码区域判定，Unicode 撇号变体（U+2019 ↔ U+02BC）编码黑名单命中。"
+      ],
+      "usageItems": [
+        "2. 设置页左侧标签栏出现 **「Claude 风控」** 独立标签（与视觉工具插件同款）：",
+        "3. **默认关闭**（`enabled: false`，避免把自己锁在外面）；打开总开关并「保存并应用」后即时生效。",
+        "> 校验安装是否成功：浏览器访问本机 dsh web 的 `/_dsh/claude/status`"
+      ],
+      "usageActions": [
+        "打开总开关并「保存并应用」后即时生效。",
+        "浏览器访问本机 dsh web 的 `/_dsh/claude/status`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "默认配置下（`ipCheck: false`、`webRtcCheck: false`）**插件不与任何外部服务通信**：所有检测（时区、语言、代理、黑名单、浏览器语言/字体）都在本机完成，不上报任何遥测。",
+        "（`purpose` 标记，**不进会话日志与模型上下文**；消息入队即异步预分类，近零额外延迟）",
+        "npm test   # 运行主机（115 项）与客户端（17 项）单元测试，无需 dsh 实例",
+        "返回 `{\"ok\":true,...}` 即主机插件已加载。"
+      ],
+      "media": [
+        {
+          "excerpt": "![设置页「Claude 风控」标签全貌](docs/assets/settings-page.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![区域惩罚阶梯：拒绝文案（带尝试计数）→ 达到次数后结束会话](docs/assets/region-ladder.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![辱骂升级 → 警告 → 主动结束对话](docs/assets/abuse-end.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![严重有害请求 → 立即结束对话](docs/assets/harmful-end.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit use-case scenarios, paired input/output examples, or concrete textual outputs.",
+        "Most operational detail is the configuration table (excluded per install/config rule); the closed and region-gating behavior is intentionally described as policy."
+      ]
+    },
+    {
+      "repo": "JingbiaoMei/Tokdash",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Exact token counts**: Input/Output/Cache token breakdowns",
+        "- **Contribution calendar**: 2D heatmap + 3D isometric view with Tokens/Cost/Messages metrics",
+        "- **Session explorer**: per-session drill-down",
+        "- **Quota tab** *[new]*: subscription window bars with reset countdowns for Codex, Claude Code, and Antigravity.",
+        "- **Multi-server views**: add WSL, macOS, and other Tokdash servers in Settings; combine usage across any selection while keeping quota grouped by machine.",
+        "- **Statusline integration** *[new]*: drop a live token-usage indicator into Claude Code's statusline (or any agent that can hit a local HTTP endpoint)",
+        "DeepSeek Harness (`dsh`) usage and sessions are read locally from `$DSH_HOME/sessions/*/*/session.jsonl.zstd` (or the uncompressed `session.jsonl`)"
+      ],
+      "usageItems": [
+        "The companion connects to `http://127.0.0.1:55423` by default.",
+        "- [`statusline-minimal.sh`](docs/guides/statusline/statusline-minimal.sh) → one line: `[Claude Sonnet 4.6] 📁 myproject | 📊 12.3M ($4.56) today`",
+        "- `GET /api/usage?period=today|week|month|N`",
+        "- `GET /api/active-time?period=...` (active time across every session tool, plus a per-tool breakdown)",
+        "- `GET /api/stats` (contribution calendar & statistics)"
+      ],
+      "usageActions": [
+        "- `GET /api/usage?period=today|week|month|N`",
+        "- `GET /api/active-time?period=...` (active time across every session tool, plus a per-tool breakdown)",
+        "- `GET /api/stats` (contribution calendar & statistics)"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "curl 'http://127.0.0.1:55423/api/usage?period=today'",
+        "tokdash doctor",
+        "tokdash serve"
+      ],
+      "usecases": [],
+      "outputs": [
+        "[Claude Sonnet 4.6] 📁 myproject | 📊 12.3M ($4.56) today",
+        "- Today's cost, tokens, messages, and month-to-date usage"
+      ],
+      "reliability": [
+        "**No telemetry**: Tokdash does not intentionally send your data anywhere.",
+        "**Server exposure**: Tokdash binds to `127.0.0.1` by default.",
+        "Treat session-log Codex consumption as an **estimate that can be materially wrong**",
+        "Either way they may lag real provider pricing — use as an estimate and verify against your billing source if it matters.",
+        "> **Keep your history.** Claude Code and Gemini CLI delete local sessions older than ~30 days by default, so Tokdash's earlier months can silently shrink.",
+        "`doctor` checks the runtime, background service, configured port, data paths, and update-check\nstatus.",
+        "All are read-only, localhost-only, and fail silently if Tokdash isn't running.",
+        "schema migrations run forward only, so once the newer build migrates the file the older one refuses to open it until it is upgraded",
+        "> The GitHub Releases binaries are **unsigned**. macOS Gatekeeper and Windows\n> SmartScreen will show an unknown-publisher warning.",
+        "It is an estimate, and the API says so: `summary.active_time_estimated` is `true`"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-overview-en-light.png\" alt=\"Tokdash overview dashboard - click for live demo\" width=\"860\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-sessions-en-light.png\" alt=\"Tokdash sessions view - click for live demo\" width=\"860\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-heatmap-en-light.png\" alt=\"Tokdash monthly usage heatmap - click for live demo\" width=\"860\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-quota-en-light.png\" alt=\"Tokdash quota tracking - click for live demo\" width=\"860\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/companion/demo-mac.png\" alt=\"Tokdash Companion Status Bar App on macOS\" width=\"360\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-statusline.png\" alt=\"Tokdash statusline integration example\" width=\"900\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "More demo images exist (yearly heatmap, Codex quota, companion Windows); the weighted media cap (6) required selecting six.",
+        "Raw-media URLs point at this same repository via raw.githubusercontent.com, so they were weighted 1 (repository-hosted).",
+        "Client-support matrix rows describe other tools' log formats as data sources; per-client capabilities were not counted as separate units."
+      ]
+    },
+    {
+      "repo": "THEWOLFWALKER/dsh-notifier",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Unified notification push plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) — one minimal `notify()` API in front, 27 channels behind.",
+        "| **Dual trigger lines** | Auto status push (`turn/end` · `approval/asked` · `agent/error`) plus a model-facing `notify` tool. |",
+        "| **Level routing** | `timeSensitive` / `active` / `passive` → per-channel delivery semantics (silent push, priority headers, @-mentions) with tiered retries. |",
+        "| **Remote approval** | Answer approvals from your phone — Telegram buttons, Feishu cards, QQ / WxPusher / WeChat iLink / DingTalk reply `1`/`2`. Silence never approves. |",
+        "| **Remote conversation** | Chat with your agent: plain text → `followup`/`inject`, `!` prefix steers mid-turn, a merge window reassembles mobile typing. |",
+        "| **Mobile command center** (v0.5.0) | Long-task heartbeats (default 15min start) and stall alerts (default 10min no events); Telegram/Feishu cards carry a ⏹ stop button",
+        "| **Multi-agent routing** (v0.3.2) | Bidirectional agent × channel matrix; sessions auto-register; `/agent` command family + `route.mjs` CLI. |",
+        "| **Web admin console** (v0.3.3) | 127.0.0.1-only + Bearer token; six pages — dashboard / notify / members (v0.7) / bindings / sessions / channels; responsive ≤768px layout (v0.5). |",
+        "| **Desktop notifications** (v0.4.0) | Native `desktop` channel (`osascript` / `notify-send` / PowerShell toast) + admin SSE live stream. |",
+        "| **Ledger & daily digest** | Append-only JSONL ledger + one `passive` summary of yesterday's traffic. |",
+        "Six channels also open inbound (remote approval + conversation): `telegram`, `feishu`, `qq-bot`, `wxpusher`, `wechat`, `dingtalk`"
+      ],
+      "usageItems": [
+        "the model can push on its own with `notify({ message, channel, title })`",
+        "`/quiet`·`/unquiet` mute or restore a session's pushes from your phone.",
+        "every inbound channel answers `/help` `/whoami` `/pair` `/unpair` registration commands"
+      ],
+      "usageActions": [
+        "notify({ message, channel, title })",
+        "`/quiet`·`/unquiet` mute or restore a session's pushes from your phone.",
+        "`/pair <code>` in any DM; first redeemer becomes owner"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "| **Never breaks startup** | Misconfigured channels are skipped silently with a log line. |",
+        "long-lived connections or long polling, so no public IP is required (only the WxPusher callback needs one)",
+        "Telegram/Feishu cards carry a ⏹ stop button (HMAC one-time tokens, same trust chain as approvals)",
+        "Empty whitelist boots into a guided state with a bootstrap pairing code on stderr instead of refusing to start.",
+        "test/                 846 tests (node --test)",
+        "All timings clamp to a 60s floor; disable any of them with `enabled: false`."
+      ],
+      "media": [
+        {
+          "excerpt": "![Dashboard](docs/screenshots/admin-dashboard.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Notify](docs/screenshots/admin-notify.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Bindings](docs/screenshots/admin-bindings.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Sessions](docs/screenshots/admin-sessions.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Channels](docs/screenshots/admin-channels.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No paired input/output examples or non-install code fences; channel config YAML treated as configuration.",
+        "Zero-dependency and bilingual claims are identity/architecture facts and were not counted as user-visible behavior."
+      ]
+    },
+    {
+      "repo": "Akimiya-z/codex-guard",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**An automatic quality gate for AI-generated pull requests.** Stop TODO leftovers,\nleaked secrets, sloppy commits and red CI from reaching `main`",
+        "Codex Guard runs on `pull_request`, figures out whether the PR looks\nagent-generated (via label, branch prefix, or title)",
+        "| 🔐 Secret scan | AWS (access + secret keys), GitHub, Google, OpenAI, Anthropic, Slack, Stripe, npm, SendGrid, Telegram, Azure connection strings, JWTs, hardcoded credentials",
+        "| 💬 Commit hygiene | Subjects that don't match conventional commits, empty subjects |",
+        "| 🧪 CI status | Failing status checks **or** check runs on the PR head commit |",
+        "Each finding is posted as a GitHub **check-run annotation at the exact file and\nline**, plus a human-readable summary comment on the PR.",
+        "Guard now distinguishes **no findings** from **not scanned**: every report shows\nthe number of eligible changed files whose patches were actually inspected.",
+        "run a **sweep** to\ninspect every currently-open agent-generated PR in one go",
+        "it declares a `dsh.bundle` manifest and registers\na `codex_guard` **tool** that DeepSeek Harness agents can call to pre-flight an\nagent-authored diff before it becomes a PR."
+      ],
+      "usageItems": [
+        "By default Codex Guard **only gates PRs it believes were written by an agent**,\nso human-authored PRs are never slowed down:",
+        "Add a label named `codex-guard-ignore` (configurable) to a PR and Codex Guard\nwill pass it without running checks.",
+        "Run the read-only local doctor after installing or changing policy:"
+      ],
+      "usageActions": [
+        "Add a label named `codex-guard-ignore` (configurable) to a PR",
+        "Run the read-only local doctor after installing or changing policy:"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "npx --yes codex-guard --diff <(git diff origin/main)",
+        "npx --yes codex-guard --git --commits",
+        "npx --yes codex-guard doctor"
+      ],
+      "usecases": [
+        "- Hardcoded API keys and connection strings copied from a chat transcript",
+        "- Commit trails like `WIP`, `fix stuff`, `more changes` — squashed versions of",
+        "- A green-looking PR that actually has failing CI on the head commit"
+      ],
+      "outputs": [
+        "❌ **Checks failed — review the findings before merging.**",
+        "- `scripts/sync.js:4` — AWS Access Key ID `AKIA...MPLE`",
+        "| TODO / FIXME scan | ⚠️ 2 |"
+      ],
+      "reliability": [
+        "- Secret detection is **regex-based on purpose** — it catches the obvious\n  mistakes cheaply, but it is not a replacement for a real secret scanner",
+        "- The TODO scan only sees lines **added by this PR** — it won't nag you about\n  pre-existing comments.",
+        "- GitHub may omit textual patches for binary or very large files. Those files\n  cannot be content-scanned.",
+        "- Agent detection is intentionally heuristic. Set `gate-agents-only: false`\n  when coverage matters more than distinguishing human and agent PRs.",
+        "Pending checks produce a neutral result,\nnot a premature green check.",
+        "If one GitHub CI API is unavailable, the report is\nneutral and explicitly says visibility is incomplete; if both are unavailable,\nthe CI check fails closed.",
+        "Previous Codex Guard check runs are ignored so a\nrerun cannot inherit its own old failure.",
+        "A blocking\nfinding will prevent the PR from merging until it is resolved"
+      ],
+      "media": [],
+      "concerns": [
+        "The repo is primarily a GitHub Action + npm CLI; it also ships a DSH bundle (dsh/) — inferredType set to standalone-nonplugin as the primary identity, with the DSH tool counted as one capability.",
+        "No media beyond badges; the sample report is quoted text reproduced from a real run and was used for outputs."
+      ]
+    },
+    {
+      "repo": "mexiaosqwq/dsh-web-mobile",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**dsh-web-mobile** 是 DeepSeek Harness Web UI 的移动端适配插件——让 DSH 在手机竖屏下也能好好用：",
+        "- **侧栏变抽屉**：手机竖屏下侧栏收进 overlay 抽屉，会话区全宽，点会话行自动收起",
+        "- **弹窗变浮层**：设置、文件树、预览改成底部 sheet，触屏好点",
+        "- **状态栏避让**：刘海安全区、深/浅主题、双击缩放都处理",
+        "- **输入区不打架**：权限胶囊、模型名、切换菜单在窄屏下不重叠",
+        "- **长会话不卡流量**：宿主返回的大 JSON（会话历史等）自动 gzip/brotli 压缩，手机端加载明显提速",
+        "- **平板也管**：768–1023px 限宽居中；桌面 ≥1024px 完全 no-op"
+      ],
+      "usageItems": [
+        "- **诊断方便**：`?mobile-nav-debug=1` 显示悬浮诊断条（视口 / 浮层状态 / JS 错误）"
+      ],
+      "usageActions": [
+        "`?mobile-nav-debug=1` 显示悬浮诊断条（视口 / 浮层状态 / JS 错误）"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "`lib/` 与源码同步入库，改动源码后重新构建再提交。"
+      ],
+      "media": [
+        {
+          "excerpt": "![移动端会话主页](assets/hero.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![目录抽屉](assets/drawer.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![移动端设置界面](assets/settings.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README reliability evidence is thin: most concrete facts live in a changelog (excluded per rules) or describe compatible third-party plugins.",
+        "Compatible-plugin version list (dsh-web-ui / dshmarket / dsh-genui …) belongs to linked projects; excluded from evidence families.",
+        "Banner image excluded as decoration."
+      ]
+    },
+    {
+      "repo": "PerryLink/dsh-memento",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Bounded, layered, approval-gated, auditable cross-session memory for DeepSeek Harness.**",
+        "- **The approval gate cannot be bypassed.** Every write path (`add` / `replace` / `remove` / `seed`) is forced through the approval waterfall inside the service, not in the tool layer.",
+        "- **Model-visible ⟺ logged.** The injected snapshot lands verbatim in `request/header.system`; every write is reconstructable from `approval/asked` + `approval/decided` + the plugin's own audit table.",
+        "- **Bounded and honest.** Hard per-track/per-layer character budgets (default user 2000 / agent 4000). A full store fails with a structured error (usage + limit) — never truncated, never auto-compacted.",
+        "Two tracks × two layers × per-agent key: a `user` track (facts about the user) and an `agent` track (environment facts and conventions), each split into `user-global` and `workspace` layers",
+        "The snapshot is frozen once per session at first prompt assembly and never changes mid-session.",
+        "| `memory` | tool | add/replace/remove/consolidate/query with Save/Skip guidance; writes ride the approval gate |",
+        "| `memory_recall` | tool | Bounded memory matches plus recent session-history matches |",
+        "| web panel | client drawer | Read-only: browse entries, search, budget bars, audit tail |",
+        "`dsh-memento` ships a read-only stdio **MCP server** (`dsh-memento-mcp`) so external MCP clients (Claude, Codex, …) can search the memory store without a harness."
+      ],
+      "usageItems": [
+        "| `/memory` | command | `list` · `query` · `add` · `remove` · `consolidate` · `proposals` · `budgets` · `audit` · `export` · `import <path>` · `adapters` |"
+      ],
+      "usageActions": [
+        "| `/memory` | command | `list` · `query` · `add` · `remove` · `consolidate` · `proposals` · `budgets` · `audit` · `export` · `import <path>` · `adapters` |",
+        "| `memory` | tool | add/replace/remove/consolidate/query with Save/Skip guidance; writes ride the approval gate |",
+        "| `memory_recall` | tool | Bounded memory matches plus recent session-history matches |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "node bin/mcp-server.mjs"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- **Session events are declared, not yet emitted (rc.2).** `memory/added|updated|removed|recalled|snapshot` are merge-declared, but rc.2 has no registration surface for out-of-repo event types",
+        "- **`ask` policy needs an answerer.** With no UI/ACP answerer composed, writes fail closed.",
+        "- **No FTS5 indexing.** Substring search runs on case-insensitive `instr` (correct for CJK).",
+        "- **Fail loud.** Corrupt DB, newer schema, or invalid config fails at load; full budgets and ambiguous substring matches fail with structured errors.",
+        "- **One process, one store.** Multiple sessions share the SQLite store; two processes sharing one `$DSH_HOME` write the same file (last-writer-wins under SQLite locking).",
+        "| Harness | DeepSeek Harness `0.1.1-rc.2` |",
+        "| Platforms | Windows / macOS / Linux (pure host; no native code, no network) |",
+        "npm test                 # node --test: 141 tests",
+        "**Read-only.** The database is opened with `node:sqlite` `readOnly: true` (no migrations, no WAL writes, no recall-count bump); a missing database returns empty results instead of crashing.",
+        "**uninstall**: `dsh plugin --profile web remove dsh-memento` (the memory database and session logs are kept)."
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or media; no paired input/output examples or concrete textual outputs beyond protocol prose.",
+        "How-it-differs table and PerryLink plugin-family list treated as marketing/linked-project content and excluded.",
+        "MCP server run is the only non-install code fence; adapter examples are data-format specs rather than operational commands."
+      ]
+    }
+  ]
+}

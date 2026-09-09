@@ -1,0 +1,312 @@
+[
+  {
+    "repo": "anysearch-team/anysearch-dsh",
+    "inferredType": "dsh-plugin",
+    "capability": [
+      "Advanced search can return cleaned page content on demand for deeper research."
+    ],
+    "usageItems": [
+      "For ordinary prompts, let Harness select the tool. Models can discover live domain and parameter definitions before making a specialized search."
+    ],
+    "usageActions": [],
+    "ioPairs": [],
+    "codeExamples": [
+      "ANYSEARCH_E2E=1 ANYSEARCH_E2E_ANONYMOUS=1 pnpm run test:e2e"
+    ],
+    "usecases": [
+      "Ordinary web search",
+      "Fetch and clean a specific URL",
+      "Discover available domains and tags | `anysearch_capabilities`",
+      "Vertical or parameterized search | `anysearch_search`",
+      "Run one to five searches together | `anysearch_batch_search`"
+    ],
+    "outputs": [
+      "Through Harness's built-in `web_search`, AnySearch returns results with titles, snippets, and URLs for easy citation.",
+      "Through Harness's built-in `web_fetch`, AnySearch Extract retrieves and cleans the content of a specific public HTTP(S) URL."
+    ],
+    "reliability": [
+      "Run one to five searches concurrently; an individual failure does not affect the other results.",
+      "DeepSeek Harness is in developer preview and may make compatibility-breaking changes.",
+      "URL extraction is exposed through Harness's provider-neutral `web_fetch`; the plugin does not add a duplicate `anysearch_extract` tool."
+    ],
+    "media": [],
+    "concerns": [
+      "Quick-start, API-key, plugin-management, and configuration instructions were excluded as install/config evidence.",
+      "Community QR images, logos, and badges were excluded as non-demonstrative media."
+    ]
+  },
+  {
+    "repo": "nutshellai-tech/mobius",
+    "inferredType": "standalone-nonplugin",
+    "capability": [
+      "Mobius rewrites itself from your input. Send a **change request**, a **screenshot**, or a **reference link** — Mobius turns them into real code, UI, plugins, or workflow updates, without interrupting your work.",
+      "Mobius orchestrates multiple agents into an autonomous research pipeline — reading papers, extracting methods, running experiments, and surfacing results.",
+      "Talk to it: create projects, split tasks, launch agents, track progress.",
+      "It supports voice input, multiple devices (Web, PC, mobile), and configurable reminders.",
+      "Mobius is model-agnostic. GPT, Claude, **GLM-5.2**, Codex — all serve as execution engines inside the same project. Choose by task type, cost, or performance.",
+      "Mobius schedules browsers, terminals, GPU clusters, embedded boards, cloud servers, and workstations — all inside the same task network.",
+      "Reach your resources through SSH, AIMUX, and controllable proxies:",
+      "Human members, AI agents, tasks, and deliverables in one view. Leads see who is doing what, where each agent is, what needs confirmation, and where risks exist — no more fragmented communication.",
+      "Mobius ships with built-in extensions and grows new ones from your needs — financial dashboards, PPT generators, research workbenches, live portals."
+    ],
+    "usageItems": [
+      "**Serve every scenario** — switch to the most convenient interface for the task at hand"
+    ],
+    "usageActions": [],
+    "ioPairs": [],
+    "codeExamples": [],
+    "usecases": [
+      "**On the web.** Zero install — open a browser on any device and the full Mobius workspace is ready instantly.",
+      "**On your phone.** XiaoMo goes wherever you go — chat with your agents, track progress, and approve decisions from anywhere. The iOS and Android apps are now fully available.",
+      "**On your desktop.** A native app that turns your PC into a Mobius workstation — read and write local project files directly, enroll this machine as a controllable node, and run multi-tab workflows.",
+      "Immersive Web Experiences",
+      "Financial News Wall",
+      "World Cup Portal",
+      "PPT Maker"
+    ],
+    "outputs": [
+      "A research goal becomes a multi-agent system, not a single Q&A.",
+      "Each extension comes with a frontend, backend handler, data directory, and an invocation entry point, ready to keep evolving.",
+      "Turn visual ideas into runnable extension apps.",
+      "Track live market narratives.",
+      "Data-rich sports portal.",
+      "Presentations from topics and materials."
+    ],
+    "reliability": [
+      "Available now on Windows, macOS, and Linux."
+    ],
+    "media": [
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-agent-os.gif\" alt=\"Self-evolving Agent OS demo\" width=\"480\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-research.gif\" alt=\"Auto Research demo\" width=\"480\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo.jpg\" alt=\"XiaoMo assistant interface\" width=\"720\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo-app.jpg\" alt=\"XiaoMo on mobile\" width=\"720\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/xiaomo-desktop-v2.png\" alt=\"XiaoMo desktop app\" width=\"720\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-team-collab.gif\" alt=\"Team collaboration demo\" width=\"480\" />",
+        "weight": 0.5
+      },
+      {
+        "excerpt": "<img src=\"https://serve.nutshellai.cn/publish/auto/readme/can-do-extensions.gif\" alt=\"Extensions demo\" width=\"480\" />",
+        "weight": 0.5
+      }
+    ],
+    "concerns": [
+      "News and Roadmap entries were excluded as changelog, future, or time-sensitive announcement evidence.",
+      "Quick Start fences were excluded because they are installation/configuration/deployment examples.",
+      "Externally hosted media were weighted 0.5; cover art and duplicate extension thumbnails were omitted."
+    ]
+  },
+  {
+    "repo": "hust-open-atom-club/oh-dsh",
+    "inferredType": "standalone-nonplugin",
+    "capability": [
+      "内置 Workspace、PTY 终端、浏览器、文件浏览、Side chat 与 Trajectory；面板可以折叠、固定、分屏或全屏展开。",
+      "查看工作区改动与 commit diff，在代码行上添加 review comment，并在同一个侧边栏完成分支、提交和推送操作。",
+      "Desktop、Web 与 TUI 都能检索、预览和安装插件，并共享同一套交易与恢复状态。",
+      "<code>@oh-dsh/skins</code> 为 Desktop、Web 与 TUI 提供统一主题，并针对各界面的布局和可读性分别适配。",
+      "模型服务仍可按需运行在云端；Workspace、终端、\nGit Review、浏览器、文件、会话与插件状态由本地工作台统一组织。",
+      "内置的 `@oh-dsh/vision` 为三端提供同一个 `view_image` 工具，让用户对 Workspace\n内的本地图片、HTTP(S) 图片或 image data URL 做 OCR、读图与界面诊断。"
+    ],
+    "usageItems": [
+      "使用同一个 <code>ohdsh</code> 命令启动 Desktop、Web 或 TUI。三端共享会话、凭据、皮肤与插件缓存，同时保留独立 Profile。",
+      "TUI 通过 Workspace\n图片路径或 URL 使用同一能力。",
+      "TUI 可输入 `/preset liangshen`。"
+    ],
+    "usageActions": [
+      "ohdsh desktop          # 启动 Oh-DSH Desktop",
+      "ohdsh gui              # Desktop 的启动别名",
+      "ohdsh web              # 启动 Oh-DSH Web",
+      "ohdsh web --port 3080  # 指定 Web 端口",
+      "ohdsh tui              # 启动 Oh-DSH TUI",
+      "TUI 可输入 `/preset liangshen`。"
+    ],
+    "ioPairs": [],
+    "codeExamples": [
+      "ohdsh desktop          # 启动 Oh-DSH Desktop"
+    ],
+    "usecases": [
+      "完整版 | **Oh-DSH Desktop**、Web、TUI、Node runtime 和内置插件 | 本地开发工作台",
+      "Web-only | **Oh-DSH Web**、Node runtime 和内置 Web 插件，不含 Electron | 浏览器、服务器或轻量安装",
+      "TUI-only | **Oh-DSH TUI**、Node runtime 和终端插件，不含 Electron | SSH 与纯终端环境",
+      "Release 资产适合需要手动选择包或离线分发的场景。"
+    ],
+    "outputs": [],
+    "reliability": [
+      "目录会标明插件实际生效的界面：安装可能在所有终端都成功，但某些插件只在 Web 或 Desktop 生效、在 TUI 不生效，界面上会明确区分。",
+      "三端默认共同使用 `~/.ohdsh` 存放缓存、配置、会话、凭据与插件状态。",
+      "插件在 Host 的最终图片\n能力校验处放行 DeepSeek V4，并在固定的 text-only 适配器序列化同一轮请求前，通过\n配置的视觉后端描述原生附件。不另加输入栏气泡或引用协议。"
+    ],
+    "media": [
+      {
+        "excerpt": "<img src=\"./assets/oh-dsh-desktop-readme.png\" alt=\"Oh-DSH Desktop 界面展示\" width=\"100%\">",
+        "weight": 1
+      },
+      {
+        "excerpt": "![Oh-DSH 插件市场](./assets/oh-dsh-plugin-marketplace.png)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![Oh-DSH 跨界面皮肤](./assets/oh-dsh-desktop-skins.png)",
+        "weight": 1
+      }
+    ],
+    "concerns": [
+      "下载、安装、源码构建、打包和设置卡片 instructions were excluded as install/config evidence.",
+      "README wraps several exact claims across lines; excerpts preserve those newline characters verbatim.",
+      "插件推荐 entries describe linked projects and were excluded under catalog ownership rules."
+    ]
+  },
+  {
+    "repo": "vlln/whale-girl",
+    "inferredType": "dsh-plugin",
+    "capability": [
+      "🎭 \"Switch Character\" cycles characters (or set `whale-girl:character` in localStorage); the button is **greyed out when the manifest has a single character** (\"No other characters available\")."
+    ],
+    "usageItems": [
+      "click for its menu (🍗 feed / 🎾 play), drag to move, hover for the status bar (seniority level / task count / recent shared memories).",
+      "🎭 \"Switch Character\" cycles characters"
+    ],
+    "usageActions": [
+      "Drag the pet",
+      "Menu 🍗 feed / 🎾 play",
+      "🎭 \"Switch Character\" cycles characters"
+    ],
+    "ioPairs": [
+      "Drag the pet | Stretched diagonally (`drag`)",
+      "Menu 🍗 feed / 🎾 play | Chomping / ball toss (`eat`/`play`) → joy (`joy`)",
+      "Idle ≥60s | Naps (`sleep`); wakes on interaction (`wake`)",
+      "Task done / level-up / title / round done | Cheers (`celebrate`)",
+      "Task failed / request error | Startled (`error`) → disappointed (`disappointed`)",
+      "New session | Waves welcome (`welcome`)",
+      "Session running / thinking | Pensive company (`think`, occasional `working`)",
+      "Awaiting approval | Expectant waiting (`wait`)"
+    ],
+    "codeExamples": [],
+    "usecases": [
+      "A desktop pet in the DSH Web GUI (QQ-pet style)",
+      "`desktop/` is a **standalone companion app** (Node engine + Tauri shell, zero runtime deps) that keeps the whale girl resident on your OS desktop."
+    ],
+    "outputs": [
+      "A persistent companion floating bottom-right: draggable, feedable, playable —",
+      "the pet appears bottom-right"
+    ],
+    "reliability": [
+      "Hidden on onboarding pages.",
+      "the in-page pet hides while it runs (presence contract) and returns after exit/crash (TTL 45s).",
+      "Shell: Tauri v2 (recommended, ~12MB); legacy Electron shell kept (`npm i -D electron`).",
+      "changes **apply live, no restart**:",
+      "**Not configurable** (changing XP / title thresholds would break the accumulation ledger).",
+      "Every character ships **all 15 states**"
+    ],
+    "media": [
+      {
+        "excerpt": "![idle](docs/preview/idle.gif)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![working](docs/preview/working.gif)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![celebrate](docs/preview/celebrate.gif)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![error](docs/preview/error.gif)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![joy](docs/preview/joy.gif)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![sleep](docs/preview/sleep.gif)",
+        "weight": 1
+      }
+    ],
+    "concerns": [
+      "Installation, update, desktop build/run, and configuration examples were excluded.",
+      "State Preview contains 15 distinct local GIFs; media was capped at weight 6, so six representative states were retained.",
+      "Usage event/behavior rows are structural ioPairs; overlapping state GIFs are allowed structural media evidence."
+    ]
+  },
+  {
+    "repo": "liustack/modsearch",
+    "inferredType": "dsh-plugin",
+    "capability": [
+      "**Automatic failover.** When a channel fails or exhausts its quota, the next one takes over.",
+      "**Per-engine key rotation.** Give Tavily, Exa, or Firecrawl multiple comma-separated keys.",
+      "Authentication, rate-limit, and quota failures rotate to the next key before the engine chain falls back.",
+      "**Searches X (Twitter).** With Grok Build installed, ModSearch queries the corpus that web indexes cannot reach.",
+      "Install once, use everywhere.** Works in Claude Code, Codex, Pi, and OpenCode."
+    ],
+    "usageItems": [
+      "Once installed, you do not need to remember any commands. Just chat.",
+      "Ask anything that needs checking, or paste a URL, and the skill triggers on its own: it picks an engine, runs the search or fetch, and the answer comes back with sources."
+    ],
+    "usageActions": [
+      "Just chat.",
+      "Ask anything that needs checking, or paste a URL"
+    ],
+    "ioPairs": [],
+    "codeExamples": [],
+    "usecases": [
+      "Give it a blog link and ask what the post says.",
+      "Give it no target at all, just \"anything interesting in AI today?\".",
+      "Ask dsh web for today's top AI stories.",
+      "Ask which Node.js line is still in maintenance."
+    ],
+    "outputs": [
+      "Twenty-five seconds later: a structured summary of the whole post, with no browser involved.",
+      "Thirty-six seconds later: six sourced stories, with a closing note on which details came from aggregation and deserve a second look.",
+      "eighteen seconds later three stories come back, each with a source link.",
+      "sixty seconds later the verdict arrives with a version status table and sources at the end.",
+      "the answer comes back with sources."
+    ],
+    "reliability": [
+      "Every engine participates by default.",
+      "Official endpoints stay built into the code and are never written as default config.",
+      "This repo does not accept pull requests. The project is maintained by the author alone.",
+      "ModSearch is MIT-licensed, so use is not restricted. The author gives no warranty and no endorsement for any particular use, commercial or otherwise.",
+      "The upstream engines it drives (Antigravity CLI, Tavily, Exa, Firecrawl, Grok Build) each carry their own terms and quotas, and complying with them is the user's responsibility."
+    ],
+    "media": [
+      {
+        "excerpt": "![Text-only DeepSeek summarising a blog link through ModSearch](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-codex-fetch.png)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![An open-ended question comes back as six sourced stories with a stated confidence caveat](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-codex-search.png)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![dsh web's native search running on the modsearch engine chain, returning three sourced stories](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-dsh-web-search.png)",
+        "weight": 1
+      },
+      {
+        "excerpt": "![read_page reading two pages and returning the Node.js maintenance verdict](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-dsh-web-fetch.png)",
+        "weight": 1
+      }
+    ],
+    "concerns": [
+      "Install, engine-enablement, key, endpoint, and settings-card instructions were excluded as install/config evidence.",
+      "The paired scenario/result prose is split across sentences, so ioPairs were omitted rather than reconstructed.",
+      "Banner, badges, QR code, star-history chart, free-tier marketing, and popularity claims were excluded."
+    ]
+  }
+]

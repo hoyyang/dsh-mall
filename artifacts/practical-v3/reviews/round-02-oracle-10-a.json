@@ -1,0 +1,253 @@
+{
+  "reviews": [
+    {
+      "repo": "Aisland-SJL/dsh-worktable",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Collects your self-hosted projects (and resident plugins like dsh-travelatlas) in one place",
+        "Rename / icon / reorder / hide each project; per-project folder; **project ↔ conversation binding** — opening a project switches the chat pane to its bound conversation",
+        "Collapse the sidebar and every project becomes a tappable square tile (icon only)",
+        "Declarative layout presets (left column / top row / main grid + right chat pane)",
+        "Draggable dividers, per-pane tabs, per-layout width persistence",
+        "Built-in panes: **file explorer, terminal, browser, animation site, custom window**",
+        "A pinned, undeletable first project — bind one management conversation on first open",
+        "3-column card grid mirrors **every** project: working / needs you / done with live runtime, subagent counts and a cleaned message preview",
+        "Event-driven host snapshot mirroring — **zero polling, zero tokens**",
+        "Glassmorphism cards, dark / light / system theme, neon status glows and a rotating comet on busy cards"
+      ],
+      "usageItems": [
+        "**Open the control room**: click the pinned 🖥️ control-room card → bind one conversation (join existing or create new) → you get the live card grid",
+        "**Create projects**: sidebar ＋ → pick a layout preset, set a project folder"
+      ],
+      "usageActions": [
+        "**Open the control room**: click the pinned 🖥️ control-room card → bind one conversation (join existing or create new) → you get the live card grid",
+        "**Create projects**: sidebar ＋ → pick a layout preset, set a project folder"
+      ],
+      "ioPairs": [
+        "Custom window: send a requirement to a new or existing conversation; the agent builds it and the result auto-mounts into the window (locked)"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "Custom window: send a requirement to a new or existing conversation; the agent builds it and the result auto-mounts into the window (locked)"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/shot-2-console.png\" width=\"1080\" alt=\"Control room\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/shot-1-sidebar.png\" alt=\"Worktable sidebar\" width=\"1080\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/shot-3-workspace.png\" alt=\"Split workspace\" width=\"1080\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**Build must run inside `01_content`** — building from the repo root writes `lib/` to the wrong place while the host keeps loading the old bundle",
+        "Regression: `04_test/functional-diag.cjs` (20 steps, strict gate) plus targeted probes (control room, bind panel, collapsed rail, model inheritance)",
+        "**Platform**: Windows is the fully tested platform. macOS support is experimental: the core file-path code has been adapted for cross-platform use, but no end-to-end test has been completed on macOS hardware.",
+        "State lives in the browser (`localStorage`) — projects, bindings and views do not sync across machines",
+        "The terminal pane is a plain PowerShell host on Windows (no PTY feature parity with the native terminal app)",
+        "Auto-mount requires the agent to actually write `widget-result.json` in the project folder",
+        "The control room monitors projects that are **bound** to a conversation; unbound projects show as idle",
+        "No telemetry, no network calls beyond the host APIs and the plugin routes."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Han-1413141/dsh-cost-meter",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 本会话费用 | 输入区下方 / 会话标题栏 | 实时累计费用 + 输入/缓存/输出 token,位置可配 |",
+        "| 官方余额 | 侧边栏顶部 / 设置页(可配) | 总余额 / 赠送 / 充值,自动刷新 + 手动刷新;可选三段进度条(蓝/橙/灰),当日段只统计官方渠道费用(不含 Coding Plan / 自定义 Provider) |",
+        "可配置 HTTP 查询任意 Provider 余额(LiteLLM 等);中/英名称、币种、extract 规则(点路径 / 数字常量 / add / subtract / divide,divide 适配 NewApi 等 quota 端点",
+        "滚动 5 小时 / 本周 / 本月用量百分比与重置时间,三档可分别开关,可同时显示预算已用%",
+        "多厂商 coding plan 订阅额度查询(Anthropic Claude Pro/Max、Z.ai/智谱 GLM、MiniMax Token Plan、Kimi Code 本周/5 小时配额",
+        "| 预算图框 | 侧边栏底部(余额行与设置按钮之间) | 圆角方形图框:预算、已用%、进度条、今日费用与占预算%、已用/额度,≥80% 预警、≥100% 超支 |",
+        "| Token 用量统计 | 设置页(费用设置) | 历史累计 token 总量(输入/缓存/输出/调用)+ 类 Codex 的 26 周每日用量方格热图,横向铺满设置页宽度,悬停见当日明细 |",
+        "各已启用 Coding Plan(含 Go)当前窗口的「每 1% 额度」与「满窗 100%」对应的 token 数与等值金额估算(采样差分/当前用量折算),附每日/每周/每月用量曲线",
+        "| 历史按模型统计回填 | 设置页(按模型统计) | 按模型统计上线前的旧账本自动回放宿主会话日志重建逐模型 token/费用拆分(旧调用按当时基础价),日志已清理的部分归入「早期未分模型」残差行 |",
+        "安装/升级后首次启动自动回放宿主全部会话日志,把未装插件时期的对话导入账本(缺失日期整日重建,已有日期只补未知会话,幂等不与实时计费重复;金额按事件时刻历史价回推)",
+        "距进入峰/谷时段不足设定提前量(默认 2 分钟,1-30 可配)时全屏色条徽标弹窗(提醒色区分进入峰/谷);弹窗位置可选**右下角 / 屏幕中心**,提醒类型可选(进入峰 / 进入谷 / 峰和谷),同一切换点只提醒一次",
+        "| 官方价格同步 | 设置页 | 抓取解析官方定价页,一键应用;可选**官方价格币种**(美元·英文官方页 / 人民币·中文官方页),人民币价按展示汇率折算入账、展示人民币时与官方账单一致 |"
+      ],
+      "usageItems": [
+        "点击任意 chip 即刷新对应数据源(budget→状态、Go→Go 额度、厂商→该家全部窗口)",
+        "键盘 Enter/Space 可触发",
+        "设置页保留手动重跑入口",
+        "并可**一键预览弹窗效果**(真实组件渲染,文案/位置/通知与实际触发完全一致)",
+        "删除账本文件即可清零,或使用设置页「清除全部历史」。"
+      ],
+      "usageActions": [
+        "点击任意 chip 即刷新对应数据源(budget→状态、Go→Go 额度、厂商→该家全部窗口)",
+        "键盘 Enter/Space 可触发",
+        "设置页保留手动重跑入口",
+        "并可**一键预览弹窗效果**(真实组件渲染,文案/位置/通知与实际触发完全一致)",
+        "删除账本文件即可清零,或使用设置页「清除全部历史」。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "适合官方价格变动时自主同步。"
+      ],
+      "outputs": [
+        "每个会话的调用次数、输入/缓存/输出 token 与费用",
+        "按天汇总,保留天数可配(默认 180 天)"
+      ],
+      "media": [
+        {
+          "excerpt": "![侧边栏底部](docs/screenshot-sidebar-footer.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![自定义 Provider 配置](docs/screenshot-custom-balance-settings-zh.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![峰谷计价与提示面板](docs/peak-panel-settings-zh.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![会话 dock](docs/screenshot-session-dock.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Token 用量统计](docs/screenshot-usage-grid.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![今日会话](docs/screenshot-table-1.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**历史计费正确性**:2026-08-16 16:00 UTC(峰谷时代分界)之前的调用按当时的基础价计费,之后的调用按峰谷两档;",
+        "计费来源为每次模型调用的 usage 块(含子代理、压缩、标题等辅助调用),与账单口径一致;",
+        "预算与超支提示**仅提醒,不阻止调用**。",
+        "账本:`$DSH_HOME/storages/cost-meter/ledger.json`(原子写入 + 2 秒防抖;按 `historyDays` 保留,每日最多 200 个会话明细);",
+        "解析结果写入价格表并持久化;页面结构变化时同步报错并保留原价格,可手动编辑兜底。",
+        "历史按模型回填依赖宿主会话日志仍在盘:日志已被清理的早期调用无法逐模型重建,只能以「未分模型」残差行计入当日合计;",
+        "**API Key 只会发往官方域名**(baseURL 指向非官方域名时余额查询拒绝请求,模型请求不受影响)",
+        "OpenCode Go 额度接口为 opencode.ai 官方端点(社区文档);接口结构变化时设置页会显示错误,可在显示设置中关闭该显示;",
+        "Token Plan 统计的「每 1% 额度/满窗」为估算值:各家额度接口只返回百分比且读数存在个位级量化(显示 1% 的真实值可能在 0.5%~1.5%)",
+        "Plan/API 双轨分类基于渠道与配置推断,混合订阅/按量使用同一厂商 Key 的场景(如 Kimi 订阅 + PAYG 混用)可在设置中按 provider:model 手动覆盖。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Dominic789654/awesome-deepseek-harness",
+      "inferredType": "catalog-list",
+      "capability": [
+        "A curated list of **plugins, skills, MCP servers, patch/profile layers, orchestrators, aggregators & UIs** for **DeepSeek Harness (DSH)**",
+        "DeepSeek asks plugin repositories to carry the **`#dsh`** GitHub topic so they can be discovered."
+      ],
+      "usageItems": [
+        "Add one entry under the most fitting category, format:",
+        "Keep the list alphabetical within each section where practical."
+      ],
+      "usageActions": [
+        "Make sure your repo carries the **`#dsh`** GitHub topic.",
+        "Add one entry under the most fitting category, format:",
+        "Keep the list alphabetical within each section where practical.",
+        "One PR per logical change; keep descriptions factual and hype-free."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness ecosystem map](./assets/dsh-ecosystem.svg)",
+          "weight": 1
+        }
+      ],
+      "reliability": [],
+      "concerns": [
+        "Linked projects' capabilities, commands, media, and reliability were excluded under catalog ownership rules; popularity data was ignored."
+      ]
+    },
+    {
+      "repo": "Inference1/clarify-intent-and-establish-shared-understanding",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "systematically examines and refines a user's plan, decision, goal, strategy, proposal, or idea before consequential actions are taken.",
+        "Its purpose is to establish a precise and shared understanding of the user's intent, objectives, constraints, priorities, assumptions, dependencies, risks, trade-offs, and measurable criteria for success.",
+        "It achieves this through adaptive and progressively deeper questioning, posing exactly one high-leverage, decision-focused question at a time.",
+        "Throughout this process, it distinguishes among facts, assumptions, hypotheses, and unknowns; identifies contradictions and information gaps; directly verifies available facts;",
+        "periodically synthesizes the emerging shared understanding."
+      ],
+      "usageItems": [
+        "introducing a deliberate `/clarify-intent-and-establish-shared-understanding` step before an agent initiates task execution."
+      ],
+      "usageActions": [
+        "`/clarify-intent-and-establish-shared-understanding`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "The SKILL is triggered when the user explicitly requests rigorous scrutiny, such as **grilling, challenging, pressure-testing, cross-examination, red-team review, pre-mortem analysis, or a decision audit**.",
+        "This skill is especially valuable when the quality of an outcome depends on accurately defining the problem before taking action.",
+        "It is intended for decisions, plans, strategies, proposals, and goal-setting processes"
+      ],
+      "outputs": [
+        "the process transforms ambiguous or insufficiently supported reasoning into a coherent, evidence-informed, constraint-sensitive, and actionable framework for goal forge."
+      ],
+      "media": [],
+      "reliability": [
+        "The process continues until the reasoning is coherent, grounded in available evidence, responsive to relevant constraints, informed by an explicit assessment of risks, actionable, and confirmed by the user."
+      ],
+      "concerns": [
+        "The README contains no non-install runnable operational example or explicit paired input/output example."
+      ]
+    },
+    {
+      "repo": "zenstory-ai/oh-story-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "插件提供创作 Skills、专业 Roles、项目协议与三栏工作台。",
+        "内置 Drama Skills 0.6.0 的 creator-first 工作流。",
+        "**原生三栏布局**：项目文件树、编辑器与官方 Chat 同屏，Trajectory、工具执行、Todo、审批和 Composer 保持 DSH 原生交互。",
+        "**实时文件跟随**：Agent 调用官方文件工具时，目标文件自动定位，编辑器同步呈现生成中的内容。",
+        "**Chat 文件导航**：点击官方 Chat 中的作品文件名，文件树会定位并在编辑器打开对应文件。",
+        "**创作文档预览**：Markdown 支持标题、表格、任务列表、引用和代码块；JSONL 以带行号、类型和状态的结构化记录呈现。",
+        "**稳定长对话**：消息区独立滚动，官方 Composer 固定在 Chat 栏底部。",
+        "13 个 Oh Story Skills 与 7 个专业 Roles 按固定上游版本随插件交付。"
+      ],
+      "usageItems": [
+        "添加作品目录为 workspace，新建或打开 Session 后使用 `/story` 或 `/short-drama`。小说与短剧工作台可随时通过左栏 Tab 切换。"
+      ],
+      "usageActions": [
+        "添加作品目录为 workspace，新建或打开 Session 后使用 `/story` 或 `/short-drama`。小说与短剧工作台可随时通过左栏 Tab 切换。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "覆盖长篇、短篇、选题、扫榜、拆文、导入、审稿、去 AI 味与封面流程。"
+      ],
+      "outputs": [
+        "每集按请求维护最多五份可读 Markdown：`剧本.md`、`视觉设定.md`、`分镜.md`、`图片提示词.md`、`视频提示词.md`"
+      ],
+      "media": [
+        {
+          "excerpt": "![oh-story-dsh 小说工作台](docs/images/oh-story-dsh-demo.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![oh-story-dsh 短剧工作台](docs/images/short-drama-dsh-demo.gif)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "不预建空文档，也不倒补用户未点名的阶段。",
+        "审查与生产交付继续使用 DSH 原生工具、权限和确认界面。",
+        "Drama Skills 0.6.0 是破坏性升级：v0.5 结构化项目应继续锁定 v0.5 并只读保留；迁移时新建项目根，逐集人工确认当前工作所需文档，不要在同一目录混用旧 JSON/JSONL 与新文档。",
+        "**安全编辑**：支持源码编辑与快捷保存；人工未保存内容不会被并发 Agent 修改覆盖。",
+        "模型、凭据与权限均由 DSH 管理，本插件不接触。"
+      ],
+      "concerns": []
+    }
+  ]
+}

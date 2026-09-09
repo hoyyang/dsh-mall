@@ -1,0 +1,238 @@
+<!-- Brand assets: placeholder art in THIS repo's assets/, referenced by
+     repo-relative path so the rendered README always shows what is on the
+     default branch.
+
+     Previously these were jsDelivr URLs pinned to a commit SHA. That made
+     the page a snapshot of a commit rather than of the branch: editing an
+     SVG changed nothing until someone also rewrote the @<sha>, and twice
+     nobody did (#412, then #415 — whose hero recolour merged and then sat
+     unrendered behind a stale pin).
+
+     Relative paths remove that failure mode: replace the SVG file CONTENTS
+     (same filenames), commit, done. There is no second step to forget.
+
+     If a mark ever needs to be pinned deliberately — quoting old artwork,
+     or a link that must survive a rename — pin that ONE url and say why
+     here. Do not reintroduce a blanket pin. -->
+
+<div align="right">
+  <a href="#"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/OpenCues_logo-dark.svg"><img width="180" alt="OpenCues" src="assets/OpenCues_logo-light.svg"></picture></a>
+</div>
+
+<br><br>
+
+<div align="center">
+  <a href="#"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/Hero-dark.svg"><img width="600" alt="OpenCues" src="assets/Hero-light.svg"></picture></a>
+</div>
+
+<br><br>
+
+#
+
+<p align="left"><a href="#"><img width="120" alt="Associations:" src="assets/associations.svg"></a><a href="https://www.reddit.com/user/inventor_black/" target="_blank" rel="noopener noreferrer"><img width="257" alt="Mod of r/ClaudeAI" src="assets/mod.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="https://luma.com/OpenSourceIRL" target="_blank" rel="noopener noreferrer"><img width="161" alt="OpenSourceIRL" src="assets/open-source-irl.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="https://wilfred.md" target="_blank" rel="noopener noreferrer"><img width="211" alt="Anthropic Ambassador" src="assets/anthropic-ambassador.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="https://wilfred.md" target="_blank" rel="noopener noreferrer"><img width="207" alt="Cerebras Ambassador" src="assets/cerebras-ambassador.svg"></a></p>
+
+<br><br><br>
+
+<!-- npm badge — hidden until announce; uncomment to show:
+[![npm](https://img.shields.io/npm/v/opencues)](https://npmjs.com/package/opencues) -->
+
+**Turn any text field into a two-way LLM channel.** It reads what you write and fills what you ask: catching a slip as you type, or answering the moment you end a line with `_`. A drop-in for Claude Code, OpenCode, Gemini CLI, your shell, and Chrome. Model-agnostic, output you review before it sends, an open standard with no chat window.
+
+The model comes to your cursor, both ways. **Cues** react to what you've already written and surface a fix or a sharper line inline, unprompted. **Blanks** act on demand: end a line with `_` and the model fills in the rest. No chat window, no copy-paste, no context switch.
+
+<!-- Slot 1, the hero. ONE span asked four times - a brief written, rewritten
+     in place, grown, then translated - and every answer walkable back through
+     `_`. Then a fresh line the runtime WIPES rather than fills, because the
+     buffer holds nothing but the question.
+
+     Every answer is the product's own, captured through the runtime's own
+     fused transform-blank prompt at the product's settings (cerebras
+     gemma-4-31b, temperature 0, seed 42) and pinned by a capture file, so
+     the film fails its gate if the values ever stop being what the product
+     says: opencues-web `artifact-kit/layouts/solo/captures/`.
+
+     Cut from two `layouts/solo` configs joined at the step level
+     (`solo/join-readme-hero.py`), not hand-authored: a bare terminal block
+     on transparency, no catalog wrapper and no frame, so it sits on
+     whichever ground GitHub renders the README in. The earlier
+     `films/readme-hero-live.py` cut of this is deprecated - it hand-wrote
+     its states, which is the one thing that system exists to prevent.
+
+     Every answer GLIMMERS in - the 140ms blink then the 70ms churn easing
+     0.45 to 0.15, glimmer-render.ts's own recipe at the product's default
+     900ms - because since v0.7.8 that is how a substitution lands on every
+     host, and a film whose answer hard-cuts is showing something the
+     product no longer does. Derived, not opted into: the kit emits it on
+     every blank `resolved` (opencues-web artifact-kit, derive.py `_glim`). -->
+<img width="100%" alt="One prompt improved, rewritten as a senior engineer would, grown with a security paragraph, translated to Japanese - then an ffmpeg command answered on a fresh line" src="assets/readme-1-hero.webp">
+
+OpenCues is platform, model, and provider agnostic, engineered from the ground up to enable native inline AI.
+
+| You type | You get |
+|---|---|
+| let's ship it Thursday the 19th | ↳ the 19th is a Friday |
+| we should probably go ahead and refactor this | ↳ we should refactor this |
+| hey can u send me that report when u get a sec make this formal _ | Could you please send me that report at your earliest convenience? |
+| 4 + 4 = _ | 4 + 4 = 8 |
+| hello world translate to japanese _ | こんにちは世界 |
+| draft an email to my landlord asking for a rent reduction _ | (the email, written) |
+| ffmpeg command to convert a video to web-ready mp4 _ | ffmpeg -i input.mov -vcodec libx264 -crf 23 -pix_fmt yuv420p -acodec aac output.mp4 |
+
+Rows with `_` are **blanks**: you ask, the model fills in. Rows without are **cues**: the model speaks up on what you wrote, no prompt.
+
+#
+
+<p align="left"><a href="LICENSE"><img width="216" alt="Apache-2.0 License" src="assets/license.svg"></a><a href="spec/README.md"><img width="157" alt="Open Standard" src="assets/Ownership-05.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="spec/blank-spec.md"><img width="121" alt="Blanks.md" src="assets/Ownership-06.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="spec/cue-spec.md"><img width="112" alt="Cues.md" src="assets/Ownership-07.svg"></a></p>
+
+<br><br><br><br>
+
+# Quickstart
+
+```bash
+npm install -g opencues              # needs Node 22+ and git
+opencues set-key cerebras csk-...    # cerebras.ai — free tier, lowest latency
+opencues install claude-code         # or: opencode | gemini-cli | chrome | shell | dsh
+claude-cues                          # launch — native `claude` is untouched
+```
+
+Full walkthrough, prerequisites, and per-host detail: [`docs/install.md`](docs/install.md). `opencues doctor` diagnoses anything that looks wrong.
+
+<!-- Slot 2, the cues half. Nothing is pressed to make these appear.
+     film29. -->
+<img width="100%" alt="A Claude Code tip cue, then Slack catching a date that does not exist" src="assets/readme-2-cues.webp">
+
+#
+
+<p align="left"><a href="docs/guides/cli-reference.md#the-5-youll-actually-use"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/opencues-cli-dark.svg"><img width="178" alt="OpenCues CLI" src="assets/opencues-cli-light.svg"></picture></a><a href="docs/features/README.md"><img width="109" alt="Features" src="assets/features.svg"></a></p>
+
+<br><br><br><br>
+
+# Integrations
+
+| Host | Status | Install |
+|---|---|---|
+| Claude Code | Available | `opencues install claude-code` |
+| OpenCode | Available | `opencues install opencode` |
+| Gemini CLI | Beta | `opencues install gemini-cli` |
+| Chrome | Beta | `opencues install chrome` |
+| Shell | Beta | `opencues install shell` |
+| DeepSeek Harness | Beta | `dsh plugin --profile web add @opencues/dsh` |
+
+Each pins its own upstream fork and never touches your native host install.
+DeepSeek Harness is the exception: it has a real plugin system, so there is no
+fork to pin and no OpenCues CLI step — see
+[`integrations/dsh/README.md`](integrations/dsh/README.md).
+
+> ⚠️ **Windows**: not supported natively, run inside WSL2 (see [`docs/install.md`](docs/install.md)).
+
+#
+
+<p align="left"><a href="#integrations"><img width="91" alt="Supports:" src="assets/supports.svg"></a><a href="integrations/opencode/README.md"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/Supports-09-dark.svg"><img width="129" alt="OpenCode" src="assets/Supports-09-light.svg"></picture></a><img width="24" alt="" src="assets/spacer.svg"><a href="integrations/claude-code/README.md"><img width="144" alt="Claude Code" src="assets/Supports-10.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="integrations/gemini-cli/README.md"><img width="126" alt="Gemini CLI" src="assets/Supports-11.svg"></a><img width="24" alt="" src="assets/spacer.svg"><a href="integrations/chrome/README.md"><img width="130" alt="Chrome" src="assets/chrome.svg"></a><a href="integrations/shell/README.md"><img width="82" alt="Shell" src="assets/shell.svg"></a></p>
+
+<br><br><br><br>
+
+# What you get
+
+| Feature | What it does |
+|---|---|
+| **Blanks** | Type `_` for free-form generation, translation, formatting, full rewrites, or keyword-bound system actions (`volume _`, `weather _`). |
+| **Sentence rewrites** | Cycle a whole sentence to a different register (formal, concise, ...) seamlessly, no `_` needed. |
+| **Word cues** | Navigate to a single word and cycle a smaller LLM-suggested alternative. |
+| **Live actuators** | `volume _` reads the real level and leaves a knob you can turn: `Ctrl+Alt+↑/↓` or a bare `_` moves it, and the device follows. |
+| **Dismissing a cue** | A cue that only tells you something can be silenced from its own note: `_` once quiets it for a while, `_` again forgets it for good. `opencues dismissals` lists what you forgot and turns any of it back on. |
+| **Session-contradiction cues** (opt-in) | Flags a draft that goes against a decision made earlier in the same coding session, on any host with a transcript. |
+| **Ask-cues** (opt-in) | Turns a vague sentence into an inline question with cyclable answers, using the assistant's own clarifying prompt. |
+| **Personal + ambient context** (opt-in) | `my email _` substitutes your real address; fluid lookups can read the page you're on. |
+| **Hot-reload** | Every `.md` config picks up edits in ~2s, no restart. |
+
+Full feature catalogue (44 concepts): [`docs/features/README.md`](docs/features/README.md).
+Running a lot of these at once? `opencues usage` prices every LLM call your
+hosts have made, across features, so the total isn't a guess.
+
+<!-- Slot 3. The blanks that call nothing at all, ending on one that
+     writes back to the machine. Cut from three `layouts/solo` block configs
+     joined at the step level (`solo/join-readme-local.py`), replacing the
+     film30 film-runner cut: the layouts system carries the landing glimmer
+     (see the hero's comment) and the derivation fixed a film30 truth bug -
+     `btc _` is a bare keyword get, so the product KEEPS the label
+     (`btc BTC: $78,018.00`); film30 wiped it. Values are film30's own
+     captured set, carried as data. -->
+<img width="100%" alt="A price, a forecast, and a system volume you can turn - none of them asking a model" src="assets/readme-3-local.webp">
+
+<br><br><br><br>
+
+# Configuration & LLM providers
+
+<div align="center">
+  <a href="#"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/Hero-2-dark.svg"><img width="600" alt="OpenCues" src="assets/Hero-2-light.svg"></picture></a>
+</div>
+
+<br>
+
+Config lives at `~/.cues/` — one `OPENCUES.md` for runtime settings, plus per-surface source folders. Seven providers supported; set an env key or `opencues set-key` and you're done.
+
+Full reference: [`docs/configuration.md`](docs/configuration.md) · [`docs/guides/llm-providers.md`](docs/guides/llm-providers.md) (switching provider/model, free mode, failover).
+
+#
+
+<img width="92" alt="Providers:" src="assets/providers.svg"><a href="https://cloud.cerebras.ai" target="_blank" rel="noopener noreferrer"><img width="200" alt="Cerebras Systems" src="assets/cerebras-systems.svg"></a><a href="https://groq.com" target="_blank" rel="noopener noreferrer"><img width="107" alt="Groq" src="assets/groq.svg"></a><a href="https://ai.google.dev" target="_blank" rel="noopener noreferrer"><img width="122" alt="Gemini" src="assets/gemini.svg"></a><a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer"><img width="141" alt="Anthropic" src="assets/anthropic.svg"></a><a href="https://openai.com" target="_blank" rel="noopener noreferrer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/openai-dark.svg"><img width="102" alt="OpenAI" src="assets/openai-light.svg"></picture></a>
+
+<br><br><br><br>
+
+# Security
+
+OpenCues has no tool handlers or exec layer for LLM output — no MCP-tool execution, no agentic actions, no side-effect channel. Worst-case, an LLM response lands as user-visible text in the buffer you review before submitting. That single invariant is what keeps prompt injection a UX failure instead of a data-exfiltration channel, across every surface below.
+
+23 of 27 tracked attack classes closed, 3 closed-with-caveat, 1 tracked for the future pack registry ([full audit table](docs/architecture/security-audit.md)).
+
+| Defense | What it covers |
+|---|---|
+| Sandbox isolation | Third-party blank JS runs in a real V8 isolate (`isolated-vm`) — its own realm, own intrinsics, no sandbox-escape via constructor-chain pivots |
+| Capability gates | A blank only gets `network`/`llm`/`storage`/`secrets` access if declared; secrets without a matching host binding are refused at load time |
+| Resource quotas | Sliding-window caps on fetches, LLM calls, and storage writes — no polling hammer, no runaway LLM burn |
+| Output sanitization | Blank output is stripped of HTML/script tags, zero-width chars, and bidi overrides before it reaches the buffer |
+
+Check a pack before trusting it:
+
+```bash
+opencues review ./untrusted-pack/
+```
+
+Full threat model: [`docs/architecture/security-audit.md`](docs/architecture/security-audit.md). Reporting a vulnerability: [`SECURITY.md`](SECURITY.md).
+
+<br><br><br><br>
+
+# Contributing
+
+<div align="center">
+  <a href="#"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/Hero-3-dark.svg"><img width="600" alt="OpenCues" src="assets/Hero-3-light.svg"></picture></a>
+</div>
+
+<br>
+
+| What | Where |
+|---|---|
+| New host integration | [`docs/guides/adding-an-integration.md`](docs/guides/adding-an-integration.md) |
+| New cue/blank | [`docs/guides/adding-a-cue-blank.md`](docs/guides/adding-a-cue-blank.md) |
+| Working on the reference runtime | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| New to the terms | [`docs/glossary.md`](docs/glossary.md) |
+
+Join the community — questions, feedback, and the people building alongside you. We're also part of [OpenSourceIRL](https://luma.com/OpenSourceIRL), a community for people building in the open.
+
+#
+
+<p align="left"><img width="85" alt="Community:" src="assets/Community-12.svg"><img width="24" alt="" src="assets/spacer.svg"><a href="https://github.com/opencues/opencues/graphs/contributors"><img width="161" alt="Contributors" src="assets/contributors.svg"></a><a href="https://x.com/openCues_" target="_blank" rel="noopener noreferrer"><img width="142" alt="X / Twitter" src="assets/x-twitter.svg"></a><a href="https://www.reddit.com/r/OpenCues/" target="_blank" rel="noopener noreferrer"><img width="118" alt="Reddit" src="assets/reddit.svg"></a><a href="https://www.instagram.com/opencues/" target="_blank" rel="noopener noreferrer"><img width="117" alt="Instagram" src="assets/instagram.svg"></a></p>
+
+<!-- TODO[community]: add Discord + GitHub Discussions once live (tracked in .internal/pre-launch-readme.md) -->
+
+<br><br><br><br>
+
+# License
+
+[Apache License 2.0](LICENSE).
+
+<br><br><br><br>
+
+#
+
+<p align="left"><img width="75" alt="Design" src="assets/design.svg"><a href="https://jbrandford.com" target="_blank" rel="noopener noreferrer"><img width="128" alt="Author" src="assets/j-brandford.svg"></a></p>

@@ -1,0 +1,361 @@
+{
+  "reviews": [
+    {
+      "repo": "Unclecheng-li/DeepSec",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "| **L1** | 幻觉包、硬编码密钥、不安全配置、AI 错误模式 | < 50ms | 正则 + 熵分析 + 种子目录 |",
+        "| **L2** | SQL 注入、XSS、SSRF、路径穿越、命令注入 | < 2s | Tree-sitter WASM AST 分析 |",
+        "| **L3** | 缺失认证/限流/校验等语义漏洞 | < 5s | LLM（DeepSeek/Claude/OpenAI/Ollama）+ 本地启发式兜底 |",
+        "- **Recon → Explore → Fact → Reflect → Report → PoC** 全流程自动化",
+        "- 40+ 内置技能包（nmap、dirsearch、subfinder、nuclei、sqlmap、ffuf、httpx、feroxbuster）",
+        "- 三面板布局：工作区侧边栏 · 会话记录 · 漏洞检查器",
+        "- Plan / Agent / YOLO 模式切换",
+        "- Side-Git 快照（随时创建/恢复代码状态）",
+        "- 会话持久化（Ctrl+S 保存 / Ctrl+R 恢复）",
+        "DeepSec 内置 MCP（Model Context Protocol）Server，可被 Claude Desktop、Cursor 等 MCP 客户端调用："
+      ],
+      "usageItems": [
+        "# 扫描项目（L1 + L2，离线）\ndeepsec shield scan ./src",
+        "# Agent 配置审计\ndeepsec shield agent-audit ./agent-config",
+        "# 供应链安全检查\ndeepsec shield supply-chain check .",
+        "# 2. 运行渗透测试（目标必须在白名单内）\ndeepsec spear run https://authorized-target.example --authorized ./scope.json",
+        "# 3. 仅侦察阶段\ndeepsec spear recon https://authorized-target.example --authorized ./scope.json",
+        "在 TUI 命令行（底部 `> ` 提示符）输入：\n\n```\n/scope add https://your-authorized-domain.com",
+        "- 查看当前白名单：`/scope list`",
+        "- 移除目标：`/scope remove https://your-authorized-domain.com`",
+        "- 按 `Tab` 在 **Plan / Agent / YOLO** 执行模式间切换（YOLO 为全自动，无需逐步确认）。",
+        "- 按 `Y` 确认授权校验并启动；按 `Esc` 取消。"
+      ],
+      "usageActions": [
+        "| `/shield scan` | 运行 Shield 扫描 |",
+        "| `/spear run` | 运行 Spear 渗透（需白名单授权） |",
+        "| `/spear recon` | 运行侦察阶段 |",
+        "| `/scope add <target>` | 将目标加入授权白名单 |",
+        "| `/scope remove <target>` | 从白名单移除目标 |",
+        "| `/scope list` | 查看当前白名单 |",
+        "| `/report` | 生成报告 |",
+        "| `/plan` | 切换到 Plan 模式 |",
+        "| `/agent` | 切换到 Agent 模式 |",
+        "| `/yolo` | 切换到 YOLO 模式（全自动） |"
+      ],
+      "ioPairs": [
+        "输入 `/shield scan 你的项目` → 2 秒看到漏洞。"
+      ],
+      "codeExamples": [
+        "### Shield 扫描\n\n```bash\n# 扫描项目（L1 + L2，离线）\ndeepsec shield scan ./src",
+        "### TUI 终端工作台\n\n```bash\n# 启动终端工作台\ndeepsec tui",
+        "**3. 启动渗透测试**\n\n```\n/spear run https://your-authorized-domain.com --authorized ~/.deepsec/targets/scope.json",
+        "### Side-Git 快照\n\n```bash\n# 创建快照\ndeepsec snapshot create . --mode shield --description \"before-refactor\""
+      ],
+      "usecases": [
+        "| `pentester` | standard | 标准渗透测试 |",
+        "| `redteam` | deep | 红队深度攻击 |",
+        "| `auditor` | standard | 安全审计（只读） |",
+        "| `blueteam` | quick | 蓝队快速验证 |",
+        "| `ctf_player` | quick | CTF 竞赛模式 |"
+      ],
+      "outputs": [
+        "- 攻击链可视化，多格式报告（Markdown / SARIF / JSON / HTML）",
+        "- 幻觉包 → 推荐替代包名",
+        "- 硬编码密钥 → 改为环境变量读取",
+        "- `yaml.load()` → `yaml.safe_load()`",
+        "- SQL f-string → 参数化查询",
+        "- `innerHTML` → `textContent`",
+        "- Debug/CORS/host 检查 → 机械修复"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/2b041a72-4566-48f1-aca8-2c685c0a52cc",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<td><img src=\"https://raw.githubusercontent.com/Unclecheng-li/DeepSec/main/media/demonstration/realtime-diagnostic.png\" alt=\"Real-time diagnostics\" width=\"400\"></td>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<td><img src=\"https://raw.githubusercontent.com/Unclecheng-li/DeepSec/main/media/demonstration/hover-tooltip.png\" alt=\"Hover tooltip\" width=\"400\"></td>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<td><img src=\"https://raw.githubusercontent.com/Unclecheng-li/DeepSec/main/media/demonstration/quick-fix.png\" alt=\"Quick Fix menu\" width=\"400\"></td>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<td><img src=\"https://raw.githubusercontent.com/Unclecheng-li/DeepSec/main/media/demonstration/problems-panel.png\" alt=\"Problems panel\" width=\"400\"></td>",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "- 白名单之外的目标一律拒绝（`target ... is not present in the scope manifest`）。",
+        "- 私有/回环/非公网地址仍被阻止，防止打到内网。",
+        "- Plan 模式只读，无法直接武装 Spear — 需先切到 Agent 或 YOLO。",
+        "- 运行中按 `Ctrl+C` 可**中止当前任务**（TUI 保持打开）；空闲时按 `Ctrl+C` 退出 TUI。",
+        "当前状态：**23 个 Python 测试通过 · 41 个 Rust TUI 测试通过 · TypeScript 干净**",
+        "JetBrains 插件通过 LSP 协议复用 DeepSec 诊断能力，支持 JetBrains 2025.2+：",
+        "现已放宽 — `signature` / `signer` 字段保留但忽略，授权只校验 `targets` 白名单（可选时间窗口仍会校验）。",
+        "- 目标会被规范化（scheme+host 转小写、去尾部 `/`）并去重，与后端授权匹配规则一致。",
+        "- 未指定 `--file` 时，默认取最近一次 `/spear run --authorized <file>` 解析出的绝对路径；若尚未运行过 spear，则回退到 `~/.deepsec/targets/scope.json`。"
+      ],
+      "concerns": [
+        "The README spans CLI, TUI, IDE, and MCP surfaces, so overlapping claims were assigned only to their most specific semantic family."
+      ]
+    },
+    {
+      "repo": "Minara-AI/minara-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Spot Trading** — Buy, sell, swap, convert, and transfer by ticker, token name, or contract address across supported chains.",
+        "- **Perpetual Futures** — Open/close positions, leverage, multi-wallet management, trade history, and AI autopilot on Hyperliquid.",
+        "- **Limit Orders** — Create, list, and cancel spot and perps limit orders.",
+        "- **Wallet & Funds** — Built-in wallet, balance, portfolio, deposit addresses, spot/perps funding, withdrawals, transfers, and credit card on-ramp via MoonPay.",
+        "- **AI Insights & Market** — Real-time on-chain data, token fundamentals, whale flows, trending tokens/stocks, equity research, commodities, and forex.",
+        "- **x402 Payment** — Pay x402-enabled HTTP APIs directly from the Minara wallet.",
+        "- **Premium** — Plans, credits, and subscription management."
+      ],
+      "usageItems": [
+        "Talk to the agent in natural language. It runs the right commands for you.",
+        "| **Login**   | _\"Login to Minara\"_                                                                           |",
+        "| **Deposit** | _\"Show my deposit address\"_ / _\"Buy crypto with credit card\"_ / _\"Deposit 500 USDC to perps\"_ |",
+        "| **Trade**   | _\"Buy 100 USDC worth of ETH\"_ / _\"Swap 0.1 ETH to USDC\"_ / _\"Sell all SOL\"_                   |",
+        "| **Open position** | _\"Long ETH perp\"_ / _\"Short BTC, 10x leverage\"_         |",
+        "| **AI analysis**   | _\"Analyze ETH long or short\"_ / _\"Should I long BTC?\"_  |",
+        "| **Autopilot**     | _\"Enable AI autopilot for perps\"_                       |",
+        "| **Limit order**   | _\"Buy ETH when price hits $3000\"_ / _\"Buy SOL at $150\"_ |",
+        "| **Manage orders** | _\"List my limit orders\"_ / _\"Cancel limit order [id]\"_  |",
+        "- _\"Show my crypto portfolio\"_ / _\"What's my balance?\"_"
+      ],
+      "usageActions": [
+        "_\"Login to Minara\"_",
+        "_\"Show my deposit address\"_",
+        "_\"Buy 100 USDC worth of ETH\"_",
+        "_\"Long ETH perp\"_",
+        "_\"Analyze ETH long or short\"_",
+        "_\"Enable AI autopilot for perps\"_",
+        "_\"Buy ETH when price hits $3000\"_",
+        "_\"List my limit orders\"_",
+        "_\"Show my crypto portfolio\"_",
+        "_\"Pay 100 USDC to [address]\"_"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Quick Start\n\n```\n> Login to Minara"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "Ethereum, Base, Arbitrum, Optimism, Polygon, Avalanche, Solana, BSC, Berachain, Blast, Manta, Mode, Sonic, Conflux, Merlin, Monad, Polymarket, XLayer, and Hyperliquid (perps).",
+        "**88/100** on [crypto-skill-bench](https://github.com/Minara-AI/crypto-skill-benchmark) (v3.0.2, Claude Sonnet 4.6, 76 scenarios)",
+        "66 passed, 10 partial, 0 failed. Safety gate: PASS.",
+        "This repo contains documentation files and setup scripts. No binaries or long-running services.",
+        "Credentials are handled by the CLI's official login flow; this repo does not collect or store secrets."
+      ],
+      "concerns": [
+        "Strategy Studio is presented as a separate web property, so its behavior was not attributed to these skills.",
+        "The README gives request prompts but no explicit paired response examples or concrete response artifacts."
+      ]
+    },
+    {
+      "repo": "alaliqing/claude-paper",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **Automatic PDF parsing** - Extract title, authors, abstract, links, and complete paper text",
+        "- **Code repository detection** - Automatically finds GitHub, arXiv, CodeOcean links",
+        "- **Interactive web viewer** - Nuxt.js interface with math equation support (KaTeX)",
+        "- **Intelligent assessment** - Difficulty levels and paper type detection for adaptive content generation",
+        "# arXiv abstract URL (automatically converted to PDF)",
+        "5. Extract and include original code (if available)",
+        "7. Update the global search index",
+        "8. Launch the web viewer automatically"
+      ],
+      "usageItems": [
+        "Ask the selected agent for a quick summary, or use the host command directly:",
+        "In Codex or DeepSeek Harness, ask for a quick paper summary or explicitly load the `claude-paper-summary` Skill.",
+        "Help me study the paper at ~/Downloads/attention-is-all-you-need.pdf",
+        "Help me study the paper at https://arxiv.org/pdf/1706.03762.pdf",
+        "Help me study the paper at https://arxiv.org/abs/1706.03762",
+        "/claude-paper:webui",
+        "/claude-paper-webui",
+        "In Codex or DeepSeek Harness, ask the agent to start the Claude Paper web viewer or explicitly load the `claude-paper-webui` Skill.",
+        "- Browse all studied papers",
+        "- Search through your paper library"
+      ],
+      "usageActions": [
+        "/claude-paper:summary /path/to/paper.pdf",
+        "/claude-paper-summary /path/to/paper.pdf",
+        "Help me study the paper at ~/Downloads/attention-is-all-you-need.pdf",
+        "Help me study the paper at https://arxiv.org/pdf/1706.03762.pdf",
+        "Help me study the paper at https://arxiv.org/abs/1706.03762",
+        "/claude-paper:webui",
+        "/claude-paper-webui",
+        "- Browse all studied papers",
+        "- View generated materials with math rendering",
+        "- Search through your paper library"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### Quickly Summarize a Research Paper\n\nAsk the selected agent for a quick summary, or use the host command directly:\n\n```bash\n# Claude Code\n/claude-paper:summary /path/to/paper.pdf",
+        "### Study a Research Paper\n\nSimply ask the selected agent to study a paper:\n\n```\nHelp me study the paper at ~/Downloads/attention-is-all-you-need.pdf",
+        "You can also use URLs:\n\n```\n# Direct PDF URL\nHelp me study the paper at https://arxiv.org/pdf/1706.03762.pdf",
+        "### Launch Web Viewer\n\n```bash\n# Claude Code\n/claude-paper:webui"
+      ],
+      "usecases": [
+        "- **Quick paper summaries** - Screen a paper with a concise 300–500 word overview before a deep study"
+      ],
+      "outputs": [
+        "- **Adaptive learning materials** - Generates README, summary, insights, Q&A based on paper complexity",
+        "- **Code demonstrations** - Clean implementations with Jupyter notebooks and original code integration",
+        "│       ├── meta.json                     # Paper metadata (title, authors, etc.)",
+        "│       ├── README.md                     # Quick navigation and overview",
+        "│       ├── summary.md                    # Detailed summary",
+        "│       ├── insights.md                   # Key insights (most important!)",
+        "│       ├── qa.md                         # Learning questions",
+        "│       ├── images/                       # Extracted figures and tables"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshot1.png\" alt=\"Library View\" width=\"100%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot2.png\" alt=\"Reading View\" width=\"100%\"/>",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "It preserves the same study workflow, generated materials, code demonstrations, and interactive web viewer across supported agents.",
+        "- **Context-safe previews** - Save complete text to `paper.txt` while keeping a 50k preview in metadata",
+        "- **Node.js**: 20.19.x, or 22.12.0 and higher",
+        "# Verify cross-agent adapters and reviewed canonical Claude Skills\nnpm test",
+        "# Verify generated adapters are synchronized\nnpm run check:adapters",
+        "# Runs adapter checks and tests before producing the publishable tarball\nnpm pack --dry-run"
+      ],
+      "concerns": [
+        "The README documents verification commands but does not state their current pass results.",
+        "No explicit request-and-response pair is shown in one operational example."
+      ]
+    },
+    {
+      "repo": "whitelonng/dshcode",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Agent 核心** — 插件化框架，内置 bash、文件系统、网页搜索/抓取、终端、LSP 与子进程工具；支持沙箱隔离与逐操作审批提示。",
+        "**Skills 技能** — 可安装的技能目录，为 Agent 提供专项工作流——研究、文档写作、视觉工具等。",
+        "**编排能力** — Subagent 并行委派，以及可跨多个 Agent 分阶段并行展开的 Workflow。",
+        "**长任务** — 执行前先审查再批准的 Plan 模式、跨轮次持续进行的 Goal 目标、可恢复的会话。",
+        "**模型控制** — 按供应商调节推理强度（关闭到最高）、最大输出 token 数，以及图像输入、图像生成与图像识别等多模态能力开关。",
+        "**个性化** — 主题与皮肤合集、选区批注工作流、命令快捷键、中英双语界面。",
+        "**插件管理** — 从 npm 或 Git 仓库安装插件、检查更新，并可逐个启用或禁用。",
+        "**归档管理** — 搜索已归档会话，可恢复或彻底删除。",
+        "**可扩展** — 安装新能力无需改动应用本体。",
+        "**桌面集成** — 托盘图标、系统通知、单实例运行、加固的 Electron 窗口。",
+        "应用会自行启动和停止内置 Web profile"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "**交互式 UI** — 内联渲染的 GenUI 卡片：图表、表格、测验、3D 场景、示意图、表单与进度视图。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/readme/dshcode-dark.png\" alt=\"DSHCode 深色主题\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/dshcode-light.png\" alt=\"DSHCode 浅色主题\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-model-config.png\" alt=\"自定义供应商模型的思考等级与多模态能力\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-plugin-manager.png\" alt=\"插件的下载、更新与管理\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-safe-mode.png\" alt=\"可禁用故障插件或安全模式启动\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-agent-repair.png\" alt=\"让 Agent 修复故障插件\" width=\"49%\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**故障恢复** — 加载失败的插件会连同诊断信息一起报告：可禁用该插件、以安全模式启动，或让 Agent 携带失败上下文自动修复。",
+        "每个版本都会随安装包发布 SHA-256 校验和（`SHA256SUMS.txt`）。",
+        "预览版安装包尚未进行代码签名或公证，因此 macOS Gatekeeper 与 Windows SmartScreen 可能在首次启动前发出警告。",
+        "- **macOS**：在访达中右键点击应用并选择**打开**，然后在弹窗中确认。或者在终端执行一次 `xattr -cr /Applications/DSHCode.app`。",
+        "- **Windows**：在 SmartScreen 弹窗中点击**更多信息**，然后选择**仍要运行**。",
+        "该服务只绑定 `127.0.0.1`，并让操作系统分配一个可用的临时端口，因此不会占用固定端口，通常也不会与其他本地服务冲突。",
+        "DSHCode 只允许一个应用实例，只加载其自身的精确回环地址；进程退出前会先释放 Harness 树，所以关闭应用也会停止服务并释放端口。",
+        "安装版用户得到的是普通应用；Node.js、CLI 与终端只在从源码运行或自行构建安装包时才需要。"
+      ],
+      "concerns": [
+        "Source-build and packaging commands were excluded as installation/build evidence.",
+        "The README gives no explicit paired request-and-response example."
+      ]
+    },
+    {
+      "repo": "bruc3van/awesome-dsh-plugin",
+      "inferredType": "catalog-list",
+      "capability": [
+        "从「我想完成什么」出发组织首页，而不是让你阅读几百行仓库名称。",
+        "原始快照与待审核队列每天由脚本自动刷新",
+        "首页精选推荐、自荐与最近加入由人工维护",
+        "普通用户可以直接理解，英文读者也有独立入口。"
+      ],
+      "usageItems": [
+        "按分类浏览每个分类下的全部项目，见 [CATALOG.md](./CATALOG.md)——目录按类目分册，索引页列出每一册。",
+        "发现遗漏、分类不准确或说明过时？欢迎提交 Issue 或 Pull Request：",
+        "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件，就会在每日刷新时进入[待审核队列](./data/review/pending.md)，经我们核实后进入全量目录",
+        "如果你是插件作者，可以按 [CONTRIBUTING](./CONTRIBUTING.md#作者自荐--self-promotion) 的自荐规范在 [SHOWCASE.md](./SHOWCASE.md) 末尾追加一条自荐（中英各一行）",
+        "提 Issue 告诉我们它解决什么问题、适合谁，或直接编辑对应 Markdown 并附上理由"
+      ],
+      "usageActions": [
+        "发现遗漏、分类不准确或说明过时？欢迎提交 Issue 或 Pull Request：",
+        "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件",
+        "如果你是插件作者，可以按 [CONTRIBUTING](./CONTRIBUTING.md#作者自荐--self-promotion) 的自荐规范在 [SHOWCASE.md](./SHOWCASE.md) 末尾追加一条自荐（中英各一行）",
+        "提 Issue 告诉我们它解决什么问题、适合谁",
+        "或直接编辑对应 Markdown 并附上理由"
+      ],
+      "ioPairs": [
+        "公开仓库只要带上 `dsh-plugin` Topic 且确实是 DSH 插件，就会在每日刷新时进入[待审核队列](./data/review/pending.md)，经我们核实后进入全量目录"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "30 秒选出一个插件",
+        "按分类浏览全部项目",
+        "看看作者们自己提交的新插件",
+        "用程序消费插件数据",
+        "收录或推荐你自己的插件"
+      ],
+      "outputs": [
+        "[CATALOG.md](./CATALOG.md)——目录按类目分册，索引页列出每一册。",
+        "[data/market.json](./data/market.json) 是给下游市场（如 DSH 桌面端插件市场）消费的精选小文件——在快照与 curation 之上过滤、清洗并按类目均衡发牌（≤600 条、≤500 KB）",
+        "首页只放经过人工筛选的精选推荐与自荐预览；[CATALOG.md](./CATALOG.md) 及其分类分册收录全部经核实的仓库",
+        "首页只展示**最近 10 条**，完整列表见 [SHOWCASE.md](./SHOWCASE.md)。",
+        "理由逐条记录在 [data/curated.json](./data/curated.json)"
+      ],
+      "media": [],
+      "reliability": [
+        "每天自动抓取 GitHub 上的 `dsh-plugin` 项目并逐个复核：真实插件分类收录，蹭标签项目剔除。",
+        "新增仓库先进入[待审核队列](./data/review/pending.md)，核实后合并",
+        "带 `dsh-plugin` Topic 但并非 DSH 插件的仓库（平台本体、其他 Agent 工具、同名目录站等）以及编辑部拉黑的仓库不计入目录与榜单",
+        "**不经编辑部审核，也不代表质量或安全背书**",
+        "本区最多保留 30 条，区满后先进先出",
+        "收录不等于安全或兼容性背书。",
+        "第三方插件可能读取会话、文件、网络或系统资源。"
+      ],
+      "concerns": [
+        "Linked-project capabilities, commands, screenshots, and reliability claims were excluded under catalog ownership.",
+        "Popularity and ranking content was not used as practical evidence."
+      ]
+    }
+  ]
+}

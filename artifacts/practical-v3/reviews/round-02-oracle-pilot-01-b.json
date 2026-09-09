@@ -1,0 +1,403 @@
+{
+  "reviews": [
+    {
+      "repo": "csyangwen/dsh-memory-evolve",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **用户档案**：你的偏好、公司、沟通习惯——AI 每回合都能看到；",
+        "- **全局事实**：环境、工具、惯例等长期知识；",
+        "- **项目关键记忆**：当前项目的约定、决策、架构、踩坑，自动注入上下文，重要结论可标记**只在某个 git 分支生效**；",
+        "- **项目日志 / 每日日志**：每回合自动记录进展，按需读取，历史可追溯。",
+        "- **四轨待办**：生活 / 工作 / 项目 / 每日。「项目」轨按工作目录隔离，换目录互不干扰。",
+        "- **本地文件搜索**：对 AI 说「**搜一下本机有没有写过类似的东西**」——按文件名找文档（可扩展到全类型）；",
+        "2. **协作沟通**：房间建好后，**谁改了什么、谁干完了，全员可见**；",
+        "后台异步执行，立即返回任务号，**不卡当前会话**，你可以继续聊别的；",
+        "提示词库是**指令范式资产库**：代码审查、调试、PRD、测试策略……把常用的工作方法固化成提示词（可分类、可搜索、可启用/禁用）。",
+        "- **会话书签**：每一轮都可以点星（☆）标记，「书签」列出全部书签（名称/轮次/时间/摘要，可搜索），**点击一键跳回任意一轮**",
+        "本插件把**中间任意轮的分支入口接管**",
+        "- **独立评审员**：给每个会话挂一个独立的评审会话，它**只观察你在界面上看到的对话**"
+      ],
+      "usageItems": [
+        "2. 发现重要事实时对它说「**记一下：这个项目的部署端口是 8080**」，它会写入项目关键记忆，**你确认后**才生效",
+        "3. 过几天、换了个会话，直接问「**查一下记忆，上次我们定下的架构决策是什么**」——它能无缝衔接；",
+        "4. 记忆多了之后，让 AI「**把 XX 那条记忆归档**」——归档条目不再注入上下文，随时可转回；",
+        "3. 另一台电脑 clone 项目后打开——**自动认亲**（同一仓库地址 = 同一项目），拉下来即可继续用；",
+        "2. 冒出的想法对 AI 说「记住」，它会进待确认队列——到「待办」里**采纳或拒绝**，你说了算；",
+        "3. 想不起来就问「之前有个文档提到过 XX」。",
+        "3. **派活与催活**：问 AI「**现在谁在干活、谁空闲了**」，它会查看各会话状态；",
+        "2. 期间随时问「**任务进度如何**」，或在「COI 调度」里看实时日志流；",
+        "2. **你一键注入**：在「提示词注入」里选中一条，点「注入一次 / 持续注入 / 立即注入」",
+        "2. 想从中间某个决策点另开一条线，书签列表点「分支」；"
+      ],
+      "usageActions": [
+        "2. 发现重要事实时对它说「**记一下：这个项目的部署端口是 8080**」，它会写入项目关键记忆，**你确认后**才生效",
+        "3. 过几天、换了个会话，直接问「**查一下记忆，上次我们定下的架构决策是什么**」——它能无缝衔接；",
+        "4. 记忆多了之后，让 AI「**把 XX 那条记忆归档**」——归档条目不再注入上下文，随时可转回；",
+        "3. 另一台电脑 clone 项目后打开——**自动认亲**（同一仓库地址 = 同一项目），拉下来即可继续用；",
+        "2. 冒出的想法对 AI 说「记住」，它会进待确认队列——到「待办」里**采纳或拒绝**，你说了算；",
+        "3. 想不起来就问「之前有个文档提到过 XX」。",
+        "3. **派活与催活**：问 AI「**现在谁在干活、谁空闲了**」，它会查看各会话状态；",
+        "2. 期间随时问「**任务进度如何**」，或在「COI 调度」里看实时日志流；",
+        "2. **你一键注入**：在「提示词注入」里选中一条，点「注入一次 / 持续注入 / 立即注入」",
+        "2. 想从中间某个决策点另开一条线，书签列表点「分支」；"
+      ],
+      "ioPairs": [
+        "2. 发现重要事实时对它说「**记一下：这个项目的部署端口是 8080**」，它会写入项目关键记忆，**你确认后**才生效",
+        "3. 过几天、换了个会话，直接问「**查一下记忆，上次我们定下的架构决策是什么**」——它能无缝衔接；",
+        "- **本地文件搜索**：对 AI 说「**搜一下本机有没有写过类似的东西**」——按文件名找文档（可扩展到全类型）；",
+        "1. 对 AI 说「**把这个任务派给 grok：移动端适配改造**」——后台异步执行，立即返回任务号",
+        "4. **派单可以带图**：对 AI 说「**把这张截图发给 grok 分析**」——附件支持本地路径/远程 URL/本会话图片",
+        "3. 点卡片「引用」复制引用串，对 AI 说\"去画板拿 XX\"——AI 用 `de_canvas` 查/读/放便签；"
+      ],
+      "codeExamples": [
+        "**发版流程（开发者）**：\n\n```bash\n# 1. 提交并推送 main（tag 必须打在已推送的 main 提交上）"
+      ],
+      "usecases": [
+        "**适合谁**：所有人。这是插件的核心，也是其他一切功能的地基。",
+        "**适合谁**：办公室和家里两台电脑干活、或有同事协作同一个项目的人——不想在每台电脑上把重要结论重新讲一遍。",
+        "**适合谁**：同时维护多个项目、经常被「之前那个方案是怎么定的」卡住的开发者。",
+        "**适合谁**：想把 AI 用成「团队」的人——一个主会话指挥美工、前端、后端、测试多个子会话。",
+        "**适合谁**：需要把大任务（视觉重设计、代码审查、完整功能开发）交给专用 AI 代理（Kimi / Codex / Grok / Hermes）的用户——不想被阻塞，又不想错过结果。",
+        "**适合谁**：任务大到单靠一边搞不定的人。",
+        "**适合谁**：想把「好用的工作方法」沉淀下来、让每个 AI（包括外部代理）都按同一套流程干活的人。",
+        "**适合谁**：对上下文开销敏感、一个会话动辄上百轮的深度用户。",
+        "**适合谁**：离开电脑也想继续和 AI 协作、或者同时开很多会话看不过来的人。",
+        "**适合谁**：想让 AI 干活时有一双\"第二眼睛\"把关、又不想自己逐句盯的人"
+      ],
+      "outputs": [
+        "完成后结果摘要**自动写入项目日志与今日日志**",
+        "- **记录可查**：评审记录 JSONL 持久化，面板「记录」可追溯。",
+        "4. AI 放的便签落在画板中央虚线区，拖到想要的位置即可。",
+        "项目关键记忆、项目日志、归档、项目待办跨设备一致",
+        "任务交接、唤醒、冲突预警全链路自动化，房间消息留痕可查。",
+        "一条「外部主刀 → 内部集成 → 测试验收 → 你确认」的完整流水线。",
+        "它变成可复用的「团队操作手册」",
+        "**带锚点、可分支、可跳转的时间线**"
+      ],
+      "media": [],
+      "reliability": [
+        "重复 insert 同 id 会让加载器报 duplicate loader entry id 无法启动。",
+        "AI 不会擅自往记忆里写东西；",
+        "两台电脑都改了同一条记忆才会出现冲突，Tab 里选「采用本机 / 采用远端 / 两者都要」即可。",
+        "唯一的前提是**主会话所在的 DSH 进程保持运行**；如果主会话空闲了或 DSH 被关掉，唤醒链就停了",
+        "codex/kimi/hermes 都能真看图（grok 走 prompt 读图，zcode 纯文本会明确拒绝）",
+        "- **上下文占用提醒**：输入框圆环实时显示上下文占用——≥30% 变黄、≥40% 变红",
+        "- **安全边界**：AI 只能读**已上板**的节点（没有任意路径读取 API）；敏感目录（.ssh/.config 等）即使上板也拒绝代理。",
+        "**更新安全机制**：只接受严格格式（v<纯数字> 或 v1.2.3）且位于 origin/main 历史的 tag；更新前校验本地工作树干净；更新过程有跨进程锁与失败回滚，不会把半更新状态留给你。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "dream-num/dsh-univer-office",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **Analyze and build spreadsheets** — read or create Excel data, clean fields, write formulas, apply formatting and validation, create tables, charts, pivots, filters, sparklines, conditional formatting, and images",
+        "- **Write and lay out documents** — create paragraphs, rich text, lists, tasks, tables, images, charts, headers, footers, pagination, and page layouts.",
+        "- **Create and revise presentations** — generate a deck from an outline, redesign selected pages, edit text, shapes, images, tables, charts, and transitions",
+        "- **Build lightweight databases** — create Base tables, fields, records, and views with formula fields, filters, sorting, grouping, and Sheet-backed references.",
+        "- **Draw editable canvases** — create shapes, text, connectors, images, native charts, and diagrams, with connector and layout analysis.",
+        "- **Compose several content types** — one `.univer` file can contain Sheets, Docs, Slides, Bases, and Boards.",
+        "- **Work with Office files** — import `.xlsx`, `.csv`, `.tsv`, `.docx`, and `.pptx`, then export the edited content in the matching format.",
+        "- **Sheet version history** — the current version shows time-grouped history in the Ribbon. Read-only views can inspect versions, while editable views can restore one explicitly."
+      ],
+      "usageItems": [
+        "1. Describe the result you want and provide any source files.",
+        "2. The agent creates an isolated draft and edits the Univer content there.",
+        "3. Follow the live preview and ask for revisions until the result is ready.",
+        "4. Approve the result to update the current version, or discard the draft without changing it.",
+        "> **Deliver a standard Excel file:** after review, ask the agent to export the spreadsheet as `.xlsx`",
+        "> **Deliver a standard PowerPoint file:** after review, ask the agent to export the presentation as `.pptx`",
+        "- Continue editing, approve, or discard changes from the Univer page embedded in the card."
+      ],
+      "usageActions": [
+        "1. Describe the result you want and provide any source files.",
+        "2. The agent creates an isolated draft and edits the Univer content there.",
+        "3. Follow the live preview and ask for revisions until the result is ready.",
+        "4. Approve the result to update the current version, or discard the draft without changing it.",
+        "> **Deliver a standard Excel file:** after review, ask the agent to export the spreadsheet as `.xlsx`",
+        "> **Deliver a standard PowerPoint file:** after review, ask the agent to export the presentation as `.pptx`",
+        "- Continue editing, approve, or discard changes from the Univer page embedded in the card."
+      ],
+      "ioPairs": [
+        "The agent created this spreadsheet from a natural-language request, then added conditional formatting and a chart in the same conversation.",
+        "Create a sales Sheet and a summary Slide in the same .univer file, with the Slide chart reading the Sheet data."
+      ],
+      "codeExamples": [
+        "### 2. Describe what you need\n\n```text\nCreate a monthly expense spreadsheet with dates, categories, amounts, a total, and a few rows of sample data."
+      ],
+      "usecases": [
+        "Create a simple payroll spreadsheet with employee, base salary, bonus, deduction, gross pay, and net pay columns. Calculate the totals automatically.",
+        "Create a six-slide lesson deck about bubble sort. Explain the concept, each comparison pass, pseudocode, and complexity, and check every page for layout problems.",
+        "Create a formal weekly project report with an executive summary, this week's progress, a risk table, next week's plan, headers, and footers, then export it as docx.",
+        "Create a customer-tracking Base with company, contact, stage, expected value, and next action fields, plus a view grouped by stage.",
+        "Create a sales Sheet and a summary Slide in the same .univer file, with the Slide chart reading the Sheet data."
+      ],
+      "outputs": [
+        "The result can be previewed, revised, merged into the current version, or discarded in place.",
+        "- Changes appear in a live, movable preview window while the agent works.",
+        "- Review cards remain in the conversation and can be folded or opened fullscreen later.",
+        "`univer_screenshot` | Render supported content as PNG images for review"
+      ],
+      "media": [
+        {"excerpt": "[![Play the DSH × Univer Office demo](docs/assets/readme/nike-presentation-demo.png)](https://www.youtube.com/watch?v=k-2zW_CMiew)", "weight": 0.5},
+        {"excerpt": "![Reviewing a spreadsheet with conditional formatting and a chart in DSH](docs/assets/readme/chart-and-formatting.png)", "weight": 1},
+        {"excerpt": "![Asking the agent to create a class score sheet](docs/assets/readme/spreadsheet-request.png)", "weight": 1},
+        {"excerpt": "![A live spreadsheet window while the agent works](docs/assets/readme/live-worktree.png)", "weight": 1},
+        {"excerpt": "![The spreadsheet review card after the task completes](docs/assets/readme/review-result.png)", "weight": 1},
+        {"excerpt": "![Reviewing a bubble sort teaching presentation in DSH](docs/assets/readme/presentation-review.png)", "weight": 1}
+      ],
+      "reliability": [
+        "Every content type supports isolated draft editing, review, revision, approval, and discarding.",
+        "Approval and discarding always require an explicit user request.",
+        "- **Session isolation** — each DSH session shows only its own windows, cards, and review state.",
+        "- **English and Chinese UI** — the plugin shell and every open Viewer follow the DSH locale.",
+        "- DeepSeek Harness and Node.js `>=22.19.0`.",
+        "- Some Slide layout checks and SVG text measurement require a local Chrome/Chromium executable.",
+        "- Slide master pages, layout pages, and speaker notes are outside the current editing scope.",
+        "- Board mind maps, tables, ink, advanced editing, and file export are not yet supported.",
+        "If that port is occupied, it tries `9081`, then continues upward one port at a time.",
+        "Draft and review previews do not allow import or export; Board provides print only."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "zhoushoujianwork/easyeda-agent",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "动作目录已覆盖原理图、PCB、文档导航、板级绑定、产物导出、诊断。",
+        "`sch block-apply` 一条命令完成**放件 + 连线 + 网表对账**",
+        "**三层布局体系 Sheet→Zone→Group**——分区框 + 区名 + 电路说明由算法计算落位,生成与校验用同一把尺",
+        "`sch gate --strict` 一条命令过**五关**(layout-lint→clusters→check→bridge-check→drc)",
+        "跨页网名审计 `sch nets --strict` + 块对账 `sch reconcile` + netlist 黄金表逐脚比对",
+        "- **`pcb new-board`** — 从原理图**新建一块板 + 空 PCB 页**并绑定",
+        "- **`pcb auto-place`** — 模块感知启发式:卫星器件贴到它所连芯片引脚那侧,2 脚器件自动转向,多芯片铺开",
+        "- **`pcb outline-fit`**(板框贴合器件)/ **`pcb outline-round`**(圆角矩形板框)。",
+        "- **`pcb route-short`** — 启发式短线布线:每网 MST、**规则感知线宽**(信号 vs 电源)、**障碍感知** L 朝向、**默认跳电源/地网**",
+        "- **`pcb power-planes`** — 4 层电源分配:GND + 电源各占**专用内平面** + 每焊盘过孔缝合",
+        "- **`pcb stackup`** — 设铜层数(2/4/6…/32)+ 内层类型(信号↔平面/内电层)。",
+        "- **`easyeda notify`** — 在 EasyEDA 窗口内弹**非阻塞 toast**(info/success/warn/error/question)"
+      ],
+      "usageItems": [
+        "Skill 或人跑一条 `easyeda` 命令;",
+        "agent 放外设前先查块库,命中即抄,省掉一整个模块的选型与接线。",
+        "`easyeda blocks ls/show/search` 离线可查(无需 daemon/窗口)",
+        "均以 typed CLI 子命令暴露(`easyeda <domain> <verb>`)",
+        "多页工程/长操作用 `--doc <page>` flag **机制性地钉住目标页**,不再靠人工切页",
+        "完整布线走外部 **Freerouting**(DSN 往返构件已就绪)",
+        "首次同步前放完整电路,或用 `pcb add-component`。"
+      ],
+      "usageActions": [
+        "Skill 或人跑一条 `easyeda` 命令;",
+        "agent 放外设前先查块库,命中即抄,省掉一整个模块的选型与接线。",
+        "`easyeda blocks ls/show/search` 离线可查(无需 daemon/窗口)",
+        "均以 typed CLI 子命令暴露(`easyeda <domain> <verb>`)",
+        "多页工程/长操作用 `--doc <page>` flag **机制性地钉住目标页**,不再靠人工切页",
+        "完整布线走外部 **Freerouting**(DSN 往返构件已就绪)",
+        "首次同步前放完整电路,或用 `pcb add-component`。"
+      ],
+      "ioPairs": [
+        "从一份客户口吻的需求文档出发,原理图全流程(S0–S6:方案书 → 分页 → 分区 → 摆放 →\n> 布线 → 机械门禁 → 交付)已可正式交付",
+        "`sch block-apply` 一条命令完成**放件 + 连线 + 网表对账**,你只需重绑对外的几根线(ports)",
+        "输入只是一份**不含 BOM/网表的\n客户口吻需求文档**,agent 沿 S0–S6 自己完成选型、放置、连线、分区与门禁",
+        "`pcb outline-fit` 板框贴合(利用率 17% → 71%)"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "### 实战展示:一份需求文档 → 三页原理图正式交付",
+        "**完整实战案例:[一份需求文档 → AI 全自动画完 ESP32-S3 四层板](docs/showcase-esp32-mini.md)**",
+        "### 原理图自动放置:两个引擎(模板 vs 官方)",
+        "固定模块的外设电路可以直接照抄。"
+      ],
+      "outputs": [
+        "产物、截图、DRC 结果、审计日志都是一等输出。",
+        "BOM(补 LCSC C 号)、网表、导出、原生截图、审计日志、录制→回放",
+        "**3 页原理图 / 26 个真实 LCSC 库件 / 18 网黄金表逐脚全对 / 复用 6 个电路块 /\n8 个分区框 + 7 条电路说明**",
+        "P1 电源页:AMS1117 LDO(5V→3V3)分区框 + 区名 + 电路说明,全部算法计算落位。",
+        "P2 主控页:WROOM 最小系统、BOOT/RESET 按键、指示 LED 三个功能分区。",
+        "P3 USB 页:CH340 USB 串口、USB-C 接口、自动下载等四个功能分区。",
+        "**自动布局 → 板框贴合 → 规则感知布线 → 4 层电源平面 → 丝印碰撞避让**",
+        "DRC 31 → 3、No-Connection 归零"
+      ],
+      "media": [
+        {"excerpt": "![P1 电源页:AMS1117 LDO 降压,分区框 + 区名 + 电路说明由算法落位](docs/images/sch-p1-power.png)", "weight": 1},
+        {"excerpt": "![P2 主控页:ESP32 WROOM 最小系统 + 按键 + LED,三个分区框](docs/images/sch-p2-mcu.png)", "weight": 1},
+        {"excerpt": "![P3 USB 页:CH340 + USB-C + 自动下载电路,四个分区框](docs/images/sch-p3-usb.png)", "weight": 1},
+        {"excerpt": "<img src=\"docs/assets/demo-schematic-generation.gif\" width=\"420\" alt=\"AI 在 EasyEDA 中从空白页生成原理图\"/>", "weight": 1},
+        {"excerpt": "<img src=\"docs/assets/demo-pcb-layout.gif\" width=\"420\" alt=\"AI 在 EasyEDA 中完成 PCB 布局、板框和铺铜\"/>", "weight": 1},
+        {"excerpt": "<img src=\"docs/assets/demo-esp32-board.png\" width=\"560\" alt=\"ESP32-S3 成品板:4层电源平面 + 圆角板框 + 位号对齐\" />", "weight": 1}
+      ],
+      "reliability": [
+        "连接器锁定该端口、校验握手、**自愈重连**",
+        "裸 JS 仅作为需二次确认的 `debug.exec_js` 逃生口保留。",
+        "- **验证门禁**:块必须跑过 `place → wire → check → DRC=0` 才入库",
+        "两版都能用、都还有少量重叠",
+        "几何回读、`sch check`、重连或持久化任何一步不可用，或残留 overlap / pin 重合 / dangling 等结构性问题，都会非零退出。",
+        "- **迷宫档自动布线**(密集/任意距离/推挤)—— daemon 只做*短、清晰*的启发式布线。",
+        "- **受控阻抗 Z0** —— 真的墙:叠层 Er / 介质厚 / 铜厚 `eda.*` 读不到,算不了 Z0 线宽。",
+        "- **泪滴(teardrop)** —— 无*typed* create API",
+        "- **无编程 undo** —— `eda.*` 没有 undo/redo;回滚靠自建(数据快照 + 反向操作)。",
+        "- **丝印密度极限** —— `silk-align` 在有空白处避让标签;比标签更密的布局无法完全消重"
+      ],
+      "concerns": [
+        "PCB 流程(P0–P10)持续演进中。"
+      ]
+    },
+    {
+      "repo": "weijiafu14/pi2dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a Pi package runs on DSH **as published** —\nno fork, no patch, no per-package adapter.",
+        "The engine discovers the Pi packages in your profile",
+        "mounts them through a single bridge\ninstance: one model directory, one login, one credential store, one upgrade\nunit.",
+        "`serveNativeSubagents` (default: **off**) serves DSH-native subagents with\nthe profile's Pi packages.",
+        "The setup flow can adopt MCP server definitions from host configs you already\nhave into the adapter's own standard `mcp.json`.",
+        "opens the full-screen interactive server manager",
+        "The model receives the\nadapter's `mcp` and `mcpScript` tools through DSH's normal tool registry",
+        "Any Pi\nprovider package that declares an `oauth` block gets a working\n`/login <provider>`",
+        "Pi's four\nofficial flows (OpenAI Codex, Anthropic, GitHub Copilot, Kimi Code) ship built\nin",
+        "Credentials persist with Pi's `auth.json` semantics and resolve per\nrequest through a standard `dsh-credentials` provider",
+        "the bridge adds the Pi ecosystem's interactive OAuth layer.",
+        "The client half exists and takes four\nseats (side-conversation panel, header, widget dock, working chrome)"
+      ],
+      "usageItems": [
+        "Add a plugin | `dsh plugin add <pkg>` (then restart dsh)",
+        "Remove a plugin | `dsh plugin remove <pkg>` — remove plugins before removing the engine",
+        "Upgrade a plugin | `dsh plugin add <pkg>@latest` — the engine is untouched",
+        "Upgrade the engine | `dsh plugin add pi2dsh@latest` — your plugins are untouched",
+        "Check a plugin before upgrading | `npx pi2dsh inspect <pkg>@<version>`",
+        "Inside dsh-TUI, run:\n\n```text\n/pi-mcp setup",
+        "```text\n/pi-mcp\n```\n\nopens the full-screen interactive server manager",
+        "```text\n/mcp       # native DSH MCP-client status\n/pi-mcp    # the installed Pi adapter's manager\n```"
+      ],
+      "usageActions": [
+        "Add a plugin | `dsh plugin add <pkg>` (then restart dsh)",
+        "Remove a plugin | `dsh plugin remove <pkg>` — remove plugins before removing the engine",
+        "Upgrade a plugin | `dsh plugin add <pkg>@latest` — the engine is untouched",
+        "Upgrade the engine | `dsh plugin add pi2dsh@latest` — your plugins are untouched",
+        "Check a plugin before upgrading | `npx pi2dsh inspect <pkg>@<version>`",
+        "/pi-mcp setup",
+        "/pi-mcp",
+        "npx pi2dsh matrix --json             # the full capability matrix",
+        "npx pi2dsh mcp-config                # Pi mcpServers config → official DSH MCP entries"
+      ],
+      "ioPairs": [
+        "npx pi2dsh inspect <pkg>@<version>   # compatibility report before an upgrade",
+        "npx pi2dsh matrix --json             # the full capability matrix",
+        "npx pi2dsh mcp-config                # Pi mcpServers config → official DSH MCP entries",
+        "`/btw <question>` runs a side thread in DSH's native subagent UI; your main conversation stays clean"
+      ],
+      "codeExamples": [
+        "### 2. Configure your MCP servers\n\nInside dsh-TUI, run:\n\n```text\n/pi-mcp setup",
+        "### 3. Use it\n\n```text\n/pi-mcp",
+        "## Other tools\n\nBeyond the engine, the CLI has a few helpers:\n\n```sh\nnpx pi2dsh inspect <pkg>@<version>   # compatibility report before an upgrade"
+      ],
+      "usecases": [
+        "## Walkthrough: advanced MCP in your terminal",
+        "A text-only model answers questions about images — CLI and web, probe images included",
+        "Generate and edit images with a ChatGPT/Codex subscription; DSH approval and inline result included",
+        "`/btw <question>` runs a side thread in DSH's native subagent UI; your main conversation stays clean",
+        "Use a ChatGPT / Claude / Copilot / Kimi subscription as a DSH model",
+        "Private / domestic / proxy gateways that reject the `developer` role",
+        "The model runs a small team: delegate, background, steer mid-run, collect, resume with memory, stop for real"
+      ],
+      "outputs": [
+        "images becoming\nreal DSH attachments",
+        "a `pi-btw` answer is a real DSH child session — visible, resumable\nand continuable by the host.",
+        "a native context-injection row — the content reaches you and\nthe model, without the plugin's styling.",
+        "`pi2dsh matrix --json`."
+      ],
+      "media": [],
+      "reliability": [
+        "Requires Node.js 22.19+ and DeepSeek Harness.",
+        "A bare\n> arbitrary profile has no surface and can start with nothing to drive it",
+        "The mount is guaranteed for the child's **first** turn: prompt assembly and\ntool execution wait for it",
+        "**47 of 50 exercised successfully · 1 with no probeable surface · 2 pending a\nre-run.**",
+        "**What this level does not tell you:** that the plugin's actual feature works\nthe way you would use it.",
+        "- **Never fake success.** A capability with no safe mapping is reported",
+        "- **Verified, not asserted.** Every capability has a public-API contract test,\n  and ships only after running end to end on every DSH surface it claims.",
+        "runtime package installation\nand standalone model runtimes stay with the host and its security gates",
+        "Pi plugins can ship their own\nrenderers; today those registrations are accepted but not invoked",
+        "Packages outside the top 50 are not a separate case — the bridge has no\nper-package code."
+      ],
+      "concerns": [
+        "the card\nrenderers are what it does not draw yet."
+      ]
+    },
+    {
+      "repo": "V1ki/dsh-plugin-subscriptions",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Use your **ChatGPT (Codex)**, **Claude**, and **Grok (X Premium)** subscriptions as LLM providers",
+        "Logged-in providers join the session model picker with their live model catalogs:",
+        "Models that advertise reasoning levels get an **Effort** selector in the same menu",
+        "Codex models whose catalog advertises the fast tier (the codex CLI's fast mode) get a **Speed** toggle",
+        "Vision-capable models declare `['text', 'image']` input modalities, and image content is translated to each provider's wire format.",
+        "Logged-in cards also show **subscription usage** — per rate-limit window",
+        "- **`x_search`** tool (Grok) — xAI's hosted X search, returning `{ answer, citations }`.",
+        "The `provider` argument picks the preferred provider (`gpt`, the default, or `grok`)",
+        "Every provider accepts several accounts",
+        "the picker shows the **union** of every account's catalog (duplicates dropped).",
+        "A model listed by ≥2 accounts failovers between them (sticky, quota-aware).",
+        "Every subscription request — token exchanges, model-API streams, usage lookups, model discovery, and the `x_search` / `image_generate` / `video_generate` tools — can be routed through an HTTP(S) proxy."
+      ],
+      "usageItems": [
+        "1. `dsh web`, open the printed URL.",
+        "2. Settings → **Subscriptions**: click **Connect** on a provider.",
+        "3. In any session, open the model picker (`/model`) and choose a model under **ChatGPT (Codex)** / **Claude (Subscription)** / **Grok (Subscription)**.",
+        "The `/fast` slash command offers the same choice as a popup",
+        "re-logging the same account updates it in place, a different account appends.",
+        "Configure it in **Settings → Subscriptions → Proxy → Configure…**"
+      ],
+      "usageActions": [
+        "1. `dsh web`, open the printed URL.",
+        "2. Settings → **Subscriptions**: click **Connect** on a provider.",
+        "3. In any session, open the model picker (`/model`) and choose a model under **ChatGPT (Codex)** / **Claude (Subscription)** / **Grok (Subscription)**.",
+        "The `/fast` slash command offers the same choice as a popup",
+        "switch accounts there first (or use an incognito window with the manual code) to add a different one.",
+        "Configure it in **Settings → Subscriptions → Proxy → Configure…**",
+        "A \"Test\" button probes one endpoint through the current configuration and shows the HTTP status/latency."
+      ],
+      "ioPairs": [
+        "- **`x_search`** tool (Grok) — xAI's hosted X search, returning `{ answer, citations }`.",
+        "Images are saved under `~/.dsh/plugins/subscriptions/images/` and the paths returned.",
+        "MP4s are saved under `~/.dsh/plugins/subscriptions/videos/`, the path returned, and the clip plays inline in the conversation.",
+        "A \"Test\" button probes one endpoint through the current configuration and shows the HTTP status/latency."
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "Headless-only usage without installing into a profile",
+        "image-to-video via `image_url`",
+        "Use your **ChatGPT (Codex)**, **Claude**, and **Grok (X Premium)** subscriptions as LLM providers in [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — no API keys."
+      ],
+      "outputs": [
+        "The `image_generate` tool renders its result inline in the conversation:",
+        "The `video_generate` tool plays the generated clip inline:",
+        "the used percentage, a progress bar, and the reset time"
+      ],
+      "media": [
+        {"excerpt": "![Subscriptions settings page](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/subscriptions.png)", "weight": 0.5},
+        {"excerpt": "![Model picker with subscription models](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-picker.png)", "weight": 0.5},
+        {"excerpt": "![Reasoning effort selector](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/model-effort.png)", "weight": 0.5},
+        {"excerpt": "![Speed toggle with the Standard/Fast menu open](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/speed-toggle.png)", "weight": 0.5},
+        {"excerpt": "![image_generate renders the image inline](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-inline.png)", "weight": 0.5},
+        {"excerpt": "![image_generate with provider gpt vs grok](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/image-generate-providers.png)", "weight": 0.5},
+        {"excerpt": "![video_generate plays the clip inline](https://raw.githubusercontent.com/V1ki/dsh-plugin-subscriptions/main/docs/images/video-generate-inline.png)", "weight": 0.5}
+      ],
+      "reliability": [
+        "Tokens live at `~/.dsh/plugins/subscriptions/auth.json` (mode 0600) and refresh automatically.",
+        "it errors with an explanation when the current model has no fast tier.",
+        "Only logged-in providers appear in the session model picker",
+        "requests fail with `MISSING_CREDENTIAL` pointing at the Settings page; nothing else breaks.",
+        "Only grant this to packages you trust — it runs the package's code at install time.",
+        "A Claude account imported from Claude Code stays synced with the CLI's credential store",
+        "Members past 95% on any usage window are gated out; failures fail over before the first stream chunk with cooldowns",
+        "The password is stored in `~/.dsh/plugins/subscriptions/proxy.json` (mode 0600) and is never returned to the browser.",
+        "Changes apply immediately to subsequent requests — no restart needed.",
+        "SOCKS proxies are not supported."
+      ],
+      "concerns": [
+        "Copilot exposes no usage endpoint, so its card shows no usage section."
+      ]
+    }
+  ]
+}

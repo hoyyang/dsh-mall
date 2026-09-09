@@ -29,6 +29,15 @@ import {
 import { formatDownloads, formatStars, relativeFromNow, type MarketEntry } from './market-data.ts'
 import RadarChart from './RadarChart.tsx'
 
+interface DownloadFreshness {
+  periodStart: string | null
+  periodEnd: string | null
+  totalPeriodStart: string | null
+  totalPeriodEnd: string | null
+  queriedAt: string | null
+  totalQueriedAt: string | null
+}
+
 interface ReadmeHit {
   status: 'ok' | 'error' | 'loading'
   text: string
@@ -277,9 +286,9 @@ export function DetailPanel(props: {
 
   // v1.7.54：详情打开时对缺失下载量的条目做一次性富化（home 富化按页，
   // 详情入口独立补拉，保证「信息补齐 ≥ 卡片」）。
-  const [downloadsHit, setDownloadsHit] = useState<{ d: number | null; t: number | null } | null>(null)
+  const [downloadsHit, setDownloadsHit] = useState<{ d: number | null; t: number | null; freshness: DownloadFreshness | null } | null>(null)
   useEffect(() => {
-    if (entry.downloads !== null && entry.downloads !== undefined) return
+    if (entry.downloads !== null && entry.downloads !== undefined && entry.downloadFreshness != null) return
     if (entry.npm === null || entry.npmLinked === false) return
     let alive = true
     fetch('/dsh-mall/downloads', {
@@ -288,17 +297,19 @@ export function DetailPanel(props: {
       body: JSON.stringify({ names: [entry.npm] }),
     })
       .then(res => res.json())
-      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null> }) => {
+      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null>; freshness?: Record<string, DownloadFreshness> }) => {
         const got = body.downloads ?? {}
         const totals = body.totals ?? {}
+        const freshness = body.freshness ?? {}
         const d = got[entry.npm as string]
         const t = totals[entry.npm as string]
-        if (alive && (d !== undefined || t !== undefined)) setDownloadsHit({ d: d ?? null, t: t ?? null })
+        const fresh = freshness[entry.npm as string] ?? null
+        if (alive && (d !== undefined || t !== undefined || fresh !== null)) setDownloadsHit({ d: d ?? null, t: t ?? null, freshness: fresh })
       })
       .catch(() => {})
     return () => { alive = false }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entry.owner, entry.name, entry.npm, entry.npmLinked, entry.downloads])
+  }, [entry.owner, entry.name, entry.npm, entry.npmLinked, entry.downloads, entry.downloadFreshness])
 
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const copyCmd = () => {
@@ -309,13 +320,30 @@ export function DetailPanel(props: {
   }
   const d30 = downloadsHit?.d ?? (typeof entry.downloads === 'number' ? entry.downloads : null)
   const dTotal = downloadsHit?.t ?? (typeof entry.totalDownloads === 'number' ? entry.totalDownloads : null)
+  const freshness = downloadsHit?.freshness ?? entry.downloadFreshness ?? null
+  const formatDateTime = (value: string | null): string | null => {
+    if (value === null) return null
+    const ms = Date.parse(value)
+    if (Number.isNaN(ms)) return value
+    return new Intl.DateTimeFormat(langChoice === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(ms))
+  }
+  const npmFreshness = freshness === null
+    ? null
+    : [
+        freshness.periodStart !== null && freshness.periodEnd !== null ? t('npmPeriod').replace('{0}', freshness.periodStart).replace('{1}', freshness.periodEnd) : null,
+        freshness.queriedAt !== null ? t('npmQueriedAt').replace('{0}', formatDateTime(freshness.queriedAt) ?? freshness.queriedAt) : null,
+      ].filter((line): line is string => line !== null).join(' · ') || null
+  const totalPeriodLabel = freshness?.totalPeriodStart !== null && freshness?.totalPeriodStart !== undefined && freshness.totalPeriodEnd !== null
+    ? t('totalDownloadsPeriodLabel').replace('{0}', freshness.totalPeriodStart).replace('{1}', freshness.totalPeriodEnd)
+    : t('totalDownloadsLabel')
   // v1.7.54：元数据——分类恒显（other 本地化）；下载量缺失时显示占位
   const meta: Array<[string, string | null]> = [
     [t('detailStars'), formatStars(entry.stars)],
     [t('todayGain'), entry.todayStars === null ? '—' : (entry.todayStars >= 0 ? '+' : '') + String(entry.todayStars)],
     [t('detailCategory'), entry.category === '' ? null : props.categoryLabel(entry.category)],
     [t('downloads30Label'), d30 !== null ? formatDownloads(d30) : (entry.npm !== null && entry.npmLinked !== false ? '—' : null)],
-    [t('totalDownloadsLabel'), dTotal !== null ? formatDownloads(dTotal) : (entry.npm !== null && entry.npmLinked !== false ? '—' : null)],
+    [totalPeriodLabel, dTotal !== null ? formatDownloads(dTotal) : (entry.npm !== null && entry.npmLinked !== false ? '—' : null)],
+    [t('npmDataFreshness'), npmFreshness],
     [t('detailCreated'), entry.created === null ? null : relativeFromNow(entry.created, t)],
     [t('updatedShort'), entry.pushed === null ? null : relativeFromNow(entry.pushed, t)],
     [t('detailLanguage'), entry.language],
@@ -396,7 +424,7 @@ export function DetailPanel(props: {
           <div className="pcm-detail-desc">{desc === '' ? '—' : desc}</div>
 
           {/* v1.7.57：信任徽章行——与首页卡片徽章内容/图标/样式完全一致（curated/verified/scanned/skill/disclosure），manual/non-plugin 为详情页补充徽章 */}
-          {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true || entry.installable != null) && (
+          {(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true || entry.installable != null || entry.excluded != null) && (
             <div className="pcm-detail-safety">
               {entry.curated && (
                 <span className="pcm-safety pcm-safety-curated" title={t('curatedBadgeTitle')}>
@@ -428,7 +456,11 @@ export function DetailPanel(props: {
                 </span>
               )}
               {entry.installable === 'manual' && <span className="pcm-safety pcm-safety-manual">⚙ {t('manualInstall')}</span>}
-              {entry.installable === 'non-plugin' && <span className="pcm-safety pcm-safety-nonplugin">⊘ {t('nonpluginBadge')}</span>}
+              {entry.pluginStatus === 'verified-non-plugin' && <span className="pcm-safety pcm-safety-nonplugin" title={(entry.pluginEvidence ?? []).join(' · ')}>⊘ {t('nonpluginBadge')}</span>}
+              {entry.pluginStatus === 'conflict' && <span className="pcm-safety pcm-safety-nonplugin" title={(entry.pluginEvidence ?? []).join(' · ')}>⚠ {t('conflictBadge')}</span>}
+              {entry.excluded?.kind === 'market' && <span className="pcm-safety pcm-safety-manual" title={entry.excluded.reason}>↗ {t('marketPolicyBadge')}</span>}
+              {entry.excluded?.kind === 'leaderboard' && <span className="pcm-safety pcm-safety-manual" title={entry.excluded.reason}>↗ {t('leaderboardPolicyBadge')}</span>}
+              {entry.excluded?.kind === 'excluded' && <span className="pcm-safety pcm-safety-nonplugin" title={entry.excluded.reason}>⊘ {t('catalogExcludedBadge')}</span>}
             </div>
           )}
 

@@ -15,7 +15,14 @@ export interface MarketEntry {
   todayStars: number | null
   created: string | null
   pushed: string | null
+  /** 兼容投影：true/false 仅代表已验证，null = 未知或冲突。 */
   isPlugin: boolean | null
+  /** 技术身份；目录排除政策单独见 excluded。 */
+  pluginStatus: 'verified-plugin' | 'verified-non-plugin' | 'conflict' | 'unknown'
+  /** 可审计的身份证据。 */
+  pluginEvidence: Array<'manifest-contract' | 'index-bundle-scan' | 'index-verified-install' | 'independent-verification' | 'index-non-plugin'>
+  /** 评分 p99 人口兼容字段；不参与技术身份/UI。 */
+  scoreBaselineEligible?: boolean
   curated: boolean
   npm: string | null
   avatar: string
@@ -47,8 +54,17 @@ export interface MarketEntry {
   topics: string[]
   /** npm 下载量（近 30 天，按需富化）；undefined=未拉取，null=未发布。 */
   downloads?: number | null
-  /** npm 总下载量（2019 起累计，按需富化）。 */
+  /** npm API 实际返回区间内的下载量（按需富化；不承诺固定起点）。 */
   totalDownloads?: number | null
+  /** npm 官方统计截止/本地查询时间；与数字一起按需富化。 */
+  downloadFreshness?: {
+    periodStart: string | null
+    periodEnd: string | null
+    totalPeriodStart: string | null
+    totalPeriodEnd: string | null
+    queriedAt: string | null
+    totalQueriedAt: string | null
+  } | null
   /** GitHub Releases latest 版本号（按需富化；npm 未发布的仓库用）。 */
   repoVersion?: string | null
   /** 黑名单/剔除条目（exclusions.json）；null=正常条目。 */
@@ -81,6 +97,24 @@ export interface MarketEntry {
     heading: boolean
     cmds: string[]
     needsConfig: boolean
+    practical: {
+      version: 3
+      parserRevision: 3
+      capabilityItems: number
+      usageItems: number
+      usageActions: number
+      ioPairs: number
+      codeExamples: number
+      usecaseItems: number
+      outputItems: number
+      media: number
+      reliabilityItems: number
+      confidence: {
+        overall: number
+        coverage: number
+        fallbackShare: number
+      }
+    } | null
   } | null
   /** v1.7.45+：实用五维评分（目录加载基础分；页级富化后补全并 complete）。 */
   score?: ScoreView | null
@@ -103,6 +137,7 @@ export interface ScoreView {
   pushedAt?: string | null
   dlActiveAt?: boolean
   dl30At?: number | null
+  practicalEvidenceAt?: string | null
 }
 
 export interface Registry {
@@ -139,7 +174,7 @@ export function visiblePlugins(plugins: MarketEntry[], options: ListQuery, isIns
   const list = plugins.filter((p) => {
     if (options.category !== 'all' && p.category !== options.category) return false
     if (options.kind === 'plugin' && p.isPlugin !== true) return false
-    if (options.kind === 'nonplugin' && p.isPlugin === true) return false
+    if (options.kind === 'nonplugin' && p.isPlugin !== false) return false
     if (options.curatedOnly && !p.curated) return false
     if (options.verifiedOnly && p.verified == null) return false
     if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false

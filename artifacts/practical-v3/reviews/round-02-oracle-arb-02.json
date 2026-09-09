@@ -1,0 +1,313 @@
+{
+  "reviews": [
+    {
+      "repo": "Awesome-AI-Pedia/Awesome-AI-Pedia",
+      "inferredType": "catalog-list",
+      "capability": [
+        "- **🔍 本地搜索** — 内置全文搜索，快速定位所需内容",
+        "- **🚀 自动部署** — 推送到 `master` 自动构建并发布到 GitHub Pages",
+        "侧边栏由 `docs/.vitepress/utils/sidebar.ts` 自动扫描生成。"
+      ],
+      "usageItems": [
+        "> 以下分类均对应仓库根目录的实际目录，可直接进入查看原始 Markdown。"
+      ],
+      "usageActions": [
+        "> 以下分类均对应仓库根目录的实际目录，可直接进入查看原始 Markdown。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [],
+      "concerns": [
+        "Catalog ownership was enforced: linked-topic guides and their commands were not attributed to the catalog.",
+        "Startup commands were excluded as installation/setup evidence; badges and the star-history chart were excluded."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-mnemon",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Runtime Memory keeps compact context available every turn.",
+        "Project Documents preserve complete narratives.",
+        "Memory Spaces retrieve durable evidence on demand and can use **Mnemon, OpenViking, Honcho, Mem0, Hindsight, Holographic, RetainDB, ByteRover, or Supermemory**.",
+        "**Smart selection** | Hard rules filter providers; a task Agent resolves only genuine ambiguity | Saves a routing receipt",
+        "**AI metadata** | One asynchronous task Agent per selected Memory Space, each using the provider's fastest sample path | Local title/description only",
+        "**Archive Document** | A task Agent creates a searchable cold reference before the Host moves the original | Supervised move",
+        "**Sidebar WebUI** | Status, Runtime, Documents, Memory Spaces, Provider services, visualization, and confirmation surfaces",
+        "**Headless** | Runtime injection, Document search, Memory Space tools, workspace routing, and supervised writes without a WebUI"
+      ],
+      "usageItems": [
+        "Open **Memory System → Status** and verify dsh-mnemon, Mnemon Native, Runtime, Documents, and enabled Providers.",
+        "Open **Memory Spaces → Overview → Create Memory Space** and choose an enabled Provider explicitly.",
+        "Submit one stable, future-useful candidate through **Remember**.",
+        "Open **Recall**, run a direct search, then run **Agent query** against the same question.",
+        "Return to the conversation, expand **Turn memory**, and follow one exact tool link."
+      ],
+      "usageActions": [
+        "Open **Memory System → Status** and verify dsh-mnemon, Mnemon Native, Runtime, Documents, and enabled Providers.",
+        "Open **Memory Spaces → Overview → Create Memory Space** and choose an enabled Provider explicitly.",
+        "Submit one stable, future-useful candidate through **Remember**.",
+        "Open **Recall**, run a direct search, then run **Agent query** against the same question.",
+        "Return to the conversation, expand **Turn memory**, and follow one exact tool link.",
+        "**Commands** | `/mnemon status`, `recall`, `related`, `remember`, and `forget`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "The tiers are not copies. A useful rule is: **every-turn context goes to Runtime, complete narratives go to Documents, and cross-task evidence goes to Memory Spaces.**"
+      ],
+      "outputs": [
+        "**Search** | Concurrent provider-native recall | Read-only",
+        "**Agent query** | A clean top-level task Agent receives bounded evidence and writes an answer | Read-only",
+        "**Remember** / **Save to memory** | A clean task Agent qualifies, routes, deduplicates, distills, and writes behind Host controls | Writes only if accepted",
+        "**Turn memory** | Expands exact recall, write, and Document-search activity; each item navigates to its source | Read-only"
+      ],
+      "media": [
+        {
+          "excerpt": "Full dsh-mnemon v0.2.0 WebUI walkthrough with scrolling and button interactions",
+          "weight": 1
+        },
+        {
+          "excerpt": "Edit a candidate before dispatching an independent task Agent",
+          "weight": 1
+        },
+        {
+          "excerpt": "Read-only Agent answer grounded in bounded multi-provider evidence",
+          "weight": 1
+        },
+        {
+          "excerpt": "Choose a Provider while creating a Memory Space",
+          "weight": 1
+        },
+        {
+          "excerpt": "Choose manual or smart Provider placement",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "Current instructions, repository files, and live tool results always outrank historical memory.",
+        "Provider capability differences stay visible. dsh-mnemon never invents graph edges, deletion semantics, or enumerable content for an engine that does not provide them.",
+        "This release is verified against DSH 0.1.1-rc.2, whose complete profiles require Node.js `^22.19.0 || >=24.0.0`; Node 20 lacks host primitives used by rc.2.",
+        "Mnemon background jobs still send text-only prompts; multimodal conversation messages keep their DSH attachment references through lifecycle processing, and raw image bytes are never copied into memory.",
+        "Runtime and Documents are local deterministic stores. Mnemon Native is local by default; external Providers are explicit opt-ins.",
+        "Provider credentials are mode `0600` under `<storageRoot>/state/memory-providers.json`. They are never returned to the browser, smart-selection Agent, or Mnemon Pack.",
+        "Host calls use argument arrays with shell disabled, bounded output, timeouts, cancellation, schema validation, path boundaries, locks, and revisions.",
+        "Disabling a Provider clears its local catalog metadata but never deletes remote data. Reconnecting rebuilds metadata from the Provider, using local defaults only when a field cannot be mapped.",
+        "There is no deterministic secret scanner yet. Never store keys, tokens, private keys, or raw sensitive logs in any tier.",
+        "Uninstalling the plugin does not remove local or remote memory data."
+      ],
+      "concerns": [
+        "The README contains more distinct shipped behaviors than the capability and reliability caps permit; lower-priority claims were omitted.",
+        "Install/configuration and development commands were excluded; repository-hosted demonstrations were deduplicated by view."
+      ]
+    },
+    {
+      "repo": "TencentCloud/tencentmeeting-cli",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- 🔐 **OAuth2 授权登录** — 设备码授权流程，安全无密码",
+        "- 📅 **会议管理** — 创建、查询、更新、取消会议，支持周期性会议，管理受邀成员",
+        "- 🎬 **录制管理** — 查询录制列表、获取下载地址、智能纪要、转写详情与搜索",
+        "- 📊 **参会报告** — 查询参会人列表、等候室成员记录",
+        "- 👥 **通讯录** — 按用户名/职位/部门检索企业通讯录成员",
+        "- 🛠️ **问题排查** — 导出本地日志，支持按时间范围过滤，打包为 zip 文件",
+        "查看当前登录状态，包括 OpenId、AccessToken / RefreshToken 的过期状态和剩余有效时间。",
+        "通过邮箱地址反查用户详细信息，支持批量查询多个邮箱。",
+        "通过手机号反查用户详细信息，支持批量查询多个手机号。",
+        "会中控制相关命令，用于在会议进行中对参会成员执行呼叫、踢出等管理操作。",
+        "管理会议中等候室成员，支持三种操作类型：",
+        "将 Agent 在使用 CLI 过程中遇到的问题或建议上报至服务器，便于后续优化工具能力。"
+      ],
+      "usageItems": [
+        "如需禁用自动打开浏览器，可使用 `--no-browser` 参数：`tmeet auth login --no-browser`",
+        "**首次查询不传**；后续翻页请将上一次响应中的 `next_page_token` 传入",
+        "# 3) 重复直到 next_page_token 为空，即已到最后一页",
+        "`--meeting-id` 和 `--meeting-code` 二选一，`--meeting-id` 优先级更高。",
+        "仅传入需要修改的字段，未传入的字段保持不变。",
+        "受邀成员通过用户 `open_id` 指定，可通过 `contact search` 命令查询获得。",
+        "申请录制权限前先调用本命令获取审批文案/会议主题/录制所有者等信息，**展示给用户二次确认后**再执行 `record permission-apply-commit` 真正提交申请。",
+        "获取 `job_id` 后，需每隔 5 秒调用 `report job-result` 轮询任务状态，直到 status 为 \"成功\" 时获取下载链接，或 status 非 \"处理中\" 时终止。",
+        "`--start` 和 `--end` 必须同时传入或同时不传。",
+        "若怀疑泄露或需停用，请立即执行登出命令 `tmeet auth logout`。"
+      ],
+      "usageActions": [
+        "tmeet auth login",
+        "tmeet meeting create --subject <主题> --start <开始时间> --end <结束时间> [选项]",
+        "tmeet meeting search [选项]",
+        "tmeet record search [选项]",
+        "tmeet record smart-minutes --record-file-id <文件ID> [选项]",
+        "tmeet contact search --username <用户名> [选项]",
+        "tmeet report participants --meeting-id <会议ID> [选项]",
+        "tmeet control waiting-room --meeting-id <会议ID> --operate-type <操作类型> [选项]",
+        "tmeet tshoot log [选项]",
+        "tmeet auth logout"
+      ],
+      "ioPairs": [
+        "# 导出日志并上传到服务器（需要登录）\ntmeet tshoot log --upload\n```\n\n输出示例：\n```\noutput log saved to: ~/tmeet_ts_20260410_153000.zip"
+      ],
+      "codeExamples": [
+        "#### `auth logout`\n\n登出并清除本地认证凭证。\n\n```bash\ntmeet auth logout",
+        "#### `meeting get` — 查询会议详情\n\n`--meeting-id` 和 `--meeting-code` 二选一，`--meeting-id` 优先级更高。\n\n```bash\ntmeet meeting get --meeting-id <会议ID>",
+        "#### `record smart-minutes` — 获取智能纪要\n\n```bash\ntmeet record smart-minutes --record-file-id <文件ID> [选项]",
+        "#### `contact search` — 搜索企业通讯录成员\n\n按用户名搜索企业通讯录成员，支持通过职位或部门进一步过滤搜索结果。\n\n```bash\ntmeet contact search --username <用户名> [选项]"
+      ],
+      "usecases": [
+        "适用于查询/列表类命令"
+      ],
+      "outputs": [
+        "| `--format` | — | `json` | 输出格式：`json`（紧凑格式）\\| `json-pretty`（缩进格式） |",
+        "未登录时提示 `Not logged in`，已登录时展示凭证有效期信息。",
+        "| `job_id` | 异步任务 ID（用于轮询任务状态） |",
+        "| `status` | 任务状态：\"成功\"、\"失败\"、\"处理中\" |",
+        "| `url` | 文件下载链接（状态为 \"成功\" 时返回，有效期 2 小时） |",
+        "| `error_msg` | 错误信息（状态为 \"失败\" 时返回） |",
+        "output log saved to: ~/tmeet_ts_20260410_153000.zip",
+        "响应中的时间戳字段会自动转换为 ISO 8601 格式展示。"
+      ],
+      "media": [],
+      "reliability": [
+        "- 🔒 **安全存储** — 凭证使用 AES-256-GCM 加密，明文不落盘",
+        "- 🖥️ **跨平台** — 支持 macOS、Linux、Windows",
+        "CLI 自动轮询结果（超时 5 分钟），凭证加密保存到本地。",
+        "原先的 `--page` / `--pos` / `--size` 参数被标记为 **deprecated**，仍可使用但不再推荐，未来版本可能移除。",
+        "`record transcript-get` / `record transcript-paragraphs` / `record transcript-search` 暂不支持基于 `--page-token` 的新分页方案。",
+        "当未传入 `--page-token` 且同时传入了旧分页参数（如 `--page`、`--pos`）时，CLI 会按旧模式发起请求（`page_type=0`）；否则一律按新模式（`page_type=1`）发起请求。",
+        "bool 参数传 false 必须使用 = 形式，不能用空格",
+        "以下三组参数**任选其一**（均不传则报错）：\n- `--start` + `--end`（时间范围）\n- `--meeting-id`（会议 ID）\n- `--meeting-code`（会议号）",
+        "`--users` / `--sip-users` / `--pstn-users` **三者至少必填一种**，且**三者总数合计最多 20 个**。",
+        "AI仍可能因模型幻觉、提示词注入、投毒攻击、执行偏差不可控等原因，导致数据泄露、越权操作等执行非预期操作的高风险后果"
+      ],
+      "concerns": [
+        "The command reference greatly exceeds multiple family caps; representative distinct operations were retained and near-duplicate examples omitted.",
+        "Installation, CLI-SKILL setup, and configuration-directory evidence were excluded."
+      ]
+    },
+    {
+      "repo": "shanliuling/dsh-image-gen",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- 🔁 **连续多轮编辑**：支持复用当前会话中的上传图片、历史生成图和上一轮编辑结果继续迭代。",
+        "- 🖼️ **画廊与图片工具**：自动汇总历史图片，支持搜索、筛选、全屏预览、复制、下载与删除。",
+        "- 🎨 **多 Provider 支持**：兼容 Google Gemini、OpenAI Images / Compatible、Seedream、DashScope Qwen Image。",
+        "- 💾 **会话与工作区保存**：图片接入 DSH Attachment / Conversation，并可自动保存到当前工作区。"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "生成一张极简主义的现代建筑客厅插画。",
+        "给刚才那张图加上落地窗，并把窗外改成雪山。",
+        "点击会话顶栏的 **`[画廊]`** Tab"
+      ],
+      "ioPairs": [
+        "现在直接在聊天框输入：\n\n```text\n生成一张极简主义的现代建筑客厅插画。\n```\n\n当前 Agent 就会自动调用 `generate_image` 工具并在对话流中返回图片。",
+        "也可以继续基于上一张图进行编辑：\n\n```text\n给刚才那张图加上落地窗，并把窗外改成雪山。\n```\n\nAgent 会调用 `edit_image`，复用当前会话中的图片继续修改。"
+      ],
+      "codeExamples": [
+        "现在直接在聊天框输入：\n\n```text\n生成一张极简主义的现代建筑客厅插画。",
+        "也可以继续基于上一张图进行编辑：\n\n```text\n给刚才那张图加上落地窗，并把窗外改成雪山。"
+      ],
+      "usecases": [],
+      "outputs": [
+        "当前 Agent 就会自动调用 `generate_image` 工具并在对话流中返回图片。",
+        "Agent 会调用 `edit_image`，复用当前会话中的图片继续修改。"
+      ],
+      "media": [
+        {
+          "excerpt": "首次生成图片的对话截图",
+          "weight": 1
+        },
+        {
+          "excerpt": "基于上一张图片继续编辑的对话截图",
+          "weight": 1
+        },
+        {
+          "excerpt": "原生生图画廊预览",
+          "weight": 1
+        }
+      ],
+      "reliability": [],
+      "concerns": [
+        "API-key/provider settings and every installation/development command were excluded as configuration or setup evidence.",
+        "The promotional hero and settings screenshot were excluded; only distinct operational screenshots were counted."
+      ]
+    },
+    {
+      "repo": "EverMind-AI/SkillCorpus",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "It aggregates sources, applies safety and license gates,\nevaluates quality, and matches task-specific skills before the agent answers.",
+        "- **Build your own skill layer** — point the pipeline at your own source registry, apply the\n  curation, safety, and license gates, and export a corpus for your agents.",
+        "- **Change the behavior** — modify the taxonomy, quality and dedup rules, retrieval recipe, export\n  schema, evaluation suites, or host plugins.",
+        "Retrieval runs every turn, before the model answers: no tool call, no skill names to memorise,\nno host patch.",
+        "[SkillHub](https://evermind.ai/skillhub) serves the corpus in three tiers — discover\n(metadata), read (`skill_md`), download (zip with `scripts/`).",
+        "packaged host adapters for OpenClaw · Hermes · WorkBuddy · Raven, plus DeepSeek Harness and an HTTP adapter",
+        "`cli build` runs the whole curation chain\n(`ingest → quality_pass → dedup_pass → license_audit → export.corpus`).",
+        "a bi-encoder fine-tuned from `Qwen3-Embedding-0.6B` for candidate recall, and a reranker\n  fine-tuned from `Qwen3-Reranker-0.6B` that scores the top candidates.",
+        "- **Benchmarks** — [`skillcorpus/evaluate/`](skillcorpus/evaluate): `skillsbench`,\n  `qwenclawbench`, `gdpval` — each self-contained with its own README and dependencies."
+      ],
+      "usageItems": [
+        "Take an `id` from the results, fetch its `skill_md`, and inject it into your agent's\nprompt.",
+        "To avoid depending on the hosted endpoint, run selection yourself. The corpus and both\nretrieval models are released: load the data, serve the two models, and run your own\nencode → top-k → rerank.",
+        "To curate **your own** sources instead, see [Build your own corpus](#build-your-own)."
+      ],
+      "usageActions": [
+        "curl \"https://skillhub.evermind.ai/openapi/v1/skills?q=extract+tables+from+a+PDF\"",
+        "python examples/skillhub_demo.py \"extract tables from a scanned PDF invoice\"",
+        "python examples/skillhub_demo.py --ask \"extract tables from a scanned PDF invoice\"",
+        "python -m skillcorpus.cli build     # 4 demo sources -> curate -> export",
+        "python -m skillcorpus.cli stats     # counts by source / category / license",
+        "python -m skillcorpus.cli export --out ./corpus",
+        "python -m pytest skillcorpus/tests -p no:cacheprovider --import-mode=importlib"
+      ],
+      "ioPairs": [
+        "task: extract tables from a scanned PDF invoice\n\n[1/2] search  → 2 hit(s), metadata only\n  1. ocr-and-documents   q=0.808  DOC-PROC  MIT\n     Extract text from PDFs/scans (pymupdf, marker-pdf)."
+      ],
+      "codeExamples": [
+        "# search + read the bodies — stdlib only, no install, no API key\npython examples/skillhub_demo.py \"extract tables from a scanned PDF invoice\""
+      ],
+      "usecases": [
+        "- **Keep control of deployment** — self-host the released retrieval models and connect your own\n  agent host instead of using the hosted SkillHub API.",
+        "Most skills are pure\ninstructions, so the read tier is usually sufficient."
+      ],
+      "outputs": [
+        "| **Pooled ∆** | **+7.5**±2.3 (z=3.2) | **+1.51**±0.49 (z=3.1) | **+2.79**±0.70 (z=4.0) |",
+        "The gain is largest where the task needs procedural knowledge the model does not already have\n(SkillsBench), and smallest on open-ended economic tasks it can already do (GDPVal).",
+        "| 🌐 | **SkillHub** | the current 114,190-skill catalog + the two models, hosted as an API — no install |",
+        "**Corpus** *(demo)* | the downloadable 1,000-skill sample — `skills.parquet` + `attachments.tar.zst` + dataset card; the full catalog is served by SkillHub",
+        "| 🛠️ | **Code** | this repo — the pipeline that builds the corpus and trains the two models (`aggregate` · `curate` · `match` · `evaluate` · `export`) |",
+        "→ built a prompt of 36,742 chars with the skill bodies injected",
+        "Attachments (`scripts/`, `references/`) ship as a sibling `attachments.tar.zst`."
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/4d9a3241-df13-4b20-9798-fb7920069995",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/taxonomy.png\" alt=\"16-class distribution over the 96,401 active skills\" width=\"58%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/pipeline.png\" alt=\"SkillCorpus: curated skills are matched to a task and injected into an agent before execution\" width=\"100%\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "The core code is Apache-2.0 licensed (`match/` and `evaluate/` are MIT); each skill retains its\nupstream license.",
+        "The packaged Raven plugin is ready to install, but it will claim the `skills`\nstage once Raven merges its upstream `context_segments` slot; Raven's built-in retrieval keeps\nworking today.",
+        "The hosted SkillHub\nservice is closed, and the full hosted catalog is not yet published as a downloadable dataset.",
+        "This endpoint speaks `/embed` + `/score`\n([`skillcorpus/match/` → Serving](skillcorpus/match/README.md#serving)) — it is **not** a\ndrop-in for SkillHub's hosted-only `/openapi/v1/skills` API.",
+        "LLM classification and\nquality scoring degrade gracefully to rules when no model endpoint is reachable, so the pipeline\nalways runs end to end.",
+        "`match/` and `evaluate/` are standalone toolkits with their own `requirements.txt`\n(torch / transformers, per benchmark); they are **not** pulled in by `pip install` of the producer.",
+        "Only skills from GREEN-licensed **sources** are exported",
+        "The per-row\n`license` is each skill's declared value, so a demo corpus can still carry non-GREEN `license`\nstrings.",
+        "Each row carries\n  `source`, `source_url`, and `license`, so downstream use must follow the per-skill terms."
+      ],
+      "concerns": [
+        "Hosted SkillHub behavior and open-source repository behavior are interleaved; only explicitly current shipped claims were retained.",
+        "Unchecked roadmap items, linked EverMind-project capabilities, install/config commands, logos, and decorative banner media were excluded."
+      ]
+    }
+  ]
+}

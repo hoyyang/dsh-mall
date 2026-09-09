@@ -1,16 +1,16 @@
 /**
  * Catalog pipeline: shard-fetch GitHub topic repos -> classify (curated map,
- * rule categories, isPlugin heuristic/verdicts) -> compute today's star
+ * rule categories, evidence-based plugin identity) -> compute today's star
  * delta from the local snapshot -> serve through an in-memory TTL cache with
- * a bundled snapshot fallback. State (star baselines, verdicts) persists
+ * a bundled snapshot fallback. State (star baselines, positive verdicts) persists
  * under the profile directory.
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { fetchTopicPages, packageJsonVerdict, searchDshTopicRepos } from './github.ts'
-import { attachScores } from './score.ts'
+import { fetchTopicPages, GithubRateLimitError, packageJsonVerdict, searchDshTopicRepos } from './github.ts'
+import { attachScores, PRACTICAL_EVIDENCE_VERSION, PRACTICAL_PARSER_REVISION } from './score.ts'
 
 // ------------------------------------------------------------ CDN channel
 // Primary source: the community-built static index (GitHub Actions, token
@@ -92,6 +92,24 @@ interface CdnRepo {
   readme_heading?: boolean
   readme_cmds?: string[]
   readme_needs_config?: boolean
+  readme_practical?: {
+    version?: number
+    parser_revision?: number
+    capability_items?: number
+    usage_items?: number
+    usage_actions?: number
+    io_pairs?: number
+    code_examples?: number
+    usecase_items?: number
+    output_items?: number
+    media?: number
+    reliability_items?: number
+    confidence?: {
+      overall?: number
+      coverage?: number
+      fallback_share?: number
+    }
+  } | null
   version?: string | null
   /** 索引 v1.10：GitHub tags 最新 tag（npm 未发布仓库的版本号展示）。 */
   latest_tag?: string | null
@@ -109,6 +127,30 @@ interface CdnRepo {
     jurisdiction?: string | null
     retention?: string | null
   } | null
+}
+
+function practicalEvidenceOf(raw: CdnRepo['readme_practical']): ReadmePracticalEvidence | null {
+  if (raw?.version !== PRACTICAL_EVIDENCE_VERSION || raw.parser_revision !== PRACTICAL_PARSER_REVISION) return null
+  const readCount = (value: unknown): number => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0
+  const readRatio = (value: unknown): number => Math.max(0, Math.min(1, readCount(value)))
+  return {
+    version: PRACTICAL_EVIDENCE_VERSION,
+    parserRevision: PRACTICAL_PARSER_REVISION,
+    capabilityItems: readCount(raw.capability_items),
+    usageItems: readCount(raw.usage_items),
+    usageActions: readCount(raw.usage_actions),
+    ioPairs: readCount(raw.io_pairs),
+    codeExamples: readCount(raw.code_examples),
+    usecaseItems: readCount(raw.usecase_items),
+    outputItems: readCount(raw.output_items),
+    media: readCount(raw.media),
+    reliabilityItems: readCount(raw.reliability_items),
+    confidence: {
+      overall: readRatio(raw.confidence?.overall),
+      coverage: readRatio(raw.confidence?.coverage),
+      fallbackShare: readRatio(raw.confidence?.fallback_share),
+    },
+  }
 }
 
 /** 从索引条目收集 description_<lang> 富化字段为 { lang: 文本 } 映射。 */
@@ -174,7 +216,38 @@ const CDN_CATEGORY_MAP: Record<string, string> = {
   security: 'security',
 }
 
-function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boolean>): MarketEntry {
+function legacyPluginHeuristic(repo: { name: string; description: string | null; topics: string[] }): boolean | null {
+  const hay = (repo.name + ' ' + (repo.description ?? '') + ' ' + repo.topics.join(' ')).toLowerCase()
+  if (!/(dsh|deepseek[ -]?harness|cordis)/i.test(hay)) return false
+  if (/(^dsh[-_]|[-_]dsh[-_]|dsh[-_]plugin|dshplugin)/i.test(hay) || /(plugin|插件)\b/i.test(hay)) return true
+  return null
+}
+
+/** Freeze the v1.8.2 score population only; never use this as technical identity. */
+function legacyCdnScoreBaselineEligible(repo: CdnRepo, verdict: true | undefined, excluded: boolean): boolean {
+  const heuristic = legacyPluginHeuristic({ name: repo.name, description: repo.description, topics: repo.topics ?? [] })
+  let oldProjection: boolean | null = verdict ?? heuristic
+  if (verdict === undefined) {
+    if (repo.installable === 'non-plugin') oldProjection = false
+    else if (repo.market_tags?.includes('verified-install') === true || (repo.pkg_name ?? null) !== null) oldProjection = true
+  }
+  if (excluded) oldProjection = false
+  return oldProjection === true
+}
+
+function pluginIdentity(positive: PluginEvidence[], negative: PluginEvidence[]): {
+  isPlugin: boolean | null
+  pluginStatus: PluginStatus
+  pluginEvidence: PluginEvidence[]
+} {
+  const evidence = [...new Set([...positive, ...negative])]
+  if (positive.length > 0 && negative.length > 0) return { isPlugin: null, pluginStatus: 'conflict', pluginEvidence: evidence }
+  if (positive.length > 0) return { isPlugin: true, pluginStatus: 'verified-plugin', pluginEvidence: evidence }
+  if (negative.length > 0) return { isPlugin: false, pluginStatus: 'verified-non-plugin', pluginEvidence: evidence }
+  return { isPlugin: null, pluginStatus: 'unknown', pluginEvidence: [] }
+}
+
+function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, true>): MarketEntry {
   const key = repo.full_name.toLowerCase()
   const knownEntry = known[key]
   const verdict = verdicts[key]
@@ -194,15 +267,14 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     else if (/(workflow|automation|scheduler|定时|自动化|工作流)/i.test(hay)) category = 'workflow'
     else category = CDN_CATEGORY_MAP[rawCategory] ?? ruleCategory(name ?? key, description, topics)
   }
-  const heuristic = heuristicIsPlugin({ name: name ?? key, description: repo.description, topics })
-  let isPlugin = verdict !== undefined ? verdict : heuristic
-  if (verdict === undefined) {
-    if (repo.installable === 'non-plugin') isPlugin = false
-    else if (repo.market_tags?.includes('verified-install') === true || (repo.pkg_name ?? null) !== null) isPlugin = true
-  }
-  // v1.7.34：剔除条目（货不对板：蹭 topic 的非插件/目录）统一标「非插件」，
-  // 不做黑名单维度——exclusions 数据只服务于 isPlugin 判定。
-  if (exclusionsMap[key] !== undefined) isPlugin = false
+  const positive: PluginEvidence[] = []
+  const negative: PluginEvidence[] = []
+  if (verdict === true) positive.push('manifest-contract')
+  if (repo.bundled === true) positive.push('index-bundle-scan')
+  if (repo.market_tags?.includes('verified-install') === true) positive.push('index-verified-install')
+  if (typeof repo.verdict === 'string' && repo.verdict.toLowerCase() === 'pass') positive.push('independent-verification')
+  if (repo.installable === 'non-plugin') negative.push('index-non-plugin')
+  const identity = pluginIdentity(positive, negative)
   const npm = knownEntry?.npm ?? NPM_OVERRIDES[key] ?? (typeof repo.pkg_name === 'string' && repo.pkg_name !== '' && repo.installable !== 'non-plugin' ? repo.pkg_name : null)
   const verified = typeof repo.verdict === 'string' && repo.verdict !== ''
     ? { by: repo.verifiedBy ?? '', at: repo.verifiedAt ?? '', reportUrl: repo.reportUrl ?? null }
@@ -223,7 +295,8 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     // v1.7.28：收录日补全——awesome known 的 added 优先，否则回退索引 created_at。
     created: knownEntry?.added ?? (typeof repo.created_at === 'string' && repo.created_at !== '' ? repo.created_at : null),
     pushed: repo.updated_at ?? null,
-    isPlugin,
+    ...identity,
+    scoreBaselineEligible: legacyCdnScoreBaselineEligible(repo, verdict, exclusionsMap[key] !== undefined),
     curated: knownEntry !== undefined,
     npm,
     avatar: 'https://github.com/' + owner + '.png?size=96',
@@ -255,14 +328,15 @@ function cdnEntry(repo: CdnRepo, known: KnownMap, verdicts: Record<string, boole
     tagsZh: tagsOf(repo.full_name ?? key),
     tagsEn: tagsEnOf(repo.full_name ?? key),
     tagDescriptions: tagDescriptionsOf(repo.full_name ?? key),
-    readmeSig: typeof repo.readme_len === 'number'
+    readmeSig: typeof repo.readme_len === 'number' || (repo.readme_practical?.version === PRACTICAL_EVIDENCE_VERSION && repo.readme_practical?.parser_revision === PRACTICAL_PARSER_REVISION)
       ? {
-          len: repo.readme_len,
+          len: typeof repo.readme_len === 'number' ? repo.readme_len : null,
           installSection: repo.readme_install_section === true,
           codeBlocks: typeof repo.readme_code_blocks === 'number' ? repo.readme_code_blocks : 0,
           heading: repo.readme_heading === true,
           cmds: Array.isArray(repo.readme_cmds) ? repo.readme_cmds.slice(0, 3).map(String) : [],
           needsConfig: repo.readme_needs_config === true,
+          practical: practicalEvidenceOf(repo.readme_practical),
         }
       : null,
   }
@@ -332,7 +406,7 @@ async function fetchCdnRegistry(profile: string, customUrl: string): Promise<Reg
   }
   throw new Error('CDN index unavailable: ' + lastError)
 }
-import type { GhRepo, KnownMap, MarketEntry, MarketState, Registry, RefreshProgress } from './types.ts'
+import type { GhRepo, KnownMap, MarketEntry, MarketState, PluginEvidence, PluginStatus, ReadmePracticalEvidence, Registry, RefreshProgress } from './types.ts'
 
 export const CATEGORIES: Record<string, { en: string; zh: string }> = {
   ui: { en: 'UI Enhancements', zh: 'UI 增强' },
@@ -431,8 +505,21 @@ export function loadKnown(): KnownMap {
   return knownCache
 }
 
-/** Keep only categories that actually have entries; 'other' always stays. */
+/** Keep only categories that actually have entries; 'other' always stays.
+ * Also migrate bundled snapshots created before the v1.8.3 identity contract:
+ * old heuristic isPlugin values are discarded and rebuilt from auditable fields. */
 function normalizeCategories(registry: Registry): Registry {
+  for (const entry of registry.plugins) {
+    if (entry.scoreBaselineEligible === undefined) entry.scoreBaselineEligible = entry.isPlugin === true
+    if (entry.pluginStatus === undefined || !Array.isArray(entry.pluginEvidence)) {
+      const positive: PluginEvidence[] = []
+      const negative: PluginEvidence[] = []
+      if (entry.bundled === true) positive.push('index-bundle-scan')
+      if (entry.verified?.by !== undefined && entry.verified.by !== '') positive.push('independent-verification')
+      if (entry.installable === 'non-plugin') negative.push('index-non-plugin')
+      Object.assign(entry, pluginIdentity(positive, negative))
+    }
+  }
   const counts = new Map<string, number>()
   for (const p of registry.plugins) counts.set(p.category, (counts.get(p.category) ?? 0) + 1)
   const categories: Record<string, { en: string; zh: string }> = {}
@@ -484,8 +571,11 @@ export function writeState(profile: string, state: MarketState): void {
   } catch { /* state writes must never break browsing */ }
 }
 
-export function verdictsOf(profile: string): Record<string, boolean> {
-  return readState(profile).verdicts ?? {}
+export function verdictsOf(profile: string): Record<string, true> {
+  const raw = readState(profile).verdicts ?? {}
+  // v1.8.3：旧 false 来自“根 package.json 未命中即非插件”的不可靠逻辑，
+  // monorepo 会被误杀；只迁移确定正证据，负证据交给索引 installable owner。
+  return Object.fromEntries(Object.entries(raw).filter(([, value]) => value === true)) as Record<string, true>
 }
 
 export function readFavorites(profile: string): string[] {
@@ -516,9 +606,10 @@ export function toggleFavorite(profile: string, key: string): string[] {
   return list
 }
 
-export function applyVerdicts(profile: string, updates: Record<string, boolean>): void {
+export function applyVerdicts(profile: string, updates: Record<string, true>): void {
   const state = readState(profile)
-  state.verdicts = { ...(state.verdicts ?? {}), ...updates }
+  const migrated = verdictsOf(profile)
+  state.verdicts = { ...migrated, ...updates }
   writeState(profile, state)
 }
 
@@ -741,21 +832,10 @@ function ruleCategory(name: string, description: string, topics: string[]): stri
   return 'other'
 }
 
-const PLUGIN_NAME_RE = /(^dsh[-_]|[-_]dsh[-_]|dsh[-_]plugin|dshplugin)/i
-const DSH_HINT_RE = /(dsh|deepseek[ -]?harness|cordis)/i
-
-export function heuristicIsPlugin(repo: { name: string; description: string | null; topics: string[] }): boolean | null {
-  const hay = (repo.name + ' ' + (repo.description ?? '') + ' ' + repo.topics.join(' ')).toLowerCase()
-  if (!DSH_HINT_RE.test(hay)) return false
-  if (PLUGIN_NAME_RE.test(hay)) return true
-  if (/(plugin|插件)\b/i.test(hay)) return true
-  return null
-}
-
 function buildEntry(
   fullName: string,
   known: KnownMap,
-  verdicts: Record<string, boolean>,
+  verdicts: Record<string, true>,
   search: GhRepo | undefined,
   html: { pushed_at: string | null; language: string | null } | undefined,
 ): MarketEntry {
@@ -769,8 +849,7 @@ function buildEntry(
     ?? search?.description
     ?? ''
   const topics = search?.topics ?? []
-  const heuristic = heuristicIsPlugin({ name, description: search?.description ?? null, topics })
-  const isPlugin = verdict !== undefined ? verdict : heuristic
+  const identity = pluginIdentity(verdict === true ? ['manifest-contract'] : [], [])
   return {
     name,
     owner,
@@ -782,7 +861,8 @@ function buildEntry(
     todayStars: null,
     created: search?.created_at ?? null,
     pushed: search?.pushed_at ?? html?.pushed_at ?? null,
-    isPlugin,
+    ...identity,
+    scoreBaselineEligible: verdict === true || legacyPluginHeuristic({ name, description: search?.description ?? null, topics }) === true,
     curated: knownEntry !== undefined,
     npm: knownEntry?.npm ?? NPM_OVERRIDES[key] ?? null,
     avatar: search?.owner.avatar_url ?? 'https://github.com/' + owner + '.png?size=96',
@@ -872,8 +952,9 @@ function makeRegistry(profile: string, htmlByKey: Map<string, { pushed_at: strin
 }
 
 async function fetchLive(profile: string, token: string, registryUrl: string): Promise<Registry> {
-  // 黑名单并行拉取（失败保留旧值，不阻塞目录）。
-  void fetchExclusions()
+  // 目录政策与技术身份正交，但首代 registry 也必须携带政策字段；等待政策源
+  // 最多一个网络超时，失败仍保留旧值并 fail-open。
+  await fetchExclusions()
   // Pass 0: the community CDN index — complete catalog, no API quota.
   try {
     return await fetchCdnRegistry(profile, registryUrl)
@@ -972,15 +1053,30 @@ export async function loadRegistry(profile: string, token: string, opts: { force
   return { registry: immediate, refreshing: true }
 }
 
-/** Deep verdict batch: returns verdicts for the given repos (only true/false). */
-export async function verifyRepos(profile: string, token: string, repos: string[]): Promise<Record<string, boolean>> {
-  const updates: Record<string, boolean> = {}
+export interface VerifyResult {
+  verdicts: Record<string, true>
+  error?: string
+  retryAfterMs?: number
+}
+
+/** Deep positive-verdict batch: absence is unknown, never a persisted negative.
+ * Partial positives are persisted and returned even when a later repo is rate-limited. */
+export async function verifyRepos(profile: string, token: string, repos: string[]): Promise<VerifyResult> {
+  const updates: Record<string, true> = {}
   const known = verdictsOf(profile)
+  let failure: unknown = null
   for (const repo of repos) {
-    if (known[repo.toLowerCase()] !== undefined) continue
-    const verdict = await packageJsonVerdict(token, repo)
-    if (verdict !== null) updates[repo.toLowerCase()] = verdict
+    if (known[repo.toLowerCase()] === true) continue
+    try {
+      const verdict = await packageJsonVerdict(token, repo)
+      if (verdict === true) updates[repo.toLowerCase()] = true
+    } catch (err) {
+      failure = err
+      break
+    }
   }
   if (Object.keys(updates).length > 0) applyVerdicts(profile, updates)
-  return updates
+  if (failure instanceof GithubRateLimitError) return { verdicts: updates, error: failure.message, retryAfterMs: failure.retryAfterMs }
+  if (failure !== null) return { verdicts: updates, error: failure instanceof Error ? failure.message : String(failure), retryAfterMs: 60_000 }
+  return { verdicts: updates }
 }

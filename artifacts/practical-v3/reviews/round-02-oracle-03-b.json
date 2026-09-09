@@ -1,0 +1,324 @@
+{
+  "reviews": [
+    {
+      "repo": "PM-Shawn/Abu-Cowork",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Autonomous Agent** — More than chat: plans, invokes tools, reads/writes files, executes commands, and completes complex tasks end-to-end",
+        "After you run a multi-step complex flow, Abu proactively offers \"want to crystallize this into a skill?\" — one click drafts it, you review, you accept.",
+        "**Projects** — Promote a workspace into a Project: conversations in the same direction auto-aggregate; each project gets its own default model, skill set, and MCP connectors",
+        "**Multi-Agent Parallel Execution** — Run up to 5 background agents simultaneously, each executing tasks independently with real-time progress tracking",
+        "**Browser Automation** — Zero-setup built-in browser for ordinary web tasks, plus an optional Chrome extension bridge for existing tabs and signed-in sessions",
+        "Screenshot + mouse/keyboard control for desktop-level tasks",
+        "**File Watcher** — Monitor file create/modify/delete events with glob patterns",
+        "**Supported Platforms** — D-Chat, Feishu (Lark), DingTalk, WeCom, Slack",
+        "**Local Models** — Zero-config Ollama integration with automatic local model discovery",
+        "**Image Generation** — Built-in DALL-E 2 / DALL-E 3 support, plus any custom image-generation endpoint",
+        "**One-Click Self-Check** — Settings → Diagnostic, runs through AI service connectivity, data & permissions, MCP, skills, network, app environment"
+      ],
+      "usageItems": [
+        "Return to the main screen, use the model selector to pick your preferred model, and start chatting.",
+        "Turn Abu into your team bot — just @Abu in your chat:",
+        "left-click opens main window, right-click menu, drag-to-edge dock"
+      ],
+      "usageActions": [
+        "Return to the main screen, use the model selector to pick your preferred model, and start chatting.",
+        "Turn Abu into your team bot — just @Abu in your chat:",
+        "left-click opens main window, right-click menu, drag-to-edge dock",
+        "Organize the files on my desktop by type",
+        "Extract the tables from this PDF and generate an Excel file",
+        "Every morning at 9 AM, search for the latest AI news and generate a daily digest",
+        "Use the frontend design skill to create a product landing page",
+        "Create a weekly report PPT for this week"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "**Try these prompts:**\n\n```\nOrganize the files on my desktop by type",
+        "### Build\n\n```bash\nnpm run dist:electron",
+        "### Testing\n\n```bash\nnpm test              # Run tests"
+      ],
+      "usecases": [
+        "Organize the files on my desktop by type",
+        "Extract the tables from this PDF and generate an Excel file",
+        "Every morning at 9 AM, search for the latest AI news and generate a daily digest",
+        "Use the frontend design skill to create a product landing page",
+        "Create a weekly report PPT for this week"
+      ],
+      "outputs": [
+        "Export any conversation to JSON in one click",
+        "When something breaks, package logs / config / version info in one click",
+        "Build artifacts are written to `release-electron/`."
+      ],
+      "reliability": [
+        "Stable releases currently use Abu's native harness.",
+        "For high-risk steps (delete / overwrite / send / install), Abu first presents a step-by-step plan and waits for you to click \"Confirm & run\"",
+        "URL length cap, embedded credential blocking, cloud metadata endpoint blocking, 10 MB download limit, 60-second timeout",
+        "runs missed while the app was closed are replayed in time order on next launch",
+        "Auto-isolate conversations by user/group/thread, auto-archive on timeout, \"continue last\" recovery",
+        "macOS Seatbelt (`sandbox-exec`) / Windows PowerShell ConstrainedLanguage isolates shell command file access",
+        "Local proxy + domain whitelist + private-network toggle to control every outbound request",
+        "Sensitive directories (system folders, SSH keys, etc.) blocked by default; dangerous commands (`rm -rf /`, etc.) caught statically",
+        "15+ blocked sensitive apps (Keychain, System Settings, WeChat, Slack, etc.), dangerous key interception (Cmd+Q, Cmd+Tab, Force Quit), session-level window hiding, 5-minute timeout",
+        "Windows DPAPI / macOS AES-256-GCM with a hardware-UUID-derived key; keys are no longer written to localStorage in plaintext"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-execution.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-web-pages.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-plan-mode.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-multi-agent.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-schedule-create.en.png\" width=\"100%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"website/assets/screenshot-diagnostic.en.png\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "DeepSeek Harness integration is marked in progress, so it was not treated as a shipped DSH plugin capability.",
+        "Installation, configuration, changelog highlights, badges, marketing, and roadmap material were excluded."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-genui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Answer-as-UI**: components are embedded in the reply and appear as they stream — no waiting for the whole message",
+        "**30+ components**: cards, tables, charts, forms, tabs, accordions, file trees, timelines, diffs…",
+        "**Native media**: audio and video play inline from browser-reachable http(s) or same-origin relative URLs, with user-controlled playback, video posters/aspect ratios, and visible failure states",
+        "**Function plots**: `plot` draws curves; parameter sliders redraw in real time, with optional auto-animation",
+        "answers, submission locks, and input values are saved per \"session + content fingerprint\" — refresh or reopen restores everything",
+        "buttons/switches/inputs/dropdowns/checkboxes/radios/textareas/quizzes carry `action`; click or blur sends back to the model, which updates the UI",
+        "the `render_ui` tool renders the same spec as a card in the tool row"
+      ],
+      "usageItems": [
+        "In a **new** session, say:",
+        "`/panel` opens it from the client (`/panel <instruction>` customizes via the model, `/panel clear` clears)",
+        "the top border is draggable to resize",
+        "`input` Enter / `textarea` Ctrl+Enter submits immediately (`submit:true`), no blur needed"
+      ],
+      "usageActions": [
+        "Use dsh-ui to draw a stats dashboard with a sortable service table.",
+        "`/panel <instruction>`",
+        "`/panel clear`",
+        "`input` Enter",
+        "`textarea` Ctrl+Enter",
+        "Click the preview to download the original MP4 if the GitHub player is unavailable."
+      ],
+      "ioPairs": [
+        "| Data | Ask for an order or service dashboard | `stat`, `table`, `chart`, and `progress` appear inside the reply; supported numeric table values sort numerically. |",
+        "| Media | Ask for an audio or video reference | Browser-reachable media plays inline, with poster/aspect-ratio and failure states. |",
+        "| Exploration | Ask for `plot` with a parameter | Dragging sliders redraws the curve locally and immediately. |",
+        "| Feedback | Ask for a short quiz | The UI grades and explains locally; only the next model step needs an `action`. |",
+        "| Workspace | Ask for `/panel` or `panel: true` | A persistent, resizable session dock is updated in place. |"
+      ],
+      "codeExamples": [
+        "## 📄 Example\n\nThe model outputs this fence (written for the browser — you don't need to read it):\n\n```dsh-ui\n{\"title\":\"Order overview\",\"items\":[",
+        "### ECharts example\n\n```dsh-ui\n{\"title\":\"Q1 Revenue\",\"items\":["
+      ],
+      "usecases": [
+        "Ask “how are this month’s orders doing?”",
+        "Ask for a short quiz"
+      ],
+      "outputs": [
+        "What you see: two stat cards.",
+        "What you see: a themed bar chart with tooltips and axis labels — rendered by ECharts, lazy-loaded on demand.",
+        "the score, per-question right/wrong, and explanations appear right in the UI with zero model round-trips"
+      ],
+      "reliability": [
+        "The plugin ships **two rendering channels** and picks one automatically after the host activates its browser module:",
+        "If your dsh build renders fences with a different class name, they still render (and a one-time console warning tells you the host DOM drifted).",
+        "The host still owns **client activation** and must provide the `slots` and `sessions` services.",
+        "successful activation always prints `[genui] client active; fence-channel=registry|dom`.",
+        "GenUI must never ask for passwords, API keys, access tokens, recovery codes, or other secrets",
+        "new content starts fresh; LRU cap of 200 blocks",
+        "bad nodes are silently dropped, numbers clamped, strings truncated; the whole tree is capped at 200 nodes / 8 nesting levels; pathological specs never crash the UI",
+        "mermaid failures auto-retry with repairs (strip backticks, quote Chinese/space labels, remove `<br/>`) before degrading to source; a broken chart never hits the screen",
+        "without the plugin, fences are just code blocks — no errors, no session pollution",
+        "buttons without one render disabled"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/f5db33ec-7471-4d4a-a85b-79c9962ab4ef",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase-panel.png\" width=\"92%\" alt=\"Real dsh-genui monitoring panel rendered inside a DSH conversation\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase-plot.png\" width=\"76%\" alt=\"Real dsh-genui function plot with draggable parameter sliders\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./assets/showcase.png\" width=\"76%\" alt=\"Real dsh-genui layout and card component composition\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Installation, migration, package configuration, roadmap entries, and development setup were excluded.",
+        "Screenshot captions were not duplicated as output evidence when the same demonstrated state was already represented by media."
+      ]
+    },
+    {
+      "repo": "tingly-dev/tingly-box",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Agent-First Model Gateway** – Unified endpoint for agents — seamlessly bridge OpenAI, Anthropic, Google Gemini, and more with automatic protocol translation and native agent compatibility",
+        "**Agent Profiles** - Run agent like Claude Code with individual profiles, each profile can work with different model and agent config",
+        "**Smart Routing Engine** – Intelligently route requests across models and tokens based on cost, speed, or custom policies — far beyond simple load balancing",
+        "**Flexible Authentication** – Support for both API keys and OAuth providers (Claude.ai, Codex, etc.) — use your existing quotas anywhere",
+        "**Visual Control Plane** – Intuitive web UI to manage providers, routes, aliases, models, and remote bots at a glance — no config files needed",
+        "**Client-Side Usage Analytics** – Track token consumption, latency, cost estimates, and model selection per request — directly from your client",
+        "| Vision Proxy                     | ✅ Supported | Enables DeepSeek to understand and process images                     |",
+        "| Web Search                       | ✅ Supported | Calls official Web tools through the Anthropic endpoint               |",
+        "| 1M Context Window                | ✅ Supported | Enables one-click setup for 1M context                                |"
+      ],
+      "usageItems": [
+        "Open Web UI like `http://localhost:12580`",
+        "Navigate to **Remote** section",
+        "Start interacting with your agents remotely"
+      ],
+      "usageActions": [
+        "Open Web UI like `http://localhost:12580`",
+        "Navigate to **Remote** section",
+        "Start interacting with your agents remotely",
+        "Then open `http://localhost:12580` in your browser."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "<summary><strong>OpenAI SDK</strong></summary>\n\n```python\nfrom openai import OpenAI",
+        "<summary><strong>Anthropic SDK</strong></summary>\n\n```python\nfrom anthropic import Anthropic"
+      ],
+      "usecases": [
+        "Execute tasks and queries from your phone or any device",
+        "Team collaboration with shared agent access",
+        "Monitor and control agents while away from your workstation"
+      ],
+      "outputs": [
+        "The output binary is written to `./build/tingly-box`.",
+        "Adds typically **< 1ms** of overhead"
+      ],
+      "reliability": [
+        "Here is [fault record](https://github.com/tingly-dev/tingly-box/discussions/626). Please update to the latest version to resolve known issues.",
+        "**Multi-Tenant API Tokens** – Isolate data per user with dedicated API tokens — each user gets their own usage tracking, provider access, and configuration",
+        "Tingly Box proxies requests transparently for SDKs and CLI tools.",
+        "**[Guardrails](./docs/guardrails.md)** – Policy-based safety checks, built-in protections, and protected credential masking",
+        "the frontend requires an auth token to log in",
+        "The GUI build is not yet publicly released. Skip this step unless you are specifically working on the desktop app."
+      ],
+      "media": [
+        {
+          "excerpt": "![Tingly Box Web UI Demo](./docs/images/output.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Remote Control Demo](./docs/images/7-remote.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Dashboard](./docs/images/1-dashboard.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Installation and configuration procedures were excluded even when they occupied most of an integration section.",
+        "SDK snippets print a response but do not show an explicit concrete response value, so no input/output pair was recorded."
+      ]
+    },
+    {
+      "repo": "Zhiyuan-Fan/Awesome-DeepSeek-Harness-Plugins",
+      "inferredType": "catalog-list",
+      "capability": [
+        "directory of public plugins and extensions for [DeepSeek Harness](https://www.deepseek.com/harness/en/)",
+        "Inclusion: public, useful, maintained, and clearly built for DSH."
+      ],
+      "usageItems": [
+        "Open a pull request, or add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "usageActions": [
+        "Open a pull request",
+        "add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "Every entry links to its canonical GitHub repository",
+        "independently verified references."
+      ],
+      "reliability": [
+        "This list is reviewed daily by a local Codex scheduled task using public sources only."
+      ],
+      "media": [],
+      "concerns": [
+        "All linked-project capabilities, commands, reliability claims, and references were excluded under catalog ownership rules.",
+        "Stars and ranking statements were ignored, as were category identity and installation advice."
+      ]
+    },
+    {
+      "repo": "linhay/harmony-next.skills",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**完全离线检索**：不依赖模型记忆，先命中文档路径再读取正文",
+        "**为 Agent 工作流设计**：按 `SKILL.md → KITS/TASK_MAP → INDEX` 层层递进检索",
+        "**可运行的最小工程**：提供 `empty-ability-app` 模板，可直接复制用于 smoke 测试"
+      ],
+      "usageItems": [
+        "设计原则：先定规则，再按 Kit 或任务缩小范围，用索引命中真实路径，最后只打开 1-3 个文件读细节。",
+        "涉及 **DevEco 模拟器、IDE 私有接口、设备日志、截图、抓包、HVD 创建/删除**等操作时，**必须先阅读对应的私有接口文档**。",
+        "默认只做静态只读分析（插件 XML、jar、配置、离线 trace 等）"
+      ],
+      "usageActions": [
+        "`python3 harmony-next/scripts/device_evidence_bundle.py webview-devtools ...`",
+        "`python3 harmony-next/scripts/device_ui_action.py tap ...`",
+        "`python3 harmony-next/scripts/ux_audit_pipeline.py doctor ...`",
+        "`python3 harmony-next/scripts/profiler_trace_audit.py audit ...`",
+        "`python3 harmony-next/scripts/hvd_manager.py doctor ...`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## 🧭 推荐检索路径\n\n```text\nSKILL.md → KITS.md / TASK_MAP.md → INDEX.md → 目标 Markdown",
+        "参考库更新后运行校验：\n\n```bash\npython3 harmony-next/scripts/check_packaging_docs.py"
+      ],
+      "usecases": [
+        "**ArkTS / ArkUI 开发**：组件、装饰器、状态管理、UIAbility 等 API 确认与示例",
+        "**NDK / C API**：头文件对应真实文档、跨语言调用、CMake 配置",
+        "**IDE / 工具链 / 调试**：签名、模拟器、真机调试、性能分析与发布流程",
+        "**DevEco 模拟器自动化**：免 IDE 启动、HVD、`hdc`/`uitest` 自动化、抓包诊断",
+        "**DevEco IDE 私有能力**：CodeGenie、ArkUI Inspector、离线 trace 审计、UI/UX 体检"
+      ],
+      "outputs": [
+        "最后给出代码片段和 `hdc` / `uitest` / wrapper 脚本验证命令。"
+      ],
+      "reliability": [
+        "面向 API 12-23 的本地知识源",
+        "**私有能力隔离**：DevEco 模拟器、IDE 未公开接口单独成章，默认先验证版本和风险",
+        "执行前验证 DevEco / Emulator / SDK 版本和命令能力",
+        "明确产物目录、脱敏边界和失败时的 `blocked` 输出",
+        "非交互模式下的执行策略、超时与脱敏契约",
+        "wrapper 脚本阻塞时建议先尝试官方 CLI 路径采集证据。",
+        "启动 IDE/GUI、本地服务、设备连接、MCP 配置等需记录目标、产物和脱敏边界",
+        "离线 trace 审计和 UI/UX 体检只使用已验证的 wrapper 脚本和规则子集。"
+      ],
+      "media": [],
+      "concerns": [
+        "Installation paths, package configuration, badges, changelog entries, and unreleased items were excluded.",
+        "Command-reference examples ending in ellipses were kept only as usage actions, not runnable code examples."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+ "round": "round-07",
+ "source": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-07.ndjson",
+ "sourceSha256": "f4404655ee4bb995a5782eeda24afb7e94c0479319ee6cb81855d7d0046d5e67",
+ "parserSha256": "38d93b813e7aff35268655fcb3ffbfd7061fc1ee34ef070a1ec8846b02b9ff5a",
+ "rubricSha256": "2d1240592b77ae1de9f3208167583fb7a30db329197bd902e26a4343e71e3f99",
+ "count": 100,
+ "uniqueRepos": 100,
+ "replayExact": true,
+ "batches": [
+  {
+   "number": "01",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-01.ndjson",
+   "sha256": "1c5b899143f0cbf21fdea9bb0d9607e9f14f98149d3cdbfa6edf3a6e302cf7f3",
+   "count": 10
+  },
+  {
+   "number": "02",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-02.ndjson",
+   "sha256": "c5c378a87b981a3fe4ed5853e4c5aaf4dfcb06948c0fa82f4d6a5d6bb6b8ca5c",
+   "count": 10
+  },
+  {
+   "number": "03",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-03.ndjson",
+   "sha256": "4c1cec847c9a271885784128f5d6872b33a9b3c0c6d2e3c1fd8b7a8e224981a2",
+   "count": 10
+  },
+  {
+   "number": "04",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-04.ndjson",
+   "sha256": "5bd848a7baae8872493f05c13b455e3d08643c17ee214655eff02299ebfd134f",
+   "count": 10
+  },
+  {
+   "number": "05",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-05.ndjson",
+   "sha256": "ad431b626699e02e1270254e7c8efb07db9eb929246c164d99086a82c4c7e422",
+   "count": 10
+  },
+  {
+   "number": "06",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-06.ndjson",
+   "sha256": "5e0d0879971a22e7e3e85a15769ce871be3894998ba4cc551d2122eabfa419d7",
+   "count": 10
+  },
+  {
+   "number": "07",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-07.ndjson",
+   "sha256": "987bafb43d2802bfae5e413968b7a394d45790f98033cc790fac3f1498b2ccad",
+   "count": 10
+  },
+  {
+   "number": "08",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-08.ndjson",
+   "sha256": "c83d41817758cc0b6b4228afa0763a624a6f7c654097d8b8720ffe3809eca879",
+   "count": 10
+  },
+  {
+   "number": "09",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-09.ndjson",
+   "sha256": "666d12c3f79ffaac0f37a56bad21ccc758897adda3323b51d3bae0145281a5e1",
+   "count": 10
+  },
+  {
+   "number": "10",
+   "path": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-07-review-batches/batch-10.ndjson",
+   "sha256": "7d48f95b3b4aafefa847493317019896b03af67d2bee1eda8b08c77c427d1f19",
+   "count": 10
+  }
+ ]
+}

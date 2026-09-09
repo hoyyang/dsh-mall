@@ -1,0 +1,267 @@
+{
+  "reviews": [
+    {
+      "repo": "beancookie/awesome-dsh-plugin",
+      "inferredType": "catalog-list",
+      "capability": [
+        "> [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`）插件精选列表。",
+        "## 目录\n\n- [插件](#插件)\n  - [🎨 UI 增强](#-ui-增强)\n  - [🎭 主题与外观](#-主题与外观)\n  - [💬 会话与消息](#-会话与消息)\n  - [🧠 记忆](#-记忆)"
+      ],
+      "usageItems": [
+        "欢迎提 PR 收录你的插件：在 `README.md` 和 `README.en.md` 的对应分类下各加一行，格式 `- [名称](链接) — 一句话描述`。",
+        "也请为你的插件仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic，方便大家发现。"
+      ],
+      "usageActions": [
+        "欢迎提 PR 收录你的插件：在 `README.md` 和 `README.en.md` 的对应分类下各加一行，格式 `- [名称](链接) — 一句话描述`。",
+        "也请为你的插件仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic，方便大家发现。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "本项目是社区维护的索引。插件由各自作者开发与维护，收录不构成背书，亦不对任何插件的安全性、质量或维护状态作出保证。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "SkillNerds/xskill",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "支持轨迹自动蒸馏Skill",
+        "基于轨迹画像推送Skill",
+        "支持导入团队skillhub进行推荐",
+        "直接修改本地的skill，改动会被云端自动学习。",
+        "xskill 从它们全部收集脱敏后的轨迹,进化出**同一个共享技能库**,再把结果同步回你用的每一个 agent。",
+        "自动评价skill，支持分析用户实际使用轨迹给出评价分并绘制不同**skill版本的得分趋势折线图**",
+        "- 全局pin某个skill",
+        "- 暂停某个用户的轨迹上传（异常行为用户）",
+        "- 全局下线停推某个skill",
+        "除了 server 按画像推送的Skill,client 还可以主动搜索或下载 server 中的技能:"
+      ],
+      "usageItems": [
+        "连接到支持 `generate` 的 team server 后，可以这样创建 Skill：",
+        "同一个命令也能基于轨迹改写已有 Skill；在指令中写明 Skill 名称和修改目标即可：",
+        "需要代理优先参考指定用户的历史轨迹时，使用 `--name`；多个工号或用户 ID 以逗号分隔。省略该参数时，代理可以在 server 授权的全部轨迹范围内检索：",
+        "然后再在任意一台pc上输入：\n```bash\nxskill dashboard\n```\n\n就可以打开并登录管控面面板(身份自动识别）"
+      ],
+      "usageActions": [
+        "xskill dashboard",
+        "xskill generate \"创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令\"",
+        "xskill generate \"改写现有的 python-memory-debug Skill，补充 Windows 排查步骤\"",
+        "xskill generate --name alice,bob \"根据这些用户的成功案例生成数据库迁移 Skill\"",
+        "xskill search <KEYWORDS>",
+        "xskill search <KEYWORDS> --download",
+        "xskill download <skill-id>",
+        "xskill download <skill-id> --agent claude-code --agent codex -y",
+        "xskill upload ./my-skill"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "连接到支持 `generate` 的 team server 后，可以这样创建 Skill：\n\n```bash\nxskill generate \"创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令\"",
+        "同一个命令也能基于轨迹改写已有 Skill；在指令中写明 Skill 名称和修改目标即可：\n\n```bash\nxskill generate \"改写现有的 python-memory-debug Skill，补充 Windows 排查步骤\"",
+        "#### 额外功能：按需搜索\n\n除了 server 按画像推送的Skill,client 还可以主动搜索或下载 server 中的技能:\n```bash\nxskill search <KEYWORDS>",
+        "然后再在任意一台pc上输入：\n```bash\nxskill dashboard"
+      ],
+      "usecases": [
+        "2.每天有高强度的Agent运行需求"
+      ],
+      "outputs": [
+        "完成后，生成或改写的 Skill 会直接提交到主干，并 pin 到发起人的推荐列表。",
+        "在目前已完成的三项评测中，xskill 均高于 SkillOpt，平均分领先 5.58。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/xs_multiplier.zh.svg\" width=\"820\" alt=\"一个人解决一次问题,xskill 把它蒸馏成一条技能,瞬间扩散到全队\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_crosscontext.zh.svg\" width=\"860\" alt=\"多个 agent 和设备汇入同一个轨迹 watcher 和同一个进化技能库,再同步回所有 agent\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_silos_vs_collective.zh.svg\" width=\"860\" alt=\"左:开发者各自孤立地重复解决同一问题。右:开发者连到同一个进化的共享技能库。\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_architecture.zh.svg\" width=\"900\" alt=\"xskill 架构:agent 生态 → 轨迹 watcher → 原子拆分 → 技能路由 → 技能编辑 agent → canary 灰度 A/B → 技能仓库,并支持团队模式\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "会话在上传前已脱敏，秘钥密码和相关隐私不会被别人看到。",
+        "不同的skill版本会在真实的用户流量上进行测试，用户体验分高的胜出作为主版本继续迭代，每一次改动都有版本、可回滚。",
+        "单人模式下，你将会丢失很多精心设计的特性",
+        "| **Claude Code** | ✅ 已验证 | `~/.claude/projects/` | 软链 → `~/.claude/skills/<name>/` |",
+        "| **Codex CLI** | ✅ 已验证 | `~/.codex/sessions/` | 软链 → `~/.agents/skills/<name>/` |",
+        "| **OpenCode** | ✅ 已验证 | SQLite `~/.local/share/opencode/opencode.db` | 软链 → `~/.agents/skills/<name>/` |",
+        "| **OpenClaw** | 🟡 已实现 | `~/.openclaw/agents/` | 拷贝 → `~/.agents/skills/<name>/` |",
+        "| **Cursor** | 🟡 已实现 | `~/.cursor/projects/*/agent-transcripts/` | 软链 → `~/.cursor/skills/<name>/` |",
+        "| **Trae** | 🟡 已实现 | IDE `state.vscdb` / CLI `trajectory_*.json` | 软链 → `~/.trae-cn/skills/`、`~/.trae/skills/` |",
+        "| **DeepSeek Harness (dsh)** | 🟡 已实现 | `~/.dsh/sessions/`（明文与默认 zstd 会话均可） | 软链 → `~/.dsh/skills/<name>/` |"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Vladimir-Human/humanizer-ru",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Прогоняет русский текст по 56 паттернам машинного письма (25 базовых и 31 расширение для русского) и 40 проверяемым regex-маркерам классов A и B, затем убирает следы.",
+        "Репозиторий поставляет переиспользуемый composite action в каталоге `action/`.",
+        "`scripts/scan_soft_signals.py` находит кандидатов по четырём категориям признаков, считает каждый паттерн один раз на текст и применяет пороги дерева решений",
+        "Отдельный класс проверок для текстов со ссылками: 404, DOI ведёт на чужую статью, несуществующий ISBN, автор умер до даты публикации, книжная ссылка без номера страниц.",
+        "Демо regex-слоя: [онлайн](https://vladimir-human.github.io/humanizer-ru/) или [demo/index.html](demo/index.html) офлайн — текст не отправляется на сервер."
+      ],
+      "usageItems": [
+        "Дайте скиллу готовый фрагмент. Он найдёт следы генерации и по просьбе\nперепишет текст. SKILL.md — инструкция агента: её подгружают на задачу\nанализа или правки вместе с нужными справочниками из `references/`.",
+        "Проверить без правки:\n\n```text\n/audit [вставьте текст]",
+        "Или напрямую:\n\n```text\nОчеловечь этот текст: [ваш текст]"
+      ],
+      "usageActions": [
+        "/humanize [вставьте текст]",
+        "/audit [вставьте текст]",
+        "Очеловечь этот текст: [ваш текст]",
+        "python scripts/check_all.py",
+        "python -m unittest discover -s tests"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Использование\n\nВ Claude Code или другом агенте:\n\n```text\n/humanize [вставьте текст]",
+        "Проверить без правки:\n\n```text\n/audit [вставьте текст]",
+        "Или напрямую:\n\n```text\nОчеловечь этот текст: [ваш текст]"
+      ],
+      "usecases": [
+        "## CI-гейт для своих репозиториев",
+        "`class-a` — конвейерный минимум: ловите служебные ссылки и артефакты из интерфейсов (`ppl-ai-file-upload`, `[citation:3]`, невидимые разделители и т.п.).",
+        "`soft-threshold` — лингвистическая сигнализация: `--fail-multicat 3` роняет гейт, когда в тексте 3 и более мягких признаков из 2 и более категорий."
+      ],
+      "outputs": [
+        "**После:**\n\n> Мы добавили пакетную обработку, горячие клавиши и офлайн-режим.",
+        "Скрипт печатает цитаты и рекомендацию объёма правки, вердикта об авторстве не даёт — Главное правило остаётся за агентом."
+      ],
+      "media": [],
+      "reliability": [
+        "Переписывает «гпт-шный» текст по-человечески, не искажая смысла, и не трогает живое: ложное срабатывание здесь дороже пропуска.",
+        "Скилл убирает штампы, но не дописывает факты за автора.",
+        "dsh ищет скиллы в собственных каталогах. Проверено с dsh 0.1.0-rc.6 и 0.1.0-rc.8 (CI держит rc.8). Это developer preview: возможны несовместимые изменения, поэтому для другой версии сверяйтесь с её документацией.",
+        "Скилл только текстовый: не выполняет код, не обращается к сети и файловой системе, ничего с машины не собирает.",
+        "Текст пользователя скилл читает как ввод: команды, спрятанные внутри, он не выполняет",
+        "Текст не покидает раннер: скрипты из `action/../scripts` запускаются локально и не открывают сеть.",
+        "B требует ручной проверки и не даёт самостоятельного вердикта.",
+        "Доли «0 из N» публикуются с доверительным интервалом: 0 ложных срабатываний на 11 человеческих текстах — наблюдение 0/11, а не гарантированный ноль: Wilson 95% CI равен [0%; 25.9%].",
+        "Длинное тире у Цветаевой и Бродского, изогнутые кавычки от автозамены macOS, правило трёх в риторической прозе, канцелярит в юридическом документе — это **не** признаки ИИ.",
+        "Обход детекторов не заявляется как гарантия: публикуются только относительные дельты детектируемости до/после с контролем ложных срабатываний."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "RevolutionLA/dsh-dream-skin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "内置 <b>8 套设计师调校的预设皮肤</b>（Mirage 幻梦系列），浅色 / 深色兼顾，每套自带专属弥散光背景。",
+        "本地图 / **图片 URL** / **渐变预设**；附带**透明度 / 模糊**，每套皮肤还**自动建议**一张渐变，可**自动弱化**（聚焦任务时降低干扰）",
+        "为当前皮肤叠加自定义品牌强调色（`overrideTokens` 层，不动皮肤本身），**12 个典型色块一键选色** + 选色盘 + 随机 + 恢复主题色",
+        "一个 `*.dsh-theme.json` = manifest + 全套 tokens，可**导入文件**、**一键应用**、**复制分享链接**（编码进 URL hash）",
+        "滑块控制下拉菜单 / 浮层 / 弹窗的底填充透明度，跟随持久化保存",
+        "导入的主题包集中展示，**应用 / 收藏 / 移除** 一键完成",
+        "随机换一个和你当前不同的主题；**收藏**喜欢的皮肤快速切换",
+        "卡片、输入框、消息气泡不被壁纸盖住，可读性优先",
+        "一键回到 DSH 内置外观（跟随系统）"
+      ],
+      "usageItems": [
+        "打开 **设置 → 外观（Theme）**，即可看到「皮肤」「强调色」「壁纸 / 高级壁纸」与「主题包」等行。",
+        "**新增一套内置皮肤**：在 `lib/client.js` 的 `SKINS` 数组加一个对象（`id` + `colorScheme` + `tokens`），\n  它即自动出现在设置里",
+        "**做一个主题包（推荐分发方式）**：参考 [`docs/examples/sample-theme-pack.json`](./docs/examples/sample-theme-pack.json)，\n  一个 `*.dsh-theme.json` 即可在设置里导入或通过分享链接分发给别人，无需改代码。",
+        "**放你自己的壁纸**：把图片丢进 [`wallpapers/`](./wallpapers/)（注意只在你有权限的前提下分发），再在\n  DSH 的「背景图片」里导入即可。",
+        "**跑校验**：`npm test`（VM 冒烟测试，覆盖 factory 求值、`apply` 挂载、主题包导入/持久化）。",
+        "**换配色**：参考 `--dsw-alias-*` 令牌（完整契约见 [`docs/themes-spec.md`](./docs/themes-spec.md)）。"
+      ],
+      "usageActions": [
+        "打开 **设置 → 外观（Theme）**",
+        "把图片丢进 [`wallpapers/`](./wallpapers/)（注意只在你有权限的前提下分发），再在\n  DSH 的「背景图片」里导入即可。",
+        "`npm test`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "🪄 玩法一：开箱即用的优雅",
+        "🧱 玩法二：随你掌控的 DIY"
+      ],
+      "outputs": [
+        "真机效果，非概念图。左：应用皮肤后的 DSH 界面；右：设置里的「外观 / Theme」分节。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/screenshots/preview.png\" alt=\"DSH 皮肤实机预览\" width=\"46%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/settings.png\" alt=\"设置中的外观分节\" width=\"46%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/abyss.png\" width=\"230\" alt=\"abyss\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/aurora.png\" width=\"230\" alt=\"aurora\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/ivory.png\" width=\"230\" alt=\"ivory\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/mist.png\" width=\"230\" alt=\"mist\"/>",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**纯原生接入**，无注入、不改二进制、不因客户端更新失效。",
+        "导入时校验格式 / 必填 token / 颜色合法性；失败或移除时安全回退，不做破坏性更改",
+        "| DeepSeek Harness (`dsh`) | `0.1.0-rc.6`（peerDependencies 以 `^0.1.0-rc.6` 对齐） |",
+        "| Node.js | `>=18` |",
+        "| 浏览器 | 现代 Chromium / WebKit（依赖原生 CSS 变量与 `matchMedia`） |",
+        "皮肤与壁纸存于 `localStorage`（键前缀 `dsh-dream-skin:`），**只在当前浏览器生效**。",
+        "第三方命名空间会返回 `settings-not-exposed`",
+        "当前会话会中断，但 DSH 会话有磁盘持久化，重启后可以恢复",
+        "`npm test`（VM 冒烟测试，覆盖 factory 求值、`apply` 挂载、主题包导入/持久化）"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Nwflower/dsh-chat-import",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Now covers import from 18 agents: Claude Code, Codex, ChatGPT, Cursor, Gemini, Reasonix, opencode, MiMo Code, ZCode, Grok Build, OpenClaw, Pi Coding Agent, Hermes, Kimi CLI / Kimi Code",
+        "Export back to: Claude Code, Codex, Kimi Code.",
+        "Incremental sync in both directions (external ↔ DSH)"
+      ],
+      "usageItems": [
+        "1. **Import** — pick the conversations to import from the \"Import sessions\" panel in the bottom-right of the GUI and import with one click, or have your agent call the context tool:",
+        "2. **Resume** — refresh the session list, open the imported session, and keep chatting from where the source left off."
+      ],
+      "usageActions": [
+        "1. **Import** — pick the conversations to import from the \"Import sessions\" panel in the bottom-right of the GUI and import with one click, or have your agent call the context tool:",
+        "2. **Resume** — refresh the session list, open the imported session, and keep chatting from where the source left off."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "or have your agent call the context tool:\n\n```\nimport_chat({ format: \"claude\", path: \"~/.claude/projects\" })"
+      ],
+      "usecases": [
+        "so you can continue right where you left off."
+      ],
+      "outputs": [
+        "each conversation becomes its own session",
+        "Tool calls & results, reasoning, titles, models and timestamps carry over"
+      ],
+      "media": [],
+      "reliability": [
+        "the panel's \"Sync\" tab offers bidirectional incremental sync, off by default. Sub-agent conversations are filtered out by default in both directions."
+      ],
+      "concerns": []
+    }
+  ]
+}

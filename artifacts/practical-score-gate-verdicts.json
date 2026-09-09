@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-08-27",
+  "population": 11971,
+  "scoredReadmes": 11377,
+  "missingReadmes": 594,
+  "criteria": {
+    "coverage": "missing v2 evidence remains null; present README with no evidence scores zero",
+    "resolution": "mode share < 25%, unique integer values >= 30, entropy > 4 bits",
+    "fenceBoundary": "fenced examples contribute at most 5/100; score-vs-fence Spearman < 0.50",
+    "inflationResistance": "irrelevant prose and extra fence p95 <= 3; installation p95 = 0; duplicate whole document = 0",
+    "language": "absolute CJK/non-CJK mean gap <= 5",
+    "semanticReview": "every reviewer group improves over the retired formula",
+    "runtimeConsistency": "list and detail practical values match for all 11,971 entries",
+    "categoryComposition": "diagnostic only; no category baselines or boosts"
+  },
+  "old": {
+    "coverage": "fail: old structural availability differs from v2 README availability",
+    "resolution": "fail",
+    "fenceBoundary": "fail",
+    "inflationResistance": "fail",
+    "semanticReview": "baseline",
+    "runtimeConsistency": "fail: list and detail used different formulas",
+    "allRequiredGatesPass": false
+  },
+  "practicalV2": {
+    "coverage": "pass",
+    "resolution": "pass",
+    "fenceBoundary": "pass",
+    "inflationResistance": "pass",
+    "language": "pass",
+    "semanticReview": "pass",
+    "runtimeConsistency": "pass",
+    "categoryComposition": "diagnostic: other has 64.23% at <=20 because its population is evidence-poor/mixed; no cosmetic compensation applied",
+    "details": {
+      "modeShare": 0.103718,
+      "uniqueValues": 91,
+      "entropyBits": 5.657,
+      "scoreVsFenceSpearman": 0.45583825169396347,
+      "cjkMean": 24.502123919730483,
+      "nonCjkMean": 27.56241758241758,
+      "cjkMeanGap": -3.060293662687098,
+      "blindPooledSpearman": 0.5925618501327945,
+      "blindReviewerC": 0.6659930884687748,
+      "irrelevantProseP95": 0,
+      "installationP95": 0,
+      "extraFenceP95": 0,
+      "extraFenceMaximum": 2,
+      "duplicateEvidenceP95": 3,
+      "duplicateEvidenceMaximum": 4,
+      "duplicateDocumentMaximum": 0,
+      "listDetailMismatches": 0
+    },
+    "allRequiredGatesPass": true
+  },
+  "verdict": "Canonical practical v2 passes algorithm, integration, typecheck and build acceptance. It is ready for the normal index/application deployment path; this evaluation did not publish, release, push or commit anything."
+}

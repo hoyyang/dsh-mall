@@ -1,0 +1,640 @@
+{
+  "reviews": [
+    {
+      "repo": "Nyasers/dsh-hanako",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "把 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）接进 Hana，作为**进程内内嵌 agent**（runProfile 在宿主进程内 boot，无独立 dsh 子进程）。",
+        "dsh 官方 Web UI 以 **DSHana 标签页**内嵌在 Hana 顶部，可见全部任务会话",
+        "dsh 凭据由 @dsh-hanako/provider 插件直读 Hana 宿主 `provider-catalog.json`，模型跟随宿主 `models.json`。",
+        "可在 **dsh 设置页「DSHana 设置」分页**直接配置（页头下方「默认模型」卡片：Provider/模型/思考强度三级联动，保存即生效）",
+        "**「DSH 版本」卡片**显示本地 dsh 版本",
+        "`dsh_session` 工具参数 `provider` / `model` / `reasoningEffort` 可显式覆盖。"
+      ],
+      "usageItems": [
+        "**也可让 Agent 调 `dsh_install` 工具**（异步默认，渲染安装卡片显示实时 pnpm 日志，安装完成自动拉起 web host；`dsh_install(action=\"verify\")` 只检测依赖完整性）。",
+        "装完让 Agent 跑一次 `dsh_session(action=\"create\")` 最小试任务验证，卡片不报 web host 错误即安装成功。",
+        "完成后去 t2 点「手动启动 web host」即可。",
+        "安装遇到问题，把报错丢给 Agent 即可（技能里有完整排错表）。"
+      ],
+      "usageActions": [
+        "点击 deps 卡片的「安装依赖」——页面自动完成部署",
+        "完成后去 t2 点「手动启动 web host」即可。",
+        "装完让 Agent 跑一次 `dsh_session(action=\"create\")` 最小试任务验证"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "插件加载后自动进程内 boot，若未就绪则显示诊断列表。",
+        "（为空且未传 cwd 时报 `cwd 不能为空`）",
+        "macOS 上 Electron 内嵌 node 跑 pnpm 签名校验失败时填此项解决。路径不存在时警告并降级回退",
+        "版本严格锁插件声明——更新 dsh = 更新插件发版"
+      ],
+      "media": [],
+      "concerns": [
+        "It is a plugin for the Hana host that embeds DSH in-process, not a DSH plugin package; typed standalone-nonplugin.",
+        "README is mostly install/config; no ioPairs, codeExamples, usecases, outputs, or media are present.",
+        "Config-table rows were excluded per rubric rule 6."
+      ]
+    },
+    {
+      "repo": "edonadei/caliper",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Caliper is a lightweight evaluation harness for agent skills. Write a short spec of what \"good\" looks like, run it, and get a **success rate** you can track.",
+        "`--ablate` runs the same tasks with that skill *removed*, and `caliper compare` diffs the two runs task by task:",
+        "Each attempt runs in an isolated temporary home with no session history. Results are saved as JSON you can inspect and diff later.",
+        "Three kinds of check, and a task needs at least one. `expect:` is graded by the\njudge LLM; `assert:` runs locally as Python; `activates:` asserts which skills\nthe agent chose to load.",
+        "Caliper never pastes your skill into the prompt. It **installs** it where the\nagent looks for skills and lets the agent decide, so a run measures the\n`description` (does it fire?) and the body (does it work?) together",
+        "`activates:` asserts the **exact set** of skills that loaded on each attempt.",
+        "A task with `activates:` and no `expect:`/`assert:` is a **trigger probe**: it\nasks only what the agent reached for, skips the judge entirely",
+        "Activation is scored on its **own scoreboard**, never blended into the success\nrate.",
+        "The optional `mcp:` block declares the [MCP](https://modelcontextprotocol.io) servers the agent-under-test may use.",
+        "Every attempt carries a typed **outcome**, so infrastructure and judge noise are\nnot scored as task failure:",
+        "Caliper records **token volume** and **wall-clock time** per attempt and rolls\nthem up per run.",
+        "`caliper compare` reports any member whose text changed between the two runs."
+      ],
+      "usageItems": [
+        "The **[Eval Starter Pack](examples/starter-pack/)** has four copy-paste\ntemplates, each catching a real agent failure (false success, tool misuse,\nrunaway loops, prompt regressions).",
+        "2. Run with `--k 1` while iterating on the spec.",
+        "3. Add `assert:` for facts an LLM judge might guess wrong (files, JSON, command output).",
+        "5. Run once with `--ablate <skill>` and `caliper compare` the two runs, to prove the skill is making a difference.",
+        "6. Commit the spec alongside the skill so contributors can run the same eval.",
+        "Use **`pass@k`** when retrying is cheap and you keep the winning run; it's the\noptimistic view, always **≥** the raw rate."
+      ],
+      "usageActions": [
+        "caliper run commit-commands.eval.yaml --k 3",
+        "caliper run commit-commands.eval.yaml --k 3 --ablate commit-commands",
+        "caliper compare .caliper/results/commit-commands/<evaluation-run>.json .caliper/results/commit-commands/<ablated-run>.json",
+        "/grill-skill ./my-skill/SKILL.md",
+        "/evaluate-skill run my-skill.eval.yaml --k 3",
+        "/evaluate-skill list",
+        "/evaluate-skill report my-skill",
+        "caliper update-cli --check",
+        "caliper run my-skill.eval.yaml --model codex:gpt-5.6-sol"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "caliper run commit-commands.eval.yaml --k 3",
+        "caliper run my-skill.eval.yaml --model codex:gpt-5.6-sol",
+        "caliper compare commit-simple-full commit-simple-short"
+      ],
+      "usecases": [
+        "- Is my agent still working the same with this new model?",
+        "- Did my prompt edit improved the skill?",
+        "- Does my skill fire when it should, and stay quiet when it needs to not trigger?",
+        "- Is the skill worth the context? Or would the base agent pass without it?",
+        "- Which agent (Claude Code, Codex, Pi, or Hermes) runs this skill more reliably?"
+      ],
+      "outputs": [
+        "The report ends with the per-task failure panels: for each attempt that didn't pass, the output plus the assertion or autorater reason *why*.",
+        "Full results are also saved as JSON under `.caliper/results/<spec>/`",
+        "`--format json` serializes the full comparison (per-task scores, deltas,\nregression flags, unmatched lists, warnings, `skill_drift`, and per-side usage)"
+      ],
+      "reliability": [
+        "`caliper validate` never touches the network: it resolves git sources\nfrom the cache when it can and reports the rest as *not cached*",
+        "If a git source can't be fetched and isn't cached, the run **refuses** — a\nmember silently missing would measure your skill against competition that\nwasn't there.",
+        "Remote **OAuth** is not supported on `hermes` or `codex`",
+        "`pi` does **not** and **will not** honor `mcp:` natively: its agent has no MCP by design.",
+        "Running an `mcp:` spec on `pi` fails with that guidance.",
+        "**A spending cap stops the run.** A cap or usage limit will not clear before the\nlast attempt, so caliper aborts rather than spending every remaining attempt",
+        "**A throttled attempt is retried, not counted.** When the provider answers 429 /\noverloaded / 503, that invocation measured nothing, so caliper retries it twice",
+        "`2` and `3` are the distinction CI needs: *the eval could not run* is a broken\npipeline, *the skill did not clear the bar* is the answer you asked for.",
+        "**`caliper compare` refuses** to diff across\n  that boundary, because those runs measured something else",
+        "**`codex judge failed: model ... is not supported`**\nThe model name is not available to your Codex account."
+      ],
+      "media": [
+        {
+          "excerpt": "![caliper compare, without commit-commands vs full neighbourhood on commit-commands: both tasks go 33.3% to 100.0% (+66.7%); tokens 290K to 180K, wall 1m 1s to 42s](docs/assets/compare-ablation.svg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "docs/assets/run-output.svg",
+          "weight": 1
+        },
+        {
+          "excerpt": "docs/assets/compare-runs.svg",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Two of the three SVG figures have alt text longer than 220 chars; recorded by their repository path fragments.",
+        "ioPairs absent: no paired input/output example with both sides shown as text.",
+        "The .eval.yaml example fences are spec/config format and were excluded from codeExamples."
+      ]
+    },
+    {
+      "repo": "zimodzh/dsh-plugin-dev-skills",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "一套遵循 [Agent Skills 规范](https://agentskills.io) 的技能，用于开发 [**DeepSeek Harness（DSH）**](https://github.com/deepseek-ai/deepseek-harness) 插件。",
+        "本技能把[官方文档](https://deepseek-harness.github.io/deepseek-harness/guide/quickstart)里散落在教程、参考手册与生成目录中的约定，收敛成一套可执行的标准——任何加载了它的 agent，都能用同一种方式开发 DSH 插件。",
+        "references 覆盖：插件形态与生命周期 · 服务与依赖注入 · 五种事件分发模式 · 插件配置 · 上下文/Fiber/注册表 API · 三种角色能力设计（Definition/Provider/Consumer）· 工具开发 · LLM 适配器协议 · 插件形态扩展（工具/钩子/UI/协议桥）· 打包与安装 · 仓库内 workspace 包 · 完整能力 seam 目录。",
+        "├── examples/     # 两个可复制、可运行的最小示例",
+        "└── evals/        # description 的触发评测集与评测方法"
+      ],
+      "usageItems": [
+        "验证：向 agent 提问\"开发一个 DSH 插件 / 写一个 DSH 工具\"，技能应被触发；在 DSH 里也可以直接用 `skill(dsh-plugin-dev)` 工具加载确认。",
+        "修改 description 前请先跑评测并记录通过率",
+        "更新任何 references 前，先核对[官方文档](https://deepseek-harness.github.io/deepseek-harness/guide/quickstart)对应页面（文档站或源码生成区块），并在 PR 中注明来源。",
+        "- `examples/hello-plugin` —— 最小插件（bundle 格式）：`dsh plugin --profile demo add ./examples/hello-plugin` 后 `dsh --profile demo` 启动，应看到加载日志和每 5 秒一次的心跳，卸载时自动清理。",
+        "- `examples/greet-tool` —— 最小模型工具：安装后对 agent 说 \"Use the greet tool to greet Ada.\"，应收到 \"Hello, Ada!\"。"
+      ],
+      "usageActions": [
+        "验证：向 agent 提问\"开发一个 DSH 插件 / 写一个 DSH 工具\"",
+        "修改 description 前请先跑评测并记录通过率",
+        "安装后对 agent 说 \"Use the greet tool to greet Ada.\""
+      ],
+      "ioPairs": [
+        "`dsh plugin --profile demo add ./examples/hello-plugin` 后 `dsh --profile demo` 启动，应看到加载日志和每 5 秒一次的心跳，卸载时自动清理。",
+        "安装后对 agent 说 \"Use the greet tool to greet Ada.\"，应收到 \"Hello, Ada!\"。"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "无需构建、无需脚本依赖、无需任何配置——以上说的是技能本身。",
+        "技能内容与仓库生成参考不一致时，**以生成参考为准**。",
+        "覆盖**仓库内、文件式**的 DSH 插件开发：插件包、cordis.yml 行、patch overlay、工具、适配器、组合包、profile、仓库内 workspace 包。",
+        "不覆盖会话内动态插件（`cordis_define`/`cordis_run` 流）与 agent preset 组合编辑",
+        "description ≤ 1024 字符（DSH 目录注入提醒默认 500）"
+      ],
+      "media": [],
+      "concerns": [
+        "This is an Agent Skill (instruction/reference collection) for developing DSH plugins, not a DSH runtime plugin; typed standalone-nonplugin.",
+        "No images, operational code fences, usecases, or outputs in the README.",
+        "Example demos provide the only paired command/expected-result evidence (recorded as ioPairs)."
+      ]
+    },
+    {
+      "repo": "hellodigua/dsh-emoji",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "为 DeepSeek Harness 的回复加入可切换、自定义的行内表情。",
+        "AI 想加入情绪或装饰性表情时，直接从 42 个允许的 Unicode 表情中选择，例如输出 `😊`；它们对应 40 个稳定语义，插件会在 Host 端将其转换为当前表情包的行内图片，无需额外模型调用。",
+        "内置和用户上传的表情包共用 40 个稳定语义 key，可随时切换，并支持小、正常、偏大、大四档尺寸。",
+        "转写只作用于 40 个规范 Unicode 表情、常见别名 `😄`／`🙂` 和本插件图片；其他 Unicode 表情、代码、链接、双冒号文本和普通 Markdown 图片保持原样。",
+        "同一套语义协议也可用于小红书、抖音、微博等自定义表情包。",
+        "`智能`：仅在表情确实有助于表达时自然使用，每回合最多 3 张，默认选项。",
+        "`高频`：在所有对话回复中加入一个合适的表情，并放在最能对应当前情绪的句子或短段落后；每回合最多 4 张。",
+        "还可以选择表情包、调整显示尺寸，或填写“附加提示词”控制表情的选择、语气和使用场景。"
+      ],
+      "usageItems": [
+        "安装并重启 Web Host 后，打开「设置 → 插件 → 表情（Whale Emoji）」：",
+        "在同一张设置卡片中点击“上传 ZIP”。上传成功后选择新表情包并保存，下一次模型调用立即使用，无需重启。"
+      ],
+      "usageActions": [
+        "安装并重启 Web Host 后，打开「设置 → 插件 → 表情（Whale Emoji）」：",
+        "在同一张设置卡片中点击“上传 ZIP”。",
+        "保存后从下一次回复生效，无需重启"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "程序不会根据正文猜测情绪或自动补图。",
+        "多张插件表情必须由有效正文分隔，相同表情可以在不同位置重复使用。",
+        "当前上传包必须声明 `dsh-emoji-core@1`",
+        "ZIP 上限 20 MiB，解压后上限 80 MiB，单文件上限 2 MiB，图片宽高均不得超过 512 像素",
+        "路径逃逸、额外文件、缺失 key、未知 `keySet`、伪造格式和同版本冲突都会被拒绝。",
+        "同一个 `id@version` 的内容不可覆盖，更新素材时必须提升版本。",
+        "从选择列表“移除”不会物理删除素材字节，因此历史消息里的版本化 URL 仍能回放；重新上传完全相同的 ZIP 可以恢复该版本。",
+        "当前版本面向 npm `@deepseek-ai/dsh@0.1.0-rc.7`，DSH peers 声明为 `^0.1.0-rc.7`。",
+        "普通 `npm install dsh-emoji` 只会把包加入当前 Node.js 项目，不会启用 DSH 插件。",
+        "所选频率策略仍依赖模型遵循提示词。"
+      ],
+      "media": [
+        {
+          "excerpt": "![蓝鲸表情在 DSH 对话中的行内显示效果](assets/readme/chat-preview.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![贴吧表情在 DSH 对话中的行内显示效果](assets/readme/chat-preview.tieba.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![B 站表情在 DSH 对话中的行内显示效果](assets/readme/chat-preview.bilibili.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No ioPairs, codeExamples, usecases, or text-described outputs; results are shown via screenshots.",
+        "The ZIP layout and pack.json fences are packaging config and were excluded from codeExamples.",
+        "Banner image excluded as decorative branding."
+      ]
+    },
+    {
+      "repo": "MichengAI/dsh-codex-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "DSH Codex Desktop turns [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) into a native, ready-to-run desktop workbench. The installer includes the required Node.js runtime and local DSH runtime",
+        "| **Desktop conversation workspace** | Project and task navigation, conversation sessions, model selection, permissions, session logs, and a focused desktop window. |",
+        "| **Expert presets** | Enable specialist roles for code review, architecture, frontend, backend, operations, and other workflows. |",
+        "| **Skill center** | Inspect, enable, disable, upload, and manage local and shared Agent skills from Settings. |",
+        "| **Archive management** | Search archived conversations, restore a session when needed, or permanently remove archived records. |",
+        "| **IM assistant** | Configure DingTalk, Feishu, Lark, WeChat, WeCom, QQ, Telegram, and other available channels in one place. |",
+        "| **Plugin market** | Discover, install, update, enable, and diagnose DSH plugins without leaving the desktop client. |",
+        "| **MCP connector** | Add and manage MCP services through OAuth, API keys, HTTP, stdio, or JSON configuration. |",
+        "| **Scheduled automation** | Use the built-in DSH scheduling capability to manage recurring tasks from the same workspace. |",
+        "| **Safe local runtime** | The app starts DSH on a validated loopback address and keeps the browser UI inside the desktop shell. |",
+        "**DSH reload** is available from the tray menu after changing plugins or profile configuration; it restarts the local DSH service without reinstalling the desktop application.",
+        "**Desktop updates** are checked after startup by default and notify you when a new release is available."
+      ],
+      "usageItems": [
+        "3. Wait for the built-in local DSH service to finish starting.",
+        "4. Create a task, select a model and permission mode, then work in your project."
+      ],
+      "usageActions": [
+        "3. Wait for the built-in local DSH service to finish starting.",
+        "4. Create a task, select a model and permission mode, then work in your project.",
+        "**DSH reload** is available from the tray menu after changing plugins or profile configuration"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The launcher accepts only validated `127.0.0.1` local HTTP addresses for its embedded window.",
+        "External HTTP(S) links open in the system browser. File, JavaScript, and data URLs are blocked.",
+        "Electron uses context isolation and sandboxing, with Node.js integration disabled for the DSH page.",
+        "The application keeps DSH data in your existing user profile (`%USERPROFILE%\\.dsh` on Windows), so sessions and settings remain available after application upgrades.",
+        "DSH configuration, sessions, and credentials remain in the current user's DSH directory. Uninstalling the desktop app does not delete them.",
+        "**Startup recovery** removes stale community-plugin registrations that no longer have an installed package, then retries the local DSH startup.",
+        "A failed plugin installation is not activated as a running bundle.",
+        "Installation and restart always require an explicit action.",
+        "The desktop application keeps its own runtime separate from profile-installed community plugins so plugin changes do not overwrite the application runtime."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-conversation-dark.png\" alt=\"DSH Codex Desktop dark conversation workspace\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-conversation-light.png\" alt=\"DSH Codex Desktop light conversation workspace\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-context-sidebar.png\" alt=\"Context management dashboard with the extensible workspace sidebar\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-archive.png\" alt=\"Archived conversation management\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-skills.png\" alt=\"Skill management\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/desktop-im-channels.png\" alt=\"IM channel configuration\" width=\"960\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Bundled capability rows reference separate linked plugin packages; their internals were not credited to this repo.",
+        "No ioPairs, codeExamples, usecases, or text-described outputs; behavior is shown via the capability table and screenshots.",
+        "Banner excluded as decorative branding; dev build commands excluded."
+      ]
+    },
+    {
+      "repo": "opencues/opencues",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Turn any text field into a two-way LLM channel.** It reads what you write and fills what you ask: catching a slip as you type, or answering the moment you end a line with `_`.",
+        "**Cues** react to what you've already written and surface a fix or a sharper line inline, unprompted.",
+        "**Blanks** act on demand: end a line with `_` and the model fills in the rest.",
+        "| **Blanks** | Type `_` for free-form generation, translation, formatting, full rewrites, or keyword-bound system actions (`volume _`, `weather _`). |",
+        "| **Sentence rewrites** | Cycle a whole sentence to a different register (formal, concise, ...) seamlessly, no `_` needed. |",
+        "| **Word cues** | Navigate to a single word and cycle a smaller LLM-suggested alternative. |",
+        "| **Live actuators** | `volume _` reads the real level and leaves a knob you can turn: `Ctrl+Alt+↑/↓` or a bare `_` moves it, and the device follows. |",
+        "| **Session-contradiction cues** (opt-in) | Flags a draft that goes against a decision made earlier in the same coding session, on any host with a transcript. |",
+        "| **Ask-cues** (opt-in) | Turns a vague sentence into an inline question with cyclable answers, using the assistant's own clarifying prompt. |",
+        "| **Personal + ambient context** (opt-in) | `my email _` substitutes your real address; fluid lookups can read the page you're on. |",
+        "| **Hot-reload** | Every `.md` config picks up edits in ~2s, no restart. |",
+        "| **Dismissing a cue** | A cue that only tells you something can be silenced from its own note: `_` once quiets it for a while, `_` again forgets it for good."
+      ],
+      "usageItems": [
+        "Rows with `_` are **blanks**: you ask, the model fills in. Rows without are **cues**: the model speaks up on what you wrote, no prompt.",
+        "`opencues doctor` diagnoses anything that looks wrong.",
+        "`opencues dismissals` lists what you forgot and turns any of it back on.",
+        "Running a lot of these at once? `opencues usage` prices every LLM call your\nhosts have made, across features, so the total isn't a guess."
+      ],
+      "usageActions": [
+        "claude-cues                          # launch — native `claude` is untouched",
+        "opencues review ./untrusted-pack/"
+      ],
+      "ioPairs": [
+        "let's ship it Thursday the 19th | ↳ the 19th is a Friday",
+        "we should probably go ahead and refactor this | ↳ we should refactor this",
+        "hey can u send me that report when u get a sec make this formal _ | Could you please send me that report at your earliest convenience?",
+        "4 + 4 = _ | 4 + 4 = 8",
+        "hello world translate to japanese _ | こんにちは世界",
+        "ffmpeg command to convert a video to web-ready mp4 _ | ffmpeg -i input.mov -vcodec libx264 -crf 23 -pix_fmt yuv420p -acodec aac output.mp4"
+      ],
+      "codeExamples": [
+        "opencues review ./untrusted-pack/"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "OpenCues has no tool handlers or exec layer for LLM output — no MCP-tool execution, no agentic actions, no side-effect channel.",
+        "Worst-case, an LLM response lands as user-visible text in the buffer you review before submitting.",
+        "| Sandbox isolation | Third-party blank JS runs in a real V8 isolate (`isolated-vm`) — its own realm, own intrinsics, no sandbox-escape via constructor-chain pivots |",
+        "| Capability gates | A blank only gets `network`/`llm`/`storage`/`secrets` access if declared; secrets without a matching host binding are refused at load time |",
+        "| Resource quotas | Sliding-window caps on fetches, LLM calls, and storage writes — no polling hammer, no runaway LLM burn |",
+        "| Output sanitization | Blank output is stripped of HTML/script tags, zero-width chars, and bidi overrides before it reaches the buffer |",
+        "23 of 27 tracked attack classes closed, 3 closed-with-caveat, 1 tracked for the future pack registry",
+        "> ⚠️ **Windows**: not supported natively, run inside WSL2 (see [`docs/install.md`](docs/install.md)).",
+        "Each pins its own upstream fork and never touches your native host install."
+      ],
+      "media": [
+        {
+          "excerpt": "assets/readme-1-hero.webp",
+          "weight": 1
+        },
+        {
+          "excerpt": "assets/readme-2-cues.webp",
+          "weight": 1
+        },
+        {
+          "excerpt": "assets/readme-3-local.webp",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Ships a beta DeepSeek Harness integration but is primarily a cross-host inline-AI tool; typed standalone-nonplugin.",
+        "Three demo images have alt/markup text over 220 chars; recorded by repository path fragments.",
+        "outputs left empty: concrete results appear as the paired You-type/You-get rows (ioPairs) and inside images.",
+        "Quickstart set-key/install commands excluded as install/config actions."
+      ]
+    },
+    {
+      "repo": "xiehuan123/dsh-deepread",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 🎛️ Five modes | `quick` key takeaways · `deep` in-depth reading · `map` knowledge map · `feynman` Feynman technique (11-step loop + spaced repetition) · `book` whole-book reading (see the comparison below) |",
+        "| 📥 Three inputs | WeChat article URLs (`mp.weixin.qq.com` stable links) · files (`.txt/.md/.html/.pdf`, PDF via a built-in pure-JS extractor",
+        "| 📤 Optional export | Displayed in-session by default; `export` accepts `md` / `mm` (FreeMind, importable by XMind) / `html` (editor-style web report with light/dark theme) / `all`",
+        "| 🔀 Batch compare | Pass 2-10 documents via `batch` (url/path/text each) to get per-document summaries plus a cross-document report: comparison matrix, conflicts, complementarity, and synthesis |",
+        "| 📍 Citations | Reports carry page/paragraph provenance: arguments, quotes, and a dedicated citation table locate claims back to `【第N页】` markers in the source |",
+        "| 🧮 Cost preview | `estimate: true` previews token spend, model-call count, and expected time per mode without calling the model",
+        "| 📚 Recently read | The Web panel keeps a local history of recent reads with one-click re-read (localStorage, no server round-trip) |",
+        "| ⏳ Progress transparency | Long reads / big PDFs / batches become official background jobs: the label states segment count and budget",
+        "| 🎨 Browser UI | `deepread` tool result card (four-color confidence legend, collapsible sections) + a 📖 shortcut button next to the input area that opens a card-style reading panel",
+        "| 🗺️ Knowledge-map mode | Core question / core conclusion / ten content categories (conclusion, sub-claim, mechanism, fact, data, case, hidden premise, objection, limitation, actionable advice)",
+        "If the source does not support a claim, DeepRead says **“source does not provide evidence”** instead of filling the gap.",
+        "The Web panel shows per-mode token + time hints above the mode chips (e.g. 深度精读 (≈38k token · ≈8分钟)), instantly for pasted text"
+      ],
+      "usageItems": [
+        "Deep-read docs/architecture.pdf in knowledge-map mode.\nFor every important claim, show the supporting evidence and source location.",
+        "Restart `dsh web`, then use the 📖 reading panel or call the `deepread` tool in chat.",
+        "You can also just say: \"Read this article in knowledge-map mode: <content>\".",
+        "1. **Trigger**: say something containing \"deep-read / analyze / knowledge map / Feynman\"",
+        "2. **Mode**: the agent picks a mode automatically (default `deep`); it asks when unsure.",
+        "3. **Input**: file path / web link (WeChat articles are fetched directly; for anti-bot sites like Zhihu/Juejin, paste the text) / pasted text.",
+        "4. **Output**: a Markdown report in the conversation by default; say \"export html / mindmap / md\" and it writes to `deepread-output/` in the workspace",
+        "Read book.pdf in knowledge-map mode and export html"
+      ],
+      "usageActions": [
+        "Restart `dsh web`, then use the 📖 reading panel or call the `deepread` tool in chat.",
+        "4. **Output**: a Markdown report in the conversation by default; say \"export html / mindmap / md\" and it writes to `deepread-output/` in the workspace",
+        "A 📖 shortcut button appears next to the input area; click it to open the card-style reading panel.",
+        "Deep-read docs/architecture.pdf in knowledge-map mode."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Please deep-read this link: https://mp.weixin.qq.com/s/xxxx"
+      ],
+      "usecases": [
+        "| `quick` | \"What is this article about?\" at a glance |",
+        "| `deep` (default) | Reading one article carefully |",
+        "| `map` | Research, fact-checking before citing |",
+        "| `feynman` | Truly learning it and teaching it to others |",
+        "| `book` | Whole books / very long texts |"
+      ],
+      "outputs": [
+        "Reconstructed the engineering chain from visibility to input, output, and retrieval-path compression; separated recommendations from project-authored benchmarks.",
+        "Found that the article's “90%”, “¥1.28M salary”, and “¥2,000/day” claims had no source, sample, or baseline; marked each one unverified.",
+        "Connected architecture choices to reported size/performance evidence while preserving the article's untested assumptions and deployment limits.",
+        "One-line summary, core claim, argument structure, quotes, key concepts, critical questions",
+        "Overview, core claim, argument structure (claim + evidence + verbatim quotes), argument flow, section highlights, quotes, key concepts, critical thinking",
+        "Table of contents, chapter flow, a full-book summary assembled from per-part deep reads"
+      ],
+      "reliability": [
+        "| DeepSeek Harness Web `0.1.0-rc.7` | Supported | Web UI loaded | Available | None |",
+        "| dsh-TUI `0.8.1` minimum / Community Consensus `v0.15` | Supported | Web client not loaded | Available | No Web route or browser UI |",
+        "| Custom composition without `storageDomain` | Supported | Depends on Web services | Available | URL cache and Host calibration use in-process state |",
+        "DeepRead `1.0.0` requires Node.js **22.19 or 24 and higher** (`^22.19 || >=24`).",
+        "If you see \"web fetch service unavailable\" after install, mount `@deepseek-ai/dsh-web-fetch-http` in the profile's `cordis.patch.yml`",
+        "when a fetch fails the\ncache is used as a fallback and the report says so.",
+        "Default TTL is 7 days with a cap of 200 entries\n(expired entries are lazily removed on write).",
+        "scan-only PDFs should be OCR'd first",
+        "npm test                    # full repository contract suite"
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepRead evidence-first reading workflow](assets/deepread-demo.svg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "https://raw.githubusercontent.com/xiehuan123/dsh-deepread/main/.github/assets/deepread-panel-dark.jpg",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "ioPairs absent: prompts are shown but no paired model output text.",
+        "The portable Agent Skill form is secondary; capability units describe the plugin's shipped tool/panel behavior.",
+        "Feishu/WeChat promotional poster excluded as non-demonstrative media."
+      ]
+    },
+    {
+      "repo": "MoFeng2223/dsh-claude-provider",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "The Models settings page gains a separate **Claude Provider** form. You can create multiple Provider IDs under this type without mixing them with generic custom providers.",
+        "Each model can use one of three configurable mode sets:",
+        "This plugin adds model discovery for Claude providers through the provider's native Anthropic-compatible `GET /v1/models` endpoint, including cursor pagination.",
+        "When a discovered model matches a recorded Claude model ID, the plugin automatically fills its context window, maximum output length, and reasoning-mode set.",
+        "Discovery, defaults, and reasoning controls are limited to Provider IDs explicitly created as **Claude Providers**.",
+        "it writes the corresponding native settings to `settings.yaml` when a Claude provider is saved through the front end.",
+        "The plugin retains its dedicated Claude provider configuration page, so users do not need to edit `settings.yaml` manually."
+      ],
+      "usageItems": [
+        "Selecting **Add Claude Provider** opens the dedicated Anthropic Messages form:"
+      ],
+      "usageActions": [
+        "Selecting **Add Claude Provider** opens the dedicated Anthropic Messages form:"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Since DeepSeek Harness 0.1.1-rc.1, reasoning-effort parameters for Claude models are supported natively, but they still need to be configured manually in `settings.yaml`.",
+        "this plugin no longer intercepts or rewrites model requests at runtime.",
+        "Uninstalling the plugin does not delete `~/.dsh/settings.yaml` or stored credentials.",
+        "Existing Claude providers remain ordinary custom `anthropic-messages` routes.",
+        "Models entered manually remain fully editable and are not overwritten by this lookup.",
+        "Their `reasoningEfforts`, default `reasoning`, and `compat.forceAdaptiveThinking` fields are native RC8 settings, so adaptive thinking and the front-end reasoning-effort selector continue to work."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/provider-entry.en.jpg\" alt=\"Add Claude Provider entry in DeepSeek Harness\" width=\"580\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/claude-provider-form.en.jpg\" alt=\"Claude Provider form in DeepSeek Harness\" width=\"580\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/model-defaults.en.jpg\" alt=\"Claude model capacity defaults and reasoning modes\" width=\"580\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No ioPairs, codeExamples, usecases, or text-described outputs; behavior is shown via the numbered capability list and screenshots.",
+        "Strikethrough legacy-behavior passages were excluded (no longer shipped behavior).",
+        "Install/uninstall command fences excluded."
+      ]
+    },
+    {
+      "repo": "sorsama/deepseek-harness-mobile",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Drive sessions, review plans and goals, answer approvals and questions, and get notified\n  when the harness finishes — from your phone, over your local network.",
+        "- **Connect effortlessly** — auto-discovers a harness on your Wi-Fi (active subnet scan +\n  readiness handshake), remembers hosts and probes them for liveness on the way in",
+        "- **Discord-style navigation** — swipe right from the left edge to open the workspace-grouped\n  chat list, swipe left to close it, swipe left from the right edge for the session details panel.",
+        "- **Full chat experience** — streamed turns with reasoning disclosure, markdown,\n  terminal/diff/read/search/web tool cards, queue dock (edit / remove / steer), history paging,\n  image attachments.",
+        "- **Slash commands and skills** — the composer adjudicates a `/` line against the session's own\n  command catalog and runs it through the harness's command gateway",
+        "- **Everything the GUI does** — goals (phases, rounds, pause/resume/edit), plan mode + plan review,\n  permission approvals, user questions, todo dock, subagents (catalog, follow-ups, interrupt),",
+        "- **Notifications** — turn complete, goal complete / blocked, review or question waiting for you;\n  background connection via a foreground service.",
+        "- **Looks like the harness** — the exact DeepSeek Harness design tokens (colors, type, radii,\n  disclosure rows, shimmer, ink buttons) with light / dark / system themes.",
+        "- **11 languages** — English, 中文, हिन्दी, Español, Français, العربية, বাংলা, Português, Русский,\n  اردو, ไทย (RTL aware)."
+      ],
+      "usageItems": [
+        "2. Open the app and choose how to connect. The two are not variations of one\n   setting — pick the one that matches what you set up on the computer.",
+        "Open the printed URL **on that computer**, set a password, then open\n   `/relay/pair`. In the app: **Relay → Pair a relay**, scan the QR.",
+        "apply the one-file LAN patch in\n   [`harness/README.md`](harness/README.md), restart `dsh web`, then tap\n   **Scan network**.",
+        "**USB / emulator** — `dsh web`, then `adb reverse tcp:3080 tcp:3080`, and\n   connect to `127.0.0.1:3080` in local-network mode.",
+        "3. Pick a session, chat, and get notified when the harness is done.",
+        "**Behind your own HTTPS reverse proxy** — paste the `https://` address into\n   local-network mode."
+      ],
+      "usageActions": [
+        "In the app: **Relay → Pair a relay**, scan the QR.",
+        "restart `dsh web`, then tap\n   **Scan network**.",
+        "then `adb reverse tcp:3080 tcp:3080`, and\n   connect to `127.0.0.1:3080` in local-network mode."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "(tested against `0.1.2-alpha.1`). **0.9.0 does not speak the 0.1.1 protocol** —\n  that release replaced the wire rather than extending it, so the app and the\n  harness have to move together.",
+        "That link authenticates the phone, but\n   it does not encrypt the connection and it does not stop anyone already on the\n   network from reaching the port — so still only on networks you trust.",
+        "The proxy can forward to loopback, so the harness needs\n   no patch; but it encrypts the link without authenticating anyone.",
+        "From harness 0.1.2 the harness authenticates\n  its whole API, and a signed-in device reaches all of it — there is no longer a reduced tier for\n  a caller that is not on the machine itself.",
+        "Signing in grants the same power as a shell on that\n  computer, because the agent runs commands there.",
+        "Local-network mode authenticates but does not\n  encrypt; relay mode adds a pinned certificate on top.",
+        "If a connect attempt fails, the app names the cause; the wiki's\n[Troubleshooting](https://github.com/sorsama/deepseek-harness-mobile/wiki/Troubleshooting) page is\nkeyed on that exact sentence."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/images/home.png\" width=\"240\" alt=\"Connect screen: recent harnesses with live reachability, discovery, manual entry and auto-connect toggles\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/chat.png\" width=\"240\" alt=\"Chat: streamed turns with per-tool icons, tool cards, goal dock and composer\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/trajectory.png\" width=\"240\" alt=\"Trajectory: a per-turn ledger with usage totals\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/session-info.png\" width=\"240\" alt=\"Details panel: context breakdown, goal, plan mode, jobs, queue, subagents, host information\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/subagent.png\" width=\"240\" alt=\"Subagent catalog with continuable children\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The dsh-relay companion plugin is a separate linked repository; its behavior was excluded.",
+        "No ioPairs, codeExamples, usecases, or text-described outputs; screens are shown via screenshots.",
+        "Banner excluded as decorative branding; gradle build commands excluded as dev-only."
+      ]
+    },
+    {
+      "repo": "runzhliu/deepseek-harness-docker",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "这是一个可直接构建的 DeepSeek Harness 社区容器方案，默认运行官方 `@deepseek-ai/dsh` 的 Web UI。",
+        "它不构建或修改 DeepSeek Harness 源码，只把官方 npm 发行物装入一个精简、非 root 的 Node.js 24 运行时。",
+        "| Helm | 可用 | 单副本 StatefulSet、PVC、Headless Service、NetworkPolicy；`helm lint --strict` 通过 |",
+        "镜像内置 Debian Chromium、中文字体、Xvfb/Openbox 桌面和 noVNC。",
+        "插件同时注册 `browser_open` Agent 工具；在对话中说“用浏览器打开 https://example.com”会创建并激活 Chromium 标签页，然后自动展开内嵌面板。",
+        "浏览器意外退出或关闭后会自动重启，Profile 持久化到 `/home/node/.dsh/chrome-profile`。",
+        "内嵌面板默认占页面约 68%，可拖动标题栏移动、拖动右下角缩放，并支持最大化/还原。",
+        "它指导 Agent 按本项目的安全边界完成 Docker Compose/Helm 部署、验证、升级与排障",
+        "每日运行的 [Upstream DSH version watch](.github/workflows/upstream-dsh.yml) 会同时检查 GitHub Release 与 npm；发现新的可安装版本时会创建或更新升级 Issue，固定版本追平后会自动关闭该 Issue。"
+      ],
+      "usageItems": [
+        "打开日志中 `dsh web:` 后面带 `?token=...` 的完整 <http://127.0.0.1:3080> 地址。",
+        "进入后在设置页配置模型和凭据。",
+        "未设置 `DSH_WORKSPACE` 时，Compose 使用独立的 `dsh-workspace` 命名卷，避免 Agent 意外修改本仓库。",
+        "侧边栏的“浏览器”按钮会在 Harness WebUI 内直接打开可交互的容器 Chromium"
+      ],
+      "usageActions": [
+        "docker compose pull",
+        "DSH_WORKSPACE=/absolute/path/to/your/project docker compose up -d --no-build",
+        "docker compose logs --no-color deepseek-harness | grep 'dsh web:'",
+        "docker compose exec deepseek-harness chromium-docker --version",
+        "docker compose logs -f deepseek-harness",
+        "docker compose down"
+      ],
+      "ioPairs": [
+        "docker compose exec deepseek-harness node -e \"console.log(require('node:os').homedir())\"\n```\n\n最后一条命令应输出 `/workspace`。"
+      ],
+      "codeExamples": [
+        "docker compose pull",
+        "docker run --rm \\"
+      ],
+      "usecases": [],
+      "outputs": [
+        "通过标准包括：CLI 版本等于构建版本；dump 后的 `webserver.config.host` 为 `0.0.0.0`；未认证首页返回 `401`，启动 token 能换取 Cookie 并加载首页；容器进入 healthy",
+        "最后一条命令应输出 `/workspace`。"
+      ],
+      "reliability": [
+        "| Dockerfile | 可用 | `linux/arm64`、`linux/amd64` 构建与原生 PTY 实际启动均已验证 |",
+        "| Docker Compose | 可用 | Web token/cookie 认证、healthy、回环端口、重启持久化已验证 |",
+        "| Headless | 可用 | 运行时注入 provider Secret；需在目标环境验证实际模型调用和沙箱 |",
+        "但它仍没有 TLS，Web API 可以执行代码，本镜像的 noVNC 端口也没有认证。因此本方案是**本机单用户开发环境**，不是可直接暴露到局域网或公网的服务。",
+        "Compose 丢弃全部 Linux capabilities、启用 `no-new-privileges`、只读根文件系统，并给 `/tmp` 单独的 tmpfs。",
+        "Docker 隔离不是多租户安全沙箱。不要把这个实例交给不受信任用户，也不要把未审查的插件装进持久化配置卷。",
+        "API Key 只应在运行时通过环境变量、Secret 或 Web 设置传入，不能写进 Dockerfile、镜像层或构建参数。",
+        "如果复用的 `dsh-home` 曾被另一个 pnpm 主版本处理，安装时可能看到 `ERR_PNPM_UNEXPECTED_STORE`。",
+        "真正发布镜像前还要分别在 `linux/amd64` 和 `linux/arm64` 上构建并实际 spawn PTY，因为终端与沙箱相关依赖包含原生模块。",
+        "不要默认安装 `latest`。RC 版本正在快速变化，固定版本才能让问题可复现。"
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness Web UI running from this image](assets/deepseek-harness-web.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Harness WebUI 中可移动、缩放的内嵌 Chromium 浏览器](assets/browser-desktop-webui.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The dsh-browser-desktop plugin is separable and detailed in a linked README; only the parent README's claims were recorded.",
+        "No explicit use-case sections; usecases left empty.",
+        "Docker/Helm/kubectl fences were treated as the product's own operational commands; the market-variant and build-arg fences were omitted as near-duplicates."
+      ]
+    }
+  ]
+}

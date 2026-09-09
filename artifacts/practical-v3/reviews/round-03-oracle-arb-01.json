@@ -1,0 +1,613 @@
+{
+  "reviews": [
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Detects supported agents from local paths and commands.",
+        "Installs hooks or plugins and reads local logs, sessions, or data files.",
+        "Normalizes agent-native events into a shared GenAI schema.",
+        "Exports to JSONL, Alibaba Cloud SLS, HTTP, and OTLP trace backends.",
+        "Supports per-agent content capture policy and secret masking before output.",
+        "Provides service status, restart, rollback, and a built-in local dashboard.",
+        "Link collected agent spans to an **upstream** trace so each turn's span tree reparents under the upstream span. Disabled by default, and fully fail-open (never affects normal collection/reporting).",
+        "Pilot automatically runs a menu bar app after installation — no extra command needed. It shows live token, session, request, and tool counts, plus per-agent and per-provider breakdowns"
+      ],
+      "usageItems": [
+        "Use the `loongsuite-pilot` command after installation:",
+        "Open\n`http://127.0.0.1:8765/`; no separate monitor command is required.",
+        "You can add new agents without changing the deployment framework",
+        "the caller writes `{sessionId, contentHash, contentPrefix, traceparent}` to `~/.loongsuite-pilot/acp-correlate/<sessionId>.jsonl` when it sends a prompt."
+      ],
+      "usageActions": [
+        "loongsuite-pilot start",
+        "loongsuite-pilot restart",
+        "loongsuite-pilot status\nloongsuite-pilot info",
+        "loongsuite-pilot token-usage",
+        "loongsuite-pilot rollback"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Verify the service:\n\n```bash\nloongsuite-pilot status\nloongsuite-pilot info\n```",
+        "Use the `loongsuite-pilot` command after installation:\n\n```bash\nloongsuite-pilot start\nloongsuite-pilot stop\nloongsuite-pilot restart"
+      ],
+      "usecases": [
+        "- Which agents are being used?\n- What model, session, turn, and tool activity happened?",
+        "- How much token usage is available from each agent?",
+        "Local backup and easy inspection. Enabled by default.",
+        "Alibaba Cloud Log Service reporting. Supports WebTracking, AK, and API Key modes.",
+        "POST batches to a custom endpoint.",
+        "Export GenAI activity as OpenTelemetry traces."
+      ],
+      "outputs": [
+        "Built-in local dashboard — multi-agent token usage, sessions, requests, tools, models, providers, and repository activity at a glance.",
+        "Local JSONL output is enabled by default under `~/.loongsuite-pilot/logs/output/` on Linux/macOS and `%USERPROFILE%\\.loongsuite-pilot\\logs\\output\\` on Windows."
+      ],
+      "reliability": [
+        "OpenClaw integration requires OpenClaw 2026.5.12 or later.",
+        "The table above describes Pilot's general integration capabilities; it does not imply that every agent is supported on every operating system.",
+        "Agents omitted from this Windows table do not currently have an explicit Windows support statement; omission does not necessarily mean that the agent cannot run on Windows.",
+        "This capability is fail-open and currently does not cover ACP-only downstream trace propagation, subagents, PowerShell, MCP tools, or non-Bash tools.",
+        "environment variables affect only processes that inherit them, and `loongsuite-pilot restart` alone does not change an already-running Claude Code hook environment.",
+        "WorkBuddy Desktop 5.3.5.0; Windows 11 installed-product E2E"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"docs/_assets/img/dashboard.png\" alt=\"LoongSuite Pilot local dashboard\" width=\"880\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/_assets/img/menubar.jpg\" alt=\"LoongSuite Pilot macOS menu bar app\" width=\"360\">", "weight": 1 }
+      ],
+      "concerns": [
+        "README shows no example pairing an input/request with its output/response, so ioPairs is empty.",
+        "DingTalk QR code image excluded as community/contact media.",
+        "Standalone local telemetry collector distributed via installer/npm, not a DSH plugin."
+      ]
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "它会把同一个任务交给模型本身和多个候选 skill，并排试跑，生成本地 HTML report，让你看到真实输出之后再选择 winner。",
+        "ForkProbe 现在可以比较 image prompt / style pipelines。每条候选先生成 `prompt.md`、`style-card.md`、`composition.md`、`negative-prompt.md` 和 `render-notes.md`，不在 runner 内调用图片 API",
+        "插件提供两个工具：`forkprobe_compare` 负责确认后的并行试跑，`forkprobe_resume` 负责在等待窗口结束后恢复 Report 中的选择。",
+        "ForkProbe 会用 `ffprobe` 检查时长、分辨率、编码和音轨，用 `ffmpeg` 生成统一封面，并根据场景检查字幕、脚本/分镜、动效规格或转写稿/剪辑清单。",
+        "所有候选统一使用 `1440x1000` 和 `390x844` 视口截图，并执行本地资源、响应式、交互与基础可访问性 QA。",
+        "选定 winner 后，Report 的“继续”按钮会同时保存本地 handoff，并让 Agent 沿胜出 Skill 继续任务。",
+        "ForkProbe 会按内容指纹和来源去重，再按场景匹配度排序。",
+        "- 自动扫描的本机已安装 Skill：`~/.codex/skills`、`~/.agents/skills`、`~/.claude/skills`、`~/.dsh/skills`，以及项目内 `.codex/skills`、`.agents/skills`、`.claude/skills`、`.dsh/skills`、`skills`。"
+      ],
+      "usageItems": [
+        "1. 从 curated 目录、本机已安装 Skill、EverMind Skill Hub、GitHub 和 BYO 路径中推荐少量候选 skill 或 artifact pipeline。",
+        "2. 用同一份输入跑 baseline 和多个候选。",
+        "3. 展示每一路完整输出、耗时、token 估算、文件预览和 AI 评审建议。",
+        "5. 生成 continuation handoff，让 Agent 继续执行正式任务。",
+        "第一步必须先推荐候选，并等待用户确认：",
+        "口播粗剪必须使用 `--asset` 给所有候选提供同一个原始视频：",
+        "在正式对比前，`scripts/recommend.py` 会先生成候选清单并等待确认。"
+      ],
+      "usageActions": [
+        "python3 scripts/recommend.py --input /tmp/forkprobe-input.txt",
+        "python3 scripts/compare.py \\\n  --input /tmp/forkprobe-input.txt \\\n  --skill baseline \\\n  --skill writing-anti-ai \\\n  --skill humanizer-zh \\",
+        "open /tmp/forkprobe-report.html",
+        "请用 forkprobe 推荐候选，等我确认后再并排执行并生成 report，让我选择 winner。",
+        "python3 scripts/recommend.py --input /tmp/forkprobe-input.txt --local-only",
+        "python3 scripts/render_artifact_report.py \\\n  --manifest /tmp/forkprobe-ppt-artifacts.json \\\n  --output /tmp/forkprobe-ppt-report.html"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### 1. Text comparison\n\n适合学术润色、自然化改写、审稿回复、投稿材料、PPT 方案/大纲等文本产物。\n\n```bash\npython3 scripts/compare.py \\",
+        "```bash\npython3 scripts/figure_artifact.py \\\n  --input /tmp/forkprobe-figure-task.txt \\\n  --pipeline baseline-python-figure \\",
+        "```bash\npython3 scripts/web_artifact.py \\\n  --input /tmp/forkprobe-web-task.txt \\\n  --pipeline baseline-web \\",
+        "```bash\npython3 scripts/video_artifact.py \\\n  --input /tmp/forkprobe-video-task.txt \\\n  --asset /path/to/source-video.mp4 \\"
+      ],
+      "usecases": [
+        "- 你不确定当前任务该用哪个 skill，想先看真实输出再决定。",
+        "- 你的交付物是 PPTX、科研 figure package、调研报告、图片 prompt/style package、可运行网页或视频成片，需要看文件、预览和 QA。",
+        "| 学术润色与 SCI 写作 | 已支持 | 多版本文本、AI 评审、winner 选择 |",
+        "| PPTX 成品生成 | 已支持 | 可打开的 PPTX、预览图、候选说明 |",
+        "| 调研报告 / Research report | 已支持 | 报告预览、sources.json、evidence table、claim checks、limitations、AI 评审 |",
+        "| 图片提示词 / 风格方向比较 | 已支持 | Prompt、风格卡、构图说明、负面约束、可选图片预览、候选说明 |"
+      ],
+      "outputs": [
+        "推荐产物包括 `preview.png`、`figure.svg`、`figure.pdf` 或 `figure.tiff`、源代码或矢量源文件、`caption.md` 和 `qa.md`。",
+        "推荐产物包括 `candidate-report.md`、`candidate-report.html`、`sources.json`、`evidence-table.md`、`claim-checks.md`、`limitations.md` 和 `summary.md`。",
+        "每条候选输出 `site/index.html`、`desktop.png`、`mobile.png`、`qa.json`、`source.zip` 和候选说明。",
+        "每条候选必须生成 `video.mp4`。",
+        "ForkProbe 的核心产物是本地 HTML report。文本模式展示每一路完整输出、耗时、token 估算和 AI 评审；",
+        "推荐产物包括 `prompt.md`、`style-card.md`、`composition.md`、`negative-prompt.md`、`render-notes.md`、`summary.md`，可选 `prompt.json`、`reference-usage.md`、`render-request.json` 和 `rendered.png`。"
+      ],
+      "reliability": [
+        "不适合简单确定性任务：如果答案或工具路径已经很明确，直接执行会更快。",
+        "DeepSeek Harness 当前为 developer preview，建议固定已验证版本用于稳定生产任务。",
+        "`forkprobe_compare` 强制要求 `confirmed=true`，候选 subagent 不获得工具权限，因此不会递归调用 ForkProbe 或改动工作区。",
+        "事件先写入 `~/.forkprobe/telemetry/outbox/`，网络失败不会阻止 winner 保存或 Agent 继续，后续运行会自动重试。",
+        "不上传任务原文、候选输出、文件、评价理由、本地路径或用户身份。",
+        "环境中安装 Python Playwright 时，还会用真实浏览器测量移动端横向溢出；不可用时 `qa.json` 会明确记录该项未测量，而不会伪报通过。",
+        "外部发现只使用经过清洗的任务信号，不会直接拿你的原始文档做搜索词，也不会自动安装或执行未经确认的候选。",
+        "Integration tests 需要真实模型/API 访问：",
+        "ForkProbe runner 本身不会要求 API key，也不会直接调用图片 API。",
+        "Artifact runner 默认使用 `workspace-write`，可用 `FORKPROBE_DSH_PERMISSION_MODE` 覆盖。"
+      ],
+      "media": [],
+      "concerns": [
+        "README embeds only shields.io badges; no product screenshots or demo media.",
+        "No explicit paired input/output example appears, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "JingbiaoMei/Tokdash",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Exact token counts**: Input/Output/Cache token breakdowns",
+        "**Contribution calendar**: 2D heatmap + 3D isometric view with Tokens/Cost/Messages metrics",
+        "**Session explorer**: per-session drill-down",
+        "**Quota tab** *[new]*: subscription window bars with reset countdowns for Codex, Claude Code, and Antigravity.",
+        "**Multi-server views**: add WSL, macOS, and other Tokdash servers in Settings; combine usage across any selection while keeping quota grouped by machine.",
+        "**Themes and app polish**: 10 style themes, light/dark mode, and PWA install support",
+        "Tokens, cost, sessions, turns, and measured active time are read locally from ZCode's SQLite database.",
+        "folds each step's early usage chunk into its finalized message instead of double-counting it, and skips the inherited prefix of forked sessions so parent and child never bill the same tokens twice.",
+        "drop a live token-usage indicator into Claude Code's statusline (or any agent that can hit a local HTTP endpoint)",
+        "active time subtracts idle by counting each gap between consecutive token events only up to an idle cap"
+      ],
+      "usageItems": [
+        "Use `tokdash doctor --json` for automation.",
+        "Open `http://127.0.0.1:55423`. Use `tokdash serve --port <port>` if the default port is busy.",
+        "Hand your agent this prompt and point it at [`docs/reference/API.md`](docs/reference/API.md):",
+        "The companion connects to `http://127.0.0.1:55423` by default. Open its\n   settings to add, test, name, enable, or remove explicit Tokdash endpoints,"
+      ],
+      "usageActions": [
+        "tokdash update       # upgrade the managed runtime and restart the service when possible",
+        "tokdash uninstall    # reverse exactly what setup created; keeps usage history by default",
+        "tokdash quota poll",
+        "tokdash quota show",
+        "tokdash db status --pretty",
+        "tokdash db verify --verify-period today --pretty",
+        "tokdash db repair --dry-run --pretty",
+        "curl 'http://127.0.0.1:55423/api/usage?period=today'",
+        "tokdash doctor"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "If you only want a one-off foreground process:\n\n```bash\ntokdash serve\n```",
+        "### Verify\n\n```bash\ntokdash doctor\n```",
+        "Example:\n```bash\ncurl 'http://127.0.0.1:55423/api/usage?period=today'\n```",
+        "DB maintenance commands:\n\n```bash\ntokdash db status --pretty"
+      ],
+      "usecases": [
+        "Tokdash can power daily/weekly/monthly OpenClaw usage reports by querying the local API on a schedule.",
+        "For remote access through Tailscale Serve, SSH forwarding, or an explicit network bind, see",
+        "Run a checkout against its own data directory so it never migrates the installed service's database:"
+      ],
+      "outputs": [
+        "[`statusline-minimal.sh`](docs/guides/statusline/statusline-minimal.sh) → one line: `[Claude Sonnet 4.6] 📁 myproject | 📊 12.3M ($4.56) today`",
+        "[`statusline-full.sh`](docs/guides/statusline/statusline-full.sh) → a four-row dashboard with today + week totals and a top-3 per-tool breakdown",
+        "Today's cost, tokens, messages, and month-to-date usage",
+        "Combined totals and server-grouped quota from multiple Tokdash endpoints",
+        "Codex, Claude, Kimi, MiniMax, Antigravity, and Grok quota windows"
+      ],
+      "reliability": [
+        "**No telemetry**: Tokdash does not intentionally send your data anywhere.",
+        "Either way they may lag real provider pricing — use as an estimate and verify against your billing source if it matters.",
+        "**Keep your history.** Claude Code and Gemini CLI delete local sessions older than ~30 days by default, so Tokdash's earlier months can silently shrink.",
+        "Treat session-log Codex consumption as an **estimate that can be materially wrong**",
+        "schema migrations run forward only, so once the newer build migrates the file the older one refuses to open it until it is upgraded",
+        "excess cold requests return a fast `503` instead of saturating the server under load",
+        "**Windows (native):** experimental",
+        "The GitHub Releases binaries are **unsigned**.",
+        "Records without a model event are skipped rather than assigned a guessed price.",
+        "It is an estimate, and the API says so: `summary.active_time_estimated` is `true` and `summary.active_time_method` is `capped-inter-event-gap`."
+      ],
+      "media": [
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-overview-en-light.png\" alt=\"Tokdash overview dashboard - click for live demo\" width=\"860\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-sessions-en-light.png\" alt=\"Tokdash sessions view - click for live demo\" width=\"860\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-heatmap-en-light.png\" alt=\"Tokdash monthly usage heatmap - click for live demo\" width=\"860\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-quota-en-light.png\" alt=\"Tokdash quota tracking - click for live demo\" width=\"860\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/demo-statusline.png\" alt=\"Tokdash statusline integration example\" width=\"900\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/JingbiaoMei/Tokdash/main/docs/assets/companion/demo-mac.png\" alt=\"Tokdash Companion Status Bar App on macOS\" width=\"360\" />", "weight": 1 }
+      ],
+      "concerns": [
+        "No explicit paired input/output example appears in the README; ioPairs is empty.",
+        "raw.githubusercontent.com assets treated as repository-hosted (weight 1); dark-mode variants and yearly heatmap excluded as duplicated views.",
+        "Standalone pip-installed local dashboard that parses agent logs; not a DSH plugin."
+      ]
+    },
+    {
+      "repo": "Akimiya-z/codex-guard",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Codex Guard runs on `pull_request`, figures out whether the PR looks\nagent-generated (via label, branch prefix, or title), and then:",
+        "AWS (access + secret keys), GitHub, Google, OpenAI, Anthropic, Slack, Stripe, npm, SendGrid, Telegram, Azure connection strings, JWTs, hardcoded credentials, connection strings (values are redacted in reports)",
+        "| 💬 Commit hygiene | Subjects that don't match conventional commits, empty subjects |",
+        "| 🧪 CI status | Failing status checks **or** check runs on the PR head commit |",
+        "Each finding is posted as a GitHub **check-run annotation at the exact file and\nline**, plus a human-readable summary comment on the PR.",
+        "- **Label** matches one of `codex-generated`, `agentic`, `ai-generated`",
+        "- **Branch** starts with `codex/`, `copilot/`, `claude-auto`, `gh-codex/`",
+        "| `sweep` | `false` | Scan every open agent PR instead of a single one (use with `workflow_dispatch`). |",
+        "a `codex_guard` **tool** that DeepSeek Harness agents can call to pre-flight an\nagent-authored diff before it becomes a PR.",
+        "The skill tells the agent to run `node src/cli.js --git --commits` before\nsubmitting, fix TODO/secret/commit findings, and only open the PR once the\nchecks pass (or the exception is documented in the description)."
+      ],
+      "usageItems": [
+        "The installer starts in **observe mode**: findings are annotated, but they do\nnot fail the workflow while you tune the policy.",
+        "Add a label named `codex-guard-ignore` (configurable) to a PR and Codex Guard\nwill pass it without running checks.",
+        "Run the read-only local doctor after installing or changing policy:",
+        "Use `pull_request_target` so the check runs with your repo's write token."
+      ],
+      "usageActions": [
+        "npx --yes codex-guard doctor",
+        "npx --yes codex-guard doctor --json  # machine-readable output",
+        "npx --yes codex-guard --diff <(git diff origin/main)",
+        "npx --yes codex-guard --git --commits",
+        "node src/cli.js --diff /tmp/patch.diff",
+        "node src/cli.js --git origin/main --commits",
+        "git diff origin/main > /tmp/patch.diff"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```bash\nnpx --yes codex-guard doctor\nnpx --yes codex-guard doctor --json  # machine-readable output\n```",
+        "# scan a diff from npm — no install needed (v1.7.0+)\nnpx --yes codex-guard --diff <(git diff origin/main)",
+        "# or straight against a ref (bare `--git` scans tracked + untracked changes)\nnpx --yes codex-guard --git --commits\nnode src/cli.js --git origin/main --commits"
+      ],
+      "usecases": [
+        "**Gate everything, and skip secrets scanning on docs:**",
+        "**Observe first, enforce later:**",
+        "**Keep gating agent PRs from forks:**",
+        "**Integrate with a tool that adds the agent label automatically:**",
+        "Adopting Codex Guard doesn't have to be retrospective — run a **sweep** to\ninspect every currently-open agent-generated PR in one go:"
+      ],
+      "outputs": [
+        "❌ **Checks failed — review the findings before merging.**",
+        "- `scripts/sync.js:4` — AWS Access Key ID `AKIA...MPLE`",
+        "| `result` | `pass`, `fail`, or `skipped`. |",
+        "| `content-scan-coverage` | Text patches scanned / eligible files, such as `12/13`, or `disabled`. |",
+        "| `findings-json` | JSON of the full report — pipe it into later steps to gate more or build dashboards. |"
+      ],
+      "reliability": [
+        "Guard now distinguishes **no findings** from **not scanned**: every report shows\nthe number of eligible changed files whose patches were actually inspected.",
+        "If one GitHub CI API is unavailable, the report is\nneutral and explicitly says visibility is incomplete; if both are unavailable,\nthe CI check fails closed.",
+        "it is not a replacement for a real secret scanner",
+        "Agent detection is intentionally heuristic.",
+        "rerun cannot inherit its own old failure",
+        "cannot be content-scanned.",
+        "A blocking\nfinding will prevent the PR from merging until it is resolved",
+        "Node API compatibility is **tested against the real `@deepseek-ai/dsh-tools`\nregistry packages** (see `test/dsh.test.js`), including an end-to-end run in a\nthrowaway git repo.",
+        "Pending checks produce a neutral result,\nnot a premature green check.",
+        "- Runs on `pull_request` events; for fork contributions use\n  `pull_request_target` (see [`examples/forks.yml`](examples/forks.yml)) and\n  supply a token with the right scope."
+      ],
+      "media": [],
+      "concerns": [
+        "README embeds only shields.io badges; no demonstration media.",
+        "The PR #6 report sample is an output-only example; no explicit paired input/output appears, so ioPairs is empty.",
+        "Primarily a GitHub Action and npm CLI that also ships an optional DSH bundle; classified standalone-nonplugin."
+      ]
+    },
+    {
+      "repo": "Stormycry-cryp/dsh-AuthInOne",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a DeepSeek Harness plugin for Provider login, API and custom OpenAI-compatible Provider setup, model switching, optional vision fallback for text-only models, token usage analytics, and cost tracking",
+        "OpenAI Codex uses browser OAuth with state, S256 PKCE, and a loopback callback.",
+        "Kimi Code opens the Provider's complete authorization link backed by an RFC 8628 device flow; the link carries the short code, so the user normally only signs in and confirms.",
+        "the plugin records the exact DSH attachment references, fallback route, prompt version, result, and provider-reported usage as ordinary durable DSH messages with plugin provenance.",
+        "Time, Provider, and output-price filters share one query context and drive every KPI, heatmap point, ranking, Token bucket, and cost value.",
+        "Daily Token activity always renders the latest 365 dates as a seven-row calendar.",
+        "The connection test calls the configured OpenAI-compatible `/models` endpoint from the Host.",
+        "the Models page omits the quota block when the upstream response is missing, incomplete, unsupported, or cannot yield a reliable percentage"
+      ],
+      "usageItems": [
+        "Open DSH, then go to **Settings → Models** or **Settings → Usage**.",
+        "The browser receives aggregated usage, redacted status, an authorization URL, and where required a user code.",
+        "Choose an active Provider and a model whose DSH adapter explicitly declares `image` input, then enable and save it.",
+        "Inspect the detached handoff after the URL returns:"
+      ],
+      "usageActions": [
+        "pnpm dlx github:Stormycry-cryp/dsh-AuthInOne#v0.2.0-alpha.4 status --profile web"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "- you want OpenAI Codex or Kimi Code login inside DSH, or knowingly opt into a labeled compatibility flow;",
+        "- you manage API-key or custom OpenAI-compatible Providers in DSH's native Models page;",
+        "- you switch the future-session default model without replacing DSH's per-session selector;",
+        "- you want a separately configured vision model to describe images only when the selected main model explicitly declares text-only input;",
+        "- you need reconstructable Provider/model/tool token usage and auditable calculated cost."
+      ],
+      "outputs": [
+        "Real DSH session logs rebuilt 26,383 Token into KPI, heatmap, model, Provider, bucket, and cost projections",
+        "a real DeepSeek call populated Usage without exposing the key",
+        "Successful auxiliary calls appear separately as **Vision-assist calls** and **Vision-assist Token** while retaining their actual Provider/model route."
+      ],
+      "reliability": [
+        "exact compatibility target: official DSH `47f9438`",
+        "mock/fixture tests cover exchange or polling, refresh rotation, denial, timeout, cancellation, logout, route activation, and secret redaction.",
+        "the plugin never imports `~/.codex/auth.json`, OpenCodex state, cookies, browser storage, OTPs, or another product's credentials.",
+        "Automatic listener verification currently supports macOS and Linux and requires `lsof`.",
+        "Ambiguous ports, unrelated listener processes, unknown owner artifacts, and unsupported launch provenance fail before the Host is stopped.",
+        "A changed or native-seam host fails with `AUTH_IN_ONE_COMPAT_UNSUPPORTED_DSH` instead of being silently replaced or double-registered.",
+        "The feature does not accept audio, video, PDF, image generation, browser object URLs, host paths, or plugin-owned base64 storage.",
+        "it returns a recoverable `VISION_FALLBACK_FAILED` result and keeps upstream response details out of the session log.",
+        "Seven entries are explicitly Experimental, and Qwen account OAuth is discontinued and unavailable.",
+        "The alpha.2 security diff scan reviewed 74 changed/added artifacts, found two medium-severity network-boundary issues, and verified both fixes with Node 24 reproductions and focused tests before release."
+      ],
+      "media": [
+        { "excerpt": "![DeepSeek Harness Models settings with Provider state and OpenAI Codex account authorization](docs/assets/models-dark-desktop.png)", "weight": 1 },
+        { "excerpt": "![DeepSeek Harness Usage settings with token activity, model usage, and cost analytics](docs/assets/usage-light-desktop.png)", "weight": 1 }
+      ],
+      "concerns": [
+        "All command fences are installation/lifecycle or local-development steps, so codeExamples is empty.",
+        "No explicit paired input/output example appears; ioPairs is empty.",
+        "Cover image excluded as branding artwork."
+      ]
+    },
+    {
+      "repo": "openma-ai/Martty",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Martty 在终端中呈现完整的 agent 工作过程，包括流式回复、推理、工具调用、\nsubagent、Plan、token 用量和持久化会话。",
+        "图片可以从文件或剪贴板加入 prompt；",
+        "回合运行时可以继续排队消息，也可以立即 steer 当前 agent。",
+        "workspace、模型、权限和界面选择会随会话恢复。",
+        "Martty 的 ACP client 是内置的。默认配置连接 DSH；连接其他 ACP server 时，只需\n修改 agent 或 stream 配置，不需要替换 Martty 的 ACP 层。",
+        "UI、主题、Slot、命令、Overlay 和 Session 视图\n都由 Cordis Plugin 组合，并随 Plugin 生命周期一起加载和卸载。",
+        "Agent 可以读取当前能力，创建新的界面 Plugin，并在运行中继续",
+        "Client half 可以通过\n`host.call(method, args)` 调用同一 run 的 Host half。",
+        "带有 Client half 的 Plugin 可以通过 `tuiSlots.register` 向六个位置提供界面内容：",
+        "只实现标准 ACP 的 agent 可以正常使用会话、认证、prompt、permission、配置与\n`session/update`。"
+      ],
+      "usageItems": [
+        "| `enter` | 发送消息；composer 为空且 Queue 非空时立即发送队首 |",
+        "| `ctrl+x` | 立即 steer 当前 agent |",
+        "| `esc` | 中断当前回合并保留草稿 |",
+        "| `/model` · `/agent` | 选择模型和 Agent Preset |",
+        "| `/image <path>` · `/clip` | 添加本地图片或剪贴板图片 |",
+        "| `!cmd` | 在 workspace 的会话级本地 shell 中执行命令 |",
+        "| `/permission` · `shift+tab` | 选择或轮换权限模式 |"
+      ],
+      "usageActions": [
+        "可用 `/liang on`、`/liang off` 显式控制。缺省关闭，`/liang on` 召唤。",
+        "martty --demo\nmartty --demo-skin",
+        "使用 `/theme` 选择 Theme Plugin，使用\n`/theme toggle` 或 `ctrl+t` 切换当前 Theme Plugin 的 dark/light 变体。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "只想看界面，可以运行：\n\n```sh\nmartty --demo\nmartty --demo-skin\n```",
+        "Standalone 模式可以指定启动命令：\n\n```sh\nDSH_TUI_AGENT=\"<acp-command> [args...]\" martty\n```"
+      ],
+      "usecases": [
+        "Cordis 嵌入场景可以使用 `config.agent: { command, args }` 启动 ACP server，或使用\n`config.stream` 接入调用方已有的标准管道。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "不能直接操作 TTY、raw mode 或终端坐标。",
+        "当前没有把任意动态 Package 一键转换为静态 Package 的 `promote` 命令；升级\n会显式经过保存或打包，避免把一次临时 run 自动写入长期配置。",
+        "包含 `code.host` 的 Host-only 或双向\nPlugin 不能写进 `.martty`",
+        "旧配置和会话数据会在首次启动时复制到 Martty 路径，不会删除原数据。"
+      ],
+      "media": [
+        { "excerpt": "alt=\"Martty 中的 Markdown 回复、工具调用和运行状态\" />", "weight": 1 }
+      ],
+      "concerns": [
+        "No explicit paired input/output example; ioPairs and outputs are empty.",
+        "Primarily an npm-installed terminal UI that can also be installed into a DSH profile as a plugin; classified standalone-nonplugin.",
+        "Logo lockup excluded as branding."
+      ]
+    },
+    {
+      "repo": "btspoony/mstar-harness",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a TypeScript **Harness Workflow Engine** (`@mstar-harness/engine`) enforces deterministic workflow gates, while `mstar-*` judgment skills drive multi-agent code delivery.",
+        "**Deterministic gates, enforced by a TS engine** — path/status/lease/dispatch/sdd/iteration/lint gates run in `@mstar-harness/engine`, not as prompt suggestions",
+        "**One engine across hosts** — the same engine + skills power dsh (DeepSeek Harness), omp, OpenCode, Cursor, Kimi Code, ZCode, and Codex",
+        "| `project-manager` | Routing, assignment, phase progression |",
+        "| `qa-engineer` | Acceptance when `QA gate: mandatory` |",
+        "| `mstar-audit` | Read-only codebase audit → prioritized improvement plans |",
+        "| `mstar-sdd` | Subagent-driven development |",
+        "| `mstar-dispatch-gates` | Dispatch, Delegation, anti-recursion |"
+      ],
+      "usageItems": [
+        "Enter PM, then run the per-plan cycle: `Prepare → Execute → QC → QA gate → Done`.",
+        "Start a new iteration: Phase 1 (interactive grill-me), then auto-continue Phase 2→5.",
+        "Resume Phase 2→5 on an already-locked iteration.",
+        "Full Phase 1→5 autonomous (no grill-me).",
+        "Load **`mstar-harness-core` first**, then topic skills on demand (`mstar-roles`)."
+      ],
+      "usageActions": [
+        "| `/iteration-drive` | Resume Phase 2→5 on an already-locked iteration. |",
+        "| `/codebase-audit [keywords]` |",
+        "`mstar status validate`, `mstar dispatch validate`, `mstar iteration gate`",
+        "`pm` skill (via the mstar skill provider; no auto-load)",
+        "| OpenCode | `agent.project-manager` (`agents/project-manager.md`) |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "npx @mstar-harness/cli doctor --target <opencode\\|cursor\\|codex\\|zcode\\|omp\\|dsh>",
+        "npx @mstar-harness/cli plugin validate"
+      ],
+      "usecases": [
+        "Three entry shapes: **without iteration** (single plan / hotfix), **with iteration** (multi-plan Phase 1–5), or **audit & review** (read-only: discover what to do, or decide whether a change ships).",
+        "Read-only survey of what's worth doing — prioritized, ready-to-execute plans",
+        "Deep pre-merge review of a PR / branch / diff at three strengths"
+      ],
+      "outputs": [
+        "one verdict (`ship it` / `needs fixes` / `blocked`)",
+        "tracked results: `{HARNESS_DIR}/AGENTS.md`, `knowledge/`, `specs/`"
+      ],
+      "reliability": [
+        "an unrelated third-party npm package named `mstar` claims the same command name.",
+        "globally co-installing both packages silently overwrites the `mstar` shim (last install wins)",
+        "Without a global install the harness still works and those checks stay advisory.",
+        "Two read-only, advisory commands under one roof — they never edit source; findings can become plans for Prepare → Execute.",
+        "Multi-PR input → first PR only; remaining PRs queued as audit todos (next session); suggest one session per PR.",
+        "**Recommended host** (best → usable): **dsh = omp ≥ OpenCode ≥ Cursor > Kimi = ZCode > Codex**"
+      ],
+      "media": [],
+      "concerns": [
+        "No paired input/output example; ioPairs is empty.",
+        "No non-badge images; only a Mermaid workflow diagram, which is not counted as media."
+      ]
+    },
+    {
+      "repo": "peiyuwang54/deepseek-harness-cli",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "is an open-source coding agent powered by DeepSeek that runs locally in your terminal.",
+        "- Code reading, editing, shell tools, web search, skills, MCP, and subagents.",
+        "- Persistent sessions with resume, plan, goal, queued messages, and automatic context compaction.",
+        "- Plugin-based profiles for terminal, headless automation, and the Web UI.",
+        "The command starts the Web UI at `http://127.0.0.1:3080` by default and opens it in the default browser for a local launch."
+      ],
+      "usageItems": [
+        "Run a non-interactive task for scripts and CI with `deepseek exec`:",
+        "Then open a project directory and run `deepseek` to get started.",
+        "Use `/credentials` to inspect its source, replace it, or remove the saved value.",
+        "Use `/permissions` during a session, or pass `--sandbox` and `--ask-for-approval` for exact controls.",
+        "Use `/mcp` in a running session to inspect connected servers.",
+        "On first launch, paste your DeepSeek API key into the masked prompt."
+      ],
+      "usageActions": [
+        "deepseek exec \"run the tests\"",
+        "deepseek exec --json \"review this repository\"",
+        "deepseek exec resume --last \"continue\"",
+        "deepseek mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem .",
+        "deepseek mcp list",
+        "deepseek doctor",
+        "deepseek plugin --profile tui list",
+        "deepseek plugin --profile tui verify --json",
+        "deepseek completion zsh > ~/.zsh/completions/_deepseek",
+        "deepseek --full-auto\ndeepseek --yolo"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Run a non-interactive task for scripts and CI with `deepseek exec`:\n\n```sh\ndeepseek exec \"run the tests\"\ndeepseek exec --json \"review this repository\"\ndeepseek exec resume --last \"continue\"\n```",
+        "```sh\ndeepseek mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem .\ndeepseek mcp list\n```",
+        "```sh\ndeepseek doctor\ndeepseek doctor --json\ndeepseek completion zsh > ~/.zsh/completions/_deepseek\n```"
+      ],
+      "usecases": [
+        "An SSH launch only prints the host URL because the SSH client or editor owns the local forwarded address."
+      ],
+      "outputs": [],
+      "reliability": [
+        "The key is stored by the shared credential provider and never added to chat history.",
+        "`--yolo` disables both confinement and approval prompts, so use it only in an isolated environment.",
+        "An inherited environment value is read-only inside the CLI.",
+        "MCP probes start the configured server with a 5000 ms per-request timeout",
+        "a required MCP server failure, missing runtime asset, or unsupported Node version is blocking.",
+        "Optional server failures and host capability checks are warnings",
+        "Source builds require Node.js `^22.19` or `>=24` and pnpm `11.7.0`.",
+        "`enable` and `disable` change the active Cordis bundle list and take effect on the next launch"
+      ],
+      "media": [
+        { "excerpt": "<img src=\".github/deepseek-cli-splash.png\" alt=\"DeepSeek CLI terminal preview\" width=\"80%\" />", "weight": 1 }
+      ],
+      "concerns": [
+        "No explicit paired input/output example; ioPairs and outputs are empty.",
+        "Theme palette swatch graphic excluded as decorative art.",
+        "Community-maintained fork/restore of the official DSH CLI; classified standalone-nonplugin."
+      ]
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**在 Claude Code 里直接搜企业微信、飞书、钉钉、淘宝开放平台、小红书、抖音电商开放平台、微信小程序、微信小店、拼多多开放平台、有赞开放平台、微信支付、支付宝开放平台、京东商家开放平台、SHEIN开放平台、得物开放平台、火山引擎、阿里云百炼、泛微 e-teams 开放平台、北森 iTalent 开放平台的 API 文档。**",
+        "**中文搜索准确** — jieba 分词 + FTS5 全文索引，`发送应用消息`、`access_token`、`40001` 都能搜到",
+        "**零配置** — 云端服务已部署好，安装 Skill 后即可使用，无需自建后端",
+        "所有 API 返回 Markdown 纯文本（`Content-Type: text/markdown`），可直接阅读。",
+        "| `GET /api/search?q=关键词&source=wecom&limit=5` | 搜索文档 |"
+      ],
+      "usageItems": [
+        "**方式一：直接提问**（提到企业微信、飞书、钉钉、淘宝、小红书、抖音电商、微信小程序、微信小店、拼多多、有赞、微信支付、支付宝、京东、SHEIN、得物、火山引擎、百炼、泛微、北森等关键词时自动触发）",
+        "打开 Claude Code 或 Cursor，开始提问即可。"
+      ],
+      "usageActions": [
+        "> /specfusion 企业微信发送应用消息\n> /specfusion feishu 获取用户列表",
+        "> 飞书如何创建审批实例？",
+        "> 企业微信的 access_token 怎么获取？",
+        "> 淘宝商品发布接口怎么用？",
+        "> 微信支付JSAPI下单接口怎么调？",
+        "> 企业微信怎么发应用消息？"
+      ],
+      "ioPairs": [
+        "> 企业微信怎么发应用消息？\n\n  搜索到 3 篇相关文档：\n  1. 发送应用消息 — POST /cgi-bin/message/send"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "**不离开终端** — 写代码时直接问，Claude 帮你查文档、给出接口参数和示例",
+        "不用切浏览器，不用翻文档站——输入问题，拿到接口参数，继续写代码。"
+      ],
+      "outputs": [
+        "搜索到 3 篇相关文档：\n  1. 发送应用消息 — POST /cgi-bin/message/send"
+      ],
+      "reliability": [
+        "> **⚠️ 必须加 `-g` 参数！** 不加 `-g` 会安装到当前目录，只在该目录下生效。",
+        "| Claude Code 找不到 | 安装时没加 `-g`，只装到了当前目录 | 重新运行 `npx skills add wxkingstar/SpecFusion -g -y` |",
+        "（需要 ego lite 桥接）",
+        "同步拼多多开放平台文档（需先跑 scripts/pdd-refresh.sh）"
+      ],
+      "media": [],
+      "concerns": [
+        "All command fences are installation or self-hosting/sync configuration, so codeExamples is empty.",
+        "README embeds only shields.io badges; no screenshots or demo media.",
+        "Only one worked example pairs a question with its search results; other examples show inputs only."
+      ]
+    },
+    {
+      "repo": "DDDMUC/dsh-free-search",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "一个给 DeepSeek Harness (dsh) 添加多引擎搜索 provider 的插件，注册进 `ctx.web` seam。内置 `web_search` 工具自动选用，支持网页设置页切换引擎、配置 API key、一键测试所有引擎、弹出式命令切换引擎。",
+        "**统一引擎回退** —— 任何引擎失败（付费/免费，缺 key/401/限流/网络）自动轮流尝试下一个引擎：首选引擎 → 其他引擎（exa/tavily/keenable 无 key 也会尝试，因为它们自带 keyless 免费额度）→ 剩余免费引擎，搜索永不直接失败；",
+        "**时间过滤** —— `advanced_search` 工具支持 `timeRange`：固定档、自定义相对值、绝对日期三种形式（详见下方逻辑说明）",
+        "**结果缓存** —— 相同查询（含引擎/时间过滤参数）5 分钟内命中缓存（LRU 50 条），防免费引擎限流、省付费额度；",
+        "**平台搜索（platform_search）** —— 搜 GitHub / V2EX / B站 / Reddit / Hacker News / Stack Overflow / 维基百科 / npm（公开 API，零依赖）",
+        "**网页抓取（web_fetch）** —— 让 agent 抓取网页内容（官方 `dsh-web-fetch-http` provider，纯 JS，零额外依赖）",
+        "**系统提示词注入** —— agent 知道当前用哪个引擎、哪些需要 key",
+        "**引擎测试** —— `free_search_test` 工具让 agent 一键测试所有引擎；设置页也有\"测试引擎\"按钮（直测当前引擎，不走回退链，付费引擎无 key 会明确报错）",
+        "**版本号 + 检查更新** —— 设置卡片显示当前版本（v0.4.12），\"检查更新\"按钮直连 npm registry 对比最新版，有新版本时提示并可一键跳转"
+      ],
+      "usageItems": [
+        "安装后，打开 **设置 → 插件 → 可配置** 标签页 → **Free Search** 卡片（官方设置页）：",
+        "- **Search engine**：下拉框切换引擎，保存即生效",
+        "不用进设置页也能切换引擎：在聊天框输入 `/free-search-engine`，**弹出引擎选择窗口**（和 `/model` 选模型一样的交互），点选即切换，当前引擎会标记出来。",
+        "对 agent 说\"测试一下所有搜索引擎\"，它会调用 `free_search_test` 工具，逐个测试并报告：",
+        "让 agent 搜\"最近一周的新闻\"、\"这个月的发布\"、\"最近 3 天的消息\"、\"7 月以来的更新\"，它会调用 `advanced_search` 工具，带 `timeRange` 参数。"
+      ],
+      "usageActions": [
+        "在聊天框输入 `/free-search-engine`，**弹出引擎选择窗口**",
+        "powershell -File tools/switch-engine.ps1 -Engine bing",
+        "- **`启动搜索引擎切换器.cmd`**（Windows）——双击启动本地 Node 服务（`http://127.0.0.1:4789`）并自动打开浏览器选择页面"
+      ],
+      "ioPairs": [
+        "对 agent 说\"测试一下所有搜索引擎\"，它会调用 `free_search_test` 工具，逐个测试并报告：\n\n```\nSearch engine test:\n- ddg: FAIL - DuckDuckGo is rate-limited right now (anti-bot challenge, usually temporary) - Bing works"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "- 没有（或不想用）DeepSeek 官方 key，",
+        "- 用的是 opencode-go 这类网关（其 OpenAI 兼容端点不支持 `web_search` 工具），",
+        "搜索到 URL 后，可以让 agent **读取网页全文**（如\"打开第一个链接看看内容\"）。"
+      ],
+      "outputs": [
+        "结果顶部注明实际生效的引擎（如 `Note: perplexity unavailable or failed, using exa.`）",
+        "- bing: OK (2 results, e.g. \"DeepSeek Harness developer preview...\")"
+      ],
+      "reliability": [
+        "| `ddg` | DuckDuckGo HTML | 免费 | 偶发限流（反爬），解封自动恢复 |",
+        "⚠️ 注意：`web_fetch` 无 SSRF 防护，agent 理论上可访问内网地址——按需使用",
+        "不要把 DSH 核心包复制进 profile 的本地 `node_modules`；重复副本会导致工具调度器失效。",
+        "| `reddit` | Reddit 帖子/讨论搜索（公开 JSON API；部分网络环境可能被 Reddit 反爬拦截） |",
+        "DuckDuckGo 等引擎可能需要代理才能访问，而 Node.js 的 `fetch` 默认不走系统代理。",
+        "| Bing / AnySearch | — | ❌ 忽略 | 无对应参数 |",
+        "| Tavily | `time_range` | ⚠️ 近似 | 只认固定档，自定义天数自动映射到最近似档位 |",
+        "额度有限流（适合日常搜索）"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-free1.png\" alt=\"免费引擎设置 (Bing)\" width=\"820\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-free.png\" alt=\"免费引擎设置\" width=\"100%\" />", "weight": 1 },
+        { "excerpt": "<img src=\"https://raw.githubusercontent.com/DDDMUC/dsh-free-search/master/assets/settings-apikey.png\" alt=\"付费引擎设置\" width=\"100%\" />", "weight": 1 }
+      ],
+      "concerns": [
+        "English section repeats the Chinese claims; each claim counted once.",
+        "raw.githubusercontent.com assets treated as repository-hosted (weight 1); duplicated views across language sections counted once.",
+        "Operational interaction is natural-language/agent-driven and all fences are configuration, so codeExamples is empty."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6493 @@
+{
+  "generatedAt": "2026-09-02T07:30:55.349Z",
+  "parser": "/Users/hoy/Desktop/DSH/dsh-market-index/scripts/readme-signals.mjs",
+  "algorithmFingerprint": {
+    "parserSha256": "9dac5d7770c0619d9ceca3913af30664dfccacbecd4eb301c15eeaf9fc674dac",
+    "scorerSha256": "66f7d0d8373f651eac2c516c26d90615ec56da4cf2e474ab9b4ae7d0de907e6c"
+  },
+  "protocolFingerprint": {
+    "evaluatorSha256": "71b910920e74723f9c0ee9df1a099de7394c8a2185bdeca6f4a124966e13487c",
+    "metricsSha256": "8a74562d942d45cb28f8702a657221eaf48686593b48a864bd08d3e864b4e3a6",
+    "rubricSha256": "3b14439fc91b8746dcbba5bfcb124f4245b0c8fd2d2897e8075810c7a6682f59",
+    "consecutiveValidatorSha256": "4477b93c61c56945d02359dd41f8fe5beb0de5f86d01db33c23b69604fc12b69"
+  },
+  "oracleProtocolFingerprint": {
+    "pairValidatorSha256": "6c496dc9890294faeb625d0623e79b95473672719ad12f1180b157ec8c60eb19",
+    "aggregatorSha256": "08121a383b12e2eebe6dd01cc0b9e7d1c88b3f356ba7e4d74e1d7aea0876a661",
+    "metricsSha256": "8a74562d942d45cb28f8702a657221eaf48686593b48a864bd08d3e864b4e3a6"
+  },
+  "oracleProvenanceVerified": true,
+  "inputFingerprint": {
+    "cohortSha256": "0fc5e7007e8146e09dae9f9d40d096e7600980633e78d19bb3c0cf05a88c56ec",
+    "ratingsSha256": "f16bf723715f01956e9a104709efe9305ed975a40b7f64db09443971e362e464"
+  },
+  "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-03.ndjson",
+  "ratingsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-oracle-ratings.json",
+  "count": 100,
+  "gates": {
+    "spearman": {
+      "rawValue": 0.7976564403806711,
+      "value": 0.798,
+      "threshold": 0.75,
+      "pass": true
+    },
+    "topQuartileRecall": {
+      "rawValue": 0.72,
+      "value": 0.72,
+      "threshold": 0.8,
+      "pass": false
+    },
+    "severeFalseNegativeRate": {
+      "rawValue": 0,
+      "value": 0,
+      "maximum": 0.05,
+      "pass": true
+    },
+    "severeFalsePositiveRate": {
+      "rawValue": 0,
+      "value": 0,
+      "maximum": 0.05,
+      "pass": true
+    },
+    "within20Share": {
+      "rawValue": 0.97,
+      "value": 0.97,
+      "threshold": 0.8,
+      "pass": true
+    },
+    "stratumSevereErrorRate": {
+      "rawValue": 0,
+      "value": 0,
+      "maximum": 0.1,
+      "pass": true
+    },
+    "languageMeanResidualGap": {
+      "rawValue": 0.6924348904505992,
+      "value": 0.692,
+      "maximum": 5,
+      "pass": true
+    }
+  },
+  "diagnostics": {
+    "meanScore": 41.93,
+    "meanHuman": 43.68,
+    "meanError": -1.75,
+    "meanAbsoluteError": 8.47,
+    "dimensionSpearman": {
+      "capability": 0.582,
+      "usage": 0.679,
+      "usecases": 0.589,
+      "demo": 0.871,
+      "reliability": 0.782
+    },
+    "byType": {
+      "catalog-list": {
+        "n": 4,
+        "meanError": 0,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "dsh-plugin": {
+        "n": 66,
+        "meanError": -3.424,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "standalone-nonplugin": {
+        "n": 27,
+        "meanError": 1.889,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "unclear": {
+        "n": 3,
+        "meanError": 0,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      }
+    },
+    "byLanguage": {
+      "mixed": {
+        "n": 41,
+        "meanError": -1.341,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "non-cjk-dominant": {
+        "n": 59,
+        "meanError": -2.034,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      }
+    },
+    "byTypeLanguage": {
+      "catalog-list × mixed": {
+        "n": 3,
+        "meanError": 4.667,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "catalog-list × non-cjk-dominant": {
+        "n": 1,
+        "meanError": -14,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "dsh-plugin × mixed": {
+        "n": 28,
+        "meanError": -3.357,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "dsh-plugin × non-cjk-dominant": {
+        "n": 38,
+        "meanError": -3.474,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "standalone-nonplugin × mixed": {
+        "n": 9,
+        "meanError": 3.778,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "standalone-nonplugin × non-cjk-dominant": {
+        "n": 18,
+        "meanError": 0.944,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "unclear × mixed": {
+        "n": 1,
+        "meanError": -9,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      },
+      "unclear × non-cjk-dominant": {
+        "n": 2,
+        "meanError": 4.5,
+        "severeErrorRate": 0,
+        "severeFalseNegativeRate": 0,
+        "severeFalsePositiveRate": 0
+      }
+    }
+  },
+  "severeFalseNegatives": [],
+  "severeFalsePositives": [],
+  "rows": [
+    {
+      "repo": "PerryLink/dsh-auto-review",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 49,
+      "human": {
+        "repo": "PerryLink/dsh-auto-review",
+        "inferredType": "dsh-plugin",
+        "capability": 21.21665366972967,
+        "usage": 11.56836851156799,
+        "usecases": 3.6267041462734904,
+        "demo": 1.7230475324955523,
+        "reliability": 15,
+        "total": 53,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 4.5,
+          "usageActions": 4,
+          "ioPairs": 1.5,
+          "codeExamples": 2.5,
+          "usecaseItems": 1.5,
+          "outputItems": 2,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8.845917815426736,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 2,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.737,
+          "coverage": 0.556,
+          "fallbackShare": 0.081
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "shengsheng90/DSH-taskboard",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 60,
+      "human": {
+        "repo": "shengsheng90/DSH-taskboard",
+        "inferredType": "dsh-plugin",
+        "capability": 21.21665366972967,
+        "usage": 17.463058854176744,
+        "usecases": 0,
+        "demo": 2.2891622648168086,
+        "reliability": 15,
+        "total": 56,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 8.5,
+          "usageActions": 9,
+          "ioPairs": 0,
+          "codeExamples": 2.5,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 1,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 56
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 12.270782190762876
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.828,
+          "coverage": 0.667,
+          "fallbackShare": 0.011
+        }
+      },
+      "error": 4
+    },
+    {
+      "repo": "Sikao-Engine/KimiX",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 41,
+      "human": {
+        "repo": "Sikao-Engine/KimiX",
+        "inferredType": "standalone-nonplugin",
+        "capability": 25,
+        "usage": 5.18395131224976,
+        "usecases": 3.6267041462734904,
+        "demo": 1.4563821070299467,
+        "reliability": 10.881267704058299,
+        "total": 46,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 2.5,
+          "usageActions": 1.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 1.5,
+          "outputItems": 0.5,
+          "media": 0.5,
+          "reliabilityItems": 7,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 46
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 6.166484159086003,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.768,
+          "coverage": 0.556,
+          "fallbackShare": 0.02
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "taxueseek/argo",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 86,
+      "human": {
+        "repo": "taxueseek/argo",
+        "inferredType": "standalone-nonplugin",
+        "capability": 25,
+        "usage": 17.188856123063367,
+        "usecases": 11.677675858399606,
+        "demo": 8.038300969022199,
+        "reliability": 14.323280724322496,
+        "total": 76,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 5.5,
+          "usageActions": 7,
+          "ioPairs": 5.5,
+          "codeExamples": 3,
+          "usecaseItems": 5.5,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 76
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 20,
+        "demo": 4.822980581413319,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.872,
+          "coverage": 0.778,
+          "fallbackShare": 0.034
+        }
+      },
+      "error": 10
+    },
+    {
+      "repo": "ZSeven-W/dsh-crew",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 61,
+      "human": {
+        "repo": "ZSeven-W/dsh-crew",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 14.887249606198555,
+        "usecases": 9.74812878357991,
+        "demo": 6.929261386143866,
+        "reliability": 15,
+        "total": 70,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 9,
+          "usageActions": 7.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 4.5,
+          "outputItems": 2.5,
+          "media": 3,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 70
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16,
+        "usecases": 0,
+        "demo": 4.822980581413319,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.744,
+          "coverage": 0.556,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "volcengine/ark-cli",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 54,
+      "human": {
+        "repo": "volcengine/ark-cli",
+        "inferredType": "standalone-nonplugin",
+        "capability": 17.356329066540173,
+        "usage": 14.983328303876895,
+        "usecases": 3.6267041462734904,
+        "demo": 0.4948154665398353,
+        "reliability": 5.075751928524747,
+        "total": 42,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 3,
+          "usageActions": 9,
+          "ioPairs": 0,
+          "codeExamples": 4,
+          "usecaseItems": 1.5,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 3,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 42
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 10.443013273181627,
+        "usecases": 14.508356938744399,
+        "demo": 1.7943467982769732,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 7,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.859,
+          "coverage": 0.778,
+          "fallbackShare": 0.061
+        }
+      },
+      "error": 12
+    },
+    {
+      "repo": "Mars-Sea/dsh-commandcode-provider",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 45,
+      "human": {
+        "repo": "Mars-Sea/dsh-commandcode-provider",
+        "inferredType": "dsh-plugin",
+        "capability": 15.390939224307964,
+        "usage": 3.748078368503466,
+        "usecases": 0,
+        "demo": 6.546028113908871,
+        "reliability": 12.270782190762876,
+        "total": 38,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7,
+          "usageItems": 2.5,
+          "usageActions": 1.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 2,
+          "media": 3,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 38
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.450153602616961,
+        "usecases": 0,
+        "demo": 8.27700787043139,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 1.5,
+        "media": 4.5,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.85,
+          "coverage": 0.778,
+          "fallbackShare": 0.077
+        }
+      },
+      "error": 7
+    },
+    {
+      "repo": "HanaAyane/dsh-reasoning-effort",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 59,
+      "human": {
+        "repo": "HanaAyane/dsh-reasoning-effort",
+        "inferredType": "dsh-plugin",
+        "capability": 18.329639367287054,
+        "usage": 7.378138038573041,
+        "usecases": 6.767669238032996,
+        "demo": 4.093100346067113,
+        "reliability": 14.323280724322496,
+        "total": 51,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 3,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 3,
+          "outputItems": 0,
+          "media": 2.5,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 51
+      },
+      "dimensions": {
+        "capability": 19.29723766808926,
+        "usage": 14.275417764662441,
+        "usecases": 6.767669238032996,
+        "demo": 3.348369522101713,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9,
+        "usageItems": 8,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.864,
+          "coverage": 0.778,
+          "fallbackShare": 0.05
+        }
+      },
+      "error": 8
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 53,
+      "human": {
+        "repo": "pengyue-polaron/deepseek-harness-genui",
+        "inferredType": "dsh-plugin",
+        "capability": 16.376912335452467,
+        "usage": 8.702336963397368,
+        "usecases": 10.717734625362931,
+        "demo": 10.162325948121012,
+        "reliability": 13.642988641244433,
+        "total": 60,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 2.5,
+          "usageActions": 3.5,
+          "ioPairs": 1,
+          "codeExamples": 2,
+          "usecaseItems": 5,
+          "outputItems": 4,
+          "media": 4.5,
+          "reliabilityItems": 9,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 60
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 11.214134019645893,
+        "usecases": 2.5178508235883346,
+        "demo": 7.637995321102681,
+        "reliability": 6.575749358311304
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 4,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.881,
+          "coverage": 0.778,
+          "fallbackShare": 0.015
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "seriousz158/dsh-memory",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 41,
+      "human": {
+        "repo": "seriousz158/dsh-memory",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 8.113474884899187,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 15,
+        "total": 47,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 4,
+          "usageActions": 4,
+          "ioPairs": 0.5,
+          "codeExamples": 0.5,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 47
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0.9233583100086873,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.634,
+          "coverage": 0.333,
+          "fallbackShare": 0.065
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 48,
+      "human": {
+        "repo": "ZSeven-W/dsh-android",
+        "inferredType": "dsh-plugin",
+        "capability": 20.25947243615101,
+        "usage": 15.928894483713727,
+        "usecases": 0,
+        "demo": 7.455767115672598,
+        "reliability": 15,
+        "total": 59,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 8,
+          "usageActions": 8,
+          "ioPairs": 2.5,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 7.5,
+          "media": 1,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 59
+      },
+      "dimensions": {
+        "capability": 8.2478001120611,
+        "usage": 12.287093850145173,
+        "usecases": 7.77483597597527,
+        "demo": 5.009667185885853,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 5,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 3.5,
+        "outputItems": 4,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.882,
+          "coverage": 0.778,
+          "fallbackShare": 0.014
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 57,
+      "human": {
+        "repo": "alibaba/loongsuite-pilot",
+        "inferredType": "standalone-nonplugin",
+        "capability": 17.356329066540173,
+        "usage": 11.989842756271187,
+        "usecases": 10.717734625362931,
+        "demo": 5.83024159005137,
+        "reliability": 12.270782190762876,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 4,
+          "usageActions": 7,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 5,
+          "outputItems": 3,
+          "media": 2,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 58
+      },
+      "dimensions": {
+        "capability": 18.329639367287054,
+        "usage": 14.966527506485905,
+        "usecases": 20,
+        "demo": 3.348369522101713,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 5,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.8,
+          "coverage": 0.667,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 56,
+      "human": {
+        "repo": "hancao97/hanai-investment-dsh",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 11.23224484956276,
+        "usecases": 6.767669238032996,
+        "demo": 9.45431762175474,
+        "reliability": 15,
+        "total": 67,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 7,
+          "usageActions": 6.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 3,
+          "outputItems": 6,
+          "media": 3,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 67
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 6.544417168406867,
+        "usecases": 0,
+        "demo": 9.744276125833228,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 2.5,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.744,
+          "coverage": 0.556,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": -11
+    },
+    {
+      "repo": "Sanqi-normal/dsh-webui-market-plugin",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 29,
+      "human": {
+        "repo": "Sanqi-normal/dsh-webui-market-plugin",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 8.958164193505015,
+        "usecases": 1.3492828476735632,
+        "demo": 3.1243491081962302,
+        "reliability": 15,
+        "total": 53,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 5.5,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0.5,
+          "outputItems": 1.5,
+          "media": 1,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 3.8473262917028634,
+        "usage": 8.423807477347697,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 8,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.767,
+          "coverage": 0.556,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": -24
+    },
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 27,
+      "human": {
+        "repo": "omdsh-dev/dsh-annotation",
+        "inferredType": "dsh-plugin",
+        "capability": 14.397891889039274,
+        "usage": 5.817002085603306,
+        "usecases": 0,
+        "demo": 5.071417054597266,
+        "reliability": 11.578342600853556,
+        "total": 37,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6.5,
+          "usageItems": 3,
+          "usageActions": 3.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 2,
+          "media": 2,
+          "reliabilityItems": 7.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 37
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.592,
+          "coverage": 0.222,
+          "fallbackShare": 0.038
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "Anionex/dsh-turn-rewind",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 32,
+      "human": {
+        "repo": "Anionex/dsh-turn-rewind",
+        "inferredType": "dsh-plugin",
+        "capability": 20.25947243615101,
+        "usage": 9.230033118324162,
+        "usecases": 0,
+        "demo": 5.071417054597266,
+        "reliability": 15,
+        "total": 50,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 5,
+          "usageActions": 4,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 2,
+          "media": 2,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 50
+      },
+      "dimensions": {
+        "capability": 2.6710184458058652,
+        "usage": 0,
+        "usecases": 9.74812878357991,
+        "demo": 4.2717278321104,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 4.5,
+        "outputItems": 1,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.751,
+          "coverage": 0.556,
+          "fallbackShare": 0.054
+        }
+      },
+      "error": -18
+    },
+    {
+      "repo": "Fishquito7/dsh-skill-mcp-panel",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 41,
+      "human": {
+        "repo": "Fishquito7/dsh-skill-mcp-panel",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 14.652752898812599,
+        "usecases": 0,
+        "demo": 3.1243491081962302,
+        "reliability": 14.323280724322496,
+        "total": 55,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 6.5,
+          "usageActions": 8,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 0,
+          "outputItems": 1.5,
+          "media": 1,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 55
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 6.575749358311304
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.713,
+          "coverage": 0.444,
+          "fallbackShare": 0.019
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "orziz/odai",
+      "type": "unclear",
+      "language": "non-cjk-dominant",
+      "score": 63,
+      "human": {
+        "repo": "orziz/odai",
+        "inferredType": "unclear",
+        "capability": 24.060516365495655,
+        "usage": 13.159902670320575,
+        "usecases": 5.743491774985174,
+        "demo": 2.481872067949657,
+        "reliability": 15,
+        "total": 60,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 6,
+          "usageActions": 6.5,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 2.5,
+          "outputItems": 3,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 60
+      },
+      "dimensions": {
+        "capability": 23.116937768613365,
+        "usage": 12.018094446400747,
+        "usecases": 6.767669238032996,
+        "demo": 6,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 6,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 3,
+        "outputItems": 8,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.856,
+          "coverage": 0.778,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-skin-market",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 32,
+      "human": {
+        "repo": "kingOfSoySauce/dsh-skin-market",
+        "inferredType": "dsh-plugin",
+        "capability": 20.25947243615101,
+        "usage": 6.425197643077231,
+        "usecases": 2.5178508235883346,
+        "demo": 4.67837183202097,
+        "reliability": 15,
+        "total": 49,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 3.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 1,
+          "outputItems": 1.5,
+          "media": 2,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 49
+      },
+      "dimensions": {
+        "capability": 8.2478001120611,
+        "usage": 5.051566939914842,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 0,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.641,
+          "coverage": 0.444,
+          "fallbackShare": 0.163
+        }
+      },
+      "error": -17
+    },
+    {
+      "repo": "omdsh-dev/dsh_workflow",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 56,
+      "human": {
+        "repo": "omdsh-dev/dsh_workflow",
+        "inferredType": "dsh-plugin",
+        "capability": 20.25947243615101,
+        "usage": 14.355320573436554,
+        "usecases": 4.698475772352076,
+        "demo": 2.8512250766072462,
+        "reliability": 15,
+        "total": 57,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 5,
+          "usageActions": 10,
+          "ioPairs": 0,
+          "codeExamples": 1.5,
+          "usecaseItems": 2,
+          "outputItems": 3.5,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 57
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16.146541383763026,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.772,
+          "coverage": 0.556,
+          "fallbackShare": 0.013
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "zuorn/Tydora",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 13,
+      "human": {
+        "repo": "zuorn/Tydora",
+        "inferredType": "standalone-nonplugin",
+        "capability": 10.341133616456904,
+        "usage": 0,
+        "usecases": 4.698475772352076,
+        "demo": 7.637995321102681,
+        "reliability": 0,
+        "total": 23,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 4.5,
+          "usageItems": 0,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 2,
+          "outputItems": 0,
+          "media": 5,
+          "reliabilityItems": 0,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 23
+      },
+      "dimensions": {
+        "capability": 3.8473262917028634,
+        "usage": 1.8793903089408304,
+        "usecases": 0,
+        "demo": 7.637995321102681,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 0,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.578,
+          "coverage": 0.333,
+          "fallbackShare": 0.176
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-tabbit",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 34,
+      "human": {
+        "repo": "Tabbit-Browser/dsh-tabbit",
+        "inferredType": "dsh-plugin",
+        "capability": 19.29723766808926,
+        "usage": 6.994161545358371,
+        "usecases": 2.5178508235883346,
+        "demo": 2.7177051082856605,
+        "reliability": 12.270782190762876,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9,
+          "usageItems": 3,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 1,
+          "media": 1,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 21.21665366972967,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 10.881267704058299
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-plugin",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 34,
+      "human": {
+        "repo": "Tabbit-Browser/dsh-plugin",
+        "inferredType": "dsh-plugin",
+        "capability": 19.29723766808926,
+        "usage": 6.994161545358371,
+        "usecases": 2.5178508235883346,
+        "demo": 2.7177051082856605,
+        "reliability": 12.270782190762876,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9,
+          "usageItems": 3,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 1,
+          "media": 1,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 21.21665366972967,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 10.881267704058299
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "liguobao/deepseek-harness-remote",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 52,
+      "human": {
+        "repo": "liguobao/deepseek-harness-remote",
+        "inferredType": "dsh-plugin",
+        "capability": 14.397891889039274,
+        "usage": 10.099972417424842,
+        "usecases": 3.6267041462734904,
+        "demo": 9.494815466539835,
+        "reliability": 14.323280724322496,
+        "total": 52,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6.5,
+          "usageItems": 6.5,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1.5,
+          "outputItems": 0.5,
+          "media": 6,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 52
+      },
+      "dimensions": {
+        "capability": 15.390939224307964,
+        "usage": 10.831511018552039,
+        "usecases": 0,
+        "demo": 10.723047532495553,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 5,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 2,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.82,
+          "coverage": 0.667,
+          "fallbackShare": 0.026
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "N0zoM1z0/th08",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 27,
+      "human": {
+        "repo": "N0zoM1z0/th08",
+        "inferredType": "standalone-nonplugin",
+        "capability": 6.09288379224007,
+        "usage": 13.958164193505015,
+        "usecases": 0,
+        "demo": 8.022610188700524,
+        "reliability": 15,
+        "total": 43,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 2.5,
+          "usageItems": 5.5,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 4,
+          "usecaseItems": 0,
+          "outputItems": 3,
+          "media": 3.5,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 43
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 14.566515228831049,
+        "usecases": 0,
+        "demo": 7.637995321102681,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.823,
+          "coverage": 0.667,
+          "fallbackShare": 0.021
+        }
+      },
+      "error": -16
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 56,
+      "human": {
+        "repo": "Leslie-SSS/seeWxapkg",
+        "inferredType": "standalone-nonplugin",
+        "capability": 13.397168281703664,
+        "usage": 11.637597849845747,
+        "usecases": 2.5178508235883346,
+        "demo": 3.9006276030075195,
+        "reliability": 15,
+        "total": 46,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6,
+          "usageItems": 5,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 1,
+          "outputItems": 2.5,
+          "media": 1,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 46
+      },
+      "dimensions": {
+        "capability": 20.25947243615101,
+        "usage": 18.679433656340734,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.816,
+          "coverage": 0.667,
+          "fallbackShare": 0.035
+        }
+      },
+      "error": 10
+    },
+    {
+      "repo": "oil-oil/dsh-vision",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 26,
+      "human": {
+        "repo": "oil-oil/dsh-vision",
+        "inferredType": "dsh-plugin",
+        "capability": 16.376912335452467,
+        "usage": 2.0142806588706677,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15,
+        "total": 33,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 1,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 33
+      },
+      "dimensions": {
+        "capability": 11.36972318351976,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.578,
+          "coverage": 0.222,
+          "fallbackShare": 0.067
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "1692775560/dsh-Mimir-Academic-research",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 34,
+      "human": {
+        "repo": "1692775560/dsh-Mimir-Academic-research",
+        "inferredType": "dsh-plugin",
+        "capability": 22.169058856430183,
+        "usage": 3.330071967450227,
+        "usecases": 2.5178508235883346,
+        "demo": 9,
+        "reliability": 7.311096587684932,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10.5,
+          "usageItems": 1.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 4.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 15.390939224307964,
+        "usage": 6.3936416809892656,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 3,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.833,
+          "coverage": 0.667,
+          "fallbackShare": 0
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "Renzic-Stone/DSH-EasyRewrite",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 40,
+      "human": {
+        "repo": "Renzic-Stone/DSH-EasyRewrite",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 7.014132648865391,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 9.47168801234033,
+        "total": 41,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 4,
+          "usageActions": 4,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 41
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.6,
+          "coverage": 0.222,
+          "fallbackShare": 0.023
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "liyupi/dsh-kun-like-pet",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 22,
+      "human": {
+        "repo": "liyupi/dsh-kun-like-pet",
+        "inferredType": "dsh-plugin",
+        "capability": 11.36972318351976,
+        "usage": 3.9201092461018616,
+        "usecases": 0,
+        "demo": 4.67837183202097,
+        "reliability": 7.311096587684932,
+        "total": 27,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5,
+          "usageItems": 1,
+          "usageActions": 2.5,
+          "ioPairs": 1,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 1.5,
+          "media": 2,
+          "reliabilityItems": 4.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 27
+      },
+      "dimensions": {
+        "capability": 13.397168281703664,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 5.075751928524747
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 6,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.621,
+          "coverage": 0.333,
+          "fallbackShare": 0.091
+        }
+      },
+      "error": -5
+    },
+    {
+      "repo": "LayneChai/superpowers-dsh",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 36,
+      "human": {
+        "repo": "LayneChai/superpowers-dsh",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 3.227287246285303,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 5.831126981981452,
+        "total": 36,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 1.5,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 2,
+          "reliabilityItems": 3.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 36
+      },
+      "dimensions": {
+        "capability": 16.376912335452467,
+        "usage": 8.714208024648531,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 3,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.822,
+          "coverage": 0.667,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "chokwinlee/deepseek-harness-desktop",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 59,
+      "human": {
+        "repo": "chokwinlee/deepseek-harness-desktop",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18.329639367287054,
+        "usage": 8.186345363577136,
+        "usecases": 2.5178508235883346,
+        "demo": 9,
+        "reliability": 15,
+        "total": 53,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 4.5,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 19.29723766808926,
+        "usage": 15.276260608663698,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9,
+        "usageItems": 10,
+        "usageActions": 9,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.766,
+          "coverage": 0.556,
+          "fallbackShare": 0.023
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "awesome-dsh-plugin/dsh-find-plugin",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 10,
+      "human": {
+        "repo": "awesome-dsh-plugin/dsh-find-plugin",
+        "inferredType": "dsh-plugin",
+        "capability": 8.2478001120611,
+        "usage": 4.077955346196689,
+        "usecases": 0,
+        "demo": 2.7177051082856605,
+        "reliability": 1.888388117691251,
+        "total": 17,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 3.5,
+          "usageItems": 2.5,
+          "usageActions": 1.5,
+          "ioPairs": 0.5,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 1,
+          "media": 1,
+          "reliabilityItems": 1,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 17
+      },
+      "dimensions": {
+        "capability": 4.984296661880481,
+        "usage": 3.5070663244326954,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2,
+        "usageItems": 4,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "dhicoc/dsh-reverse-skill",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 23,
+      "human": {
+        "repo": "dhicoc/dsh-reverse-skill",
+        "inferredType": "dsh-plugin",
+        "capability": 12.388060217751379,
+        "usage": 2.7837459172112404,
+        "usecases": 2.5178508235883346,
+        "demo": 0,
+        "reliability": 11.578342600853556,
+        "total": 29,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5.5,
+          "usageItems": 1,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 7.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 29
+      },
+      "dimensions": {
+        "capability": 10.341133616456904,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 12.270782190762876
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.591,
+          "coverage": 0.222,
+          "fallbackShare": 0.04
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "Hilbert-beinghappy/seektty",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 69,
+      "human": {
+        "repo": "Hilbert-beinghappy/seektty",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 15.62314241099512,
+        "usecases": 2.5178508235883346,
+        "demo": 9.923358310008688,
+        "reliability": 15,
+        "total": 66,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 7,
+          "usageActions": 8,
+          "ioPairs": 0,
+          "codeExamples": 2.5,
+          "usecaseItems": 1,
+          "outputItems": 1,
+          "media": 6,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 66
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 19.859447533617853,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.814,
+          "coverage": 0.667,
+          "fallbackShare": 0.039
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "pingfanfan/hello-dsh",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 52,
+      "human": {
+        "repo": "pingfanfan/hello-dsh",
+        "inferredType": "standalone-nonplugin",
+        "capability": 9.301026450282537,
+        "usage": 5.095821888889744,
+        "usecases": 16.36104292101717,
+        "demo": 3.0793867652831635,
+        "reliability": 9.47168801234033,
+        "total": 43,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 4,
+          "usageItems": 1.5,
+          "usageActions": 2,
+          "ioPairs": 0.5,
+          "codeExamples": 1,
+          "usecaseItems": 8,
+          "outputItems": 0.5,
+          "media": 1.5,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 43
+      },
+      "dimensions": {
+        "capability": 8.2478001120611,
+        "usage": 11.315263252687124,
+        "usecases": 20,
+        "demo": 1.7943467982769732,
+        "reliability": 10.881267704058299
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 3.5,
+        "usageItems": 10,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 10,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.867,
+          "coverage": 0.778,
+          "fallbackShare": 0.043
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "wink-run/tokenbank",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 59,
+      "human": {
+        "repo": "wink-run/tokenbank",
+        "inferredType": "standalone-nonplugin",
+        "capability": 25,
+        "usage": 9.457762988283411,
+        "usecases": 5.743491774985174,
+        "demo": 11.851225076607246,
+        "reliability": 10.179191388871875,
+        "total": 62,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 4.5,
+          "usageActions": 4,
+          "ioPairs": 1,
+          "codeExamples": 1,
+          "usecaseItems": 2.5,
+          "outputItems": 3.5,
+          "media": 6,
+          "reliabilityItems": 6.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 62
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 14.487439883661136,
+        "usecases": 8.767665811081738,
+        "demo": 9,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 4,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.876,
+          "coverage": 0.778,
+          "fallbackShare": 0.025
+        }
+      },
+      "error": -3
+    },
+    {
+      "repo": "Alex-Yanggg/awesome-DSH-plugin",
+      "type": "catalog-list",
+      "language": "non-cjk-dominant",
+      "score": 10,
+      "human": {
+        "repo": "Alex-Yanggg/awesome-DSH-plugin",
+        "inferredType": "catalog-list",
+        "capability": 12.388060217751379,
+        "usage": 6.225976077013976,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 5.831126981981452,
+        "total": 24,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5.5,
+          "usageItems": 3,
+          "usageActions": 1.5,
+          "ioPairs": 0,
+          "codeExamples": 1.5,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 3.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 24
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 6.994161545358371,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 3,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.696,
+          "coverage": 0.444,
+          "fallbackShare": 0.053
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "e2mcc/dsh-popout-sidebar",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 41,
+      "human": {
+        "repo": "e2mcc/dsh-popout-sidebar",
+        "inferredType": "dsh-plugin",
+        "capability": 19.29723766808926,
+        "usage": 3.330071967450227,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 5.831126981981452,
+        "total": 28,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9,
+          "usageItems": 1.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 3.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 11.419201247623189,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 5.075751928524747
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 9,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.751,
+          "coverage": 0.556,
+          "fallbackShare": 0.054
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "mishibeikejie/zat-dsh-engine",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 49,
+      "human": {
+        "repo": "mishibeikejie/zat-dsh-engine",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 4.924670397681363,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 14.323280724322496,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 2.5,
+          "usageActions": 2.5,
+          "ioPairs": 0.5,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8.574187700290345,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.722,
+          "coverage": 0.444,
+          "fallbackShare": 0
+        }
+      },
+      "error": 5
+    },
+    {
+      "repo": "XieRW/dsh-beauty-skins",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 24,
+      "human": {
+        "repo": "XieRW/dsh-beauty-skins",
+        "inferredType": "dsh-plugin",
+        "capability": 9.301026450282537,
+        "usage": 3.330071967450227,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 6.575749358311304,
+        "total": 28,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 4,
+          "usageItems": 1.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 2.6710184458058652,
+        "usage": 10.790404782473525,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 6,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.807,
+          "coverage": 0.667,
+          "fallbackShare": 0.053
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "AITabby/dockyard-dsh",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 50,
+      "human": {
+        "repo": "AITabby/dockyard-dsh",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 7.494580213096469,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15,
+        "total": 47,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 1,
+          "usageActions": 6,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 47
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 10.443013273181627,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.778,
+          "coverage": 0.556,
+          "fallbackShare": 0
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "titanwings/dsh-automation",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 67,
+      "human": {
+        "repo": "titanwings/dsh-automation",
+        "inferredType": "dsh-plugin",
+        "capability": 22.169058856430183,
+        "usage": 9.216877677496244,
+        "usecases": 12.628917349787105,
+        "demo": 5.746338891422006,
+        "reliability": 15,
+        "total": 65,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10.5,
+          "usageItems": 3.5,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 6,
+          "outputItems": 1,
+          "media": 3,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 65
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.239215719244052,
+        "usecases": 5.743491774985174,
+        "demo": 6.248278463954462,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 2.5,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.878,
+          "coverage": 0.778,
+          "fallbackShare": 0.022
+        }
+      },
+      "error": 2
+    },
+    {
+      "repo": "tencent-connect/dsh-qqbot",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 20,
+      "human": {
+        "repo": "tencent-connect/dsh-qqbot",
+        "inferredType": "dsh-plugin",
+        "capability": 16.376912335452467,
+        "usage": 9.155650917604529,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 4.307618831238881,
+        "total": 32,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 2,
+          "usageActions": 9,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 2.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 32
+      },
+      "dimensions": {
+        "capability": 4.984296661880481,
+        "usage": 8,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2,
+        "usageItems": 0,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.691,
+          "coverage": 0.444,
+          "fallbackShare": 0.063
+        }
+      },
+      "error": -12
+    },
+    {
+      "repo": "skymecode/deepseek-harness-for-vscode",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 58,
+      "human": {
+        "repo": "skymecode/deepseek-harness-for-vscode",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23.116937768613365,
+        "usage": 8.570321856791805,
+        "usecases": 0,
+        "demo": 4.822980581413319,
+        "reliability": 15,
+        "total": 52,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 4.5,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 3,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 52
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13.051566939914842,
+        "usecases": 0,
+        "demo": 5.317796047953154,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 6,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0.5,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.815,
+          "coverage": 0.667,
+          "fallbackShare": 0.036
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "bruc3van/dsh-desktop",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 44,
+      "human": {
+        "repo": "bruc3van/dsh-desktop",
+        "inferredType": "standalone-nonplugin",
+        "capability": 22.169058856430183,
+        "usage": 6.989334039120788,
+        "usecases": 6.767669238032996,
+        "demo": 7.637995321102681,
+        "reliability": 15,
+        "total": 59,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10.5,
+          "usageItems": 3.5,
+          "usageActions": 3.5,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 3,
+          "outputItems": 0,
+          "media": 5,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 59
+      },
+      "dimensions": {
+        "capability": 4.984296661880481,
+        "usage": 13.722966793891466,
+        "usecases": 2.5178508235883346,
+        "demo": 7.637995321102681,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 2,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 1,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.859,
+          "coverage": 0.778,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": -15
+    },
+    {
+      "repo": "2BingLing/dsh-market",
+      "type": "unclear",
+      "language": "mixed",
+      "score": 36,
+      "human": {
+        "repo": "2BingLing/dsh-market",
+        "inferredType": "unclear",
+        "capability": 24.060516365495655,
+        "usage": 6.6063192086451625,
+        "usecases": 2.5178508235883346,
+        "demo": 3.348369522101713,
+        "reliability": 8.038300969022199,
+        "total": 45,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 4.5,
+          "usageActions": 3,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 2,
+          "reliabilityItems": 5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 45
+      },
+      "dimensions": {
+        "capability": 17.356329066540173,
+        "usage": 12.287093850145173,
+        "usecases": 0,
+        "demo": 4.2717278321104,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 10,
+        "usageActions": 5,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 1,
+        "media": 2,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.796,
+          "coverage": 0.667,
+          "fallbackShare": 0.074
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "labring/sealos-skills",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 66,
+      "human": {
+        "repo": "labring/sealos-skills",
+        "inferredType": "dsh-plugin",
+        "capability": 20.25947243615101,
+        "usage": 8.445058847568365,
+        "usecases": 6.767669238032996,
+        "demo": 2.7177051082856605,
+        "reliability": 14.323280724322496,
+        "total": 53,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 3.5,
+          "usageActions": 4.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 3,
+          "outputItems": 1,
+          "media": 1,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 19.544417168406866,
+        "usecases": 4.698475772352076,
+        "demo": 1.7943467982769732,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 2,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.852,
+          "coverage": 0.778,
+          "fallbackShare": 0.074
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "omdsh-dev/dsh-notification",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 9,
+      "human": {
+        "repo": "omdsh-dev/dsh-notification",
+        "inferredType": "dsh-plugin",
+        "capability": 8.2478001120611,
+        "usage": 1.9903947975788214,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 11.578342600853556,
+        "total": 22,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 3.5,
+          "usageItems": 1.5,
+          "usageActions": 0.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 7.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 22
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.566,
+          "coverage": 0.222,
+          "fallbackShare": 0.091
+        }
+      },
+      "error": -13
+    },
+    {
+      "repo": "like-study1/Oh-My-DSH",
+      "type": "catalog-list",
+      "language": "mixed",
+      "score": 17,
+      "human": {
+        "repo": "like-study1/Oh-My-DSH",
+        "inferredType": "catalog-list",
+        "capability": 19.29723766808926,
+        "usage": 2.0142806588706677,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 4.307618831238881,
+        "total": 26,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9,
+          "usageItems": 1,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 2.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 26
+      },
+      "dimensions": {
+        "capability": 12.388060217751379,
+        "usage": 1.4358729437462936,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.637,
+          "coverage": 0.333,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": -9
+    },
+    {
+      "repo": "Vladimir-Human/ru-marketplace-mcp",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 57,
+      "human": {
+        "repo": "Vladimir-Human/ru-marketplace-mcp",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20.25947243615101,
+        "usage": 5.930579764246462,
+        "usecases": 1.3492828476735632,
+        "demo": 0.9233583100086873,
+        "reliability": 15,
+        "total": 43,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 0.5,
+          "usageActions": 3,
+          "ioPairs": 1,
+          "codeExamples": 1.5,
+          "usecaseItems": 0.5,
+          "outputItems": 1,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 43
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 18.40386470202472,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 13.642988641244433
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 8,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.748,
+          "coverage": 0.556,
+          "fallbackShare": 0.06
+        }
+      },
+      "error": 14
+    },
+    {
+      "repo": "cpj-dev/dsh-plugin-cc",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 27,
+      "human": {
+        "repo": "cpj-dev/dsh-plugin-cc",
+        "inferredType": "standalone-nonplugin",
+        "capability": 10.341133616456904,
+        "usage": 11.175512122095661,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 12.958904584542287,
+        "total": 34,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 4.5,
+          "usageItems": 4.5,
+          "usageActions": 9,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 8.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 34
+      },
+      "dimensions": {
+        "capability": 2.6710184458058652,
+        "usage": 12.142940638959491,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 12.270782190762876
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 3,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.756,
+          "coverage": 0.556,
+          "fallbackShare": 0.043
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 67,
+      "human": {
+        "repo": "Jayden-X-L/forkprobe",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 14.338660790060015,
+        "usecases": 10.717734625362931,
+        "demo": 3.9304589605085916,
+        "reliability": 15,
+        "total": 61,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 5,
+          "usageActions": 6,
+          "ioPairs": 0,
+          "codeExamples": 4,
+          "usecaseItems": 5,
+          "outputItems": 5,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 61
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 13,
+        "usecases": 12.628917349787105,
+        "demo": 0.9233583100086873,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 6,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.798,
+          "coverage": 0.667,
+          "fallbackShare": 0.07
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "Noob-stupid/dsh-plugin-hub",
+      "type": "unclear",
+      "language": "non-cjk-dominant",
+      "score": 51,
+      "human": {
+        "repo": "Noob-stupid/dsh-plugin-hub",
+        "inferredType": "unclear",
+        "capability": 21.21665366972967,
+        "usage": 5.414135390426397,
+        "usecases": 1.3492828476735632,
+        "demo": 1.7943467982769732,
+        "reliability": 15,
+        "total": 45,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 3,
+          "usageActions": 3,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0.5,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 45
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 7.682733084438589,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 2,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.77,
+          "coverage": 0.556,
+          "fallbackShare": 0.015
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "kuangre123/codex-switch",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 37,
+      "human": {
+        "repo": "kuangre123/codex-switch",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21.21665366972967,
+        "usage": 8.404339997100205,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 12.270782190762876,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 2.5,
+          "usageActions": 5.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 19.29723766808926,
+        "usage": 8.366830192601967,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9,
+        "usageItems": 2,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.792,
+          "coverage": 0.667,
+          "fallbackShare": 0.083
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "hanshenmesen/dsh-turn-delete",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 12,
+      "human": {
+        "repo": "hanshenmesen/dsh-turn-delete",
+        "inferredType": "dsh-plugin",
+        "capability": 14.397891889039274,
+        "usage": 1.546853468504759,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 10.179191388871875,
+        "total": 28,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6.5,
+          "usageItems": 0.5,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 6.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 0,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 2.2891622648168086,
+        "reliability": 9.47168801234033
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0.5,
+        "media": 1,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -16
+    },
+    {
+      "repo": "starsstreaming/beautiCode",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 41,
+      "human": {
+        "repo": "starsstreaming/beautiCode",
+        "inferredType": "dsh-plugin",
+        "capability": 13.397168281703664,
+        "usage": 4.586458004154029,
+        "usecases": 0,
+        "demo": 1.3850374650130308,
+        "reliability": 10.881267704058299,
+        "total": 30,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6,
+          "usageItems": 3,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0.75,
+          "reliabilityItems": 7,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 30
+      },
+      "dimensions": {
+        "capability": 16.376912335452467,
+        "usage": 16.507066324432696,
+        "usecases": 0,
+        "demo": 4.822980581413319,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 10,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.809,
+          "coverage": 0.667,
+          "fallbackShare": 0.049
+        }
+      },
+      "error": 11
+    },
+    {
+      "repo": "LX2000WASD/dsh-web-plugin-manager",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 42,
+      "human": {
+        "repo": "LX2000WASD/dsh-web-plugin-manager",
+        "inferredType": "dsh-plugin",
+        "capability": 22.169058856430183,
+        "usage": 7.938121542170531,
+        "usecases": 1.3492828476735632,
+        "demo": 0,
+        "reliability": 15,
+        "total": 46,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10.5,
+          "usageItems": 1.5,
+          "usageActions": 6,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0.5,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 46
+      },
+      "dimensions": {
+        "capability": 21.21665366972967,
+        "usage": 5.803342775497759,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 0,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.648,
+          "coverage": 0.333,
+          "fallbackShare": 0.037
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "morluto/jacobian",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 22,
+      "human": {
+        "repo": "morluto/jacobian",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20.25947243615101,
+        "usage": 8.091130030348015,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 5.831126981981452,
+        "total": 35,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 3.5,
+          "usageActions": 2.5,
+          "ioPairs": 1,
+          "codeExamples": 1.5,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 3.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 35
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 15.103133879829684,
+        "usecases": 0,
+        "demo": 3.2153203876088794,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 6,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 4,
+        "media": 0,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.822,
+          "coverage": 0.667,
+          "fallbackShare": 0.023
+        }
+      },
+      "error": -13
+    },
+    {
+      "repo": "Lyn-77/ProMentor",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 24,
+      "human": {
+        "repo": "Lyn-77/ProMentor",
+        "inferredType": "dsh-plugin",
+        "capability": 18.329639367287054,
+        "usage": 10.783326933096394,
+        "usecases": 1.3492828476735632,
+        "demo": 0.4948154665398353,
+        "reliability": 3.523856829264057,
+        "total": 34,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 4,
+          "usageActions": 9,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0.5,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 2,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 34
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.768,
+          "coverage": 0.556,
+          "fallbackShare": 0.02
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "ZASENJC/dsh-plugins-store",
+      "type": "catalog-list",
+      "language": "mixed",
+      "score": 54,
+      "human": {
+        "repo": "ZASENJC/dsh-plugins-store",
+        "inferredType": "catalog-list",
+        "capability": 18.329639367287054,
+        "usage": 7.66875835567167,
+        "usecases": 0,
+        "demo": 5.016458656075801,
+        "reliability": 12.958904584542287,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 3.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 0,
+          "outputItems": 1,
+          "media": 2.5,
+          "reliabilityItems": 8.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 7.731000596255575,
+        "usecases": 0,
+        "demo": 6.248278463954462,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 4,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.77,
+          "coverage": 0.556,
+          "fallbackShare": 0.015
+        }
+      },
+      "error": 10
+    },
+    {
+      "repo": "Awu12277/dsh-stock-watch",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 38,
+      "human": {
+        "repo": "Awu12277/dsh-stock-watch",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 5.202030210826487,
+        "usecases": 0,
+        "demo": 8.132810787642518,
+        "reliability": 10.881267704058299,
+        "total": 48,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 2,
+          "usageActions": 3,
+          "ioPairs": 1,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 5,
+          "reliabilityItems": 7,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 48
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 9.361042853598233,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 2,
+        "media": 5,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.698,
+          "coverage": 0.444,
+          "fallbackShare": 0.048
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "feibi-mochi/deepseek-harness-control-center",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 52,
+      "human": {
+        "repo": "feibi-mochi/deepseek-harness-control-center",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 5.4073311003841775,
+        "usecases": 3.6267041462734904,
+        "demo": 1.330002309919257,
+        "reliability": 15,
+        "total": 49,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 3.5,
+          "usageActions": 2.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1.5,
+          "outputItems": 1.5,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 49
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 12.018094446400747,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.763,
+          "coverage": 0.556,
+          "fallbackShare": 0.029
+        }
+      },
+      "error": 3
+    },
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 45,
+      "human": {
+        "repo": "SeaOf0/dsh-redteam-model",
+        "inferredType": "dsh-plugin",
+        "capability": 25,
+        "usage": 6.916344321637102,
+        "usecases": 13.5722551851625,
+        "demo": 9,
+        "reliability": 12.270782190762876,
+        "total": 67,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 12,
+          "usageItems": 3.5,
+          "usageActions": 3,
+          "ioPairs": 0.5,
+          "codeExamples": 0.5,
+          "usecaseItems": 6.5,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 67
+      },
+      "dimensions": {
+        "capability": 18.329639367287054,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 11.481872067949658,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 3,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.713,
+          "coverage": 0.444,
+          "fallbackShare": 0.018
+        }
+      },
+      "error": -22
+    },
+    {
+      "repo": "eri64/dsh-claude-ux",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 20,
+      "human": {
+        "repo": "eri64/dsh-claude-ux",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 4.916334981847252,
+        "usecases": 0,
+        "demo": 6.248278463954462,
+        "reliability": 7.311096587684932,
+        "total": 36,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 3,
+          "usageActions": 2,
+          "ioPairs": 0.5,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 4,
+          "reliabilityItems": 4.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 36
+      },
+      "dimensions": {
+        "capability": 9.301026450282537,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 7.578280773873719,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 1.5,
+        "media": 4,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.679,
+          "coverage": 0.444,
+          "fallbackShare": 0.087
+        }
+      },
+      "error": -16
+    },
+    {
+      "repo": "JingbiaoMei/Tokdash",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 70,
+      "human": {
+        "repo": "JingbiaoMei/Tokdash",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21.21665366972967,
+        "usage": 13.169856633548306,
+        "usecases": 2.5178508235883346,
+        "demo": 10.723047532495553,
+        "reliability": 15,
+        "total": 63,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 4,
+          "usageActions": 7,
+          "ioPairs": 0,
+          "codeExamples": 3,
+          "usecaseItems": 1,
+          "outputItems": 2,
+          "media": 6,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 63
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.824,
+          "coverage": 0.667,
+          "fallbackShare": 0.019
+        }
+      },
+      "error": 7
+    },
+    {
+      "repo": "THEWOLFWALKER/dsh-notifier",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 45,
+      "human": {
+        "repo": "THEWOLFWALKER/dsh-notifier",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 5.004464405207268,
+        "usecases": 0,
+        "demo": 7.637995321102681,
+        "reliability": 12.270782190762876,
+        "total": 49,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 3,
+          "usageActions": 2.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 5,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 49
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 5.150080968394826,
+        "usecases": 0,
+        "demo": 12.615277729326586,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 3,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 6.5,
+        "media": 5,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "Akimiya-z/codex-guard",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 66,
+      "human": {
+        "repo": "Akimiya-z/codex-guard",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21.21665366972967,
+        "usage": 11.618082168745893,
+        "usecases": 6.767669238032996,
+        "demo": 2.481872067949657,
+        "reliability": 15,
+        "total": 57,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 3,
+          "usageActions": 6,
+          "ioPairs": 0,
+          "codeExamples": 3,
+          "usecaseItems": 3,
+          "outputItems": 3,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 57
+      },
+      "dimensions": {
+        "capability": 22.169058856430183,
+        "usage": 18.051566939914842,
+        "usecases": 4.698475772352076,
+        "demo": 6,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 10,
+        "usageActions": 6,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 2,
+        "outputItems": 8,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.864,
+          "coverage": 0.778,
+          "fallbackShare": 0.05
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "mexiaosqwq/dsh-web-mobile",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 27,
+      "human": {
+        "repo": "mexiaosqwq/dsh-web-mobile",
+        "inferredType": "dsh-plugin",
+        "capability": 16.376912335452467,
+        "usage": 1.546853468504759,
+        "usecases": 0,
+        "demo": 4.822980581413319,
+        "reliability": 5.075751928524747,
+        "total": 28,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 0.5,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 3,
+          "reliabilityItems": 3,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 11.36972318351976,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 4.2717278321104,
+        "reliability": 10.881267704058299
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 1,
+        "media": 2,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.722,
+          "coverage": 0.444,
+          "fallbackShare": 0
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "PerryLink/dsh-memento",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 44,
+      "human": {
+        "repo": "PerryLink/dsh-memento",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 5.085520473205826,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 15,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 0.5,
+          "usageActions": 3.5,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 4.142940638959492,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.674,
+          "coverage": 0.444,
+          "fallbackShare": 0.096
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "c3ll256/dsh-toy",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 36,
+      "human": {
+        "repo": "c3ll256/dsh-toy",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 10.472059547270295,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15,
+        "total": 43,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 4.5,
+          "usageActions": 7,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 43
+      },
+      "dimensions": {
+        "capability": 10.341133616456904,
+        "usage": 10.362166740779323,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 4.5,
+        "usageItems": 2,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 2,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.768,
+          "coverage": 0.556,
+          "fallbackShare": 0.02
+        }
+      },
+      "error": -7
+    },
+    {
+      "repo": "dclichang2022/dsh-green-meter",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 27,
+      "human": {
+        "repo": "dclichang2022/dsh-green-meter",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 3.330071967450227,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 6.575749358311304,
+        "total": 28,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 2,
+          "usageActions": 1.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 15.390939224307964,
+        "usage": 11.930957248855673,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 6,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.696,
+          "coverage": 0.444,
+          "fallbackShare": 0.053
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "Stormycry-cryp/dsh-AuthInOne",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 53,
+      "human": {
+        "repo": "Stormycry-cryp/dsh-AuthInOne",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 4.51420665386803,
+        "usecases": 10.717734625362931,
+        "demo": 5.83024159005137,
+        "reliability": 15,
+        "total": 53,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 4,
+          "usageActions": 1,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 5,
+          "outputItems": 3,
+          "media": 2,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 21.21665366972967,
+        "usage": 6.544417168406867,
+        "usecases": 8.767665811081738,
+        "demo": 1.7943467982769732,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10,
+        "usageItems": 8,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 4,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.732,
+          "coverage": 0.556,
+          "fallbackShare": 0.091
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "openma-ai/Martty",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 45,
+      "human": {
+        "repo": "openma-ai/Martty",
+        "inferredType": "standalone-nonplugin",
+        "capability": 21.21665366972967,
+        "usage": 15.02719360024536,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 8.038300969022199,
+        "total": 46,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10,
+          "usageItems": 7,
+          "usageActions": 8,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 46
+      },
+      "dimensions": {
+        "capability": 20.25947243615101,
+        "usage": 12.142848471716883,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 9.47168801234033
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9.5,
+        "usageItems": 1,
+        "usageActions": 9,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.792,
+          "coverage": 0.667,
+          "fallbackShare": 0.082
+        }
+      },
+      "error": -1
+    },
+    {
+      "repo": "PolinniZhong/dsh-omi-voice",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 43,
+      "human": {
+        "repo": "PolinniZhong/dsh-omi-voice",
+        "inferredType": "dsh-plugin",
+        "capability": 11.36972318351976,
+        "usage": 3.330071967450227,
+        "usecases": 2.5178508235883346,
+        "demo": 5.317796047953154,
+        "reliability": 9.47168801234033,
+        "total": 32,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5,
+          "usageItems": 2,
+          "usageActions": 1.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0.5,
+          "media": 3,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 32
+      },
+      "dimensions": {
+        "capability": 22.169058856430183,
+        "usage": 2.7070676952131985,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 9.47168801234033
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 3,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 6,
+        "confidence": {
+          "overall": 0.693,
+          "coverage": 0.444,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": 11
+    },
+    {
+      "repo": "melandlabs/opencontext",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 68,
+      "human": {
+        "repo": "melandlabs/opencontext",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20.25947243615101,
+        "usage": 10.179108434734555,
+        "usecases": 12.628917349787105,
+        "demo": 2.1062808047305466,
+        "reliability": 4.307618831238881,
+        "total": 49,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 3.5,
+          "usageActions": 5.5,
+          "ioPairs": 0.5,
+          "codeExamples": 1.5,
+          "usecaseItems": 6,
+          "outputItems": 2.5,
+          "media": 0,
+          "reliabilityItems": 2.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 49
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 18.190651521659245,
+        "demo": 0,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 9,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.833,
+          "coverage": 0.667,
+          "fallbackShare": 0
+        }
+      },
+      "error": 19
+    },
+    {
+      "repo": "vlln/dsh-navbar",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 28,
+      "human": {
+        "repo": "vlln/dsh-navbar",
+        "inferredType": "dsh-plugin",
+        "capability": 19.29723766808926,
+        "usage": 5.4073311003841775,
+        "usecases": 0,
+        "demo": 2.2891622648168086,
+        "reliability": 6.575749358311304,
+        "total": 34,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9,
+          "usageItems": 3.5,
+          "usageActions": 2.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 1,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 34
+      },
+      "dimensions": {
+        "capability": 23.116937768613365,
+        "usage": 2.7070676952131985,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 11,
+        "usageItems": 3,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.667,
+          "coverage": 0.333,
+          "fallbackShare": 0
+        }
+      },
+      "error": -6
+    },
+    {
+      "repo": "Yan-Zero/dsh-std",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 28,
+      "human": {
+        "repo": "Yan-Zero/dsh-std",
+        "inferredType": "standalone-nonplugin",
+        "capability": 20.25947243615101,
+        "usage": 1.0071403294353338,
+        "usecases": 2.5178508235883346,
+        "demo": 0,
+        "reliability": 6.575749358311304,
+        "total": 30,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 1,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 30
+      },
+      "dimensions": {
+        "capability": 16.376912335452467,
+        "usage": 5.294234179580506,
+        "usecases": 1.3492828476735632,
+        "demo": 1.7230475324955523,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7.5,
+        "usageItems": 5,
+        "usageActions": 1,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0.5,
+        "outputItems": 2,
+        "media": 0,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.819,
+          "coverage": 0.667,
+          "fallbackShare": 0.028
+        }
+      },
+      "error": -2
+    },
+    {
+      "repo": "cofy-x/axern",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 53,
+      "human": {
+        "repo": "cofy-x/axern",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18.329639367287054,
+        "usage": 7.938121542170531,
+        "usecases": 0,
+        "demo": 2.5845712987433282,
+        "reliability": 10.881267704058299,
+        "total": 40,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 1.5,
+          "usageActions": 6,
+          "ioPairs": 0,
+          "codeExamples": 1,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1.5,
+          "reliabilityItems": 7,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 40
+      },
+      "dimensions": {
+        "capability": 17.356329066540173,
+        "usage": 16.187275082196393,
+        "usecases": 3.6267041462734904,
+        "demo": 1.7943467982769732,
+        "reliability": 13.642988641244433
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 8,
+        "usageItems": 6,
+        "usageActions": 9,
+        "ioPairs": 0,
+        "codeExamples": 3,
+        "usecaseItems": 1.5,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.876,
+          "coverage": 0.778,
+          "fallbackShare": 0.027
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "vlln/plugin-registry",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 6,
+      "human": {
+        "repo": "vlln/plugin-registry",
+        "inferredType": "dsh-plugin",
+        "capability": 11.36972318351976,
+        "usage": 0.5397131390694253,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 6.575749358311304,
+        "total": 20,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5,
+          "usageItems": 0.5,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 20
+      },
+      "dimensions": {
+        "capability": 3.8473262917028634,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 0
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 0,
+        "confidence": {
+          "overall": 0.311,
+          "coverage": 0.222,
+          "fallbackShare": 0.6
+        }
+      },
+      "error": -14
+    },
+    {
+      "repo": "btspoony/mstar-harness",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 34,
+      "human": {
+        "repo": "btspoony/mstar-harness",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 6.994161545358371,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 9.47168801234033,
+        "total": 34,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 3,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 34
+      },
+      "dimensions": {
+        "capability": 13.397168281703664,
+        "usage": 13.80334277549776,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 6.575749358311304
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 6,
+        "usageItems": 10,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.704,
+          "coverage": 0.444,
+          "fallbackShare": 0.037
+        }
+      },
+      "error": 0
+    },
+    {
+      "repo": "wenbin-wb/dsh-bridge",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 65,
+      "human": {
+        "repo": "wenbin-wb/dsh-bridge",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 10.220146916849968,
+        "usecases": 1.3492828476735632,
+        "demo": 9,
+        "reliability": 15,
+        "total": 60,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 1.5,
+          "usageActions": 10,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 0.5,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 60
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 16,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.773,
+          "coverage": 0.556,
+          "fallbackShare": 0.01
+        }
+      },
+      "error": 5
+    },
+    {
+      "repo": "Laplace-bit/dsh-smooth-stream",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 19,
+      "human": {
+        "repo": "Laplace-bit/dsh-smooth-stream",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 2.837109849063495,
+        "usecases": 0,
+        "demo": 2.2891622648168086,
+        "reliability": 12.270782190762876,
+        "total": 35,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 2.5,
+          "usageActions": 0.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 1,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 35
+      },
+      "dimensions": {
+        "capability": 11.36972318351976,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 2.2891622648168086,
+        "reliability": 5.075751928524747
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0.5,
+        "media": 1,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.67,
+          "coverage": 0.444,
+          "fallbackShare": 0.105
+        }
+      },
+      "error": -16
+    },
+    {
+      "repo": "multica-ai/dsh-multica-runtime",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 5,
+      "human": {
+        "repo": "multica-ai/dsh-multica-runtime",
+        "inferredType": "dsh-plugin",
+        "capability": 14.397891889039274,
+        "usage": 3.6559958967167367,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 9.47168801234033,
+        "total": 29,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6.5,
+          "usageItems": 1,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 29
+      },
+      "dimensions": {
+        "capability": 1.4313633440798301,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 0.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.567,
+          "coverage": 0.333,
+          "fallbackShare": 0.2
+        }
+      },
+      "error": -24
+    },
+    {
+      "repo": "peiyuwang54/deepseek-harness-cli",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 26,
+      "human": {
+        "repo": "peiyuwang54/deepseek-harness-cli",
+        "inferredType": "standalone-nonplugin",
+        "capability": 13.397168281703664,
+        "usage": 14.966527506485905,
+        "usecases": 0,
+        "demo": 1.7943467982769732,
+        "reliability": 10.881267704058299,
+        "total": 41,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 6,
+          "usageItems": 5,
+          "usageActions": 10,
+          "ioPairs": 0,
+          "codeExamples": 2,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 1,
+          "reliabilityItems": 7,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 41
+      },
+      "dimensions": {
+        "capability": 2.6710184458058652,
+        "usage": 16.507066324432696,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 1,
+        "usageItems": 4,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.812,
+          "coverage": 0.667,
+          "fallbackShare": 0.043
+        }
+      },
+      "error": -15
+    },
+    {
+      "repo": "yxxbc/dsh-balance-plugin",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 40,
+      "human": {
+        "repo": "yxxbc/dsh-balance-plugin",
+        "inferredType": "dsh-plugin",
+        "capability": 18.329639367287054,
+        "usage": 2.162425675177217,
+        "usecases": 0,
+        "demo": 8.132810787642518,
+        "reliability": 7.311096587684932,
+        "total": 36,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 0.5,
+          "usageActions": 1,
+          "ioPairs": 1,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 5,
+          "reliabilityItems": 4.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 36
+      },
+      "dimensions": {
+        "capability": 15.390939224307964,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 11.106280804730547,
+        "reliability": 13.642988641244433
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 2.5,
+        "media": 6,
+        "reliabilityItems": 9,
+        "confidence": {
+          "overall": 0.722,
+          "coverage": 0.444,
+          "fallbackShare": 0
+        }
+      },
+      "error": 4
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 43,
+      "human": {
+        "repo": "wxkingstar/SpecFusion",
+        "inferredType": "dsh-plugin",
+        "capability": 11.36972318351976,
+        "usage": 6.002028840045984,
+        "usecases": 4.698475772352076,
+        "demo": 0.9233583100086873,
+        "reliability": 5.075751928524747,
+        "total": 28,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5,
+          "usageItems": 2,
+          "usageActions": 4,
+          "ioPairs": 1,
+          "codeExamples": 0,
+          "usecaseItems": 2,
+          "outputItems": 1,
+          "media": 0,
+          "reliabilityItems": 3,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 28
+      },
+      "dimensions": {
+        "capability": 19.29723766808926,
+        "usage": 16,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 9,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.693,
+          "coverage": 0.444,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": 15
+    },
+    {
+      "repo": "DDDMUC/dsh-free-search",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 63,
+      "human": {
+        "repo": "DDDMUC/dsh-free-search",
+        "inferredType": "dsh-plugin",
+        "capability": 23.116937768613365,
+        "usage": 6.002028840045984,
+        "usecases": 4.698475772352076,
+        "demo": 6.546028113908871,
+        "reliability": 12.270782190762876,
+        "total": 53,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 4,
+          "usageActions": 2,
+          "ioPairs": 1,
+          "codeExamples": 0,
+          "usecaseItems": 2,
+          "outputItems": 2,
+          "media": 3,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 53
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 12.142940638959491,
+        "usecases": 5.743491774985174,
+        "demo": 4.822980581413319,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 2.5,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.889,
+          "coverage": 0.778,
+          "fallbackShare": 0
+        }
+      },
+      "error": 10
+    },
+    {
+      "repo": "01Virex/dsh-status-rotator",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 34,
+      "human": {
+        "repo": "01Virex/dsh-status-rotator",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 4.5282458762222335,
+        "usecases": 0,
+        "demo": 0.9233583100086873,
+        "reliability": 14.323280724322496,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 2,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0.5,
+          "usecaseItems": 0,
+          "outputItems": 1,
+          "media": 0,
+          "reliabilityItems": 9.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 2.7070676952131985,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 6.575749358311304
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.561,
+          "coverage": 0.333,
+          "fallbackShare": 0.211
+        }
+      },
+      "error": -10
+    },
+    {
+      "repo": "omdsh-dev/dsh-open-in-vscode",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 15,
+      "human": {
+        "repo": "omdsh-dev/dsh-open-in-vscode",
+        "inferredType": "dsh-plugin",
+        "capability": 7.179364718731468,
+        "usage": 0.5397131390694253,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 11.578342600853556,
+        "total": 19,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 3,
+          "usageItems": 0,
+          "usageActions": 0.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 7.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 19
+      },
+      "dimensions": {
+        "capability": 11.36972318351976,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0,
+        "reliability": 3.523856829264057
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 2,
+        "confidence": {
+          "overall": 0.611,
+          "coverage": 0.222,
+          "fallbackShare": 0
+        }
+      },
+      "error": -4
+    },
+    {
+      "repo": "fwerkor/local-shell-mcp",
+      "type": "standalone-nonplugin",
+      "language": "non-cjk-dominant",
+      "score": 65,
+      "human": {
+        "repo": "fwerkor/local-shell-mcp",
+        "inferredType": "standalone-nonplugin",
+        "capability": 24.060516365495655,
+        "usage": 9.86238689786925,
+        "usecases": 9.74812878357991,
+        "demo": 0,
+        "reliability": 15,
+        "total": 59,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 5,
+          "usageActions": 4,
+          "ioPairs": 0,
+          "codeExamples": 1.5,
+          "usecaseItems": 4.5,
+          "outputItems": 0,
+          "media": 0,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 59
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 15.090436625642932,
+        "usecases": 9.74812878357991,
+        "demo": 0,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 5,
+        "usageActions": 7,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 4.5,
+        "outputItems": 0,
+        "media": 0,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.804,
+          "coverage": 0.667,
+          "fallbackShare": 0.059
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "modusensus/dsh-mneme",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 31,
+      "human": {
+        "repo": "modusensus/dsh-mneme",
+        "inferredType": "dsh-plugin",
+        "capability": 12.388060217751379,
+        "usage": 0,
+        "usecases": 6.767669238032996,
+        "demo": 0.4948154665398353,
+        "reliability": 6.575749358311304,
+        "total": 26,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 5.5,
+          "usageItems": 0,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 3,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 4,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 26
+      },
+      "dimensions": {
+        "capability": 15.390939224307964,
+        "usage": 2.7070676952131985,
+        "usecases": 8.767665811081738,
+        "demo": 1.7943467982769732,
+        "reliability": 1.888388117691251
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 7,
+        "usageItems": 0,
+        "usageActions": 3,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 4,
+        "outputItems": 0,
+        "media": 1,
+        "reliabilityItems": 1,
+        "confidence": {
+          "overall": 0.778,
+          "coverage": 0.556,
+          "fallbackShare": 0
+        }
+      },
+      "error": 5
+    },
+    {
+      "repo": "yyh-001/dsh-meme",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 38,
+      "human": {
+        "repo": "yyh-001/dsh-meme",
+        "inferredType": "dsh-plugin",
+        "capability": 16.376912335452467,
+        "usage": 8.897932949609732,
+        "usecases": 0,
+        "demo": 5.317796047953154,
+        "reliability": 9.47168801234033,
+        "total": 40,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 4,
+          "usageActions": 3,
+          "ioPairs": 1,
+          "codeExamples": 1.5,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 3,
+          "reliabilityItems": 6,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 40
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.5070663244326954,
+        "usecases": 0,
+        "demo": 4.822980581413319,
+        "reliability": 5.075751928524747
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 4,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 3,
+        "reliabilityItems": 3,
+        "confidence": {
+          "overall": 0.665,
+          "coverage": 0.444,
+          "fallbackShare": 0.114
+        }
+      },
+      "error": -2
+    },
+    {
+      "repo": "FlashingChen/dsh-desktop-hub",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 56,
+      "human": {
+        "repo": "FlashingChen/dsh-desktop-hub",
+        "inferredType": "standalone-nonplugin",
+        "capability": 18.329639367287054,
+        "usage": 1.9903947975788214,
+        "usecases": 0,
+        "demo": 6.248278463954462,
+        "reliability": 12.270782190762876,
+        "total": 39,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8.5,
+          "usageItems": 1.5,
+          "usageActions": 0.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 4,
+          "reliabilityItems": 8,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 39
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 8.423807477347697,
+        "usecases": 0,
+        "demo": 7.637995321102681,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 2,
+        "usageActions": 8,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.764,
+          "coverage": 0.556,
+          "fallbackShare": 0.027
+        }
+      },
+      "error": 17
+    },
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 73,
+      "human": {
+        "repo": "franksong2702/dsh-codex-connect",
+        "inferredType": "dsh-plugin",
+        "capability": 17.356329066540173,
+        "usage": 13.949884159260783,
+        "usecases": 0,
+        "demo": 11.481872067949658,
+        "reliability": 15,
+        "total": 58,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 8,
+          "usageItems": 7,
+          "usageActions": 5,
+          "ioPairs": 0,
+          "codeExamples": 3,
+          "usecaseItems": 0,
+          "outputItems": 3,
+          "media": 6,
+          "reliabilityItems": 10,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 58
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 12.269332361444103,
+        "reliability": 15
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 6,
+        "media": 5,
+        "reliabilityItems": 10,
+        "confidence": {
+          "overall": 0.885,
+          "coverage": 0.778,
+          "fallbackShare": 0.009
+        }
+      },
+      "error": 15
+    },
+    {
+      "repo": "dshplugin/dsh-plugin-hub",
+      "type": "catalog-list",
+      "language": "mixed",
+      "score": 48,
+      "human": {
+        "repo": "dshplugin/dsh-plugin-hub",
+        "inferredType": "catalog-list",
+        "capability": 20.25947243615101,
+        "usage": 4.1767870189349,
+        "usecases": 0,
+        "demo": 5.183241080054139,
+        "reliability": 5.831126981981452,
+        "total": 35,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 9.5,
+          "usageItems": 2.5,
+          "usageActions": 2,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 3.25,
+          "reliabilityItems": 3.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 35
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 2.886530638376164,
+        "usecases": 0,
+        "demo": 9,
+        "reliability": 10.881267704058299
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 1,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 7,
+        "confidence": {
+          "overall": 0.724,
+          "coverage": 0.556,
+          "fallbackShare": 0.107
+        }
+      },
+      "error": 13
+    },
+    {
+      "repo": "yuc16/PatentRadar",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 53,
+      "human": {
+        "repo": "yuc16/PatentRadar",
+        "inferredType": "standalone-nonplugin",
+        "capability": 23.116937768613365,
+        "usage": 12.898827217638008,
+        "usecases": 4.698475772352076,
+        "demo": 3.4434387084397686,
+        "reliability": 8.038300969022199,
+        "total": 52,
+        "confidence": "high",
+        "evidence": "citation-grounded oracle: three-reviewer count median",
+        "concern": "",
+        "reviewMethod": "three-reviewer evidence-count median",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11,
+          "usageItems": 2,
+          "usageActions": 8,
+          "ioPairs": 1,
+          "codeExamples": 3,
+          "usecaseItems": 2,
+          "outputItems": 3,
+          "media": 0.5,
+          "reliabilityItems": 5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 52
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 21,
+        "usecases": 0,
+        "demo": 0.9233583100086873,
+        "reliability": 6.575749358311304
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 0,
+        "codeExamples": 4,
+        "usecaseItems": 0,
+        "outputItems": 1,
+        "media": 0,
+        "reliabilityItems": 4,
+        "confidence": {
+          "overall": 0.821,
+          "coverage": 0.667,
+          "fallbackShare": 0.024
+        }
+      },
+      "error": 1
+    },
+    {
+      "repo": "LaplaceYoung/oh-my-dsh",
+      "type": "dsh-plugin",
+      "language": "non-cjk-dominant",
+      "score": 39,
+      "human": {
+        "repo": "LaplaceYoung/oh-my-dsh",
+        "inferredType": "dsh-plugin",
+        "capability": 24.060516365495655,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 0.4948154665398353,
+        "reliability": 8.038300969022199,
+        "total": 33,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 11.5,
+          "usageItems": 0,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0.5,
+          "media": 0,
+          "reliabilityItems": 5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 33
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 3.315263252687124,
+        "usecases": 0,
+        "demo": 2.481872067949657,
+        "reliability": 8.038300969022199
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 2,
+        "ioPairs": 0,
+        "codeExamples": 1,
+        "usecaseItems": 0,
+        "outputItems": 3,
+        "media": 0,
+        "reliabilityItems": 5,
+        "confidence": {
+          "overall": 0.756,
+          "coverage": 0.556,
+          "fallbackShare": 0.043
+        }
+      },
+      "error": 6
+    },
+    {
+      "repo": "whiteguo233/dsh-openbiliclaw",
+      "type": "dsh-plugin",
+      "language": "mixed",
+      "score": 53,
+      "human": {
+        "repo": "whiteguo233/dsh-openbiliclaw",
+        "inferredType": "dsh-plugin",
+        "capability": 22.169058856430183,
+        "usage": 1.0794262781388506,
+        "usecases": 2.5178508235883346,
+        "demo": 9,
+        "reliability": 8.758256893799704,
+        "total": 44,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 10.5,
+          "usageItems": 0.5,
+          "usageActions": 0.5,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 1,
+          "outputItems": 0,
+          "media": 6,
+          "reliabilityItems": 5.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 44
+      },
+      "dimensions": {
+        "capability": 25,
+        "usage": 0,
+        "usecases": 6.767669238032996,
+        "demo": 9,
+        "reliability": 12.270782190762876
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 12,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 3,
+        "outputItems": 0,
+        "media": 6,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.705,
+          "coverage": 0.444,
+          "fallbackShare": 0.034
+        }
+      },
+      "error": 9
+    },
+    {
+      "repo": "xiincs/deepseek-harness-desktop",
+      "type": "standalone-nonplugin",
+      "language": "mixed",
+      "score": 38,
+      "human": {
+        "repo": "xiincs/deepseek-harness-desktop",
+        "inferredType": "standalone-nonplugin",
+        "capability": 16.376912335452467,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 11.578342600853556,
+        "total": 31,
+        "confidence": "medium",
+        "evidence": "citation-grounded oracle: two-reviewer count mean",
+        "concern": "",
+        "reviewMethod": "two-reviewer evidence-count mean",
+        "oracleEvidence": {
+          "version": 3,
+          "capabilityItems": 7.5,
+          "usageItems": 0,
+          "usageActions": 0,
+          "ioPairs": 0,
+          "codeExamples": 0,
+          "usecaseItems": 0,
+          "outputItems": 0,
+          "media": 2,
+          "reliabilityItems": 7.5,
+          "confidence": {
+            "overall": 1,
+            "coverage": 1,
+            "fallbackShare": 0
+          }
+        },
+        "ratingTotal": 31
+      },
+      "dimensions": {
+        "capability": 22.169058856430183,
+        "usage": 0,
+        "usecases": 0,
+        "demo": 3.348369522101713,
+        "reliability": 12.270782190762876
+      },
+      "evidence": {
+        "version": 3,
+        "capabilityItems": 10.5,
+        "usageItems": 0,
+        "usageActions": 0,
+        "ioPairs": 0,
+        "codeExamples": 0,
+        "usecaseItems": 0,
+        "outputItems": 0,
+        "media": 2,
+        "reliabilityItems": 8,
+        "confidence": {
+          "overall": 0.654,
+          "coverage": 0.333,
+          "fallbackShare": 0.024
+        }
+      },
+      "error": 7
+    }
+  ],
+  "pass": false
+}

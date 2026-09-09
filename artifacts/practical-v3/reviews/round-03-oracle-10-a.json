@@ -1,0 +1,578 @@
+{
+  "reviews": [
+    {
+      "repo": "fwerkor/local-shell-mcp",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "`local-shell-mcp` gives ChatGPT Developer Mode and other MCP clients controlled access to a real execution environment.",
+        "It exposes a dedicated workspace with shell, persistent shell, filesystem, search, patch, Playwright, audit",
+        "durable logical sessions with optional Goal plans, public file links, and outbound remote-worker access.",
+        "Git is handled through ordinary shell commands instead of a parallel wrapper API.",
+        "| Real terminal access | Run tests, build projects, inspect logs, and debug with persistent shell sessions. |",
+        "| Workspace-aware file tools | Read, write, patch, search, and review files under a controlled root. |",
+        "| Browser automation | Extract page text, capture PNG/PDF evidence, or run a full Playwright script. |",
+        "| Remote workers | Control NAT, firewall, HPC, NPU, or lab machines that can only connect outward. |",
+        "| Agent Skills | Discover, load, and read reusable `SKILL.md` workflows through three fixed tools without changing the MCP tool list. |",
+        "| ChatGPT connector support | OAuth 2.1, `/mcp`, discovery controls, and ChatGPT-compatible tool schemas. |",
+        "| DeepSeek Harness plugin | Install this repository as a DSH bundle and expose the complete LSM tool surface, including remote workers. |",
+        "| ChatGPT Live Workspace | Render a native MCP App for real-time activity, terminal, files, diffs, jobs, remotes, audit, and direct human/agent collaboration inside ChatGPT. |"
+      ],
+      "usageItems": [
+        "`session_manage` provides one durable logical task context for agent work.",
+        "To continue work in another ChatGPT conversation, the user explicitly passes the existing `session_id`",
+        "They should report the active `session_id` after start/resume, at meaningful progress checkpoints, and before ending a turn",
+        "Create a one-time invite on the control server, paste the generated command on a remote machine",
+        "Use `skill_list` to discover installed Skills, `skill_load` to load one instruction set, and `skill_read` to read a related file by the returned Skill-relative path.",
+        "Open the browser interface on the service origin:"
+      ],
+      "usageActions": [
+        "local-shell-mcp tui",
+        "curl -i http://127.0.0.1:8765/healthz",
+        "`session_manage(action=\"resume\", session_id=...)`",
+        "`session_manage(action=\"report\", session_id=...)`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "local-shell-mcp tui"
+      ],
+      "usecases": [
+        "For full shell, filesystem, remote-worker, and Playwright tools, use ChatGPT Developer Mode or another full MCP client.",
+        "- HPC login nodes or compute nodes behind firewalls.",
+        "- NPU/GPU servers without inbound connectivity.",
+        "- Lab machines that can make outbound HTTPS requests.",
+        "- Temporary build hosts or remote test environments."
+      ],
+      "outputs": [],
+      "reliability": [
+        "The intended safety boundary is the container or VM, not the host.",
+        "- Workspace scoping to `/workspace` unless full-container mode is explicitly enabled.",
+        "- Command timeouts, output limits, and concurrency limits.",
+        "- Shell subprocess environment filtering for service-side secrets.",
+        "- Audit logs at `/workspace/.local-shell-mcp/audit.jsonl`.",
+        "Manual actions entered through either human interface are excluded from the MCP audit log; Activity, Audit, and the terminal audit rail show model-originated MCP activity.",
+        "Keep `local-shell-mcp.allowFullContainer` disabled for direct host usage; enable it only inside disposable containers or VMs.",
+        "Automatic continuation is capped at 10 continuation attempts (accepted or rejected) and resumes the same Session before continuing.",
+        "Do not mount `/var/run/docker.sock`.",
+        "Do not expose the service with `LOCAL_SHELL_MCP_AUTH_MODE=none` on a public network."
+      ],
+      "media": [],
+      "concerns": [
+        "Typed standalone-nonplugin: an MCP control plane whose repository root is also installable as a DSH bundle (noted in capability).",
+        "No images or media (logo excluded); no IO pairs or described outputs; install/config fences excluded.",
+        "Web UI / OpenTUI descriptions and session/plan semantics partially folded into capability; remaining hard rules omitted at the reliability cap."
+      ]
+    },
+    {
+      "repo": "modusensus/dsh-mneme",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`dsh-mneme` is a [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness) plugin providing persistent cross-session memory.",
+        "**跨会话记忆** — 对话中 AI 自动记录关键信息，新会话自动注入相关记忆",
+        "**自动整理** — 后台自动去重、合并、归档，记忆库越用越精炼",
+        "**删对话 ≠ 删记忆** — 删除聊天窗口不会丢掉已保存的记忆（可配置）",
+        "**你的数据你做主** — 所有记忆以 Markdown 格式存于本地，随时打开查看和编辑",
+        "**完全离线** — 默认无需 API Key，所有处理在本地完成"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "| 周一聊完项目需求，周三继续 |",
+        "| 告诉 AI 你的编码习惯 |",
+        "| 整理大量资料后关窗口 |"
+      ],
+      "outputs": [
+        "| 周一聊完项目需求，周三继续 | \"能再描述一下你的项目吗？\" | \"你指的是上周提到的博客重构吗？当时你说想用 Astro。\" |"
+      ],
+      "reliability": [
+        "- 数据只存在你的电脑本地，不上传任何服务器",
+        "- 无遥测、无分析、无远程日志",
+        "> 需要 Node 24+（`node:sqlite`）。",
+        "npm test          # 770 个测试"
+      ],
+      "media": [],
+      "concerns": [
+        "README is bilingual (CN + EN); translated duplicates were counted once per claim.",
+        "Roadmap/version tables excluded per rubric (only presently shipped behavior counted); banner image excluded as decorative.",
+        "No operational usage steps, code fences, or IO pairs; the scenario-table reply was used as the single concrete output."
+      ]
+    },
+    {
+      "repo": "yyh-001/dsh-meme",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**纯文本也能斗图**：界面显示表情图片，模型收到的是 `[表情: 描述]`，无需图片输入能力",
+        "**AI 自动学图**：用户说「入库」时，`learn_meme` 收录最近一张用户附件（不必填附件 id），自动识别分类/描述",
+        "**情绪主动发图**：先选情绪桶，系统随机抽若干张 caption，模型挑一张贴进回复",
+        "**像 QQ/微信 一样发图**：输入框 😊 悬浮面板点选表情直接发出",
+        "**管理 API** | 上传 / 编辑 / 删除 / 删除分类，全部在设置页完成，数据持久",
+        "**导出 / 导入** | 图库一键打包 ZIP 分享，导入别人的包自动切换（零依赖实现）",
+        "**图库切换** | 设置页下拉切换已扫描图库；扫描目录默认 `~/.dsh/meme-packs`"
+      ],
+      "usageItems": [
+        "输入框左侧点 **😊**（微信同款笑脸）直接选图一键发出，无需让模型代劳。",
+        "设置页「当前图库」下拉即可切换。",
+        "1. 设置页 → **导出图库**，得到 `dsh-meme-pack-日期.zip`",
+        "3. 对方设置页 → **导入图库**，选这个 ZIP，会自动切换到新图库"
+      ],
+      "usageActions": [
+        "| `send_meme` | 按情绪随机抽候选；Web 模式把 `[表情: 描述]` 写进回复，前端配图 |",
+        "| `learn_meme` | **学图**：用户说「入库」即可（默认最近一张用户附件）；也可传 `attachmentId` / `imageUrl` |",
+        "send_meme tag=sad limit=8          # 难过桶随机 8 张，挑一行 [表情: …] 贴进回复"
+      ],
+      "ioPairs": [
+        "用户: 发个无语的表情包\n模型: send_meme tag=sad → 随机几张 caption → 把 [表情: …] 贴进回复\n前端: 按描述配图，对话里看起来就是表情"
+      ],
+      "codeExamples": [
+        "send_meme tag=sad limit=8          # 难过桶随机 8 张，挑一行 [表情: …] 贴进回复"
+      ],
+      "usecases": [],
+      "outputs": [
+        "前端: 按描述配图，对话里看起来就是表情"
+      ],
+      "reliability": [
+        "- `learn_meme` 自动识图依赖当前默认模型支持图片输入（不支持时可手动指定 tag/caption）；",
+        "磁盘上仍是细 tag（angry/baka/…），模型只认六个情绪桶；caption 对不齐时前端会折叠引号后再配图。",
+        "⚠️ 上游**未提供 LICENSE**：这套图缺乏显式的再分发许可。",
+        "旧包名 `dsh-expression` 已弃用，请改用 `dsh-meme`。",
+        "pnpm 有「新包安全期」（默认 24h），刚发布的版本会被静默回落到旧版",
+        "请用插件导出的 ZIP。GitHub 仓库页上的「Download ZIP / 下载源码」是压缩过的，导入会失败。",
+        "直接上传的图片仍是附件，原样进会话；学图走 `learn_meme`",
+        "设置存在 `~/.dsh/dsh-expression.json`，升级插件不丢。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/yyh-001/dsh-meme/main/docs/chat-example.png\" alt=\"模型根据情绪主动发表情包\" width=\"80%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/yyh-001/dsh-meme/main/docs/settings-panel.png\" alt=\"设置页表情包管理面板\" width=\"80%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/yyh-001/dsh-meme/main/docs/quick-picker.png\" alt=\"输入框一键发表情包\" width=\"80%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Hero banner excluded as decorative; screenshots are raw.githubusercontent URLs of the same repository, weighted 1 as repository-hosted.",
+        "The 装完即用 fence provides the single explicit input→output example; no use-case section exists.",
+        "Built-in gallery packs are third-party content with attribution and license caveats noted under reliability."
+      ]
+    },
+    {
+      "repo": "FlashingChen/dsh-desktop-hub",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**无需 Node.js，不碰 YAML，一站式使用和管理 DeepSeek Harness。**",
+        "DeepSeek Harness 官方 Web UI 桌面客户端 —— 内置插件市场、MCP 市场、Skills 市场与三套本地管理台。",
+        "**开箱即用**：内置 Node.js + DeepSeek Harness 运行时（约 586MB），下载即用，本机不需要安装任何环境。",
+        "**一体化**：在 Harness 对话、插件市场、MCP 市场、Skills 市场之间切换，不用再开终端敲 `dsh plugin` / 手写 YAML。",
+        "**及时更新**：Windows 与 macOS 发布版启动后自动检查 GitHub Releases，侧边栏提示新版本；用户确认后下载并重启安装",
+        "Claude Code / Cursor 导出的 MCP JSON，粘贴进去 → 自动转换成 DSH 插件行 YAML（`${VAR}` 自动转 `!!js process.env.VAR`，sse / 非法 serverName 会警告）→ 确认后写入 profile patch，官方 HMR 热生效。",
+        "扫描用户级 / 随包全部 skills（rank 规则，同名低 rank 生效、高 rank 标「被遮蔽」）；支持导入 `.skill` / `.zip` / GitHub 仓库链接，或直接新建用户级 skill，模型可见 / 用户可见一键切换。",
+        "按组合包 / 依赖分类展示 web profile 的插件清单；安装、移除、更新真实执行 `dsh plugin`；聚合仓库（缺 `dsh.bundle`）拒绝误装",
+        "默认（无 flag）＝产品行为：启动 harness + 五 Tab 壳；关闭窗口后继续驻留托盘，托盘菜单提供「显示窗口 / 退出」。",
+        "匿名/署名反馈会提交到可访问的反馈服务，再由 bot 整理为 GitHub Issue，普通用户不需要访问 GitHub。"
+      ],
+      "usageItems": [
+        "首次启动会有分步引导带你认识各功能区，之后可随时从侧栏「使用引导」重看。",
+        "需要外部工具时，到 MCP / Skills / Plugin Tab 管理。"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**安全**：所有写操作原子落盘、自动备份 `.bak-<ts>`、官方 HMR 热生效，改错了随时可恢复。",
+        "当前为预览版（macOS arm64，已签名并公证；Windows x64 未签名）。",
+        "**git 来源插件的构建授权**：pnpm ≥10 拒绝依赖构建脚本时，Hub 会解析 pnpm 给出的包名或完整 Git depPath，逐包请求用户确认；确认后才原子写入 profile 的 `pnpm-workspace.yaml.allowBuilds` 并重试一次。",
+        "**MCP `!!js` backtick 模板兼容**：patch 中以反引号模板写 `Bearer ${...}`（官方 README 示例写法）超出 yaml 解析器语法，MCP 面板会拒绝解析并提示",
+        "**MCP 无文件导入**：MCP 面板支持粘贴 JSON（`${VAR}` 自动转 `!!js process.env.VAR`；默认合并写入，可选全量替换），暂无 `.mcp.json` 文件选择器。",
+        "**退出边界**：正常退出走 SIGTERM 进程组清理 + 单实例锁；Harness 意外退出可在 UI 一键重启；强杀（timeout / group-kill）仍可能遗留 dsh 子进程。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/demo/harness.png\" width=\"900\" alt=\"DSH Desktop Hub 主界面：左侧五 Tab 工作区，主区域为 DeepSeek Harness 官方 Web UI\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "![MCP 转换流程演示](assets/demo/mcp-flow.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/demo/skills.png\" width=\"760\" alt=\"Skills 管理台：4 个 skill，来源与可见性开关\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/demo/plugins.png\" width=\"760\" alt=\"Plugin 管理台：组合包与依赖清单\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Typed standalone-nonplugin: an Electron desktop client that embeds the official DSH Web UI; not itself a DSH plugin.",
+        "Roadmap table excluded; logo and QQ QR code excluded as branding/contact; the Windows-unsigned fact appears twice and was counted once.",
+        "No operational commands, IO pairs, or use-case scenarios in the README."
+      ]
+    },
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`dsh-codex-connect` adds the `openai-codex` model catalog and a separate ChatGPT OAuth login.",
+        "Models run through Harness's normal LLM service, so streaming, tool calls, reasoning replay, compaction, filesystem controls, permission gates, and approval prompts remain Harness-owned.",
+        "When an eligible GPT Codex model is selected, the Composer also shows a conversation-scoped Fast Mode toggle and a compact weekly-quota indicator.",
+        "Installation is additive. The bundle does not replace the current default model or search route.",
+        "Codex Connect checks public package metadata and this repository's `verified-compatibility.json` periodically through the DSH Web server.",
+        "When a newer plugin version is available, a frame-wide DSH notice appears even if you switch conversations.",
+        "**Fast Mode (lightning icon)** is off by default for each conversation. Click it to request the faster `1.5×` mode; click it again to return to Standard speed.",
+        "**Weekly quota bar** is the short horizontal bar beside the model selector. Its color moves from green through yellow/orange to red as the remaining amount falls.",
+        "`enableSearch: true` registers Codex as an available search provider. It does not select the profile's global search route.",
+        "`enableImageTool: true` enables `view_image` for approved local reads and public-network image fetches on vision-capable models.",
+        "`enableImageGeneration: true` enables the prompt-only image generation tool. Use the image generation capability included with your current GPT subscription.",
+        "Select **Detect proxy** to test only the standard proxy environment variables and the documented loopback candidates `127.0.0.1:7890`, `127.0.0.1:7897`, and `127.0.0.1:10809`."
+      ],
+      "usageItems": [
+        "Open **Settings → Plugins → Plugin configuration → Codex Connect**.",
+        "Click **Sign in with ChatGPT** and complete the browser approval yourself.",
+        "If an embedded WebView blocks the sign-in window, use the displayed **Open ChatGPT sign-in page** link to continue in your system browser.",
+        "uncheck the models you do not want to see, and select **Save changes**.",
+        "To update, copy the short request shown in the notice to the Agent you use for this DSH project.",
+        "After the Agent reports completion, return to the notice or settings card and select **Done — check again**.",
+        "Describe the image you want in ordinary language. The agent can expand that request into the prompt sent to GPT Image."
+      ],
+      "usageActions": [
+        "Click **Sign in with ChatGPT** and complete the browser approval yourself.",
+        "uncheck the models you do not want to see, and select **Save changes**.",
+        "Choose **Use this proxy** only after reviewing a candidate, then click **Save changes**.",
+        "Turn on **Enable GPT Image generation** in the Codex Connect card and select **Save changes**.",
+        "Open Harness's normal model picker and select an `openai-codex` model for the agent or session you are using."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "dsh plugin --profile web exec dsh-codex-connect status --json",
+        "dsh plugin --profile web exec dsh-codex-connect doctor --json",
+        "dsh plugin --profile web exec dsh-codex-connect trust-origin http://192.168.1.20:3080"
+      ],
+      "usecases": [],
+      "outputs": [
+        "Expected result: `status --json` reports `signed-in` and exits `0`",
+        "Generated images are saved as DSH attachments and shown in the Codex Connect result gallery.",
+        "a fresh installation shows **Not signed in** and a **Sign in with ChatGPT** button"
+      ],
+      "reliability": [
+        "It does not turn a ChatGPT subscription into an OpenAI Platform API credential.",
+        "The plugin never runs an upgrade command by itself.",
+        "Do not copy an authorization URL, code, token, or account identifier into an issue, log, or configuration file.",
+        "OAuth is stored separately at `$DSH_HOME/.openai-codex-auth.json` (`~/.dsh` by default). `~/.codex/auth.json` is never copied or modified.",
+        "By default, the OAuth routes accept loopback browser requests only.",
+        "Every DNS result and redirect is checked, and the connection is pinned to the validated address so localhost, private networks, link-local services, and cloud metadata endpoints remain unreachable.",
+        "The only verified compatibility combination is DSH plugin API packages `0.1.1-rc.2`, `@earendil-works/pi-ai` `0.82.1`, and Node.js `^22.19.0 || >=24.0.0`",
+        "ChatGPT plan eligibility, model access, quotas, and backend behavior are controlled by OpenAI and may change.",
+        "Removing the package does not delete OAuth state. Run `logout` only when credential removal is intended.",
+        "Codex Connect never silently retries the request through a direct connection."
+      ],
+      "media": [
+        {
+          "excerpt": "Collapsed English-localized Codex Connect entry under Harness plugin configuration",
+          "weight": 1
+        },
+        {
+          "excerpt": "English-localized Codex Connect signed-in state inside Harness plugin configuration",
+          "weight": 1
+        },
+        {
+          "excerpt": "OpenAI Codex model group in the English-localized DeepSeek Harness model picker",
+          "weight": 1
+        },
+        {
+          "excerpt": "DeepSeek Harness Composer with the per-conversation Fast Mode lightning control and weekly quota bar",
+          "weight": 1
+        },
+        {
+          "excerpt": "English-localized Codex Connect optional capability configuration after explicit opt-in",
+          "weight": 1
+        },
+        {
+          "excerpt": "English-localized Codex Connect GPT Image result with preview, copyable prompt, download action, and image details",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Hero banner excluded as decorative; media recorded by unique alt captions because the full img markup exceeds 220 chars; media cap of 6 reached exactly.",
+        "Reliability omissions at cap: owner-only credential permissions/atomic writes, cross-device network-trust guidance.",
+        "No IO pairs; install/config/update command fences excluded except the secret-free diagnostics and trust-origin examples."
+      ]
+    },
+    {
+      "repo": "dshplugin/dsh-plugin-hub",
+      "inferredType": "catalog-list",
+      "capability": [
+        "DSH Plugin Hub 是 **DeepSeek Harness 社区插件市场**：一个遵循官方插件开发规范构建的开源插件，安装进「设置 → 插件中心」后，无需离开应用即可浏览、搜索并一键安装社区插件。",
+        "**一键安装** — 点击即装：后台队列串行执行，弹窗实时显示安装进度，可随时取消；装完刷新页面即生效，无需重启",
+        "**一键升级** — 目录检测到新版本自动提示，卡片按钮变为「更新」，覆盖安装一键完成",
+        "**一键卸载** — 卸载全程可视化，实时进度一目了然，卸载成功即生效",
+        "**任务留痕** — 每次安装 / 升级 / 卸载的成功与失败都会写入通知中心，随时回查",
+        "收录 **5,048** 个社区插件，其中 **4,470** 已人工精选验证，由 [dsh-plugin.org](https://dsh-plugin.org) 每日收录、人工审核并发布",
+        "每个插件标注人工验证状态（verified）、Star / Fork 评分、版本号与最近更新时间，来源可溯",
+        "支持「最热 / 最新 / 最早收录」排序，双语描述、能力标签一目了然",
+        "按已安装 / 未安装快速过滤，配合全文搜索精确定位目标插件",
+        "数据与官网同源，安装后自动获取最新目录，无需手动升级",
+        "失败可一键提交 GitHub Issue，为开源做贡献；待重启项支持「稍后重启 / 立即重启」",
+        "每个 DSH plugin 都由专业的技术团队人工核查，逐项核对安装命令、兼容状态（verified / unconfirmed）与 DSH 目标版本（dshTarget），并标注能力分类"
+      ],
+      "usageItems": [
+        "打开 **设置 → 插件中心**，即可浏览并安装插件",
+        "将你的插件发布到 GitHub 并添加 `dsh-plugin` topic，即可被 DSH Plugin 插件目录自动发现与收录。"
+      ],
+      "usageActions": [
+        "打开 **设置 → 插件中心**，即可浏览并安装插件",
+        "**收录你的插件**：添加 `dsh-plugin` topic 即可被自动发现"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "本项目为独立社区项目，与 DeepSeek Harness 官方无隶属关系。",
+        "本站数据整理自 DeepSeek Harness 官网、官方架构文档与官方仓库，看到的信息都有据可查。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://api.dsh-plugin.org/images/releases/1-3-8/dsh-plugin-hub-market-zh.png\" alt=\"DSH Plugin Hub 插件中心界面\" width=\"840\">",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/dsh-plugin-hub-site-home.png\" alt=\"DSH Plugin 官网首页\" width=\"400\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/dsh-plugin-hub-site-categories.png\" alt=\"DSH Plugin 分类展示\" width=\"400\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Catalog-list repository: per rule 7 only its own discovery/curation/install/submit behavior counted; listed plugins' capabilities never credited.",
+        "Mixed media hosting: panel image served from api.dsh-plugin.org weighted 0.5, repo screenshots weighted 1; logo excluded.",
+        "No IO pairs, outputs, use cases, or operational code fences (install/update commands excluded)."
+      ]
+    },
+    {
+      "repo": "yuc16/PatentRadar",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "输入一个专利公开号，输出一份竞品侵权分析报告——内容包括：逐项技术特征对比表、可点击的公开证据 URL、以及“还缺什么证据 / 下一步去哪查”的可执行建议。",
+        "PatentRadar 把这条链路压到 **1 小时**：4 个模块串行流水线 + 多源搜索 + 多模态证据抓取 + 严苛评分规则",
+        "抓 Google Patents 公开文本 → LLM 把每条权利要求（独立 + 从属）拆成原子特征",
+        "每个候选独立抓页面 + PDF + 图片 → LLM 多模态评估权 1 各特征 → 给出 `明确满足 / 可能满足 / 证据不足 / 明确不满足` 四档判定",
+        "**Gap 轮补搜**：对\"证据不足 / 可能满足\"特征 LLM 主动建议 follow-up query → 代码端跑补搜 → 再判一次",
+        "复用模块 2 证据池 + 扩展到**全部从属权利要求**",
+        "把模块 1 / 3 数据组装成 4 章节的 markdown 报告 → WeasyPrint 渲染 PDF",
+        "skill 会自动触发，按顺序 spawn 4 个独立 subagent，每个 subagent 跑完用 JSON Schema 自动校验产物（失败时把错误清单透传给该 subagent 让它修正后重交，最多重试 2 次）",
+        "- 输入专利公开号，点「开始分析」即可端到端跑完 4 模块",
+        "- 4 个模块进度、每一次 LLM 调用 / 搜索调用 / 网页 fetch 实时显示",
+        "- 跑完后可回放（1x / 20x / 100x / 600x 倍速），支持导出离线 HTML 分享给同事"
+      ],
+      "usageItems": [
+        "帮我跑下 CN114512759B 的侵权竞品分析",
+        "> 命令前缀按你的部署方式替换，命令体和产物路径完全一致："
+      ],
+      "usageActions": [
+        "curl -X POST http://localhost:8000/api/run/CN110293961B",
+        "curl -N    http://localhost:8000/api/stream/CN110293961B   # SSE 实时事件",
+        "curl       http://localhost:8000/api/status/CN110293961B   # JSON 快照",
+        "uv run patentradar decompose CN110293961B",
+        "uv run patentradar competitor-search data/output/CN110293961B/task_package.json",
+        "uv run patentradar full-claim-chart  data/output/CN110293961B/task_package.json \\",
+        "uv run patentradar report            data/output/CN110293961B/task_package.json \\",
+        "uv run uvicorn patentradar.server.app:app --reload --port 8000"
+      ],
+      "ioPairs": [
+        "`POST /api/run/{pub}` 同步校验格式（不合法专利号 → **400** + 错误信息）；\n若该 pub 已经在跑则直接 **409**，避免重复启动 BackgroundTask。"
+      ],
+      "codeExamples": [
+        "uv run patentradar decompose CN110293961B",
+        "curl -X POST http://localhost:8000/api/run/CN110293961B"
+      ],
+      "usecases": [
+        "传统侵权排查靠人工：律师团队读专利权 → 拆特征 → 翻竞品手册 → 搜证据 → 写 claim chart，一份高质量报告动辄 3-5 天。",
+        "把 **可追溯复核** 的 侵权分析报告直接交到律师手上。"
+      ],
+      "outputs": [
+        "4. **相似专利人工核查**（score ≥ 80 才出）　预生成 Google Patents 高级检索深链",
+        "├── report.md                        # 模块 4：最终报告（markdown）",
+        "└── report.pdf                       #         最终报告（PDF）"
+      ],
+      "reliability": [
+        "本工具做的是**偏字面的初筛**，**不做专利法的等同侵权分析**",
+        "当竞品特征「字面不同但可能法律等同」时，框架会把它**降到「证据不足」交人工跟进**，而不会替你下等同结论。",
+        "缺图形库 → 只产出 md、无 PDF；缺中文字体 → PDF 中文乱码。",
+        "**PDF 渲染的系统层依赖** —— `uv sync` 只装 Python 包；WeasyPrint 另需系统级图形库（Pango / Cairo 等）",
+        "**`total_score` 只看权 1**（从属权满足度不进 ranking，避免权 1 已\"明确满足\"的候选因从属权证据稀疏被错误压低分）"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/94f8f758-6a43-49a8-b16b-2e04e1d8e110",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "No DSH integration: skill mode targets Claude Code / Codex CLI; typed standalone-nonplugin.",
+        "The demo video is a bare externally hosted user-attachments link, weighted 0.5; no embedded images.",
+        "Scoring-scale table and quality-constraint mermaid details omitted; the literal-vs-equivalent boundary kept as the headline reliability claim."
+      ]
+    },
+    {
+      "repo": "LaplaceYoung/oh-my-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`deep-research` decomposes a compound question into sub-questions, searches and fetches sources\nin parallel through DSH's portable web seam, and synthesizes a cited report.",
+        "`tower` dispatches a list of instructions to a team of worker subagents that iterate one repo",
+        "then a reviewer — always on the primary model — re-reads their outputs and flags conflicts.",
+        "`secret-scanner` registers a `tools.guard` that denies `write`/`edit`/`apply_patch` calls whose\narguments carry API keys, tokens, or private keys — before any filesystem mutation, and with no\nallow-override path.",
+        "`stream-rules` injects regex-matched reminders into the stream the moment the model goes\noff-script",
+        "`github-workflow` wraps the `gh` CLI (`issue create/list`, `pr list`) through `ctx.shell`",
+        "`branch-tree` renders fork lineage (parent→children, ancestry, fork points) and `task-board`\nprojects a parallel-task kanban (columns, blocked reasons, dependency tree)",
+        "`session-snapshot`\nand `session-rewind` for checkpoint rollback",
+        "`memory-writeback` lands Claude Code's `CLAUDE.md` loop",
+        "`mcp-bridge` speaks the protocol, `mcp-registry` catalogs servers",
+        "`jailbreak-detector` and `injection-guard` watch the prompt stream",
+        "`otel-genai-traces` and `otel-genai-metrics` emit OpenTelemetry GenAI semantic conventions"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "**530** plugins · **3731** tests · **2183/2183** e2e registration checks · **6/6** live-session\nchecks against a real DeepSeek model."
+      ],
+      "reliability": [
+        "oh-my-dsh is a **capability library**, not a fork.",
+        "plugin registers through a documented extension seam — never a patch to the skeleton, never a\nhot-path tax.",
+        "leave them unset and a deterministic\ntemplate report still lands — every path degrades gracefully, none require a real key to test.",
+        "Data lives in-session; persistence is a consumer step.",
+        "Project-scoped by\ndefault — what the agent learns about this repo stays with this repo."
+      ],
+      "media": [],
+      "concerns": [
+        "A 530-plugin capability library (monorepo of DSH plugins); typed dsh-plugin, with only representative capability slices excerpted.",
+        "No usage instructions, IO pairs, or media (badges only); quick-start fences are dev/test commands and were excluded.",
+        "Peer-harness mapping table treated as provenance, not evidence."
+      ]
+    },
+    {
+      "repo": "whiteguo233/dsh-openbiliclaw",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "本仓库是它的 DeepSeek Harness 客户端插件——DSH 左侧栏一个 OpenBiliClaw 按钮，点开右侧滑出抽屉（推荐/内容库/对话/画像/设置），并注册 22 个 Agent Bridge 工具",
+        "注册 22 个 `openbiliclaw_*` 工具（Agent Bridge v2 CLI）和 `openbiliclaw-adapter` skill，让 DSH 里的 Agent 能读取推荐、回答探测、保存内容、和用户对话",
+        "**人用侧**：在 DSH 左侧栏底部加一个 OpenBiliClaw 按钮，点开从右侧滑出一个与浏览器插件 / 手机版视觉一致的抽屉面板",
+        "**惊喜推荐 hero 大图**：整卡宽的 16:9 封面 + ✨ 角标 + 「💗 91% 匹配」分数胶囊，展开可见推荐理由、看看/喜欢/稍后看/收藏/少来点/聊一聊",
+        "**跨平台封面兼容**：与浏览器插件 / PC Web 统一经后端 `/api/image-proxy` 加载，归一化小红书、YouTube 等 CDN URL；代理失败时自动回退为文本或媒体占位，不留空白卡片",
+        "**无限滚动**：滚到底自动加载下一页；距离底部约 800px 时**提前预加载**",
+        "顶部「同步到平台」：全量同步到 B 站收藏夹 / 稍后再看，轮询展示逐条结果（成功 / 失败 / 需登录）",
+        "历史记录：近 30 天「点开过 / 看过 / 移除的」，光标分页 + 触底自动加载",
+        "兴趣 / 回避探测卡片：确认、拒绝、聊聊、稍后，乐观状态机即时反馈",
+        "- **深色模式**跟随 DSH 主题实时切换（保留 OpenBiliClaw 自己的粉/蓝配色体系）",
+        "- 后端在线状态点带**迟滞**：连续两次探测失败才置离线，单次抖动不再闪",
+        "- 面板与 Agent 工具走**同一套后端状态**：面板里收藏的，Agent 工具立刻看得到；Agent 代答的探测，面板同步生效"
+      ],
+      "usageItems": [
+        "面板内的「设置 → 通用 → 连接」可改后端地址（默认 `http://127.0.0.1:8420`，面板本地保存、立即生效"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "典型场景：左边和 Agent 聊需求，点左下角的 OpenBiliClaw 按钮，右侧抽屉滑出来顺手刷两条推荐，点个「收藏」，过一会儿弹出兴趣探测，和它聊两句，画像就更懂你了——全程不离开 DSH。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "插件要求 DSH `0.1.1-rc.2` 或更高版本；插件的 peer ABI 已与该版本的 `dsh-*` 包及 `@deepseek-ai/cordis ^4.0.1` 对齐。",
+        "请不要在同一个 profile 中混用旧版（`0.0.1` / `0.1.0-rc.x`）的 DSH 工具包。",
+        "Agent Bridge 要求后端开启 Agent Bridge v2（`python -m openbiliclaw.integrations.openclaw.cli <command>`），插件默认通过 `<workdir>/.venv/bin/python` 调用",
+        "本插件只做**消费侧**。爬取 / 平台源管理 / 账号同步等能力仍属于主项目（后端 + 浏览器插件 / 手机版），有意不带入 DSH。",
+        "`cordis.patch.yml` 的顶层是 patch 列表；不带 `insert` 的 `id` 条目会被当作已有配置行覆盖，找不到 `openbiliclaw` 时会被跳过。"
+      ],
+      "media": [
+        {
+          "excerpt": "![推荐 · 亮色](docs/screenshots/overview-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![推荐 · 深色](docs/screenshots/overview-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![内容库](docs/screenshots/library-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![对话](docs/screenshots/dialogue-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![画像](docs/screenshots/profile-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![设置 · 模型](docs/screenshots/settings-models-light.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "OpenBiliClaw main-project (backend crawler/recommender) capabilities excluded per linked-project ownership; only the DSH client plugin's own surface counted.",
+        "The 22-tool list gives names without purposes, so it was not counted as command-reference rows; settings-scheduler/settings-general screenshots omitted at the media cap of 6.",
+        "No IO pairs, outputs, or operational code fences; install/config excluded."
+      ]
+    },
+    {
+      "repo": "xiincs/deepseek-harness-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**双击即用**：打开应用，自动帮你把后台服务准备好，不需要敲命令行、不需要搞懂端口是什么。",
+        "**关窗不等于退出**：点右上角的关闭按钮只是把窗口藏起来，工作还在继续；托盘图标右键才是真的退出。",
+        "**数据和网页版完全通用**：所有会话、配置都存在同一个地方，网页版和桌面版随便切换，互不冲突。",
+        "**文件面板**：右侧一键唤出文件目录树，点开任意文件直接预览、编辑、保存，改动会用颜色标出",
+        "**插件市场**：浏览、搜索、安装社区插件，目录持续更新、条目数以百计",
+        "**内置终端**：需要跑个命令的时候，不用再额外开一个终端窗口，应用里直接就有。",
+        "**有新版本会提醒你**：打开应用时自动检查更新，一键装上，不用跑去发布页面翻。"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**这是官方产品吗？**\n不是。DeepSeek Harness 本体由官方维护，这个桌面壳是社区做的第三方封装",
+        "应用里的网页界面（也就是 DeepSeek Harness 本体的部分）运行在一个隔离的沙箱里，没有权限访问你电脑上",
+        "唯一会读写本地文件的是桌面壳自带的文件面板——这是一个独立、",
+        "应用本身可以离线打开，但里面加载的 DeepSeek Harness 服务该怎么工作还是怎么工作",
+        "| macOS | `.dmg` | 首次打开需要在「系统设置 → 隐私与安全性」里手动允许一次（未加入 Apple 开发者计划，属正常现象） |",
+        "> macOS / Linux 版暂不支持自动更新，有新版本时需要自己回来这个页面重新下载。",
+        "安装前会先给你看清楚要执行的确切命令，确认后才会真正安装，不会点一下就悄悄装上。",
+        "是刻意的：只有上游把某个版本标为正式默认版本时，这个应用才会跟进",
+        "- **崩溃了自己爬起来**：后台服务万一意外挂掉，应用会自动帮你重启一次；实在起不来也会告诉你原因，\n  而不是一片空白让你猜。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/screenshots/app-running.png\" alt=\"DeepSeek Harness Desktop 运行截图\" width=\"960\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/app-boot.png\" alt=\"启动页\" width=\"400\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Typed standalone-nonplugin: a third-party desktop shell around the official DSH Web UI; not a DSH plugin.",
+        "No usage steps, IO pairs, outputs, or use-case sections; the demo GIF exists only as a placeholder comment and was not counted.",
+        "Download badges excluded; the tray behavior appears in both the intro and feature bullets and was counted once."
+      ]
+    }
+  ]
+}

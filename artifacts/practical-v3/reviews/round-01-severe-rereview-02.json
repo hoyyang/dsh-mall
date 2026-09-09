@@ -1,0 +1,100 @@
+{
+  "reviews": [
+    {
+      "repo": "platonai/Browser4",
+      "capability": 22,
+      "usage": 20,
+      "usecases": 13,
+      "demo": 3,
+      "reliability": 12,
+      "confidence": "high",
+      "evidence": "CLI: snapshot refs, click/fill, X-SQL htmlsnapshot, crawl/swarm/loop, agent run, state; decision-tree usage guide; amazon compare demo; MockSite; doctor.",
+      "concern": "Demos external-only (YouTube); WebMiner Commercial is paid; README marketing-heavy.",
+      "total": 70
+    },
+    {
+      "repo": "chuspeeism/dashi-taskboard",
+      "capability": 19,
+      "usage": 18,
+      "usecases": 11,
+      "demo": 3,
+      "reliability": 12,
+      "confidence": "medium",
+      "evidence": "HTTP API powers UI, taskctl CLI, Codex Skill; CDP injection; taskctl examples; LAN/Cloudflare share; SSE sync; check suite; signing policy; LAN auth limits.",
+      "concern": "Codex-only integration; LAN mode unauthenticated; demo is a single product screenshot.",
+      "total": 63
+    },
+    {
+      "repo": "esengine/DeepSeek-Reasonix",
+      "capability": 20,
+      "usage": 18,
+      "usecases": 9,
+      "demo": 6,
+      "reliability": 11,
+      "confidence": "high",
+      "evidence": "Config-driven; CLI/TUI, desktop, VS Code via ACP; MCP plugins, sidecars; dual executor+planner; checkpoints/rewind; run/setup usage; SHA256SUMS; recovery docs.",
+      "concern": "Demo is one embedded video; no output examples; breadth of claims unverifiable from README.",
+      "total": 64
+    },
+    {
+      "repo": "liustack/modlens",
+      "capability": 19,
+      "usage": 16,
+      "usecases": 14,
+      "demo": 12,
+      "reliability": 13,
+      "confidence": "high",
+      "evidence": "Paste-image bridge; wrapped model entries; 6 providers+4 CLIs failover; key rotation; config commands; 5 unedited demos; doctor; troubleshooting/security docs.",
+      "concern": "Single-author, no PRs; superlative claims; no automated-test evidence in README.",
+      "total": 74
+    },
+    {
+      "repo": "lencx/Minke",
+      "capability": 21,
+      "usage": 14,
+      "usecases": 10,
+      "demo": 10,
+      "reliability": 13,
+      "confidence": "high",
+      "evidence": "Files/terminal/plugins; Agent Browser w/ human takeover; WeChat/TG/Discord remote; 3 tested routes; PWA; 6 screenshots+GIF; verified updater; Keychain repair.",
+      "concern": "Unsigned pre-release macOS builds need quarantine bypass; much of README is install/config.",
+      "total": 68
+    },
+    {
+      "repo": "xiaods/k8e",
+      "capability": 22,
+      "usage": 20,
+      "usecases": 12,
+      "demo": 3,
+      "reliability": 11,
+      "confidence": "medium",
+      "evidence": "Single binary; gVisor/Kata/FC isolation; eBPF egress; warm pool; CAS snapshots; run/create/subagent/confirm CLI; API keys w/ TTL; verify steps; make test.",
+      "concern": "No screenshots; no troubleshooting section; comparison table is mostly marketing.",
+      "total": 68
+    },
+    {
+      "repo": "omdsh-dev/DSH-better-sidebar",
+      "capability": 22,
+      "usage": 19,
+      "usecases": 9,
+      "demo": 12,
+      "reliability": 14,
+      "confidence": "high",
+      "evidence": "Dual workbench: file tree, editor, Mermaid/HTML preview, sandboxed browser, PTY, Git, side chat; API sample; ~12 screenshots; limits/FAQ/security; tests.",
+      "concern": "README changelog-heavy; explicit use cases thin vs feature enumeration.",
+      "total": 76
+    },
+    {
+      "repo": "xmanrui/dsh-im",
+      "capability": 22,
+      "usage": 19,
+      "usecases": 12,
+      "demo": 3,
+      "reliability": 13,
+      "confidence": "high",
+      "evidence": "9 IM channels, multi-bot; streaming replies; 20+ commands w/ examples; per-channel file limits; access modes; Office connector (SSE/lease); tests; secrets.",
+      "concern": "One screenshot; nine channels unverifiable from README; proxy setup friction.",
+      "total": 69
+    }
+  ]
+}

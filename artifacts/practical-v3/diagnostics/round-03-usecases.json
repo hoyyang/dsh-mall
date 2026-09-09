@@ -1,0 +1,824 @@
+{
+  "generatedAt": "2026-09-02T07:36:53.683Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-03.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "usecases",
+  "question": "Diagnose recurring deterministic usecaseItems misses and overcounts.",
+  "families": [
+    "usecaseItems"
+  ],
+  "under": [
+    {
+      "repo": "SeaOf0/dsh-redteam-model",
+      "practicalScore": 45,
+      "oracleScore": 67,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 6.5,
+          "gap": 6.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# dsh-redteam-model",
+            "excerpt": "目标是服务于 redteam 进行授权安全研究，覆盖渗透测试、红队评估、代码审计、二进制分析、免杀对抗、应急溯源、云安全攻防与 CTF 解题领域。"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `pentest` 渗透测试 | Web/API/app/小程序黑盒渗透：侦察、枚举、漏洞验证与报告 |"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `code-audit` 代码审计 | 白盒源码审计，可 RCE 主线（上传/未授权/组合/反序列化/溢出等七类） |"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `binary-analysis` 二进制分析 | 病毒分析、逆向破解、脱壳还原 |"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `incident-response` 应急溯源 | Windows/Linux 应急响应与攻击溯源：证据保全→失陷排查→攻击链时间线还原→定性→处置建议→报告 |"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `ctf-solver` CTF 解题 | CTF 竞赛解题：题面登记、模块路由（web/pwn/reverse/crypto/misc 等）、解题循环、flag 台账与复盘 |"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `av-evasion` 免杀对抗 | 攻击视角的免杀研究：载荷开发与本地实验循环"
+          },
+          {
+            "heading": "## 九个工作模式",
+            "excerpt": "| `cloud-security` 云安全攻防 | 云平台（AWS/Azure/GCP/阿里云/腾讯云/华为云）与云原生（K8s/容器/Serverless/CI-CD）渗透"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-crew",
+      "practicalScore": 61,
+      "oracleScore": 70,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 4.5,
+          "gap": 4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### 🎚️ Tier Policy and Escalation",
+            "excerpt": "`flash` for mechanical work, `pro` for reasoning, `effort` from `off` to `max`"
+          },
+          {
+            "heading": "### Regular subscribers → shell subagent approach (recommended)",
+            "excerpt": "If you already subscribe to Claude Pro or use Claude Code, use this approach—convenient and transparent"
+          },
+          {
+            "heading": "### Pay-as-you-go / CI environments → direct router approach",
+            "excerpt": "If using API-key credentials (not OAuth) and want to save Anthropic tokens, can run local router for direct DeepSeek connection"
+          },
+          {
+            "heading": "### Running DSH Web → hub mode auto-enabled",
+            "excerpt": "During local development iteration, recommend enabling hub mode; worker progress can be fully observed in Web UI"
+          },
+          {
+            "heading": "### Running DSH Web → hub mode auto-enabled",
+            "excerpt": "for cross-machine collaboration or environments without Web UI, use the dispatching-host shell approach"
+          },
+          {
+            "heading": "### Regular subscribers → shell subagent approach (recommended)",
+            "excerpt": "**Recommendation**: If you already subscribe to Claude Pro or use Claude Code, use this approach—convenient and transparent"
+          },
+          {
+            "heading": "### Pay-as-you-go / CI environments → direct router approach",
+            "excerpt": "- CI environments typically also use API keys; this approach is more economical (all DeepSeek tokens)"
+          },
+          {
+            "heading": "### Running DSH Web → hub mode auto-enabled",
+            "excerpt": "- **Recommendation**: During local development iteration, recommend enabling hub mode; worker progress can be fully observed in Web UI"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "practicalScore": 53,
+      "oracleScore": 60,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 1,
+          "oracle": 5,
+          "gap": 4
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "Use an interface when the user needs to see a difficult relationship or make several connected choices. Plain questions, rewriting, summaries, and simple lists stay in prose."
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "Turn candidate availability into a short list of useful 90-minute writing blocks."
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "Move light, carbon dioxide, temperature, and stomatal controls to find the limiting step."
+          },
+          {
+            "heading": "## When an Interface Helps",
+            "excerpt": "Ask from the CLI for a source-grounded explanation of a real project flow."
+          },
+          {
+            "heading": "## Task Apps or Component Trees?",
+            "excerpt": "The task needs a purpose-built React app whose structure and interactions are not known in advance."
+          },
+          {
+            "heading": "## Task Apps or Component Trees?",
+            "excerpt": "Free-form simulations, spatial tools, connected workflows, or multi-step state matter most."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "titanwings/dsh-automation",
+      "practicalScore": 67,
+      "oracleScore": 65,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 2.5,
+          "oracle": 6,
+          "gap": 3.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 🧰 Good automation candidates",
+            "excerpt": "| Weekday regression triage | `read-only` | Inspect local test evidence, group failures, and leave a concise diagnosis in a new Session. |"
+          },
+          {
+            "heading": "## 🧰 Good automation candidates",
+            "excerpt": "| Weekly repository health report | `read-only` | Review stale TODOs, dependency manifests, ignored failures, and test gaps without changing the tree. |"
+          },
+          {
+            "heading": "## 🧰 Good automation candidates",
+            "excerpt": "| One-shot verification | `read-only` | Recheck a flaky failure later and preserve evidence outside the current chat. |"
+          },
+          {
+            "heading": "## 🧰 Good automation candidates",
+            "excerpt": "| Generated-code refresh | `workspace-write` | Rebuild a known generated artifact, run focused checks, and report the exact diff. |"
+          },
+          {
+            "heading": "## 🧰 Good automation candidates",
+            "excerpt": "| Maintenance fix window | `workspace-write` | Reproduce one bounded issue, make the smallest verified fix, and stop when acceptance checks pass. |"
+          },
+          {
+            "heading": "## 🎯 Why automation",
+            "excerpt": "If a task depends on unstated chat history, needs an interactive approval halfway through, or should react to a file, HTTP, or process condition rather than time, it is not a good automation yet."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "practicalScore": 56,
+      "oracleScore": 67,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 3,
+          "gap": 3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# Hanai Worth · 值见",
+            "excerpt": "帮助用户从“发现一家公司”走到“形成并持续验证自己的判断”"
+          },
+          {
+            "heading": "### 专家开放对谈",
+            "excerpt": "- **周期可证伪**：“永远缺某种资源”只作为假设，从需求、供给、库存与利用率、资本开支、价格利润和拥挤度检查，并给出反证与失效条件。"
+          },
+          {
+            "heading": "### 专家开放对谈",
+            "excerpt": "用于分析行业周期、注意力迁移和叙事竞争；创建对谈时明确提示 AI 模拟边界"
+          },
+          {
+            "heading": "## 在线投研报告",
+            "excerpt": "变盘点能力审计 | [GitHub Pages 首页](https://hancao97.github.io/hanai-investment-dsh/)"
+          },
+          {
+            "heading": "## 在线投研报告",
+            "excerpt": "A 股未来一年周期展望 | [完整门禁版在线报告](https://hancao97.github.io/hanai-investment-dsh/a-share-cycle-outlook.html)"
+          },
+          {
+            "heading": "## 界面预览",
+            "excerpt": "中国平安在 2026-07-01 命中 `低位破低反包`，悬浮卡同时展示触发条件、20 日历史方向频率、样本数、同场景对照和研究截止日"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh_workflow",
+      "practicalScore": 56,
+      "oracleScore": 57,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 它为 DSH 带来什么",
+            "excerpt": "| 每轮重新提示如何拆任务，策略难复用 | 保存为项目或个人 workflow，按名字运行 |"
+          },
+          {
+            "heading": "## 它为 DSH 带来什么",
+            "excerpt": "| 中断后通常从头重来 | 按 run snapshot 重跑，或用 effect cache 续跑未完成部分 |"
+          },
+          {
+            "heading": "# 验证 bundle 已进入 profile 合成树",
+            "excerpt": "/workflow parallel-investigation {\"question\":\"为什么这个测试会间歇失败？\"}"
+          },
+          {
+            "heading": "# 验证 bundle 已进入 profile 合成树",
+            "excerpt": "/workflow create 为这个仓库设计一个并行安全评审流程"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "zuorn/Tydora",
+      "practicalScore": 13,
+      "oracleScore": 23,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## **🌳 From Line to Tree, See the Forest in One Step**",
+            "excerpt": "Outlining, dissecting books, reviewing ideas — no need to switch tools, the <mark>flow</mark> never breaks."
+          },
+          {
+            "heading": "## **🌸 Let Your Knowledge Garden Bloom Quietly on the Web**",
+            "excerpt": "Blogs, documentation, personal wikis."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "bruc3van/dsh-desktop",
+      "practicalScore": 44,
+      "oracleScore": 59,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 1,
+          "oracle": 3,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 两种连接方式",
+            "excerpt": "- **内置运行时**：为「装好就能用」准备。安装包自带固定版本的官方运行时，不需要 Node.js、pnpm 或 `dsh` CLI，双击即可开始对话。"
+          },
+          {
+            "heading": "## 两种连接方式",
+            "excerpt": "- **连接已有的完整服务**：为专业开发准备。你在终端里用自己的 Node 环境跑 `dsh web`，桌面端只作为窗口连上去，运行时版本、插件与环境完全由你掌控。"
+          },
+          {
+            "heading": "## 两种连接方式",
+            "excerpt": "| **智能模式**（默认） | 大多数本机用户 |"
+          },
+          {
+            "heading": "## 两种连接方式",
+            "excerpt": "| **自定义** | 自行维护的 Web UI 实例（官方 dsh 目前只面向本机使用） |"
+          },
+          {
+            "heading": "## 两种连接方式",
+            "excerpt": "- **连接已有的完整服务**：为专业开发准备。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "practicalScore": 43,
+      "oracleScore": 28,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 使用方式",
+            "excerpt": "> 飞书如何创建审批实例？"
+          },
+          {
+            "heading": "## 使用方式",
+            "excerpt": "> 企业微信的 access_token 怎么获取？"
+          },
+          {
+            "heading": "## 使用方式",
+            "excerpt": "> 微信支付JSAPI下单接口怎么调？"
+          },
+          {
+            "heading": "## 为什么用 SpecFusion",
+            "excerpt": "**不离开终端** — 写代码时直接问，Claude 帮你查文档、给出接口参数和示例"
+          },
+          {
+            "heading": "# SpecFusion",
+            "excerpt": "不用切浏览器，不用翻文档站——输入问题，拿到接口参数，继续写代码。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yuc16/PatentRadar",
+      "practicalScore": 53,
+      "oracleScore": 52,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 2,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 为什么需要 PatentRadar",
+            "excerpt": "传统侵权排查靠人工：律师团队读专利权 → 拆特征 → 翻竞品手册 → 搜证据 → 写 claim chart，一份高质量报告动辄 3-5 天。"
+          },
+          {
+            "heading": "## 为什么需要 PatentRadar",
+            "excerpt": "把 **可追溯复核** 的 侵权分析报告直接交到律师手上。"
+          },
+          {
+            "heading": "## 为什么需要 PatentRadar",
+            "excerpt": "> 传统侵权排查靠人工：律师团队读专利权 → 拆特征 → 翻竞品手册 → 搜证据 → 写 claim chart，一份高质量报告动辄 3-5 天。"
+          },
+          {
+            "heading": "#### HTTP API（脚本化 / CI 集成）",
+            "excerpt": "与 Web Dashboard 同源同接口，适合无人值守"
+          },
+          {
+            "heading": "#### 分步 CLI（调试 / 重跑某一步）",
+            "excerpt": "分步 CLI（调试 / 重跑某一步）"
+          },
+          {
+            "heading": "#### 分步 CLI（调试 / 重跑某一步）",
+            "excerpt": "仅供开发期调试，不适合跑生产专利"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PerryLink/dsh-auto-review",
+      "practicalScore": 49,
+      "oracleScore": 53,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Assertion families",
+            "excerpt": "for gating any DSH agent, not research ranking"
+          },
+          {
+            "heading": "## Security boundaries",
+            "excerpt": "unattended deployments whose admin accepts that risk"
+          },
+          {
+            "heading": "## Security boundaries",
+            "excerpt": "`allow-once` grants unconditionally; it exists only for unattended deployments whose admin accepts that risk."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Sikao-Engine/KimiX",
+      "practicalScore": 41,
+      "oracleScore": 46,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### Scriptable Workflows (Core Advantage)",
+            "excerpt": "**Batch automation**: Use native Python syntax (`for` loops, file globbing) to fire tasks at multiple files at once."
+          },
+          {
+            "heading": "### Scriptable Workflows (Core Advantage)",
+            "excerpt": "**Complex orchestration**: Freely compose mode switches, tool calls, and logic into multi-stage, multi-branch workflows."
+          },
+          {
+            "heading": "### Scriptable Workflows (Core Advantage)",
+            "excerpt": "**Reproducible & maintainable**: Workflows live as version-controlled scripts, not ephemeral chat history."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "liguobao/deepseek-harness-remote",
+      "practicalScore": 52,
+      "oracleScore": 52,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Connect once. Ready whenever you are.",
+            "excerpt": "Return to the same Harness session from whichever device is with you. Harness keeps running on your work computer, with the same workspaces, tools, and project setup."
+          },
+          {
+            "heading": "## Connect once. Ready whenever you are.",
+            "excerpt": "Continue using your DeepSeek Harness instance from a phone, computer, or browser."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "feibi-mochi/deepseek-harness-control-center",
+      "practicalScore": 52,
+      "oracleScore": 49,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "### One place for the signals that matter",
+            "excerpt": "DeepSeek Harness can keep several conversations and model providers active at once, but balance, usage, background-task status, and session actions normally live in different places."
+          },
+          {
+            "heading": "### One place for the signals that matter",
+            "excerpt": "answer three questions at a glance: **How much official balance remains? What has this conversation used? Does anything need attention?**"
+          },
+          {
+            "heading": "### One place for the signals that matter",
+            "excerpt": "so the current workflow can answer three questions at a glance: **How much official balance remains? What has this conversation used? Does anything need attention?**"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-skin-market",
+      "practicalScore": 32,
+      "oracleScore": 49,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 页面异常时重置皮肤",
+            "excerpt": "如果皮肤冲突导致 DSH 页面无法操作，先停止当前 DSH 进程"
+          },
+          {
+            "heading": "### 本地目录调试",
+            "excerpt": "本地开发 DSH 皮肤时，市场默认仍会从 GitHub Pages 请求远程 `catalog.json`，因此刚写入本地 `registry/skins` 的条目可能被远程目录覆盖。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Tabbit-Browser/dsh-tabbit",
+      "practicalScore": 34,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# tabbit-browser for DeepSeek Harness",
+            "excerpt": "Use it for web automation, information extraction, QA, and benchmarks."
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "volcengine/ark-cli",
+      "practicalScore": 54,
+      "oracleScore": 42,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 7,
+          "oracle": 1.5,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "# 3. 同步 Ark Skills 到本地 Agent",
+            "excerpt": "无浏览器环境，例如远程开发机、CI 或 Agent 沙箱"
+          },
+          {
+            "heading": "# 3. 同步 Ark Skills 到本地 Agent",
+            "excerpt": "无浏览器环境，例如远程开发机、CI 或 Agent 沙箱："
+          },
+          {
+            "heading": "# 配置指定 Harness，并同步注入 MCP",
+            "excerpt": "适合想恢复干净 Agent 环境、或担心 Skills 过多影响 Agent 路由时使用。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "practicalScore": 57,
+      "oracleScore": 58,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 5,
+          "gap": -5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Why LoongSuite Pilot?",
+            "excerpt": "Development teams often use more than one AI coding agent, and each agent records activity in a different local format."
+          },
+          {
+            "heading": "## Why LoongSuite Pilot?",
+            "excerpt": "Pilot gives teams one local collector that can discover those agents, collect their activity, normalize the data, and send it to destinations that are useful for analysis, audit, and observability."
+          },
+          {
+            "heading": "## Output Data",
+            "excerpt": "Local backup and easy inspection. Enabled by default."
+          },
+          {
+            "heading": "## Output Data",
+            "excerpt": "Alibaba Cloud Log Service reporting. Supports WebTracking, AK, and API Key modes."
+          },
+          {
+            "heading": "## Output Data",
+            "excerpt": "POST batches to a custom endpoint."
+          },
+          {
+            "heading": "## Output Data",
+            "excerpt": "Export GenAI activity as OpenTelemetry traces."
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "Use this when the caller cannot obtain a per-turn `sessionId` up front."
+          },
+          {
+            "heading": "## Why LoongSuite Pilot?",
+            "excerpt": "- Which agents are being used?\n- What model, session, turn, and tool activity happened?"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "taxueseek/argo",
+      "practicalScore": 86,
+      "oracleScore": 76,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 5.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 适用场景",
+            "excerpt": "Claude Code / Grok Build / Codex / Kimi 等 **Agent 的搜索后端**"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "**多语言、多领域**日常问答：中英日韩等 + 金融 / 影视 / 体育 / 学术 / 代码"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "脚本与流水线里需要 **可复现、可缓存** 的检索"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "事实核查、金融公开信息、实体与公开资料的 **多源对照**"
+          },
+          {
+            "heading": "### 五种能力，通俗说",
+            "excerpt": "适合综述、调研这类要全面、要扎实的场景。"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "不太适合单独承担：平台内高级互动定榜、需要长期养服务的最大召回聚合器"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "- Claude Code / Grok Build / Codex / Kimi 等 **Agent 的搜索后端**"
+          },
+          {
+            "heading": "## 适用场景",
+            "excerpt": "- **多语言、多领域**日常问答：中英日韩等 + 金融 / 影视 / 体育 / 学术 / 代码"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Anionex/dsh-turn-rewind",
+      "practicalScore": 32,
+      "oracleScore": 50,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 4.5,
+          "oracle": 0,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "practicalScore": 48,
+      "oracleScore": 59,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 3.5,
+          "oracle": 0,
+          "gap": -3.5
+        }
+      },
+      "citations": {
+        "usecaseItems": []
+      }
+    },
+    {
+      "repo": "melandlabs/opencontext",
+      "practicalScore": 68,
+      "oracleScore": 49,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 9,
+          "oracle": 6,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Software engineering teams.** Decisions scatter across GitHub PRs, Linear tickets, Slack threads, and Notion docs — across people, tools, and quarters."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Efficiency / productivity engineering teams.** The people building internal automation for the rest of the company."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Office-assistant products.** Assistants that live inside Telegram, iMessage, WhatsApp, Lark/Feishu, and friends."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Financial trading teams.** Every order, rebalance, and risk decision needs to be traceable and auditable."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Legal, healthcare and other audited domains.** Law firms, hospitals, and similar teams where every judgement needs per-fact provenance, append-only corrections, and exportable compliance evidence."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "**Multi-agent and autonomous-workflow authors.** Need scheduled, deterministic wake-up instead of an LLM loop all the way down."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "- **Software engineering teams.** Decisions scatter across GitHub PRs, Linear tickets, Slack threads, and Notion docs — across people, tools, and quarters."
+          },
+          {
+            "heading": "## Who is it for?",
+            "excerpt": "- **Efficiency / productivity engineering teams.** The people building internal automation for the rest of the company."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "pingfanfan/hello-dsh",
+      "practicalScore": 52,
+      "oracleScore": 43,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 10,
+          "oracle": 8,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## Start here",
+            "excerpt": "It assumes you have nothing: no Node.js, no command-line experience."
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `dsh-troubleshoot` | Won't start, config not applying, UNKNOWN_TOOL, missing skills |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `plan-before-code` | A task spanning several files, with unknowns |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `code-review-cn` | Reviewing a change, PR, or diff |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `debug-systematically` | A bug, a failing test, \"it worked yesterday\" |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `web-research` | Researching online, verifying facts, evaluating options |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `dsh-onboarding` | First run of DSH, or stuck on startup, workspace, permissions |"
+          },
+          {
+            "heading": "### The skills",
+            "excerpt": "| `refactor-safely` | Refactoring, splitting functions, removing duplication |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "whiteguo233/dsh-openbiliclaw",
+      "practicalScore": 53,
+      "oracleScore": 44,
+      "familyGaps": {
+        "usecaseItems": {
+          "machine": 3,
+          "oracle": 1,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "usecaseItems": [
+          {
+            "heading": "## 这是什么",
+            "excerpt": "典型场景：左边和 Agent 聊需求，点左下角的 OpenBiliClaw 按钮，右侧抽屉滑出来顺手刷两条推荐，点个「收藏」，过一会儿弹出兴趣探测，和它聊两句，画像就更懂你了——全程不离开 DSH。"
+          }
+        ]
+      }
+    }
+  ]
+}

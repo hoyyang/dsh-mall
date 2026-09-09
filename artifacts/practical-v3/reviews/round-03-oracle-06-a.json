@@ -1,0 +1,547 @@
+{
+  "reviews": [
+    {
+      "repo": "Vladimir-Human/ru-marketplace-mcp",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Read prices, stock, ratings,\nreviews and seller identity from Wildberries, Ozon, Yandex Market, Detsky Mir, Avito,\nAliExpress, Taobao, Megamarket, Lamoda, DNS and Citilink",
+        "сравнение цен по всем источникам одним вызовом.",
+        "unified `marketplace-mcp` that mounts them all under one client entry. It adds its\nown `marketplace_sources` tool — which connectors mounted, and which dropped out and\nwhy — so it exposes 36 tools",
+        "`wb_seller` answers the question a listing hides: who actually ships this? It returns\nthe registered legal entity and tax ids",
+        "**Two prices, always.** `price_rub` is what anyone pays. `price_with_plus` needs a\npaid Yandex Plus subscription and runs 25–30% lower.",
+        "**Region is per call.** Prices and especially offline availability swing by city —\none item sat in 152 Moscow stores, 37 in St Petersburg, 2 in Khabarovsk.",
+        "Every connector ships its own skill under `skills/` — fourteen of them — one per source plus a shared\n`marketplace` overview.",
+        "this connector is two-tier: TLS impersonation\nfirst, then a fetch inside your own logged-in Chrome over the DevTools Protocol when\nCloudflare challenges.",
+        "One marketplace\nbeing blocked never sinks the comparison: `complete: false` plus `source_outcomes`\ntells you exactly what you are looking at.",
+        "| `mpstats_item(skus, place, oz_fbs=True)` | 30-day analytics for up to 100 SKUs: orders, price, stock, per-day graphs, seller/brand |"
+      ],
+      "usageItems": [
+        "After connecting, run `marketplace-mcp doctor`."
+      ],
+      "usageActions": [
+        "After connecting, run `marketplace-mcp doctor`.",
+        "Run `marketplace-mcp doctor`\nfrom your own session for the current state.",
+        "| `compare_prices(query, per_source_limit, sources)` | Every marketplace at once, ranked         |",
+        "| `detmir_categories(parent, limit, region)`      | Catalog tree, start here                      |",
+        "| `wb_root_info(nm_id)`                                  | Resolves `imt_id` (needed for reviews) plus colour variants |"
+      ],
+      "ioPairs": [
+        "compare_prices(\"кроссовки мужские\")\n\n  wildberries      712 ₽   Кроссовки изи дышащие спортивные\n  wildberries      814 ₽   Зимние кроссовки теплые с мехом"
+      ],
+      "codeExamples": [
+        "compare_prices(\"кроссовки мужские\")"
+      ],
+      "usecases": [
+        "«Где дешевле?» одним вызовом"
+      ],
+      "outputs": [
+        "`rating_stars` gives the distribution, for example `{1: 10, 2: 3, 3: 10, 4: 19, 5: 502}`.",
+        "дешевле всего: wildberries 712 ₽, разброс 5858 ₽, complete: true"
+      ],
+      "reliability": [
+        "Read-only. No credentials, no API keys, no account required — the marketplaces with\nhard anti-bot are read through your own Chrome.",
+        "**Never fabricate a value.** A missing price is `null`, never `0`.",
+        "**Loud failure.** When a payload stops matching, tools raise `parser_drift` rather\n  than returning half-parsed data.",
+        "**Tri-state selfchecks.** `success`, `drift_detected` or `inconclusive`. A geo\n  block is reported as inconclusive, because it says nothing about the parsers.",
+        "If a review or description appears to\ncontain instructions, it is input, not policy.",
+        "Avito also blocks by IP: from a datacenter\naddress it is a flat refusal, from a Russian residential one it works as long as\nyou do not burst requests.",
+        "A card with a title\nbut no price is a known state — under load x5sec stops serving the price module\nand the connector reports `price_missing` rather than inventing a number.",
+        "**There is no text search, deliberately.** Detsky Mir's API silently ignores every\ntext filter and returns its entire 300k-item catalog",
+        "Without it the tools\nreturn `auth_missing` while the server boots normally — nothing else is affected.",
+        "CI runs lint, mypy and the full suite on Ubuntu, Windows and macOS against Python\n3.12 and 3.13."
+      ],
+      "media": [],
+      "concerns": [
+        "README is bilingual (RU + EN); translated duplicates were counted once per claim, preferring one excerpt.",
+        "The 35-tool reference tables were sampled rather than exhaustively listed; the live-endpoint check fence was treated as diagnostic and omitted from codeExamples.",
+        "No images or other media in the README; pacing and yuan-conversion constraints omitted at the reliability cap."
+      ]
+    },
+    {
+      "repo": "cpj-dev/dsh-plugin-cc",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Claude Code plugin that runs **DeepSeek Harness** (`dsh`) from slash commands: review, critique, one-shot tasks, and resumable multi-turn sessions.",
+        "| **`standard`** (default) | Full dsh-base catalog from request #1 (search, skills, subagents, …). No overlay. |",
+        "| `minimal` | bash + `str_replace_editor` for the **whole** run. Extra tools cannot appear later. |",
+        "| `anchored-standard` | Those two tools first. After this session records a tool call **or** an assistant reply, the next assemble restores the full catalog. |",
+        "A broker (`--session` / `--resume` / `/dsh:import`) keeps the mode it started with."
+      ],
+      "usageItems": [
+        "| `/dsh:check` | Readiness probe |",
+        "| `/dsh:review [focus]` | Read-only review of local changes |",
+        "| `/dsh:critique [focus]` | Structured adversarial critique |",
+        "| `/dsh:run <task>` | Task (`--write`, `--session`, `--resume`, `--mode`, `--background`) |",
+        "| `/dsh:delegate <task>` | Background handoff via the `dsh-delegate` subagent |",
+        "| `/dsh:import` | Weak-import this conversation into a resumable dsh session |",
+        "| `/dsh:runs` / `/dsh:show` | List runs / replay a stored result |",
+        "| `/dsh:stop` / `--broker` | Kill a run / the shared broker |"
+      ],
+      "usageActions": [
+        "| `/dsh:check` | Readiness probe |",
+        "| `/dsh:review [focus]` | Read-only review of local changes |",
+        "| `/dsh:critique [focus]` | Structured adversarial critique |",
+        "| `/dsh:run <task>` | Task (`--write`, `--session`, `--resume`, `--mode`, `--background`) |",
+        "| `/dsh:delegate <task>` | Background handoff via the `dsh-delegate` subagent |",
+        "| `/dsh:import` | Weak-import this conversation into a resumable dsh session |",
+        "| `/dsh:runs` / `/dsh:show` | List runs / replay a stored result |",
+        "| `/dsh:stop` / `--broker` | Kill a run / the shared broker |",
+        "- this run: `/dsh:run --mode minimal …` or `--mode anchored-standard`",
+        "- this shell: `DSH_CC_MODE=minimal`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Pin: [`@deepseek-ai/dsh@0.1.1-rc.2`](https://www.npmjs.com/package/@deepseek-ai/dsh). After upgrading the plugin, rerun `/dsh:setup`.",
+        "- No mid-run approvals. Permissions are decided before launch (`--write` or not).",
+        "- Fresh one-shot runs are not resumable. Only `--session` / `--resume` / `/dsh:import` record session ids, and those live only as long as the broker process.",
+        "- Stop = kill. The SDK wire has no per-turn cancel; stopping a mid-turn broker run discards in-memory sessions.",
+        "- `/dsh:import` is a compressed text digest, not native history replay. Non-text Claude blocks (including images) are dropped.",
+        "Visual understanding stays with Claude. Slash `$ARGUMENTS` is text; this plugin never forwards pasted images to DSH.",
+        "- POSIX only. Windows is out of scope.",
+        "Tests: `npm test` (fake dsh, no API key)."
+      ],
+      "media": [],
+      "concerns": [
+        "This is a Claude Code plugin that drives DSH, not a DSH-native plugin; typed as standalone-nonplugin.",
+        "The Quick Start fence mixes install and one operational command and was excluded from codeExamples per the install-exclusion rule.",
+        "No images, use-case scenarios, or IO examples in the README."
+      ]
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "ForkProbe 是一个 AI Skill 选型与试跑工具。它会把同一个任务交给模型本身和多个候选 skill，并排试跑，生成本地 HTML report，让你看到真实输出之后再选择 winner。",
+        "**v1.1 新增图片提示词 / 风格方向比较：** ForkProbe 现在可以比较 image prompt / style pipelines。",
+        "选定 winner 后，Report 的“继续”按钮会同时保存本地 handoff，并让 Agent 沿胜出 Skill 继续任务。",
+        "从 curated 目录、本机已安装 Skill、EverMind Skill Hub、GitHub 和 BYO 路径中推荐少量候选 skill 或 artifact pipeline。",
+        "用同一份输入跑 baseline 和多个候选。",
+        "展示每一路完整输出、耗时、token 估算、文件预览和 AI 评审建议。",
+        "DeepSeek Harness 原生插件，支持文本候选、AI judge、Report 选择和同一 Agent 继续",
+        "插件提供两个工具：`forkprobe_compare` 负责确认后的并行试跑，`forkprobe_resume` 负责在等待窗口结束后恢复 Report 中的选择。",
+        "所有候选统一使用 `1440x1000` 和 `390x844` 视口截图，并执行本地资源、响应式、交互与基础可访问性 QA。",
+        "ForkProbe 会用 `ffprobe` 检查时长、分辨率、编码和音轨，用 `ffmpeg` 生成统一封面",
+        "ForkProbe 会按内容指纹和来源去重，再按场景匹配度排序。",
+        "artifact 模式展示 PPTX、figure package、research package、网页或视频成品的文件链接、预览/播放、候选说明、QA 和评审建议。"
+      ],
+      "usageItems": [
+        "先帮我比较几个 skill，看看哪个更适合当前任务。",
+        "对 DSH 说：\n\n```text\n请使用 ForkProbe 先推荐几个适合这次改写的 Skill，等我确认后再用原生 DSH subagent 并行试跑，打开 Report 让我选择 Winner，并沿胜出结果继续。",
+        "在正式对比前，`scripts/recommend.py` 会先生成候选清单并等待确认。",
+        "如果只想使用本地候选：",
+        "口播粗剪必须使用 `--asset` 给所有候选提供同一个原始视频"
+      ],
+      "usageActions": [
+        "python3 scripts/compare.py \\",
+        "python3 scripts/recommend.py --input /tmp/forkprobe-research-task.txt",
+        "python3 scripts/figure_artifact.py \\",
+        "python3 scripts/research_artifact.py \\",
+        "python3 scripts/image_prompt_artifact.py \\",
+        "python3 scripts/web_artifact.py \\",
+        "python3 scripts/video_artifact.py \\",
+        "python3 scripts/render_artifact_report.py \\"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "python3 scripts/compare.py \\",
+        "python3 scripts/figure_artifact.py \\",
+        "python3 scripts/web_artifact.py \\",
+        "python3 scripts/video_artifact.py \\"
+      ],
+      "usecases": [
+        "你不确定当前任务该用哪个 skill，想先看真实输出再决定。",
+        "你想比较 baseline 和多个 skill，而不是只相信 skill 的描述。",
+        "你的交付物是 PPTX、科研 figure package、调研报告、图片 prompt/style package、可运行网页或视频成片，需要看文件、预览和 QA。",
+        "你想从本机已安装 Skill、EverMind Skill Hub、GitHub 或 BYO 路径中找到候选，再做一次小规模试跑。",
+        "不适合简单确定性任务：如果答案或工具路径已经很明确，直接执行会更快。"
+      ],
+      "outputs": [
+        "推荐产物包括 `preview.png`、`figure.svg`、`figure.pdf` 或 `figure.tiff`、源代码或矢量源文件、`caption.md` 和 `qa.md`。",
+        "推荐产物包括 `candidate-report.md`、`candidate-report.html`、`sources.json`、`evidence-table.md`、`claim-checks.md`、`limitations.md` 和 `summary.md`。",
+        "推荐产物包括 `prompt.md`、`style-card.md`、`composition.md`、`negative-prompt.md`、`render-notes.md`、`summary.md`",
+        "每条候选输出 `site/index.html`、`desktop.png`、`mobile.png`、`qa.json`、`source.zip` 和候选说明。",
+        "每条候选必须生成 `video.mp4`。"
+      ],
+      "reliability": [
+        "外部 GitHub 候选进入执行前仍建议检查 license、依赖和最终产物路径。",
+        "`forkprobe_compare` 强制要求 `confirmed=true`，候选 subagent 不获得工具权限，因此不会递归调用 ForkProbe 或改动工作区。",
+        "环境中安装 Python Playwright 时，还会用真实浏览器测量移动端横向溢出；不可用时 `qa.json` 会明确记录该项未测量，而不会伪报通过。",
+        "外部发现只使用经过清洗的任务信号，不会直接拿你的原始文档做搜索词，也不会自动安装或执行未经确认的候选。",
+        "不上传任务原文、候选输出、文件、评价理由、本地路径或用户身份。",
+        "事件先写入 `~/.forkprobe/telemetry/outbox/`，网络失败不会阻止 winner 保存或 Agent 继续，后续运行会自动重试。",
+        "统计按任务类型聚合，至少达到 20 次有效选择后才通过公共统计 API 返回 Skill 胜率和两两胜率。",
+        "DeepSeek Harness 当前为 developer preview，建议固定已验证版本用于稳定生产任务。",
+        "Integration tests 需要真实模型/API 访问：",
+        "其中 `openai` SDK 和 `OPENAI_API_KEY` 只用于 Codex native CLI 不可用或被关闭时的 OpenAI API fallback。"
+      ],
+      "media": [],
+      "concerns": [
+        "Identity is hybrid (Agent skill + scripts + DSH native plugin); typed as dsh-plugin since a native DSH plugin ships in-repo.",
+        "No images or demo media; the mermaid flowchart is a diagram fence, not media.",
+        "recommend/compare commands repeat across sections; duplicates counted once; the PPTX render-report fence omitted from codeExamples at the cap of 4."
+      ]
+    },
+    {
+      "repo": "Noob-stupid/dsh-plugin-hub",
+      "inferredType": "catalog-list",
+      "capability": [
+        "A **plugin management panel** for the DeepSeek Harness (DSH) Web GUI: one-click\nenable/disable of installed plugins",
+        "a **multi-source plugin marketplace**\n(GitHub / Gitee / custom sources) with one-click install",
+        "Auto-collected index of `dsh-plugin` topic repos (**500+** by stars) plus a **Skills tab** (`agent-skills` ∪ `claude-skills` ∪ `dsh-skill`, up to 300) — browse, search, one-click install, no GitHub API calls",
+        "**Auto-collection CI** | GitHub Actions reruns `build-index` every 6 hours (manual trigger available); authors just add the `dsh-plugin` / `agent-skills` / `claude-skills` / `dsh-skill` topic — no application needed",
+        "The index is served as a static `marketplace/index.json` via jsDelivr CDN (10-min host cache); terminal users make **zero GitHub API calls**",
+        "Installed entries are matched against npm `dist-tags.latest` automatically; cards show **「更新 → vX」**; subpackage mismatch warnings prevent mixed-version breakage",
+        "`⊞` merges GitHub + all custom sources in parallel",
+        "suite one-click assembly, and **one-click framework upgrade** (online install with\nauto-rollback)",
+        "**backup config & framework (rollback point) → online install (service stays up) →\n> version verification → auto-rollback on failure → auto-restart**.",
+        "After upgrade, framework packages are **auto-relinked** (fixes pnpm top-level link\n> staleness that caused mixed versions, e.g. an old model plugin missing vision models).",
+        "skill install/disable,\nsuite one-click assembly"
+      ],
+      "usageItems": [
+        "Open the \"Plugin Console\" panel → **Plugin Marketplace** → the\n> `deepseek-ai/deepseek-harness` card → click **\"Framework Upgrade → vX\"**",
+        "**For plugin authors**: add the `dsh-plugin` topic to your repo"
+      ],
+      "usageActions": [
+        "Open the \"Plugin Console\" panel → **Plugin Marketplace** → the\n> `deepseek-ai/deepseek-harness` card → click **\"Framework Upgrade → vX\"**",
+        "authors just add the `dsh-plugin` / `agent-skills` / `claude-skills` / `dsh-skill` topic — no application needed"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "If you build DSH plugins, this panel is your distribution channel: one-click install for every user of the hub."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Loopback-only routes; AI fallback behind an explicit cost-consent modal; infrastructure rows are toggle-protected",
+        "Tested: 0.1.0-rc.8 → **0.1.1-rc.2** end-to-end automatic, rollback-safe.",
+        "Skills are plain files (SKILL.md + assets) — installing a skill does **not** execute code;",
+        "GitHub metadata is used only to discover public plugins; npm installs keep full TLS\n  validation against the registry;",
+        "Custom source URLs accept https and local/private http only (127.0.0.1, localhost,\n  10.x, 192.168.x, 172.16-31.x, etc.);",
+        "Host code changes require a **service restart** (the panel's restart button is\n  watchdog-safe); client changes just need a page refresh;",
+        "Live GitHub search depends on GitHub reachability (browser-direct + server fallback;\n  during network-blackout windows retry later);",
+        "Version detection works for npm-published packages; skill-type repos have no version concept;",
+        "The static index is capped (500 plugins / 300 skills per build); authors bump their star\n  count or wait for the 6h CI cycle to enter the index;",
+        "Skills are discovered by `dsh-skill-filesystem` — if the current profile does not enable\n  that plugin, installed skills stay dormant until it is enabled and DSH restarted."
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"1170\" height=\"609\" alt=\"image\" src=\"https://github.com/user-attachments/assets/b802d606-14ba-4151-9956-ff642ed12b0a\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Capabilities of listed third-party plugins were excluded per the catalog ownership rule; only the hub's own discovery/index/install/upgrade behavior counted.",
+        "The intro paragraph appears to contain a text merge glitch around \"Plugin Consote\"; that fragment was not used.",
+        "One externally hosted screenshot (weight 0.5); the disclaimer and remaining limitation rows were omitted at array caps."
+      ]
+    },
+    {
+      "repo": "kuangre123/codex-switch",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "一个小巧的 macOS 工具：一键把 Codex 在「官方 OpenAI」和「你自己的自定义 / 第三方 API」之间切换，**切换后对话记录始终都在",
+        "两套配置都留在 `config.toml`，在 App 里选「API 提供方」再保存即可切换（桌面端和 CLI 通用",
+        "**对话永不丢**：正常切换只改写 `config.toml` 和 `auth.json`；若检测到旧版适配器留下的非法 message ID，则先备份、再一次性修复 ID 前缀",
+        "国内大模型快速预设**：DeepSeek、Kimi、智谱 GLM、通义千问、豆包（火山引擎）、百度文心、MiniMax、阶跃星辰 StepFun，以及「第三方 / 中转 API（手动填写）」——选完自动填好接入点和模型，只需粘贴 API Key。",
+        "**自定义 / 第三方供应商卡片**：支持任意 OpenAI 兼容的第三方 / 中转 API，填接入点 + 模型 ID + Key 即可。",
+        "**Chat 适配器**：接口只支持 `/chat/completions`（如 DeepSeek/Kimi/千问等）时，在本地启动一个代理，自动把 Codex 的 Responses 请求转成 Chat Completions；原生支持 `/responses` 的接口则直连。",
+        "**保存时智能探测**：保存前先用你的 Key 试探接入点（先 `/responses` 再 `/chat/completions`），都不通就当场报错「请检查设置」，不会留下一个用不了的会话。",
+        "**跳过登录**：可选绕过 ChatGPT OAuth，用 API‑Key 模式。",
+        "一键把本机 HTTP/mixed 代理写入 Codex shell 环境、当前 macOS `launchd` 环境和登录后恢复用的 LaunchAgent，修复官方模式下新任务反复 Reconnecting。",
+        "代理**只在官方 OpenAI 模式生效**：切到自定义 API 时自动关闭（自定义链路走本地 adapter + 国内直连中转，经代理反而会断流），切回官方时按你的设置自动恢复。",
+        "同时写入 `[profiles.ccswitch]`（自定义）和 `[profiles.official]`（官方），终端里 `codex` / `codex-official` 直接用。",
+        "自动备份到 `~/.codex/backups`；工具栏自动检查 GitHub 新版本；保存后自动重启 Codex 让配置生效。"
+      ],
+      "usageItems": [
+        "选「自定义 API」→ 顶层 `model_provider = \"custom\"`，Codex 走你的自定义 provider。",
+        "选「官方 OpenAI」→ 顶层 `model_provider = \"openai\"`，Codex 走官方，用其内置模型目录（官方模型列表完整）。",
+        "不要在对话里让 Codex 自己改接入方式，容易改坏。切换请用本工具，稳定得多。",
+        "`--custom-model` 是发给你接口的真实上游模型 ID。",
+        "`--chat-adapter` 会在 `127.0.0.1:17638` 起一个本地服务，把 Responses 桥接成 Chat Completions。`--probe` 在保存前验证接入点是否可用。"
+      ],
+      "usageActions": [
+        "codex-switch status",
+        "codex-switch configure \\",
+        "codex-switch proxy apply --auto --restart-codex",
+        "codex-switch proxy set --url http://127.0.0.1:7897 --restart-codex",
+        "codex-switch proxy status --probe",
+        "codex-switch proxy off --restart-codex"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "codex-switch status"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "应用已用 **Developer ID 签名并通过 Apple 公证（notarized）**，也是 **通用二进制（Intel + Apple 芯片）",
+        "请勿从 DMG 窗口或「下载」目录里直接运行，否则会触发 macOS 隔离（App Translocation），导致内置代理服务连接异常。",
+        "`proxy` 命令只接受 HTTP/mixed 代理 URL，例如 `http://127.0.0.1:7897`。不要把 SOCKS5 端口直接填进去；`NO_PROXY` 默认保留 `localhost,127.0.0.1,::1`，避免本地 adapter 被错误送进代理。",
+        "**不写自定义模型目录（model_catalog_json）** —— 早期版本写过，但它会替换 Codex 内置目录、还容易让对话列表加载失败，已彻底移除。",
+        "不会改写会话数据库或会话内容。仅在检测到旧版适配器生成的 `item_...` message ID 时修复为协议要求的 `msg_...`，原文件备份在 `~/.codex/backups_state/message-id-repair/`。",
+        "桌面端的模型选择器由 Codex 自己（后端 / 内置）驱动；自定义 provider 的模型在选择器里显示为\"自定义\"标签，这是 Codex 的限制。",
+        "没有签名证书时会自动退回 ad‑hoc 签名（仅本机可用），不影响开发构建。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshot.png\" alt=\"Codex Switch\" width=\"600\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit use-case scenarios or described outputs; usecases/outputs empty.",
+        "The CLI fence was counted as one codeExample (first meaningful command) though it contains several commands; install/build fences excluded.",
+        "Text contains U+2011 non-breaking hyphens (API‑Key, ad‑hoc); excerpts were marker-sliced to preserve exact characters."
+      ]
+    },
+    {
+      "repo": "hanshenmesen/dsh-turn-delete",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Delete one complete closed turn from a DeepSeek Harness conversation without deleting or replacing the Session.",
+        "The action appears beside the final assistant response for each completed top-level turn.",
+        "A trash action appears only on completed ordinary Session turns. Subagent transcripts do not expose it.",
+        "The prompt, assistant messages, and tool records for the selected turn are removed from the Session's current model surface.",
+        "The Session id, title, workspace association, later turns, and original append-only event log remain intact.",
+        "A durable zero-content replacement event records the deletion. Reloading the page or restarting the profile preserves it.",
+        "Repeating the same request is idempotent."
+      ],
+      "usageItems": [
+        "Delete the middle turn after confirmation while keeping the same Session and its later turn."
+      ],
+      "usageActions": [
+        "Delete the middle turn after confirmation while keeping the same Session and its later turn."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Deletion requires confirmation and is disabled while the Session is running.",
+        "The plugin refuses deletion when the target turn is still open or has already been merged into a compaction replacement with other history. This prevents deleting only part of model-visible context.",
+        "- DeepSeek Harness `0.1.0-rc.6` and `0.1.0-rc.7`",
+        "- Node.js 22.19 or newer",
+        "After upgrading Harness, verify the plugin once with a disposable Session containing three short turns and delete the middle one.",
+        "Like every DSH plugin, this package runs with the Harness process's permissions."
+      ],
+      "media": [
+        {
+          "excerpt": "![Delete one turn without deleting the Session](https://github.com/hanshenmesen/dsh-turn-delete/releases/download/v0.1.0/dsh-turn-delete-demo-en.gif)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Small README: no IO pairs, operational code fences, or explicit use-case sections; the demo caption served as the single usage item.",
+        "The audit-retention sentence duplicates the event-log-intact capability claim and was counted once.",
+        "Demo GIF is hosted in the same repository's release assets, so weighted 1."
+      ]
+    },
+    {
+      "repo": "starsstreaming/beautiCode",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "为 DeepSeek Harness 添加图片与视频背景，也支持 Codex Desktop。",
+        "* 图片\n* 动态壁纸\n* MP4 视频\n* 番剧\n\n直接设成 DeepSeek Harness 网页背后的背景。",
+        "它不会把工作窗口变成一个播放器，而是让画面安静地待在对话和工作区后面。",
+        "代码、输入框和按钮仍然可以正常使用。",
+        "插件装好后，DSH 侧栏「设置」上方会出现「背景」，不必再开托盘。",
+        "通过托盘菜单可以：\n\n* 更换图片\n* 更换视频\n* 清除背景\n* 打开或关闭视频声音\n* 进入摸鱼模式\n* 保存当前主题\n* 切换已保存主题\n* 删除主题"
+      ],
+      "usageItems": [
+        "打开网页后，侧栏「设置」上方有「背景」：可从文件夹选图片或 MP4、清除、开关声音、切换已保存主题。",
+        "也可以用 `/bg`、`/bg-theme`、`/bg-clear`，或直接跟 AI 说把本机图片/视频设成背景。",
+        "点「应用或重新应用」：DSH 路径只连接已启动的网页（网页关了会重新打开，DSH 没运行则提示你先 `dsh web`）；Codex 路径与原来一样",
+        "选 **Codex Desktop** 会按需拉起 Codex；选 **DeepSeek Harness** 只连接你已经启动的 DSH 网页，不会替你启动 DSH。"
+      ],
+      "usageActions": [
+        "也可以用 `/bg`、`/bg-theme`、`/bg-clear`，或直接跟 AI 说把本机图片/视频设成背景。",
+        "点「应用或重新应用」：DSH 路径只连接已启动的网页（网页关了会重新打开，DSH 没运行则提示你先 `dsh web`）；Codex 路径与原来一样"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "它不包含、不安装、也不启动 DSH。",
+        "目前主要支持：\n\n* Windows\n* DeepSeek Harness（推荐）\n* Codex Desktop\n* JPG、JPEG、PNG、WebP 图片\n* MP4 视频",
+        "beautiCode 只读取你主动选择的本地图片和视频。",
+        "项目不会提供番剧、电影或其他受版权保护的内容。",
+        "请只导入你拥有或有权使用的媒体文件，并遵守当地法律与内容版权要求。",
+        "退出托盘不会结束 DeepSeek Harness，避免打断正在进行的工作。",
+        "当前安装包尚未进行商业代码签名，Windows 可能显示 SmartScreen 提示。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"1280\" height=\"714\" alt=\"QQ20260818-205802\" src=\"https://github.com/user-attachments/assets/a9a18412-4c62-4083-ab49-d127f05e61c3\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"320\" alt=\"Windows 安装包\" src=\"https://github.com/user-attachments/assets/8c16eeb9-94d0-4f19-a816-b32fba8a110c\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Hero banner excluded as decorative art; two externally hosted screenshots weighted 0.5 each.",
+        "No explicit use-case scenarios, outputs, or IO examples; philosophy section treated as marketing.",
+        "Install/config (npx, dsh plugin add, installer, source build) excluded per rubric."
+      ]
+    },
+    {
+      "repo": "Lyn-77/ProMentor",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "ProMentor 是一个 **AI Coding Agent Skill**。装上它，你的 AI 编程助手立刻化身为导师——扫描项目架构、生成阶梯式 Chapter、带你手写核心逻辑、自动判题、AI Code Review。",
+        "主页概览：总体完成度、当前学习章节、已完成/学习中/未开始统计、每章状态/分数/尝试次数、内容完整性警告",
+        "章节独立页面：`/dashboard/chapters/<chapter_id>/` 直达任意章节，可刷新、可分享",
+        "左侧边栏：一键切换讲义（Lecture）与源码导读（Source）",
+        "Markdown 增强渲染：代码语法高亮、Mermaid 图、数学公式、CJK 排版（Streamdown）",
+        "`/promentor init` 结束与 `/promentor learn <ch>` 开始时，会提示打开 GUI 内置面板\n（插件未安装时自动启动独立仪表盘并输出访问地址）。",
+        "独立服务模式（备用）：全局单进程，重复启动复用已有进程"
+      ],
+      "usageItems": [
+        "AI 自动扫描你的项目，分析架构，生成课程大纲。你确认后，逐 Chapter 生成讲义、Lab、行为测试。",
+        "AI 讲解讲义、带你读标注过的源码、引导你手写核心逻辑。",
+        "AI 运行行为测试，告诉你哪些通过了、哪些失败了、为什么。",
+        "AI 读了你的代码和测试结果，给你**针对当前错误的、分层的**提示。从方向到思路，不直接给答案。",
+        "全量测试 + 锁定成绩。代码保存到提交历史。",
+        "AI 对比你的实现 vs 原始源码，解释设计决策、\"为什么这样做\"、你可以如何改进。",
+        "点击会话输入框上方的 `ProMentor` 按钮，\n面板跟随当前会话的工作目录，直接读取 `.promentor/` 课程数据——无需任何本地服务。"
+      ],
+      "usageActions": [
+        "| `/promentor init` | 分析项目，生成课程 |",
+        "| `/promentor` | 课程面板（目录 + 进度） |",
+        "| `/promentor learn <ch>` | 进入指定 Chapter 学习 |",
+        "| `/promentor test` | 运行行为测试 |",
+        "| `/promentor hint` | 动态生成分层提示 |",
+        "| `/promentor submit` | 正式提交，锁定成绩 |",
+        "| `/promentor review` | 对比实现 vs 原始源码 |",
+        "| `/promentor progress` | 查看总进度 |",
+        "| `/promentor dashboard` | 课程仪表盘（完成度 + 当前学习 + 内容完整性） |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "把任意开源项目转成 MIT 风格的动手工程课程 在实践中学习"
+      ],
+      "outputs": [],
+      "reliability": [
+        "只有 DSH 需要本小节：它的 Dashboard 是 **GUI 内置插件**（Codex / Claude Code\n> 等其他 Agent 的技能包自带静态网页，跳过本小节）。插件预构建产物随 Release 包\n> 分发，仓库本身不含构建产物。"
+      ],
+      "media": [],
+      "concerns": [
+        "No images or demo media; no IO pairs or operational code fences (install scripts excluded).",
+        "The backup-mode serve.py commands were omitted from usageActions to respect the cap of 10 command-reference rows.",
+        "Reliability material is thin: the only explicit compatibility/packaging note counted is the DSH GUI-plugin distribution remark; installation scripts excluded."
+      ]
+    },
+    {
+      "repo": "LX2000WASD/dsh-web-plugin-manager",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "在 Web UI 中一键管理 DeepSeek Harness (DSH) 插件：查看、实时启停、安装/卸载、更新检测、健康检查（依赖/冲突/兼容性分析）、环境管理、插件市场。",
+        "bundle 与非 bundle 插件全覆盖。",
+        "查看 | 合并展示层栈/依赖/挂载行/运行条目；手动安装未挂载的依赖显示\"未挂载\"并可一键挂载",
+        "实时启停/卸载 | managed 块编辑 patch，经 loader 直接应用，实时生效、重启后持久",
+        "安装 | 官方 dsh plugin CLI + 质量门 + 自动回滚；非 bundle 自动写挂载行并实时加载",
+        "多类型安装：skill（SKILL.md→`~/.dsh/skills`，热加载）与 agent 预设（agent.cordis.yml→`~/.dsh/.agent-presets`，官方发现机制直接可见）直装+记录",
+        "更新 | 检查更新（npm dist-tag / git HEAD / 安装 commit），更新带质量门与回滚；含管理器自身（自更新）——管理页可直接点更新升级，失败自动装回旧版本",
+        "健康检查 | 依赖图/缺失/循环/重复行 id/同名注册冲突（服务/工具/section/路由）/peer 版本/官方包重复；运行中追加 pending 与失败诊断；A 级问题一键修复、B 级建议确认后修复",
+        "环境管理 | 启停、复制/转移插件、创建/重命名/删除 profile（官方 profile 只读）、备份导出/导入恢复（差异对比后逐项受保护恢复）",
+        "市场 | 静态索引（topic:dsh-plugin 全量 ~3100 条，多源兜底 + gzip + 磁盘缓存 + 新鲜度门控）+ awesome 精选覆盖层 + dsh.so 独立验证/安全扫描徽标（L1-L5 + 风险等级叠加）",
+        "agent 工具 | plugin_status/search/install/uninstall/toggle + 安装守卫（拦截裸命令并引导）+ 提示词注入；plugin_search 自然语言检索市场（name/topics/描述加权），结果提示安装前先浏览仓库"
+      ],
+      "usageItems": [
+        "打开\"设置 → 插件管理\"，\"检查更新\"会列出全部已装插件（含管理器自身），有新版时点对应卡片上的\"更新\"即可",
+        "git 源插件需要安装期环境变量时，CLI 会打印缺失变量清单并给出 `--env KEY=value` 续装命令（非交互式）。"
+      ],
+      "usageActions": [
+        "dshpm install <source> [--env KEY=value ...] --profile <name>",
+        "dshpm remove <name>    --profile <name>",
+        "dshpm update <name>    --profile <name>",
+        "dshpm mount <name>     --profile <name>",
+        "dshpm uninstall-kind <owner/repo> [--profile <name>]",
+        "dshpm list             --profile <name>",
+        "dshpm analyze          --profile <name>"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "dshpm install <source> [--env KEY=value ...] --profile <name>"
+      ],
+      "usecases": [
+        "强烈建议先装管理器、再装其他插件：本管理器自带质量门与健康检查（安装时全链依赖扫描 + bundle patch 行校验 + 安装即回滚；安装后可做依赖图/冲突/循环/peer 兼容性分析）。先装管理器，后续每个插件的安装都会经过检测，能显著减少\"装上就炸、重启起不来\"的情况。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "禁用被依赖的条目可能导致 profile 启动失败（官方 fail-loud 设计）；恢复：手动删除该 profile `cordis.patch.yml` 里的 managed 块",
+        "安装守卫只拦 agent 工具调用，拦不住用户在终端手工执行裸 `dsh plugin`",
+        "健康检查为静态+尽力而为：同名注册冲突依赖源码正则扫描（动态拼接的名字检测不到）；语义冲突无同名可查，不在检测范围",
+        "手动安装的插件不会自动挂载：管理器显示\"未挂载\"并提供\"挂载\"/`dshpm mount`，不擅自改变 profile 行为",
+        "环境变量过滤只覆盖常见敏感键形态（TOKEN/KEY/SECRET/PASSWORD/PASS/CREDENTIAL）",
+        "带信任围栏：POST+JSON 强制、Host 回环/白名单校验、Origin 同源——防 CSRF/DNS-rebinding",
+        "删除 bundle 插件的实时卸载失败/超时不再静默：输出会提示「live unmount 未完成，请重启后完全生效」——半挂的 loader 树可能让 Web 服务已关但进程不退，此时自动重启链路可能卡死，需手动拉起（issue #10",
+        "GitHub API 未认证限流 60/h 仅影响 catalog 独有条目的星数富化（量小，列表不受影响）",
+        "质量门可能误伤未声明运行时依赖的插件（保守策略，可加白名单）",
+        "git 源安装前扫描仓库所需环境变量（TOKEN/KEY/SECRET 形态），缺则暂停询问、行内填写后继续，answers 仅按扫描白名单注入（防 PATH/HOME 注入），宿主敏感键不传给第三方脚本"
+      ],
+      "media": [],
+      "concerns": [
+        "No images or demo media; no IO pairs; install/config sections excluded.",
+        "dshpm commands counted once (usageActions + one codeExample for the same fence).",
+        "Additional limitation rows (pnpm minimumReleaseAge, nvm PATH handling, update-detection edges) omitted at the reliability cap."
+      ]
+    },
+    {
+      "repo": "morluto/jacobian",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Jacobian is an MCP server that gives AI agents a searchable vocabulary of typed\nmathematical operations.",
+        "`math.find` discovers an operation, and `math.run`\nexecutes exactly one bounded mathematical contract and returns its typed\nresult.",
+        "The same mathematical library is also available through a CLI and\nnative Python API.",
+        "Results are exact where\nclaimed and make approximation, incompleteness, or uncertainty explicit.",
+        "- polynomial maps and polynomial algebra;\n- exact linear algebra;\n- graphs, paths, colorings, and isomorphism;\n- bounded SAT and SMT solving;\n- finite algebra, probability, geometry, and topology.",
+        "`matrix.determinant.compute` accepts one exact rational matrix and returns its\ndeterminant directly.",
+        "Callers compose results by passing their typed values to a\nsubsequent operation.",
+        "The npm package deterministically maps its exact package version to the\ncorresponding `uvx` invocation.",
+        "That package includes Jacobian's exact maintained Python backend stack: SymPy,\nNetworkX, Z3, and Python-FLINT."
+      ],
+      "usageItems": [
+        "Use\n`math.find` to search for an operation, browse an unfamiliar domain, and inspect\none operation before calling `math.run` once.",
+        "inspect the exact installed contract and run one\nof its examples with the CLI",
+        "Choose detected agents and review the changes before they are written.",
+        "For automation, preview\nan explicit plan with `npx jacobian@latest setup --codex --dry-run`; use\n`--yes` only with explicit agent flags or `--all`.",
+        "Run the canonical Python MCP command without installing Jacobian globally:"
+      ],
+      "usageActions": [
+        "jacobian inspect integer.compute.extended_gcd",
+        "jacobian run integer.compute.extended_gcd --json '{\"left\":\"84\",\"right\":\"30\"}'",
+        "uvx --from jacobian jacobian-mcp",
+        "npx jacobian mcp"
+      ],
+      "ioPairs": [
+        "jacobian run integer.compute.extended_gcd --json '{\"left\":\"84\",\"right\":\"30\"}'\n```\n\nThe second command returns the gcd and Bézout coefficients as JSON."
+      ],
+      "codeExamples": [
+        "jacobian inspect integer.compute.extended_gcd",
+        "uvx --from jacobian jacobian-mcp"
+      ],
+      "usecases": [],
+      "outputs": [
+        "The second command returns the gcd and Bézout coefficients as JSON."
+      ],
+      "reliability": [
+        "tested binary-install contract is CPython 3.12 or 3.13 on glibc Linux x86-64;\nthe release gate installs the built wheel and starts Jacobian on both Python",
+        "Other systems may have compatible upstream wheels, but are not part\nof the tested release contract yet. In particular, Alpine/musl cannot install\nthe complete mandatory stack from PyPI.",
+        "is pre-stable. Its published package and operation contracts\ndescribe the supported surface; experimental operation contracts may change\nbetween releases."
+      ],
+      "media": [],
+      "concerns": [
+        "Hero photograph excluded as decorative art; no other media.",
+        "The single ioPair pairs the CLI command with its prose-described output (no literal response body is shown).",
+        "No explicit use-case scenarios; pip install / setup fences excluded as install."
+      ]
+    }
+  ]
+}

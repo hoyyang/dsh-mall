@@ -1,0 +1,56 @@
+{
+  "reviews": [
+    {
+      "repo": "mrpulor-gh/nuphus-mcp",
+      "capability": 24,
+      "usage": 13,
+      "usecases": 17,
+      "demo": 7,
+      "reliability": 15,
+      "total": 76,
+      "evidence": "README concretely documents 38 shipped MCP tools spanning desktop input, screenshots, windows, local OCR/optional YOLO, BYOK vision, and Chrome CDP automation. It gives a runnable JSON-RPC smoke test and stdio demo, explicit browser/profile and visual-automation scenarios, platform support, hard-error and fallback behavior, self-healing CDP attachment, strict confirmation, path validation, and a 60-test command.",
+      "concern": "Most commands are installation, configuration, or protocol-startup examples rather than task-level automation walkthroughs; the README shows no captured tool results or end-to-end visual output.",
+      "confidence": "high",
+      "inferredType": "standalone-nonplugin"
+    },
+    {
+      "repo": "ZJU-REAL/Polaris",
+      "capability": 25,
+      "usage": 17,
+      "usecases": 19,
+      "demo": 14,
+      "reliability": 15,
+      "total": 90,
+      "evidence": "README describes a shipped six-stage research system for literature ingestion and wikis, idea generation and Elo review, SSH/GPU experiments, collaborative LaTeX writing, and citation/fact review, backed by resumable Voyage state machines, human gates, budgets, RBAC, model routing, and durable artifacts. It provides a two-minute tour and a live read-only guest instance, and names concrete outputs including wiki pages, proposals, rankings, logs, metric curves, figures, PDFs, and citation verdicts. Reliability evidence includes checkpoint recovery, deterministic acceptance checks, encrypted SSH credentials, allow/deny lists, audit trails, hard citation gates, tests/lint commands, deployment requirements, and desktop-platform caveats.",
+      "concern": "User operation is explained mainly through feature and pipeline narratives rather than a step-by-step research run; the live guest demo cannot mutate state or execute models.",
+      "confidence": "high",
+      "inferredType": "standalone-nonplugin"
+    },
+    {
+      "repo": "Dominic789654/awesome-deepseek-harness",
+      "capability": 10,
+      "usage": 5,
+      "usecases": 5,
+      "demo": 4,
+      "reliability": 4,
+      "total": 28,
+      "evidence": "Scored only for the catalog's own behavior: the README ships a categorized DSH ecosystem index with a contents taxonomy and an ecosystem map, and states contribution rules requiring the dsh topic, placement in the best-fitting category, a concise factual one-line description, practical alphabetical order, and one logical change per PR.",
+      "concern": "Beyond static categorization and contribution formatting, the README states no catalog-side verification, compatibility testing, security review, freshness process, search workflow, or runnable demo. Listed projects' capabilities, stars, descriptions, and repeated entries receive no credit.",
+      "confidence": "high",
+      "inferredType": "catalog-list"
+    },
+    {
+      "repo": "tinqiao-oss/engramory",
+      "capability": 23,
+      "usage": 20,
+      "usecases": 18,
+      "demo": 7,
+      "reliability": 15,
+      "total": 83,
+      "evidence": "README documents a shipped plain-Markdown memory protocol with typed notes, an always-loaded bounded index, dedup/update/delete discipline, continuity sync, validator/doctor tools, init and uninstall helpers, read-only cross-agent readers, host adapters, a Claude pre-write cap hook, and an activating DSH guard plugin. It gives actionable memory-writing, continuity, adoption, reader, and reporting procedures, and explicitly targets personal local memory, cross-thread continuation, and shared read-only recall. Reliability coverage is unusually strong: tested and unverified hosts are distinguished, version-specific DSH failures are named, dogfood behavior is reported, safe uninstall semantics and mechanical recovery are explained, and extensive security, privacy, scale, concurrency, provenance, and enforcement limitations are explicit.",
+      "concern": "The project is explicitly experimental and best-effort outside matched hooks, assumes a single serialized writer, stores unencrypted text, caps active memory at roughly 200 pointers, and lacks schema migration, provenance, authentication, and multi-project isolation; it also has no substantial visual or recorded demo.",
+      "confidence": "high",
+      "inferredType": "dsh-plugin"
+    }
+  ]
+}

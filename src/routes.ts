@@ -15,7 +15,7 @@ import { getRepoTopics, lastRateInfo, listMyRepos, putRepoTopics } from './githu
 import { installState, loaderIdOf, patchDisables, pluginStatesOf, restartNeededOf, readManifest as readProfileManifest, removeLegacyPatchEntry, rollbackDep, runDsh, runSelfUpdate } from './install.ts'
 import { runInstall, runUninstall, runUpdate, setPluginEnabled, snapshotDep, withMutationLock } from './install.ts'
 import { autoUpdateStateOf, setAutoUpdateEnabled, startAutoUpdate, stopAutoUpdate } from './auto-update.ts'
-import { ensureDownloads, ensureTotals } from './downloads.ts'
+import { downloadsFreshnessOf, ensureDownloads, ensureTotals } from './downloads.ts'
 import { ensureRepoVersions } from './versions.ts'
 import { ensureBundleScans, ensureSkillScans } from './scan.ts'
 import { fetchRawReadme, fetchSanitizedReadme, probeReadme, sanitizeMarkdown } from './readme.ts'
@@ -570,12 +570,13 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
       }
       const names = Array.isArray(body.names) ? body.names.filter((n): n is string => typeof n === 'string' && n !== '') : []
       if (names.length === 0) {
-        sendJson(response, 200, { ok: true, downloads: {} })
+        sendJson(response, 200, { ok: true, downloads: {}, totals: {}, freshness: {} })
         return
       }
       const downloads = await ensureDownloads(config.profile, names)
       const totals = await ensureTotals(config.profile, names)
-      sendJson(response, 200, { ok: true, downloads, totals })
+      const freshness = downloadsFreshnessOf(config.profile, names)
+      sendJson(response, 200, { ok: true, downloads, totals, freshness })
     },
   }))
 
@@ -1004,11 +1005,11 @@ export function mountMarketRoutes(host: MarketHost, config: MarketConfig, loader
         return
       }
       const repos = Array.isArray(body.repos) ? body.repos.filter(parseRepo) : []
-      try {
-        const verdicts = await verifyRepos(config.profile, config.githubToken, repos.slice(0, 40))
-        sendJson(response, 200, { ok: true, verdicts })
-      } catch (err) {
-        sendJson(response, 200, { ok: false, error: err instanceof Error ? err.message : String(err) })
+      const result = await verifyRepos(config.profile, config.githubToken, repos.slice(0, 40))
+      if (result.error !== undefined) {
+        sendJson(response, 200, { ok: false, verdicts: result.verdicts, error: result.error, retryAfterMs: result.retryAfterMs ?? 60_000 })
+      } else {
+        sendJson(response, 200, { ok: true, verdicts: result.verdicts })
       }
     },
   }))

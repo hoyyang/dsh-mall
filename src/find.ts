@@ -135,8 +135,7 @@ function keywordScore(e: MarketEntry, needle: string): number {
   let score = kwFinal * 0.8 + Math.log10(1 + (e.stars ?? 0))
   if (e.curated) score += 2
   if (e.verified != null) score += 3
-  // v1.7.5：非插件不再扣分——插件与非插件都要找，靠关键词/星/精选排名，
-  // 结果条目自带 isPlugin 标记（卡片有「插件/非插件」徽章区分）。
+  // 结果保留 pluginStatus/evidence：推荐区只收 verified-plugin，其他身份在相关区显式标注。
   // v1.7.27：market 类条件加分——只有查询本身是「市场/商场」语义时才给 +4，
   // 否则市场目录不再靠无条件加分霸榜（与「市场不能包含市场」原则对齐）。
   if (e.category === 'market' && /market|store|mall|商场|商店|市场|目录|hub|marketplace/i.test(needle)) score += 4
@@ -181,9 +180,13 @@ export async function findPlugins(profile: string, token: string, query: string,
     r.score = kw === Number.NEGATIVE_INFINITY ? Number.NEGATIVE_INFINITY : kw + qualityBonus(r.p)
   })
   ranked.sort((a, b) => b.score - a.score)
-  const recommended = ranked.filter(r => r.score > 0).slice(0, Math.min(limit, 5)).map(r => r.p)
-  const related = ranked
-    .filter(r => r.score > 0 && !recommended.includes(r.p))
+  const eligible = ranked.filter(r => r.score > 0)
+  const recommended = eligible
+    .filter(r => r.p.pluginStatus === 'verified-plugin')
+    .slice(0, Math.min(limit, 5))
+    .map(r => r.p)
+  const related = eligible
+    .filter(r => !recommended.includes(r.p))
     .slice(0, Math.min(Math.max(limit, 8), 10))
     .map(r => r.p)
   const categories: Record<string, { en: string; zh: string }> = {}
@@ -285,16 +288,24 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
     if (lang === 'zh' && e.descriptions?.zh) return e.descriptions.zh
     return e.description
   }
+  const kindMark = (p: MarketEntry): string => p.pluginStatus === 'verified-plugin'
+    ? ''
+    : p.pluginStatus === 'verified-non-plugin'
+      ? ' 〔非插件〕'
+      : p.pluginStatus === 'conflict'
+        ? ' 〔证据冲突〕'
+        : ' 〔待判定〕'
   const lines: string[] = []
   if (value.recommended.length > 0) {
     lines.push('**推荐**')
     value.recommended.forEach((p, i) => {
       const install = p.npm !== null ? 'dsh plugin add ' + p.npm : 'dsh plugin add github:' + p.owner + '/' + p.name
-      const kindMark = p.isPlugin === true ? '' : p.isPlugin === false ? ' 〔非插件〕' : ' 〔待判定〕'
+      // 推荐列表只含已验证插件；保留标记便于历史 staged payload 兼容。
+      const mark = kindMark(p)
       // v1.7.45：为什么推荐——五维评分解释层（推荐理由，质量信号）。
       const exp = p.score?.explanation
       const reason = exp !== undefined && exp !== null ? (lang === 'zh' ? exp.zh : exp.en) : ''
-      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + (p.verified != null ? ' ✓已验证' : '') + (p.curated ? ' ⚑精选' : '') + kindMark)
+      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + (p.verified != null ? ' ✓已验证' : '') + (p.curated ? ' ⚑精选' : '') + mark)
       lines.push('   ' + (desc(p) || '—').slice(0, 200))
       if (reason !== '') lines.push('   💡为什么推荐：' + reason + '。')
       lines.push('   ' + install)
@@ -304,8 +315,8 @@ function renderFindResult(value: FindPayload & { buttonUrl?: string; lang?: stri
     lines.push('')
     lines.push('**其他相关**')
     value.related.forEach((p, i) => {
-      const kindMark = p.isPlugin === true ? '' : p.isPlugin === false ? ' 〔非插件〕' : ' 〔待判定〕'
-      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + kindMark + ' — ' + (desc(p) || '—').slice(0, 120))
+      const mark = kindMark(p)
+      lines.push((i + 1) + '. ' + p.name + ' ★' + (p.stars ?? '—') + mark + ' — ' + (desc(p) || '—').slice(0, 120))
     })
   }
   if (value.recommended.length === 0 && value.related.length === 0) {

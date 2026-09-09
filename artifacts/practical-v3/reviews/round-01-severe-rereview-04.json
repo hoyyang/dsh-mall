@@ -1,0 +1,100 @@
+{
+  "reviews": [
+    {
+      "repo": "zhu1090093659/dsh-web",
+      "capability": 22,
+      "usage": 20,
+      "usecases": 15,
+      "demo": 8,
+      "reliability": 12,
+      "confidence": "high",
+      "evidence": "Perf HUD+alerts, cron task board, QR-paired remote, SSH term/SFTP/tunnel/cluster, vision tool, git worktrees, rescue mode; FAQ, limits, security notes.",
+      "concern": "Aggregate bundle; per-plugin claims unverifiable from README; cited eval scores lack methodology.",
+      "total": 77
+    },
+    {
+      "repo": "zhu1090093659/dsh-web-ui",
+      "capability": 22,
+      "usage": 20,
+      "usecases": 15,
+      "demo": 8,
+      "reliability": 12,
+      "confidence": "high",
+      "evidence": "README is exact duplicate of dsh-web (same MD5): 14-plugin suite w/ cron board, SSH ops, remote pairing, rescue mode, FAQ/limits.",
+      "concern": "Title names dsh-web not dsh-web-ui; duplicate README suggests mirror/rename, evidence unverified.",
+      "total": 77
+    },
+    {
+      "repo": "Jesseovo/last30days-skill-cn",
+      "capability": 18,
+      "usage": 18,
+      "usecases": 14,
+      "demo": 7,
+      "reliability": 11,
+      "confidence": "high",
+      "evidence": "8 CN platforms, API->Playwright->public->Bing degradation, scoring, 7 emit modes incl HTML, --diagnose, 214 tests, CST dating, old-mac compat mode.",
+      "concern": "Crawler may break as platforms anti-bot; test count undetailed; no output screenshots.",
+      "total": 68
+    },
+    {
+      "repo": "Anil-matcha/awesome-dsh-plugin",
+      "capability": 4,
+      "usage": 3,
+      "usecases": 3,
+      "demo": 1,
+      "reliability": 4,
+      "confidence": "medium",
+      "evidence": "Curated ~200-entry catalog (19 categories), one-line plugin descriptions, security warning, verify-before-submit rule, plugin-dev steps.",
+      "concern": "Mangled formatting; no CI, freshness, or verification evidence beyond submit rule.",
+      "total": 15
+    },
+    {
+      "repo": "Anil-matcha/awesome-deepseek-harness",
+      "capability": 4,
+      "usage": 3,
+      "usecases": 3,
+      "demo": 1,
+      "reliability": 4,
+      "confidence": "medium",
+      "evidence": "README text identical to awesome-dsh-plugin (same MD5): categorized ~200-entry catalog, security warning, verification contribution standard.",
+      "concern": "Exact duplicate of awesome-dsh-plugin README; no distinct maintenance or verification evidence.",
+      "total": 15
+    },
+    {
+      "repo": "mnemon-dev/mnemon",
+      "capability": 20,
+      "usage": 18,
+      "usecases": 14,
+      "demo": 6,
+      "reliability": 12,
+      "confidence": "high",
+      "evidence": "Go binary: remember/link/recall, 4-graph store, decay/GC/dedup, RRF recall, named stores, hashed receipts, 16 runtime setups, Agency preview, test targets.",
+      "concern": "Agency preview-only, Windows partial; 16-runtime and 87-insight claims unverifiable from README.",
+      "total": 70
+    },
+    {
+      "repo": "freestylefly/wesight",
+      "capability": 20,
+      "usage": 15,
+      "usecases": 13,
+      "demo": 8,
+      "reliability": 10,
+      "confidence": "high",
+      "evidence": "Electron workspace: 9 agent CLIs, unified providers, Feishu IM hub, dashboard (TTFT/TPS), live workspace, SkillHub, scheduled tasks; 6 screenshots.",
+      "concern": "Windows installer unsigned; no troubleshooting; scheduled tasks/memory claims unverified in README.",
+      "total": 66
+    },
+    {
+      "repo": "0xsline/awesome-deepseek-harness",
+      "capability": 5,
+      "usage": 4,
+      "usecases": 3,
+      "demo": 1,
+      "reliability": 5,
+      "confidence": "medium",
+      "evidence": "Largest catalog (~450 entries, 21 categories) from hub + dsh-plugin topic; install docs, hand-maintained standard, placeholder/WIP labels, org-access caveat.",
+      "concern": "Scale unverifiable; many dsh-external links may be placeholder/inaccessible; no automated checks.",
+      "total": 18
+    }
+  ]
+}

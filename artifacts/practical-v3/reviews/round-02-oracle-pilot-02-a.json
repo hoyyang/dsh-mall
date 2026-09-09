@@ -1,0 +1,224 @@
+{
+  "reviews": [
+    {
+      "repo": "imsai-sh/awesome-deepseek-harness-plugins",
+      "inferredType": "catalog-list",
+      "capability": [
+        "**定时收集**：自动收录带 `dsh-plugin` topic 的 GitHub 仓库，增量抓取新建与新推送的仓库，并定期全量对账——长期不活跃的仓库不会被漏收，掉了 topic 也只在一次成功的全量对账后才下架。",
+        "**自动同步**：PR 合并后由 CI 自动同步目录到网站数据库并刷新本 README，贡献者和维护者都不需要手工改任何生成文件。",
+        "该 Skill 会检查插件仓库、生成唯一允许提交的目录 JSON、验证变更范围，并在获得授权后创建 PR。"
+      ],
+      "usageItems": [
+        "分组默认折叠，点开即可展开。",
+        "使用 $submit-dsh-plugin 检查并提交我的 DeepSeek Harness 插件。",
+        "请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，通过 PR 提交一个新的结构化插件文件"
+      ],
+      "usageActions": [
+        "分组默认折叠，点开即可展开。",
+        "使用 $submit-dsh-plugin 检查并提交我的 DeepSeek Harness 插件。",
+        "请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，通过 PR 提交一个新的结构化插件文件"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "安装后告诉助手：\n\n```text\n使用 $submit-dsh-plugin 检查并提交我的 DeepSeek Harness 插件。"
+      ],
+      "usecases": [
+        "欢迎把你的 DeepSeek Harness 插件提交到本目录。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "**格式校验**：每个候选仓库都要通过静态校验——读取默认分支的 Git tree，检查 `package.json`、`dsh.bundle.patch` 字段，以及 patch 文件在同一棵 tree 中确实存在。**全程只读文件，绝不安装依赖、绝不执行仓库代码。** 校验不通过就不进目录。",
+        "修改或删除既有条目的 PR 同样会跑静态审查，但不会自动合并，需要维护者人工审核后手动合并。",
+        "GitHub 对单个文件的渲染长度有上限，条目较多的分类只列出其中一部分",
+        "插件由各自作者开发和维护，收录不构成安全、质量或维护状态背书。"
+      ],
+      "media": [],
+      "concerns": [
+        "网站与 CLI 的源码（`web` 与 `plugin`）在姊妹仓库 [dsh-1024store](https://github.com/imsai-sh/dsh-1024store)。"
+      ]
+    },
+    {
+      "repo": "libukai/awesome-deepseek-harness",
+      "inferredType": "catalog-list",
+      "capability": [
+        "本项目秉持少而精的原则，精选并收录 DeepSeek Harness 相关优质资源",
+        "收录包含完整论述、实践细节或一手背景的公开社交媒体长帖，补充官方资料未覆盖的背景与实践细节。",
+        "以下项目提供了独立的用户界面、发行形态或产品化组装，而不只是单个工具能力。"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "下方各项目标注的 DSH 版本表示其作者实际声明的开发或测试基线，不应自动视为已兼容最新预览版。",
+        "发行版或 Fork 会直接复用、修改或重新打包完整的 DSH Runtime，不能通过 `dsh plugin` 安装，因此不属于插件",
+        "项目被收录不代表已经签名、公证、自包含或适合生产环境；请查看各项目 README 和 Releases 中的当前说明。"
+      ],
+      "media": [],
+      "concerns": []
+    },
+    {
+      "repo": "ericshang98/Perfect-Web-Clone",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "turns one `clone <url>` into a full-page, scored replica.",
+        "The skill drives the agent through capture → section plan → clean React → build → measured repair",
+        "The agent authors code and repairs the worst measured section",
+        "Capture the live URL (integrity-checked, assets localized)",
+        "Plan the real page sections",
+        "Author clean React for every section",
+        "Score fingerprints, weight, and visual match",
+        "Repair the worst section, rebuild, re-measure"
+      ],
+      "usageItems": [
+        "Say this to your coding agent:\n\n```text\nclone https://example.com"
+      ],
+      "usageActions": [
+        "clone https://example.com",
+        "pwc extract https://example.com",
+        "pwc plan <source_id>",
+        "pwc assemble <source_id>",
+        "pwc build",
+        "pwc fingerprints dist/",
+        "pwc weight dist/",
+        "pwc score --ref reference.png --cand clone.png"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Say this to your coding agent:\n\n```text\nclone https://example.com",
+        "## CLI\n\n```bash\npwc extract https://example.com"
+      ],
+      "usecases": [],
+      "outputs": [
+        "Hand you a local preview: `ready_for_user_review` or `failed_with_residuals`",
+        "Every command prints JSON."
+      ],
+      "reliability": [
+        "Hands and eyes are deterministic (`pwc`) — they never call a model",
+        "Pixel-perfect is a gate table, not a prompt",
+        "it will not stop after the first viewport or call a similar-looking inert widget “done.”",
+        "If the page is WebGL, runtime canvas, or scroll-choreographed, that ceiling is reported up front. Content still clones; the runtime-drawn look may not.",
+        "`ok` is the only pass/fail that matters."
+      ],
+      "media": [],
+      "concerns": [
+        "plugin/        optional coding-agent plugin"
+      ]
+    },
+    {
+      "repo": "Ayase34/gal-view",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "编辑器一样拖拽/改属性/换图层，编辑结果实时同步回游戏模式。",
+        "首次打开「GAL视窗」且本地没有存档场景时自动加载，编辑模式的「重置」也回到该预设。"
+      ],
+      "usageItems": [
+        "点开之后会话视窗变成\n16:9 Galgame 舞台",
+        "更新预设：编辑场景 → `Ctrl+S` 导出 → 用导出的 `gal-scene.json` 替换仓库根同名文件 → `npm run build:client` 并提交。",
+        "npm test                # 纯逻辑单测（node:test，同进程运行）",
+        "npm run check:client    # 校验 client.js 新鲜度",
+        "npm run smoke           # Playwright 冒烟（需 DSH_CHECKOUT 指向 dsh checkout）"
+      ],
+      "usageActions": [
+        "点开之后会话视窗变成\n16:9 Galgame 舞台",
+        "编辑场景 → `Ctrl+S` 导出",
+        "npm test                # 纯逻辑单测（node:test，同进程运行）",
+        "npm run check:client    # 校验 client.js 新鲜度",
+        "npm run smoke           # Playwright 冒烟（需 DSH_CHECKOUT 指向 dsh checkout）"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "DSH Web GUI 会话页的 **Galgame 风格对话视图 + 场景元素可视化编辑器**"
+      ],
+      "outputs": [
+        "16:9 Galgame 舞台：占位立绘、大对话框、打字机台词、玩家输入",
+        "仓库根 [`gal-scene.json`](gal-scene.json) 是随包分发的**默认预设场景**（编辑器导出的格式，内嵌被引用的图片/字体）"
+      ],
+      "reliability": [
+        "bundle 层在启动时合成，必须重启才会加载插件",
+        "场景布局、素材图片、字体与阅读进度都保存在你的**浏览器**里（localStorage / IndexedDB），重装或卸载插件不会丢失；清除浏览器站点数据才会重置它们。",
+        "Node half（极简，无宿主行为）",
+        "纯逻辑单测（node:test，同进程运行）",
+        "校验 client.js 新鲜度",
+        "Playwright 冒烟（需 DSH_CHECKOUT 指向 dsh checkout）"
+      ],
+      "media": [
+        {
+          "excerpt": "![image.png](image.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "bradeGithub/DSH-Plugins-Marketplace",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "插件列表优先从**静态索引**（`registry.json`，jsDelivr CDN 分发，GitHub Actions 每 2 小时自动生成）加载",
+        "每个插件卡片带「安装」按钮，点击后自动完成：克隆仓库 → 识别类型 → 扫描所需环境变量 → 执行安装",
+        "自动区分并安装以下类型的仓库",
+        "当插件需要 `API_KEY` / `TOKEN` / `SECRET` 等环境变量时，**安装自动暂停**，在页面内弹窗请你提供材料（或跳过），不会盲装",
+        "五重判定——安装清单（`installed.json`）+ 目录启发式探测 + 包名映射扫描 + 本体 `repository` 自识别 + 缓存克隆预读",
+        "界面与安装日志跟随 DSH 的语言设置自动切换 中文 / English",
+        "cordis 插件自动对比已装版本与仓库最新版本（从本地缓存读取，零额外网络请求），不一致时按钮变为「更新」，点击即可覆盖升级",
+        "按插件名 / 仓库全名 / 标签实时过滤",
+        "构建时按简介/标签自动分类（12 类：视觉多模态 / 文档办公 / 记忆知识 / 模型用量 / 通知通讯 / 开发编码 / 对话会话 / 界面美化 / Agent 自动化 / 通用工具 / 聚合资源 / 其他）",
+        "浏览 CI 构建的全量 skills 索引（`agent-skills` ∪ `claude-skills`，20000+ 仓库），支持搜索 / 分页触底加载 / 一键安装到 `~/.dsh/skills/` / 已安装识别",
+        "每个卡片提供跳转到原仓库的链接（新标签页打开）",
+        "全部使用 DSH 主题令牌（`--dsw-alias-*`），自动适配深色 / 浅色模式"
+      ],
+      "usageItems": [
+        "重启 DSH 后打开 Web GUI，进入 **设置 → DSH插件市场**",
+        "使用搜索框按名字过滤插件；分类 chips 按栏目筛选",
+        "**安装** → 开始安装，日志实时滚动",
+        "需要材料时 → 页面弹出输入框，提供 API Key 等后点「提交材料并继续安装」",
+        "**更新** → 检测到新版本时覆盖升级",
+        "切换到 **通用 Skills** tab 浏览 20000+ 技能，支持搜索 / 触底分页 / 一键安装"
+      ],
+      "usageActions": [
+        "重启 DSH 后打开 Web GUI，进入 **设置 → DSH插件市场**",
+        "使用搜索框按名字过滤插件；分类 chips 按栏目筛选",
+        "**安装** → 开始安装，日志实时滚动",
+        "提供 API Key 等后点「提交材料并继续安装」",
+        "**更新** → 检测到新版本时覆盖升级",
+        "切换到 **通用 Skills** tab 浏览 20000+ 技能，支持搜索 / 触底分页 / 一键安装"
+      ],
+      "ioPairs": [
+        "| `/api/marketplace/install` | POST | 安装 / 更新，body：`{ \"repo\": \"owner/name\", \"answers\": { \"ENV_NAME\": \"值\" } }`；返回 `done` / `awaiting-input` / `aborted` / `failed` / `manual` 状态 + 逐步日志 |",
+        "| `/api/marketplace/uninstall` | POST | 卸载，body：`{ \"repo\": \"owner/name\" }`；删除安装目录 / 包目录 + `cordis.patch.yml` 注册条目 + 安装记录；返回 `done`（含 `removed` 计数与日志） |",
+        "| `/api/marketplace/self-update` | POST | 执行市场本体更新（官方 CLI 安装 + 装后版本校验）；返回 `no-update` / `done` / `failed` |",
+        "| `/api/marketplace/check-update` | POST | npm 型 cli 插件手动版本检测（body `{ repo }`；查 npm registry，npmmirror 优先）；返回 `done` + `updateAvailable` / `latestVersion` |",
+        "| `/api/marketplace/feedback` | POST | 提交安装反馈（body `{ repo, ok, note }`）→ 移除队列并同步创建 GitHub issue；返回 `done`（含 `issueUrl` / `manualUrl`） |",
+        "| `/api/marketplace/env-edit` | POST | 写入插件环境变量（body `{ repo, values }`，落盘 `~/.dsh/.env` + `envs.json`）；返回 `done` + `applied` |",
+        "| `/api/marketplace/restore/diff` | POST | 给定备份计算恢复差异（body `{ backup }`；返回 `missing` / `already`） |",
+        "| `/api/marketplace/logs` | GET | 导出脱敏安装日志（`{ text, count }`） |"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "开始安装，日志实时滚动",
+        "两者都存在且不一致 → 卡片显示「更新」按钮 + `已装 vX → vY` 提示。",
+        "点「刷新」强制重新拉取，并以弹窗提示「刷新成功 / 刷新失败」"
+      ],
+      "reliability": [
+        "检测到第三方安装脚本（`install.sh` / `install.ps1`）或 npm 生命周期脚本（`prepare` / `install` / `postinstall` 等）时，先弹窗征求你的确认——拒绝即取消安装并**清理全部痕迹**",
+        "你提供的 API Key 等材料只作为**本次安装的环境变量**传入，不会写入任何持久化文件（安装脚本自身的行为除外）",
+        "第三方安装脚本运行时只获得**最小化环境变量**（基础系统变量 + 你提交的材料）；npm 依赖安装会剔除全部密钥类变量——`process.env` 不会全量外泄给插件代码",
+        "安装端点仅接受可信来源：请求必须携带 `X-DSH-Marketplace` 头，且 Host 在**白名单**内",
+        "手动（非市场）预装的插件仅能被识别为「已安装」，不提供卸载按钮。",
+        "安装端点无用户认证，防护依赖「本地网络隔离 + CSRF 头 + Host 白名单（本机/局域网/可配置）+ Origin 校验」——请勿将 DSH web 端口暴露到不可信网络",
+        "若在 DSH 前套了短超时的反向代理（默认 60s），连接可能被切断——后端任务仍会继续执行，前端需刷新状态确认结果",
+        "版本检测仅对含 `package.json` 的插件生效；skill / 预设 / 脚本类无版本概念；作者发版不 bump version 时不会提示更新",
+        "未认证限流 **10 次/分钟**，频繁点「刷新」可能触发限流（会提示刷新失败，稍等再试）",
+        "插件代码修改后需**重启 DSH** 才能生效（Web profile 的 HMR 处于禁用状态）"
+      ],
+      "media": [],
+      "concerns": [
+        "插件市场**不对任何插件的质量、可靠性、安全性、可用性作任何明示或默示担保**"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "reviews": [
+    {
+      "repo": "omdsh-dev/dsh-data-agent",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- 💬 **零门槛对话即分析**：告别繁琐的 SQL 语法，直接用大白话提问（如“对比最近 30 天各渠道转化率”）。AI 会自动理解业务意图、探查库表结构、编写并执行查询、连续推演并输出清晰结论。",
+        "- 🧠 **深度挖掘商业洞察**：不止是罗列查询数字，还能自动比较波动趋势、定位异常原因、识别高价值客群与畅销品类，把冷冰冰的数据转化为可直接落地的业务建议。",
+        "- 🏷️ **AI 驱动的业务口径治理**：智能扫描数据库，自动为库表和字段标注通俗易懂的业务含义，支持人工审核与指标定义，确保每一次分析都基于统一、准确的业务口径。",
+        "- 🖥️ **现代 Web 与高效终端双体验**：既可在直观的可视化 Web 界面中点击配置与浏览图表，也可在极客高效的命令行终端（dsh-tui）中一键唤起。",
+        "Web 界面内置一站式数据库工作台，包含 **连接配置**、**库表浏览**、**数据治理** 与 **SQL 执行** 四大功能模块，方便在对话之余随时查验数据资产。",
+        "- 🐬 **关系型数据库**：MySQL, PostgreSQL, SQLite, Oracle, Microsoft SQL Server",
+        "- ⚡ **分析型数仓 / OLAP**：ClickHouse, Apache Doris, Apache Hive, Apache Impala",
+        "- 📁 **本地与轻量数据**：SQLite 数据文件（即开即用，无需额外服务）"
+      ],
+      "usageItems": [
+        "2. 连接成功后，直接在对话框中用自然语言提出你的业务分析问题；",
+        "3. 根据初步结论继续追问，AI 会沿着上下文层层下钻深挖。",
+        "在会话中输入 `/preset data-agent` 切换模式，输入 `/database connect` 连接数据库，即可开始提问。"
+      ],
+      "usageActions": [
+        "2. 连接成功后，直接在对话框中用自然语言提出你的业务分析问题；",
+        "3. 根据初步结论继续追问，AI 会沿着上下文层层下钻深挖。",
+        "你可以在当前对话中继续追问（例如“再帮我按省份拆解一下”、“把柱状图换成饼图”、“为什么华东区 5 月份环比下降了”）"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "#### 方式一：Web 界面（推荐）\n启动 Web 控制台后，新建会话并选择 **「数据模式」**：\n```bash\ndsh --profile web",
+        "#### 方式二：终端命令行（dsh-tui）\n适合键盘流与极客用户，在终端中快速连接并展开分析：\n```bash\ndsh --profile dsh-tui"
+      ],
+      "usecases": [
+        "| 📈 **销售与营收复盘** | *\"分析最近 30 天各渠道销售额与环比变化，找出下滑最明显的商品品类，并分析主要原因\"* |",
+        "| 👥 **用户画像与客群分层** | *\"根据近半年的购买频次和客单价对会员进行 RFM 分层，统计各层级用户的留存率与复购周期\"* |",
+        "| 🛒 **运营转化与漏斗分析** | *\"统计本月新用户从注册、搜索、加购到下单的各环节转化率，找出流失率最高的步骤\"* |",
+        "| 📦 **库存与供应链监控** | *\"排查周转天数超过 60 天的高库存 SKU，结合近期销售速度预测断货或积压风险\"* |",
+        "| 📑 **周报 / 月报自动生成** | *\"汇总上周核心业务指标（GMV、活跃用户数、客单价），生成一段适合汇报的管理层周报小结\"* |"
+      ],
+      "outputs": [
+        "当分析需要可视化呈现时，Agent 会自动生成单图或多维 Dashboard，并自动在工作目录的 `analysis-reports/` 目录下保存独立的离线 HTML 报告。包含丰富的指标卡、动态图表与明细数据表，无需网络即可随时双击打开或发送给同事。"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"assets/features.webp\" alt=\"DSH Data Agent 核心特性\" width=\"100%\">", "weight": 1 },
+        { "excerpt": "<img src=\"assets/tables.webp\" alt=\"数据库工作台\" width=\"90%\">", "weight": 1 },
+        { "excerpt": "<img src=\"assets/data-governance.webp\" alt=\"AI 数据治理\" width=\"90%\">", "weight": 1 },
+        { "excerpt": "<img src=\"assets/charts.webp\" alt=\"分析报告图表\" width=\"90%\">", "weight": 1 }
+      ],
+      "reliability": [
+        "- 🔑 **凭据安全隔离**：连接密码仅在当前会话运行时使用，不记录在明文历史中，绝不上报远程服务器。",
+        "- 💻 **纯本地执行**：数据查询与分析报告生成均在本地安全受控运行，全面守护企业商业机密。",
+        "在只读保护下，任何写入、修改、删除（如 UPDATE, DELETE, DROP）等高危指令都会被严格拦截，保障生产数据绝对安全。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "pulseaiclub/phi",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Sub-agents** — spawn isolated jobs and watch the full run unfold in the TUI / job logs, without stuffing every turn into the parent context",
+        "**Hashline edits** — edit by whole-file `@file path#TAG` plus line `LINE#HASH` anchors",
+        "- **Any model** — OpenAI-compatible or Anthropic, no vendor lock-in",
+        "The TUI gives the model four core tools — `read`, `write`, `edit`, and\n`bash` — plus `grep`, `find`, and `ls`.",
+        "Assistant output is rendered as Markdown (CommonMark/GFM): headings, emphasis,\nstrikethrough, links, blockquotes, lists, task checkboxes, and tables are\nstyled with the active theme",
+        "Themes: `Dark`, `Darcula`, `Pink`, and `Terminal` (default), switchable from\nthe palette under settings → theme.",
+        "Skills are directories containing a `SKILL.md` file with YAML frontmatter and\na Markdown body.",
+        "They are loaded from `~/.phi/skills/` (or `skill_path` /\n`PHI_SKILL_PATH`) and injected into the agent's context, letting you give the\nmodel reusable procedures:",
+        "Hooks run custom logic around each tool call — before the permission gate and\nafter execution.",
+        "Use them for organization policy, audit trails, or rewriting\ntool input, without changing phi's binary or `config.yaml`."
+      ],
+      "usageItems": [
+        "- `@` — fuzzy file mention picker (type `@` and start typing a path)",
+        "- `?` — shortcut help picker (lists `/`, `!`, `@`, and key bindings; `Esc` closes)",
+        "- `!command` — run a shell command locally and stream its output into the\n  transcript (see [Commands](#commands))",
+        "- `Ctrl+K` — command palette: settings → model / theme / permissions / agents, skills, hooks",
+        "- `phi sessions list` — list session id, mtime, and preview for the current\n  directory",
+        "- `/resume <id>` — continue a session (id or unique prefix)",
+        "- `/clear` — start a fresh session (new id, empty transcript)",
+        "- `phi run --session <id>` / `phi run --continue-last` — resume headlessly",
+        "In the TUI, add skills from the palette (skills → list), then submit the\nmessage with the selected skills applied.",
+        "Flow: pick a server from the prompt → `mcp_list(server=…)` → `mcp_inspect` → `mcp_call`. Subprocesses start **lazily** on first use."
+      ],
+      "usageActions": [
+        "- `@` — fuzzy file mention picker (type `@` and start typing a path)",
+        "- `?` — shortcut help picker (lists `/`, `!`, `@`, and key bindings; `Esc` closes)",
+        "- `!command` — run a shell command locally and stream its output into the\n  transcript (see [Commands](#commands))",
+        "- `Ctrl+K` — command palette: settings → model / theme / permissions / agents, skills, hooks",
+        "| `phi sessions list`| List persisted sessions for this directory    |",
+        "| `/resume <id>`     | Resume a session by id or unique prefix (TUI) |",
+        "| `/clear`           | Start a fresh empty session (TUI)             |",
+        "In the TUI, add skills from the palette (skills → list), then submit the\nmessage with the selected skills applied."
+      ],
+      "ioPairs": [
+        "| `!command`         | Run a shell command locally, stream output into the transcript; `Esc` cancels it |",
+        "```sh\nphi run -p \"fix the failing test in internal/tools\"\n```\n\nRuns one agent loop without a TUI. Human logs go to stderr; with `--jsonl`,\nmachine-readable events go to stdout, one JSON object per line."
+      ],
+      "codeExamples": [
+        "## Headless mode\n\n```sh\nphi run -p \"fix the failing test in internal/tools\""
+      ],
+      "usecases": [
+        "| `explore` | read-only (+ allowlisted bash) | Search / map structure |",
+        "| `review` | read-only (+ allowlisted bash) | Diffs / checks; no edits |",
+        "| `worker` | full tools except nesting | Planned, independent edits |"
+      ],
+      "outputs": [
+        "Sessions persist automatically per working directory under\n`~/.phi/session/<encoded-cwd>/` as JSONL trajectories.",
+        "Human logs go to stderr; with `--jsonl`,\nmachine-readable events go to stdout, one JSON object per line.",
+        "Sub-agent transcripts live under `~/.phi/jobs/<id>/` and are **not** injected\ninto the parent context — only the wait/task summary is."
+      ],
+      "media": [
+        { "excerpt": "![phi welcome](assets/phi.png)", "weight": 1 },
+        { "excerpt": "![phi TUI](assets/image.png)", "weight": 1 }
+      ],
+      "reliability": [
+        "- **Permission gate** — Gate / Ask before destructive tools fire; safety is not optional when an agent can touch your tree",
+        "stale tags/hashes are rejected so over-edits and silent corruption stop here",
+        "Exit codes: `0` success · `1` runtime/LLM error · `2` max rounds reached ·\n`3` config/usage error.",
+        "In the interactive TUI, exhausting the tool-round budget prompts Continue /\nStop. Headless `phi run` has no confirmation UI, so it exits with code 2.",
+        "In headless mode, permission `ask` decisions are denied (there is no approval\nUI), so `readonly`-style safety applies without extra flags.",
+        "Default stays explore (read-only). Prefer worker only after the parent has a concrete plan.",
+        "Search\ntools (`fd`, `rg`) download into `~/.phi/bin` in the background when missing."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "Nagi-ovo/dsh-find-plugins",
+      "inferredType": "catalog-list",
+      "capability": [
+        "它就会从全 GitHub 的 [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) 里找出候选，解释差别",
+        "它只检查最匹配的少量候选",
+        "它会先查一遍这个插件的 lifecycle scripts、对外网络和子进程、读取的会话数据与凭据，以及仓库本身的可信度"
+      ],
+      "usageItems": [
+        "对 DSH 说一句「有没有插件能……」",
+        "你选定之后、开装之前"
+      ],
+      "usageActions": [
+        "对 DSH 说一句「有没有插件能……」",
+        "你选定之后、开装之前"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "比如「想把数据和流程画出来」",
+        "「想给 Web UI 加点 2005 年互联网味道」"
+      ],
+      "outputs": [
+        "然后**无论有没有问题都汇报一次**"
+      ],
+      "media": [],
+      "reliability": [
+        "只要是公开仓库并带有 `dsh-plugin` topic，转移仓库后仍然能被发现。",
+        "Skill 会先运行自带脚本，获取所有公开、未归档、非 fork 的 `dsh-plugin` 仓库。",
+        "[dsh-external/hub](https://github.com/dsh-external/hub) 在当前账号可访问时可以补充分类和安装信息，但 GitHub topic 才是主目录。"
+      ],
+      "concerns": [
+        "The README is a discovery catalog; linked plugins' capabilities and media were excluded."
+      ]
+    },
+    {
+      "repo": "worldwonderer/oh-story-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "插件提供创作 Skills、专业 Roles、项目协议与三栏工作台。",
+        "- **原生三栏布局**：项目文件树、编辑器与官方 Chat 同屏，Trajectory、工具执行、Todo、审批和 Composer 保持 DSH 原生交互。",
+        "- **实时文件跟随**：Agent 调用官方文件工具时，目标文件自动定位，编辑器同步呈现生成中的内容。",
+        "- **创作文档预览**：Markdown 支持标题、表格、任务列表、引用和代码块；JSONL 以带行号、类型和状态的结构化记录呈现。",
+        "- **稳定长对话**：消息区独立滚动，官方 Composer 固定在 Chat 栏底部。"
+      ],
+      "usageItems": [
+        "添加作品目录为 workspace，新建或打开 Session 后使用 `/story` 或 `/short-drama`。",
+        "小说与短剧工作台可随时通过左栏 Tab 切换。"
+      ],
+      "usageActions": [
+        "添加作品目录为 workspace，新建或打开 Session 后使用 `/story` 或 `/short-drama`。",
+        "小说与短剧工作台可随时通过左栏 Tab 切换。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "覆盖长篇、短篇、选题、扫榜、拆文、导入、审稿、去 AI 味与封面流程。",
+        "内置 Drama Skills 0.6.0 的 creator-first 工作流。"
+      ],
+      "outputs": [
+        "每集按请求维护最多五份可读 Markdown：`剧本.md`、`视觉设定.md`、`分镜.md`、`图片提示词.md`、`视频提示词.md`"
+      ],
+      "media": [
+        { "excerpt": "![oh-story-dsh 小说工作台](docs/images/oh-story-dsh-demo.gif)", "weight": 1 },
+        { "excerpt": "![oh-story-dsh 短剧工作台](docs/images/short-drama-dsh-demo.gif)", "weight": 1 }
+      ],
+      "reliability": [
+        "13 个 Oh Story Skills 与 7 个专业 Roles 按固定上游版本随插件交付。",
+        "不预建空文档，也不倒补用户未点名的阶段。",
+        "审查与生产交付继续使用 DSH 原生工具、权限和确认界面。",
+        "v0.5 结构化项目应继续锁定 v0.5 并只读保留",
+        "迁移时新建项目根，逐集人工确认当前工作所需文档，不要在同一目录混用旧 JSON/JSONL 与新文档。",
+        "人工未保存内容不会被并发 Agent 修改覆盖。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "cocofhu/anime-find",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- 聚合 [Mikan](https://mikanani.me)、[AniBT](https://anibt.net) 和 [AnimeGarden](https://animes.garden)",
+        "- 根据 Asia/Shanghai 时区识别当前新番季度",
+        "- 支持「还有吗」「换一批」等追问并分页展示更多结果",
+        "- 点击卡片后按字幕组和集数浏览资源，并可查看 Bangumi 介绍、评分和短评",
+        "- 可选流媒体 Tab：按搜索结果显示用户规则解析出的可播源，并在同页选集播放",
+        "播放地址支持两种取法：`playURL` 既可以是指向 `src`/`href` 的选择器，也可以写成\n`script:player_aaaa.url`，从播放页内联脚本对象里读取（MacCMS 站点常用，按同级\n`encrypt` 字段自动处理 URL 编码或 base64）。",
+        "介绍、评分和基础信息来自公开 v0 API。短评由 Host 代理 Bangumi 的非公开 p1 接口，最多展示 5 条。"
+      ],
+      "usageItems": [
+        "按字幕组浏览集数、复制磁力链接或打开种子文件：",
+        "在详情中切换到流媒体，选择剧集后可在对话中直接播放："
+      ],
+      "usageActions": [
+        "> 搜一下无职转生，看看有没有磁力",
+        "> 最近有哪些好看的动漫",
+        "> 还有吗",
+        "按字幕组浏览集数、复制磁力链接或打开种子文件：",
+        "在详情中切换到流媒体，选择剧集后可在对话中直接播放："
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "> 搜一下无职转生，看看有没有磁力",
+        "> 最近有哪些好看的动漫"
+      ],
+      "outputs": [
+        "- 在对话流中展示番剧封面、标题、评分、格式和资源数量"
+      ],
+      "media": [
+        { "excerpt": "![资源详情：无职转生第三季的磁力与种子列表](docs/screenshot-resources.png)", "weight": 1 },
+        { "excerpt": "![流媒体播放：无职转生第三季在线播放](docs/screenshot-streaming.png)", "weight": 1 }
+      ],
+      "reliability": [
+        "只有声明过的域才会\n被解析和代理放行；私网、回环和链路本地地址始终拒绝。",
+        "媒体请求仅会代理到\n已启用规则的域名及其声明的 `mediaHosts`（HLS playlist 会重写分片链接），不提供开放代理。",
+        "首期不支持依赖\nKazumi WebView 拦截的动态规则，也不会自动同步社区规则仓库。",
+        "脚本、函数和文本匹配谓词仍不支持。",
+        "该接口可能变更或不可用，届时短评 Tab 会自动隐藏，不影响介绍和资源浏览；本期不使用 HTML 抓取后备。",
+        "Bangumi 的介绍和短评只在用户点击详情卡后加载和渲染，不会写入提供给模型的工具正文。",
+        "- **搜番卡片未出现**：开启新对话，并确认 `anime_find_search` 已加载",
+        "- **来源请求失败**：检查网络与对应站点地址；单个来源失败不会阻止其他来源返回结果"
+      ],
+      "concerns": [
+        "Streaming depends on user-supplied rules and third-party source behavior; unsupported dynamic-rule cases were retained as limitations."
+      ]
+    }
+  ]
+}

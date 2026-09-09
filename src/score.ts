@@ -10,6 +10,8 @@
  *   并重新融合总分（complete 标记供 UI 决定是否渲染雷达图）
  */
 
+import type { ReadmePracticalEvidence, ReadmeSig } from './types.ts'
+
 export interface ScoreBreakdown {
   maintain: number | null
   practical: number | null
@@ -32,6 +34,8 @@ export interface ScoreView {
   /** v1.8.2：热度解释证据快照，README 富化/refold 时继承，避免丢失下载理由。 */
   dlActiveAt?: boolean
   dl30At?: number | null
+  /** practical 输入指纹；同版本 README 证据变化时强制重算，防旧缓存残留。 */
+  practicalEvidenceAt?: string | null
 }
 
 const WEIGHTS = { maintain: 0.3, practical: 0.25, popularity: 0.2, ease: 0.15, signal: 0.1 } as const
@@ -67,32 +71,79 @@ export function scoreMaintain(pushedAt: string | null, stars: number | null, ope
   return Math.round(clip(commitActivity * 0.6 + issueHealth * 0.4) * 100)
 }
 
-/** 2a. 实用度（索引 CI 结构信号版）：len/安装章节/代码块，零网络。 */
-export function scorePracticalFromSig(sig: { len: number | null; installSection: boolean; codeBlocks: number }): number | null {
-  if (sig.len === null) return null
-  let s = 0
-  if (sig.len > 2000) s += 30
-  else if (sig.len > 500) s += 20
-  else if (sig.len > 0) s += 10
-  if (sig.installSection) s += 30
-  if (sig.codeBlocks >= 2) s += 20
-  return Math.round(clip(s))
+function practicalCount(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0
 }
 
-/** 2. 实用度：README 结构完备度（README 缺失时 null）。 */
-export function scorePractical(readme: string | null): number | null {
-  if (readme === null) return null
-  const text = readme
-  let s = 0
-  if (text.length > 2000) s += 30
-  else if (text.length > 500) s += 20
-  else if (text.length > 0) s += 10
-  if (/(install|installation|usage|getting started|quick start|setup|安装|使用说明|快速开始)/i.test(text)) s += 30
-  const codeBlocks = (text.match(/```/g) ?? []).length
-  if (codeBlocks >= 2) s += 20
-  if (/^#{1,3}\s+(features?|功能)/im.test(text) && /^#{1,3}\s+(config|配置|example|示例)/im.test(text)) s += 10
-  if (/^(#{1,4})\s+(技能|skill)/im.test(text)) s += 10
-  return Math.round(clip(s))
+export const PRACTICAL_EVIDENCE_VERSION = 3
+export const PRACTICAL_PARSER_REVISION = 3
+const PRACTICAL_SCORER_REVISION = 4
+const PRACTICAL_CURVE_EXPONENT = 0.9
+
+export function currentPracticalEvidence(evidence: ReadmePracticalEvidence | null | undefined): evidence is ReadmePracticalEvidence {
+  return evidence?.version === PRACTICAL_EVIDENCE_VERSION && evidence.parserRevision === PRACTICAL_PARSER_REVISION
+}
+
+function practicalEvidenceFingerprint(evidence: ReadmePracticalEvidence | null | undefined): string | null {
+  return currentPracticalEvidence(evidence)
+    ? [
+        evidence.version,
+        evidence.parserRevision,
+        PRACTICAL_SCORER_REVISION,
+        evidence.capabilityItems,
+        evidence.usageItems,
+        evidence.usageActions,
+        evidence.ioPairs,
+        evidence.codeExamples,
+        evidence.usecaseItems,
+        evidence.outputItems,
+        evidence.media,
+        evidence.reliabilityItems,
+        evidence.confidence.overall,
+        evidence.confidence.coverage,
+        evidence.confidence.fallbackShare,
+      ]
+        .map((value, index) => index < 3 ? value : Math.round(practicalCount(value) * 1000) / 1000)
+        .join(':')
+    : null
+}
+
+export interface PracticalDimensionScores {
+  capability: number
+  usage: number
+  usecases: number
+  demo: number
+  reliability: number
+}
+
+/**
+ * 实用度 V3 的五个可审计子维度。证据先由 parser 做语义归属、全局去重与 family cap，再在 scorer 中映射。
+ * 每个 anchor 严格等于 frozen rubric/parser cap，保证 cap 内每条合法证据都有边际价值且满证据严格为 100；
+ * 共享 0.9 次幂是 citation-grounded 全门控 5-fold 的中位数，也是完整开发集综合第一；只有轻微边际递减；
+ * confidence 仅描述证据、不改变分数。
+ */
+export function scorePracticalDimensions(evidence: ReadmePracticalEvidence | null | undefined): PracticalDimensionScores | null {
+  if (!currentPracticalEvidence(evidence)) return null
+  const credit = (count: unknown, anchor: number, points: number): number =>
+    points * Math.min(1, Math.pow(practicalCount(count) / anchor, PRACTICAL_CURVE_EXPONENT))
+  return {
+    capability: credit(evidence.capabilityItems, 12, 25),
+    usage: Math.min(25,
+      credit(evidence.usageItems, 10, 8)
+      + credit(evidence.usageActions, 10, 8)
+      + credit(evidence.ioPairs, 8, 4)
+      + credit(evidence.codeExamples, 4, 5)),
+    usecases: credit(evidence.usecaseItems, 10, 20),
+    demo: Math.min(15, credit(evidence.outputItems, 8, 6) + credit(evidence.media, 6, 9)),
+    reliability: credit(evidence.reliabilityItems, 10, 15),
+  }
+}
+
+/** 2. 实用度 v3：加权 README 实证；长度/安装/配置不参与，代码示例最多 5 分。 */
+export function scorePractical(evidence: ReadmePracticalEvidence | null | undefined): number | null {
+  const dimensions = scorePracticalDimensions(evidence)
+  if (dimensions === null) return null
+  return Math.round(clip(Object.values(dimensions).reduce((sum, value) => sum + value, 0)))
 }
 
 /** npm 下载统计（downloads.json 通道，v1.8.0）。 */
@@ -248,7 +299,7 @@ function confidenceOf(input: {
 
 const REASONS: Record<string, { zh: string; en: string }> = {
   maintain: { zh: '近期仍在更新，DSH 迭代快也不怕坏', en: 'actively maintained — survives fast DSH iterations' },
-  practical: { zh: 'README 含完整安装与使用说明，上手即用', en: 'README has complete install & usage docs' },
+  practical: { zh: 'README 提供多类能力、用法、场景、产出与可靠性证据', en: 'README provides capability, usage, use-case, output, and reliability evidence' },
   popularity: { zh: '社区认可度高', en: 'well recognized by the community' },
   ease: { zh: '无需额外配置，开箱即用', en: 'works out of the box, no extra config' },
   signal: { zh: '项目信息完整（license/主题/文档齐全）', en: 'complete project metadata (license/topics/docs)' },
@@ -319,7 +370,7 @@ export interface ScoreInput {
   /** v1.8.0：星 30 天增量（star-history.json）；<7 天窗口时 null=中性。 */
   starDelta?: number | null
   /** v1.7.50+：索引 CI README 结构信号（有则实用/便捷两维零网络可算）。 */
-  readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
+  readmeSig?: ReadmeSig | null
 }
 
 /** 目录加载即算（零网络）：维护/热度/信号三维；实用/便捷 = null。
@@ -331,7 +382,7 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
   const signal = scoreSignal({ hasDescription: input.hasDescription, descriptionLen: input.descriptionLen, hasLicense: input.hasLicense, hasHomepage: input.hasHomepage, topics: input.topics, readme: null })
   // v1.7.50：索引 CI README 信号在场时实用/便捷零网络可算，五维当场齐全。
   const sig = input.readmeSig ?? null
-  const practical = sig !== null ? scorePracticalFromSig(sig) : null
+  const practical = sig !== null ? scorePractical(sig.practical) : null
   const ease = sig !== null ? scoreEaseFromSig(sig) : null
   const breakdown: ScoreBreakdown = { maintain, practical, popularity, ease, signal }
   const total = weightedGeometricMean(breakdown)
@@ -350,6 +401,7 @@ export function computeBaseScore(input: ScoreInput): ScoreView {
     pushedAt: input.pushedAt,
     dlActiveAt: input.dl != null && input.dl.dl30 >= DL_FLOOR && popularity !== null && popularity >= 70,
     dl30At: input.dl?.dl30 ?? null,
+    practicalEvidenceAt: practicalEvidenceFingerprint(sig?.practical),
   }
 }
 
@@ -366,9 +418,8 @@ function refoldScore(score: ScoreView, extras: { curated?: boolean; verified?: b
   return score
 }
 
-/** README 到手后补全实用/便捷两维并重新融合（详情页/find/卡片页级富化）。
- *  v1.7.46：signal 重算必须沿用原始字段（description/license/topics）——
- *  此前传空 topics/license 会把信号分算低（dsh-web-ui 65 vs 应有的 85）。 */
+/** README 到手后只补全便捷/信号并重新融合（详情页/find/卡片页级富化）。
+ *  practical 只能来自索引 readmeSig.practical，详情路径不得重解析或覆盖。 */
 export function enrichScore(base: ScoreView, readme: string | null, needsConfig: boolean, extras: {
   stars?: number | null
   pushedAt?: string | null
@@ -382,7 +433,6 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
   dlActive?: boolean
   dl30?: number | null
 } = {}): ScoreView {
-  const practical = scorePractical(readme)
   const ease = scoreEase(readme, needsConfig)
   const description = extras.description ?? ''
   const license = extras.license ?? null
@@ -395,7 +445,7 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
     topics,
     readme,
   })
-  const breakdown: ScoreBreakdown = { ...base.breakdown, practical, ease, signal }
+  const breakdown: ScoreBreakdown = { ...base.breakdown, ease, signal }
   const total = weightedGeometricMean(breakdown)
   const confidence = confidenceOf({ hasDescription: description !== '', hasLicense: typeof license === 'string' && license !== '', readme, topics })
   const complete = breakdown.maintain !== null && breakdown.practical !== null && breakdown.popularity !== null && breakdown.ease !== null
@@ -413,6 +463,7 @@ export function enrichScore(base: ScoreView, readme: string | null, needsConfig:
     pushedAt,
     dlActiveAt: dlActive,
     dl30At: dl30,
+    practicalEvidenceAt: base.practicalEvidenceAt ?? null,
   }
 }
 
@@ -443,21 +494,24 @@ export function attachScores(entries: Array<{
   curated?: boolean
   verified?: unknown
   bundled?: boolean | null
-  readmeSig?: { len: number | null; installSection: boolean; codeBlocks: number; heading: boolean; cmds: string[]; needsConfig: boolean } | null
+  readmeSig?: ReadmeSig | null
   score?: ScoreView | null
   isPlugin?: boolean | null
+  /** v1.8.3 身份重构期间冻结 v1.8.2 p99 人口；不参与身份展示。 */
+  scoreBaselineEligible?: boolean
 }>, force = false): void {
-  // v1.7.52：p99 口径修正——只在 isPlugin===true 的插件群体上取（与 dsh.market
-  // 在其已收录插件集上取 p99 同口径）。此前用全量 topic 仓库（含 react-resume
-  // 等 8 万星非插件）当基准，p99 被抬高、热度分被系统性压低——「90 分以上只有
-  // 一个」的重要原因之一。无任何判定插件时回退全量。
-  const pluginStars = entries.filter(e => e.isPlugin === true).map(e => e.stars)
-  const p99 = computeP99Stars(pluginStars.length > 0 ? pluginStars : entries.map(e => e.stars))
+  // 身份证据态不应间接改写本期评分算法。新目录显式携带 v1.8.2 的候选人口；
+  // 旧缓存/旧调用方没有该字段时回退历史 isPlugin 口径。
+  const baselineStars = entries
+    .filter(e => e.scoreBaselineEligible === true || (e.scoreBaselineEligible === undefined && e.isPlugin === true))
+    .map(e => e.stars)
+  const p99 = computeP99Stars(baselineStars.length > 0 ? baselineStars : entries.map(e => e.stars))
   for (const e of entries) {
     // v1.7.68：stars/pushed 变化时重算基础分（此前 score 一经挂载就跨刷新保留，
     // 星数涨了热度维还是旧值——「★2 但热度 0」的数据不同步根因）。
     // 重算时保留 README 富化维度（实用/便捷/信号），只刷新基础三维并重新融合。
-    if (!force && e.score != null && e.score.starsAt === e.stars && e.score.pushedAt === e.pushed) continue
+    const practicalEvidenceAt = practicalEvidenceFingerprint(e.readmeSig?.practical)
+    if (!force && e.score != null && e.score.starsAt === e.stars && e.score.pushedAt === e.pushed && e.score.practicalEvidenceAt === practicalEvidenceAt) continue
     const old = e.score
     // v1.8.0：热数据查表——实测下载量/星 30 天增量；缺失走无偏换算与中性动量。
     const npmKey = typeof e.npm === 'string' && e.npm !== '' ? e.npm.toLowerCase() : null
@@ -480,7 +534,8 @@ export function attachScores(entries: Array<{
       readmeSig: e.readmeSig ?? null,
     })
     if (old != null) {
-      if (old.complete === true) {
+      // practical/ease 仅当 canonical 输入指纹未变化时可继承；索引升级或证据变化必须用新值。
+      if (old.complete === true && old.practicalEvidenceAt === practicalEvidenceAt) {
         e.score.breakdown.practical = old.breakdown.practical
         e.score.breakdown.ease = old.breakdown.ease
         if (old.breakdown.signal > e.score.breakdown.signal) e.score.breakdown.signal = old.breakdown.signal

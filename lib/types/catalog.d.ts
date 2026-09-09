@@ -1,8 +1,8 @@
 /**
  * Catalog pipeline: shard-fetch GitHub topic repos -> classify (curated map,
- * rule categories, isPlugin heuristic/verdicts) -> compute today's star
+ * rule categories, evidence-based plugin identity) -> compute today's star
  * delta from the local snapshot -> serve through an in-memory TTL cache with
- * a bundled snapshot fallback. State (star baselines, verdicts) persists
+ * a bundled snapshot fallback. State (star baselines, positive verdicts) persists
  * under the profile directory.
  */
 import type { KnownMap, MarketEntry, MarketState, Registry, RefreshProgress } from './types.ts';
@@ -26,12 +26,12 @@ export declare function loadKnown(): KnownMap;
 export declare function stateFile(profile: string): string;
 export declare function readState(profile: string): MarketState;
 export declare function writeState(profile: string, state: MarketState): void;
-export declare function verdictsOf(profile: string): Record<string, boolean>;
+export declare function verdictsOf(profile: string): Record<string, true>;
 export declare function readFavorites(profile: string): string[];
 export declare function readSkipUpdates(profile: string): Set<string>;
 export declare function setSkipUpdate(profile: string, name: string, skip: boolean): string[];
 export declare function toggleFavorite(profile: string, key: string): string[];
-export declare function applyVerdicts(profile: string, updates: Record<string, boolean>): void;
+export declare function applyVerdicts(profile: string, updates: Record<string, true>): void;
 export declare function fetchLocalizedDescriptions(lang: string, repos: string[]): Promise<Record<string, string>>;
 /** 可更新插件：已装依赖 spec 里的版本 vs 索引 npm_version（npm registry latest）。 */
 export interface PluginUpdate {
@@ -63,11 +63,6 @@ export declare function resolveInstalled(registry: Registry, deps: Record<string
     current: boolean;
 }>;
 export declare function computeUpdates(registry: Registry, deps: Record<string, string>, skip?: Set<string>): PluginUpdate[];
-export declare function heuristicIsPlugin(repo: {
-    name: string;
-    description: string | null;
-    topics: string[];
-}): boolean | null;
 export declare function computeTodayStars(profile: string, entries: MarketEntry[]): MarketEntry[];
 export interface LoadResult {
     registry: Registry;
@@ -78,5 +73,11 @@ export declare function loadRegistry(profile: string, token: string, opts?: {
     force?: boolean;
     registryUrl?: string;
 }): Promise<LoadResult>;
-/** Deep verdict batch: returns verdicts for the given repos (only true/false). */
-export declare function verifyRepos(profile: string, token: string, repos: string[]): Promise<Record<string, boolean>>;
+export interface VerifyResult {
+    verdicts: Record<string, true>;
+    error?: string;
+    retryAfterMs?: number;
+}
+/** Deep positive-verdict batch: absence is unknown, never a persisted negative.
+ * Partial positives are persisted and returned even when a later repo is rate-limited. */
+export declare function verifyRepos(profile: string, token: string, repos: string[]): Promise<VerifyResult>;

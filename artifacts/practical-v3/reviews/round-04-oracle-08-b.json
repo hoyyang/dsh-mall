@@ -1,0 +1,521 @@
+{
+  "reviews": [
+    {
+      "repo": "openguardrails/openguardrails",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "The whole protocol is **one endpoint, two calls per model call**. You forward\nthe exact bodies you already send to and receive from your LLM; the runtime\ndoes everything else (sessions, turns, decomposition, detection).",
+        "A detector is **OGR-conformant** if it accepts a `GuardEvent` and returns a\n  valid `Verdict` against the [JSON Schemas](schema/).",
+        "The [benchmark](benchmarks/) evaluates conformant detectors on shared corpora\n  and publishes the leaderboard.",
+        "| [obligations](specification/obligations.md) | What the enforcement point must DO before an action proceeds — carried beside an `allow` |",
+        "| [local redaction](specification/local-redaction.md) | What an in-process integration does so a secret never leaves the host — mask on the way out, restore into a tool, rules served by the runtime | — |",
+        "| [composition](specification/composition.md) | How multiple detectors' answers combine into one decision | — |",
+        "**Security** — *system compromise* (prompt injection, data exfiltration,\n  malicious commands, SSRF, secret leakage, supply chain). Judged on actions\n  and data flow — what a tool call is about to do.",
+        "| [artifact scan](specification/artifact-scan.md) | The sibling contract a scanner implements — hash-first, range-negotiated, pluggable | ICAP |",
+        "Each event gets a **verdict at the moment the integration can still refuse\nit**"
+      ],
+      "usageItems": [
+        "def evaluate(kind, step_id, payload):\n    \"\"\"The whole protocol is this one call. Fail-open: no verdict → proceed.\"\"\""
+      ],
+      "usageActions": [
+        "if blocked(evaluate(\"step/request\", step_id, body)):     # ① before the model",
+        "if blocked(evaluate(\"step/response\", step_id, resp)):    # ② before acting on it"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Integrate your agent in five minutes\n\nThe whole protocol is **one endpoint, two calls per model call**."
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Fail-open by\ndefault: if the runtime is unreachable, your agent keeps running.",
+        "changes within 1.x are additive-optional (`additionalProperties: false`\nrejects unknown keys, not absent ones, so both ends roll forward\nindependently)",
+        "| [degraded mode](specification/degraded-mode.md) | What an integration does when the runtime is unreachable (default: fail open) | — |"
+      ],
+      "media": [],
+      "concerns": [
+        "This repo is a protocol specification and benchmark monorepo, not a plugin; the DeepSeek Harness integration is one listed integration among several (Higress, litellm, Claude Code, ...).",
+        "The integration-status table rows describe linked third-party targets and were not counted as this project's own capabilities.",
+        "The README contains no images/GIFs/videos; media is empty."
+      ]
+    },
+    {
+      "repo": "PlutoKeating/dsh-lark-bot",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**安全网守护**：dsh 崩溃后飞书仍会回复你，`/safemode` 进入仅核心安全模式直接自愈；重启后自动恢复排队任务，`/jobs` 可显式重试。",
+        "**多机器人可信交接**：`bot add` 增加独立实例，可信机器人在同群真实 @ 交接，连续协作有上限。",
+        "**完善的工作区与会话管理**：每会话自动创建隔离 git worktree 项目工作区；`/session` 浏览 / 绑定会话，`/archive` + `/retention` 自动归档与清理，会话列表不会烂掉。",
+        "**完善的版本管理机制**：管理员直接在飞书发 `/upgrade` 后台更新、验证并重载；有新版本才提醒，不打断当前工作。",
+        "**dsh Web 可视化设置**：官方 Settings → Plugins 页面点选工作目录、模型、并行数、提醒，不用背环境变量。",
+        "**并行多任务**：同一群聊同时跑多个任务、会话隔离。",
+        "**多角色 Agent**：`/role` 切换或指派 PM / 开发 / 文档等角色，各带人设、模型偏好与规则。",
+        "**对话内管理模型与密钥**：一张 `/config` 卡片切换供应商、热更新密钥，不用离开飞书。",
+        "**快速 / 平衡 / 深度模式**：`/mode` 一键选任务强度，下一轮生效且不打断当前任务。",
+        "**关键任务先拍板**：`lark_request_plan_approval` 先出完整计划，再批准或附意见继续规划。",
+        "**跨会话通知 + @人**：A 群跑完任务主动推送到 B 群 / 私聊并 @ 你。",
+        "经 `/channels` 配置后单向推送到 Telegram / 企业微信群机器人等；只推送、无入站交互"
+      ],
+      "usageItems": [
+        "| `/status` | 查看状态卡（工作区 / 模型 / session / run / token / 任务账本） |",
+        "| `/cd <path>` | 切到该目录的独立会话 |",
+        "| `/ws list\\|save\\|use\\|remove` | 管理命名工作空间 |",
+        "| `/jobs [list\\|show\\|retry]` | 对账并重试排队/运行/失败/中断任务 |",
+        "| `/session`、`/session bind` | 浏览 / 显式绑定 DSH session |",
+        "| `/notify <scope\\|chatId> <text>` | 跨会话发送通知（管理员） |",
+        "| `/stop` | 终止当前任务 |",
+        "| `/doctor` | 生成脱敏诊断包（管理员） |"
+      ],
+      "usageActions": [
+        "| `/status` | 查看状态卡（工作区 / 模型 / session / run / token / 任务账本） |",
+        "| `/cd <path>` | 切到该目录的独立会话 |",
+        "| `/jobs [list\\|show\\|retry]` | 对账并重试排队/运行/失败/中断任务 |",
+        "| `/stop` | 终止当前任务 |",
+        "| `/doctor` | 生成脱敏诊断包（管理员） |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "让 DeepSeek Harness 成为你飞书里的一员，在手机、群聊、话题里直接指挥本机 coding agent。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "**DeepSeek Harness（`dsh`）**：已验证 **0.1.0-rc.8**（2026-08-25）",
+        "**运行时**：Node.js ≥ 22.19；**平台**：Linux / macOS / Windows。adapter 默认 `sdk`（原生续跑 / 流式 / 图片块），可切 `acp` / `headless` / `web`。",
+        "- **安全**：默认拒绝、密钥脱敏、路径 containment、SSRF 防护、过期事件拒绝、交互工具默认禁用",
+        "本项目**从不提供 .exe 或\n> “下载即运行”的安装包**，任何以此名义分发的页面 / 仓库均为**假冒 / 恶意来源**。",
+        "飞书走 WebSocket 长连接（出站），本机在 NAT 后面也能用，免公网服务器、免域名、免内网穿透。"
+      ],
+      "media": [],
+      "concerns": [
+        "The README contains no images/GIFs/videos; media is empty.",
+        "Most command rows duplicate capability claims already recorded in capability, so usageItems keeps only non-duplicated command-reference rows.",
+        "Community/ecosystem listing table and the impostor-repo forensic archive are external references and were not counted."
+      ]
+    },
+    {
+      "repo": "jjxjjjjiik-bot/dsh-chat-timeline",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**常驻右侧导航轨**——屏幕右侧细长竖轨，每条用户消息对应一个指示线，折叠态纯净极简无多余干扰，与官网折叠态 1:1 一致",
+        "**⭐ 重点节点书签与筛选**——展开面板点击 `★` 即可加星标记；折叠态已标记项呈现**高亮金色指示线**；展开面板顶部「★ 只看标记 (n)」支持一键筛选重点问答；本地 `localStorage` 自动持久化",
+        "**全模式主题适配**——1:1 像素级复刻 DeepSeek 官网浅色/深色主题：浅色模式下灰线清爽优雅、白底毛玻璃展开面板；深色模式沉浸暗黑、高对比度金色标记",
+        "**✨ 丝滑跳转与防抖**——点击条目一键平滑跳转到对应消息（按需加载更早历史）；智能防抖锁定机制，彻底消除长对话跨区域跳转时悬浮面板的抽搐乱跳",
+        "**动态避让**——智能检测右侧工作台（如 aionui 等工具栏），自动平移贴合聊天区边缘，避免重叠遮挡",
+        "**自动隐藏与窄屏适配**——会话少于 2 条用户消息时自动隐藏；视口宽度 ≤ 767px（移动端/窄窗口）自动收起防遮挡",
+        "- **无障碍**——完善的 ARIA 标签与键盘导航 + 遵循系统「减弱动态效果（prefers-reduced-motion）」设置"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**🔄 回退撤回深度兼容**——多层防御式解析联动 `dsh-rewind` 插件，无论中英文提示文案或结构化参数，被回退/撤回的消息均自动从时间线上即时剔除",
+        "Host 侧通过会话投影（`dshChatTimeline`）持久化枚举所有用户消息（支持 surface replace 自动剔除回退消息）"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshot-1.png\" alt=\"右侧导航栏\" width=\"45%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshot-2.png\" alt=\"悬停展开面板\" width=\"45%\"/>",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The README is feature-plus-install; no explicit use cases, io pairs, or operational code fences, so those arrays are empty.",
+        "The rewind/withdraw compatibility claim was placed in reliability as a compatibility fact rather than duplicating it in capability."
+      ]
+    },
+    {
+      "repo": "Gin-7/dsh-pet-remielle",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "由 **DSH 真实会话事件**驱动的多宠物网页桌宠：桌宠实时跟随 DeepSeek Harness 的任务进展，以贴纸动画 + 状态气泡呈现。",
+        "- 多宠物注册表 + 状态气泡（项目 / 阶段 / 待办 / 进度实时汇报）",
+        "- SSE 实时推送 + 可选的桌面悬浮窗（随包 Electron，透明置顶）",
+        "- 双击画画联动：粗笔刷揭示作品图（绘制中 → 得意中 → 淡出）",
+        "- 一键版本检查 + 增量更新",
+        "| 多 Session 优先级 | 审批 > 等待回答 > 完成提醒 > 等待/错误 > 当前会话 > 状态优先级 > 更新时间。",
+        "多 Session 同时运行时按 `审批 > 等待回答 > 完成提醒 > 等待/错误 > 当前会话 > 状态优先级 > 更新时间` 选择顶层任务；其余会话由可点击的 `+N` 汇总背板表示。",
+        "- **今日已用 · 实时·令牌（精确）**：配置平台会话令牌 `DEEPSEEK_PLATFORM_TOKEN` 后，直连平台费用接口"
+      ],
+      "usageItems": [
+        "- **单击桌宠**：切换随机贴纸心情。",
+        "- **双击桌宠**：进入画画动画，绘制完成后在屏幕（右上角）弹出作品图，随后淡出。",
+        "- **右键桌宠（页面内）**：角色大小 / 锁定位置 / 显示气泡 / 用量模式 / 桌面悬浮模式 / 重置位置 / 暂停动画。",
+        "- **气泡翻页**：状态与用量都开启时，点左侧圆点或在气泡上滚轮，在状态卡与余额页之间切换；停在当前页，不会自动回落。",
+        "- **滚轮（桌宠）**：调整角色大小。",
+        "| 会话操作 | 网页与桌面一致：点卡片 / `?` / `!` 打开对应会话，`✓` 允许一次；"
+      ],
+      "usageActions": [
+        "- **单击桌宠**：切换随机贴纸心情。",
+        "- **双击桌宠**：进入画画动画，绘制完成后在屏幕（右上角）弹出作品图，随后淡出。",
+        "- **右键桌宠（页面内）**：角色大小 / 锁定位置 / 显示气泡 / 用量模式 / 桌面悬浮模式 / 重置位置 / 暂停动画。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "气泡显示「DeepSeek 余额 ¥X」+「今日已用 ¥X · 空闲/高峰时段」，时段用颜色标识：空闲绿、高峰红"
+      ],
+      "reliability": [
+        "| 状态来源 | DSH `session/event` 真实事件，非 DOM 抓取 |",
+        "| 实时推送 | SSE 流（断线自动重连 + 轮询兜底） |",
+        "- 已知限制：「有待处理内容」的绿点信息来自网页侧边栏，仅在**网页端在线时**同步给桌面窗。",
+        "但属于估算——DSH 关闭期间的消耗会漏记。",
+        "- 令牌缺失或失效时自动回落记账模式",
+        "| macOS / Linux | ✗ | ✓（自动回落页面内） |",
+        "低于 0.3.0 **必须先卸载旧版再重装新版**",
+        "npm test                          # node --test 单测",
+        "插件行 id：`dsh-pet-remielle`。卸载即复原，无残留。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/01.gif\" width=\"56\" alt=\"01 绘制中\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/02.gif\" width=\"56\" alt=\"02 摸鱼中\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/03.gif\" width=\"56\" alt=\"03 得意中\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/04.gif\" width=\"56\" alt=\"04 思考中\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/05.gif\" width=\"56\" alt=\"05 等待中\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/pets/remielle/06.gif\" width=\"56\" alt=\"06 待机中\"/>",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The six mood-sticker GIFs are the README's only media and each demonstrates a distinct state; together they reach the media cap of 6.",
+        "The pet character assets are third-party (HoYoverse) and non-commercial per NOTICE; only the plugin behavior was counted.",
+        "The changelog-style package-rename history was reduced to the single upgrade-limitation fact in reliability."
+      ]
+    },
+    {
+      "repo": "not-big-dog/DSH-pipeline-kernel",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**pipeline-kernel 是管线无关的管理内核**：管线 = 配置数据（`pipelines` 表一行，用 `pipeline_define` 定义），内核不绑定任何具体业务。",
+        "每 5 分钟扫描 open 任务补唤醒（同任务 10 分钟冷却）、done 但路由未完成（僵尸）自愈补投、全链静止 30 分钟汇报主管。",
+        "- **活动**：各管线运行摘要（角色状态 / 进行中任务 / 最近完成 / 失败置顶）",
+        "- **管线**：管线一等实体（Graph 缩略图 / KPI / 打包产物）；点击任务展开 Task Inspector",
+        "- **归档**：冷存储——归档不删除数据，可恢复；永久删除仅在归档箱内、需输入管线 id 确认",
+        "- **新建**：定义新管线（工作文件夹必选，走系统目录选择器）",
+        "多语言：UI 与文档自动跟随 DSH 语言设置（中文 / English）"
+      ],
+      "usageItems": [
+        "定义管线：`pipeline_define {id:\"my-pipe\", roles:{supervisor:{preset:\"pipeline-supervisor\"}, ...}, chain:[\"supervisor\",...], gates:{...}}`",
+        "2. 起链：`pipeline_deploy {pipelineId:\"my-pipe\"}`",
+        "3. 播种角色会话：`pipeline_seed {pipelineId:\"my-pipe\"}`（按定义给未注册角色创建会话，自动写注册表）",
+        "4. 投任务：`pipeline_push {title, description, tags:[\"target:<角色>\",\"task:<编号>\",\"attempt:1\"]}`",
+        "5. 流转：`pipeline_list` → `pipeline_claim` → `pipeline_done {result:\"done route:<角色|UID> 产物:...\"}`（内核自动路由下一环）",
+        "6. 看全景：`pipeline_status`"
+      ],
+      "usageActions": [
+        "2. 起链：`pipeline_deploy {pipelineId:\"my-pipe\"}`",
+        "3. 播种角色会话：`pipeline_seed {pipelineId:\"my-pipe\"}`（按定义给未注册角色创建会话，自动写注册表）",
+        "4. 投任务：`pipeline_push {title, description, tags:[\"target:<角色>\",\"task:<编号>\",\"attempt:1\"]}`",
+        "5. 流转：`pipeline_list` → `pipeline_claim` → `pipeline_done {result:\"done route:<角色|UID> 产物:...\"}`（内核自动路由下一环）",
+        "6. 看全景：`pipeline_status`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "> **依赖要求（v0.9+）：宿主 `deepseek-harness 0.1.0-rc.8` 及以上**（本插件自身锁定 `^0.1.0-rc.8`，cordis 4.x）。",
+        "重启 dsh web 后，**新会话**带 `pipeline_*` 工具（存量会话工具目录固定，需重建会话）。",
+        "无管线/无任务时零噪音。"
+      ],
+      "media": [],
+      "concerns": [
+        "The bilingual README states the same facts twice (中文 / English); each claim was recorded once.",
+        "The README contains no images/GIFs/videos; media is empty.",
+        "No explicit use cases, io pairs, or non-install code fences; those arrays are empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "yuukiLike/zeromd",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "zeromd simply keeps this local knowledge base in sync across all your devices.",
+        "- **macOS ↔ iOS**: iCloud auto-sync (seconds)",
+        "- **macOS ↔ GitHub**: Git timed sync (every 5 min, only when changes exist)",
+        "The installer will find your vault, set up Git, let you choose `SSH` or `HTTPS`, connect to GitHub, and start syncing.",
+        "**Vault renamed?** No action needed. sync.sh auto-discovers the vault by scanning for `.git` in the iCloud Obsidian directory.",
+        "On this machine's first sync, zeromd checks whether the local vault has already established sync with `origin/main`. If the local state may conflict, it creates a local `zeromd-backup-<timestamp>` branch first"
+      ],
+      "usageItems": [
+        "gmd                      # check sync status (same as gmd status)",
+        "gmd doctor               # health check, diagnose issues",
+        "gmd sync                 # manual sync now",
+        "gmd log                  # view last 20 log entries",
+        "gmd setup                # smart setup (idempotent, skips completed steps)",
+        "gmd help                 # compact help (Chinese, English, or Japanese)",
+        "**Mac → iPhone**: Create a note on Mac, it should appear on iPhone within 30 seconds.",
+        "**iPhone → Mac**: Write something on iPhone, it should appear on Mac within 30 seconds."
+      ],
+      "usageActions": [
+        "gmd sync                 # manual sync now",
+        "gmd doctor               # health check, diagnose issues",
+        "gmd setup                # smart setup (idempotent, skips completed steps)",
+        "**Sync issues?** Run `gmd doctor` to diagnose."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Common Commands\n\n```bash\ngmd                      # check sync status (same as gmd status)"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "| iCloud corrupts .git | Low probability; remote repo is full backup |",
+        "| macOS off, iOS edits can't push | Auto-syncs when Mac wakes up |",
+        "| Git conflicts | `pull --rebase` + plain text is easy to resolve |",
+        "| GitHub down | Local + iCloud dual backup |",
+        "If you use HTTPS and GitHub rejects your credentials, zeromd now reports that as an HTTPS auth error instead of a generic push failure.",
+        "Pure bash test suite, zero dependencies. Run it after any change to `scripts/`. All tests must pass before submitting a PR.",
+        "Your notes are not affected. iCloud sync continues. Only auto-push to GitHub stops.",
+        "Windows users can `git clone` the repo and use [obsidian-git](https://github.com/denolehov/obsidian-git) for sync."
+      ],
+      "media": [],
+      "concerns": [
+        "This is a local bash/Obsidian sync tool with no DeepSeek Harness relationship; typed as standalone-nonplugin.",
+        "The Mermaid architecture diagrams are not images and were not counted as media.",
+        "The Claude Code vault-access fence demonstrates the vault being AI-readable, not how to operate zeromd, so it was excluded from codeExamples."
+      ]
+    },
+    {
+      "repo": "zhu168/dsh-save-money",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "at pause time running long tasks are **paused** (not stopped) automatically, and they resume when the window ends.",
+        "- **Multiple time windows**: add / remove pause-resume windows freely; supports midnight-crossing windows (23:00–08:00) and per-weekday filtering;",
+        "- **No requests during the window (the saving core)**: inside a pause window the AI sends no new requests to the model service, so **no cost is incurred**;",
+        "- **Per-model-tier save mode**: decide per model tier which ones pause during windows.",
+        "- **One-click DeepSeek preset**: dedupe-append the peak windows (**08:58–12:02, 13:58–18:02**, with a 2-minute boundary margin",
+        "- **Timezone support**: IANA timezone dropdown, browser auto-detection with Beijing time (+8) fallback;",
+        "- **Account balance display (optional)**: tick \"Show balance\" in settings and your official DeepSeek account balance appears next to the status text",
+        "- **Spend bar chart (last 8 hours, per 10 minutes)**: click the balance to open a chart of the last 48 ten-minute windows. **External-spend attribution**"
+      ],
+      "usageItems": [
+        "1. After install and activation, click the **\"Save · 🟢 Working\"** status text in the top-right of the session header (next to the Session log) to open settings",
+        "2. Click **One-click DeepSeek peak/off-peak savings** → the peak windows are added automatically",
+        "3. **Check \"Enable\"** (the one-click does not auto-enable);",
+        "| `save_money_status` | Query state / **gate state (gate: open\\|closed)** / window / pause record / UTC projection |",
+        "| `save_money_configure` | Configure (enabled / timezone / warnMinutes / windows) |",
+        "| `save_money_end_window` | End save mode for the currently active window only (one-shot, in-memory): resume now / cancel the upcoming pause; next windows still take effect |",
+        "Paused and want to continue immediately? Click **End this save mode** (red button)"
+      ],
+      "usageActions": [
+        "2. Click **One-click DeepSeek peak/off-peak savings** → the peak windows are added automatically",
+        "3. **Check \"Enable\"** (the one-click does not auto-enable);",
+        "| `save_money_status` | Query state / **gate state (gate: open\\|closed)** / window / pause record / UTC projection |",
+        "| `save_money_end_window` | End save mode for the currently active window only (one-shot, in-memory): resume now / cancel the upcoming pause; next windows still take effect |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "equally useful for time-of-use electricity rates, bandwidth off-peak shifting, or any \"I don't want the machine working during this period\" scenario."
+      ],
+      "outputs": [
+        "Each bar is a 10-minute window: the X axis shows whole-hour ticks, the Y axis key-point amount ticks (≤5, with gridlines), and hovering shows each window's exact time range and amount.",
+        "Hover the balance to see **how much was spent in the last 1 hour / 10 minutes / 24 hours** (balance increases from top-ups or refunds show as \"+amount\");"
+      ],
+      "reliability": [
+        "- **Non-intrusive by design**: no screen lock, no overlay blocking, no user action prevented",
+        "| Plugin fails to load with `ReferenceError: harness is not defined` | You are running a build older than **v1.2.2**",
+        "| UI shows but the **Enable checkbox (and other settings) do nothing** | You are running a build older than **v1.2.5**",
+        "The file is keyed by a fingerprint of the API key — **changing the key discards the old history** automatically;",
+        "Your settings survive upgrades (they live in `save-money.config.json`, untouched by remove/re-add).",
+        "- **Persistent balance history**: sampled history is saved to `~/.dsh/dsh-save-money-balance.json`"
+      ],
+      "media": [
+        {
+          "excerpt": "![Save-money plugin screenshot](./screenshot.en.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Balance and spend bar chart screenshot](./screenshot-balance.en.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The install section spans three long paths; all install/config fences were excluded from codeExamples.",
+        "The external-spend attribution detail is part of the spend-chart claim and was kept once in capability.",
+        "No io pairs or runnable operational code examples exist; those arrays are empty."
+      ]
+    },
+    {
+      "repo": "hellodigua/dsh-share",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DSH 对话分享插件，分享单轮或多轮对话，可导出为图片或 Markdown。",
+        "- 问题和回答两侧都有联动勾选框，也可直接点击内容整组选择，支持不连续选择",
+        "- 勾选框会在长内容滚动时吸附在页面上，到当前问题或回答末尾再移出",
+        "- 可复制图片、下载 PNG 或 Markdown",
+        "- 保留 Markdown、代码块、表格、图片和工具调用摘要",
+        "- 可调整图片宽度和字号，长图支持滚动预览",
+        "- 可勾选“不展示过程”，只保留提问和最终回答",
+        "和 DeepSeek 网页端一致的多选交互，操作体验完全一致。"
+      ],
+      "usageItems": [
+        "- 从右上角进入问答选择模式，默认全选",
+        "- 每轮的分享按钮也会进入选择模式，并只预选当前问答",
+        "生成图片前可调整宽度、字号和过程显示，完成后可下载或复制图片。"
+      ],
+      "usageActions": [
+        "- 可复制图片、下载 PNG 或 Markdown",
+        "- 从右上角进入问答选择模式，默认全选"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "兼容 `@deepseek-ai/dsh ^0.1.0-rc.6`。",
+        "- 复制图片需要浏览器授予剪贴板权限，权限不足时仍可下载图片。",
+        "- 无法读取的远程资源会以透明占位跳过。",
+        "- 只能选择页面已经加载的完整问答；需要更早内容时，请先向上滚动加载。",
+        "DSH 调整对话结构后可能需要同步适配。",
+        "性能测试：日常聊天仅保留分享按钮等轻量开销；选择处理和图片生成只在使用分享功能时启动，并针对多轮对话做了优化。"
+      ],
+      "media": [
+        {
+          "excerpt": "![dsh-share 多轮问答选择](./assets/readme/share-selection.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![dsh-share 生成图片](./assets/readme/share-dialog.webp)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Short README; no io pairs, code examples, or use-case statements, so those arrays are empty.",
+        "The selection-mode entry points straddle capability/usage; interaction instructions were placed in usageItems and the selection behaviors in capability."
+      ]
+    },
+    {
+      "repo": "MarvekG/deepseek-harness-model-config",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI 添加“模型高级配置”页面，用于创建自定义模型端点并配置每个模型的能力参数。",
+        "- 新增自定义端点：名称、URL、API Key 和协议。",
+        "- 支持在 provider 层配置自定义请求 Header，并应用于模型请求。",
+        "- 支持 `openai-completions`、`openai-responses`、`anthropic-messages`。",
+        "- 通过统一的 `GET /models` 流程获取候选模型，支持按模型 ID 或显示名称搜索、全选、反选和全不选。",
+        "- 无需拉取即可手动输入模型 ID 添加模型；重复 ID 会直接选中已有模型。",
+        "- 端点高级参数支持默认容量、输入模态、推理兼容、缓存、传输、超时和重试策略。",
+        "- 从 `models.dev` 补全缺失的上下文窗口、最大输出、输入模态和推理能力",
+        "- 在保存前编辑每个模型的容量、文本/图片输入和 `reasoningEfforts`，并查看不含密钥的配置预览。"
+      ],
+      "usageItems": [
+        "打开 Web UI 的“设置 → 模型高级配置”，即可新增端点或编辑现有 `llm-pi-ai` 模型配置。",
+        "端点名称、BASE_URL、API-KEY，然后点击获取模型，把想要的模型勾选上：",
+        "2. 模型参数：主要检查上下文大小和最大输出长度。"
+      ],
+      "usageActions": [
+        "打开 Web UI 的“设置 → 模型高级配置”，即可新增端点或编辑现有 `llm-pi-ai` 模型配置。",
+        "端点名称、BASE_URL、API-KEY，然后点击获取模型，把想要的模型勾选上："
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- API Key 仅经 Harness 凭据存储写入，不会进入 `settings.yaml` 或配置预览。",
+        "模型参数一般能自动填写，前提是要能访问 [https://models.dev](https://models.dev)",
+        "自定义 Header 仅用于模型请求；“获取可用模型”仍使用 API Key。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"1666\" height=\"810\" alt=\"image\" src=\"https://github.com/user-attachments/assets/945e6566-dca2-45ca-bcc3-4609ea47f079\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"1746\" height=\"1580\" alt=\"image\" src=\"https://github.com/user-attachments/assets/828f36ea-8a7d-4021-9dbb-253d60a1e949\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"1712\" height=\"1613\" alt=\"image\" src=\"https://github.com/user-attachments/assets/e185563c-4b89-468f-8463-49463c5b6e41\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"1744\" height=\"1628\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a9a1e123-1e78-4435-addc-02ded574ba83\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "All four screenshots are externally hosted GitHub user-attachments, so each is weighted 0.5.",
+        "No io pairs, code examples, or explicit use cases; those arrays are empty.",
+        "The screenshots use the generic alt text \"image\"; they were still counted as demonstration media of the settings UI."
+      ]
+    },
+    {
+      "repo": "Rain-kl/dsh-preset-plus",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "插件只提供一个固定 DSH 模式 **`preset-plus`**。仅当**当前会话挂载的 preset id ∈ `scopedPresets`**时，才向请求注入预设上下文。",
+        "可以很方便的调整自定义模式系统提示词, 并且能够支持导入导出分享提示词",
+        "默认内置 `jailbreak` 预设",
+        "- **自动（auto，可关）**：第一条真实消息到来时自动注入。",
+        "- **手动（/preset-plus prefill）**：用户显式触发，注入标记生效于下一条消息。",
+        "模型工具：`preset_plus_status`"
+      ],
+      "usageItems": [
+        "- `/preset-plus status | prefill | on | off | save`",
+        "- `/preset-plus list`：列出预设",
+        "- `/preset-plus activate <id>`：激活预设",
+        "在设置里配置完预设后, 选择 PresetPlus 模式使用既可生效"
+      ],
+      "usageActions": [
+        "- `/preset-plus status | prefill | on | off | save`",
+        "- `/preset-plus list`：列出预设",
+        "- `/preset-plus activate <id>`：激活预设"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "破限场景下，伪造模型的服从输出从而提升破限效果。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "其他模式**一律不进行任何注入**。",
+        ">注意: 伪造输入无法记录到\"轨迹\"中, 可以通过查看控制台打印判断是否注入成功",
+        "#可能存在版本滞后"
+      ],
+      "media": [
+        {
+          "excerpt": "![preset-settings.png](docs/assets/preset-settings.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![console-log.png](docs/assets/console-log.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![select-patern.png](docs/assets/select-patern.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The plugin's stated purpose is jailbreak-style prompt prefilling; this review records the README's described behavior as evidence only.",
+        "The injection-order fence is a schematic, not a runnable example, so codeExamples is empty.",
+        "No io pairs or concrete outputs are described; those arrays are empty."
+      ]
+    }
+  ]
+}

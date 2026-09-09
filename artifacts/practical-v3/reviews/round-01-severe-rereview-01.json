@@ -1,0 +1,100 @@
+{
+  "reviews": [
+    {
+      "repo": "foryourhealth111-pixel/Vibe-Skills",
+      "capability": 20,
+      "usage": 12,
+      "usecases": 9,
+      "demo": 10,
+      "reliability": 10,
+      "total": 61,
+      "confidence": "medium",
+      "evidence": "Skill discovery, L/XL planning, per-module assignment, TDD, execution records, 17-check acceptance; ML case 10/10 17/17; troubleshooting; receipts.",
+      "concern": "Case and verification evidence lives in linked docs; no test outputs or samples in README itself."
+    },
+    {
+      "repo": "strukto-ai/mirage",
+      "capability": 21,
+      "usage": 18,
+      "usecases": 7,
+      "demo": 4,
+      "reliability": 7,
+      "total": 57,
+      "confidence": "medium",
+      "evidence": "Mounts (S3/Slack/Redis...), ~50 backends, two-layer cache, CLI create/execute/snapshot/load, register_cli, sandbox, Python/TS quickstarts.",
+      "concern": "No explicit use cases, demos, or troubleshooting; sandbox and limits only mentioned in passing."
+    },
+    {
+      "repo": "bowenliang123/dsh-context",
+      "capability": 23,
+      "usage": 15,
+      "usecases": 4,
+      "demo": 6,
+      "reliability": 8,
+      "total": 56,
+      "confidence": "medium",
+      "evidence": "Composition bar, per-request trend, events, file activity, agent network, context browser with diff; /context command; real-session figures; coverage notes.",
+      "concern": "Feature tour only, no explicit use cases; screenshots external-hosted, not viewable in README."
+    },
+    {
+      "repo": "Alisa0808/vox-director",
+      "capability": 20,
+      "usage": 13,
+      "usecases": 9,
+      "demo": 11,
+      "reliability": 8,
+      "total": 61,
+      "confidence": "medium",
+      "evidence": "B/A/C-roll pipelines, approval gates, voice cloning, live model fetch; quick-start prompt; embedded video +4 films; models-and-gotchas; auto-retry.",
+      "concern": "Requires paid Atlas Cloud API; no free path; no tests or troubleshooting section in README."
+    },
+    {
+      "repo": "MemTensor/memmy-agent",
+      "capability": 20,
+      "usage": 17,
+      "usecases": 10,
+      "demo": 6,
+      "reliability": 10,
+      "total": 63,
+      "confidence": "medium",
+      "evidence": "Cross-agent memory, history onboarding, desktop/CLI/TUI/API, MCP/Skills; CLI commands, systemd, config sample; tests; explicit error over fake memories.",
+      "concern": "Trial/BYOK monetization prominent; single GIF demo; comparison table is positioning, not evidence."
+    },
+    {
+      "repo": "imsai-sh/zhuzhiliao",
+      "capability": 16,
+      "usage": 10,
+      "usecases": 5,
+      "demo": 3,
+      "reliability": 8,
+      "total": 42,
+      "confidence": "high",
+      "evidence": "Single-file sim: rope physics, real-sample audio with synth fallback chain, sensor mode, auto-spin, local counter, iOS/sensor fallbacks; LAN play command.",
+      "concern": "Not open source (no redistribution); demo only via external site; no in-README media."
+    },
+    {
+      "repo": "ccch1mneyyy/working-activity",
+      "capability": 22,
+      "usage": 18,
+      "usecases": 4,
+      "demo": 8,
+      "reliability": 10,
+      "total": 62,
+      "confidence": "medium",
+      "evidence": "Working-line (pi+DSH): tool activity, progress, narration, warnings, cost/token stats, presets, doctor, commands; known limitations; no telemetry; tests.",
+      "concern": "No explicit use cases; feature-list README; no screenshots, only inline text examples."
+    },
+    {
+      "repo": "paean-ai/deeptide",
+      "capability": 19,
+      "usage": 15,
+      "usecases": 7,
+      "demo": 8,
+      "reliability": 8,
+      "total": 57,
+      "confidence": "medium",
+      "evidence": "Agent CLI+GUI: tools, slash commands, hooks, memory, sub-agents, custom md commands, plan mode, research; doctor; local-echo mode; 6 samples; failure-mode docs.",
+      "concern": "CLI engine is upstream redirect; no tests shown; tool/command claims inherited from zero-cli."
+    }
+  ]
+}

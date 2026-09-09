@@ -1,0 +1,314 @@
+{
+  "reviews": [
+    {
+      "repo": "ZJU-LLMs/OpenStory",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "现在可以通过 `dsh-openstory` 将 OpenStory 多智能体推演接入 DeepSeek Harness，让 agent 直接启动模拟、查看角色、下达指令并逐回合推进故事。",
+        "底层采用强大的 Agent-Kernel 架构，支持在推演过程中**动态增删智能体**。",
+        "你不仅能直观地看到智能体在地图上的动态轨迹，更能随时点击查看人物的详细信息、状态变化与互动档案。",
+        "涵盖智能体感知、计划、执行、反思等完整生命周期插件",
+        "同时新增故事回溯功能，可回到过往节点重选。",
+        "**一句话生成世界（WorldKernel）**：输入一句自然语言设想，系统自动生成角色、地点、路径与规则，并接入可交互的多智能体模拟。"
+      ],
+      "usageItems": [
+        "在项目根目录下，选择要运行的故事并执行相应命令。",
+        "并在页面中选择游玩自由模式或剧情模式。",
+        "在页面中描述你想生成的世界，或选择已有本地世界进入模拟。",
+        "查看大观园等场景地图。",
+        "点击**开始推演** / **下一回合 (Tick)** 观察人物的行动与交互。",
+        "点击左侧人物列表，查看详细的“人物档案”与实时状态。"
+      ],
+      "usageActions": [
+        "在项目根目录下，选择要运行的故事并执行相应命令。",
+        "在页面中描述你想生成的世界，或选择已有本地世界进入模拟。",
+        "查看大观园等场景地图。",
+        "点击**开始推演** / **下一回合 (Tick)** 观察人物的行动与交互。",
+        "点击左侧人物列表，查看详细的“人物档案”与实时状态。"
+      ],
+      "ioPairs": [
+        "**一句话生成世界（WorldKernel）**：输入一句自然语言设想，系统自动生成角色、地点、路径与规则，并接入可交互的多智能体模拟。"
+      ],
+      "codeExamples": [
+        "#### 红楼梦\n\n```bash\npython -m examples.story_of_the_stone.run_simulation"
+      ],
+      "usecases": [
+        "本项目中的 `examples/story_of_the_stone` 示例以中国古典名著《红楼梦》为背景。",
+        "本项目中的 `examples/WestWorld` 示例以科幻剧集《西部世界》为背景，构建了一座由多智能体共同驱动的仿真乐园。",
+        "你可以创造「西游记·大闹天宫」，也可以生成一座靠交易记忆运转的风暴档案城。",
+        "在这里，你既可以在自由模式中观察 Dolores、Maeve、Teddy 等角色的自主互动与命运分岔，也可以在剧情模式中扮演一名 Host，选择结盟、隐藏异常或逃离乐园，并在 Overseer 的监控与干预下亲手推演属于自己的觉醒故事。"
+      ],
+      "outputs": [
+        "你的每一次抉择都会衍生全新剧情分支，体验不断变化的故事冒险。",
+        "系统能够根据性格设定与环境变化，自动生成跌宕起伏、精彩绝伦且极具戏剧张力与冲击力的推演剧情！"
+      ],
+      "media": [
+        {
+          "excerpt": "![Frontend Preview](assets/frontend.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**Redis**：作为默认的数据总线与缓存，请确保本地 Redis 服务已启动并在 `6379` 端口监听。",
+        "西部世界与红楼梦都会使用 `8000` 端口，因此请勿同时运行两者。",
+        "WorldKernel 使用 `8100` 端口，可与红楼梦 / 西部世界分开启动。"
+      ],
+      "concerns": [
+        "Installation and model-configuration instructions were excluded.",
+        "Story cover art was treated as decorative; only the frontend preview was retained as demonstrative media."
+      ]
+    },
+    {
+      "repo": "WYH66666666/DSH-Transparent-UI-Plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Aqua is a highly customizable glassmorphism theme for the DeepSeek Harness web UI.",
+        "The header, sidebar, composer, stats line, and trajectory view all become panes of frosted glass.",
+        "**Mica** restyles the layout into floating glass cards (blur and frost adjustable)",
+        "**Compatibility Mode** keeps the stock layout byte-for-byte and only swaps the material to generic glass — other plugins' UI gets the same treatment automatically",
+        "a living fluid board (hue adjustable) or your own wallpaper (fills the page, aspect preserved, with its own blur and frost)",
+        "**Background brightness**: follows the resolved scheme — dark mode darkens (0–50), light mode brightens (50–100), 50 is unchanged",
+        "**Particle whale**: the deepseek.com/harness centerpiece fish (a 2D port of the site's particle engine)",
+        "**Glossy \"Harness\" badge**: in dark mode the sidebar wordmark wears the official nameplate pill (135° gradient ring + soft glow); light mode keeps the stock plate",
+        "**Edge fades**: 5px gradient blur bands pinned to the top and bottom of the page, above the chat content — scrolling content melts into the edges; faint white veil on light, faint black on dark",
+        "One switch: off restores the stock UI exactly, and every effect is removed with the plugin"
+      ],
+      "usageItems": [
+        "Reload the web UI.",
+        "the master switch lives in **Settings → Plugins → Glass theme**",
+        "every other control sits directly under **Settings → General → Appearance**"
+      ],
+      "usageActions": [
+        "Reload the web UI.",
+        "the master switch lives in **Settings → Plugins → Glass theme**",
+        "every other control sits directly under **Settings → General → Appearance**"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "With the master switch off, the whole control block under Appearance is hidden."
+      ],
+      "media": [
+        {
+          "excerpt": "![](assets/1.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/2.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/3.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/4.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "Notice ⚠️: As DSH has been updated, I am unable to promptly update the plugin with the new APIdue to my academic commitments.",
+        "Please use an alternative agent to replace or repair it yourself to avoid crashes when installing this plugin."
+      ],
+      "concerns": [
+        "The README explicitly warns that the plugin trails the updated DSH API and may crash.",
+        "All code fences are installation or configuration examples, so no code examples were retained."
+      ]
+    },
+    {
+      "repo": "text2future/flowix",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Use agents inside Flowix or connect **Codex**, **Claude Code**, **OpenCode**, **Hermes**, and other MCP or CLI tools — all working from the same notes and context.",
+        "the agent gets the `mcp__flowix__memo` tool to search, read, create, and edit Flowix memos (including mind maps).",
+        "Note library with tags",
+        "Note detail with agent presets",
+        "Agent model picker",
+        "Full-text and file search",
+        "Code file browsing and editing"
+      ],
+      "usageItems": [
+        "2. Create a new local folder, or register an existing folder as a notebook.",
+        "3. Create a document and write down the task background, reference materials, goals and constraints.",
+        "4. Call an agent from within the document, or keep organizing content with tags and properties."
+      ],
+      "usageActions": [
+        "2. Create a new local folder, or register an existing folder as a notebook.",
+        "3. Create a document and write down the task background, reference materials, goals and constraints.",
+        "4. Call an agent from within the document, or keep organizing content with tags and properties."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "**Product work** | Keep requirements, feedback, decisions, and PRDs up to date.",
+        "**Software development** | Give coding agents the context to continue your project.",
+        "**Research** | Keep sources, analysis, and conclusions together and reusable.",
+        "**Personal knowledge** | Turn notes, plans, and preferences into useful agent context."
+      ],
+      "outputs": [
+        "save the result back to the same note — ready to review, edit, and reuse next time."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/readme-introduce.gif\" width=\"100%\" alt=\"Flowix\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/home-write.png\" width=\"100%\" alt=\"Flowix notes shown across light and dark themes\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<p align=\"center\"><img src=\"./docs/images/home-nav.png\" width=\"60%\" alt=\"Flowix navigation for notes, conversations, tasks, and tags\" /></p>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<p align=\"center\"><img src=\"./docs/images/home-agent.png\" width=\"60%\" alt=\"Flowix connecting Codex, Claude Code, OpenCode, Hermes, and Flowix Agent to the same note\" /></p>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/gh-detail-1.png\" width=\"100%\" alt=\"Note library with tags\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/gh-detail-2.png\" width=\"100%\" alt=\"Note detail with agent presets\" />",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "The development environment requires Node.js 20+, Rust 1.75+ and Tauri v2; the desktop app supports macOS 14+ and Windows 10+."
+      ],
+      "concerns": [
+        "The bundled DSH plugin's installation and CLI-path configuration were excluded.",
+        "No explicit paired input/output example appears in the README."
+      ]
+    },
+    {
+      "repo": "yjh051108/dsh-router-standard",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "reads the session's first REAL user message, classifies\nthe task (build → react / fix → spec / ambiguous → weak)",
+        "on the first\nmodel request injects the matching persona while keeping the full prompt\nsections",
+        "the first-turn core tool surface follows the band\n(spec=read/edit/glob/grep, react=read/write/edit, weak=read/write/edit, each\nplus the platform shell).",
+        "Weak-band sessions also get a near-field routing\nguide in the SAME request as every real user message.",
+        "After the first durable tool call the full Standard catalog is exposed and the\nrouter stops touching anything.",
+        "The mode is derived from durable session\nevents, so resume/reload keeps it. The plan-mode prompt section is preserved,\nso plan boundaries do not reset the model's focus."
+      ],
+      "usageItems": [
+        "dev_reload_preset router-standard   # 预设热更新：?v=N query 绕 ESM 缓存，新会话立即用新代码",
+        "- `dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>` — explicit mode",
+        "- `dev_mode_subagent <spec|react|balanced> <task>` — run one task in a\n  DIFFERENT reasoning mode inside a fresh isolated context (its own system\n  prompt), leaving the current trajectory untouched."
+      ],
+      "usageActions": [
+        "dev_reload_preset router-standard   # 预设热更新：?v=N query 绕 ESM 缓存，新会话立即用新代码",
+        "- `dev_router_status` — current mode, band, persona, core tools, override state",
+        "- `dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>` — explicit mode",
+        "- `dev_mode_subagent <spec|react|balanced> <task>` — run one task in a",
+        "node --test router.test.mjs   # 11 tests: classification, bands, personas, plan-section survival"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Tests\n\n```sh\nnode --test router.test.mjs   # 11 tests: classification, bands, personas, plan-section survival"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "v0.3.0 fixes all of it,\nverified against `@deepseek-ai/dsh-agent-loop` (0.1.0-rc.7) event ordering:",
+        "inserted into `decision.messages` at `agent/pre-step`: same request as the\n  user message, near-field, cache-neutral, zero extra round-trips.",
+        "loader 按 URL 缓存模块——原地覆盖文件内容不生效",
+        "路由模式在首个请求锁定（路径承诺），中途切 GUI 模型/\n   改配置不影响已运行会话。",
+        "`parentSession` 会话跳过路由层（社区 #5 修复），shell-less\n   子代理不再崩溃。",
+        "首轮路由读 `agent/inbox/claimed` 的原始\n   消息文本并经 `classifyTask` 分类——首轮即真实 band（不再 weak 兜底）。",
+        "node --test router.test.mjs   # 11 tests: classification, bands, personas, plan-section survival"
+      ],
+      "concerns": [
+        "The top current-state section is explicitly an unpublished development line, so its strict-workflow and page-check claims were omitted.",
+        "The README mixes historical v0.3 documentation with later version notes and still mentions retired Router Pro in one usage paragraph."
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "deep native analysis and function dossiers through Hopper or bring-your-own Ghidra on Linux",
+        "execution-free managed PE/CLI triage",
+        "controlled process capture",
+        "passive website, Electron page, and Node/Electron V8 Inspector observation",
+        "bounded JavaScript/source-map reconstruction",
+        "a versioned domain graph for connecting JavaScript application layers without confusing static inference with runtime observation",
+        "Turn recovered behavior into product features, tests, migration notes, ports, or interoperable replacements.",
+        "Export and import evidence bundles across sessions.",
+        "Compare complete artifact inventories by stable path, content, metadata, and relations; incomplete evidence never implies equivalence.",
+        "Aggregate runtime comparisons into observed behavior changes while keeping static artifact/function differences labeled as candidates."
+      ],
+      "usageItems": [
+        "Name any app you want to understand, or ask the agent to start with an overview.",
+        "Inspect or decompile one part of an app from the Terminal        | `rea analyze` or `rea decompile`",
+        "Validate, canonicalize, or compare Evidence v2 bundles           | `rea evidence-import`, `rea evidence-export`, or `rea compare`",
+        "Run or resume a persistent two-version artifact analysis         | `rea investigate-versions`",
+        "Map a local JavaScript/Electron application without executing it | `rea analyze PATH --approved` or `rea analyze-javascript-application`",
+        "Reuse immutable analysis results without relaunching a provider  | Pass `--snapshot /approved/path/analysis.json` to a deep-analysis command",
+        "Import source as historical reference                            | `rea import-reference-source`",
+        "Capture or compare controlled process behavior                   | `rea capture-process` or `rea compare-process-captures`",
+        "REA accepts a Mac `.app` folder directly. If an agent cannot find an app by name, tell it where the app is installed."
+      ],
+      "usageActions": [
+        "npx -y rea-agents@latest analyze /Applications/Notes.app",
+        "npx -y rea-agents@latest inspect /Applications/Notes.app",
+        "npx -y rea-agents@latest inspect /Applications/Notes.app --detail detailed --limit 20",
+        "npx -y rea-agents@latest search /Applications/Notes.app \"offline\"",
+        "npx -y rea-agents@latest function /Applications/Notes.app 0x1000",
+        "npx -y rea-agents@latest xrefs /Applications/Notes.app 0x1000",
+        "npx -y rea-agents@latest trace /Applications/Notes.app \"offline\"",
+        "npx -y rea-agents@latest compare /absolute/path/to/left-evidence.json /absolute/path/to/right-evidence.json",
+        "npx -y rea-agents@latest investigate-versions /path/to/v1 /path/to/v2 /absolute/path/to/evidence/releases.json --yes",
+        "npx -y rea-agents@latest capabilities"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Then ask:\n\n```text\nUnderstand how search works in the Notes app, show me the evidence, and build a\nsimilar feature for my project.",
+        "## One prompt, a full investigation\n\n```text\nReverse engineer the Notes app. Find how offline search works, explain it,\nand build a version for my project using TypeScript and SQLite.",
+        "## CLI\n\nThe agent workflow above is the easiest way to use REA. For a one-off overview from the Terminal:\n\n```bash\nnpx -y rea-agents@latest analyze /Applications/Notes.app",
+        "When REA feeds a shell pipeline, enable `pipefail` so a downstream formatter\ncannot hide its failure:\n\n```bash\nset -o pipefail"
+      ],
+      "usecases": [
+        "Explain how a feature works when its source code is unavailable.",
+        "Reconstruct an app's authentication, storage, update, or networking flow.",
+        "Recover enough structure to document an undocumented format or interface.",
+        "Trace a suspicious behavior from a string or symbol to the code that implements it.",
+        "Run, checkpoint, resume, and reuse a content-addressed artifact investigation across two versions.",
+        "Analyze Swift and Objective-C metadata without manually untangling every mangled symbol.",
+        "Leave names, comments, and bookmarks in Hopper so human and agent analysis reinforce each other."
+      ],
+      "outputs": [
+        "derives an artifact comparison, and records a changed-behavior report.",
+        "ordered events return typed decisions, actions, captured aliases, transition journals, final state, and exact limit use without echoing request or captured values.",
+        "The comparison reports each observed dimension separately and identifies the\nfirst terminal, interaction, exit, filesystem, protocol, process, or shim\ndivergence.",
+        "PR CI\npublishes generated API documentation as the `api-docs` workflow artifact."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "REA shows how it reached its conclusions. It does not claim to recover original source code or automatically clone an application.",
+        "Analysis runs on your supported local host. REA does not upload the app to a hosted analysis service.",
+        "An analysis timeout, scan or inventory safety limit, request timeout, or oversized response fails explicitly instead of returning a partial result labeled complete.",
+        "Exports never replace an existing file unless `--overwrite` is explicit. Imports are size/depth bounded, validate every Evidence v2 ID and manifest, and never execute bundle content.",
+        "Inspection is passive: REA does not evaluate page JavaScript, navigate, click, close the page, or close the browser.",
+        "Missing or truncated sections can never support equality\nclaims.",
+        "Truthful unknowns, warnings, and bounded or truncated evidence remain successful results.",
+        "If shutdown or cleanup cannot be verified, `close_binary` returns `cleanup_incomplete` with the affected local resources.",
+        "runtime failure\nnever selects another provider silently.",
+        "Shipped providers, passive observers, and Process Capture are not security sandboxes: providers and launched targets run with the current user's permissions."
+      ],
+      "concerns": [
+        "Roadmap items and all installation or configuration examples were excluded despite the README's breadth.",
+        "The README distinguishes static inference, runtime observation, and unknown states; evidence was kept within those stated boundaries."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,479 @@
+{
+  "reviews": [
+    {
+      "repo": "william-jin-cmu/dsh-vision",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "本插件注册一个 `view_image` 工具：模型带着问题调用它（OCR、数数、读图表、看 UI 布局……任意视觉问题）",
+        "插件把图片和问题转发给任意 **OpenAI 兼容的 VLM 端点**，答案以文本返回。",
+        "装上之后，dsh 的所有入口（web、TUI、远程通道）同时获得视觉。",
+        "一套配置（`baseURL` + `apiKey` + `model`）覆盖所有后端：",
+        "thinking 系模型混进正文的 `<think>` 推理块会被自动剥离。",
+        "本地图片以 base64 data URL 内联；`exec.signal` 全程透传，取消即中断请求；"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [
+        "用户: 看下 ~/Desktop/error.png 是什么报错\n模型 → view_image(source=\"/Users/me/Desktop/error.png\", question=\"这个报错的完整文本是什么？\")\n     ← \"TypeError: Cannot read properties of undefined (reading 'map') at …\""
+      ],
+      "codeExamples": [
+        "用户: 看下 ~/Desktop/error.png 是什么报错"
+      ],
+      "usecases": [],
+      "outputs": [
+        "对纯文本的 deepseek-v4 说\"看看 images.jpeg 在我的桌面上的\"——模型自己定位文件、带着问题调 `view_image`（14.5s），拿到的描述精确到樱花图案、摄像头开孔和底部的 BURGA 品牌标识：",
+        "| `qwen3-vl-flash`                   | ✅ 准确                            | **~2.9s** | 全场最快，百炼最便宜 VL 线——追求速度选它         |",
+        "| `qwen3.8-max`                      | ✅ 细节最丰富（认出了 Arc 浏览器） | ~18s      | 旗舰档                                           |",
+        "| `glm-4.6v-flash`（**默认，免费**） | ✅ 准确                            | ~6.8s     | 高峰限流时自动走降级链                           |"
+      ],
+      "reliability": [
+        "**免费档降级链**：智谱免费模型偶发限流（429，公共容量池）。默认配置下插件会自动依次降级 `glm-4.6v-flash` → `glm-4.1v-thinking-flash` → `glm-4v-flash`，保证零配置也总能出答案；自定义 `fallbackModels` 可覆盖。",
+        "注意 Ark 的模型 ID 带日期后缀（`doubao-seed-2.0-lite` 这种短名会 404）",
+        "这类模型建议 `maxTokens: 2048` 以上，否则推理会吃光 token 预算。",
+        "错误信息自动脱敏 API key。",
+        "17 个 spec：真实 Cordis 组合 + 注入 fetch"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"assets/demo-input.jpeg\" width=\"220\" alt=\"测试图片：BURGA 樱花手机壳\">", "weight": 1 },
+        { "excerpt": "<img src=\"assets/demo-session.png\" width=\"640\" alt=\"dsh web 会话：模型自主调用 view_image 并准确描述图片\">", "weight": 1 }
+      ],
+      "concerns": [
+        "后端选择表按配置指引排除，未计入能力。",
+        "「未来」DeepSeek 官方识图 API 行按 roadmap 排除。"
+      ]
+    },
+    {
+      "repo": "keleus/deepseek-pet",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "角色上方用与 Pet 等宽的气泡轮播状态短句，并以单行横向打字机效果跟随最新输出；无任务活动时 10 秒后自动隐藏；",
+        "角色下方用横条显示聚焦会话并以亮边标记，正在执行的会话向下排列，超过三个时自动层叠收起；",
+        "多个会话并行执行时进入“忙疯了”状态；",
+        "根据分析、回答、编码、网络搜索、子 Agent、完成和失败等场景切换表情；",
+        "工具等待批准时，可直接在气泡中允许或拒绝；",
+        "用户问题支持选项、自定义输入、提交和拒绝；",
+        "reasoning 中疑问较多时显示困惑或压力表情；",
+        "上下文达到 62% 时提示“还可以再吃一点”，达到 82% 时显示“吃饱了”；",
+        "图片输入时显示蒙眼状态；",
+        "无任务 10 分钟显示饿了，30 分钟抱枕犯困，1 小时后睡觉；",
+        "支持拖动角色、单击互动、双击折叠；鼠标悬停角色时可用滚轮缩放，并记住位置和尺寸；",
+        "设置面板新增「桌宠设置」页（界面样式与页面设计系统一致），可配置动作图片"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "拖动角色：调整显示位置；",
+        "鼠标停在角色上滚动滚轮：在 65%～140% 范围内调整 Pet 尺寸；",
+        "单击角色：触发与当前状态相符的短句反馈；",
+        "双击角色或点击“−”按钮：最小化为右下角静止图标；",
+        "点击活跃会话：将该会话切换为聚焦会话；",
+        "出现批准或提问卡片时：可直接选择、输入、允许或拒绝。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "角色使用完整表情图切换，不拆分头部、手脚或五官图层，避免部件错位和表情突变。",
+        "支持窄屏布局和 `prefers-reduced-motion`；",
+        "待机、思考、回复、成功、等待、错误和干饭等动作按累计时间稳定轮换，不会因重渲染随机跳图；"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"./docs/deepseek-pet-preview.png\" alt=\"DeepSeek Pet 网页内运行效果\" width=\"560\">", "weight": 1 }
+      ],
+      "concerns": [
+        "分时问候、动作组启停等待性因 capability 上限 12 未单列。"
+      ]
+    },
+    {
+      "repo": "feiyang-dev/dsh-usage-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Usage & Cost**: records each model call's token usage and cache hits (input miss / cache hit / cache write / output / reasoning / finish reason), and computes cost using DeepSeek's peak/valley or base pricing",
+        "The overview also supports **date filtering** (Today / Last 7 days / Last 30 days / All, plus a custom start–end range)",
+        "**Usage Calendar**: a monthly daily-usage heatmap (colored by cost or call count), hover for details including the peak/off-peak cost split, click a day for its call list and peak/off-peak totals",
+        "**Cache Hit List**: newest-first, fully scrollable, with quick filters (Today / 7 days / 30 days / All) and custom date ranges",
+        "**Price Table**: the official DeepSeek API price table (covering `deepseek-v4-flash` / `deepseek-v4-flash-vision-exp` / `deepseek-v4-pro`)",
+        "**Balance Query**: queries your DeepSeek account balance using the configured `DEEPSEEK_API_KEY`.",
+        "**Export**: CSV / JSON / **PNG long image** (newest-first, up to the latest 2000 records, warns if exceeded; the PNG report includes peak/off-peak cost columns)",
+        "**Import**: merge-imports JSON / CSV files, deduplicated by time.",
+        "**English UI (i18n)**: the panel follows the harness's own language setting (General Settings → Language)",
+        "**Per-message token popup**: when a turn finishes, the assistant message's footer action row shows a **\"Turn tokens\"** button; clicking opens a `Token Details` popup in two layers",
+        "**Internal/tool calls grouped separately**: internal/placeholder calls (e.g. `dsh2shell-*` with model `fake`) are excluded from the model cost breakdown",
+        "**Interrupted calls shown truthfully**: calls that were aborted / errored / timed out"
+      ],
+      "usageItems": [
+        "Send a message and the \"Usage & Cost\" panel should show this call's token / cost record.",
+        "then open the \"Balance Query\" tab and click \"Query Balance\"."
+      ],
+      "usageActions": [
+        "then open the \"Balance Query\" tab and click \"Query Balance\"."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The official console still counts these as API requests and bills their actual tokens, but the harness does not report their usage to the plugin — so the plugin records them at 0 tokens",
+        "calls from other API keys on your account (other apps/scripts) do not pass through DeepSeek Harness — the console includes them, the plugin does not;",
+        "models without an official price are counted as 0.",
+        "Model names come from the actual request parameters, so non-DeepSeek models are shown truthfully instead of \"unknown model\";",
+        "**Writes bypass the model sandbox**: persistence is done by the host plugin process's own filesystem, not subject to the `workspace-write` sandbox",
+        "**Legacy data auto-merge**: on first start, records previously scattered in `%USERPROFILE%\\dsh-usage`, `~/.dsh/dsh-usage`, and each workspace's `dsh-usage` (or `.dsh-usage-records.json`) are merged into the fixed root",
+        "| Panel reports `Unexpected end of JSON input` | The plugin row is missing the `inject` list, so the route isn't registered. Add the inject list per Method B3 and restart |",
+        "Your usage history is **safe** — since v1.9.2 it lives in a fixed dedicated directory (not in any profile / workspace), so an update never wipes it.",
+        "⚠️ **Do not hand-edit files under `~/.dsh/profiles/web/node_modules/@feiyang666/dsh-usage-plugin/`** (e.g. `lib/index.js` / `lib/client.js`). Every update re-extracts the package from npm and overwrites those files,",
+        "Supports **Windows / macOS / Linux**: paths are handled per platform (`node:path`)"
+      ],
+      "media": [
+        { "excerpt": "![Usage & Consumption](./docs/assets/usage-overview.png)", "weight": 1 },
+        { "excerpt": "![Balance Query](./docs/assets/balance-query.png)", "weight": 1 }
+      ],
+      "concerns": [
+        "UI adaptation bullet omitted (capability cap 12).",
+        "Overview 的持久化路径表述与 v1.9.2 固定数据目录章节冲突，以后者为准，前者按歧义省略。"
+      ]
+    },
+    {
+      "repo": "AX1202/ax-feishu-bridge",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "通过扫码快速创建飞书/Lark 机器人，减少手动配置",
+        "支持私聊、群聊、群话题分别维护独立的 Pi 会话",
+        "`open`：群里和话题里可直接回复，不需要 @",
+        "`mention`：只有 `@` 机器人、命中关键词或回复机器人消息时才会回复（后两项可选开启）",
+        "支持图片、代码文件和文本文件等附件输入；",
+        "支持解析飞书 interactive 告警卡片；回复一条消息或卡片时，可把原内容一并带给 Pi",
+        "支持在飞书内切换当前会话的模型、工作区、历史会话和思考强度",
+        "收到消息后立即显示“正在回复…”，后续答案在同一张卡片中流式输出；可停止，并会显示完成或失败状态",
+        "支持渲染显示 Markdown 格式内容",
+        "Pi agent 关闭后，仍有后台常驻服务可以对话，pi agent无需前台运行。"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "`/new`   | 为当前会话新建一个 Pi 会话",
+        "`/resume` | 打开当前工作区的历史会话列表；可在卡片中切到全部会话",
+        "`/model` | 打开模型选择卡片，切换当前会话使用的模型",
+        "`/stop`  | 停止当前这条回复的处理",
+        "`/workspace /path/to/project` | 把当前会话切换到指定工作区，下一条消息生效",
+        "`/status` | 查看当前会话的工作状态、模型、思考强度和上下文占用",
+        "`/config groupKeywords 关键词1,关键词2` | 设置群聊关键词触发并立即生效",
+        "`/feishu setup`     | 打开初始化配置",
+        "`/feishu status`    | 查看连接状态、当前 owner 和配置",
+        "`/feishu reset`     | 清除配置和映射，但保留会话历史"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "图片能不能被识别，取决于当前选中的模型是否支持图片输入。",
+        "DSH 的环境变量前缀是 `HARNESS_`（例如 `HARNESS_APP_ID`），而不是 Pi 的 `FEISHU_`；卡片回调端口默认也不同——Pi 默认 `3001`，DSH 默认 `3002`，两边同时启用也不会冲突。",
+        "**空白的全新会话不渲染命令记录**——如果敲了命令没看到任何反应，先在该会话里发一条普通消息，再执行命令即可。",
+        "还没有实现后台服务开机自启动功能，目前需要电脑开机后手动启动一次 Pi agent 才能正常工作。",
+        "长时间任务（例如跑测试、构建、批量处理）默认**不会**再被报为“任务失败”",
+        "（依赖宿主 DSH 的命令能力；宿主未提供时会静默跳过，不影响桥接本身）",
+        "可热更新的范围仅包括 `groupPolicy`、`groupKeywords`、`groupAlsoOnReply`、`ignoreBotMessages`、`reactEmoji`、`language` 以及流式展示参数；应用凭证、引用消息展开和连接方式不能通过聊天修改。",
+        "卡片回调默认监听 `0.0.0.0:3001/webhook/card`（Pi）/ `0.0.0.0:3002/webhook/card`（DSH），需要在飞书开发者后台把交互卡片回调地址指到一个外部可访问的 URL。",
+        "`/feishu reset` 只会清掉配置和映射，不会删除会话历史。",
+        "`open`模式下：群里和话题里可直接回复，不需要 @，但还需手动在飞书开发者后台开启机器人“获取群组中所有消息”权限才能生效。"
+      ],
+      "media": [],
+      "concerns": [
+        "docs/images/1.jpeg 为飞书开发者后台设置截图，未计入 media。",
+        "媒体平台宣传与反馈群内容排除。"
+      ]
+    },
+    {
+      "repo": "Sutera-Diffusus/dsh-whale-musume",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "默认悬浮形态（200px），支持鼠标拖拽；",
+        "**拖拽惯性**：松手后按瞬时速度滑行一小段并旋转回正，撞到屏幕边缘就「抓住」边缘停住",
+        "检测到工具运行（`data-running` / `data-state=\"ongoing\"`）自动切换为「抱笔记本工作」；",
+        "**按工具类型切换姿态**：跑命令、改文件、搜索、测试、评审、部署、调试各有对应姿势",
+        "新增「余额」分组，显示当前账户余额，并让她用一句话说明情况（分 充裕 / 正常 / 偏紧 / 告急 / 已见底 五档，29 条台词）；",
+        "全场景立绘：待机、工作中、思考、离开，以及摸头 / 戳肚子 / 戳尾巴分区互动立绘；",
+        "13 种梗表情关键词感知：kyun、OMG、doge、sike、膜拜、peace、怀疑人生、waku waku 等，命中即变身表情包。",
+        "5–8 分钟主动闲聊：按当前任务内容本地分类贴题，不尬聊；工作态绝不插嘴；",
+        "天气视觉特效：全屏氛围特效（雨/雪/雷闪/风/雾/热浪/霜雾），随真实天气自动切换，工作态自动降档，可在设置中关闭。",
+        "四条主动关怀线：久坐提醒（连续忙 25 分钟）、深夜劝休息（23 点后仍在忙）、卡住陪伴（同一状态停滞 8 分钟）、回来打招呼（离开超过 3 分钟）；",
+        "4×4 泡泡网格，普通/星星/炸弹三种泡泡，连击加分，30 秒一局三档结算；",
+        "心情、好感度、饱食度、等级、连续签到、陪伴时长；"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "| 投喂小点心 | 提升饱食度与好感度 |",
+        "| 戳一下 | 降低心情，触发生气立绘 |",
+        "| 夸夸 鲸鱼娘 | 提升心情与好感度，触发星星眼 |",
+        "| 回到原位 | 清除保存的悬浮位置 |",
+        "| 打开看板娘设置 | 跳转 DSH 设置页 |",
+        "**点击鲸鱼娘**：应出现脸红/爱心特效；",
+        "**连续快速点击三次**：应出现星星眼庆祝 + 粒子特效；",
+        "**拖拽鲸鱼娘**：应切换为「被拎起来」立绘并跟随光标摇摆，松手后位置自动保存；",
+        "**右键鲸鱼娘**：应看到投喂 / 戳一下 / 夸夸 / 戳泡泡小游戏 / 回到原位 / 打开设置的菜单；",
+        "**跑一次工具调用**：鲸鱼娘应自动切换为「抱笔记本工作」并带淡蓝光晕。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "所有资源本地运行，无遥测、无外部请求。",
+        "代理只监听 127.0.0.1、不回显密钥，上游请求在服务端完成",
+        "**默认关闭**，开启后 60 秒查一次（与代理缓存对齐）；代理没开或查不到时静默失败，不弹错、不刷日志；",
+        "兼容性兜底：`slots` 服务缺失或子 slot 渲染异常时，设置面板回落到内置渲染，桌宠本体不受影响。",
+        "脚本安装方式会修改 DSH 安装目录中的前端资源文件。虽然脚本自带备份，仍建议安装前关闭 DSH 页面，并记录当前 DSH 版本号。",
+        "| DeepSeek Harness | `0.1.0-rc.6` 及以上；设置面板已适配并在 `0.1.1-rc.2` 实测 |",
+        "| 操作系统 | Windows 10 / 11（开发与测试环境） |",
+        "# 单元测试（102 个）",
+        "| 刷新后看不到鲸鱼娘 | 确认安装命令输出 `Applied`（组合包方式确认插件已启用）；强制刷新；检查设置面板「看板娘」开关 |",
+        "| 拖拽误触发 | 单次点击不会触发拖拽；只有移动超过 4px 才会进入拖拽状态 |"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"docs/images/preview-idle-coffee.png\" alt=\"待机陪伴：喝咖啡小动作\" width=\"560\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/images/preview-working.png\" alt=\"工作状态：抱起笔记本陪你干活\" width=\"560\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/images/preview-headpat.png\" alt=\"摸头互动：台词气泡反馈\" width=\"560\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/images/preview-feeding.png\" alt=\"投喂互动：吃东西反应\" width=\"560\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/images/preview-idle-sparkle.png\" alt=\"待机形态：收起侧边栏后的悬浮形态\" width=\"560\">", "weight": 1 }
+      ],
+      "concerns": [
+        "无障碍模式、节日换装、主题适配等待性因 capability 上限 12 未单列。",
+        "homepage-promo.png 按宣传图排除；logo 与徽章排除。"
+      ]
+    },
+    {
+      "repo": "morluto/flameox",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Flameox coordinates profilers, benchmark tools, trace processors, and direct\nlocal targets.",
+        "There are 24 read-only analysis tools, 17 executing capture tools, and three lifecycle tools.",
+        "It exposes one resource template, `flameox://evidence/{evidence_id}`, for the\ndigest-bound, redacted projection of the canonical immutable manifest.",
+        "The first `preserve_evidence` call creates `.flameox`, stores native\nbytes and a canonical evidence bundle by SHA-256",
+        "Comparison is intentionally a two-stage workflow. Flameox captures representative baseline and\ncandidate summaries separately, optionally preserves them, and then passes both artifacts to an\n`analyze_*_compare` tool.",
+        "`flameox setup` prints a version-bound stdio client configuration using Python\n3.12 and the exact running Flameox release.",
+        "When a capture reports a missing managed provider,\n`prepare_providers` prepares its version-pinned uvx environment and returns that same launcher for\nreconnection.",
+        "Direct capture accepts an argv array, a project-contained cwd, bounded environment overrides, a\ntyped compatible-provider variant, capability-specific options, an explicit single/experiment",
+        "Work remains owned by the live MCP request, so SDK progress and\ncancellation apply directly; there are no detached or restart-surviving tasks."
+      ],
+      "usageItems": [
+        "Existing artifacts remain usable by passing their exact\npaths and formats to `analyze`",
+        "apply the printed command through the client's supported MCP\nmanagement interface.",
+        "Use `--timeout-seconds` for a slow cold resolution."
+      ],
+      "usageActions": [
+        "uv run flameox mcp inspect",
+        "uv run flameox analyze artifact.preview /absolute/path/to/artifact.json",
+        "uv run flameox capture --provider direct -- python benchmark.py",
+        "uv run flameox mcp serve --project-root \"$PWD\""
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "uv run flameox mcp serve --project-root \"$PWD\""
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Analysis and unpreserved capture make no durable Flameox writes.",
+        "Shell strings are never accepted.",
+        "Host tools, drivers, and permissions are never installed or changed; the same\nresult reports their setup guidance.",
+        "Native artifact bytes are\ndeliberately not available as MCP resources.",
+        "System and vendor tools are\ndiagnosed with external install guidance.",
+        "Flameox does not\nsubstitute one Python runtime for the other.",
+        "A profile supports exploration, not causality.",
+        "There are no `capture_*_compare` tools: experiment capture measures cases\nand reports an effect, but it is not a substitute for comparing explicit native artifacts.",
+        "old `.diagnostics` state is not migrated.",
+        "Preparation does not modify the running MCP process."
+      ],
+      "media": [],
+      "concerns": [
+        "Quick start fence 首行为 uv sync 依赖安装，按规则 8 不计入 codeExamples。",
+        "Version 0.2 移除 workspace/SQLite 的历史按 changelog 排除。"
+      ]
+    },
+    {
+      "repo": "PKUfudawei/dsh-capability-menu",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "为海量 MCP tools / skills 建立统一能力目录（`ctx.capability`），并以**常驻 / 按需 / 禁用**三档管理暴露程度和执行方式",
+        "**统一能力目录**：编目所有 MCP 工具与 Skill，模型经 `meta_search` 检索、`meta_invoke` 执行。",
+        "**可视化配置**：「能力菜单」设置 tab（MCP tools / Skills 两栏，分类可点击循环切换），调整即时生效。",
+        "**三档能力策略**：常驻 = 高频能力随叫随到；按需 = 低频能力归档进目录、用到才翻出来；禁用 = 明确禁止。",
+        "**Skills 目录浏览**：展开某个 skill 可浏览其文件目录，点击文件预览 SKILL.md 等正文内容。",
+        "MCP 工具还可以点击整行查看模型侧工具定义（name / description / parameters）。",
+        "按需（Progressive）能力会物化成一个 YAML 目录文件——registry 在工具/技能变更、分类调整（能力菜单点击或 `updateConfig`）时自动重写"
+      ],
+      "usageItems": [
+        "**点击循环切换**：点击能力旁的圆点或分类计数即可循环切换分类"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "`blocked` 是最硬的控制（压过一切），meta 工具（`meta_search`/`meta_invoke`）恒为 Exposed 且不可被 blocked。",
+        "**规则优先级**（命中即停）：`blocked` 精确 > `blocked` 通配 > `exposed` 精确 > `progressive` 精确 > `exposed` 通配 > `progressive` 通配 > 默认 Exposed。",
+        "「能力菜单」tab 的改动只写入运行时内存、不落盘；要持久化（随 profile 生效、可版本管理/批量声明），编辑 profile 的 `cordis.patch.yml` 即可",
+        "上表的 tool 档位均指 `mcp__` 编目工具；原生工具不参与三档管理，只能以 `tools.exposed` 保活可见性",
+        "若沙箱隔离宿主目录，请把 `catalogFile` 显式配置到沙箱可见的路径。默认路径在多个 dsh 实例间共享（last-write-wins），多实例部署时请为每个实例配置独立的 `catalogFile`。",
+        "挂了 policy 但没有任何规则 → 全部能力默认 Exposed（`classify` 兜底），不投影、不隐藏。"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"assets/screenshot-mcp-tools.png\" alt=\"MCP tools tab\" width=\"45%\"/>", "weight": 1 },
+        { "excerpt": "<img src=\"assets/screenshot-skills.png\" alt=\"Skills tab\" width=\"45%\"/>", "weight": 1 }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "jing-hy/picturereader",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**视觉孪生 adapter**（把任意文本模型原位包装成「支持图片」→ DSH 原生缩略图 + 图片块自动分析）",
+        "**本地像素级工具链**（scan / OCR×4 引擎 / crop / palette / compare / batch）",
+        "**文档转图片**（pdf / word / excel / ppt）",
+        "**本地修图工具 `image_edit`**（Pillow/OpenCV 纯 CPU：缩放 / 旋转 / 滤镜 / 合成 / 水印 / 去背景 / 超分等）",
+        "已支持外部视觉 API（OpenAI 兼容端点 / LM Studio / 云端 VLM），由 LLM 自行按需调用",
+        "`vision_analyze` | 统一入口：低信息拦截 + 可选像素扫描 / OCR / VLM，按模式路由，返回多路证据",
+        "**这是 picturereader 的\"大脑\"**：统一在 `routing.js` + `runtime.js` 收敛「什么时候走外部 VLM、什么时候只用本地、要不要交叉验证」",
+        "Web 设置页注册「图片阅读」卡片（settings-panel 设计语言：卡片分组 + 胶囊按钮 + 折叠高级项）"
+      ],
+      "usageItems": [
+        "模型选择器中选择对应模型的「(视觉)」变体（如 `deepseek-v4-flash (视觉)`）。",
+        "粘贴 / 拖入图片 → 原生缩略图 → 图片块自动分析为文本证据。",
+        "用 image_scan 看一下 <路径> 这张图，细看感兴趣的部分"
+      ],
+      "usageActions": [
+        "用 image_edit 把 <路径> 缩放到宽 800：action=resize, file_path=<路径>, width=800, height=600",
+        "给 <路径> 加左下角文字水印：action=watermark, file_path=<路径>, type=text, text=\"©2026\", position=bottom_left, font_size=40",
+        "把 <背景> 和 <前景> 合成（贴图）：action=composite, file_path=<背景>, file_paths=[<前景>], position=bottom_right, alpha=0.8",
+        "把 <IMG1>、<IMG2> 水平拼接：action=stitch, file_path=<IMG1>, file_paths=[<IMG2>], direction=horizontal",
+        "用 image_scan 看一下 <路径> 这张图，细看感兴趣的部分"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "async def main():\n    r = await tools.image_scan({\"file_path\": r\"C:\\path\\to\\img.png\"})\n    return r"
+      ],
+      "usecases": [
+        "适用：敏感图片（身份证、合同、私人截图）、离线、零外部流量审计场景。",
+        "适用：需要高准确率与可复现结论的场景（审图、校对、数据分析）。",
+        "| **智能模式**（默认） | 允许，但先本地看图再决定 | 先 `image_scan` 快速看，文字→OCR、简单图→本地、复杂图才 `vision_analyze` 外呼 | 日常，省轮数与耗时 |"
+      ],
+      "outputs": [],
+      "reliability": [
+        "绝不调用**任何外部视觉端点，即使你在设置卡配了 API。",
+        "约束是 host 侧强制：`runtime.js` 使 `isVlmConfigured()` 恒为 `false`，`vision_analyze` 强制 `include_vlm=false`",
+        "**DSH attachment 单图默认约 5MB**：超大图片可能被宿主上传限制拦截；",
+        "**WebP 暂不支持**：`image_scan` / `vision_analyze` 等对 WebP 报错，请先转成 PNG / JPEG；",
+        "**平台引擎不可跨平台**：`windows` / `macos` OCR 引擎分别限定对应平台",
+        "可选依赖缺失时，**不是崩溃**，而是返回清晰的中文提示",
+        "**`dsh-file-drop` 需停用**：其「拖入图片即注入文本」与视觉孪生/图片桥的自动分析可能冲突",
+        "**视觉桥模型勾选需重启 DSH** 生效（`vision_models` 的改动不会热加载）。",
+        "本版本专门兼容 **dsh 0.1.1-rc.2** 及 **dsheac 5.1.0**",
+        "`node --test` 全量 **146 通过 / 0 失败**："
+      ],
+      "media": [],
+      "concerns": [
+        "计划替换内置 dsh-tool-vision / 随 EAC 捆绑按 roadmap 排除。",
+        "与其他多模态插件的对比表按营销/关联项目排除。",
+        "rembg 首次联网下载模型等依赖细节因 reliability 上限 10 未单列。"
+      ]
+    },
+    {
+      "repo": "Chinesezjc/dsh-interconnect",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "让一个 DSH 实例能向同一个实例、另一台机器、或另一台机器上的别的 DSH 实例发送消息、探测活性，并在实例之间双向推送事件。",
+        "全走持久 WebSocket 链接：跨实例、跨机器投递消息、枚举 live session、探测活性（`send`/`reply`/`ping`/`list` 经 `/interconnect/link` 的 `msg`/`query` 帧）",
+        "`interconnect_send`：向对端实例的指定 session 投递消息；可选 `delivery` 选投递模式、`resume` 唤醒离线 session",
+        "`interconnect_list`：列出对端实例的 live session（id + 标题 + 状态），用于在不预先知道 session id 时寻址",
+        "`interconnect_ping`：探测对端实例活性与身份",
+        "`interconnect_reply`：向记录过的发送方回传消息，只需本机 session id + 文本，无需再次寻址",
+        "向模型注册 `dsh-interconnect` skill，说明 `list`/`ping`/`send`/`reply` 的完整用法"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "interconnect_send(instanceId=\"peer\", sessionId=..., text=...)",
+        "interconnect_ping(instanceId=\"peer\")",
+        "interconnect_list(instanceId=\"peer\")",
+        "interconnect_reply(sessionId=...)",
+        "interconnect_send(instanceId=\"peer\", sessionId, text, resume=true, delivery=\"followup\")",
+        "interconnect_send(instanceId=\"peer\", sessionId, text, resume=true, delivery=\"inject\")"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "interconnect_send(instanceId=\"b\", sessionId=B-sess, text=\"…\", sender={instanceId:A, sessionId:A-sess})",
+        "interconnect_send(instanceId=\"peer\", sessionId, text, resume=true, delivery=\"followup\")"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "从 0.9 起，**传输只走 WebSocket 持久链接，不再有 HTTP 端点**，寻址参数从 `baseUrl` 改为 `instanceId`",
+        "共享密钥鉴权（`DSH_INTERCONNECT_TOKEN`，bearer，fail-closed，timing-safe 比较）",
+        "到**未配置 / 未联通**的对端 `send`/`ping`/`list` 返回 `unreachable`（无 HTTP 回退）。",
+        "`interconnect_send` 不会往 subagent 拥有的 session 里投递，`interconnect_list` 也不会把它们\n列出来。",
+        "因为不同失败需要不同应对，所以\n`SendResult.reason` 会指明是哪一种",
+        "**默认关闭是有意的。** 实测确认：消息投递到 session 后会触发一次**完整的 agent 回合**",
+        "**接收方**用 `Config.allowResume`（默认 `true`）一票否决——因为花钱和跑工具的是它那台机器；",
+        "**已知限制**：磁盘格式过旧的 session 无法唤醒，返回 `resume-failed`。",
+        "38/38 单测通过（服务 + 工具 + skill）；类型检查、构建均干净。",
+        "已在两台机器之间实测双向互通：消息投递、WebSocket 事件推流、以及 agent 经\n  `interconnect_send` 工具反向回发，均验证通过。"
+      ],
+      "media": [],
+      "concerns": [
+        "「事件 fan-out（HTTP + WebSocket）」与 0.9 无 HTTP 端点的表述冲突，按歧义省略。",
+        "仅当入站 send 带 sender 时 reply 才有目标等失败细节因 reliability 上限 10 未单列。"
+      ]
+    },
+    {
+      "repo": "zhuiyueya/dsh-im-gateway",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "drive your coding agents from <b>WeChat, Feishu, Telegram, Discord, QQ</b> and 25+ chat platforms, with unified sessions, remote approvals, interactive questions and one-command setup.",
+        "agent 请求工具批准时会把请求推送到聊天；直接回复「批准 / 拒绝」即可。",
+        "当 agent 调用 `ask_user_question` 时，Web GUI 的问题和选项会同步发送到该会话绑定的全部 IM 聊天。Web 和 IM 均可回答，**第一份有效答案生效**",
+        "定时任务绑定**聊天（chatId）而非会话（sessionId）**。在聊天里说「每天 9 点提醒我喝水」或「每周一 9 点生成今日待办」，agent 会创建提醒；无论 `/new` 轮换多少次或会话是否重启，到点都会直接推送到该聊天。",
+        "手机多段输入：`..` 表示还有后续，`!!` 立即提交，裸文本在 5 秒窗口内合并，崩溃后自动恢复。",
+        "长回复按各渠道上限分片，优先在换行或句号处断行，带 `（i/n）` 序号。",
+        "微信支持图片、语音转文字、文件、视频；agent 可通过 `im_send_file` 发送工作区文件。",
+        "连接后无需重启，状态统一显示为：**已连接 / 未连接 / 连接中 / 异常**。"
+      ],
+      "usageItems": [],
+      "usageActions": [
+        "`/help` | 本帮助",
+        "`/status` | 查询当前会话（会话 id / 工作区 / 待批准）",
+        "`/new` · `/clear` | 开启全新会话（per-chat 模式）",
+        "`/continue <会话id>` | 继续已有会话（跨渠道/跨工作区）",
+        "`/bind <session-id>` | 绑定本机 live 会话（bound 模式）",
+        "`/cron list` | 查看本聊天定时任务",
+        "`批准` / `拒绝` | 应答待批准请求（也支持 yes / no / 同意）",
+        "普通文本 | 发给 agent；结尾 `..` 表示还有后续，`!!` 立即提交"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "你好，帮我看看当前工作区    ← 普通聊天 = 驱动 agent"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "如果设置了 `allowAllUsers: false`，未授权用户首次发消息会收到授权提示，Web 设置页顶部会出现访问请求",
+        "审批回复会校验聊天与会话归属，超时后转回本机批准体系。",
+        "重启 dsh 后，已保存配置的渠道会自动恢复；微信登录态已持久化，无需重复扫码。",
+        "**断开 vs 删除配置**：暂时断开只停止运行并保留配置，重启后会自动恢复；删除配置会移除凭据，之后需要重新接入。",
+        "窗口超时只会停止 IM 等待，Web GUI 中的问题仍可继续回答；等待按 session 隔离。",
+        "支持 IANA 时区与 DST 间隙/重叠处理",
+        "状态落盘，重启自动恢复；发送失败自动重试",
+        "npm test               # node --test（106 个用例）",
+        "🧪 实验性 = 需公网或专用基础设施"
+      ],
+      "media": [
+        { "excerpt": "<img src=\"docs/screenshots/im-gateway-settings.png\" width=\"92%\" alt=\"dsh IM 网关设置界面\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/screenshots/wechat-chat.jpg\" width=\"30%\" alt=\"微信聊天截图\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/screenshots/qq-chat.jpg\" width=\"30%\" alt=\"QQ 聊天截图\">", "weight": 1 },
+        { "excerpt": "<img src=\"docs/screenshots/feishu-chat.jpg\" width=\"30%\" alt=\"飞书聊天截图\">", "weight": 1 }
+      ],
+      "concerns": [
+        "渠道支持表逐行能力由总述覆盖，未单列以免重复。"
+      ]
+    }
+  ]
+}

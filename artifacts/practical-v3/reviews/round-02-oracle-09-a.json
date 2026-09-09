@@ -1,0 +1,343 @@
+{
+  "reviews": [
+    {
+      "repo": "shanliuling/dsh-image-gen",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "💬 **原生对话生图与编辑**：直接在 DeepSeek Harness 对话中生成图片，也可以基于已有图片继续修改。",
+        "🔁 **连续多轮编辑**：支持复用当前会话中的上传图片、历史生成图和上一轮编辑结果继续迭代。",
+        "🖼️ **画廊与图片工具**：自动汇总历史图片，支持搜索、筛选、全屏预览、复制、下载与删除。",
+        "🎨 **多 Provider 支持**：兼容 Google Gemini、OpenAI Images / Compatible、Seedream、DashScope Qwen Image。",
+        "💾 **会话与工作区保存**：图片接入 DSH Attachment / Conversation，并可自动保存到当前工作区。"
+      ],
+      "usageItems": [
+        "生成一张极简主义的现代建筑客厅插画。",
+        "给刚才那张图加上落地窗，并把窗外改成雪山。",
+        "点击会话顶栏的 **`[画廊]`** Tab，即可集中查看和搜索所有对话生成的历史图片："
+      ],
+      "usageActions": [
+        "生成一张极简主义的现代建筑客厅插画。",
+        "给刚才那张图加上落地窗，并把窗外改成雪山。",
+        "点击会话顶栏的 **`[画廊]`** Tab，即可集中查看和搜索所有对话生成的历史图片："
+      ],
+      "ioPairs": [
+        "现在直接在聊天框输入：\n\n```text\n生成一张极简主义的现代建筑客厅插画。\n```\n\n当前 Agent 就会自动调用 `generate_image` 工具并在对话流中返回图片。",
+        "也可以继续基于上一张图进行编辑：\n\n```text\n给刚才那张图加上落地窗，并把窗外改成雪山。\n```\n\nAgent 会调用 `edit_image`，复用当前会话中的图片继续修改。"
+      ],
+      "codeExamples": [
+        "### 3. 开始对话生图\n\n现在直接在聊天框输入：\n\n```text\n生成一张极简主义的现代建筑客厅插画。",
+        "也可以继续基于上一张图进行编辑：\n\n```text\n给刚才那张图加上落地窗，并把窗外改成雪山。"
+      ],
+      "usecases": [
+        "帮我画一张雨夜霓虹街头的赛博朋克猫咪。"
+      ],
+      "outputs": [],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/generate-example.png\" alt=\"首次生成图片的对话截图\" width=\"48%\" style=\"vertical-align: top;\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/edit-example.png\" alt=\"基于上一张图片继续编辑的对话截图\" width=\"48%\" style=\"vertical-align: top;\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/gallery-preview.png\" alt=\"原生生图画廊预览\" width=\"820\" />",
+          "weight": 1
+        }
+      ],
+      "reliability": [],
+      "concerns": [
+        "Provider settings and installation/development commands were omitted under the install/config exclusion."
+      ]
+    },
+    {
+      "repo": "EverMind-AI/SkillCorpus",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "It aggregates sources, applies safety and license gates,\nevaluates quality, and matches task-specific skills before the agent answers.",
+        "SkillHub selects vetted procedural\nknowledge for the task and puts it into the agent's context.",
+        "serves the corpus in three tiers — discover\n(metadata), read (`skill_md`), download (zip with `scripts/`).",
+        "`cli build` runs the whole curation chain\n(`ingest → quality_pass → dedup_pass → license_audit → export.corpus`).",
+        "a bi-encoder fine-tuned from `Qwen3-Embedding-0.6B` for candidate recall",
+        "a reranker\n  fine-tuned from `Qwen3-Reranker-0.6B` that scores the top candidates.",
+        "`skillsbench`,\n  `qwenclawbench`, `gdpval` — each self-contained with its own README and dependencies.",
+        "packaged host adapters for OpenClaw · Hermes · WorkBuddy · Raven, plus DeepSeek Harness and an HTTP adapter"
+      ],
+      "usageItems": [
+        "Take an `id` from the results, fetch its `skill_md`, and inject it into your agent's\nprompt.",
+        "To avoid depending on the hosted endpoint, run selection yourself.",
+        "load the data, serve the two models, and run your own\nencode → top-k → rerank.",
+        "Use `--sources-config your.yaml` for your own registry, or `--source <name>` for one source."
+      ],
+      "usageActions": [
+        "curl \"https://skillhub.evermind.ai/openapi/v1/skills?q=extract+tables+from+a+PDF\"",
+        "python examples/skillhub_demo.py \"extract tables from a scanned PDF invoice\"",
+        "python examples/skillhub_demo.py --ask \"extract tables from a scanned PDF invoice\"",
+        "python -m skillcorpus.cli build     # 4 demo sources -> curate -> export",
+        "python -m skillcorpus.cli stats     # counts by source / category / license",
+        "python -m skillcorpus.cli export --out ./corpus",
+        "python -m pytest skillcorpus/tests -p no:cacheprovider --import-mode=importlib"
+      ],
+      "ioPairs": [
+        "task: extract tables from a scanned PDF invoice\n\n[1/2] search  → 2 hit(s), metadata only"
+      ],
+      "codeExamples": [
+        "# search + read the bodies — stdlib only, no install, no API key\npython examples/skillhub_demo.py \"extract tables from a scanned PDF invoice\"",
+        "python -m skillcorpus.cli build     # 4 demo sources -> curate -> export",
+        "python -m skillcorpus.cli stats     # counts by source / category / license"
+      ],
+      "usecases": [
+        "**Build your own skill layer** — point the pipeline at your own source registry, apply the\n  curation, safety, and license gates, and export a corpus for your agents.",
+        "**Change the behavior** — modify the taxonomy, quality and dedup rules, retrieval recipe, export\n  schema, evaluation suites, or host plugins.",
+        "**Keep control of deployment** — self-host the released retrieval models and connect your own\n  agent host instead of using the hosted SkillHub API.",
+        "You can use the live [SkillHub](https://evermind.ai/skillhub) without cloning this repository."
+      ],
+      "outputs": [
+        "| OpenClaw × Qwen3.5-27B | 8.8 → **13.0** | 81.2 → **83.1** | 65.2 → **66.7** |",
+        "| OpenClaw × Qwen3.5-397B | 11.1 → **16.9** | 82.2 → **84.0** | 65.7 → **67.0** |",
+        "| Raven × Qwen3.5-27B | 10.0 → **16.5** | 82.6 → **83.8** | 66.9 → **70.8** |",
+        "| Raven × Qwen3.5-397B | 9.2 → **22.6** | 84.0 → **85.2** | 68.8 → **73.2** |",
+        "| **Pooled ∆** | **+7.5**±2.3 (z=3.2) | **+1.51**±0.49 (z=3.1) | **+2.79**±0.70 (z=4.0) |",
+        "→ built a prompt of 36,742 chars with the skill bodies injected",
+        "the downloadable 1,000-skill sample — `skills.parquet` + `attachments.tar.zst` + dataset card; the full catalog is served by SkillHub"
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/4d9a3241-df13-4b20-9798-fb7920069995",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/taxonomy.png\" alt=\"16-class distribution over the 96,401 active skills\" width=\"58%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/pipeline.png\" alt=\"SkillCorpus: curated skills are matched to a task and injected into an agent before execution\" width=\"100%\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "The packaged Raven plugin is ready to install, but it will claim the `skills`\nstage once Raven merges its upstream `context_segments` slot; Raven's built-in retrieval keeps\nworking today.",
+        "The hosted SkillHub\nservice is closed, and the full hosted catalog is not yet published as a downloadable dataset.",
+        "LLM classification and\nquality scoring degrade gracefully to rules when no model endpoint is reachable, so the pipeline\nalways runs end to end.",
+        "it is **not** a\ndrop-in for SkillHub's hosted-only `/openapi/v1/skills` API.",
+        "`match/` and `evaluate/` are standalone toolkits with their own `requirements.txt`\n(torch / transformers, per benchmark); they are **not** pulled in by `pip install` of the producer.",
+        "Only skills from GREEN-licensed **sources** are exported",
+        "every skill keeps its **original upstream license**; only GREEN\n  (MIT / Apache-2.0 / BSD / ISC / …) skills are included, none relicensed."
+      ],
+      "concerns": [
+        "The README mixes the open-source repository with the closed hosted SkillHub; only clearly attributed shipped behavior was retained."
+      ]
+    },
+    {
+      "repo": "ZJU-REAL/Polaris",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Cold start snowballs citations from anchor papers and scores relevance against the **direction library's** inclusion config",
+        "incremental sync with watermark resume, pgvector semantic search, research digests, and Obsidian vault sync.",
+        "Lab members join the discussion live over WebSocket, and their comments enter the agent context as first-class input.",
+        "writes code, runs a smoke test, launches runs with streamed logs and live metric curves, then auto-iterates: parse metrics, reflect, then improve, debug, or stop",
+        "An agent drafts section by section, but experiment numbers may only come from real `ExperimentRun` metrics and citations must map to real knowledge-base entries.",
+        "A global companion that rides along on every page",
+        "it can hand work to subagents.",
+        "versionable, composable `guidance`, `rubric`, `persona`, and `workflow` packs injected at named points",
+        "the body fetched by\n  `skill_load` as a tool result, attachments read on demand",
+        "exposed both internally to the agent loop and externally as an\n  **MCP server** (Streamable HTTP and stdio) for Claude Code, Codex, and Cursor",
+        "All model calls go through one layer; a DB-backed routing table\n  maps each research stage to a provider, a model, and a reasoning-effort level",
+        "Polaris ships as a desktop app for macOS, Windows, and Linux."
+      ],
+      "usageItems": [
+        "A guest account on a running instance, for looking around: sign in at\n<http://101.37.174.109:8080> with the username `guest` and the password `zjuguest123`.",
+        "A console gives each run a task map and a terminal you can talk to mid-stream.",
+        "One click refreshes the references and wires the bibliography into the main TeX file.",
+        "make desktop-dev            # build the frontend and run the shell (app:// protocol)",
+        "make desktop-dist           # package an unsigned installer for the current platform",
+        "make test                   # backend pytest + frontend build",
+        "make lint                   # ruff check + tsc --noEmit"
+      ],
+      "usageActions": [
+        "sign in at\n<http://101.37.174.109:8080> with the username `guest` and the password `zjuguest123`.",
+        "One click refreshes the references and wires the bibliography into the main TeX file.",
+        "make desktop-dev            # build the frontend and run the shell (app:// protocol)",
+        "make desktop-dist           # package an unsigned installer for the current platform",
+        "make test                   # backend pytest + frontend build",
+        "make lint                   # ruff check + tsc --noEmit",
+        "docker compose --env-file .env -f docker/docker-compose.yml up -d",
+        "docker compose -f docker/docker-compose.yml exec api alembic upgrade head   # required on first run",
+        "xattr -dr com.apple.quarantine /Applications/Polaris.app",
+        "on Windows choose More info → Run anyway past SmartScreen"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "make desktop-dev            # build the frontend and run the shell (app:// protocol)",
+        "make desktop-dist           # package an unsigned installer for the current platform",
+        "make test                   # backend pytest + frontend build",
+        "make lint                   # ruff check + tsc --noEmit"
+      ],
+      "usecases": [
+        "It is built for a research lab, with multi-user access, RBAC, and invite-code registration",
+        "Research tasks are long-running by nature: a cold-start literature backfill takes hours, an experiment\nruns for days.",
+        "the **Brain** (the full\nplan-execute-verify loop) activates only for open-ended kinds such as experiments.",
+        "Predictable pipelines\n(wiki compile, idea review, paper drafting) run on fixed templates instead of being over-orchestrated."
+      ],
+      "outputs": [
+        "compiles a cross-linked wiki page (TL;DR, method, reusable ideas, concept backlinks).",
+        "deduplicated semantically, and funneled to a candidate pool. A deep Research Proposal builder then hardens the winner with a plan-execute-verify loop.",
+        "a judge produces an Elo tournament ranking.",
+        "Figures are generated and VLM-checked.",
+        "server-side tectonic compilation to a live PDF preview.",
+        "then multi-perspective top-venue reviewer agents and a meta-review."
+      ],
+      "media": [
+        {
+          "excerpt": "https://github.com/user-attachments/assets/388972c1-7ffa-45f2-94c4-07f388379ba2",
+          "weight": 0.5
+        }
+      ],
+      "reliability": [
+        "The heavy lifting (crawling, parsing, deduplication, metric parsing,",
+        "The account is for demonstration only: it is read-only and cannot call any model.",
+        "A Voyage is backed by a persistent state machine (`planning -> executing -> verifying -> ...`).",
+        "worker crashes mid-run, the Voyage resumes from its last checkpoint after a health check.",
+        "Budgets are\n> attached to the run and auto-pause it when exceeded; every plan, action, and verdict is retained and\n> replayable in the UI.",
+        "A fabricated citation forces a non-pass.",
+        "The built-in fake provider is structurally disabled in production — setting the flag by\n  mistake cannot turn it on.",
+        "The builds are **neither signed nor notarized**",
+        "The Electron shell (`src/desktop/`) is a shell plus a small local process, not an offline build:",
+        "The `worker` container is required (it runs all long\ntasks), and the first-run migration is mandatory (Postgres tables are not auto-created)."
+      ],
+      "concerns": [
+        "Architecture-only details and installation/configuration steps were omitted from the large feature surface."
+      ]
+    },
+    {
+      "repo": "Nagi-ovo/dsh-visualize",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "模型调用 `visualize` 后，Web UI 会在对话里直接出现一张可交互卡片",
+        "卡片会跟随 DSH 的明暗主题和鲸鱼蓝配色。"
+      ],
+      "usageItems": [
+        "直接告诉模型你想看什么，例如「做一个能调参数的排序算法可视化」。",
+        "模型会写出一份 HTML fragment，再调用 `visualize(path, title?, mode?)` 把它放进对话。",
+        "适合并排比较的内容可以使用 `mode: \"wide\"`。"
+      ],
+      "usageActions": [
+        "直接告诉模型你想看什么，例如「做一个能调参数的排序算法可视化」。",
+        "`visualize(path, title?, mode?)`",
+        "使用 `mode: \"wide\"`"
+      ],
+      "ioPairs": [
+        "直接告诉模型你想看什么，例如「做一个能调参数的排序算法可视化」。模型会写出一份 HTML fragment，再调用 `visualize(path, title?, mode?)` 把它放进对话。"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "用来做模拟器、图表、对比面板或 UI mockup。"
+      ],
+      "outputs": [],
+      "media": [
+        {
+          "excerpt": "[![DSH 对话内生成交互式可视化演示](assets/demo.webp)](assets/demo.mp4)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "会话重放时，页面从持久化的工具结果恢复，不依赖原始 fragment 文件仍然存在。",
+        "卡片运行在不透明来源的 sandboxed iframe 中，不能接触宿主页面。",
+        "CSP 会阻止网络请求、嵌套页面和表单提交，只允许从固定 CDN 加载静态资源。",
+        "单个 fragment 默认上限为 `1000000` 字节，可以通过 `maxFragmentBytes` 调整。",
+        "目前只在 Web UI 中渲染交互卡片，TUI 和 headless 客户端会显示普通工具结果。",
+        "卡片内的按钮暂时不能向主对话发送 follow-up 消息。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "ningbainb/deepseek-harness-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "在同一个窗口中即可完成 AI 对话、代码修改、文件管理、Git 操作",
+        "通过分支选择器和 Git 图谱查看分支关系、Commit 历史、当前仓库状态和分支泳道，帮助快速理解项目变化和代码提交历史。",
+        "**文件预览**：Markdown、HTML、代码、Diff、CSV、PDF、Office、图片和文本",
+        "**Git 变更**：查看真实 SCM 状态并执行 Stage / Unstage / Discard",
+        "手机端可以查看工作区、新建和查看会话、收发消息、切换模型、调整思考强度，并与桌面端保持同步。",
+        "侧边栏内置 SSH 面板，可以直接管理远程服务器，并与 Agent 共用连接配置。",
+        "在 Agent 对话中直接调用已配置的远程主机",
+        "模型切换时，桌面端会根据模型实际能力展示可用的推理强度档位，并自动处理对应配置。",
+        "桌面版内置多套主题，并支持先预览、再应用。",
+        "桌宠会根据 Agent 的思考、工作、等待和完成状态自动切换不同动画，同时支持互动、命名、拖拽和隐藏。",
+        "粒子鲸鱼主题不仅可以显示在启动页面，也可以直接应用到 Harness 主界面",
+        "支持多种扩展方式："
+      ],
+      "usageItems": [
+        "输入框可以直接搜索并插入已安装 Skills。",
+        "通过任务看板统一管理 Agent 工作。",
+        "通过桌面端二维码即可连接当前 Harness 工作区。",
+        "可以通过扩展坞扫码完成连接，让 QQ 私聊和群聊与本机 Harness 联动。",
+        "DeepSeek Harness Desktop 支持应用内版本检查，发现新版本后可以查看更新内容并选择升级。"
+      ],
+      "usageActions": [
+        "输入框可以直接搜索并插入已安装 Skills。",
+        "通过任务看板统一管理 Agent 工作。",
+        "Stage / Unstage / Discard",
+        "通过桌面端二维码即可连接当前 Harness 工作区。",
+        "可以通过扩展坞扫码完成连接，让 QQ 私聊和群聊与本机 Harness 联动。",
+        "支持先预览、再应用。",
+        "发现新版本后可以查看更新内容并选择升级。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "适合周期性的开发、维护和自动化工作。",
+        "桌面版不仅可以操作本机项目，也支持远程开发场景：",
+        "可以从电脑、手机或聊天工具连接自己的 Harness 工作环境。",
+        "**Stable**：默认频道，适合绝大多数用户。",
+        "**Beta**：用于体验较新的功能，需要用户主动切换。"
+      ],
+      "outputs": [
+        "任务可以直接交给 DSH Agent Session 执行，并保存 Task Run 与 Evidence。",
+        "输入区域下方可以实时查看：\n\n- TPS 生成速度\n- LLM 请求耗时\n- 上下文占用\n- Cache 命中率\n- Input Token\n- Output Token"
+      ],
+      "media": [
+        {
+          "excerpt": "![DeepSeek Harness Desktop 主界面与 Skills 技能库](docs/screenshots/13-hero-main.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![任务看板](docs/screenshots/09-task-board.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Git 图谱](docs/screenshots/04-git-graph.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![右侧面板](docs/screenshots/19-right-panel.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![移动端聊天](docs/screenshots/22-mobile-chat.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![实时令牌统计](docs/screenshots/18-live-stats.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "支持 **Windows 10 / 11 x64**",
+        "完整 Profile 失败时原样重试一次，不先停用插件，也不把“外来插件”当作启动阻断条件。",
+        "确认为插件或配置问题后，可调用用户已经配置的模型在私有事务工作区生成候选；只有通过注册检查的修改才会原子应用。",
+        "没有模型或可用 Key 时不会调用云端模型，页面明确显示无模型状态并继续同 Home 内置插件回退；Tools capability 按当前 Runtime 能力安全处理。",
+        "候选无效、没有可用模型或修复后仍失败时自动回滚，并从同一个 Home 启动内置插件；聊天和设置不搬家。",
+        "桌面版使用独立的 `desktop` profile，不会覆盖已有 DSH 配置。",
+        "授权 grant 只由官方凭据服务读写并保存在本机 DSH Home，前端只读取\"是否已登录\"，不会收到 access token 或 refresh token。",
+        "DSH Runtime 默认监听本机回环地址",
+        "遥测默认关闭",
+        "导出的诊断信息会对 Token、Secret、Cookie、路径、Prompt、Session 和 Tool Result 等内容进行脱敏"
+      ],
+      "concerns": [
+        "The version-history table was excluded as changelog; only behavior restated in current feature sections was retained."
+      ]
+    }
+  ]
+}

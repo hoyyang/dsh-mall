@@ -1,0 +1,604 @@
+{
+  "reviews": [
+    {
+      "repo": "Walvez/dsh-codex-sync",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Browse conversations grouped by workspace folder in an intuitive project tree",
+        "Preserves user prompts, assistant outputs, reasoning traces, and tool-call trajectories",
+        "Automatically attaches imported sessions to matching workspaces for **seamless continuation**",
+        "Incremental re-import: Codex conversations continued after the initial import are marked as `updated` and append only new turns without creating duplicate sessions.",
+        "Automatically matches Codex's workspace catalog",
+        "Creates clean, standalone Codex rollouts (`history_mode: legacy`) and SQLite index entries",
+        "Hides internal sub-agent threads by default to keep the conversation list focused",
+        "Mounts `~/.codex/skills/*/SKILL.md` directly into DSH's native skill catalog",
+        "Zero-restart updates: Edit a skill file on disk, and DSH recognizes the change on the next turn.",
+        "Watches `~/.codex/config.toml` live, dynamically mirroring `[mcp_servers.*]` to DSH with conflict avoidance and stderr silencing",
+        "Single-command setup (`npx dsh-codex-sync codex-install`) equips your Codex agent with tools to search, inspect, and install DSH plugins",
+        "Scan stored session logs for replay damage and heal them in place"
+      ],
+      "usageItems": [
+        "Click the **Codex Icon** in the sidebar to open the centered control modal",
+        "Open project picker to import chats into DSH",
+        "Export DSH chats into new Codex conversation copies",
+        "Fix — run this in any DSH chat (or `dsh-codex-sync repair-sessions --fix` in a terminal):",
+        "Modal overview of MCP servers, health, and statuses",
+        "Re-sync all switch states from the host",
+        "Toggle between 简体中文 / English"
+      ],
+      "usageActions": [
+        "/import-all",
+        "/export-codex",
+        "/repair-sessions [--fix]",
+        "/mcp-status",
+        "/codex-settings",
+        "dsh-codex-sync doctor",
+        "*\"Dry-run importing my Codex conversations\"* → runs `/import-codex --dry-run`",
+        "*\"Check current MCP mirror status\"* → runs `/mcp-status`",
+        "*\"Turn on auto-import\"* → runs `/auto-import on`",
+        "/repair-sessions --fix"
+      ],
+      "ioPairs": [
+        "*\"Dry-run importing my Codex conversations\"* → runs `/import-codex --dry-run`",
+        "*\"Check current MCP mirror status\"* → runs `/mcp-status`",
+        "*\"Turn on auto-import\"* → runs `/auto-import on`"
+      ],
+      "codeExamples": [
+        "🩺 Troubleshooting: `token meter` / replay errors on imported chats | /repair-sessions --fix"
+      ],
+      "usecases": [
+        "Incompatible session formats prevent resuming past Codex tasks in DSH",
+        "Skills and MCP servers must be manually recreated and maintained in two separate tools",
+        "Most migration scripts are one-time destructive copies that offer no clean way to safely bring DSH continuations back to Codex."
+      ],
+      "outputs": [
+        "View and continue chats in Codex immediately after restarting the Codex app.",
+        "keeps a `.bak` next to each repaired log"
+      ],
+      "reliability": [
+        "without modifying or overwriting original Codex histories",
+        "gracefully locking unknown directories to prevent orphan threads",
+        "Imports created by **v1.6.0+** are replay-safe by construction, so this should never trigger again.",
+        "command.execute failed: internal: token meter: assistant/message at seq N has no matching step/start event",
+        "Logs written before v1.6.0 lacked paired `step/start…step/end` markers, and mixed logs can carry stale seq citations",
+        "The repair merges seams, inserts missing step markers, remaps citations, renumbers sequences, validates every candidate with the real `@deepseek-ai/dsh-token-meter`"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/sync-settings-modal.png\" alt=\"Codex Sync Settings modal: actions, switches, language\" width=\"100%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/sidebar-entry.png\" alt=\"Workspace header Codex quick entry button\" width=\"100%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/import-picker.png\" alt=\"Import picker: projects, chats, and status tags\" width=\"100%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/export-picker.png\" alt=\"Export picker: smart workspace matching, source filter\" width=\"100%\"/>",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "ioPairs limited to the built-in agent-skill request→command mappings; no other explicit paired I/O example exists.",
+        "installation/config fences (dsh plugin add, cordis.patch.yml, codex-install) excluded as zero evidence."
+      ]
+    },
+    {
+      "repo": "agi-fans/oh-my-dsh",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "search, pin, rename, and resume sessions in `/sessions`",
+        "rewind, retry, compact, and export complete transcripts as Markdown or standalone HTML",
+        "mention project files and other sessions with `@`",
+        "paste clipboard images",
+        "edit multiline prompts externally, and retrieve queued follow-ups",
+        "steer a continuable child from its transcript",
+        "use `/context` for an inline projection-backed breakdown that remains in the transcript",
+        "`/trajectory` opens a keyboard-driven event ledger with Turn/Step grouping, live following, search, folding, timing, token usage, tool payloads, results, and schemas.",
+        "After an upgrade, omdsh can show release notes once at startup.",
+        "Generate shell integration without starting the TUI or making network requests",
+        "inspect distinct Input and Output sections, expand long results",
+        "prefer the stored credential over an inherited `DEEPSEEK_API_KEY`"
+      ],
+      "usageItems": [
+        "press Down on an empty composer then Enter (or use Alt+A directly) to select a child in the keyboard-driven Agent Hub",
+        "Use `/model favorite` and `/model unfavorite` to maintain a small local cycle list, then use `Ctrl+P`/`Alt+P` to move through it and `Ctrl+T` to change reasoning effort.",
+        "Use `/changelog` for recent entries or `/changelog full` for the complete packaged history.",
+        "run `pnpm benchmark:tui` locally"
+      ],
+      "usageActions": [
+        "omdsh",
+        "/sessions",
+        "/context",
+        "/trajectory",
+        "/changelog full",
+        "/model favorite",
+        "pnpm benchmark:tui",
+        "omdsh completions bash"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Configuration | omdsh completions bash"
+      ],
+      "usecases": [
+        "complete a first task, add precise context, guide queued work, recover long sessions, customize the environment, and write an installable plugin",
+        "extend a project with reusable instructions and external tools",
+        "install DSH bundles into the omdsh Profile with `omdsh plugin`"
+      ],
+      "outputs": [
+        "restoring 10,000 conversation turns takes a median 2.62 ms, 10,000 tool calls take 22.71 ms, and rendering cached frames over a 5,000-turn surface averages 0.35 ms per frame."
+      ],
+      "reliability": [
+        "Requirements: Node.js 22.19 or later in the 22.x line, or Node.js 24 or newer, plus a DeepSeek API key for live model turns.",
+        "preserve correct display-cell alignment for CJK text and emoji",
+        "A cached daily npm check reports newer versions without installing anything automatically",
+        "Terminal notifications for completed long turns and human prompts are also configured there and remain off by default.",
+        "Reference checkouts under `refs/` remain read-only research material."
+      ],
+      "media": [
+        {
+          "excerpt": "![oh-my-dsh terminal interface](apps/site/public/screenshot.webp)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "/login and /logout provider flows treated as configuration and excluded per rubric.",
+        "No explicit paired input/output operational example in the README; ioPairs empty."
+      ]
+    },
+    {
+      "repo": "lsz-asd/dsh-plugin-session-delete",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "在会话顶部添加垃圾桶按钮，侧栏会话行 \"...\" 菜单内添加\"删除会话\"项",
+        "`RiskConfirmation` 风险确认：勾选\"我已了解后果\"后确认可用",
+        "`workbench_session_delete` 工具：agent 可直接删除会话"
+      ],
+      "usageItems": [
+        "点击后出现风险确认弹窗（需勾选）"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "你是否困扰于 web 端无法删除对话？",
+        "是否在尝试编辑 harness 时遇到对话话历史无法同步，而损坏的对话又无法删除？"
+      ],
+      "outputs": [],
+      "reliability": [
+        "确认后会删除会话日志、投影缓存与工作区记账",
+        "运行中的会话会有提示，若仍选择删除会停止运行并删除",
+        "经活动 storageDomain，内存/磁盘一致",
+        "可在web中使用，并且理论上兼容一切web套壳的客户端。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"1800\" height=\"1020\" alt=\"image\" src=\"https://github.com/user-attachments/assets/c66f6185-457d-4261-9e10-1b44b9959896\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "English section is a full translation duplicate of the Chinese section; each claim counted once.",
+        "Changelog (v0.3.0/v0.3.1) entries excluded as changelog; no operational command fences beyond installation."
+      ]
+    },
+    {
+      "repo": "834063245-creator/HoloGram",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "通过 MCP 协议向 AI Agent 暴露 **35 个默认图查询工具**（注册表共 36 个 schema）",
+        "Agent 一次工具调用拿到结构化事实（影响面、循环、脆弱模块、数据流路径），而不是源文件文本",
+        "27 种 tree-sitter 语法静态链接，18 族/19 种语言有手工调校的结构与数据流查询",
+        "Kotlin / Markdown / TOML 动态加载",
+        "耦合 / 循环依赖 / 脆弱模块 / 架构盲点 / 边界违规 / 执行流 / 语法级数据流 / 社区检测（Leiden + Louvain）/ 24 个框架路由 / gRPC 服务映射",
+        "9 种节点 / 12 种边，边带 L1–L4 耦合深度、跨文件、时序延迟、LSP 已解析等属性",
+        "13 个领域工具（fs / shell / git / search / web / agent / task / memory / browser / desktop / graph / ops / lsp）",
+        "Three.js WebGL + WebGPU 布局 + 星系折叠导航，万节点秒开",
+        "watcher 驱动增量更新（保存即刷新）",
+        "按需启动原生 LSP（rust-analyzer / gopls / pyright 等 9 个）",
+        "CDP 控制，多账号会话隔离",
+        "每个工具返回结构化 JSON（不是源文件），并附带推荐的下一步工具"
+      ],
+      "usageItems": [
+        "改代码前先问图：`graph(symbols → impact → preflight)` 是工作流入口",
+        "调 engine_status 验证",
+        "选项目 → 自动出图",
+        "点节点即开源码",
+        "重启后：mcp__hologram__* 工具进工具箱 + 侧边栏「3D 星图」入口"
+      ],
+      "usageActions": [
+        "hologram run --list",
+        "hologram run graph_summary .",
+        "hologram run trace_impact . --node_id src/main.rs:main",
+        "hologram run preflight_check . --files a.rs,b.rs",
+        "hologram run detect_cycles .",
+        "hologram run list_flows .",
+        "hologram serve --project-root . --tcp",
+        "hologram --stress <path> <iters>"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "### CLI | hologram run --list"
+      ],
+      "usecases": [
+        "LLM 分析\"改 A 会炸什么\"时，靠逐文件读源码推测依赖——弱模型会漏，大项目会翻不动",
+        "接入 Claude Code / Cursor 等任意 MCP 客户端",
+        "HoloGram 用自己的引擎分析自己的代码库"
+      ],
+      "outputs": [
+        "当前图快照 **18,119 节点 / 65,508 边**（2026-08-17）",
+        "全量分析 1,770s 全程跑完，RSS 646MB；快照写入 2.44GB / 56.3s",
+        "单点查询省 ~70% token，全局分析省 90%+",
+        "改前检查（exit code 表达结果）"
+      ],
+      "reliability": [
+        "失败时返回带 `guidance`/`fallback` 的降级响应而非硬错误",
+        "eval/动态代码标记不可达、动态 import 标记动态站点，不假装知道运行时才知道的事",
+        "失败自动回退全量",
+        "panic 守护，重新分析可抢占在途任务",
+        "引擎 **697 用例**（lib 669 + bin 27 + doc 1，696 passed / 1 ignored）",
+        "首次全量在并行构建环境下偶发 1 失败，重跑通过",
+        "本地运行、零配置、代码不出机器",
+        "数据文件不产生图节点，不浪费解析"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/01.png\" width=\"32%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/02.png\" width=\"32%\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/screenshots/03.png\" width=\"32%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README covers three forms (MCP service, desktop app, DSH bundle); evidence drawn from the shared engine behaviors only.",
+        "assets/banner.png treated as decorative art and excluded from media.",
+        "No explicit paired input/output operational example; ioPairs empty."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-custom-tool",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "users author their own JavaScript tools in the settings UI with a Monaco (VS Code) editor and TypeScript intellisense",
+        "the model grows and prunes the same toolset itself through `custom_tool_create` / `custom_tool_remove` / `custom_tools_list`",
+        "Every tool is durable, hot-registered, and written into the model prompt on the next step.",
+        "a tool is a form in the settings UI — name, description, parameters, code — saved live and callable by the model immediately",
+        "Model-created and workspace-scoped tools are badged.",
+        "Every string follows the harness locale (Chinese / English) and switches with the language preference.",
+        "enabled tools register into `ctx.tools` the moment the settings write commits; disabled/removed tools unregister immediately"
+      ],
+      "usageItems": [
+        "list, create, edit, enable/disable, delete",
+        "tools are exercised through model calls or a headless run"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Tool code contract | // args is typed from the parameter JSON Schema you declared."
+      ],
+      "usecases": [
+        "recurring file tasks inside the session workspace",
+        "pure computation, external data, workflows",
+        "a durable file task the user keeps everywhere, like a PDF reader"
+      ],
+      "outputs": [],
+      "reliability": [
+        "every call executes in a fresh worker thread inside a `node:vm` realm with an explicit allowlist, Node Permission Model, and hard budgets",
+        "The worker receives no inherited environment variables, filesystem access outside its configured scope, or child-process capability.",
+        "any path that escapes the root is rejected with an explicit error",
+        "a workspace tool fails with `no workspace root` rather than running without a boundary",
+        "A symlink inside the workspace can still point out of it — workspace scope is trusted code, not a sandbox against a malicious host.",
+        "the worker is terminated on timeout, abort, or completion",
+        "Creating a **global-location** tool requires the user's explicit approval",
+        "The model may **not** remove **user-created** tools (`source: user`)",
+        "Custom tool names cannot shadow tools owned by other packages; a collision surfaces as a per-tool registration failure in `custom_tools_list`.",
+        "Without it the UI renders but saves are silently refused (`settings-not-exposed`)"
+      ],
+      "media": [
+        {
+          "excerpt": "![The Custom Tool settings page](assets/screenshots/settings-section.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![The tool editor](assets/screenshots/tool-editor.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No explicit paired input/output example; ioPairs empty.",
+        "Install/development fences and the configuration field table excluded as install/config."
+      ]
+    },
+    {
+      "repo": "147228/dsh-xiaoyao-skins",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "每套皮肤都是一个可安装、可卸载、可测试的 DSH，不替换会话、模型、工具、沙箱或插件系统",
+        "切换时只移除本仓库登记过的其他皮肤包"
+      ],
+      "usageItems": [
+        "可用 `--profile <name>` 指定其他 profile，用 `--dry-run` 只查看将执行的 DSH 命令。",
+        "点击图片可进入对应皮肤目录"
+      ],
+      "usageActions": [
+        "xiaoyao-skin use black-whale",
+        "xiaoyao-skin use ocean",
+        "xiaoyao-skin use official",
+        "xiaoyao-skin create moon-rabbit",
+        "xiaoyao-skin doctor ./dsh-skin-moon-rabbit"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "一行换肤 | npx --yes --package=https://github.com/147228/dsh-xiaoyao-skins/releases/latest/download/xiaoyao-skin-kit.tgz xiaoyao-skin use black-whale",
+        "做一套自己的皮肤 | npx --yes --package=https://github.com/147228/dsh-xiaoyao-skins/releases/latest/download/xiaoyao-skin-kit.tgz xiaoyao-skin create moon-rabbit"
+      ],
+      "usecases": [
+        "做一套自己的皮肤"
+      ],
+      "outputs": [],
+      "reliability": [
+        "运行时禁止发起网络请求，也禁止导入功能型 DSH",
+        "安装目标失败时不会移除当前皮肤。",
+        "不改 DSH 源码，不清空 profile，不读取或迁移会话数据。",
+        "自动走 Corepack；Corepack 也不可用时自动走随 Node 提供的 npx",
+        "`pnpm check` 会校验目录元数据、官方 DSH 接线、表现层权限边界、生命周期清理、",
+        "合并请求还会在 Linux、macOS、Windows\n三套环境中重跑。",
+        "没有时通过\nCorepack 或 npx 为本次操作临时提供兼容版本，不修改全局 pnpm 配置。"
+      ],
+      "media": [
+        {
+          "excerpt": "![夕小瑶 · 黑鲸实验室真实 DSH Web profile 效果图](packages/skins/black-whale/preview/dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![夕小瑶 · 探索之境真实 DSH Web profile 效果图](packages/skins/ocean/preview/dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![蓝粉双子 · 晴空研究所真实 DSH Web profile 效果图](packages/skins/sky-lab/preview/dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![夕小瑶 · 烽火夜长城真实 DSH Web profile 效果图](packages/skins/great-wall-beacon/preview/dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![夕小瑶 · 山河朝霞真实 DSH Web profile 效果图](packages/skins/great-wall-sunrise/preview/dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![夕小瑶 · 雪岭长城真实 DSH Web profile 效果图](packages/skins/great-wall-snow/preview/dark.jpg)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Skin table captions are caption-duplicates of the preview screenshots and were not counted as outputs.",
+        "Licensing table treated as licensing, not shipped behavior."
+      ]
+    },
+    {
+      "repo": "Xuxchloris/deepseek-harness-sdr-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Agent 按九阶段销售流程工作：解析任务、开发客户、公司背调、评分、写开发信、人工审批、跟进计划、报价素材、结案",
+        "`sdr_create_task` | 创建任务；相同请求幂等返回原任务",
+        "`sdr_audit_log` | 回放工具调用、阶段和审批事件",
+        "`sdr_knowledge_search` | 检索企业知识",
+        "`sdr_knowledge_evaluate` | 评测召回质量（Recall@K、MRR）",
+        "支持全文检索，可注入 embedding 和 reranker",
+        "知识库存放产品、品牌、认证、报价政策、市场规则等资料，供开发信草稿和结案报告引用，引用记录来源和版本"
+      ],
+      "usageItems": [
+        "在 DSH Web 的模式菜单中选择「SDR 数字员工」",
+        "第 6 阶段时，`sdr_review_drafts` 列出开发信草稿，等人工选择。"
+      ],
+      "usageActions": [
+        "Agent 调用 `sdr_create_task` 创建任务，然后反复调用 `sdr_next_step` 推进，每次只完成一个阶段。",
+        "npm.cmd test --prefix \".\\packages\\dsh-sdr\"",
+        "node \".\\scripts\\demo_dsh_sdr.mjs\""
+      ],
+      "ioPairs": [
+        "> 开发 3 个美国户外用品客户\n\nsdr_create_task              创建任务，进入 task_parse",
+        "sdr_continue_after_approval  拒绝：仍有 3 封草稿未获批准",
+        "sdr_next_step × 3            跟进计划 → 报价素材 → 结案报告，附 11 条审计事件"
+      ],
+      "codeExamples": [
+        "没有 DSH Web 时可以跑离线演示 | npm.cmd test --prefix \".\\packages\\dsh-sdr\""
+      ],
+      "usecases": [
+        "没有 DSH Web 时可以跑离线演示，合成数据，不需要凭证"
+      ],
+      "outputs": [
+        "结案报告，附 11 条审计事件",
+        "读取任务状态、结案报告",
+        "生成 3 封开发信草稿"
+      ],
+      "reliability": [
+        "阶段顺序由服务端状态机决定，模型不能跳阶段",
+        "开发信必须经人工批准才能进入后续流程",
+        "Email、WhatsApp、CRM 默认 dry-run，不会发出真实消息",
+        "只要还有草稿没批，`sdr_continue_after_approval` 就拒绝放行",
+        "批准凭证绑定草稿内容哈希：草稿改过后，原来的批准自动失效，需要重新审批",
+        "密码、API key、token 不会进入知识库、工具参数或审计日志",
+        "`send()` 返回 `blocked-dry-run`",
+        "JSON 写入先落临时文件再 rename，进程中断不会写坏状态",
+        "当前会话不支持 agent 交互提问时，审批请求会失败，任务冻结在原地，不会跳过审批继续跑",
+        "模型没有 `send_email` 之类的通用发送工具可用"
+      ],
+      "media": [],
+      "concerns": [
+        "README contains no images; media empty.",
+        "Chinese README only; no translation duplication issue."
+      ]
+    },
+    {
+      "repo": "weinibuliu/deepseek-harness-vsc-extension",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "VSCode style interface",
+        "Native File Picker",
+        "Feeling of current focus",
+        "Problems from editor",
+        "Agent Preset selector for blank sessions",
+        "Extension will try to find `dsh`.",
+        "Display usage",
+        "Context usage"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Due to the possibility of breaking changes to DeepSeek Harness, this extension may only run with specific version dsh.",
+        "Test Passed Version: 0.1.0-rc.6"
+      ],
+      "media": [],
+      "concerns": [
+        "Feature bullets are one-line bilingual labels without operational detail; usage/ioPair evidence absent.",
+        "Unchecked TODO items excluded as roadmap; only checked (shipped) items counted."
+      ]
+    },
+    {
+      "repo": "Ericwong5021/deepseek-plugin-store",
+      "inferredType": "catalog-list",
+      "capability": [
+        "本目录从 [`dsh-plugin`](https://github.com/topics/dsh-plugin) Topic、编辑精选和提交 Issue 中发现候选",
+        "Topic 中发现但尚未进入 Registry 的项目保持隐藏候选状态，不会获得 DSH 直接安装入口。",
+        "检查公开且未归档的仓库、可解析的根 `package.json`、有效 `dsh.bundle`、Manifest 引用文件、README 指引和默认分支检查，并保存固定 commit SHA",
+        "人工复核 > 已接受的维护者分类 > LLM 分类 > Manifest/文本/关键词证据 > 历史迁移",
+        "LLM 分类 Action 每天 00:43 UTC（北京时间 08:43）处理一批插件",
+        "治理发现 Action 每周日从第一个历史分区开始，自动串行扫描四个 Topic 时间分区",
+        "Schema、身份唯一性、路径范围、不可变证据、治理策略和 Catalog 确定性必须全部通过",
+        "Publisher 同步生成 Catalog、榜单和中英文 README",
+        "按分类浏览"
+      ],
+      "usageItems": [
+        "在根目录 `package.json` 中声明有效的 `dsh.bundle`，准备安装或使用说明，然后提交[插件收录 Issue]"
+      ],
+      "usageActions": [
+        "提交插件收录 Issue"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "3449 个通过结构预检"
+      ],
+      "reliability": [
+        "发现不等于收录；公开项目以 Registry 为准",
+        "`verified` 表示结构和证据通过，不是安全审计或运行时兼容性保证",
+        "准入流程不执行外部仓库代码",
+        "人工结论不会被自动分类覆盖",
+        "定时运行不会自动续跑下一批",
+        "历史迁移记录可能保持 `legacy-pending`，但不会被当作已验证插件。"
+      ],
+      "media": [],
+      "concerns": [
+        "The bulk of the README is a listing of linked plugins (1711 entries); per rubric rule 7 all linked-project capabilities, install commands, and star data were excluded.",
+        "docs/banner.png treated as decorative banner and excluded from media."
+      ]
+    },
+    {
+      "repo": "chenw2759-wq/dsh-IDE",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "拖 tab 拖出成浮窗，拖回右缘自动停靠",
+        "Markdown / HTML / 图片 / CSV / Office（docx / xlsx / pptx）/ 日志等多格式直接预览",
+        "代码即时编辑（语法高亮 + 行号 + 斑马纹）",
+        "Markdown/HTML **Word 式可视化编辑**",
+        "文件树、命令行终端、Trae 风格红绿 diff、类型颜色标签、Git 角标、监视路径——开箱即用的 JupyterLab 式工作区",
+        "read / write / edit / glob / grep 与 bash / 终端在 SSH 模式下透明地在远程服务器执行",
+        "懒加载、按文件名搜索定位",
+        "docx：段落 / 表格 / 加粗 / 斜体 / 下划线 / 文字颜色 / 字号 / 高亮 / 对齐 / 字体（含中文字体 `w:eastAsia`）",
+        "GUI 配置多台主机（含 ProxyJump 跳板链、密钥 passphrase），一键切换",
+        "`remote_status` / `remote_ls` / `remote_read` / `remote_write` / `remote_mkdir`",
+        "`.R` / `.r` 脚本以 **Rscript** 运行（▶ 运行）",
+        "监视标记按会话记忆"
+      ],
+      "usageItems": [
+        "预览 tab 条右侧「⇊ / ⇉ / ⇱」循环切换——下框展示 / 右侧抽屉（默认）/ 浮动覆盖（更宽）",
+        "按住 tab 条 / 工具栏空白处拖出成浮窗；拖到屏幕右缘松手停靠回右栏抽屉；拖到预设位吸附。",
+        "打开 `.py` / `.md` / `.js` 等文件 → 直接输入 → Ctrl+S 保存（mtime 冲突检测）。",
+        "打开 `.py` / `.js` / `.sh` 等文件 → 工具栏「▶ 运行」，SSH 模式下在远程主机执行。",
+        "预览工具栏「>_ 终端」，或文件栏 tab 条「>_」按钮（不打开代码也能开命令行）。",
+        "点「编辑最新版本」直接改，点「刷新」保留红绿。",
+        "文件树节点右键 → 下载 / 重命名 / 复制 / 粘贴 / 删除（本地与远程一致）。",
+        "会话右上角（session log 左侧）点击 **SSH** → 填主机（别名/主机/端口/用户名/密码或密钥/远程根）",
+        "直接对 Agent 说「读/改远程文件」「在服务器上执行命令」——普通工具即远程执行。"
+      ],
+      "usageActions": [
+        "Ctrl+S 保存",
+        "「▶ 运行」直接执行当前文件",
+        "「>_ 终端」打开命令行面板随时输入命令",
+        "**Ctrl+滚轮**缩放",
+        "点击 **SSH**"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "「本地大脑、远程手脚」",
+        "SSH 远程开发只是 dsh-IDE 的能力之一——本地目录同样享受完整的 IDE 工作区。"
+      ],
+      "outputs": [
+        "Added/removed 统计 + 删除行红底、新增行绿底",
+        "全新文件（无历史基线）自动弹出全绿卡片",
+        "文件被删除自动弹出全红卡片",
+        "首个工作表渲染为表格（共享字符串解析）",
+        "pptx：逐页卡片式呈现"
+      ],
+      "reliability": [
+        "保存带 mtime 冲突检测",
+        "已知限制：图表（`word/charts/*`）与嵌入对象（嵌入 Excel）等复杂结构暂不解析，编辑保存也不保留。",
+        "SSH 模式下本机沙箱不对远程执行生效",
+        "远程操作消耗真实远程资源，先确认再执行",
+        "远程 grep/glob/realpath 依赖 GNU find/grep/coreutils。",
+        "隔离作用于面板与显式 remote_* 工具",
+        "路由仅 loopback（同源校验）；认证材料存 `~/.dsh/dsh-ssh.json`（0600）。",
+        "过程文件无论标记都不弹出",
+        "浏览器端 ZIP 解析，无需宿主依赖、无需重启 dsh",
+        "远程文件树正确识别符号链接目录（如 AutoDL 的 `/root/autodl-tmp`）"
+      ],
+      "media": [
+        {
+          "excerpt": "![Markdown 预览](docs/markdown预览.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![左栏](docs/左栏.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![红绿标注](docs/红绿标注.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![终端](docs/终端.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SSH 配置](docs/ssh配置.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![可视化编辑](docs/可视化编辑.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Installation/build fences excluded as install/config; no operational code example fences exist.",
+        "No explicit paired input/output operational example; ioPairs empty."
+      ]
+    }
+  ]
+}

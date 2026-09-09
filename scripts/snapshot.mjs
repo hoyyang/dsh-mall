@@ -7,13 +7,16 @@
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DATA = join(ROOT, 'data')
+const SNAPSHOT_FILE = join(DATA, 'registry-snapshot.json')
 const TOKEN = process.env.DSHM_GITHUB_TOKEN ?? ''
 const UA = 'dsh-mall-snapshot'
+const PRACTICAL_EVIDENCE_VERSION = 3
+const PRACTICAL_PARSER_REVISION = 3
 
 const CATEGORIES = {
   ui: { en: 'UI Enhancements', zh: 'UI 增强' },
@@ -51,15 +54,33 @@ function ruleCategory(name, description, topics) {
   return 'other'
 }
 
-const PLUGIN_NAME_RE = /(^dsh[-_]|[-_]dsh[-_]|dsh[-_]plugin|dshplugin)/i
-const DSH_HINT_RE = /(dsh|deepseek[ -]?harness|cordis)/i
-
-function heuristicIsPlugin(name, description, topics) {
+function legacyPluginHeuristic(name, description, topics) {
   const hay = (name + ' ' + description + ' ' + topics.join(' ')).toLowerCase()
-  if (!DSH_HINT_RE.test(hay)) return false
-  if (PLUGIN_NAME_RE.test(hay)) return true
-  if (/(plugin|插件)\b/i.test(hay)) return true
+  if (!/(dsh|deepseek[ -]?harness|cordis)/i.test(hay)) return false
+  if (/(^dsh[-_]|[-_]dsh[-_]|dsh[-_]plugin|dshplugin)/i.test(hay) || /(plugin|插件)\b/i.test(hay)) return true
   return null
+}
+
+function legacyScoreBaselineEligible(repo, excluded) {
+  let oldProjection = legacyPluginHeuristic(String(repo.name ?? ''), String(repo.description ?? ''), Array.isArray(repo.topics) ? repo.topics : [])
+  if (repo.installable === 'non-plugin') oldProjection = false
+  else if ((Array.isArray(repo.market_tags) && repo.market_tags.includes('verified-install')) || (repo.pkg_name ?? null) !== null) oldProjection = true
+  if (excluded) oldProjection = false
+  return oldProjection === true
+}
+
+function pluginIdentity(repo) {
+  const positive = []
+  const negative = []
+  if (repo.bundled === true) positive.push('index-bundle-scan')
+  if (Array.isArray(repo.market_tags) && repo.market_tags.includes('verified-install')) positive.push('index-verified-install')
+  if (typeof repo.verdict === 'string' && repo.verdict.toLowerCase() === 'pass') positive.push('independent-verification')
+  if (repo.installable === 'non-plugin') negative.push('index-non-plugin')
+  const pluginEvidence = [...new Set([...positive, ...negative])]
+  if (positive.length > 0 && negative.length > 0) return { isPlugin: null, pluginStatus: 'conflict', pluginEvidence }
+  if (positive.length > 0) return { isPlugin: true, pluginStatus: 'verified-plugin', pluginEvidence }
+  if (negative.length > 0) return { isPlugin: false, pluginStatus: 'verified-non-plugin', pluginEvidence }
+  return { isPlugin: null, pluginStatus: 'unknown', pluginEvidence: [] }
 }
 
 async function gh(path, token) {
@@ -134,6 +155,39 @@ async function fetchCdnRepos() {
   throw new Error('CDN unavailable: ' + lastError)
 }
 
+export function practicalCount(registry) {
+  return Array.isArray(registry?.plugins)
+    ? registry.plugins.filter((entry) => entry?.readmeSig?.practical?.version === PRACTICAL_EVIDENCE_VERSION && entry?.readmeSig?.practical?.parserRevision === PRACTICAL_PARSER_REVISION).length
+    : 0
+}
+
+function priorPracticalCount(registry) {
+  return Array.isArray(registry?.plugins)
+    ? registry.plugins.filter((entry) => {
+        const version = entry?.readmeSig?.practical?.version
+        return version === 2 || version === 3
+      }).length
+    : 0
+}
+
+export function assertNoPracticalDowngrade(current, candidate) {
+  const currentPractical = priorPracticalCount(current)
+  const nextV3 = practicalCount(candidate)
+  if (currentPractical > 0 && nextV3 === 0) {
+    const error = new Error(`refusing schema downgrade: current snapshot has ${currentPractical} practical records, candidate has no practical-v3 evidence`)
+    error.code = 'PRACTICAL_SCHEMA_DOWNGRADE'
+    throw error
+  }
+}
+
+function writeSnapshotOutputs(registry, known) {
+  let current = null
+  try { current = JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8')) } catch { /* first snapshot */ }
+  assertNoPracticalDowngrade(current, registry)
+  writeFileSync(SNAPSHOT_FILE, JSON.stringify(registry))
+  writeFileSync(join(DATA, 'awesome-known.json'), JSON.stringify(known, null, 2))
+}
+
 async function main() {
   mkdirSync(DATA, { recursive: true })
 
@@ -154,12 +208,51 @@ async function main() {
         added: plugin.added ?? null,
       }
     }
-    writeFileSync(join(DATA, 'awesome-known.json'), JSON.stringify(known, null, 2))
-    console.log('awesome-known.json:', Object.keys(known).length, 'entries')
+    console.log('awesome-known.json candidate:', Object.keys(known).length, 'entries')
   } catch (err) {
     console.warn('curated catalog fetch failed:', err.message)
     try { known = JSON.parse(readFileSync(join(DATA, 'awesome-known.json'), 'utf8')) } catch { /* keep {} */ }
   }
+
+  const exclusionUrls = [
+    'https://raw.githubusercontent.com/hoyyang/dsh-market-index/main/exclusions.json',
+    'https://cdn.jsdelivr.net/gh/hoyyang/dsh-market-index@main/exclusions.json',
+  ]
+  let exclusions = {}
+  for (const url of exclusionUrls) {
+    try {
+      const res = await fetch(url, { headers: { 'user-agent': UA }, signal: AbortSignal.timeout(20_000) })
+      if (!res.ok) continue
+      const body = await res.json()
+      if (body.entries && typeof body.entries === 'object') {
+        exclusions = Object.fromEntries(Object.entries(body.entries).map(([key, value]) => [key.toLowerCase(), value]))
+      }
+      break
+    } catch { /* next source */ }
+  }
+
+  const readCount = (value) => Number.isFinite(value) ? Math.max(0, value) : 0
+  const readRatio = (value) => Math.max(0, Math.min(1, readCount(value)))
+  const practicalEvidenceOf = (raw) => raw?.version === PRACTICAL_EVIDENCE_VERSION && raw?.parser_revision === PRACTICAL_PARSER_REVISION
+    ? {
+        version: PRACTICAL_EVIDENCE_VERSION,
+        parserRevision: PRACTICAL_PARSER_REVISION,
+        capabilityItems: readCount(raw.capability_items),
+        usageItems: readCount(raw.usage_items),
+        usageActions: readCount(raw.usage_actions),
+        ioPairs: readCount(raw.io_pairs),
+        codeExamples: readCount(raw.code_examples),
+        usecaseItems: readCount(raw.usecase_items),
+        outputItems: readCount(raw.output_items),
+        media: readCount(raw.media),
+        reliabilityItems: readCount(raw.reliability_items),
+        confidence: {
+          overall: readRatio(raw.confidence?.overall),
+          coverage: readRatio(raw.confidence?.coverage),
+          fallbackShare: readRatio(raw.confidence?.fallback_share),
+        },
+      }
+    : null
 
   // 2. Repo snapshot: CDN index first (fresh, quota-free), Search crawl as fallback.
   const toEntry = (repo) => {
@@ -172,6 +265,8 @@ async function main() {
     for (const [k, v] of Object.entries(repo)) {
       if (k.startsWith('description_') && typeof v === 'string' && v !== '') descriptions[k.slice('description_'.length)] = v
     }
+    const policy = exclusions[key]
+    const identity = pluginIdentity(repo)
     return {
       name: repo.name,
       owner: String(repo.full_name ?? '').split('/')[0] ?? '',
@@ -183,7 +278,8 @@ async function main() {
       todayStars: null,
       created: knownEntry?.added ?? null,
       pushed: repo.updated_at ?? null,
-      isPlugin: repo.installable === 'non-plugin' ? false : (knownEntry !== undefined || npmName !== null ? true : heuristicIsPlugin(String(repo.name ?? ''), String(repo.description ?? ''), topics)),
+      ...identity,
+      scoreBaselineEligible: legacyScoreBaselineEligible(repo, policy !== undefined),
       curated: knownEntry !== undefined,
       npm: npmName,
       avatar: 'https://github.com/' + String(repo.full_name ?? '').split('/')[0] + '.png?size=96',
@@ -195,9 +291,28 @@ async function main() {
       verified: typeof repo.verdict === 'string' && repo.verdict !== ''
         ? { by: repo.verifiedBy ?? '', at: repo.verifiedAt ?? '', reportUrl: repo.reportUrl ?? null }
         : null,
-      disclosure: null,
+      disclosure: repo.disclosure ?? null,
       installable: repo.installable === 'non-plugin' || repo.installable === 'manual' ? repo.installable : null,
       topics,
+      excluded: policy !== undefined && policy !== null
+        ? { kind: policy.kind === 'market' || policy.kind === 'leaderboard' ? policy.kind : 'excluded', reason: typeof policy.reason === 'string' && policy.reason !== '' ? policy.reason : 'listed for review' }
+        : null,
+      bundled: typeof repo.bundled === 'boolean' ? repo.bundled : null,
+      bundledAt: typeof repo.bundled_at === 'string' ? repo.bundled_at : null,
+      npmLinked: typeof repo.npm_linked === 'boolean' ? repo.npm_linked : null,
+      dormant: typeof repo.dormant === 'boolean' ? repo.dormant : null,
+      hasSkill: typeof repo.has_skill === 'boolean' ? repo.has_skill : null,
+      readmeSig: typeof repo.readme_len === 'number' || (repo.readme_practical?.version === PRACTICAL_EVIDENCE_VERSION && repo.readme_practical?.parser_revision === PRACTICAL_PARSER_REVISION)
+        ? {
+            len: typeof repo.readme_len === 'number' ? repo.readme_len : null,
+            installSection: repo.readme_install_section === true,
+            codeBlocks: typeof repo.readme_code_blocks === 'number' ? repo.readme_code_blocks : 0,
+            heading: repo.readme_heading === true,
+            cmds: Array.isArray(repo.readme_cmds) ? repo.readme_cmds.slice(0, 3).map(String) : [],
+            needsConfig: repo.readme_needs_config === true,
+            practical: practicalEvidenceOf(repo.readme_practical),
+          }
+        : null,
     }
   }
   try {
@@ -210,9 +325,10 @@ async function main() {
       categories: CATEGORIES,
       plugins,
     }
-    writeFileSync(join(DATA, 'registry-snapshot.json'), JSON.stringify(registry))
+    writeSnapshotOutputs(registry, known)
     console.log('registry-snapshot.json (from CDN index):', plugins.length, 'repos')
   } catch (err) {
+    if (err?.code === 'PRACTICAL_SCHEMA_DOWNGRADE') throw err
     console.warn('CDN snapshot failed (' + err.message + '); falling back to GitHub Search crawl')
     try {
       const repos = await fetchAllRepos(TOKEN)
@@ -220,6 +336,9 @@ async function main() {
         const key = repo.full_name.toLowerCase()
         const knownEntry = known[key]
         const description = knownEntry?.description?.en ?? knownEntry?.description?.zh ?? repo.description ?? ''
+        const policy = exclusions[key]
+        const topics = repo.topics ?? []
+        const identity = pluginIdentity(repo)
         return {
           name: repo.name,
           owner: repo.owner.login,
@@ -230,11 +349,29 @@ async function main() {
           todayStars: null,
           created: repo.created_at,
           pushed: repo.pushed_at,
-          isPlugin: knownEntry !== undefined ? true : heuristicIsPlugin(repo.name, repo.description, repo.topics ?? []),
+          ...identity,
+          scoreBaselineEligible: legacyPluginHeuristic(repo.name, repo.description ?? '', topics) === true && policy === undefined,
           curated: knownEntry !== undefined,
           npm: knownEntry?.npm ?? null,
           avatar: repo.owner.avatar_url,
           language: repo.language ?? null,
+          npmVersion: null,
+          version: null,
+          defaultBranch: repo.default_branch ?? null,
+          license: repo.license?.spdx_id ?? null,
+          verified: null,
+          disclosure: null,
+          installable: null,
+          topics,
+          excluded: policy !== undefined && policy !== null
+            ? { kind: policy.kind === 'market' || policy.kind === 'leaderboard' ? policy.kind : 'excluded', reason: typeof policy.reason === 'string' && policy.reason !== '' ? policy.reason : 'listed for review' }
+            : null,
+          bundled: null,
+          bundledAt: null,
+          npmLinked: null,
+          dormant: null,
+          hasSkill: null,
+          readmeSig: null,
         }
       })
       const registry = {
@@ -244,12 +381,14 @@ async function main() {
         categories: CATEGORIES,
         plugins,
       }
-      writeFileSync(join(DATA, 'registry-snapshot.json'), JSON.stringify(registry))
+      writeSnapshotOutputs(registry, known)
       console.log('registry-snapshot.json (from Search):', plugins.length, 'repos')
     } catch (err2) {
+      if (err2?.code === 'PRACTICAL_SCHEMA_DOWNGRADE') throw err2
       console.warn('repo snapshot failed:', err2.message)
     }
   }
 }
 
-main().catch(err => { console.error(err); process.exit(1) })
+const IS_MAIN = process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+if (IS_MAIN) main().catch(err => { console.error(err); process.exit(1) })

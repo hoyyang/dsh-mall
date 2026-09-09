@@ -128,7 +128,7 @@ function reasonsFor(e: MarketEntry, profileFeatures: string[], novelty: boolean,
 function veteranRecommend(plugins: MarketEntry[], installed: Set<string>, weights: Map<string, number>, quiz: string[], limit: number): Recommendation[] {
   const now = Date.now()
   const profNorm = Math.sqrt([...weights.values()].reduce((a, b) => a + b * b, 0))
-  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null)
+  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null && e.pluginStatus === 'verified-plugin')
   const scored = pool.map((e) => {
     const feats = featureOf(e)
     let dot = 0
@@ -173,7 +173,7 @@ function veteranRecommend(plugins: MarketEntry[], installed: Set<string>, weight
 /** 冷启动问卷路径：问卷匹配×0.7 + 综合分×0.3 + 近 30 天×0.1（画像薄弱时主力）。 */
 function quizRecommend(plugins: MarketEntry[], installed: Set<string>, quiz: string[], limit: number): Recommendation[] {
   const now = Date.now()
-  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null)
+  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null && e.pluginStatus === 'verified-plugin')
   const scored = pool.map((e) => {
     const qz = quizSimilarity(e, quiz)
     const novel = e.pushed !== null && now - Date.parse(e.pushed) <= NOVEL_DAYS * 86400000
@@ -190,7 +190,7 @@ function quizRecommend(plugins: MarketEntry[], installed: Set<string>, quiz: str
 
 /** 新手路径：高分精选 + 无需配置 + 置信度（dsh.market noviceGuess 同款）。 */
 function noviceRecommend(plugins: MarketEntry[], installed: Set<string>, limit: number): Recommendation[] {
-  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null)
+  const pool = plugins.filter((e) => !isInstalledEntry(e, installed) && e.excluded == null && e.pluginStatus === 'verified-plugin')
   const scored = pool.map((e) => {
     let s = e.score?.total ?? 0
     if (e.readmeSig?.needsConfig === false) s += 8

@@ -1,0 +1,955 @@
+{
+  "generatedAt": "2026-09-01T02:33:02.485Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-02.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "reliability-capability",
+  "question": "Diagnose reliabilityItems under-extraction and capabilityItems saturation/overcounting.",
+  "families": [
+    "reliabilityItems",
+    "capabilityItems"
+  ],
+  "under": [
+    {
+      "repo": "V1ki/dsh-plugin-subscriptions",
+      "practicalScore": 48,
+      "oracleScore": 87,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 12,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Tokens live at `~/.dsh/plugins/subscriptions/auth.json` (mode 0600) and refresh automatically."
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Only logged-in providers appear in the session model picker"
+          },
+          {
+            "heading": "## Providers",
+            "excerpt": "Copilot exposes no usage endpoint, so its card shows no usage section."
+          },
+          {
+            "heading": "## Use",
+            "excerpt": "Not logged in? The provider stays out of the picker, and requests fail with `MISSING_CREDENTIAL` pointing at the Settings page; nothing else breaks."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Use your **ChatGPT (Codex)**, **Claude**, and **Grok (X Premium)** subscriptions as LLM providers in [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — no API keys."
+          },
+          {
+            "heading": "# dsh-plugin-subscriptions [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "Codex and Grok log in via OAuth in the dsh web UI (Settings → Subscriptions); Claude imports credentials from an existing Claude Code session"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "Logged-in providers join the session model picker with their live model catalogs:"
+          },
+          {
+            "heading": "## Demo",
+            "excerpt": "Models that advertise reasoning levels get an **Effort** selector in the same menu"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "openma-ai/open-managed-agents",
+      "practicalScore": 46,
+      "oracleScore": 88,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Architecture",
+            "excerpt": "Stateless: crash → rebuild from event log → resume"
+          },
+          {
+            "heading": "## MCP servers",
+            "excerpt": "Credentials never enter the sandbox; the outbound resolver matches by host and injects at forward time."
+          },
+          {
+            "heading": "# Bind an OAuth credential via Vault",
+            "excerpt": "Tool discovery is bounded at 15 s per server; one bad server logs and skips, the rest stay live."
+          },
+          {
+            "heading": "#                          (lose it and every encrypted row is unreadable — back it up)",
+            "excerpt": "lose it and every encrypted row is unreadable — back it up"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Write a Harness",
+            "excerpt": "When you need custom behavior — different caching, compaction, context engineering — write your own:"
+          },
+          {
+            "heading": "## API",
+            "excerpt": "When attached to a session, each store is mounted into the sandbox at\n`/mnt/memory/<store_name>/`. The agent reads and writes it with the\n**standard file tools** (bash/read/write/edit/glob/grep)"
+          },
+          {
+            "heading": "## MCP servers",
+            "excerpt": "OMA registers any [Model Context Protocol](https://modelcontextprotocol.io) server attached to an agent."
+          },
+          {
+            "heading": "## Skills",
+            "excerpt": "At session start the platform mounts everything under `/home/user/.skills/{name}/` in the sandbox **and inlines the SKILL.md body directly into the system prompt**"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kelai141/dsh-mobile-apk",
+      "practicalScore": 25,
+      "oracleScore": 79,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 9,
+          "gap": -3
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# dsh-mobile-apk — DeepSeek Harness Android Shell APK",
+            "excerpt": "**0.13.0-preview — preview release**: unstable, intended for community validation — do not rely on it in production."
+          },
+          {
+            "heading": "# dsh-mobile-apk — DeepSeek Harness Android Shell APK",
+            "excerpt": "**ADB is not complete**: pairing / port auto-scan / execution are preview UI screens — the real ADB channel is under development and completes in the 0.13.0 official release."
+          },
+          {
+            "heading": "# dsh-mobile-apk — DeepSeek Harness Android Shell APK",
+            "excerpt": "**most of them are likely unavailable or buggy on phones** (mobile vs desktop differ in WebView engine / filesystem / permission model / runtime)."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "first launch extracts in 2–4 min"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-mobile-apk — DeepSeek Harness Android Shell APK",
+            "excerpt": "it boots a full dsh web agent that can really execute bash."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "bundling node + git + bash +\n  coreutils + dsh + plugins + pnpm + python/perl/ruby; first launch extracts in 2–4 min\n  (`refreshSnapshot`), engine listens on `127.0.0.1:3080`; fully offline."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "**Search (grep/glob)** — mobile ripgrep platform package (android-arm64, pcre2/NEON full-featured)."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "**Mobile UI** — responsive plugin (drawer/sheet on phones); adjustable font size, immersive status\n  bar, dark theme."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZJU-REAL/Polaris",
+      "practicalScore": 54,
+      "oracleScore": 78,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 12,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "The heavy lifting (crawling, parsing, deduplication, metric parsing,"
+          },
+          {
+            "heading": "### Try it live",
+            "excerpt": "The account is for demonstration only: it is read-only and cannot call any model."
+          },
+          {
+            "heading": "## The Voyage agent core",
+            "excerpt": "A Voyage is backed by a persistent state machine (`planning -> executing -> verifying -> ...`)."
+          },
+          {
+            "heading": "## The Voyage agent core",
+            "excerpt": "worker crashes mid-run, the Voyage resumes from its last checkpoint after a health check."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "Cold start snowballs citations from anchor papers and scores relevance against the **direction library's** inclusion config"
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "incremental sync with watermark resume, pgvector semantic search, research digests, and Obsidian vault sync."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "Lab members join the discussion live over WebSocket, and their comments enter the agent context as first-class input."
+          },
+          {
+            "heading": "## The research pipeline",
+            "excerpt": "writes code, runs a smoke test, launches runs with streamed logs and live metric curves, then auto-iterates: parse metrics, reflect, then improve, debug, or stop"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "weijiafu14/pi2dsh",
+      "practicalScore": 46,
+      "oracleScore": 90,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Install",
+            "excerpt": "> **A profile needs a surface bundle.** DSH's built-in templates are `web` and\n> `headless`."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "- **`ERR_PNPM_IGNORED_BUILDS`** — pnpm blocks dependency build scripts by\n  default."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "- **An add silently installs an older version** right after a release —\n  pnpm's `minimumReleaseAge` skips versions published very recently."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "Requires Node.js 22.19+ and DeepSeek Harness."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why this exists",
+            "excerpt": "top of DSH's native services, so a Pi package runs on DSH **as published** —\nno fork, no patch, no per-package adapter. You install a Pi plugin the same\nway you install anything else in DSH, and it works."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "There is no conversion step, no generated bundle, no\nbuild."
+          },
+          {
+            "heading": "# $DSH_HOME/profiles/<profile>/cordis.patch.yml",
+            "excerpt": "`serveNativeSubagents` (default: **off**) serves DSH-native subagents with\nthe profile's Pi packages."
+          },
+          {
+            "heading": "### 2. Configure your MCP servers",
+            "excerpt": "The setup flow can adopt MCP server definitions from host configs you already\nhave into the adapter's own standard `mcp.json`."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ChisaAlter/Deepseek-Harness-Desktop",
+      "practicalScore": 34,
+      "oracleScore": 73,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 10.5,
+          "oracle": 8.5,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **独立家目录** — 会话、设置、市场插件只在应用数据下的 `dsh-home`，不读、不迁、不改官方 CLI 的 `~/.dsh`。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **Harness `0.1.1-rc.1`** — 安装包钉官方 `dsh-v0.1.1-rc.1`。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **终端资源** — Ghostty wasm / 字体打进安装包；源码启动缺资源则拒绝启动。"
+          },
+          {
+            "heading": "## 0.2.7 更新",
+            "excerpt": "- **识图与网关** — 自定义网关不再误写官方 `DEEPSEEK_*`；主模型不识图时走官方兜底。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "下载安装即可使用，不用自己起 <code>dsh web</code>"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **官方界面** — 对话、工具调用、审批就是 `dsh web`，没有另做一套聊天页。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **启动器** — 冷启动先开启动器（更新询问、导入、版本、插件问诊）；托盘可随时再打开。"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "- **Git** — 标题栏切分支、提交、推送、开变更请求。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "SkillNerds/xskill",
+      "practicalScore": 50,
+      "oracleScore": 91,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 10,
+          "gap": 10
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 10,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 为什么需要 xskill",
+            "excerpt": "会话在上传前已脱敏，秘钥密码和相关隐私不会被别人看到。"
+          },
+          {
+            "heading": "## 架构",
+            "excerpt": "不同的skill版本会在真实的用户流量上进行测试，用户体验分高的胜出作为主版本继续迭代，每一次改动都有版本、可回滚。"
+          },
+          {
+            "heading": "## 🔌 与你的 agent 协同",
+            "excerpt": "| **Claude Code** | ✅ 已验证 | `~/.claude/projects/` | 软链 → `~/.claude/skills/<name>/` |"
+          },
+          {
+            "heading": "## 🔌 与你的 agent 协同",
+            "excerpt": "| **Codex CLI** | ✅ 已验证 | `~/.codex/sessions/` | 软链 → `~/.agents/skills/<name>/` |"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 为什么需要 xskill",
+            "excerpt": "支持轨迹自动蒸馏Skill"
+          },
+          {
+            "heading": "## 为什么需要 xskill",
+            "excerpt": "基于轨迹画像推送Skill"
+          },
+          {
+            "heading": "## 为什么需要 xskill",
+            "excerpt": "支持导入团队skillhub进行推荐"
+          },
+          {
+            "heading": "#### 额外功能：管控面板",
+            "excerpt": "全局pin某个skill"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "TencentCloud/tencentmeeting-cli",
+      "practicalScore": 56,
+      "oracleScore": 78,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 10,
+          "gap": 9
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 🔒 **安全存储** — 凭证使用 AES-256-GCM 加密，明文不落盘"
+          },
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 🖥️ **跨平台** — 支持 macOS、Linux、Windows"
+          },
+          {
+            "heading": "## 分页参数说明",
+            "excerpt": "原先的 `--page` / `--pos` / `--size` 参数被标记为 **deprecated**，仍可使用但不再推荐，未来版本可能移除。"
+          },
+          {
+            "heading": "# 3) 重复直到 next_page_token 为空，即已到最后一页",
+            "excerpt": "当未传入 `--page-token` 且同时传入了旧分页参数（如 `--page`、`--pos`）时，CLI 会按旧模式发起请求（`page_type=0`）；否则一律按新模式（`page_type=1`）发起请求。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 📅 **会议管理** — 创建、查询、更新、取消会议，支持周期性会议，管理受邀成员"
+          },
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 🎬 **录制管理** — 查询录制列表、获取下载地址、智能纪要、转写详情与搜索"
+          },
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 📊 **参会报告** — 查询参会人列表、等候室成员记录"
+          },
+          {
+            "heading": "## 功能特性",
+            "excerpt": "- 👥 **通讯录** — 按用户名/职位/部门检索企业通讯录成员"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "NanmiCoder/dsh-auto-mode",
+      "practicalScore": 31,
+      "oracleScore": 59,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 10,
+          "gap": 9
+        },
+        "capabilityItems": {
+          "machine": 1,
+          "oracle": 9,
+          "gap": 8
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "This plugin does not implement a sandbox."
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "The file sandbox does not restrict reads, network access, or external services; the Windows backend reports `partial` enforcement."
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "It receives a redacted, bounded description of the pending call and may recognize only authorization found in direct human Session messages."
+          },
+          {
+            "heading": "## Permission modes",
+            "excerpt": "Repository text, tool output, Assistant text, Skills, plugins, and sub-agents cannot grant permission."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "Routine project work runs directly inside the official `workspace-write` sandbox"
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "only semantic risks outside that boundary are classified using the current DSH model and the direct user's instructions"
+          },
+          {
+            "heading": "## Why Auto?",
+            "excerpt": "genuine ambiguity asks once, and destructive access to critical paths is denied before execution."
+          },
+          {
+            "heading": "### Build from source",
+            "excerpt": "The Web client registers its copy with DSH's official locale service."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PC2005-cloud/dsh-pet",
+      "practicalScore": 45,
+      "oracleScore": 92,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 8.5,
+          "gap": 8.5
+        },
+        "capabilityItems": {
+          "machine": 10,
+          "oracle": 9.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# ③ 安装本插件",
+            "excerpt": "本插件在 dsh **`0.1.1-rc.2`** 下开发并测试"
+          },
+          {
+            "heading": "# ④ 安装到 DSH（file: 指向本目录，用构建好的 lib）",
+            "excerpt": "`prepare:webm` / `prepare:mov` 才产出可安装的 lib（注入播放扩展名）；直接用 `tsdown` 裸构建会留下占位符，动画无法播放。"
+          },
+          {
+            "heading": "# 后续步骤两条路线共用：",
+            "excerpt": "自动 HSV 抠像易残边或误抠，PR 手动遮罩更精细。"
+          },
+          {
+            "heading": "### ②.5 🍎 Safari 版素材（webm → mov，GitHub Actions macOS 流水线）",
+            "excerpt": "`step04/` 是 **VP9-alpha webm**（Chrome/Edge/Firefox 原生支持）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 插件功能",
+            "excerpt": "**余额展示**：实时显示当前 LLM 服务商的余额/额度——DeepSeek 官方显示账户余额（¥），OpenCode Zen Go 显示 5h/周/月 三个额度窗口中最紧张的一个"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "每次刷新按档位播放余额动画，头顶弹出联想气泡（随宠物大小等比缩放，10 秒后自动消失）"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **动画链**：每个动画（含待机）播完立即按权重选下一个"
+          },
+          {
+            "heading": "## 插件功能",
+            "excerpt": "- **多开**：可配置同时显示多个宠物，每只宠物独立的大小与位置"
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "anysearch-team/anysearch-dsh",
+      "practicalScore": 54,
+      "oracleScore": 53,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 4,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 1,
+          "gap": -11
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "Run one to five searches concurrently; an individual failure does not affect the other results."
+          },
+          {
+            "heading": "## Compatibility and limitations",
+            "excerpt": "DeepSeek Harness is in developer preview and may make compatibility-breaking changes."
+          },
+          {
+            "heading": "## Compatibility and limitations",
+            "excerpt": "URL extraction is exposed through Harness's provider-neutral `web_fetch`; the plugin does not add a duplicate `anysearch_extract` tool."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "an individual failure does not affect the other results."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "Advanced search can return cleaned page content on demand for deeper research."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "Keep using Harness's native `web_search` and `web_fetch`"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Awesome-AI-Pedia/Awesome-AI-Pedia",
+      "practicalScore": 28,
+      "oracleScore": 22,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3,
+          "gap": -9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [],
+        "capabilityItems": [
+          {
+            "heading": "### 🎯 核心特性",
+            "excerpt": "- **🔍 本地搜索** — 内置全文搜索，快速定位所需内容"
+          },
+          {
+            "heading": "## 📂 知识库分类",
+            "excerpt": "> 以下分类均对应仓库根目录的实际目录，可直接进入查看原始 Markdown。"
+          },
+          {
+            "heading": "## 🗂️ 项目结构",
+            "excerpt": "侧边栏由 `docs/.vitepress/utils/sidebar.ts` 自动扫描生成。"
+          },
+          {
+            "heading": "### 🎯 核心特性",
+            "excerpt": "- **🌙 暗黑主题** — 默认暗色界面，长时间阅读不刺眼"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "imsai-sh/awesome-deepseek-harness-plugins",
+      "practicalScore": 40,
+      "oracleScore": 53,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 5.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3,
+          "gap": -9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**格式校验**：每个候选仓库都要通过静态校验——读取默认分支的 Git tree，检查 `package.json`、`dsh.bundle.patch` 字段，以及 patch 文件在同一棵 tree 中确实存在。**全程只读文件，绝不安装依赖、绝不执行仓库代码。** 校验不通过就不进目录。"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "修改或删除既有条目的 PR 同样会跑静态审查，但不会自动合并，需要维护者人工审核后手动合并。"
+          },
+          {
+            "heading": "## 插件分类",
+            "excerpt": "GitHub 对单个文件的渲染长度有上限，条目较多的分类只列出其中一部分"
+          },
+          {
+            "heading": "## 免责声明",
+            "excerpt": "插件由各自作者开发和维护，收录不构成安全、质量或维护状态背书。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**定时收集**：自动收录带 `dsh-plugin` topic 的 GitHub 仓库，增量抓取新建与新推送的仓库，并定期全量对账——长期不活跃的仓库不会被漏收，掉了 topic 也只在一次成功的全量对账后才下架。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "**自动同步**：PR 合并后由 CI 自动同步目录到网站数据库并刷新本 README，贡献者和维护者都不需要手工改任何生成文件。"
+          },
+          {
+            "heading": "### 使用 Agent Skill 提交（推荐）",
+            "excerpt": "该 Skill 会检查插件仓库、生成唯一允许提交的目录 JSON、验证变更范围，并在获得授权后创建 PR。"
+          },
+          {
+            "heading": "### 定时自动收集 + 格式校验",
+            "excerpt": "- **定时收集**：自动收录带 `dsh-plugin` topic 的 GitHub 仓库，增量抓取新建与新推送的仓库，并定期全量对账"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yzlnew/infra-skills",
+      "practicalScore": 51,
+      "oracleScore": 75,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 4,
+          "gap": 3
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3,
+          "gap": -9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# AI Infrastructure Agent Skills",
+            "excerpt": "> This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use."
+          },
+          {
+            "heading": "### Construction Methodology (Unless Otherwise Specified)",
+            "excerpt": "3. **Validation**: Test skill-generated code examples to ensure correctness"
+          },
+          {
+            "heading": "### Construction Methodology (Unless Otherwise Specified)",
+            "excerpt": "4. **Maintenance**: Regular updates based on latest official documentation"
+          },
+          {
+            "heading": "# AI Infrastructure Agent Skills",
+            "excerpt": "This project is under active development and heavily generated by LLMs without strict proofreading. Use with caution and verify all code before production use."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### TileLang Developer",
+            "excerpt": "Write high-performance GPU kernels using TileLang for NVIDIA, AMD, and Ascend hardware."
+          },
+          {
+            "heading": "### Megatron Memory Estimator",
+            "excerpt": "Estimate GPU memory usage for Megatron-based MoE and dense models."
+          },
+          {
+            "heading": "### SLIME User",
+            "excerpt": "Guide for using SLIME (LLM post-training framework for RL Scaling)."
+          },
+          {
+            "heading": "### TikZ Flowchart",
+            "excerpt": "Create professional flowcharts and architecture diagrams using LaTeX TikZ with standardized styles."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "libukai/awesome-deepseek-harness",
+      "practicalScore": 66,
+      "oracleScore": 26,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 2.5,
+          "gap": 2.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 3.5,
+          "gap": -8.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 快速开始",
+            "excerpt": "下方各项目标注的 DSH 版本表示其作者实际声明的开发或测试基线，不应自动视为已兼容最新预览版。"
+          },
+          {
+            "heading": "## 第三方客户端",
+            "excerpt": "发行版或 Fork 会直接复用、修改或重新打包完整的 DSH Runtime，不能通过 `dsh plugin` 安装，因此不属于插件"
+          },
+          {
+            "heading": "### 终端、移动与 Web 体验",
+            "excerpt": "项目被收录不代表已经签名、公证、自包含或适合生产环境；请查看各项目 README 和 Releases 中的当前说明。"
+          },
+          {
+            "heading": "## 快速开始",
+            "excerpt": "不应自动视为已兼容最新预览版。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "本项目秉持少而精的原则，精选并收录 DeepSeek Harness 相关优质资源"
+          },
+          {
+            "heading": "### 社区讨论",
+            "excerpt": "收录包含完整论述、实践细节或一手背景的公开社交媒体长帖，补充官方资料未覆盖的背景与实践细节。"
+          },
+          {
+            "heading": "## 第三方客户端",
+            "excerpt": "以下项目提供了独立的用户界面、发行形态或产品化组装，而不只是单个工具能力。"
+          },
+          {
+            "heading": "## 快速开始",
+            "excerpt": "下方各项目标注的 DSH 版本表示其作者实际声明的开发或测试基线"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Zhiyuan-Fan/Awesome-DeepSeek-Harness-Plugins",
+      "practicalScore": 25,
+      "oracleScore": 34,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 1,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 4,
+          "gap": -8
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Maintenance",
+            "excerpt": "This list is reviewed daily by a local Codex scheduled task using public sources only."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# Awesome DeepSeek Harness Plugins",
+            "excerpt": "Every entry links to its canonical GitHub repository"
+          },
+          {
+            "heading": "# Awesome DeepSeek Harness Plugins",
+            "excerpt": "> Inclusion: public, useful, maintained, and clearly built for DSH."
+          },
+          {
+            "heading": "## Core",
+            "excerpt": "**Taxonomy:** Models & Providers · Tools & Skills · Sessions & Storage · Loops & Scheduling · Runtime & Sandboxes · UI & Clients · Integrations · Developer & Operations"
+          },
+          {
+            "heading": "## Core",
+            "excerpt": "The taxonomy follows the capability seams defined by the [official Harness overview](https://www.deepseek.com/harness/en/)."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "shanliuling/dsh-image-gen",
+      "practicalScore": 61,
+      "oracleScore": 41,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 0,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 4,
+          "gap": -8
+        }
+      },
+      "citations": {
+        "reliabilityItems": [],
+        "capabilityItems": [
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "💬 **原生对话生图与编辑**：直接在 DeepSeek Harness 对话中生成图片，也可以基于已有图片继续修改。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🔁 **连续多轮编辑**：支持复用当前会话中的上传图片、历史生成图和上一轮编辑结果继续迭代。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🖼️ **画廊与图片工具**：自动汇总历史图片，支持搜索、筛选、全屏预览、复制、下载与删除。"
+          },
+          {
+            "heading": "## ✨ 主要能力",
+            "excerpt": "🎨 **多 Provider 支持**：兼容 Google Gemini、OpenAI Images / Compatible、Seedream、DashScope Qwen Image。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Ikalus1988/MisakaNet",
+      "practicalScore": 67,
+      "oracleScore": 91,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 9.5,
+          "gap": -0.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 5,
+          "gap": -7
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## What is this?",
+            "excerpt": "No prompt leaking, no raw logs stored."
+          },
+          {
+            "heading": "### Register for unlimited access",
+            "excerpt": "Debug context is stripped by default; only shown when enabled."
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E1 | CI verified | Automated tests |"
+          },
+          {
+            "heading": "### Evidence Levels",
+            "excerpt": "| E2 | PR merged | Code review |"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## AI Agent Friendly",
+            "excerpt": "✅ **MCP Server** — 6 tools for search, lessons, intake"
+          },
+          {
+            "heading": "## What is this?",
+            "excerpt": "Agent hits an error → search lessons → get a fix path."
+          },
+          {
+            "heading": "## What is the failure-memory protocol?",
+            "excerpt": "**Search** — BM25 keyword retrieval across all lessons."
+          },
+          {
+            "heading": "### Agent compatibility",
+            "excerpt": "If your agent finds no good lesson, submit a failure case directly"
+          }
+        ]
+      }
+    }
+  ]
+}

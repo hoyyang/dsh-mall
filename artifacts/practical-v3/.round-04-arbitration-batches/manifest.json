@@ -1,0 +1,10 @@
+{
+  "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-04.ndjson",
+  "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-04-oracle-review-pairs.json",
+  "threshold": ">10 production-scorer points from validated pair report",
+  "disagreementCount": 9,
+  "batchSize": 10,
+  "files": [
+    "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/.round-04-arbitration-batches/arb-batch-01.ndjson"
+  ]
+}

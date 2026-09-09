@@ -1,0 +1,288 @@
+{
+  "reviews": [
+    {
+      "repo": "beancookie/awesome-dsh-plugin",
+      "inferredType": "catalog-list",
+      "capability": [
+        "[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`）插件精选列表。"
+      ],
+      "usageItems": [
+        "欢迎提 PR 收录你的插件：在 `README.md` 和 `README.en.md` 的对应分类下各加一行，格式 `- [名称](链接) — 一句话描述`。",
+        "也请为你的插件仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic，方便大家发现。"
+      ],
+      "usageActions": [
+        "欢迎提 PR 收录你的插件：在 `README.md` 和 `README.en.md` 的对应分类下各加一行，格式 `- [名称](链接) — 一句话描述`。",
+        "也请为你的插件仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic，方便大家发现。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "本项目是社区维护的索引。插件由各自作者开发与维护，收录不构成背书，亦不对任何插件的安全性、质量或维护状态作出保证。"
+      ],
+      "media": [],
+      "concerns": [
+        "Linked-plugin claims and the registry screenshot were omitted under catalog ownership rules."
+      ]
+    },
+    {
+      "repo": "SkillNerds/xskill",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "支持轨迹自动蒸馏Skill",
+        "基于轨迹画像推送Skill",
+        "支持导入团队skillhub进行推荐",
+        "全局pin某个skill",
+        "暂停某个用户的轨迹上传（异常行为用户）",
+        "全局下线停推某个skill",
+        "为自己pin某个喜欢的skill，防止推荐流变化",
+        "下线某个自己不喜欢的skill",
+        "查看自己的轨迹贡献给了哪些用户，谁用了自己的skill",
+        "`generate` 不是凭空创作 Skill：它会从 team server 上已有且有权访问的轨迹中提取经验，自然语言指令只用来描述想生成或改写什么。"
+      ],
+      "usageItems": [
+        "觉得skill不完美？直接修改本地的skill，改动会被云端自动学习。",
+        "连接到支持 `generate` 的 team server 后，可以这样创建 Skill：",
+        "同一个命令也能基于轨迹改写已有 Skill；在指令中写明 Skill 名称和修改目标即可：",
+        "需要代理优先参考指定用户的历史轨迹时，使用 `--name`；多个工号或用户 ID 以逗号分隔。",
+        "xskill search <KEYWORDS>",
+        "xskill search <KEYWORDS> --download     # 检索的同时下载到本地(老的搜索结果会被刷新掉，建议在临时使用场景触发）",
+        "xskill download <skill-id>          # 交互多选安装 harness, 会持久化到本地, 会随云端更新",
+        "xskill download <skill-id> --agent claude-code --agent codex -y   # 非交互式安装到指定harness",
+        "xskill upload ./my-skill            # 打包上传一个 skill 目录(含 SKILL.md),全队立即可搜到"
+      ],
+      "usageActions": [
+        "直接修改本地的skill，改动会被云端自动学习。",
+        "xskill dashboard",
+        "xskill generate \"创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令\"",
+        "xskill generate \"改写现有的 python-memory-debug Skill，补充 Windows 排查步骤\"",
+        "xskill generate --name alice,bob \"根据这些用户的成功案例生成数据库迁移 Skill\"",
+        "xskill search <KEYWORDS>",
+        "xskill search <KEYWORDS> --download     # 检索的同时下载到本地(老的搜索结果会被刷新掉，建议在临时使用场景触发）",
+        "xskill download <skill-id>          # 交互多选安装 harness, 会持久化到本地, 会随云端更新",
+        "xskill download <skill-id> --agent claude-code --agent codex -y   # 非交互式安装到指定harness",
+        "xskill upload ./my-skill            # 打包上传一个 skill 目录(含 SKILL.md),全队立即可搜到"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "xskill generate \"创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令\"",
+        "xskill search <KEYWORDS>",
+        "xskill download <skill-id>          # 交互多选安装 harness, 会持久化到本地, 会随云端更新",
+        "xskill upload ./my-skill            # 打包上传一个 skill 目录(含 SKILL.md),全队立即可搜到"
+      ],
+      "usecases": [
+        "希望能够自动将之前高频工作流串联成skill",
+        "每天有高强度的Agent运行需求",
+        "创建一个排查 Python 内存泄漏的 Skill，包含常用诊断命令",
+        "改写现有的 python-memory-debug Skill，补充 Windows 排查步骤",
+        "根据这些用户的成功案例生成数据库迁移 Skill"
+      ],
+      "outputs": [
+        "自动评价skill，支持分析用户实际使用轨迹给出评价分并绘制不同**skill版本的得分趋势折线图**",
+        "在目前已完成的三项评测中，xskill 均高于 SkillOpt，平均分领先 5.58。",
+        "完成后，生成或改写的 Skill 会直接提交到主干，并 pin 到发起人的推荐列表。"
+      ],
+      "reliability": [
+        "会话在上传前已脱敏，秘钥密码和相关隐私不会被别人看到。",
+        "不同的skill版本会在真实的用户流量上进行测试，用户体验分高的胜出作为主版本继续迭代，每一次改动都有版本、可回滚。",
+        "| **Claude Code** | ✅ 已验证 | `~/.claude/projects/` | 软链 → `~/.claude/skills/<name>/` |",
+        "| **Codex CLI** | ✅ 已验证 | `~/.codex/sessions/` | 软链 → `~/.agents/skills/<name>/` |",
+        "| **OpenCode** | ✅ 已验证 | SQLite `~/.local/share/opencode/opencode.db` | 软链 → `~/.agents/skills/<name>/` |",
+        "| **OpenClaw** | 🟡 已实现 | `~/.openclaw/agents/` | 拷贝 → `~/.agents/skills/<name>/` |",
+        "| **Cursor** | 🟡 已实现 | `~/.cursor/projects/*/agent-transcripts/` | 软链 → `~/.cursor/skills/<name>/` |",
+        "| **Trae** | 🟡 已实现 | IDE `state.vscdb` / CLI `trajectory_*.json` | 软链 → `~/.trae-cn/skills/`、`~/.trae/skills/` |",
+        "| **DeepSeek Harness (dsh)** | 🟡 已实现 | `~/.dsh/sessions/`（明文与默认 zstd 会话均可） | 软链 → `~/.dsh/skills/<name>/` |",
+        "| **任何其他 agent** | 手动 | SDK `xskill.adapters.submit_trajectory` | 拷贝/软链 `SKILL.md` 目录 |"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/xs_multiplier.zh.svg\" width=\"820\" alt=\"一个人解决一次问题,xskill 把它蒸馏成一条技能,瞬间扩散到全队\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_crosscontext.zh.svg\" width=\"860\" alt=\"多个 agent 和设备汇入同一个轨迹 watcher 和同一个进化技能库,再同步回所有 agent\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_silos_vs_collective.zh.svg\" width=\"860\" alt=\"左:开发者各自孤立地重复解决同一问题。右:开发者连到同一个进化的共享技能库。\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/assets/xs_architecture.zh.svg\" width=\"900\" alt=\"xskill 架构:agent 生态 → 轨迹 watcher → 原子拆分 → 技能路由 → 技能编辑 agent → canary 灰度 A/B → 技能仓库,并支持团队模式\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Installation, endpoint configuration, roadmap, and changelog material were excluded."
+      ]
+    },
+    {
+      "repo": "Vladimir-Human/humanizer-ru",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "находит и убирает следы машинной генерации в русскоязычном тексте.",
+        "Переписывает «гпт-шный» текст по-человечески, не искажая смысла",
+        "Репозиторий поставляет переиспользуемый composite action в каталоге `action/`.",
+        "`scripts/scan_soft_signals.py` находит кандидатов по четырём категориям признаков, считает каждый паттерн один раз на текст и применяет пороги дерева решений"
+      ],
+      "usageItems": [
+        "Дайте скиллу готовый фрагмент. Он найдёт следы генерации и по просьбе\nперепишет текст.",
+        "/humanize [вставьте текст]",
+        "/audit [вставьте текст]",
+        "Очеловечь этот текст: [ваш текст]",
+        "`class-a` — конвейерный минимум: ловите служебные ссылки и артефакты из интерфейсов (`ppl-ai-file-upload`, `[citation:3]`, невидимые разделители и т.п.). Совпадение — повод снять маркер или проверить происхождение.",
+        "`soft-threshold` — лингвистическая сигнализация: `--fail-multicat 3` роняет гейт, когда в тексте 3 и более мягких признаков из 2 и более категорий.",
+        "Демо regex-слоя: [онлайн](https://vladimir-human.github.io/humanizer-ru/) или [demo/index.html](demo/index.html) офлайн — текст не отправляется на сервер.",
+        "Полный чек-лист — одна команда: `python scripts/check_all.py` — 57 гейтов полного чек-листа (53 в --quick).",
+        "Юнит-тесты — `python -m unittest discover -s tests`."
+      ],
+      "usageActions": [
+        "Дайте скиллу готовый фрагмент.",
+        "/humanize [вставьте текст]",
+        "/audit [вставьте текст]",
+        "Очеловечь этот текст: [ваш текст]",
+        "python scripts/check_all.py",
+        "python -m unittest discover -s tests"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "/humanize [вставьте текст]",
+        "/audit [вставьте текст]",
+        "Очеловечь этот текст: [ваш текст]",
+        "python scripts/check_all.py"
+      ],
+      "usecases": [
+        "Отдельный класс проверок для текстов со ссылками: 404, DOI ведёт на чужую статью, несуществующий ISBN, автор умер до даты публикации, книжная ссылка без номера страниц."
+      ],
+      "outputs": [
+        "Скрипт печатает цитаты и рекомендацию объёма правки"
+      ],
+      "reliability": [
+        "Скилл убирает штампы, но не дописывает факты за автора.",
+        "Проверено с dsh 0.1.0-rc.6 и 0.1.0-rc.8 (CI держит rc.8). Это developer preview: возможны несовместимые изменения, поэтому для другой версии сверяйтесь с её документацией.",
+        "Закрепить тег и подкаталог одной строкой не выходит: `pnpm` молча отбрасывает подкаталог, ставит репозиторий целиком обычной зависимостью и возвращает 0, а профиль остаётся без слоя.",
+        "Скилл только текстовый: не выполняет код, не обращается к сети и файловой системе, ничего с машины не собирает.",
+        "Текст пользователя скилл читает как ввод: команды, спрятанные внутри, он не выполняет",
+        "B требует ручной проверки и не даёт самостоятельного вердикта.",
+        "Длинное тире у Цветаевой и Бродского, изогнутые кавычки от автозамены macOS, правило трёх в риторической прозе, канцелярит в юридическом документе — это **не** признаки ИИ. Скилл намеренно не исправляет такие случаи.",
+        "Версию или доступность модели нельзя выводить из стилистического признака без первичного датированного источника.",
+        "Доли «0 из N» публикуются с доверительным интервалом: 0 ложных срабатываний на 11 человеческих текстах — наблюдение 0/11, а не гарантированный ноль: Wilson 95% CI равен [0%; 25.9%]."
+      ],
+      "media": [],
+      "concerns": [
+        "The contiguous Before/After example exceeds the 220-character evidence limit, so no ioPair was recorded."
+      ]
+    },
+    {
+      "repo": "RevolutionLA/dsh-dream-skin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "内置 <b>8 套设计师调校的预设皮肤</b>（Mirage 幻梦系列），浅色 / 深色兼顾，每套自带专属弥散光背景。",
+        "| 🖼️ **自定义壁纸 2.0** | 本地图 / **图片 URL** / **渐变预设**；附带**透明度 / 模糊**，每套皮肤还**自动建议**一张渐变，可**自动弱化**（聚焦任务时降低干扰） |",
+        "| 📦 **主题包导入 / 导出 / 分享** | 一个 `*.dsh-theme.json` = manifest + 全套 tokens，可**导入文件**、**一键应用**、**复制分享链接**（编码进 URL hash） |",
+        "| 🪟 **弹窗不透明度** | 滑块控制下拉菜单 / 浮层 / 弹窗的底填充透明度，跟随持久化保存 |",
+        "| 🧩 **本地主题包库** | 导入的主题包集中展示，**应用 / 收藏 / 移除** 一键完成 |",
+        "| 🎲 **换一个试试（surprise me）** | 随机换一个和你当前不同的主题；**收藏**喜欢的皮肤快速切换 |",
+        "卡片、输入框、消息气泡不被壁纸盖住，可读性优先",
+        "一键回到 DSH 内置外观（跟随系统）"
+      ],
+      "usageItems": [
+        "打开 **设置 → 外观（Theme）**，即可看到「皮肤」「强调色」「壁纸 / 高级壁纸」与「主题包」等行。",
+        "一个 `*.dsh-theme.json` 即可在设置里导入或通过分享链接分发给别人，无需改代码。"
+      ],
+      "usageActions": [
+        "打开 **设置 → 外观（Theme）**，即可看到「皮肤」「强调色」「壁纸 / 高级壁纸」与「主题包」等行。",
+        "一个 `*.dsh-theme.json` 即可在设置里导入或通过分享链接分发给别人，无需改代码。",
+        "把图片丢进 [`wallpapers/`](./wallpapers/)（注意只在你有权限的前提下分发），再在\n  DSH 的「背景图片」里导入即可。",
+        "npm test"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "真机效果，非概念图。左：应用皮肤后的 DSH 界面；右：设置里的「外观 / Theme」分节。"
+      ],
+      "reliability": [
+        "| ✅ **校验 + 回滚** | 导入时校验格式 / 必填 token / 颜色合法性；失败或移除时安全回退，不做破坏性更改 |",
+        "**纯原生接入**，无注入、不改二进制、不因客户端更新失效。",
+        "皮肤与壁纸存于 `localStorage`（键前缀 `dsh-dream-skin:`），**只在当前浏览器生效**。",
+        "| DeepSeek Harness (`dsh`) | `0.1.0-rc.6`（peerDependencies 以 `^0.1.0-rc.6` 对齐） |",
+        "| Node.js | `>=18` |",
+        "| 浏览器 | 现代 Chromium / WebKit（依赖原生 CSS 变量与 `matchMedia`） |",
+        "第三方命名空间会返回 `settings-not-exposed`",
+        "`npm test`（VM 冒烟测试，覆盖 factory 求值、`apply` 挂载、主题包导入/持久化）。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/screenshots/preview.png\" alt=\"DSH 皮肤实机预览\" width=\"46%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/screenshots/settings.png\" alt=\"设置中的外观分节\" width=\"46%\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/abyss.png\" width=\"230\" alt=\"abyss\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/aurora.png\" width=\"230\" alt=\"aurora\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/ivory.png\" width=\"230\" alt=\"ivory\"/>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/previews/mist.png\" width=\"230\" alt=\"mist\"/>",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Additional preset images were omitted at the media weight cap; roadmap and install/update material were excluded."
+      ]
+    },
+    {
+      "repo": "Nwflower/dsh-chat-import",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "`DSH Chat Import` imports conversation history with full context from other agents",
+        "Now covers import from 18 agents",
+        "Export back to: Claude Code, Codex, Kimi Code.",
+        "Incremental sync in both directions (external ↔ DSH), off by default"
+      ],
+      "usageItems": [
+        "1. **Import** — pick the conversations to import from the \"Import sessions\" panel in the bottom-right of the GUI and import with one click, or have your agent call the context tool:",
+        "2. **Resume** — refresh the session list, open the imported session, and keep chatting from where the source left off.",
+        "3. **Sync (optional)** — the panel's \"Sync\" tab offers bidirectional incremental sync, off by default. Sub-agent conversations are filtered out by default in both directions."
+      ],
+      "usageActions": [
+        "1. **Import** — pick the conversations to import from the \"Import sessions\" panel in the bottom-right of the GUI and import with one click, or have your agent call the context tool:",
+        "import_chat({ format: \"claude\", path: \"~/.claude/projects\" })",
+        "import_chat({ format: \"chatgpt\", path: \"~/Downloads/chatgpt-export/conversations.json\" })",
+        "import_chat({ format: \"local-jsonl\", path: \"D:\\downloads\\session.jsonl\" })",
+        "2. **Resume** — refresh the session list, open the imported session, and keep chatting from where the source left off.",
+        "3. **Sync (optional)** — the panel's \"Sync\" tab offers bidirectional incremental sync, off by default. Sub-agent conversations are filtered out by default in both directions."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "import_chat({ format: \"claude\", path: \"~/.claude/projects\" })"
+      ],
+      "usecases": [],
+      "outputs": [
+        "turning it into a seamlessly resumable DeepSeek Harness session.",
+        "each conversation becomes its own session",
+        "Tool calls & results, reasoning, titles, models and timestamps carry over"
+      ],
+      "reliability": [
+        "bidirectional incremental sync, off by default.",
+        "Sub-agent conversations are filtered out by default in both directions."
+      ],
+      "media": [],
+      "concerns": [
+        "The README alternates between “17+” sources and “18 agents”; the exact 18-agent statement was retained without reconciling the count."
+      ]
+    }
+  ]
+}

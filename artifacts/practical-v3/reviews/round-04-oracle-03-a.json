@@ -1,0 +1,497 @@
+{
+  "reviews": [
+    {
+      "repo": "Yan-Zero/dsh-codex",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "ChatGPT OAuth from the dsh Settings panel or a standalone CLI, with automatic token refresh",
+        "the Codex GPT catalog, including vision-capable models when the account offers them",
+        "streaming, tool calls, reasoning replay, prompt caching, and dsh compaction through the normal LLM service",
+        "an `imagegen` tool backed by `gpt-image-2`, with workspace or conversation reference images and automatic workspace output",
+        "a per-conversation Fast Mode switch and compact weekly quota indicator in the Web composer",
+        "Codex standalone web search through dsh's existing `web_search` tool",
+        "optional HTTP(S) URL input added to Harness's existing `read_image` tool",
+        "By default, the model picker advertises the complete `openai-codex` catalog.",
+        "Turning off the second keeps `imagegen` available to Codex vision models and rejects calls from other model providers at execution time."
+      ],
+      "usageItems": [
+        "ask the model to call `read_image` with either `file_path` for a workspace image or `url` for an HTTP(S) image",
+        "Open **Settings → OpenAI Codex** and use the model checkboxes to choose which entries remain visible.",
+        "Use `/codex status|login|logout|usage|config` for the account and live settings",
+        "the four boolean settings can be changed with `/codex set <read-image|imagegen-other-models|websocket-context|native-compaction> <on|off>`",
+        "paste an image into the Web composer with <kbd>Ctrl</kbd>+<kbd>V</kbd>, or drag and drop it"
+      ],
+      "usageActions": [
+        "dsh plugin --profile web exec dsh-openai-codex login",
+        "dsh plugin --profile web exec dsh-openai-codex login --device-code",
+        "dsh plugin --profile web exec dsh-openai-codex status",
+        "dsh plugin --profile web exec dsh-openai-codex doctor --json",
+        "can be inspected or revoked with `trusted-origins` and `untrust-origin`",
+        "`/model` lists the `openai-codex` catalog."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "The account page shows live Codex quota bars and exact remaining percentages",
+        "omitting it creates a unique `generated-<timestamp>-<id>.png` file",
+        "Each resolved, secret-free auxiliary request is recorded before dispatch as the dedicated `web/openai-codex-search-llm-request` session event."
+      ],
+      "reliability": [
+        "This branch targets the DSH `0.1.0-rc.7` plugin surfaces and `@earendil-works/pi-ai` `0.82.1`.",
+        "ChatGPT plan eligibility, model access, quotas, and backend behavior are controlled by OpenAI and may change.",
+        "The Codex endpoint does not enforce the ordinary Responses `max_output_tokens` field.",
+        "credentials are stored at `$DSH_HOME/.openai-codex-auth.json` (`~/.dsh` by default)",
+        "browser status and diagnostics never return token values",
+        "`~/.codex/auth.json` is never copied or modified.",
+        "The URL extension bounds redirects and bytes, rejects credentials embedded in URLs, rejects local/private/special network targets",
+        "History edits, compaction, Fork, connection loss, and process restarts fall back to a full request.",
+        "If V2 compaction is unavailable or fails, the same call falls back to the existing Harness model summary.",
+        "The standalone search endpoint is not a public OpenAI Platform API."
+      ],
+      "media": [],
+      "concerns": [
+        "CLI login/status/doctor command fences sit under the Install heading, so their operational-context status is ambiguous; codeExamples left empty.",
+        "The `models` seed YAML and the search config YAML are configuration, excluded per rules."
+      ]
+    },
+    {
+      "repo": "ymh0000123/dsh-theme-endfield",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "主题总开关、谷地黄/武陵青配色、直角/圆角模式",
+        "等高线背景、动态开关、`24 / 60 / 120 FPS`",
+        "等高线速度 `1x / 2x / 4x`",
+        "背景水印及持续显示",
+        "启动加载动画",
+        "雷霆大字及入场动画"
+      ],
+      "usageItems": [
+        "在 **设置 › 终末地主题设置** 中调整"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "所有设置均使用 `localStorage` 持久化，设置文案支持中英文。",
+        "动态等高线支持系统减少动态效果偏好",
+        "插件只运行在 Client 侧，通过主题令牌和样式覆盖界面，不修改应用代码。",
+        "部分浏览器测试需要本机安装 Chrome 或 Edge。"
+      ],
+      "media": [],
+      "concerns": []
+    },
+    {
+      "repo": "PerryLink/dsh-mcp-panel",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **`/mcp` command** — one row per server: transport, target, tool count, connection status",
+        "- **`/mcp <server> tools`** — model-visible `mcp__*` tool names and descriptions.",
+        "- **`/mcp <server> health`** — derived self-heal suggestions (ENOENT → missing dependency, ECONNREFUSED, timeouts, 401/403/404, DNS, rate limit, reconnect exhaustion…)",
+        "- **`/mcp <server> call <tool> [json]`** — trial-call through the **official tool pipeline** (`ctx.tools.execute()`); pre-execute permission policy, approval, guards, and post-execute all apply.",
+        "- **Server CRUD** — add/edit/remove forms → `insert`/`set`/`set disabled` fragments → clipboard copy or approval-gated write with automatic backups.",
+        "- **Recommended directory** — a built-in community MCP server catalog (filesystem, git, github, fetch, playwright, …)",
+        "- **Config import/export** — `exportConfigs()` serializes the server rows to a versioned JSON document",
+        "- **Tool trial console** — server → `mcp__*` tool → JSON args → canonical JSON result + rendered content",
+        "Register the `mcp_probe` background-job tool (panel-only results)"
+      ],
+      "usageItems": [
+        "Then open **Settings → Plugins → MCP**, or run:"
+      ],
+      "usageActions": [
+        "/mcp",
+        "/mcp everything tools",
+        "/mcp everything health",
+        "/mcp everything call echo '{\"message\": \"hi\"}'"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "DeepSeek Harness `0.1.1-rc.2`–`0.2.0` 0.1.2-alpha.3 (adapted 2026-09-01): the session envelope keeps its ignorable field for stored-log read compatibility only",
+        "**No fake status.** Connection fields without upstream observations read `unknown` / `—` with `statusSource: 'derived'`; exit codes and stderr tails are never invented.",
+        "**Writes are append-only, approval-gated, and backed up.** The console never rewrites `cordis.patch.yml`",
+        "URL query credentials, userinfo passwords, header values, bearer tokens, and JWTs are redacted before rendering",
+        "**No prompt injection.** The panel registers **no prompt sections**",
+        "**Resources & Prompts** are pending upstream support — the official client bridges tools only.",
+        "**Exit codes / stderr tails** are labeled *pending upstream support* until the client exposes them.",
+        "configured `headers` never enter any snapshot, and env/header **values** never leave the host (the editor sees keys only)",
+        "the panel is read-only; only `/mcp` output is model-readable",
+        "the `dshWorkshop` manifest declares `network:outbound` and `native-code:none`"
+      ],
+      "media": [],
+      "concerns": []
+    },
+    {
+      "repo": "flizzywine/dsh-tavern",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "正文与候选项分开生成。正文只负责讲好故事，候选项则提供多种人物行动和场景变化，不会混入正文。",
+        "独立总结人物姿势，保持人物位置、动作和状态前后一致",
+        "注入 Guide，为当前会话添加持续生效的剧情或写作要求",
+        "剧本模式可以为人物卡绑定小说、剧本或故事大纲，让剧本作为故事主线持续牵引剧情。",
+        "每一轮只参考当前剧情附近的剧本内容，不会一次性把整份剧本塞给模型。",
+        "系统会记录当前剧情进度，并根据后续情节推荐更贴近主线的行动。",
+        "**人物卡库**：导入、导出和编辑 SillyTavern PNG / JSON 人物卡，管理世界书与剧本绑定",
+        "**世界书库**：统一管理独立世界书和人物卡内置世界书",
+        "**预设库（实验性）**：导入并选择 SillyTavern 预设",
+        "**剧本库**：导入、查看和修改小说、剧情大纲与故事素材，并与人物卡一对一绑定。",
+        "支持人物卡正则美化与 HTML 展示；支持 MVU，变量由后台 Agent 更新，状态栏常驻右侧面板。"
+      ],
+      "usageItems": [
+        "输入意见，重新生成候选项",
+        "输入意见，重新生成正文",
+        "回退当前回合",
+        "反馈游玩或变量更新问题时，可点击对话顶部的“日志”下载 Session 与 MVU 执行记录"
+      ],
+      "usageActions": [
+        "dsh-tavern start",
+        "dsh-tavern stop",
+        "dsh-tavern restart",
+        "运行 `dsh-tavern open` 可重新打开",
+        "dsh-tavern status"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "启动：\n\n```bash\ndsh-tavern start",
+        "停止：\n\n```bash\ndsh-tavern stop",
+        "重启：\n\n```bash\ndsh-tavern restart"
+      ],
+      "usecases": [
+        "适合不想单独配置运行环境和管理服务的用户。",
+        "适合希望通过浏览器访问、自己管理服务的用户。"
+      ],
+      "outputs": [
+        "使用 DeepSeek V4 Flash 测试时，一轮交互平均等待时间约为 15 秒。"
+      ],
+      "reliability": [
+        "本版适配 DSH `0.1.2-alpha.2`。允许使用其他版本，但 DSH 更新较激进，可能导致本插件异常，请自行斟酌。",
+        "Android 可借助 [DSHA](https://github.com/qiannianhuanxiang/DSHA) 实验性部署，目前不保证稳定可用。",
+        "两者使用同一套 Tavern Profile 和数据，请勿同时运行。",
+        "更新 dsh-tavern 时，用户添加的插件与配置会被保留，不会被安装程序整体覆盖。",
+        "旧版内置更新失败时，也直接运行上面的命令：它会获取最新安装器，绕过本地旧更新脚本。",
+        "新增执行记录从更新后开始收集，无法补录旧故障。",
+        "DSH 本体可以按其自身方式正常更新，通常不会影响本项目的使用，除非 DSH 进行了不兼容的破坏性更新。"
+      ],
+      "media": [
+        {
+          "excerpt": "![dsh-tavern 整体界面：左侧会话、中间游玩、右侧酒馆状态](docs/images/readme/overview.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![自由游玩的独立候选项、Guide 与人物姿势](docs/images/readme/free-play-candidates.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![剧本模式的正文、剧情进度与召回片段](docs/images/readme/script-mode.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![卡片工作台的六种起始任务](docs/images/readme/card-workbench.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![MVU 人物卡的变量更新结果与右侧酒馆状态栏](docs/images/readme/mvu-status-panel.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![通过对话讨论并编辑人物卡字段](docs/images/readme/card-editor.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README shows nine distinct product screenshots; media recorded up to the weighted cap of six, three omitted.",
+        "The 15-second wait figure is a self-reported measurement and is recorded as text only."
+      ]
+    },
+    {
+      "repo": "hanelalo/browser-bridge",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "把页面内容转换成标准 Markdown（默认自动提取正文，去掉导航/页脚等噪音）",
+        "读取页面 a11y tree，可交互节点（按钮/链接/输入框等）带 `target` 可直接喂给 `click` / `set_value`",
+        "截取页面可见区域截图，返回 base64 data URL",
+        "`googlesearch '<关键词>'` | Google 搜索，输出 `{ tab_id, results }`",
+        "`redditsearch '<关键词>'` | Reddit 搜索，输出 `{ tab_id, results }`",
+        "`youtubesearch '<关键词>' [--time] [--sort] [--max]` | YouTube 搜索，支持上传日期 / 优先顺序筛选，最多返回 `--max` 条（默认 5），输出 `{ tab_id, results }`",
+        "`youtubeinfo '<视频URL或ID>'` | 获取指定 YouTube 视频详情：字幕全文、URL、作者、时长、点赞/评论/订阅数，输出 `{ tab_id, video }`",
+        "`youtuberinfo '<频道URL或handle>' [--max]` | 获取指定 YouTube 频道（youtuber）的视频列表",
+        "`googletrends '<关键词>' [--date] [--geo]` | Google Trends，输出 `{ tab_id, trend[], top[], rising[], regions[] }`",
+        "`querydomains '<关键词>' [--tlds 'com,ai,xyz']` | Query.Domains 批量查域名注册情况与价格",
+        "`bridge-mcp` 把全部浏览器指令暴露为 MCP tools（stdio 传输），供 Claude / Codex / Cursor 等客户端直接调用。",
+        "在页面里执行任意 JS 表达式（可返回 Promise），结果 JSON 序列化返回，用于探索页面结构、复杂提取等场景。"
+      ],
+      "usageItems": [
+        "任务结束后可再调 `close_agent_window` 关闭自己的专用窗口（连同窗口内标签页一并释放）",
+        "需要看页面其他部分时先 `scroll` 再截",
+        "流程结束后可用 `close-auto-tabs` 一键清理，不会误关你手动打开的标签页。"
+      ],
+      "usageActions": [
+        "`navigate <url>` | 导航并等待页面加载完成",
+        "`click <target> [--new-tab]` | 点击匹配定位的元素（锚点默认当前标签页打开）",
+        "`set-value <target> <value>` | 设置 input/textarea/contenteditable 的值",
+        "`scrape <item> --fields '...'` | 按选择器提取结构化数据",
+        "`run-script '<js>'` | 页面里执行任意 JS，返回 JSON",
+        "cargo run -- googletrends 'ai image' --date 'today 1-m' --geo Worldwide"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "cargo run -- get-page-markdown --url https://example.com/docs   # 先导航再转换",
+        "cargo run -- get-a11y-tree --max-nodes 1000   # 大页面放宽上限",
+        "cargo run -- screenshot --format jpeg --quality 80     # JPEG，质量 80",
+        "cargo run -- googlesearch 'Haze Seas'"
+      ],
+      "usecases": [
+        "适合需要与页面交互（点击 / 填表 / 选择 / 勾选）前先了解页面结构、找出可交互元素的场景"
+      ],
+      "outputs": [
+        "实测 `--max 40` 约 3 秒返回。",
+        "同样自动翻完分页（实测可达 66 个地区）"
+      ],
+      "reliability": [
+        "server 只监听 `127.0.0.1`，不要让公网访问。",
+        "`run_script` / `scrape` 可以读写页面，属于强能力；不要把它暴露给不可信来源。",
+        "服务端目前接受任意角色的连接；如需更强隔离，可在握手阶段加 token。",
+        "只截可见区域、不滚动拼接整页：这是 `captureVisibleTab` 的能力边界（本项目不依赖 CDP）。",
+        "只遍历 light DOM，不穿透 iframe 与 shadow DOM（与元素定位行为一致）。",
+        "若页面数据缺失（如验证墙/consent 页）会返回明确错误提示。",
+        "插件断线后按 500ms→5s 退避自动重连。",
+        "配方会用 YouTube 官方 oEmbed 接口校验，发现疑似截断的标题自动替换成完整标题",
+        "Chrome 版本 | 120+ | `run_script` 需要 `chrome.userScripts`（135+ 体验最佳）",
+        "个别 TLD 可能没有价格徽标（上游未返回定价），此时 `price` 为 `null`"
+      ],
+      "media": [],
+      "concerns": [
+        "The command-reference rows pair an input form with an output shape but are not worked examples, so ioPairs was left empty.",
+        "codeExamples excerpts record the fence's first line; their headings are the get-page-markdown / get-a11y-tree / screenshot / googlesearch sections."
+      ]
+    },
+    {
+      "repo": "ChangedenCZD/dsh-minimal-turbo",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "基于这个现象开发了**许愿模式**：工具链沿用官方基准模式，提示词使用\"专武\"强化，添加了首轮思考约束，使首轮高概率以最简短方式思考"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "纯文件编辑 / 命令行操作的简单任务",
+        "复杂、多步骤任务，追求高质量输出"
+      ],
+      "outputs": [
+        "许愿模式下完成的真实案例（见 [`wish-demo`](wish-demo) 目录，含单文件 HTML 成品与原始 prompt）",
+        "Kerr-Newman 黑洞 WebGL 渲染（raymarching + 体积吸积盘 + 后处理）",
+        "我的世界风格 3D 游戏"
+      ],
+      "reliability": [
+        "**已知问题**：一 shot 可能会报错（语法错误或引用错误），把报错复制给模型，第二轮基本直接成功。",
+        "脚本执行时会自动将原 `agent.cordis.yml`（wish 脚本含 `preset.yml`）备份为 `*.bak-<时间戳>`（位于原目录），可随时手动恢复。",
+        "覆盖保存后，记得**重启 dsh**，再选择对应模式重新开任务。",
+        "官方极简模式配置，兼容 Windows"
+      ],
+      "media": [],
+      "concerns": [
+        "Distributed as agent-preset config files installed by scripts, not a dsh plugin bundle; inferredType marked standalone-nonplugin.",
+        "wish-demo entries are linked HTML files, not image/video markup, so media stays empty."
+      ]
+    },
+    {
+      "repo": "zenx0x/allinluna",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "It turns the work into independent top-level tasks: **run what can run in parallel, wait only on real dependencies, keep each task's context separate, and bring the results back together.**",
+        "All in Luna persists run state, task state, dependencies, and results.",
+        "All in Luna can check tests, builds, changed files, artifacts, and declared outputs before accepting a task as complete.",
+        "A Top-level Task can still split into WorkUnits or use local subagents when it is complex on its own.",
+        "Connect **Research Routes** for research-oriented work.",
+        "Preserves Claims, Evidence, unknowns, contradictions, experiments, and research route changes.",
+        "It turns frozen All in Luna top-level task actions into\ndurable DSH lane children, while preserving the exact action and receipt\ncontract.",
+        "Advanced users can still override concrete models and reasoning at Task or WorkUnit scope.",
+        "Use **GSD** inside a Task when you want a more explicit development workflow."
+      ],
+      "usageItems": [
+        "Add `start --no-dispatch` when you want to preview and\ncorrect an unstarted Task's resource policy before releasing the first Lane.",
+        "Use `start --supersedes-run OLD_RUN_ID` for an explicit replacement, and\n`doctor RUN_ID` for a read-only completion-consistency check.",
+        "At the boundary, persist the request with `allinluna request-permission ...`;\nthe Coordinator can then surface and resume from that exact decision.",
+        "If the console script\nis not on `PATH`, use `python -m allinluna_runtime` with the same arguments."
+      ],
+      "usageActions": [
+        "allinluna --db C:/absolute/path/runtime.db start --goal \"Finish the authentication refactor\" --repository-root C:/absolute/path/repository",
+        "allinluna --db C:/absolute/path/runtime.db status RUN_ID --invariants",
+        "allinluna --db C:/absolute/path/runtime.db drive RUN_ID",
+        "allinluna --db C:/absolute/path/runtime.db lane finalize RUN_ID TASK_ID"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Use All in Luna to finish the authentication refactor.\nKeep independent parts moving in parallel where possible.",
+        "allinluna --help"
+      ],
+      "usecases": [
+        "All in Luna is a good fit for:\n\n- large features;",
+        "- work spanning frontend / backend / tests / docs;\n- major refactors;",
+        "If you are fixing one typo, explaining one function, changing one CSS rule, or doing another tiny linear task, using the current agent directly is usually faster."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Starting a run does not grant All in Luna every external permission.",
+        "Research judgment does not automatically become implementation authorization.",
+        "Reuse the same absolute Runtime DB for the complete run."
+      ],
+      "media": [],
+      "concerns": [
+        "The CLI fence mixes a pip install line with operational commands, so only its usageActions entries were recorded; codeExamples uses the clean fences.",
+        "The task/dependency trees are illustrative examples, not measured outputs, so outputs left empty.",
+        "The three SVG images are brand/decorative art, excluded from media."
+      ]
+    },
+    {
+      "repo": "PivotStackIntelligence/dsh-github",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "a third \"Source Control\" tab in the session view ring (alongside chat and trajectory); when active it fills the main area and splits into the SCM panel (left) and the diff viewer (right)",
+        "- **Commit bar** — multi-line commit message, `Amend` checkbox, `Commit` button with a dropdown (Commit / Commit & Push / Commit & Sync / Undo Last Commit)",
+        "- **Diff viewer** — side-by-side and inline modes with line numbers and added/removed coloring; the file header shows old path → new path. Conflict files expose Accept Current / Accept Incoming / Accept Both.",
+        "- **Commits** — searchable history (message/author), short SHA + subject + author + relative date + refs badges; expand a commit for full details and per-file diffs",
+        "- **Branches** — current branch highlighted; checkout, rename, delete, merge-into-current, and rebase-onto.",
+        "- **Remotes** — fetch/push URLs per remote; fetch, fetch (prune), add, and remove.",
+        "- **Tags** — list, create, push, and delete.",
+        "- **Stashes** — list, apply, apply & drop, drop, and view diff.",
+        "- **Merge / rebase state** — continue and abort an in-progress merge or rebase from the panel.",
+        "- **Git output** — a collapsible section of recent git commands and their (redacted) output.",
+        "- **Change groups** — STAGED CHANGES / CHANGES / MERGE CHANGES (untracked files live inside CHANGES), collapsible, with count badges and group actions",
+        "**Auto-refresh** — refreshes on open, every 3 seconds while the tab is active (paused when switched away)"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "It does not call the GitHub API, store GitHub tokens, implement OAuth, depend on GitHub CLI, or expose arbitrary shell commands.",
+        "The plugin uses the repository's normal local Git configuration, SSH keys, HTTPS credential helpers, and Git remotes.",
+        "Git writes require an explicit user action, and repository state is reloaded after each operation.",
+        "discard a single file or all changes through an inline confirmation dialog (never a bare `window.confirm`)"
+      ],
+      "media": [],
+      "concerns": [
+        "Panel abilities are described as UI buttons rather than explicit operational steps, so usageItems/usageActions left empty.",
+        "Requirements (DSH version, Git on PATH, remote/credential helper) read as install prerequisites only, so they are not recorded as reliability."
+      ]
+    },
+    {
+      "repo": "openma-ai/deepseek-harness-tui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Martty 在终端中呈现完整的 agent 工作过程，包括流式回复、推理、工具调用、\nsubagent、Plan、token 用量和持久化会话。",
+        "回合运行时可以继续排队消息，也可以立即 steer 当前 agent。",
+        "图片可以从文件或剪贴板加入 prompt",
+        "Martty 的 ACP client 是内置的。默认配置连接 DSH；连接其他 ACP server 时，只需\n修改 agent 或 stream 配置，不需要替换 Martty 的 ACP 层。",
+        "UI、主题、Slot、命令、Overlay 和 Session 视图\n都由 Cordis Plugin 组合，并随 Plugin 生命周期一起加载和卸载。",
+        "带有 Client half 的 Plugin 可以通过 `tuiSlots.register` 向六个位置提供界面内容",
+        "Client half 可以通过\n`host.call(method, args)` 调用同一 run 的 Host half。",
+        "Agent 可以读取当前能力，创建新的界面 Plugin，并在运行中继续\n观察和修改。",
+        "`/ui` | UI Plugin 列表，例如 Martty 与 DeepSeek；选择后切换整套 UI 组合",
+        "`/theme` | Theme Plugin 列表；选择后切换配色及该 Plugin 的其他能力"
+      ],
+      "usageItems": [
+        "可用 `/liang on`、`/liang off` 显式控制。缺省关闭，`/liang on` 召唤。"
+      ],
+      "usageActions": [
+        "`/model` · `/agent` | 选择模型和 Agent Preset",
+        "`/permission` · `shift+tab` | 选择或轮换权限模式",
+        "`!cmd` | 在 workspace 的会话级本地 shell 中执行命令",
+        "`/image <path>` · `/clip` | 添加本地图片或剪贴板图片",
+        "`/harness [id]` | 为下次 standalone 启动的新会话选择 Harness",
+        "`esc` | 中断当前回合并保留草稿",
+        "martty harness add local --label \"Local ACP\" --command local-acp --arg --stdio",
+        "martty --check-runtime"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "DSH_TUI_AGENT=\"<acp-command> [args...]\" martty",
+        "martty harness add local --label \"Local ACP\" --command local-acp --arg --stdio"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Plugin 只能使用公开的\nService 和语义节点，不能直接操作 TTY、raw mode 或终端坐标。",
+        "ACP 使用 Client 进程的\nstdin/stdout；用户 TTY 使用 fd 3/4，两条通道互不混用。",
+        "不会把旧 Harness 的会话带到新 Harness，也不会热切换当前会话",
+        "旧配置和会话数据会在首次启动时复制到 Martty 路径，不会删除原数据。",
+        "当前没有把任意动态 Package 一键转换为静态 Package 的 `promote` 命令；升级\n会显式经过保存或打包，避免把一次临时 run 自动写入长期配置。",
+        "只实现标准 ACP 的 agent 可以正常使用会话、认证、prompt、permission、配置与\n`session/update`。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/screenshots/agent-turn.png\" width=\"720\"\n       alt=\"Martty 中的 Markdown 回复、工具调用和运行状态\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Primary distribution is a standalone npm TUI with an optional dsh-plugin profile path; inferredType marked dsh-plugin on the plugin-install path."
+      ]
+    },
+    {
+      "repo": "Yts1919/dsh-vision-complete",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "🖼 图片理解 / 问答 | 描述、问答、看图说话",
+        "🔤 OCR 取字 | 截图、票据、文档拍照提取文字",
+        "🎯 物体检测定位 | 找目标、画框、裁剪",
+        "🎬 视频理解 | 画面+声音时间线、找事件、数次数",
+        "🎙 语音转写 | 普通转写、带时间戳、多说话人分离",
+        "🎵 音乐分析 | 风格、情绪、乐器、调性",
+        "📄 文档可视化 | PDF / Office / CSV / 代码 / 3D / notebook",
+        "📷 截图直读 | 截图自动存盘并转成路径",
+        "✂️ 图像分割 | 把目标从图里抠出来（进阶，需 SAM3）",
+        "🎞 长视频（30 分钟+） | 语义记忆与检索",
+        "含 `vision.py`（零依赖，可接任意 OpenAI 兼容视觉模型）",
+        "三个 MCP 服务器（core / api / video-memory），提供通义千问的云/本地视觉工具"
+      ],
+      "usageItems": [
+        "「描述一下这张图」+ 发图",
+        "「把这张截图里的文字提取出来」",
+        "「总结这段视频讲了什么」+ 发视频",
+        "按 `Win+Shift+S`，用鼠标框选要截图的区域。",
+        "回到 DeepSeek 聊天框，按 `Ctrl+V` 粘贴",
+        "双击 `start-screenshot-autosave.bat`",
+        "双击同目录下的 `open-save-folder.bat` 一键打开保存目录。"
+      ],
+      "usageActions": [
+        "python vision.py chat --image 图.png --prompt \"描述这张图\"",
+        "按 `Win+Shift+S`，用鼠标框选要截图的区域。",
+        "双击 `start-screenshot-autosave.bat`"
+      ],
+      "ioPairs": [
+        "对它说「描述这张图」。\n3. ✅ 能返回图片内容 = 装好了，开始用吧。"
+      ],
+      "codeExamples": [
+        "python vision.py chat --image 图.png --prompt \"描述这张图\""
+      ],
+      "usecases": [
+        "这个功能让你**截完图直接就能让 DeepSeek 读**，不用手动存文件、再拖文件，特别适合截屏提问。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "这个插件本身不含「眼睛」模型，它是调用**云端视觉大模型**（默认通义千问）来替你看图。",
+        "报 401 / 没有 API Key / 鉴权失败 | 还没配 `DASHSCOPE_API_KEY`，或配了但**没完全退出重开 Harness**（环境变量只在重启后生效）",
+        "模型说「没有注册 `mcp__qwen-mm-plugins-*` 工具」 | ① 确认装了 `uv`（install 窗口自检会提示）；② **完全退出并重开 Harness**（MCP 服务器要重启才加载）",
+        "`vision.py` 报 SSL / `_ssl` 模块错误 | 你的 Python 环境坏了（常见于 Anaconda），换官网安装的 Python 或修复后重试",
+        "视频转写报 ffmpeg 缺失 | 安装 ffmpeg 并加入 PATH",
+        "截图粘贴出来还是图片不是路径 | 确认截图监控窗口在运行、DeepSeek 端口是 3080（否则设 `DS_PORT`）",
+        "只有当 DeepSeek（`127.0.0.1:3080`）开着时，截图才会被自动接管；DeepSeek 关掉后，截图恢复正常"
+      ],
+      "media": [],
+      "concerns": [
+        "The vision.py fence mixes config setup with the run command; only the operational run line was recorded.",
+        "No image/video markup is present, so media is empty."
+      ]
+    }
+  ]
+}

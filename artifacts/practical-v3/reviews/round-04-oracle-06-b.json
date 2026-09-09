@@ -1,0 +1,609 @@
+{
+  "reviews": [
+    {
+      "repo": "MichengAI/dsh-codex-ui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Replace the default sidebar through the official `sidebar` slot and keep `sidebar.workspaces`, `sidebar.settings`, and `sidebar.footer.action`.",
+        "Provide a Codex-style header with brand wordmark, sidebar collapse, and global search.",
+        "List workspaces and conversations with expand/collapse, drag reorder, project pinning, unread dots, and running-state indicators.",
+        "Add project and conversation menus for rename, pin, unread, archive, fork, open folder, copy, and delete.",
+        "Restyle the conversation column and composer card, and add a compact turn navigator on the current session.",
+        "Show companion-plugin status in **Settings → About**, and install the missing pieces from npm.",
+        "The plugin takes over the default sidebar through `cordis.patch.yml`. Uninstalling restores the default sidebar."
+      ],
+      "usageItems": [
+        "| Start a conversation | Select **New task**, or use a workspace **+** / **New conversation** action. |",
+        "| Find a conversation or setting | Use the header search field and choose a session, Settings page, or quick action. |",
+        "| Collapse the sidebar | Use the header panel button. The expand control stays on the collapsed rail. |",
+        "| Pin a workspace | Drag it into **Pinned**, or use **Pin project** in the project menu. |",
+        "| Manage a conversation | Open the conversation menu to rename, pin, mark unread, archive, fork, copy, or delete. |",
+        "| Jump between turns | Use the turn marks on the left of the current conversation. |",
+        "| Inspect connectors | Open **Settings → Connectors**. Addresses, commands, and credentials are never shown. |",
+        "| Check companion plugins | Open **Settings → About** to install or update individual companion plugins. |"
+      ],
+      "usageActions": [
+        "| Start a conversation | Select **New task**, or use a workspace **+** / **New conversation** action. |",
+        "| Collapse the sidebar | Use the header panel button. The expand control stays on the collapsed rail. |",
+        "| Pin a workspace | Drag it into **Pinned**, or use **Pin project** in the project menu. |",
+        "| Jump between turns | Use the turn marks on the left of the current conversation. |",
+        "| Check companion plugins | Open **Settings → About** to install or update individual companion plugins. |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Deleting a workspace registration does not delete its folder or conversation records. Pinned and unread state is stored only in the current browser.",
+        "| Conversation records | DSH host services | Unchanged by this plugin |",
+        "- It does not modify host source code or the conversation data model.",
+        "- The Connectors directory never exposes addresses, commands, or credentials.",
+        "`tests\\*.assert.ts` and `tests\\*.spec.ts`: interaction, visual, and runtime integration checks.",
+        "| Pinned workspaces | Host profile file with a `localStorage` cache | Survives DSH restarts and Desktop tray reloads |"
+      ],
+      "media": [
+        {
+          "excerpt": "![Light theme conversation](assets/screenshots/conversation-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Dark theme conversation](assets/screenshots/conversation.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Conversation menu](assets/screenshots/session-menu.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![About page and companion plugins](assets/screenshots/settings-about.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The DSH product ecosystem table describes linked products (Codex Desktop, IM Connect, Automation, etc.); their capabilities were excluded per the rubric.",
+        "Installation fences are install/config commands and were excluded from codeExamples.",
+        "No explicit use-case scenarios, io pairs, or non-install code examples; those arrays are empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "FuRongJun-1999/dsh-memory",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**时空记忆图**：五层记忆（锚点/结构/知识/情境/自我）+ 跨会话 recall/search",
+        "**自演化知识飞轮**：`distill / flywheel / learn / induce` 把经验验证→归纳→联想→蒸馏为可复用模式，记忆越用越强。",
+        "**可审计的信任**：护栏宪章 v2 ——对外部与人类使用者的行为边界成文、可执行、可审计、可终裁",
+        "**自我认知**（大脑模式 brain）：`cognition / cognition_report / self_reliability / emotional_bias / recursive_reflect`",
+        "**角色扮演**（v3.3 扮演论）：自我锚点（SELF 层 no_forget 不可遗忘）· 特化价值观（条件触发）· 跨会话角色记忆 · 世界认知（子知识·虚拟化世界观）· 自定义翻译（现实↔虚拟名词表）",
+        "灵枢处理知识查询走**白箱确定性格局**（不依赖 LLM 生成/校验），完整管线：",
+        "2. **方向推理 + 组合生成**：问题动词 → 期望方向（液→气 / 浮沉 / 热传递 / 排序…）→ 匹配单元 → 组合演绎出**未预写的新答案**",
+        "3. **三层自校验**：方向一致性 + 因果链完整性 + 事实一致性——白箱自己发现生成错误",
+        "4. **知识固化闭环**：自校验通过 → 固化为直答（触发词匹配 + JSON 持久化跨进程生效）→ 下次同问法直接命中",
+        "- `user/message`（仅 `source.kind === 'user'` 的真实用户消息）→ `remember`（importance 0.6，tags `dsh`）",
+        "**动态 schema + 进程自愈**：工具清单运行时拉取（灵枢升级 DSH 零改动）",
+        "voxel_world（小型我的世界 · 4D 时空占用）"
+      ],
+      "usageItems": [
+        "**想做什么 → 找对应泳道 → 走条件边到功能**",
+        "「问知识」走 `wisdom_chat`（白箱优先），「验证说法」走 `wisdom_verify`（互维双通道），「记住信息」走 `remember`。",
+        "找不到路径时用 `service_info` 看协议实例身份。"
+      ],
+      "usageActions": [
+        "python -m aeis.roleplay_web --port 8793 --data-dir roleplay_data",
+        "python -m aeis.game_web.server --port 8791",
+        "python -m aeis.mcp.server",
+        "`python tools/rp_quality_gate.py --role <id>`（OOC + 世界观一致性自检）",
+        "`python tools/run_whale_100.py`（100 轮长对话压力测试）"
+      ],
+      "ioPairs": [
+        "**OOC 检测**（「你是人类吗」→ 角色化否认，逆转操作）",
+        "（如「高原煮饭不熟」由「气压↓→沸点↓」×「高原=气压低」组合生成，无需预写完整答案）"
+      ],
+      "codeExamples": [
+        "# B. 独立网页服务（浏览器对话 + 人设编辑器）\npython -m aeis.roleplay_web --port 8793 --data-dir roleplay_data",
+        "# B2. 交互式世界游戏（实时生成场景和对话 · 七层闭环实际验证）\npython -m aeis.game_web.server --port 8791",
+        "# C. MCP 工具（roleplay_chat / role_create / role_import / role_block）\npython -m aeis.mcp.server"
+      ],
+      "usecases": [
+        "目标用户是**对 AGI 有需要的研究人员**（白箱智能 / 可解释性 / 协议工程 / 记忆机制 / 扮演论研究者），不是面向普通用户的消费级插件。",
+        "| 角色扮演总 OOC / 记不住设定 / 世界观矛盾 | **扮演一致性**（角色） |"
+      ],
+      "outputs": [
+        "| 知识问答白箱率 | **100%**（零 LLM） |",
+        "| 总 token 节约（vs 全 LLM） | **83.3%** |",
+        "| 白箱 vs LLM 对照一致率 | 100%（17/17，目标 ≥90%） |",
+        "图谱信噪比 **0.9524**（verified 80 / 全边 341，超 90% 健康线）",
+        "四路融合检索（翻译表+二元组+语义坐标+bge）在主库 **0.11s** 命中学科卡",
+        "OOC 测试 100 轮零漂移"
+      ],
+      "reliability": [
+        "**已适配 DSH 0.1.1-rc.2**（2026-08-28 实测：MCP 桥接 / 自动记忆 / 工具注册全正常）",
+        "**不要**用 `npm install` 把插件装进 profile 的 `node_modules`——那会引入错误版本的 `@deepseek-ai` peer 包，导致插件加载失败",
+        "**工具注册竞态补注册**：启动时 python 未就绪（竞态）→ 桥重连成功后自动补注册工具（2s 轮询）",
+        "**内容分级门控**：**拒绝一切涉及未成年人的性内容**（服务端关键词组合硬拦截",
+        "**不适用于**开放创作、长链推理、首次遇到的新领域等无确定基准",
+        "白箱六维测试（诚实/边界/条件/追溯/一致性/记忆 18/18）",
+        "npm test         # 真实集成测试（spawn 本机灵枢，验证握手/往返/注册/卸载）",
+        "写入前过滤 `sk-`密钥 / API key / 密码 / `Bearer`令牌 / 18位身份证 / 11位手机号",
+        "插件注入的系统上下文（AGENTS.md、文件变更通知等 `kind: 'plugin'`）**不写入**，防止记忆噪音",
+        "81 个全量中排除 13 个**宿主级风险工具**（见下）"
+      ],
+      "media": [
+        {
+          "excerpt": "[![灵枢使用教学认知图](docs/lingshu_tutorial.html)](docs/lingshu_tutorial.html)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![记忆系统使用性评分](docs/memory_score.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The 教学入门 doc links and the 记忆系统评分 table rows for other systems (Hy-Memory, Zep, Mem0, etc.) are external/linked-project claims and were excluded.",
+        "The tutorial cognitive-map media is an image tag pointing at an HTML file; counted once, flagged as slightly ambiguous.",
+        "Tool-count figures differ across sections (81 registered, 68/36/12 exposed by mode); mode-exposure numbers treated as configuration, not evidence."
+      ]
+    },
+    {
+      "repo": "flymysql/dsh-remote",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Manage several SSH machines, then pick a **remote workspace** (or a **local** one) and let the agent operate right there without leaving the harness",
+        "**Multi-machine SSH** — save any number of hosts (`host`/`port`/`user` + **private key** or **password**).",
+        "**`~/.ssh/config` import** — the Settings page lists your `Host` aliases; one click fills the form",
+        "On confirm it creates a **real local mirror** under `$DSH_HOME/remote-workspaces/<host>-<user>-<port>/<base>` that passes `fs.realpath`",
+        "**Bidirectional SFTP sync, conflict-aware** — `rw_sync` (remote → mirror) and `rw_push` (mirror → remote) are **three-way**",
+        "**Port forwarding panel** — create/start/stop/remove **local** (`127.0.0.1:port → remote`) and **reverse** (`remote → local`) tunnels",
+        "**Sidebar remote editing** — the better-sidebar remote file tab is now **editable**: click **编辑** → edit → **保存到远程** with an mtime optimistic lock",
+        "**Async long tasks** — `rw_sync`/`rw_push` with `async: true` return a `taskId`",
+        "**Connection health** — a **「测试连接」** button validates host/user/key/password",
+        "**Cross-platform remotes** — all file access is SFTP-protocol-level (no shell dependency)",
+        "**Model tools** — 20 tools, all Windows/POSIX portable via SFTP"
+      ],
+      "usageItems": [
+        "1. **Add a machine** — Settings → 远程工作区 → add host/port/user + key or password → (optional) set it current.",
+        "2. **Open a workspace** — click **Add workspace** in the sidebar / conversation:",
+        "3. **Work with the agent** — treat it like any workspace:",
+        "`rw_list_dir(path?)`/`rw_read_file` — inspect remote files",
+        "`rw_write_file(path, content)` / `rw_edit(path, old, new)` — create / patch a remote file directly",
+        "`rw_search(pattern, path?)` — grep remote files (SFTP walk, Windows OK)",
+        "`rw_exec(command, cwd?, pty?)` — run remote shell commands (defaults to the workspace dir)",
+        "`rw_forward(listenPort, targetHost?, targetPort?)` — open an SSH tunnel",
+        "`rw_sync(dryRun?/force?/async?)` / `rw_push(dryRun?/force?/async?)` — conflict-aware mirror pull/push"
+      ],
+      "usageActions": [
+        "`rw_list_dir(path?)`/`rw_read_file` — inspect remote files",
+        "`rw_write_file(path, content)` / `rw_edit(path, old, new)` — create / patch a remote file directly",
+        "`rw_search(pattern, path?)` — grep remote files (SFTP walk, Windows OK)",
+        "`rw_exec(command, cwd?, pty?)` — run remote shell commands (defaults to the workspace dir)",
+        "`rw_forward(listenPort, targetHost?, targetPort?)` — open an SSH tunnel",
+        "`rw_sync(dryRun?/force?/async?)` / `rw_push(dryRun?/force?/async?)` — conflict-aware mirror pull/push"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "first connect records it, a later CHANGE is rejected",
+        "远端和本地都改过同一个文件时会跳过并列出冲突（绝不静默覆盖）。",
+        "**侧边栏远程文件保存失败（409）** — 远端文件在你打开后已被改动，重新读取后再编辑（mtime 乐观锁保护）。",
+        "Giving the plugin a machine's credentials lets the agent run **shell commands as your user** on that host. Only add machines you trust.",
+        "Every executed command is recorded in the audit log when `auditLog` is on",
+        "earlier versions crashed boot with `duplicate prefix route",
+        "Linux 需要 secret-tool（libsecret）；后端不可用时自动回退明文。",
+        "**镜像里没有某个目录** — 默认 ignore 规则（`.git`、`node_modules`、`target` 等）会跳过",
+        "- Run `scripts/check.mjs` (static framework-constraint gate: command-name"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://cdn.jsdelivr.net/gh/flymysql/dsh-remote@main/docs/ui-settings-panel.png\" alt=\"dsh-remote settings — multi-machine registry (light theme, host scrubbed)\" width=\"720\"/>",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "alt=\"dsh-remote workspace picker — real dialog; 本机 (local) tab; 远程 machine select + prefilled root path + autocomplete\"",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Both preview images are externally hosted on a CDN, so each is weighted 0.5.",
+        "No explicit use-case headings, io pairs, or non-install code fences; those arrays are empty rather than inferred.",
+        "The hoisted-linker requirement was treated as an installation prerequisite and excluded from reliability."
+      ]
+    },
+    {
+      "repo": "CAPTAIN1275/dsh-ui-web",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DSH Web UI 全家桶为 DeepSeek Harness 的 Web 界面提供一系列插件与皮肤：极光毛玻璃皮肤、任务看板、",
+        "**自定义背景**：URL / 本地图片 / 动图（GIF/WebP）/ **视频（mp4/webm）** / 透明度 / 模糊调节，",
+        "**仿Claude Code推理等级滑块**：点击模型菜单的「推理等级」弹出 Effort 滑块面板",
+        "**养成系统**：亲密度 4 级成长（幼鲸 / 伙伴 / 挚友 / 深海羁绊）、升级庆祝气泡、进度条、",
+        "**一键生效**：保存后写入用户级技能 `~/.dsh/skills/catgirl-rp/SKILL.md`，DSH 技能系统实时加载，",
+        "**可临时退出**：对话中说「退出角色扮演模式」即切回普通助手，说「进入角色扮演模式」恢复",
+        "**彩色统计卡**：累计 token、调用次数、缓存命中、估算费用（按 DeepSeek 官方定价）",
+        "| **dsh-task-board** | 侧边栏任务看板：多列 kanban、真实执行（驱动 agent 会话）、定时执行（cron） |",
+        "| **dsh-ssh** | SSH 运维：主机管理、远程执行、SFTP 传输、隧道、集群并发、Web 终端 |",
+        "| **dsh-aionui-panel** | 右侧「预览 / 文件 / 变更」面板：文件树、多格式预览、git 操作、文件拖拽 |",
+        "10 套皮肤（ths / xp / blue-fantasy / dragon-heir / minecraft / miku / trading / whale-song /"
+      ],
+      "usageItems": [
+        "- **侧边栏入口**：彩色柱状按钮打开全屏看板",
+        "- 摸头 / 喂食 / 改名 / 拖动，召唤按钮（live2d 同款贴边滑出）"
+      ],
+      "usageActions": [
+        "- 摸头 / 喂食 / 改名 / 拖动，召唤按钮（live2d 同款贴边滑出）"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**自动记录**：对话时自动采集 token 用量（会话快照替换语义，不双计）",
+        "本地文件持久化（存 `~/.dsh/skin-aurora-media/`，刷新不丢）"
+      ],
+      "media": [
+        {
+          "excerpt": "![极光液态玻璃](docs/aurora-glass.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![aurora-dark](packages/skins/aurora/preview/dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![aurora-light](packages/skins/aurora/preview/light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![推理等级滑块](docs/effort-slider.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![人格设定](docs/persona-settings.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "README is feature/install focused; no use-case scenarios, io pairs, or non-install code fences, so those arrays are empty.",
+        "Upstream attribution (zhu1090093659/dsh-web-ui) and pet-image credits treated as linked-project/licensing content, not evidence.",
+        "Only the pet interactions and dashboard entry qualified as usage; most other content is feature description or installation."
+      ]
+    },
+    {
+      "repo": "HsiangNianian/dsh-auto-continue",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "whenever a request in the web GUI gets interrupted by a **non-human cause**, the plugin simulates the user typing **“Continue”** and sends it",
+        "Since 0.8.0 the engine runs **inside the host process** (single instance), so it keeps watching even with every browser tab closed, and multiple open tabs can never double-send.",
+        "**Error classification** — transient failures (network / timeout / 5xx / 429…) are auto-resumed; permanent ones are **skipped** and notified",
+        "**Adaptive backoff** — consecutive failures wait longer each time (cooldown × factor: 20s → 40s → 80s…), capped at the max backoff",
+        "**Templated continue text** — `continueText` supports `{code}` `{message}` `{status}` `{tool}` `{turn}` `{errorCount}` `{sessionTitle}` `{elapsed}` placeholders",
+        "**Idempotency guard** — before resuming, the plugin inspects the last tool call",
+        "**Loop guard** — watches **running** turns too. Three signals trip the guard, which cancels the turn and restarts it with a configurable loop text",
+        "**Pause** — a global **Pause auto-continue** toggle in the settings card stops everything (live + scan) instantly",
+        "**Notification buttons** — notifications carry **Resume now** (send immediately, ignoring cooldown, the consecutive cap and any pause) and **Pause this session 1h** actions",
+        "**English / Chinese localization** — the settings card, built-in resume / guard / loop text, and browser notifications follow DSH's active UI language"
+      ],
+      "usageItems": [
+        "Everything is configurable from the GUI — no file or console edits needed. Open **Settings → Plugins → Plugin configuration**.",
+        "click the card or its right-hand chevron to expand the full configuration in place",
+        "- Edits are **staged** — nothing reaches the disk until you hit **Save**;"
+      ],
+      "usageActions": [
+        "Open **Settings → Plugins → Plugin configuration**.",
+        "dsh --profile web --dump-config | grep auto-continue   # config layer mounted",
+        "In the browser console (Ctrl/Cmd+Shift+I): `[auto-continue] 已启动(文本=\"继续\", …)`"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "**Stats panel** — the settings card shows today's auto-continue count, recoveries, failures, permanent skips, give-ups and loop breaks, broken down by error code"
+      ],
+      "reliability": [
+        "**Never auto-continues:** user-aborted turns (`aborted`) or policy rejections (`blocked`);",
+        "- It opens the same two read-only event streams the web UI already uses (no extra server, no third-party endpoints)",
+        "The engine's **only automatic write** is `sessions.prompt` — the same call the Send button makes",
+        "- No browser storage at all: the single host-side engine keeps its cooldowns, send caps, pauses and stats in process memory",
+        "Plugin v0.8.2 supports the new 0.1.2 client-store module layout and retains a fallback for DSH 0.1.0-rc.7 through 0.1.1; rc.6 and earlier remain unsupported",
+        "npm run test        # node tests/simulate-host.mjs — 15 host-side behavioral scenarios",
+        "- Invalid drafts (non-numbers, values below the minimum) block the save with a hint",
+        "CI installs from the lockfile, typechecks, rebuilds and verifies committed artifacts, runs the host and dual-layout client simulations"
+      ],
+      "media": [
+        {
+          "excerpt": "![demo](docs/demo.svg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "[![dsh-auto-continue recovery workflow](docs/auto-continue-workflow.en.svg)](docs/auto-continue-workflow.en.svg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![The collapsed Auto Continue card in the plugin configuration list](docs/screenshots/02-settings-card.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The configuration table and YAML fences are configuration content and were excluded from evidence.",
+        "The GitStock activity chart and banner were treated as third-party/decorative media and excluded.",
+        "No explicit use-case scenarios or io pairs; arrays left empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "songyang0603/ds-spec-loop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "| Understand existing conventions | Reads applicable instructions, proposals, decisions, current docs, source, tests, generated files, CI, and relevant Git history |",
+        "| Reuse one decision record | Updates the record already responsible for the change; creates a narrowly scoped record when none exists |",
+        "| Write testable acceptance criteria | States what should be observable, where it can fail, and which direct check can disprove completion |",
+        "| Trace the affected integration path | Checks the layers that actually connect the change to its caller, runtime, persistence, or visible result |",
+        "| Handle changed requirements | Revises an unfinished proposal in place; creates a replacement record only after a delivered decision is reversed |",
+        "| Keep the repository consistent | Updates affected decisions, code, tests, generated files, public contracts, and current docs in the same pull request or linked changes |",
+        "| Remove code completely | Checks real consumers and removes obsolete code, registration, exports, config, tests, docs, and compatibility behavior |",
+        "The Skill does not impose one directory layout. It first finds which existing files already perform each job."
+      ],
+      "usageItems": [
+        "Use $ds-spec-loop to implement this change. Reuse the repository's existing\ndecision, documentation, test, and CI conventions, and keep them consistent.",
+        "Use $ds-spec-loop to investigate this change and write its proposal.\nDo not implement it. Compare real alternatives and define direct checks.",
+        "Use $ds-spec-loop to check whether proposals, decisions, code, tests,\ngenerated files, and current documentation agree. Do not modify files."
+      ],
+      "usageActions": [
+        "| Codex | `$ds-spec-loop` |",
+        "| Claude Code | `/ds-spec-loop` |",
+        "| GitHub Copilot CLI | `/ds-spec-loop` |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "Implement a change:\n\n```text\nUse $ds-spec-loop to implement this change."
+      ],
+      "usecases": [
+        "`ds-spec-loop` helps coding agents keep requirements, decisions, implementation, tests, and documentation consistent while building features, fixing bugs, changing architecture or interfaces",
+        "Write a proposal without implementing it:",
+        "Review without modifying:"
+      ],
+      "outputs": [],
+      "reliability": [
+        "The requested task boundary remains binding: review-only stays read-only, and proposal-only does not silently become implementation.",
+        "A Python project is not told to run `pnpm test`.",
+        "It does not create class folders, archives, indexes, validators, translations, or checksum files without a demonstrated need.",
+        "This update has passed cross-language scenario tests, structural validation, and independent review.",
+        "A spelling correction, formatting-only edit, or other local mechanical change is exempt only when it changes no behavior, contract, structure, process, test strategy, stored-data format, or rationale."
+      ],
+      "media": [],
+      "concerns": [
+        "This is a portable coding-agent Skill, not a DSH plugin package; typed as standalone-nonplugin.",
+        "No media, io pairs, or concrete outputs are described; arrays left empty rather than inferred.",
+        "Installation instructions for multiple hosts are install content and were excluded."
+      ]
+    },
+    {
+      "repo": "bihangchi9-creator/dsh-lark-bridge",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Feishu ⇄ dsh agent.** Inbound Feishu messages drive a live dsh agent through the host's `agents` service; the reply streams back onto a live-updating Feishu message.",
+        "**One group, one project folder.** Every chat id maps to a stable directory (`<workspaceRoot>/<chatId>`), created on first use.",
+        "**Persistent per-chat sessions.** A chat's conversation survives restarts (policy-fingerprint-gated resume-or-create; `/new` really clears it).",
+        "**Files and images.** Send them to the bot and the bridge stores each message in an isolated `.attachments/<messageId>/` folder, then gives the paths to the agent.",
+        "**Zero-config setup.** On first launch, if no credentials exist, the plugin auto-runs a QR registration wizard — scan it in the Feishu app and it connects automatically.",
+        "**Slash commands.** `/help`, `/new`, `/where`, `/models`, and `/whoami` manage each chat locally; owner-only `/model`, `/preset`, `/allow`, and `/disallow` change shared chat state.",
+        "Ships with a `lark_cli` tool: Feishu operations (IM, docs, sheets, calendar, …) via the host's authenticated `lark-cli`"
+      ],
+      "usageItems": [
+        "| `/new` | Start a fresh session (clears this chat's context) |",
+        "| `/where` | Show this chat's project directory |",
+        "| `/models` | List available providers/models |",
+        "| `/whoami` | Show your identity and this chat's authorization state |",
+        "In a **group** chat, `@`-mention the bot to trigger it (unless mention is disabled). In a **DM**, just send a message."
+      ],
+      "usageActions": [
+        "| `/new` | Start a fresh session (clears this chat's context) |",
+        "| `/where` | Show this chat's project directory |",
+        "| `/models` | List available providers/models |",
+        "| `/help` | Show help |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Each group chat is an isolated workspace, so a team can run several projects in parallel, one per group.",
+        "for example, ask the agent in a group to draft something, then use `lark-cli` skills to push it into a Feishu doc."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Limits: 5 attachments per message, images ≤10 MB, other files ≤20 MB; names are sanitized and stale files are swept after 7 days.",
+        "Whether an image can actually be interpreted depends on the selected model's vision support.",
+        "- **Fail-closed:** with an unknown owner and empty allowlists, *every* message",
+        "| `read-only` | `lark-readonly` | search/read files only — no writes, no shell, no network |",
+        "read/write/edit files; **no shell, no network, no subagents** (no arbitrary code execution)",
+        "> later move or delete it, the next `dsh web` cannot resolve the bundle and",
+        "> and **the host fails to load it**. `pnpm setup` builds for you;",
+        "> `DSH_PERMISSION_MODE=danger-full-access` makes the agent's approval policy `never`.",
+        "- **Bot says nothing / \"(no output)\"** — make sure a model is resolvable",
+        "Hard deadline for one agent turn; timeout disposes the stuck session"
+      ],
+      "media": [],
+      "concerns": [
+        "No images, GIFs, or videos in the README; media is empty.",
+        "Install/registration fences are setup content and were excluded from codeExamples.",
+        "The lark-cli pairing section describes an external tool; only the bridge-side integration claim was counted."
+      ]
+    },
+    {
+      "repo": "6Mikao9/dsh-wsl-workspace",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Add a WSL workspace from the DeepSeek Harness web GUI and run the whole agent session — bash commands and file reads/writes — inside a local WSL distribution with Linux paths. Nothing needs to be installed inside WSL.",
+        "The session can reach both WSL and Windows at the same time: bash commands run inside the WSL distribution, while Windows files stay accessible via `/mnt/<drive>` (for example `/mnt/c/Users/...`).",
+        "the bash tool executes commands inside the chosen distribution and `read`/`write`/`edit` operate on WSL files, so every path the model sees is a Linux path.",
+        "The mode picker keeps working as usual: Standard, PTC, Minimal and Creative each land on their WSL variant automatically",
+        "The username field is optional: leave it empty to run commands as the distribution's default user, or name a Linux user of that distribution to run the session as that user instead",
+        "then scanning downward for `.dsh/skills` / `.agents/skills` — including nested projects — bounded to 4 directory levels, 64 skill directories and 4096 visited directories."
+      ],
+      "usageItems": [
+        "Click the W button beside Settings at the sidebar foot to open the \"Add WSL workspace\" dialog. Pick a distribution from the list, then browse the directory tree or type an absolute Linux path",
+        "use the Check button to verify the path exists before creating the workspace.",
+        "Click \"Create & open\" to start a new session in the workspace.",
+        "delete the entry (or recreate the workspace from the dialog) to return to the default user."
+      ],
+      "usageActions": [
+        "Click the W button beside Settings at the sidebar foot to open the \"Add WSL workspace\" dialog.",
+        "Click \"Create & open\" to start a new session in the workspace.",
+        "use the Check button to verify the path exists before creating the workspace."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The Windows ACL sandbox cannot wrap `wsl.exe` — its children run on the Linux kernel side — so WSL itself is the isolation boundary and the DSH file policy does not apply to bash.",
+        "Under `workspace-write`, reads work anywhere but writes are restricted to the session workspace; switch the file policy to `danger-full-access` to also allow writes outside it.",
+        "the Windows-side `\\\\wsl.localhost` share cannot resolve Linux symlinks (they read back as unresolvable entries), so a project linked into the workspace via `ln -s` is not discoverable",
+        "a workspace registered at the distro root `/` scans the whole filesystem",
+        "- The garbled `localhost` port-forwarding banner `wsl.exe` prints to stderr when the distro was not running yet is harmless."
+      ],
+      "media": [
+        {
+          "excerpt": "![alt text](image-3.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![alt text](image-2.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The Changelog sections (0.4.0 / 0.3.2) were treated as changelog and not used for evidence; the nested-project skill behavior was sourced from the Behavior notes instead.",
+        "The two screenshots use the non-descriptive alt text \"alt text\"; counted as the project's demonstration media.",
+        "No explicit use cases, io pairs, or non-install code fences; those arrays are empty rather than inferred."
+      ]
+    },
+    {
+      "repo": "h4dex/opc-nexus",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "- **Hermes** 负责对话理解、澄清、记忆、计划内容和委派建议。",
+        "- **OPC-Nexus Main** 负责项目范围、员工白名单、权限、预算、任务/Run 状态、审批、取消、恢复、交付和审计。",
+        "- 动态调度或项目固定员工范围，支持 `@员工`、子 Agent 组队和独立验收员工。",
+        "- Codex、Claude Code、Pi、Hermes CLI Worker 和 Android Worker 通过统一执行策略接入。",
+        "- 企业微信、飞书、微信 iLink Bot 等真实渠道可绑定到项目会话；远程批准、暂停和取消都会审计。",
+        "- 交付 Manifest、目录打开、Markdown/文件预览、启动命令、运行地址、截图和渠道发送。",
+        "- Hermes 手机 Web 访问，复用 TLS、一次性配对码和 viewer/operator 角色。",
+        "- 项目级 MCP/Skill 选择，能力中心不重复注册旧 DSH 插件。",
+        "- 调试模式将脱敏 JSONL 写入用户数据目录 `logs/`，用于排查启动、代理、Gateway、任务和渠道问题。"
+      ],
+      "usageItems": [
+        "1. 在项目设置中选择真实工作目录。项目不强制绑定某一个员工；简单任务可以 `@` 指定员工，复杂任务由 Hermes 根据能力、权限和预算动态组队。",
+        "2. 在 Quest 的连接设置中配置 Base URL、API Key 和模型并执行“读取模型”和“测试”。",
+        "3. 发送老板指令。Hermes 会在需要时提出可持久化的澄清问题，随后生成计划草案；确认计划后由 Main 创建正式版本并派发",
+        "4. 在 Quest 右侧治理面板查看员工进度、工具调用、验收和交付 Manifest。",
+        "5. 手机扫码只连接当前项目的 Hermes 对话，不会打开 Android 控制台或访问其他项目。"
+      ],
+      "usageActions": [
+        "2. 在 Quest 的连接设置中配置 Base URL、API Key 和模型并执行“读取模型”和“测试”。",
+        "4. 在 Quest 右侧治理面板查看员工进度、工具调用、验收和交付 Manifest。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "面向个人工作室和小公司的本地优先 AI 工作台：老板下令，Hermes 理解和调度，数字员工执行，系统交付真实成果。",
+        "- 简单需求直达回答；复杂需求走“澄清 -> 计划 -> 批准 -> 派工 -> 交付”。"
+      ],
+      "outputs": [
+        "  -> 项目目录、预览、运行命令、截图和渠道回执"
+      ],
+      "reliability": [
+        "检查失败会显示真实原因并提供连接设置入口，不会伪造“在线”或“任务完成”。",
+        "任何服务、Provider、员工或权限不可用时，界面显示真实错误和恢复入口，不生成 Mock 员工、伪成功或虚构产物。",
+        "API Key 只进入 Electron `safeStorage`，不会写入 README、日志、Renderer 状态或 Hermes 记忆。",
+        "- `contextIsolation: true`、`nodeIntegration: false`，Renderer 不得调用 Node.js API。",
+        "- Hermes 进程、代理或 Gateway 崩溃时显示离线/错误并停止相关队列，不显示成功。",
+        "两部 30 万字小说的全量写作尚未完成，因此不能把该场景宣称为已交付。",
+        "v2.0.1 已通过类型检查、单元测试、生产构建、Hermes runtime smoke 和桌面 UI smoke。",
+        "升级时请先备份用户数据；应用会迁移旧数据目录，不会把旧 DSH 调度状态重新启用为第二套控制面。"
+      ],
+      "media": [
+        {
+          "excerpt": "![Quest Hermes staffing](./docs/screenshots/quest-hermes-staffing.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Quest Hermes delivery](./docs/screenshots/quest-hermes-delivery.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Hermes mobile chat](./docs/screenshots/hermes-mobile-chat.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Desktop AI workbench application, not a DSH plugin (DSH is explicitly not the scheduler here); typed as standalone-nonplugin.",
+        "Development/build command fences were excluded from codeExamples as build content.",
+        "The unfinished 300k-character novel scenario is recorded as a limitation in reliability, not as a shipped use case."
+      ]
+    },
+    {
+      "repo": "xuedai-mayi/dsh-wenshan",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "它把实习资料整理成可审核、可追溯的知识图谱，再用已发布的知识完成现场导览、教学讲解和问答。",
+        "- `dsh-georag`：知识检索、关系扩展、空间查询和知识事件存储插件。",
+        "- 知识演化：收录文字、PDF、Word、图片、录音和常见 GIS 文件，生成知识草稿，人工确认后再发布。",
+        "- 野外助教：只读正式知识库，支持概念检索、邻接关系、位置、气象和行程查询。",
+        "- 知识缺口闭环：野外助教答不上来的问题自动登记为缺口待办，知识演化模式按被问次数补资料、发布后逐条销掉。",
+        "- 照片地图：实习照片按讲解点聚簇落在真实地形晕渲底图上，支持逐日路线动画与\"回放全程\"时空演绎。",
+        "- 知识星系：知识图谱的三维星系视图，节点按类型发光、关联线粒子流动，可旋转、聚焦并阅读节点正文。",
+        "- 可交互图谱：搜索、筛选、拖动和定位节点，按需读取笔记正文。",
+        "基础检索结合中文二元组 BM25、知识关系扩展和空间距离衰减。"
+      ],
+      "usageItems": [
+        "切换到 `知识演化`，选择一个资料文件夹，或直接粘贴短文本。",
+        "发送 `处理最新资料` 后，知识演化引擎会读取来源并生成草稿。",
+        "确认内容无误后，按页面提示发送完整口令：",
+        "切换到 `野外助教` 即可使用正式知识库。",
+        "也可以在 `知识演化` 对话中发送 `查看知识缺口` 查看。",
+        "补充资料并发布后，让知识演化引擎逐条销掉对应缺口。"
+      ],
+      "usageActions": [
+        "发送 `处理最新资料` 后，知识演化引擎会读取来源并生成草稿。",
+        "确认发布 draft-xxxxxxxx",
+        "也可以在 `知识演化` 对话中发送 `查看知识缺口` 查看。",
+        "切换到 `野外助教` 即可使用正式知识库。"
+      ],
+      "ioPairs": [
+        "确认发布 draft-xxxxxxxx\n```\n\n`可以`、`继续` 等普通回复不会触发发布。发布成功后，检索引擎会立即更新。"
+      ],
+      "codeExamples": [
+        "### 审核并发布\n\n发送 `处理最新资料` 后，知识演化引擎会读取来源并生成草稿。草稿不会自动进入正式知识库。确认内容无误后，按页面提示发送完整口令：\n\n```text\n确认发布 draft-xxxxxxxx"
+      ],
+      "usecases": [
+        "问山是面向地理野外实习的 DeepSeek Harness 社区插件与二次开发项目。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "- 权限隔离：野外助教没有资料写入和知识发布工具，只能登记缺口。",
+        "- 本地持久化：原始资料、提取结果、草稿、发布记录、缺口记录分开保存，重启后可恢复。",
+        "草稿不会自动进入正式知识库。",
+        "`可以`、`继续` 等普通回复不会触发发布。发布成功后，检索引擎会立即更新。",
+        "主服务只监听 `127.0.0.1`，适合本机演示和教学环境。",
+        "如需部署到公网，应另外配置登录鉴权、HTTPS、限流、文件安全检查和数据备份，不能直接暴露本机服务端口。",
+        "系统按 SHA-256 内容指纹去重，原件和提取结果会分别保存。",
+        "凭据写入本机 DSH 配置，不进入本仓库。",
+        "缺失时页面自动退回纯矢量底图"
+      ],
+      "media": [
+        {
+          "excerpt": "![问山主界面](docs/images/home.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![知识图谱](docs/images/knowledge-graph.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The repository ships a customized DeepSeek Harness source tree alongside its plugins; typed as dsh-plugin based on the Cordis plugin suite it delivers.",
+        "The publishing command plus its engine response forms the single ioPair; no other paired examples exist.",
+        "Install/start script fences are setup content and were excluded from codeExamples."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "reviews": [
+    {
+      "repo": "Totoro-qaq/dsh-plugin-bridge",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Long content scrolls inside the card while the action bar stays reachable.",
+        "UIs that implement the official `conversation.chat.commandview` slot receive the same card automatically.",
+        "UI authors can reuse the framework-free `dsh-plugin-bridge/client-contract` export instead of reimplementing the wire.",
+        "Image already has assistant analysis | Copy that response verbatim",
+        "Image is unresolved and target accepts images | Copy the original attachment and preserve the source VLM",
+        "The same package now adds an optional official client half for rendered editing and navigation"
+      ],
+      "usageItems": [
+        "/bridge                       list target presets",
+        "/bridge --doctor              check the host contract after a DSH upgrade",
+        "/bridge code                  preview the handoff; change nothing",
+        "/bridge code --go             migrate, restate, then wait",
+        "/bridge code --go --continue  restate and start work in the same target request",
+        "/bridge code --go --file <path>",
+        "**Confirm migration** opens the created target session."
+      ],
+      "usageActions": [
+        "/bridge                       list target presets",
+        "/bridge --doctor              check the host contract after a DSH upgrade",
+        "/bridge code                  preview the handoff; change nothing",
+        "/bridge code --go             migrate, restate, then wait",
+        "/bridge code --go --continue  restate and start work in the same target request",
+        "/bridge code --go --file <path>",
+        "**Confirm migration** opens the created target session."
+      ],
+      "ioPairs": [
+        "| `/bridge code` | One bounded summary worker; preview only | No target session is created |",
+        "| Default `--go` | Target restates and waits | One explicit confirmation request before useful work |",
+        "| `--go --continue` | Restate and work in one target request | Lower request count; no background goal round |"
+      ],
+      "codeExamples": [
+        "Then type in the official WebUI:\n\n```text\n/bridge                       list target presets",
+        "On an older or non-slot client, correct the printed summary file and run:\n\n```text\n/bridge code --go --file <path>"
+      ],
+      "usecases": [
+        "Halfway through a task and need another tool preset?"
+      ],
+      "outputs": [
+        "**Text** exposes the fixed five sections as ordinary fields and list rows;",
+        "**Markdown** preserves full source freedom;",
+        "**Preview** renders Markdown or a complete JSON tree.",
+        "The five sections are Goal, Current state, Key decisions and conventions, Key files, and Next step."
+      ],
+      "reliability": [
+        "**Fail closed** | The target goal is paused before kickoff. If that cannot be guaranteed, Bridge clears/cancels the target and sends no model request.",
+        "The original session is never rewritten; archive the target and return to the source if the handoff is unsatisfactory.",
+        "Image is unresolved and target is text-only | Prompt admission rejects the image; Bridge sends a visible text fallback",
+        "CI covers Node.js 22 and 24.",
+        "Run `/bridge --doctor` after every Harness upgrade; it names missing required gateway methods instead of failing vaguely.",
+        "text-only models cannot inspect unresolved images;",
+        "the native-card repeat gate is still only three fixed runs, so it is release evidence rather than a statistical guarantee.",
+        "if that prerelease client contract fails to load, `/bridge` still returns the complete server result."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/Totoro-qaq/dsh-plugin-bridge/main/assets/bridge-demo.en.gif\" width=\"880\" alt=\"A real Bridge migration in the official DeepSeek Harness WebUI\">",
+          "weight": 0.5
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-liang-skin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "档位直接读取当前模型的 `reasoning.efforts`，不写死数量或名称。",
+        "任意 N 个档位均匀落在 0–30：两档为 `0 / 30`，三档为 `0 / 15 / 30`，五档为 `0 / 7.5 / 15 / 22.5 / 30`。",
+        "拖动期间只做连续视觉预览；指针松开、键盘操作完成或控件失焦时，才吸附到最近档位并通过官方 ModelDirectory 提交该档位原始 ID。",
+        "`滑动变祖`：显示滑块并启用人物、背景和自适应配色。",
+        "`原生`：移除背景层、皮肤变量和滑块，恢复 Harness 原生界面。",
+        "选择保存在当前浏览器本地，不会改动模型配置。",
+        "当前接入 24 张经过审核的人像锚点，滑动时直接切换最近锚点，不做图片交叉渐变。"
+      ],
+      "usageItems": [
+        "入口位于 `设置 → 通用设置 → 外观皮肤`："
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "不支持推理或只有一个可选档位的模型不显示滑块。",
+        "addressed subagent 不显示也不提交滑块。",
+        "当前版本已在 `0.1.0-rc.6` 上验证。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/preview.png\" alt=\"滑动变祖皮肤效果截图\" width=\"100%\">",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "drewnekota/cetus",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Cetus brings along the current screenshot, frontmost app, browser URL, and selected text as removable context chips",
+        "Turn any prompt into a one-off or recurring job (`at` / `every` / `cron` / `daily`).",
+        "With screen context on, Cetus periodically captures frames, dedupes them, and OCRs them on-device with Apple Vision.",
+        "Cetus translates each runtime into the same desktop workflow while preserving conversation context and background terminals across replies.",
+        "**Cetus Remote**, an optional Tailscale-backed mobile companion for following runs and handling approvals",
+        "**Computer & Browser control** lets the agent drive your browser and Mac apps through numbered element lists (not raw pixels)",
+        "**30+ model providers**, including Anthropic, OpenAI, Google, Bedrock, Ollama, LM Studio, and OpenRouter"
+      ],
+      "usageItems": [
+        "Hold **both ⌘ keys** to summon your agent over any app.",
+        "Double-tap **right ⌥** on any conversation — a team channel, an email, a support console — and Cetus reads what is on screen, then streams a draft into an editable panel.",
+        "Press **⏎** to drop it into the input you were already in, or **⇥** to redraft the same screen on another runtime.",
+        "Pick a **workspace**, choose a runtime, optionally attach files or a screenshot, and send.",
+        "Hold a hotkey from any app and talk — Cetus pops a floating equalizer HUD, transcribes on-device with Seed-ASR, and drops the cleaned-up text wherever your cursor is.",
+        "Turn on **meeting memory** and Cetus quietly transcribes your calls into searchable notes — on-device, text only, no audio stored."
+      ],
+      "usageActions": [
+        "Hold **both ⌘ keys** to summon your agent over any app.",
+        "Double-tap **right ⌥** on any conversation — a team channel, an email, a support console — and Cetus reads what is on screen, then streams a draft into an editable panel.",
+        "Press **⏎** to drop it into the input you were already in, or **⇥** to redraft the same screen on another runtime.",
+        "Pick a **workspace**, choose a runtime, optionally attach files or a screenshot, and send.",
+        "Hold a hotkey from any app and talk — Cetus pops a floating equalizer HUD, transcribes on-device with Seed-ASR, and drops the cleaned-up text wherever your cursor is.",
+        "Turn on **meeting memory** and Cetus quietly transcribes your calls into searchable notes — on-device, text only, no audio stored."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Run an agent while you are away and review the result later.",
+        "Compare independent solutions without colliding git changes.",
+        "Carry project decisions and preferences into the next conversation.",
+        "Connect coding work to the meetings, screens, and apps surrounding it."
+      ],
+      "outputs": [
+        "Every conversation is a card tracked across **In progress · Needs review · Done**.",
+        "While a session is live, a small floating pill (red dot + elapsed timer + stop button) sits at the top of your screen without stealing focus.",
+        "Outputs `.app` / `.dmg` on macOS."
+      ],
+      "reliability": [
+        "The prebuilt app supports **Apple Silicon** and **macOS 13 or later**.",
+        "**Early release:** Cetus is under active development.",
+        "Images and text stay on your Mac; capture is opt-in, with retention controls and an excluded-apps list.",
+        "macOS 14.2+; falls back to mic-only below that",
+        "Off by default; the master switch means Cetus never listens until you opt in. macOS only for now.",
+        "with a confirmation step before anything consequential (sending, deleting, purchasing, submitting, authenticating) and a Stop button always in reach.",
+        "Each capability is opt-in."
+      ],
+      "media": [
+        {
+          "excerpt": "![Cetus runtime picker — Claude Code, Codex, DeepSeek Harness, OpenCode, Grok Build, and Kimi CLI in one macOS app](docs/screenshot-runtime-picker.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Cetus demo — launch an agent, schedule an automation, and switch runtimes](docs/cetus-demo.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Cetus quick launcher demo](docs/quick-launcher.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Cetus Automations demo](docs/automation.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Cetus global quick reply demo](docs/quick-reply.gif)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Cetus screen context settings](docs/screenshot-screen-history.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "liceses/dsh-gitbash-preset",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "bash 工具每次命令执行 `<git bash> -c <command>`，并通过沙箱感知门控保证不绕过安全边界。",
+        "**自动探测 bash**：`GIT_BASH` 环境变量 → 常见安装目录（ProgramFiles / ProgramFiles(x86) / LOCALAPPDATA）→ PATH 中的 `bash.exe` → 兜底 `bash`，无需硬编码路径；",
+        "`gitbash-executor.mjs` 通过 host 的 `subprocess` 服务执行 `bash -c`，处理超时、后台、输出截断与错误诊断",
+        "**极简不变**：固定 persona、`str_replace_editor`、无上下文压缩，与原极简模式一致。"
+      ],
+      "usageItems": [
+        "Web 界面新建会话，选择 **极简模式 (Git Bash)**；"
+      ],
+      "usageActions": [
+        "Web 界面新建会话，选择 **极简模式 (Git Bash)**；",
+        "把会话沙箱切到**完全访问**，之后所有 bash 调用直接走 git bash；",
+        "或保持 workspace-write，让模型在第一次调用失败后按提示用 `sandbox_permissions: \"danger-full-access\"` + justification 单次升级（走正常审批流程）。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "极简模式的持久 bash 依赖 PTY 后端，而 `@deepseek-ai/dsh-subprocess-local` 在 win32 上直接拒绝（`terminal inspection is unsupported on platform win32`），与 bash 是否存在无关；",
+        "即便绕过 PTY，`@deepseek-ai/dsh-bash-local` 硬编码从 PATH 找 `bash`，Windows 上默认没有。",
+        "会话沙箱为 workspace-write（或更窄）时，git bash 无法启动（MSYS 受限令牌限制），需切换完全访问或单次升级——这是沙箱边界，插件不绕过；",
+        "与原极简模式不同，bash 为**每次调用新 shell**（不保持 cd/export 状态）——Windows 上 PTY 持久会话不可用，此为替代设计。",
+        "npm run test    # 单元测试：路径转换 / 探测优先级 / 配置校验，10 个用例"
+      ],
+      "media": [],
+      "concerns": []
+    },
+    {
+      "repo": "summer1238/dsh-remote-web-gateway",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "## **一键建立 Cloudflare Quick Tunnel。**",
+        "### 📱 **Phone 专门适配**\n不是把桌面 UI 硬缩进手机。",
+        "### 🐙 **可选 GitHub 身份验证**\n有需要时可以绑定自己的 GitHub 身份。"
+      ],
+      "usageItems": [
+        "把：\n\n### **项目链接 + 你的报错 / 截图**\n\n一起发给 DSH、Codex、Claude Code 或其它 AI。",
+        "先阅读本项目 README、User Guide 和 Troubleshooting，再按照项目当前文档帮我排查。"
+      ],
+      "usageActions": [
+        "**在电脑端撤销它。**",
+        "把：\n\n### **项目链接 + 你的报错 / 截图**\n\n一起发给 DSH、Codex、Claude Code 或其它 AI。",
+        "先阅读本项目 README、User Guide 和 Troubleshooting，再按照项目当前文档帮我排查。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "下班路上，Agent 还在跑任务。\n\n你只是想掏出手机看看：\n\n### **做到哪了？结果出来了吗？**",
+        "出门以后，它突然停下来等你确认。",
+        "或者已经躺床上了，你突然想到：\n\n> “刚才那个需求还得补一句。”"
+      ],
+      "outputs": [
+        "发现新版本后通知你，由你确认安装，不偷偷重启正在工作的 DSH。"
+      ],
+      "reliability": [
+        "拿到访问地址，不等于已经获得 DSH 控制权。",
+        "首次配对使用一次性凭证，而不是让一个长期万能 Token 跟着二维码和链接到处跑。",
+        "不是所有手机共享同一把长期钥匙。",
+        "授权可以收回来。",
+        "**DeepSeek Harness 和 Gateway 仍然只监听本机。**",
+        "所以默认不需要公网 IP，也不需要给路由器开放新的入站端口。",
+        "支持系统 / 环境代理，并在官方下载异常时尝试经过验证的备用下载路径。"
+      ],
+      "media": [
+        {
+          "excerpt": "![DSH Remote Web Gateway](docs/assets/mobile-showcase-zh.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DSH Remote Web Gateway](docs/assets/security-model-zh.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![DSH Remote Web Gateway](docs/assets/architecture-zh.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": []
+    }
+  ]
+}

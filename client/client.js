@@ -65,9 +65,13 @@ const en = {
 	sortDownloads: "npm Downloads (30d)",
 	sortScore: "Practical score",
 	downloadsHint: "npm downloads in the last 30 days",
-	totalDownloadsHint: "Total npm downloads since 2019",
+	totalDownloadsHint: "Total npm downloads for the API-reported period",
 	downloads30Label: "30d downloads",
-	totalDownloadsLabel: "total downloads",
+	totalDownloadsLabel: "period downloads",
+	totalDownloadsPeriodLabel: "downloads {0} – {1}",
+	npmDataFreshness: "npm data freshness",
+	npmPeriod: "official period {0} – {1}",
+	npmQueriedAt: "queried {0}",
 	sortCreated: "Publish date",
 	sortAsc: "Ascending ↑",
 	sortDesc: "Descending ↓",
@@ -137,13 +141,19 @@ const en = {
 	curatedBadge: "Awesome Curated",
 	pluginBadge: "plugin",
 	nonpluginBadge: "non-plugin",
+	conflictBadge: "evidence conflict",
 	pendingBadge: "unverified",
+	marketPolicyBadge: "excluded from downstream markets",
+	leaderboardPolicyBadge: "excluded from leaderboard",
+	catalogExcludedBadge: "excluded by catalog policy",
 	installTitle: "Install {0}?",
 	installFrom: "Source: {0}",
 	installVia: "Install target: {0}",
 	riskCurated: "Curated in awesome-dsh-plugin — verified listing, one click to install.",
-	riskCommunity: "Community repo. Plugins are third-party code: install only sources you trust.",
-	riskNonplugin: "This repo may NOT be a dsh plugin — installation may fail or do nothing.",
+	riskCommunity: "Verified plugin contract. Plugins are third-party code: install only sources you trust.",
+	riskUnknown: "Plugin identity is not yet verified. Smart install will inspect it before installation.",
+	riskConflict: "Plugin identity evidence conflicts. Review the evidence before installation.",
+	riskNonplugin: "Verified non-plugin — installation as a DSH plugin is expected to fail.",
 	confirm: "Install",
 	cancel: "Cancel",
 	installing: "Installing {0}…",
@@ -362,9 +372,13 @@ const zh = {
 	sortDownloads: "近 30 天 npm 下载量",
 	sortScore: "维度评分",
 	downloadsHint: "近 30 天 npm 下载量",
-	totalDownloadsHint: "npm 总下载量（2019 年至今累计）",
+	totalDownloadsHint: "npm API 实际返回区间内的下载量",
 	downloads30Label: "近 30 天下载",
-	totalDownloadsLabel: "总下载",
+	totalDownloadsLabel: "区间下载",
+	totalDownloadsPeriodLabel: "{0} 至 {1} 下载",
+	npmDataFreshness: "npm 数据新鲜度",
+	npmPeriod: "官方统计区间 {0} 至 {1}",
+	npmQueriedAt: "本地查询于 {0}",
 	sortCreated: "发布时间",
 	sortAsc: "升序 ↑",
 	sortDesc: "降序 ↓",
@@ -434,13 +448,19 @@ const zh = {
 	curatedBadge: "awesome官方精选",
 	pluginBadge: "插件",
 	nonpluginBadge: "非插件",
+	conflictBadge: "证据冲突",
 	pendingBadge: "待判定",
+	marketPolicyBadge: "不进入下游市场",
+	leaderboardPolicyBadge: "不进入排行榜",
+	catalogExcludedBadge: "目录政策排除",
 	installTitle: "安装 {0}？",
 	installFrom: "来源：{0}",
 	installVia: "安装目标：{0}",
 	riskCurated: "awesome 精选条目 — 已人工收录，一键安装。",
-	riskCommunity: "社区项目。插件属于第三方代码：请只安装你信任的来源。",
-	riskNonplugin: "该仓库可能不是 dsh 插件 — 安装可能失败或无效果。",
+	riskCommunity: "已验证插件契约。插件属于第三方代码：请只安装你信任的来源。",
+	riskUnknown: "插件身份尚未验证；智能安装会在安装前检查。",
+	riskConflict: "插件身份证据冲突；安装前请检查证据。",
+	riskNonplugin: "已验证为非插件，按 DSH 插件安装预计会失败。",
 	confirm: "安装",
 	cancel: "取消",
 	installing: "正在安装 {0}…",
@@ -659,9 +679,7 @@ const ja = {
 	"sortDownloads": "npmダウンロード数 (30日)",
 	"sortScore": "実用スコア",
 	"downloadsHint": "過去30日間のnpmダウンロード数",
-	"totalDownloadsHint": "2019年からのnpm累計ダウンロード数",
 	"downloads30Label": "30日間ダウンロード数",
-	"totalDownloadsLabel": "累計ダウンロード数",
 	"sortCreated": "公開日",
 	"sortAsc": "昇順 ↑",
 	"sortDesc": "降順 ↓",
@@ -952,9 +970,7 @@ const ko = {
 	"sortDownloads": "npm 다운로드 (30일)",
 	"sortScore": "실용 점수",
 	"downloadsHint": "지난 30일간 npm 다운로드 수",
-	"totalDownloadsHint": "2019년 이후 총 npm 다운로드 수",
 	"downloads30Label": "30일 다운로드",
-	"totalDownloadsLabel": "총 다운로드",
 	"sortCreated": "게시 날짜",
 	"sortAsc": "오름차순 ↑",
 	"sortDesc": "내림차순 ↓",
@@ -1245,9 +1261,7 @@ const es = {
 	"sortDownloads": "Descargas npm (30 días)",
 	"sortScore": "Puntuación práctica",
 	"downloadsHint": "Descargas npm en los últimos 30 días",
-	"totalDownloadsHint": "Descargas totales de npm desde 2019",
 	"downloads30Label": "Descargas en 30 días",
-	"totalDownloadsLabel": "descargas totales",
 	"sortCreated": "Fecha de publicación",
 	"sortAsc": "Ascendente ↑",
 	"sortDesc": "Descendente ↓",
@@ -1538,9 +1552,7 @@ const fr = {
 	"sortDownloads": "Téléchargements npm (30 j)",
 	"sortScore": "Score pratique",
 	"downloadsHint": "Téléchargements npm au cours des 30 derniers jours",
-	"totalDownloadsHint": "Total des téléchargements npm depuis 2019",
 	"downloads30Label": "Téléchargements 30 j",
-	"totalDownloadsLabel": "total des téléchargements",
 	"sortCreated": "Date de publication",
 	"sortAsc": "Croissant ↑",
 	"sortDesc": "Décroissant ↓",
@@ -1831,9 +1843,7 @@ const de = {
 	"sortDownloads": "npm-Downloads (30 Tage)",
 	"sortScore": "Praktischer Score",
 	"downloadsHint": "npm-Downloads in den letzten 30 Tagen",
-	"totalDownloadsHint": "Gesamte npm-Downloads seit 2019",
 	"downloads30Label": "30-Tage-Downloads",
-	"totalDownloadsLabel": "Gesamt-Downloads",
 	"sortCreated": "Veröffentlichungsdatum",
 	"sortAsc": "Aufsteigend ↑",
 	"sortDesc": "Absteigend ↓",
@@ -2124,9 +2134,7 @@ const pt = {
 	"sortDownloads": "Downloads npm (30d)",
 	"sortScore": "Pontuação de praticidade",
 	"downloadsHint": "downloads npm nos últimos 30 dias",
-	"totalDownloadsHint": "Total de downloads npm desde 2019",
 	"downloads30Label": "downloads em 30d",
-	"totalDownloadsLabel": "total de downloads",
 	"sortCreated": "Data de publicação",
 	"sortAsc": "Crescente ↑",
 	"sortDesc": "Decrescente ↓",
@@ -2417,9 +2425,7 @@ const ru = {
 	"sortDownloads": "npm Загрузки (30 дн.)",
 	"sortScore": "Практическая оценка",
 	"downloadsHint": "Загрузки npm за последние 30 дней",
-	"totalDownloadsHint": "Всего загрузок npm с 2019 года",
 	"downloads30Label": "Загрузки за 30 дн.",
-	"totalDownloadsLabel": "всего загрузок",
 	"sortCreated": "Дата публикации",
 	"sortAsc": "По возрастанию ↑",
 	"sortDesc": "По убыванию ↓",
@@ -2734,7 +2740,7 @@ function visiblePlugins(plugins, options, isInstalled, isFav) {
 	const list = plugins.filter((p) => {
 		if (options.category !== "all" && p.category !== options.category) return false;
 		if (options.kind === "plugin" && p.isPlugin !== true) return false;
-		if (options.kind === "nonplugin" && p.isPlugin === true) return false;
+		if (options.kind === "nonplugin" && p.isPlugin !== false) return false;
 		if (options.curatedOnly && !p.curated) return false;
 		if (options.verifiedOnly && p.verified == null) return false;
 		if (options.installedOnly && !(isInstalled?.(p) ?? false)) return false;
@@ -2862,7 +2868,7 @@ const RULES = {
 		title: "五维分数怎么算的",
 		dims: {
 			maintain: "维护：最近是否还在更新代码、问题多不多",
-			practical: "实用：README 有没有安装说明和代码示例",
+			practical: "实用：README 是否提供能力、用法、场景、产出和可靠性证据",
 			popularity: "热度：星数 + npm 下载量 + 增长趋势——没有 npm 数据就用星数换算等效下载量，同样算法不亏待",
 			ease: "便捷：能不能一条命令装好、要不要额外配置",
 			signal: "信号：许可证 / 简介 / 主题标签全不全"
@@ -2873,7 +2879,7 @@ const RULES = {
 		title: "How the five dimensions score",
 		dims: {
 			maintain: "Maintain: recently updated, few open issues",
-			practical: "Practical: README has install & usage docs",
+			practical: "Practical: README evidence for capabilities, usage, use cases, outputs, and reliability",
 			popularity: "Popularity: stars + npm downloads + momentum — without npm data we convert stars to an equivalent estimate, so no one is penalized",
 			ease: "Ease: one-command install, no extra setup",
 			signal: "Signal: license/description/topics completeness"
@@ -3220,7 +3226,7 @@ function DetailPanel(props) {
 	]);
 	const [downloadsHit, setDownloadsHit] = (0, react.useState)(null);
 	(0, react.useEffect)(() => {
-		if (entry.downloads !== null && entry.downloads !== void 0) return;
+		if (entry.downloads !== null && entry.downloads !== void 0 && entry.downloadFreshness != null) return;
 		if (entry.npm === null || entry.npmLinked === false) return;
 		let alive = true;
 		fetch("/dsh-mall/downloads", {
@@ -3230,11 +3236,14 @@ function DetailPanel(props) {
 		}).then((res) => res.json()).then((body) => {
 			const got = body.downloads ?? {};
 			const totals = body.totals ?? {};
+			const freshness = body.freshness ?? {};
 			const d = got[entry.npm];
 			const t = totals[entry.npm];
-			if (alive && (d !== void 0 || t !== void 0)) setDownloadsHit({
+			const fresh = freshness[entry.npm] ?? null;
+			if (alive && (d !== void 0 || t !== void 0 || fresh !== null)) setDownloadsHit({
 				d: d ?? null,
-				t: t ?? null
+				t: t ?? null,
+				freshness: fresh
 			});
 		}).catch(() => {});
 		return () => {
@@ -3245,7 +3254,8 @@ function DetailPanel(props) {
 		entry.name,
 		entry.npm,
 		entry.npmLinked,
-		entry.downloads
+		entry.downloads,
+		entry.downloadFreshness
 	]);
 	const scrollRef = (0, react.useRef)(null);
 	const copyCmd = () => {
@@ -3256,12 +3266,25 @@ function DetailPanel(props) {
 	};
 	const d30 = downloadsHit?.d ?? (typeof entry.downloads === "number" ? entry.downloads : null);
 	const dTotal = downloadsHit?.t ?? (typeof entry.totalDownloads === "number" ? entry.totalDownloads : null);
+	const freshness = downloadsHit?.freshness ?? entry.downloadFreshness ?? null;
+	const formatDateTime = (value) => {
+		if (value === null) return null;
+		const ms = Date.parse(value);
+		if (Number.isNaN(ms)) return value;
+		return new Intl.DateTimeFormat(langChoice === "zh" ? "zh-CN" : "en", {
+			dateStyle: "medium",
+			timeStyle: "short"
+		}).format(new Date(ms));
+	};
+	const npmFreshness = freshness === null ? null : [freshness.periodStart !== null && freshness.periodEnd !== null ? t("npmPeriod").replace("{0}", freshness.periodStart).replace("{1}", freshness.periodEnd) : null, freshness.queriedAt !== null ? t("npmQueriedAt").replace("{0}", formatDateTime(freshness.queriedAt) ?? freshness.queriedAt) : null].filter((line) => line !== null).join(" · ") || null;
+	const totalPeriodLabel = freshness?.totalPeriodStart !== null && freshness?.totalPeriodStart !== void 0 && freshness.totalPeriodEnd !== null ? t("totalDownloadsPeriodLabel").replace("{0}", freshness.totalPeriodStart).replace("{1}", freshness.totalPeriodEnd) : t("totalDownloadsLabel");
 	const targets = [
 		[t("detailStars"), formatStars(entry.stars)],
 		[t("todayGain"), entry.todayStars === null ? "—" : (entry.todayStars >= 0 ? "+" : "") + String(entry.todayStars)],
 		[t("detailCategory"), entry.category === "" ? null : props.categoryLabel(entry.category)],
 		[t("downloads30Label"), d30 !== null ? formatDownloads(d30) : entry.npm !== null && entry.npmLinked !== false ? "—" : null],
-		[t("totalDownloadsLabel"), dTotal !== null ? formatDownloads(dTotal) : entry.npm !== null && entry.npmLinked !== false ? "—" : null],
+		[totalPeriodLabel, dTotal !== null ? formatDownloads(dTotal) : entry.npm !== null && entry.npmLinked !== false ? "—" : null],
+		[t("npmDataFreshness"), npmFreshness],
 		[t("detailCreated"), entry.created === null ? null : relativeFromNow(entry.created, t)],
 		[t("updatedShort"), entry.pushed === null ? null : relativeFromNow(entry.pushed, t)],
 		[t("detailLanguage"), entry.language],
@@ -3397,7 +3420,7 @@ function DetailPanel(props) {
 							className: "pcm-detail-desc",
 							children: desc === "" ? "—" : desc
 						}),
-						(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true || entry.installable != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						(entry.curated || entry.verified != null || disclosure != null || entry.hasSkill === true || entry.bundled === true || entry.installable != null || entry.excluded != null) && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 							className: "pcm-detail-safety",
 							children: [
 								entry.curated && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
@@ -3477,9 +3500,30 @@ function DetailPanel(props) {
 									className: "pcm-safety pcm-safety-manual",
 									children: ["⚙ ", t("manualInstall")]
 								}),
-								entry.installable === "non-plugin" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+								entry.pluginStatus === "verified-non-plugin" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
 									className: "pcm-safety pcm-safety-nonplugin",
+									title: (entry.pluginEvidence ?? []).join(" · "),
 									children: ["⊘ ", t("nonpluginBadge")]
+								}),
+								entry.pluginStatus === "conflict" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-safety pcm-safety-nonplugin",
+									title: (entry.pluginEvidence ?? []).join(" · "),
+									children: ["⚠ ", t("conflictBadge")]
+								}),
+								entry.excluded?.kind === "market" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-safety pcm-safety-manual",
+									title: entry.excluded.reason,
+									children: ["↗ ", t("marketPolicyBadge")]
+								}),
+								entry.excluded?.kind === "leaderboard" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-safety pcm-safety-manual",
+									title: entry.excluded.reason,
+									children: ["↗ ", t("leaderboardPolicyBadge")]
+								}),
+								entry.excluded?.kind === "excluded" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "pcm-safety pcm-safety-nonplugin",
+									title: entry.excluded.reason,
+									children: ["⊘ ", t("catalogExcludedBadge")]
 								})
 							]
 						}),
@@ -4381,6 +4425,11 @@ function MarketSection(props) {
 	const [toast, setToast] = (0, react.useState)(null);
 	const [verifyBusy, setVerifyBusy] = (0, react.useState)(false);
 	const [detail, setDetail] = (0, react.useState)(null);
+	const detailCurrent = (0, react.useMemo)(() => {
+		if (detail === null || data === null) return detail;
+		const key = (detail.owner + "/" + detail.name).toLowerCase();
+		return data.plugins.find((entry) => (entry.owner + "/" + entry.name).toLowerCase() === key) ?? detail;
+	}, [detail, data]);
 	const [updateBusy, setUpdateBusy] = (0, react.useState)(false);
 	const [updatingNames, setUpdatingNames] = (0, react.useState)(/* @__PURE__ */ new Set());
 	const [selfUpdateBusy, setSelfUpdateBusy] = (0, react.useState)(false);
@@ -4459,10 +4508,16 @@ function MarketSection(props) {
 						const merged = { ...e };
 						if (old.downloads !== void 0) merged.downloads = old.downloads;
 						if (old.totalDownloads !== void 0) merged.totalDownloads = old.totalDownloads;
+						if (old.downloadFreshness !== void 0) merged.downloadFreshness = old.downloadFreshness;
 						if (old.repoVersion !== void 0) merged.repoVersion = old.repoVersion;
 						if (old.bundled !== void 0 && old.bundled !== null) merged.bundled = old.bundled;
 						if (old.bundledAt !== void 0) merged.bundledAt = old.bundledAt;
 						if (old.hasSkill !== void 0 && old.hasSkill !== null) merged.hasSkill = old.hasSkill;
+						if (merged.pluginStatus === "unknown" && old.pluginStatus === "verified-plugin" && (old.pluginEvidence ?? []).includes("index-bundle-scan")) {
+							merged.isPlugin = true;
+							merged.pluginStatus = old.pluginStatus;
+							merged.pluginEvidence = old.pluginEvidence;
+						}
 						if (old.score !== void 0 && merged.score === void 0) merged.score = old.score;
 						if (old.installCmds !== void 0) merged.installCmds = old.installCmds;
 						if (old.cmdSource !== void 0) merged.cmdSource = old.cmdSource;
@@ -4602,9 +4657,12 @@ function MarketSection(props) {
 		fetchRegistry,
 		fetchStatus
 	]);
+	const verifyRequested = (0, react.useRef)(/* @__PURE__ */ new Map());
 	const verifyPage = (0, react.useCallback)((entries) => {
-		const unknown = entries.filter((e) => e.isPlugin === null).map((e) => e.owner + "/" + e.name).slice(0, 12);
+		const now = Date.now();
+		const unknown = entries.filter((e) => e.pluginStatus === "unknown" || e.pluginStatus === void 0 && e.isPlugin === null).map((e) => e.owner + "/" + e.name).filter((repo) => (verifyRequested.current.get(repo.toLowerCase()) ?? 0) <= now).slice(0, 12);
 		if (unknown.length === 0 || verifyBusy) return;
+		for (const repo of unknown) verifyRequested.current.set(repo.toLowerCase(), now + 30 * 6e4);
 		setVerifyBusy(true);
 		fetch("/dsh-mall/verify", {
 			method: "POST",
@@ -4617,16 +4675,27 @@ function MarketSection(props) {
 				return {
 					...prev,
 					plugins: prev.plugins.map((e) => {
-						const v = verdicts[(e.owner + "/" + e.name).toLowerCase()];
-						if (v === void 0) return e;
+						if (verdicts[(e.owner + "/" + e.name).toLowerCase()] === void 0) return e;
+						const evidence = e.pluginEvidence ?? [];
+						const conflict = evidence.includes("index-non-plugin");
 						return {
 							...e,
-							isPlugin: v
+							isPlugin: conflict ? null : true,
+							pluginStatus: conflict ? "conflict" : "verified-plugin",
+							pluginEvidence: [.../* @__PURE__ */ new Set([...evidence, "manifest-contract"])]
 						};
 					})
 				};
 			});
-		}).catch(() => {}).finally(() => setVerifyBusy(false));
+			if (body.ok !== true) {
+				const retryMs = Math.max(6e4, Math.min(body.retryAfterMs ?? 6e4, 60 * 6e4));
+				const retryAt = Date.now() + retryMs;
+				for (const repo of unknown) if (verdicts[repo.toLowerCase()] !== true) verifyRequested.current.set(repo.toLowerCase(), retryAt);
+			}
+		}).catch(() => {
+			const retryAt = Date.now() + 6e4;
+			for (const repo of unknown) verifyRequested.current.set(repo.toLowerCase(), retryAt);
+		}).finally(() => setVerifyBusy(false));
 	}, [verifyBusy]);
 	const catalogPlugins = data?.plugins ?? [];
 	const represented = (0, react.useMemo)(() => {
@@ -4652,6 +4721,8 @@ function MarketSection(props) {
 		created: null,
 		pushed: null,
 		isPlugin: true,
+		pluginStatus: "verified-plugin",
+		pluginEvidence: ["manifest-contract"],
 		curated: false,
 		npm: name,
 		avatar: "",
@@ -4781,7 +4852,7 @@ function MarketSection(props) {
 			if (scannedOnly && p.bundled !== true) continue;
 			if (skillOnly && p.hasSkill !== true) continue;
 			if (kind === "plugin" && p.isPlugin !== true) continue;
-			if (kind === "nonplugin" && p.isPlugin === true) continue;
+			if (kind === "nonplugin" && p.isPlugin !== false) continue;
 			if (curatedOnly && !p.curated) continue;
 			if (verifiedOnly && p.verified == null) continue;
 			if (installedOnly && !isInstalled(p)) continue;
@@ -4840,7 +4911,7 @@ function MarketSection(props) {
 			const mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day);
 			return mon.getFullYear() + "-" + String(mon.getMonth() + 1).padStart(2, "0") + "-" + String(mon.getDate()).padStart(2, "0");
 		};
-		const computePicks = (pluginsAll) => pluginsAll.filter((p) => p.curated === true && p.excluded == null && p.isPlugin !== false).sort((a, b) => (b.score?.total ?? 0) - (a.score?.total ?? 0)).slice(0, 6);
+		const computePicks = (pluginsAll) => pluginsAll.filter((p) => p.curated === true && p.excluded == null && p.pluginStatus === "verified-plugin").sort((a, b) => (b.score?.total ?? 0) - (a.score?.total ?? 0)).slice(0, 6);
 		(0, react.useEffect)(() => {
 			if (data === null) return;
 			const wk = weekKeyOf(/* @__PURE__ */ new Date());
@@ -4856,7 +4927,7 @@ function MarketSection(props) {
 			} catch {}
 			if (storedWeek === wk && storedNames.length > 0) {
 				const byKey = new Map(data.plugins.map((p) => [(p.owner + "/" + p.name).toLowerCase(), p]));
-				const restored = storedNames.map((n) => byKey.get(n.toLowerCase())).filter((p) => p !== void 0);
+				const restored = storedNames.map((n) => byKey.get(n.toLowerCase())).filter((p) => p !== void 0 && p.excluded == null && p.pluginStatus === "verified-plugin");
 				if (restored.length === 6) {
 					setPicks(restored);
 					return;
@@ -4997,6 +5068,7 @@ function MarketSection(props) {
 		}).then((res) => res.json()).then((body) => {
 			const got = body.downloads ?? {};
 			const totals = body.totals ?? {};
+			const freshness = body.freshness ?? {};
 			setData((prev) => {
 				if (prev === null) return prev;
 				return {
@@ -5004,11 +5076,13 @@ function MarketSection(props) {
 					plugins: prev.plugins.map((e) => {
 						const hit = e.npm !== null ? got[e.npm] : void 0;
 						const tot = e.npm !== null ? totals[e.npm] : void 0;
-						if (hit === void 0 && tot === void 0) return e;
+						const fresh = e.npm !== null ? freshness[e.npm] : void 0;
+						if (hit === void 0 && tot === void 0 && fresh === void 0) return e;
 						return {
 							...e,
 							downloads: hit === void 0 ? e.downloads : hit,
-							totalDownloads: tot === void 0 ? e.totalDownloads : tot
+							totalDownloads: tot === void 0 ? e.totalDownloads : tot,
+							downloadFreshness: fresh === void 0 ? e.downloadFreshness : fresh
 						};
 					})
 				};
@@ -5066,6 +5140,13 @@ function MarketSection(props) {
 						if (hitB !== void 0) {
 							next.bundled = hitB;
 							next.bundledAt = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+							if (hitB === true) {
+								const priorEvidence = next.pluginEvidence ?? [];
+								const conflict = priorEvidence.includes("index-non-plugin");
+								next.pluginEvidence = [.../* @__PURE__ */ new Set([...priorEvidence, "index-bundle-scan"])];
+								next.pluginStatus = conflict ? "conflict" : "verified-plugin";
+								next.isPlugin = conflict ? null : true;
+							}
 						}
 						if (hitS !== void 0) next.hasSkill = hitS;
 						return next;
@@ -6794,13 +6875,20 @@ function MarketSection(props) {
 											children: [
 												entry.isPlugin === true && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 													className: "pcm-badge pcm-badge-plugin",
+													title: (entry.pluginEvidence ?? []).join(" · "),
 													children: t("pluginBadge")
 												}),
 												entry.isPlugin === false && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 													className: "pcm-badge pcm-badge-nonplugin",
+													title: (entry.pluginEvidence ?? []).join(" · "),
 													children: t("nonpluginBadge")
 												}),
-												entry.isPlugin === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+												entry.pluginStatus === "conflict" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+													className: "pcm-badge pcm-badge-nonplugin",
+													title: (entry.pluginEvidence ?? []).join(" · "),
+													children: t("conflictBadge")
+												}),
+												(entry.pluginStatus === "unknown" || entry.pluginStatus === void 0) && entry.isPlugin === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 													className: "pcm-badge pcm-badge-pending",
 													children: t("pendingBadge")
 												}),
@@ -6997,33 +7085,33 @@ function MarketSection(props) {
 					})
 				]
 			}),
-			detail !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(DetailPanel, {
+			detailCurrent !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)(DetailPanel, {
 				t,
-				entry: detail,
+				entry: detailCurrent,
 				langChoice,
 				categoryLabel: (cat) => data?.categories?.[cat]?.[langChoice === "zh" ? "zh" : "en"] ?? cat,
-				isFav: isFav(detail),
-				isInstalled: isInstalled(detail),
-				installedSpec: installedSpecOf(detail),
+				isFav: isFav(detailCurrent),
+				isInstalled: isInstalled(detailCurrent),
+				installedSpec: installedSpecOf(detailCurrent),
 				installing,
-				update: updateFor(detail),
+				update: updateFor(detailCurrent),
 				updating: (() => {
-					const u = updateFor(detail);
+					const u = updateFor(detailCurrent);
 					return u !== null && updatingNames.has(u.name.toLowerCase());
 				})(),
 				related: (() => {
-					const self = (detail.owner + "/" + detail.name).toLowerCase();
-					return data === null ? [] : data.plugins.filter((p) => p.category === detail.category && p.excluded == null && (p.owner + "/" + p.name).toLowerCase() !== self).sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0)).slice(0, 6);
+					const self = (detailCurrent.owner + "/" + detailCurrent.name).toLowerCase();
+					return data === null ? [] : data.plugins.filter((p) => p.category === detailCurrent.category && p.excluded == null && (p.owner + "/" + p.name).toLowerCase() !== self).sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0)).slice(0, 6);
 				})(),
 				onOpenEntry: (e) => setDetail(e),
-				onToggleFav: () => toggleFav(detail),
-				onInstall: () => setConfirming(detail),
+				onToggleFav: () => toggleFav(detailCurrent),
+				onInstall: () => setConfirming(detailCurrent),
 				onUninstall: () => {
-					if (detail.local === true) setRemovingLocal(detail);
-					else setRemoving(detail);
+					if (detailCurrent.local === true) setRemovingLocal(detailCurrent);
+					else setRemoving(detailCurrent);
 				},
 				onUpdate: () => {
-					const u = updateFor(detail);
+					const u = updateFor(detailCurrent);
 					if (u !== null) doUpdateOne(u);
 				},
 				onClose: () => setDetail(null)
@@ -7164,8 +7252,8 @@ function MarketSection(props) {
 function InstallModal(props) {
 	const { t, entry, installing, statusLine } = props;
 	const target = entry.npmLinked === false ? "github:" + entry.owner + "/" + entry.name : entry.npm ?? "github:" + entry.owner + "/" + entry.name;
-	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.isPlugin === true ? "pcm-risk pcm-risk-community" : "pcm-risk pcm-risk-nonplugin";
-	const riskText = entry.curated ? t("riskCurated") : entry.isPlugin === true ? t("riskCommunity") : t("riskNonplugin");
+	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.pluginStatus === "verified-plugin" ? "pcm-risk pcm-risk-community" : entry.pluginStatus === "verified-non-plugin" || entry.pluginStatus === "conflict" ? "pcm-risk pcm-risk-nonplugin" : "pcm-risk pcm-risk-community";
+	const riskText = entry.curated ? t("riskCurated") : entry.pluginStatus === "verified-plugin" ? t("riskCommunity") : entry.pluginStatus === "verified-non-plugin" ? t("riskNonplugin") : entry.pluginStatus === "conflict" ? t("riskConflict") : t("riskUnknown");
 	const [readmeCmds, setReadmeCmds] = (0, react.useState)(() => entry.installCmds !== void 0 && entry.installCmds !== null ? {
 		commands: entry.installCmds,
 		source: entry.cmdSource ?? "readme"
@@ -7259,8 +7347,8 @@ function InstallModal(props) {
 function UpdateModal(props) {
 	const { t, entry, upd, busy, statusLine } = props;
 	const target = entry.npmLinked === false ? "github:" + entry.owner + "/" + entry.name : entry.npm ?? "github:" + entry.owner + "/" + entry.name;
-	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.isPlugin === true ? "pcm-risk pcm-risk-community" : "pcm-risk pcm-risk-nonplugin";
-	const riskText = entry.curated ? t("riskCurated") : entry.isPlugin === true ? t("riskCommunity") : t("riskNonplugin");
+	const riskClass = entry.curated ? "pcm-risk pcm-risk-curated" : entry.pluginStatus === "verified-plugin" ? "pcm-risk pcm-risk-community" : entry.pluginStatus === "verified-non-plugin" || entry.pluginStatus === "conflict" ? "pcm-risk pcm-risk-nonplugin" : "pcm-risk pcm-risk-community";
+	const riskText = entry.curated ? t("riskCurated") : entry.pluginStatus === "verified-plugin" ? t("riskCommunity") : entry.pluginStatus === "verified-non-plugin" ? t("riskNonplugin") : entry.pluginStatus === "conflict" ? t("riskConflict") : t("riskUnknown");
 	return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(_deepseek_ai_dsh_client_ui_primitives.Modal, {
 		open: true,
 		onClose: props.onClose,

@@ -1,0 +1,538 @@
+{
+ "reviews": [
+  {
+   "repo": "skyf0xx/hedgehog",
+   "inferredType": "standalone-nonplugin",
+   "capability": [
+    "Hedgehog gives AI a **disciplined way to build software**: TDD. Opinionated architecture. Small, verifiable steps.",
+    "**BMAD for planning** — turn an idea into a clear brief, requirements, and architecture",
+    "**Mechanical enforcement** — use tooling and phase gates instead of trusting the AI to follow instructions",
+    "**Deterministic scaffolding** — generate boilerplate and schemas instead of asking the AI to write it freehand",
+    "**Every task** Hedgehog generates **is a node** with [explicit dependencies in sqlite](BUILD_GRAPH.md).",
+    "Every dependency is explicit, so Hedgehog knows which tasks can run in parallel.",
+    "Hedgehog reaches for your editor's own Language Server Protocol integration to see what depends on what.",
+    "**Impact known before editing**: every task checks what depends on it before it changes anything",
+    "**Generators over freehand**: schemas, boilerplate, and scaffolding come from generators that create the code",
+    "Hedgehog also adopts onto a repo it didn't build. It reads the repo and proposes a layer chain that verifies with the repo's own test/lint/build commands."
+   ],
+   "usageItems": [
+    "Mention `Hedgehog` whenever you want to build something with it."
+   ],
+   "usageActions": [
+    "npx @skyf0xx/hedgehog graph # show graph"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "path the agents can use.\n\n```bash\nnpx @skyf0xx/hedgehog graph # show graph"
+   ],
+   "usecases": [
+    "A fixed TypeScript stack with a backend-first, test-driven build order:",
+    "A structured pipeline for producing distinctive, production-quality landing pages:",
+    "Local-first simple mobile compatible web  apps: trackers, journals, planners, etc:",
+    "Tools, hooks, and extensions for DSH's Cordis-based agent framework:",
+    "A CLI, a library, a browser extension, a data pipeline, etc. gets its build order."
+   ],
+   "outputs": [],
+   "reliability": [
+    "On a fresh project with no warm pnpm store, that first install can take",
+    "This refreshes the installed agents and skills in a specific repo (note, not vendor skills)"
+   ],
+   "media": [
+    {
+     "excerpt": "![Hedgehog - build software the right way, one step at a time](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/hero.jpg)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Small steps, big leverage: small context loops, continuous verification, traceable evolution, sustainable velocity](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/small-steps.jpg)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![The Hedgehog build graph](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/graph.jpg)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Deterministic code generation](https://raw.githubusercontent.com/skyf0xx/hedgehog/master/docs/images/deterministic.jpg)",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "Agent 技能/工作流工具链（Claude Code / Gemini / Cursor），非 DSH 插件，inferredType 为 standalone-nonplugin。",
+    "各构建核心（full-stack/landing/PWA/DSH plugin）标题下的说明作为显式使用场景记入 usecases。"
+   ]
+  },
+  {
+   "repo": "PerryLink/dsh-plugin-guide",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "**Everything you need to build [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugins.**",
+    "The knowledge base registers as the `dsh-plugin-guide` agent skill (visible in every session catalog, loading workflow steps, official docs, and community deep-dives on demand)",
+    "**Plugin contract & hard rules** — effects/disposers, waterfall `next()`, model-visible ⟺ logged, Schemastery config.",
+    "**Official docs archive** — a verbatim copy of the official repo docs (EN + ZH), byte-identical to upstream at the last verified snapshot.",
+    "**20+ real-world pitfalls** with root cause + fix (cordis dual copies, tsconfig trio, multi-frame zstd sessions, Windows junctions, stale npm `latest`, …).",
+    "**Community deep-dives** — 114 community repositories archived (15 deep-dived), plus a full source index where every fact links to its origin.",
+    "The bundle ships the zero-runtime-dependency `dsh-plugin-dev` CLI (`bin/` → tsdown-bundled `dist/dsh-plugin-dev.js`).",
+    "`new <name>` | Scaffolds a TS or JS plugin repo: `src/index.ts` contract template, Schemastery Config, tests, tsdown/vitest, commented `cordis.patch.yml`, five-language READMEs.",
+    "`check` | Static checks: `cordis.patch.yml` validity, `package.json` metadata (`dsh.bundle.patch` pointer, peer deps, engines, files whitelist), five-language README consistency, engineering red-line patterns.",
+    "`verify` | `pnpm pack`, then install/start/uninstall the bundle in a clean mkdtemp `DSH_HOME` profile (aligned with `verify:self-contained`). Failures report the log tail plus suggestions."
+   ],
+   "usageItems": [
+    "Then just ask your agent: *\"Use the dsh-plugin-guide skill to build me a … plugin.\"*"
+   ],
+   "usageActions": [
+    "dsh-plugin-dev new <name> [--lang ts|js] [--dir <path>] [--force] [--git]",
+    "dsh-plugin-dev check [--cwd <dir>] [--json] [--strict]",
+    "dsh-plugin-dev verify [--cwd <dir>] [--dsh <bin>] [--pnpm <bin>]",
+    "npx dsh-plugin-guide new hello-plugin            # scaffold a TS plugin repo",
+    "npx dsh-plugin-guide check --json                # static-check it",
+    "npx dsh-plugin-guide verify                      # pack + clean-profile smoke",
+    "dsh --profile web --dump-config | grep -A3 'id: dsh-plugin-guide'"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "Or drive the CLI directly:\n\n```sh\nnpx dsh-plugin-guide new hello-plugin            # scaffold a TS plugin repo"
+   ],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "the session envelope keeps its ignorable field for stored-log read compatibility only - Session.append still cannot stamp it, so audit-gate behavior is unchanged.",
+    "| Node | `^22.19.0 || >=24.0.0` (DeepSeek Harness runtime) |",
+    "| Platforms | All (plain ESM bundle; no native code, no network) |",
+    "| Model | Any (no model interaction) |",
+    "**Read-only knowledge base.** The bundle only reads its own files; it never writes, never calls the network, and never invokes a model.",
+    "**Official docs are a snapshot.** Re-sync with `scripts/sync-official-docs.ps1` when upstream moves; the freshness stamp and commit hash reference `references/official-docs/SNAPSHOT.md`.",
+    "**`downloads/` is generated, not committed.** Raw snapshots (community repo archives, Discussions, articles) must be generated with the scripts before use.",
+    "**`awesome-dsh-plugins` content is local-only.** Its upstream declares an internal-use constraint, so it is not redistributed with the repo."
+   ],
+   "media": [],
+   "concerns": [
+    "无演示媒体、无输入/输出配对；知识库内容为结构化证据。"
+   ]
+  },
+  {
+   "repo": "dickpy/dsh-imagegen",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "`dsh-imagegen` 是 DeepSeek Harness（DSH）的原生 AI 图像工作台。配置任意 OpenAI 兼容生图接口后，Agent 对话生图、`/edit_image` 斜杠命令连续编辑、多模型并列对比、441 条案例模板库与画廊资产管理都在同一个窗口完成",
+    "电商模式还能把一张商品图扩展成主图、卖点图、场景图等一整套商品视觉。",
+    "生成任务由宿主进程排队执行，不卡界面、不打断对话，图片也不必在多个工具之间来回搬运。",
+    "| **查看** | 工具结果旁 / 工作台画布 / 全屏预览 | 图片内联显示在对应位置，支持缩放、翻页、复制提示词 |",
+    "| **加入对话** | 结果卡或画廊点“加入对话” | 图片进入当前会话，自动适配附件限制，无需手动上传 |",
+    "| **继续编辑** | 对 Agent 说，或输入 `/edit_image …` | 以上一张成图为参考提交图生图，只需描述要改的地方 |",
+    "- **锚定生成**：确认后先生成主图，其余图片自动以主图为参考生成，并在提示词中附加商品一致性约束，保证整套是同一个商品。",
+    "- **先预览后生成**：点击「生成套图预览」只输出计划（各用途与数量），确认后才批量提交，不浪费额度。",
+    "- **历史记录**：保留提示词、模型与参数（最近 50 条），支持关键词、模型、比例筛选，点击即可恢复参数",
+    "插件会把简短想法发给一个对话模型扩写成结构完整的生图提示词，再提交生成"
+   ],
+   "usageItems": [
+    "2. 点击“生图”Tab，输入一句提示词，生成第一张图。",
+    "输入 `/edit_image 把背景改成夜景`",
+    "顶部导航切换到「电商模式」，把一张商品图扩展成一套可发布的商品视觉：上传商品素材（主体 / 包装 / 细节 / 风格，最多 4 张），选择平台、文案语言、比例与类目，填写商品卖点，然后用卡片勾选套图结构（主图、卖点图、场景图、细节图、规格图、使用图）与每种用途的数量。"
+   ],
+   "usageActions": [
+    "| `generate_image` | 提交文生图任务；完成后在工具结果旁显示图片，并返回可继续编辑的图片引用。",
+    "| `edit_image` | 以已有图片为参考提交图生图任务；引用需原样传入之前工具返回的图片对象。 |",
+    "| `get_image_generation_task` | 查询任务状态；完成时显示图片并返回下一步编辑所需的引用。 |",
+    "| `cancel_image_generation_task` | 取消排队中或正在执行的任务。 |"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "```text\n帮我为 dsh-imagegen 设计一张 16:9 横版项目海报。",
+    "```text\n保留当前海报的整体构图和深色科技风。"
+   ],
+   "usecases": [],
+   "outputs": [
+    "一键导出 JSON 清单，记录每张图的提示词与参数，方便复现。"
+   ],
+   "reliability": [
+    "API 请求由 DSH 宿主进程代理，浏览器不直接连接上游：没有 CORS 问题，密钥不会出现在前端；宿主路由仅监听本机回环地址并校验同源请求。",
+    "密钥保存于本机 DSH 设置中，设置页面仅展示“已配置”状态。",
+    "图生图会把参考图发送到当前渠道的上游 API，请确认渠道服务商的数据处理政策，不要上传敏感图片。",
+    "生图会消耗上游 API 额度。图片内容由上游模型生成，可能出现不准确、不适宜或不符合预期的结果，请在使用前人工检查。",
+    "未配置 API 地址、密钥或模型时，会明确引导到“设置 → 插件 → AI 生图”，不会静默失败。",
+    "配置了多个生图模型时，Agent 会先询问你想用哪个，而不是擅自选择",
+    "收藏由 DSH 宿主持久化保存，跨同一宿主的浏览器/设备可见；同一图片内容按哈希去重，不会重复加入。",
+    "电商模式目前为预览功能，入口带有「预览」角标；生成仍走已配置的生图渠道与任务队列，额度消耗与普通生成一致。",
+    "等待上限 300 秒，超时自动取消。"
+   ],
+   "media": [
+    {
+     "excerpt": "<img src=\"docs/images/imagegen-overview.png\" alt=\"dsh-imagegen AI image studio\" width=\"100%\" />",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/videos/agent-chat-edit.gif\" alt=\"Agent 对话生图与连续编辑演示\" width=\"100%\" />",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/images/multi-model-comparison.png\" alt=\"gpt-image-2、grok-imagine-image 与 doubao-seedream 的三模型并列结果对比\" width=\"100%\" />",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/images/ecommerce-mode.png\" alt=\"电商模式：商品信息、参数选择、套图结构与结果\" width=\"100%\" />",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/images/image-generation-studio-three-column.png\" alt=\"三栏工作台\" width=\"100%\" />",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/images/gallery-workspace.png\" alt=\"画廊工作区：分类筛选、瀑布流和大图预览\" width=\"100%\" />",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "两条案例提示词围栏作为操作型示例计入 codeExamples（生成/继续编辑两个操作）。",
+    "媒体达 6 上限，其余截图视为重复视图未计入。"
+   ]
+  },
+  {
+   "repo": "ChenRuoT/dsh-sidebar-qa",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "划选任意文本 → 点击「提问」→ 右侧面板问答",
+    "自动创建<b>同工作区的独立 DSH 会话</b>，主对话零打断。实现类 codex 侧边提问 / Claude Code `/btw` 功能。",
+    "**📝 划选提问**：对话中划选任意文本 → 浮层「提问」→ 右侧面板内嵌问答，全程不跳转大窗口；**侧边栏面板收起时也会自动展开**，「提问」永远有可见反馈",
+    "**💬 添加到对话**：同一个浮层的另一个按钮，把划选文本以 `>` 引用块**追加**进当前会话的主输入框并聚焦（光标落在引用块下方），**不新建会话、不打开侧边栏**",
+    "**🧠 智能摘要**：快速无思考模型把主对话上下文压缩成小摘要，与划选引文一起注入首条消息",
+    "**🪆 嵌套追问**：在追问对话里再划选提问，生成子追问，层层嵌套",
+    "**🗂️ 追问记录**：按根（主）会话分层树展示；限定当前工作区；节点可折叠、显示最近访问时间",
+    "**🏷️ 两段式命名**：划选首行占位命名 → 首次回答完成后基于「问题 + 回答」自动提炼 ≤15 字最终标题",
+    "**🌏 中英双语**：界面文案与模型侧提示词跟随 DSH 语言设置实时切换（无需刷新）"
+   ],
+   "usageItems": [
+    "在任意对话（主对话或追问对话）中划选一段文本，浮层会给出两个按钮",
+    "回答过程中可在输入框继续追问（Enter 发送、Shift+Enter 换行），所有问答都在侧边栏内完成。"
+   ],
+   "usageActions": [],
+   "ioPairs": [],
+   "codeExamples": [
+    "ctx.betterSidebar.openTab(\n  { type: 'dsh-sidebar-qa:ask', meta: { quote: { text: '选中的内容', role: 'user' } } },\n)"
+   ],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "`dsh-better-sidebar` **必须安装**（未安装时本插件**不激活**，无任何 UI/行为，也不创建会话），且需 **`0.16.0` 及以上**",
+    "宿主 DSH 需 **`0.1.2-alpha.1` 及以上**（`engines.dsh: >=0.1.2-alpha.1`，本插件的浏览器侧 RPC 走该版本引入的 Remote 服务 `ctx.remote.session`；更早的 DSH 上插件**静默不激活**，请留在 `dsh-sidebar-qa@0.4.0`）。",
+    "摘要失败/无渠道时自动降级为「仅近期对话 + 引文 + 问题」，问答不中断；全量继承失败（主对话正在回答）时自动降级为压缩模式。",
+    "选区捕获与校验（单消息/非流式/≤2000 字符）",
+    "压缩模式的下上文注入刻意保持轻量：旧背景压成**最多 3 句话**（目标 / 当前进度 / 未决事项），近期只保留最近 2 条且每段强截断（≤400 字符）",
+    "写入经 `/sidebarqa/api/config.update` 带 revision 乐观锁（多窗口冲突时提示重试）"
+   ],
+   "media": [
+    {
+     "excerpt": "<img alt=\"dsh-sidebar-qa demo\" src=\"https://github.com/ChenRuoT/dsh-sidebar-qa/releases/download/v0.1.0/demo.gif\" width=\"100%\" />",
+     "weight": 0.5
+    }
+   ],
+   "concerns": [
+    "演示 GIF 托管于 GitHub Releases（外部），按 0.5 权重计入。",
+    "配置表为安装/配置参考，未计入。"
+   ]
+  },
+  {
+   "repo": "lxzy-7/dsh-plugin-guard",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "pre-install snapshots, one-click / automatic rollback, guarded boot, and incident reports that auto-trigger agent analysis.",
+    "│  tools.guard hook: automatic snapshot BEFORE the install (in-process)",
+    "│  snapshot before boot → start dsh web → health check",
+    "└─ unhealthy ─► auto-rollback to last good snapshot → retry once",
+    "→ write an incident report + set a pending marker",
+    "→ the next session's prompt tells the agent to analyze it",
+    "**Snapshots are pure file copies.** Taking a snapshot just copies 5 config files (`package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `cordis.yml`, `cordis.patch.yml`).",
+    "the boot-guard diagnoses the offending plugin from the boot logs, **quarantines it** (appends `disabled: true` to `cordis.patch.yml`), boots without it",
+    "`dsh_rollback action=incident` builds a problem-localization report (last boot logs, server stderr, and a diff of the profile config against the last good snapshot)",
+    "per-environment snapshot lists, **load a specific backup**, **create a manual snapshot**, and **set how many snapshots each environment keeps (minimum 2)**"
+   ],
+   "usageItems": [
+    "Put it on your PATH and run `dsh-guard snapshot` before `dsh plugin add <pkg>` from a terminal",
+    "right-click → *Create shortcut* (or copy the file anywhere) and double-click it to restore the last good snapshot of every profile"
+   ],
+   "usageActions": [
+    "| `dsh_snapshot` | Manually snapshot one profile or all profiles |",
+    "| `dsh_rollback` | list / rollback / status / incident (Node-based, cross-platform) |",
+    "| `incident_resolved` | Mark a pending incident as resolved after analysis/fix |",
+    "snapshot  [--profile X] [--tag T] [--reason R] [--force]",
+    "rollback  [--profile X] [--id I | --good] [--skip-install]",
+    "keep      [N]                     # show or set the per-profile cap (min 2)",
+    "health    [--port N]",
+    "incident  [--kind K] [--no-marker]"
+   ],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "The guard does **not** statically inspect plugin code, and it does **not** try to \"test\" a plugin in isolation.",
+    "**Runtime-only problems are not detected at install time.**",
+    "Since v0.3.1 the check also confirms the **web client actually rendered**",
+    "Every rollback first writes a `pre-rollback` snapshot, so **rollback itself is reversible**.",
+    "The plugin only reads/writes profile config files and snapshots; it never executes third-party code.",
+    "Automatic rollback happens only when the boot health check fails; the guard never silently changes config during normal runtime.",
+    "Incident auto-analysis covers **boot-failure class** incidents; for mid-session errors, run `dsh_rollback action=incident` manually to produce the same report.",
+    "Corrupted session logs are a data problem and are out of scope for rollback.",
+    "It works even when the app cannot start, and it self-derives `DSH_HOME` when the environment does not set it.",
+    "Snapshots and incident reports are local files without credentials (credentials live elsewhere under `$DSH_HOME`, not in this directory layout)."
+   ],
+   "media": [],
+   "concerns": [
+    "无演示媒体与输入/输出配对；流程图为 ASCII 文本。",
+    "CLI 参考行记入 usageActions（结构证据）。"
+   ]
+  },
+  {
+   "repo": "beiyege-01/dsh-voice-ai-girlfriend",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "这是一位住在你电脑里的 AI 女友：点一下麦克风，她听你说话、跟你拌嘴、把回答一字一句念给你听；你出门了，她追到你的 QQ 上继续聊",
+    "⚡ **嘴快**：你说完话，她 0.5 秒内开口 —— FunASR 中文识别只要 150ms、TTS 几乎秒开，反应比你还快",
+    "🎧 **耳朵挑**：-35dB 噪声门 + silero VAD 双重把关 —— 风扇、键盘、电视声统统进不来，只有你说话她才理",
+    "📱 **粘人**：她的回复自动推到你的 **QQ**（文本 + 语音 + 图片）—— 你不在电脑前，她也能找到你",
+    "🎬 **会演**：回复不只是声音——**流式数字人**（DUIX）把你的回复实时生成口播视频：长回复切成 ≤10 秒小段，边生成画面边合成下一段语音，一段接一段连续播放，TTS 与口型同步开口",
+    "🔇 **懂打断**：你插嘴她就闭嘴听你说；想让她把话说完，点一下开关就切回排队模式",
+    "🔊 **声音是你的**：TTS 声音克隆（OmniVoice，600+ 语言），音色由你给的参考音频决定，或直接用参数设计音色",
+    "**段级抢占**：对话中来了更新的回复，当前长任务的剩余段自动让位（已生成段保留），最新回复永远最快开始。"
+   ],
+   "usageItems": [
+    "1. 点**麦克风**：开始连续聆听（每句自动识别发送；再点一下停止）",
+    "3. 点**👧**：显示/隐藏女友动画窗；窗口可拖宽、双击换边",
+    "5. 点**🔊**：开/关语音朗读",
+    "6. **QQ 对话**：手机 QQ 主号给小号发消息即可（需已按「十、QQ 双向对话」配置）",
+    "内置了**多个音色预设**，工具行「🎙️ 音色」按钮可随时切换（说话的声音立即变化，无需重启）。"
+   ],
+   "usageActions": [
+    "从桥接发测试：`POST /api/qq/send {\"text\":\"你好\",\"voice\":true}`",
+    "发图片：`POST /api/qq/image {\"path\":\"C:/path/to/a.png\"}`"
+   ],
+   "ioPairs": [
+    "从桥接发测试：`POST /api/qq/send {\"text\":\"你好\",\"voice\":true}` → 主号收到文本+语音",
+    "发图片：`POST /api/qq/image {\"path\":\"C:/path/to/a.png\"}` → 主号收到图片（agent 生成图片后可直接推给你）"
+   ],
+   "codeExamples": [
+    "```powershell\nbridge\\start-bridge.cmd",
+    "```powershell\nvenv-speech\\Scripts\\python.exe bridge\\smoke_tts.py --text \"你好，我是小雅。\""
+   ],
+   "usecases": [],
+   "outputs": [
+    "结束后项目根目录会生成 `tts_out.wav`，播放它——**能听到克隆音色的声音，说明 TTS 链路通了**。",
+    "成品视频直接落在宿主 `D:\\duix_avatar_data\\face2face\\temp\\`"
+   ],
+   "reliability": [
+    "**没有 NVIDIA 显卡就装不了本项目**（模型推理依赖 CUDA GPU）。",
+    "全链路（TTS + 数字人同时工作）实测峰值约 **15GB**，16GB 显存基本吃满；OmniVoice 与 DUIX 建议错峰（TTS 合成完再生成视频）。",
+    "**QQ 登录用一个小号**（防风控；注入后 QQ 窗口通常隐藏，用手机 QQ 查看消息）",
+    "② 语音必须 **silk 格式**（`pip install pilk`，桥接已内置转换），mp3 base64 发不出去",
+    "① 别给小号**自己**发语音（QQ 不支持自己给自己发语音）；",
+    "必须配 **WebSocket 客户端**（NapCat 连 `ws://127.0.0.1:8765/api/qq/onebot`），配成 WebSocket 服务器会抢 8765 端口失败",
+    "FunASR 对超短语音/纯噪声会返回空结果被丢弃（日志见 `funasr returned empty result`）",
+    "**第一次 TTS 很慢（10~60s）** → 正常。模型首次懒加载 + 预热，之后每句约 0.5s 出音。",
+    "参考音频建议 3-10 秒单一完整句，不要跨句截取（跨句会导致输出混入参考内容）。",
+    "NapCat 的 OneBot HTTP（3000）重启后有时不自动加载"
+   ],
+   "media": [],
+   "concerns": [
+    "产品 = Python 语音桥接 + DSH Web 插件；README 无图片素材，仅有 ASCII 架构图。",
+    "QQ 发送验证示例同时提供输入/输出两侧，记入 ioPairs 与 usageActions（结构重叠）。"
+   ]
+  },
+  {
+   "repo": "chen731215-dev/dsh-tavern",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "🎴 **为 DeepSeek Harness 打造的角色卡 / 世界书管理插件，导入角色卡就能开始角色扮演。**",
+    "🎭 **角色卡管理** — 支持 SillyTavern 格式（PNG/JSON），多角色卡",
+    "📚 **世界书** — 智能关键词注入，全局条目常驻、角色条目按需触发，省 60% 上下文",
+    "⚙️ **多预设** — 每个会话独立保存角色卡/世界书，切换对话自动加载",
+    "🎭 **状态栏美化** — AI 回复中的「状态栏：」格式自动渲染为紫色状态卡（日期/时间/地点/用户列表）",
+    "✂️ **<content> 清理** — 自动剥离 AI 输出中的 <content> 草稿容器标签，正文干净",
+    "🧠 **记忆总结** — 手动/自动总结对话，AI 能看到之前的剧情",
+    "🔗 **角色关系网** — 总结时自动提取角色关系，可视化图谱",
+    "🎬 **剧情选项** — AI 每次回复输出 3 个选项，点击继续",
+    "➕ **新建空白预设** — 新建预设默认完全空白（不复制上一个预设），另有一键「复制当前预设」"
+   ],
+   "usageItems": [
+    "2. **导入**：设置 → 酒馆管理 → 把角色卡 PNG/JSON 拖进去",
+    "3. **开聊**：点「💾 保存并注入」，直接开始聊天",
+    "在**聊天顶部的预设选择器**里，选中你要用的 Agent 预设（比如刚才配好的那个）",
+    "点 **＋ 新会话**（新建一个聊天）"
+   ],
+   "usageActions": [],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [
+    "**想保持角色一致性**：建好角色卡后尽量少改；要调整时直接改酒馆面板，下一次回复就生效，不用重开聊天",
+    "**想开新剧情/新角色**：用「＋ 新建」建空白预设，配新角色卡，**新开会话**选择它——老会话的角色不受影响",
+    "**角色卡和世界书分开管理**：角色卡管\"是谁\"，世界书管\"世界长什么样\"，分开维护更清晰",
+    "**成人内容**：在酒馆面板启用「成人模式」，并搭配成人词条预设（如破限词条）使用"
+   ],
+   "outputs": [],
+   "reliability": [
+    "**关键**：Agent 预设是在**会话创建时**绑定到聊天的（DSH 事件流记录）。所以**先选预设，再开始聊**。",
+    "**修改角色卡/世界书/预设 = 对后续生成即时生效，历史消息保持不变**。",
+    "| **删除/重命名预设** | ⚠️ 已绑定该预设的会话：删除后绑定失效（回退默认）；重命名不影响绑定（按 id 绑定） |"
+   ],
+   "media": [],
+   "concerns": [
+    "无截图/演示媒体与输入输出配对；无斜杠命令或工具行。"
+   ]
+  },
+  {
+   "repo": "xiajiajun516/dsh-config-manager",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "Backup, restore, export, import, migrate and sync your complete DeepSeek Harness (DSH) configuration — settings, model providers, plugins, MCP servers, skills, agent presets and workspaces",
+    "⏰ **Scheduled full backups** — automatic, on your own cadence (6h / 12h / 24h / 7d / custom weekly), secrets never included",
+    "☁️ **Git / WebDAV** configuration sync",
+    "🛒 **Configuration market** — browse & one-click install shared configs",
+    "↩️ Automatic snapshot and rollback before restore",
+    "🔐 Encrypted backups with optional credentials",
+    "Dead absolute paths are detected and remapped automatically (batch prefix mapping supported).",
+    "**Preview before import** | Full preview first — **never touches your config silently**",
+    "**Snapshot restore** | Undo an import: whole-file restore + uninstall added plugins (CLI & GUI)"
+   ],
+   "usageItems": [
+    "Click \"Export Configuration\" → choose \"Quick Export\"",
+    "Select the ZIP → wait for analysis → review the \"Import Preview\"",
+    "Path issues? → choose new paths (batch mapping supported)",
+    "Conflicts? → choose Keep Current / Use Imported",
+    "Re-enter any missing API Keys as prompted"
+   ],
+   "usageActions": [
+    "| `config_backup` | Full backup of DSH config to the local `exports` dir — **no secrets by default**; pass `password` for an encrypted backup.",
+    "`config_list_snapshots` | List local rollback snapshots (id / created / source / status / entry count) for use with `config_restore`",
+    "| `config_restore` | Restore to a snapshot. **Default is a zero-write plan preview**; pass `confirm: true` to actually execute",
+    "| `config_sync_push` | Push config sync to the remote (Git / WebDAV) using the persisted channel config.",
+    "| `config_sync_pull` | Pull a remote diff **preview** (zero-write: download + analyze only).",
+    "dsh-config-manager snapshots [--data-dir <dir>]                # list snapshots (newest first)",
+    "dsh-config-manager restore [--id <id>] [--dry-run]",
+    "dsh-config-manager reinstall --dry-run"
+   ],
+   "ioPairs": [],
+   "codeExamples": [
+    "dsh-config-manager restore --id <snapshot-id>                 # execute (current files are backed up first)"
+   ],
+   "usecases": [
+    "Create a portable backup of your DSH settings, model providers, plugins, MCP servers, skills, agent presets, profiles and workspace — one ZIP file, no secret values included by default.",
+    "Move your complete DeepSeek Harness setup without manually reinstalling plugins, MCP servers and skills.",
+    "Keep portable configuration synchronized between machines through a private Git repository or WebDAV — secrets never sync."
+   ],
+   "outputs": [
+    "You get dsh-config-2026-08-14.zip (the report confirms no secrets inside)",
+    "✓ 18 settings will be updated    ✓ 6 plugins already installed",
+    "the result page lists what needs a DSH restart (per plugin/MCP), credentials to re-enter, and failed/skipped items you can retry"
+   ],
+   "reliability": [
+    "**The default backup contains no secret values** — a hard invariant, enforced at export",
+    "**A ZIP is untrusted input**: defends against Zip Slip, malicious paths, zip bombs, corrupt archives — any trigger rejects the whole file",
+    "A checksum mismatch rejects the import outright (protects against corruption or tampering).",
+    "Items are deduplicated by stable IDs (plugin ID / MCP name / skill name…); existing items are skipped.",
+    "a lost password means the `secrets.enc` can't be decrypted (by design — keep your password safe)",
+    "Installing / updating plugins or MCP takes effect after restarting DSH",
+    "Consecutive failures are highlighted in red in the settings card.",
+    "only the newest **10** snapshots are kept on the remote (`MAX_REMOTE_SNAPSHOTS=10`); older ones are deleted automatically.",
+    "Git and WebDAV do **not** share snapshots or a common ancestor.",
+    "The `dsh-config-manager` **CLI is completely independent of the DSH runtime** (pure Node + the core engine, **zero `@deepseek-ai/*` imports** — it runs even when the DSH peer packages are broken or missing)."
+   ],
+   "media": [
+    {
+     "excerpt": "![One-click Export](assets/screenshot-export.png)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Import Preview](assets/screenshot-import-preview.png)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Snapshot Restore](assets/screenshot-snapshots.png)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Remote Sync](assets/screenshot-sync.png)",
+     "weight": 1
+    },
+    {
+     "excerpt": "![Configuration Market](assets/screenshot-market.png)",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "Use Cases 章节为显式场景标题，取三个非重复场景；Scheduled/Marketplace 与 capability 重复故未重复计入。"
+   ]
+  },
+  {
+   "repo": "the-beating-light-of-the-nail/dsh-meme-hub",
+   "inferredType": "catalog-list",
+   "capability": [
+    "This is an [Awesome List](https://github.com/sindresorhus/awesome)-style navigation repo: one line per project + one hand-picked screenshot (star counts are snapshots from the day of listing).",
+    "All 28 picks live on one page with screenshots, categories and one-click install commands",
+    "Built something new for DSH? **PRs welcome!** Skins, desktop pets, mini-games, or anything more abstract — attach the repo link and a one-line intro; bonus points for a hand-picked screenshot",
+    "If any inclusion infringes on your rights, open an issue and it will be removed promptly."
+   ],
+   "usageItems": [],
+   "usageActions": [],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "This repo is navigation and promotion only, and does not redistribute any source code or assets."
+   ],
+   "media": [],
+   "concerns": [
+    "收录条目的能力、命令、截图与可靠性按规则 7 一律不计入本目录（含 showcase 截图，均为被链接项目素材）。",
+    "No-Screenshot Club 条目无截图。"
+   ]
+  },
+  {
+   "repo": "lhh010/dsh-ui-whale",
+   "inferredType": "dsh-plugin",
+   "capability": [
+    "DSH Web UI 的常驻像素鲸鱼伙伴插件：会话标题栏（标题行右侧）常驻一只小鲸鱼，随会话快照实时反应——**零核心改动**。",
+    "**平时（空闲）**：隔一会儿眨一次眼（约 5 秒）；偶尔摆一下尾巴（约 11 秒一次，0-1-2-3-4-3-2-1-0 来回）；偶尔动动胸鳍（约 7 秒一次，0-1-2-1-0 来回）。",
+    "**睡觉**：连续空闲 **10 秒**后入睡——头顶灰色「Z」按 **0-1-2-3-4-5-1-2-3-4-5-1-…** 循环（先静止姿态 0 一次，再上浮→渐小→淡出 1-5 反复）",
+    "**思考 / 运行 / 工作中**：尾巴持续摆动 + 胸鳍持续扑动 + 眨眼更频繁。",
+    "**回合完成时**：头顶喷水庆祝——水花按**单向 0-1-2-3-4-5-6** 喷起散开（不反向），喷完结束。",
+    "**点击鲸鱼**：左上角冒出一颗粉色爱心，从小变大再消失（**单向 0-1-2-3-0**），期间其它动作照常进行；再点一次会重新从小爱心开始。"
+   ],
+   "usageItems": [],
+   "usageActions": [],
+   "ioPairs": [],
+   "codeExamples": [],
+   "usecases": [],
+   "outputs": [],
+   "reliability": [
+    "你的 DSH 版本决定装哪个插件版本**（装错会崩：常见症状 `useConversation is not a function`）",
+    "DSH **0.1.1-rc.2**（npm 最新）：装**旧版** `'@dsh-external/dsh-ui-whale@github:lhh010/dsh-ui-whale#v0.3.4'`",
+    "DSH **0.1.2-alpha.1 / alpha.2 / alpha.3**：装**新版**（下方默认命令）",
+    "0809 宿主在激活时校验 `dshClient` 包的构建产物，缺失会抛 `ClientPackageCompositionError` 并**拒绝启动 `dsh web`**",
+    "顶层 `dshClient` 字段读不到会静默丢出 boot 图——无日志、无报错，\"启动顺利但插件全没\"。",
+    "本插件 v0.3.8 起内置**兼容性自诊断**：apply 时探测所需客户端 API,不满足时不再崩溃,而是在页面右下角渲染修复指引横幅(点击可关闭),提示升级 DSH 或更新插件。",
+    "typecheck、34 个单测与构建全绿",
+    "0811 与 0812 实机 boot 验证通过",
+    "**构建产物（lib/*.js）零 cordis 运行时导入**"
+   ],
+   "media": [
+    {
+     "excerpt": "![dsh-ui-whale 完整演示](docs/dsh-ui-whale-demo.gif)",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/眨眼.gif\" alt=\"眨眼\" width=\"200\">",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/喷水花.gif\" alt=\"喷水花\" width=\"200\">",
+     "weight": 1
+    },
+    {
+     "excerpt": "<img src=\"docs/冒爱心.gif\" alt=\"冒爱心\" width=\"200\">",
+     "weight": 1
+    }
+   ],
+   "concerns": [
+    "各 DSH 快照兼容性长表取关键边界记入 reliability；动作 GIF 取代表帧，其余视为重复视图。",
+    "无操作命令/输入输出配对（安装命令除外）。"
+   ]
+  }
+ ]
+}

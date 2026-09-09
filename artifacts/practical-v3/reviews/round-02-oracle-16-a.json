@@ -1,0 +1,322 @@
+{
+  "reviews": [
+    {
+      "repo": "EthanYoQ/Invoice-Downloader",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 🤖 | **双引擎 AI 识别** | Track A（OCR精确流）+ Track B（视觉降级流），自动切换，无需手动操作 |",
+        "| 🔍 | **四层智能漏斗** | 白名单域名 → 主题关键字 → 正文检测 → 二维码扫描，精准过滤非发票邮件 |",
+        "| 📄 | **链接发票自动恢复** | Playwright 自动打开百望云、税务平台链接，下载正式 PDF 存档 |",
+        "| 🧾 | **发票与凭证自动撮合** | 住宿发票/水单、打车发票/行程单自动配对并相邻命名归档 |",
+        "| 🪟 | **安静的后台处理** | URL 恢复 worker、Node 与 Chromium 全链路隐藏运行，不再批量弹出控制台窗口 |",
+        "| 🗂️ | **自然语言分类规则** | 支持\"滴滴大于100元放进大额\"这样的自定义规则 |"
+      ],
+      "usageItems": [
+        "双击 `InvoiceFlowAI.exe`；首次启动会自动弹出设置界面。",
+        "保存后点击「开始扫描」。",
+        "在软件的时间范围设置中，将起始日期**往前调整至 180 天以上**",
+        "部分邮箱默认只拉取近30天邮件，需要在邮箱 IMAP 设置里选择「收取全部邮件」"
+      ],
+      "usageActions": [
+        "双击 `InvoiceFlowAI.exe`；首次启动会自动弹出设置界面。",
+        "保存后点击「开始扫描」。",
+        "在软件的时间范围设置中，将起始日期**往前调整至 180 天以上**",
+        "部分邮箱默认只拉取近30天邮件，需要在邮箱 IMAP 设置里选择「收取全部邮件」"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "面向每月需要手工收集多张电子发票的个人、自由职业者和小团队。"
+      ],
+      "outputs": [
+        "| 📊 | **一键 Excel 报表** | 自动生成 `summary_report.xlsx`，发票清单、金额汇总全覆盖 |",
+        "发票整理/\n├── 火车票/\n│   └── 20260315-北京-上海-火车票.pdf\n├── 机票/\n│   └── 20260301_机票_1280.00_中国国际航空.pdf"
+      ],
+      "media": [
+        {
+          "excerpt": "![双引擎AI识别架构](docs/track-ab.svg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![四层智能筛选漏斗](docs/funnel.svg)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "**Local Fallback**：本地正则规则，断网可用，零 API 消耗",
+        "插件支持 Windows x64 和 macOS Apple Silicon",
+        "授权码由 DSH 凭据服务保存，不写入插件设置或扫描日志。",
+        "此版本未签名、未公证；若 macOS 阻止打开，请在“系统设置 → 隐私与安全性”中确认仍要打开。",
+        "正常现象。当 AI 识别置信度不足时，系统自动放入 `Manual_Check` 队列，需人工确认。通常由图片模糊、非标准票据或加密 PDF 导致。",
+        "所有邮件、发票文件均在**本地处理**，不上传任何服务器",
+        "邮箱凭据在 Windows 通过 **DPAPI** 加密存储，在 macOS 通过 **Keychain** 存储",
+        "GLM API 仅接收**发票图片**（Base64）用于文字识别，不发送邮件原文内容",
+        "本软件通过 IMAP **只读**访问邮箱，不发送、删除或修改任何邮件。"
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "oil-oil/dsh-oil-creator",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "| 选题与脚本 | 新建规范目录，读写 `topic.md` / `script.md`，遵守长期脚本规则 | 选题方向和最终表达 |",
+        "| 录制与剪辑 | 绑定并打开 Screen Studio 工程，等待导出文件稳定落盘 | 录制、时间线剪辑和导出 |",
+        "| 字幕与封面 | 启动字幕工作流，打开预览，烧录字幕，生成三种画幅封面 | 专有名词、标题和错别字 |",
+        "| 数据回收 | 通过 Ego Browser 同步已发布作品的播放、赞、评和链接 | 登录状态和异常匹配结果 |",
+        "**本地片库**：按 `日期_可读标题` 扫描目录，展示阶段、成片、字幕、封面、文章和发布状态。",
+        "**对话上下文**：通过 `@当前详情`、内容搜索或 `/current content` 把目标文件夹交给 AI。",
+        "**长期脚本规则**：保存语气、结构、禁忌和目标观众，之后写或修改 `script.md` 时复用。",
+        "**长任务追踪**：字幕、封面和烧录启动后立即返回，由工作台继续观察文件产物和任务状态。",
+        "| 发布 | 把本地材料交给 `video-publisher` 准备多平台草稿 | 各平台最终“发表”按钮 |"
+      ],
+      "usageItems": [
+        "今天做一期 DeepSeek Harness 安装上手。新建内容目录，把选题写进笔记，再给我一个脚本初稿。",
+        "随后继续说“绑定刚才的 Screen Studio 工程”“等待成片后生成字幕和封面”或“这条还缺什么”。"
+      ],
+      "usageActions": [
+        "今天做一期 DeepSeek Harness 安装上手。新建内容目录，把选题写进笔记，再给我一个脚本初稿。",
+        "随后继续说“绑定刚才的 Screen Studio 工程”“等待成片后生成字幕和封面”或“这条还缺什么”。",
+        "/current content"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "├── topic.md\n    ├── script.md\n    ├── DeepSeek Harness 上手.mp4\n    ├── DeepSeek Harness 上手.srt\n    ├── DeepSeek Harness 上手_subtitled.mp4\n    ├── DeepSeek Harness 上手_3x4.png"
+      ],
+      "media": [],
+      "reliability": [
+        "当前兼容 Node.js 22.19+、DeepSeek Harness `0.1.0-rc.6` / `0.1.0-rc.7`。",
+        "插件只把工程绑定、手写发布标记、同步到的播放数据和生成任务等工作台状态存进 `~/.dsh-oil-creator/overlay.json`，不会把正文复制一份藏起来。",
+        "工作台不会假装替人完成录制、剪辑或最终发布。它负责把每一步需要的文件、状态和下一步动作放在同一个上下文里。",
+        "`minimal` preset 不包含 Skill 和文件工具，不适合首次配置或自动整理目录。",
+        "核心片库和脚本管理不依赖下表中的外部工具。缺少某项时，只关闭对应环节。",
+        "API Key 使用 Harness 官方凭据服务保存。页面只显示“已配置 / 未配置”，不会回显明文。",
+        "插件不会自动上传内容；上传只在用户明确调用发布 Skill 后发生，并停在最终发表前。",
+        "目录创建、配置保存和批量重命名都遵循“先预览、再确认、后执行”。",
+        "`pnpm check` 会依次运行 TypeScript 检查、Vitest 测试和 Host / Client 构建。",
+        "它会先拒绝脏工作树、未跟踪的关键文件或缺失的 `origin`，再验证测试、构建和 GitHub 安装包内容；不会发布到 npm。"
+      ],
+      "concerns": [
+        "Optional integrations are dependency-gated, and the README points to another document for full operational examples."
+      ]
+    },
+    {
+      "repo": "toolclub/dsh-agent-team-gui",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Give each member its own model, role, fallback route, token limit, and tool policy.",
+        "A team is a reusable product object, not a one-off dispatch form. Create it once in **Settings →\nTeams**, then use it across projects and conversations.",
+        "| Dynamic workflow planning by default | The active conversation's model assigns focused work and dependencies from the current request |",
+        "| Team / Solo / Inherited modes | Choose a durable conversation override, a project default, or a one-message exception without ambiguous switches |",
+        "| Bounded DAG, retries, quality gate, background work | Long work is observable, cancellable, finite, and restart-safe |",
+        "| Official provider Token usage | See input, cache-read, cache-write, and output Tokens with full/partial/unavailable coverage—never invented prices |",
+        "| Versions, recipes, and definition backup | Reproduce a team, share it without credentials, preview impact, and remap model routes before applying |",
+        "**Adaptive** lets Smart planning select the smallest useful non-empty subset.",
+        "An optional quality gate names one reviewer, one repair owner, explicit criteria, and `0..2` repair\nrounds.",
+        "Import supports **Copy** or\n  **Merge**, conflict preview, and separate primary/fallback route remapping.",
+        "Definition backup exports agents and teams.",
+        "`dispatch_to_squad` remains available for explicit/manual model-driven use. It accepts a team ID or\nunique case-insensitive name, a task, optional assignments/order, and execution/context overrides"
+      ],
+      "usageItems": [
+        "In **Settings → Members**, create reusable members. Pick a configured provider/model, write a\n   narrow role prompt, optionally add a fallback route, and grant only the tools that role needs.",
+        "In **Settings → Teams**, create a team and select those members. Leave **Fixed order** off for\n   dynamic planning, or enable it for a repeatable serial pipeline.",
+        "Choose **Always**, **Smart**, or **Manual** activation; all members or an adaptive subset;\n   foreground or background response; and optional resilience, budget, or review controls.",
+        "Beside the normal composer choose **Team**, **Solo**, or **Inherited**. You can also queue a\n   different team or Solo for only the next eligible message, or set a project default.",
+        "Send the task normally. Open **Team runs** to inspect the plan, stages, members, review/repair\n   rounds, outputs, errors, timings, retries, and official Token coverage."
+      ],
+      "usageActions": [
+        "In **Settings → Members**, create reusable members. Pick a configured provider/model, write a\n   narrow role prompt, optionally add a fallback route, and grant only the tools that role needs.",
+        "In **Settings → Teams**, create a team and select those members. Leave **Fixed order** off for\n   dynamic planning, or enable it for a repeatable serial pipeline.",
+        "Choose **Always**, **Smart**, or **Manual** activation; all members or an adaptive subset;\n   foreground or background response; and optional resilience, budget, or review controls.",
+        "Beside the normal composer choose **Team**, **Solo**, or **Inherited**. You can also queue a\n   different team or Solo for only the next eligible message, or set a project default.",
+        "Send the task normally. Open **Team runs** to inspect the plan, stages, members, review/repair\n   rounds, outputs, errors, timings, retries, and official Token coverage."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Combine a planner, implementer, reviewer, or specialist without forcing one route on everyone"
+      ],
+      "outputs": [
+        "The Run Center exposes foreground/background\nstate, live phase, elapsed time, child IDs, complete outputs, bounded handoffs, stop, linked whole\nor member retry, export, filters, and retention-safe clear.",
+        "Coverage is explicitly\n**full**, **partial**, or **unavailable** at run and retry-attempt level. Before a provider reports a\nsample, the UI says **Metering…** instead of showing a false zero.",
+        "Background runs return a\nshort acknowledgement and stay visible in the plugin Run Center; when the official DSH Jobs service\nis present, the same run is also registered there with a shared cancel hook.",
+        "Each saved team version includes immutable snapshots of all referenced member definitions.",
+        "Definition exports include member system prompts and model route names. Run exports additionally\ninclude the user task and member outputs."
+      ],
+      "media": [
+        {
+          "excerpt": "![Manage a persistent multi-model team in DeepSeek Harness Settings](assets/v0.5-teams-settings.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Choose Team, Solo, or Inherited beside the normal composer](assets/v0.5-composer-mode.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Inspect the DAG, member state, review rounds, and Token buckets](assets/v0.5-run-center.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Compare durable usage and completion insights without fabricated prices](assets/v0.5-insights.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Preview a recipe, conflicts, affected teams, and primary/fallback route remapping](assets/v0.5-recipes.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![The primary path remains usable on a narrow viewport](assets/v0.5-narrow.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "A\nbad, cyclic, or unavailable plan falls back to deterministic role-scoped assignments.",
+        "These states remain interactive after page refresh, cold Host startup, and live reconnect. An empty\nor temporarily unavailable catalog never silently deletes a saved selection.",
+        "Delegated sessions cannot dispatch another team. Detected DSH subagent tools—including renamed\n  registrations—are denied inside team children.",
+        "Member timeout, concurrency, retry-once, soft team Token budget, and quality rounds are finite.",
+        "A retry creates a linked immutable run and replays the original normalized assignments, order,\n  and DAG; it does not silently ask the model to invent a different workflow.",
+        "Empty output, rejected runs, cleanup\nfailures, timeouts, and other non-completed reasons such as `max-tokens` remain failures.",
+        "Without that optional\nservice, the plugin falls back to process-local background execution; a Host restart then reconciles\nunfinished durable state as **Interrupted** rather than pretending it completed.",
+        "Multi-table writes are serialized and use compensating rollback on validation, cancellation, or\n  storage failure. Readers see either the previous or committed definition graph, not a half-import.",
+        "Remote recipe URLs are disabled in v0.5. Import a reviewed local JSON file; this intentionally\n  avoids exposing an unprotected server-side fetch/SSRF surface.",
+        "Declared compatibility is DSH `>=0.1.0-rc.5 <0.2.0`; CI currently verifies rc.6. DSH and this\n  plugin are both pre-stable, so pin versions."
+      ],
+      "concerns": []
+    },
+    {
+      "repo": "GraySilver/dsh-evolve-modes",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "它在输入区提供一个紧凑的工作流控制项，让你组合 Agent 的工作状态、思考策略、质量门禁和自进化行为。",
+        "安装后，当前任务使用的组合始终显示在输入区旁",
+        "全局“自进化模式”设置则负责管理跨会话的学习提议和已批准规则。",
+        "自进化用于从多个已完成的 Agent 协作中识别稳定的用户身份、偏好和工作要求。",
+        "查看每条提议的类别、推断类型和原始用户证据；",
+        "应用或忽略提议；",
+        "手工新增、修改和删除全局规则；",
+        "查看学习运行记录和失败原因；",
+        "从每次变更前自动创建的备份中恢复。",
+        "在父 Agent 回复完成后启动独立审查 Agent，检查未满足要求、缺少依据的结论、遗漏、回归、反例和安全风险。",
+        "对照任务、候选答案以及存在时的已批准计划进行验收。",
+        "**计划模式**：委托给官方 `@deepseek-ai/dsh-plan-mode` service，复用 DSH 的计划持久化和 `exit_plan_mode` 审批流程，不重复实现另一套计划系统。"
+      ],
+      "usageItems": [
+        "点开控制项即可分别调整四个维度：",
+        "可在 Web 输入区或命令 API 使用：\n\n```text\n/evolve-mode"
+      ],
+      "usageActions": [
+        "/evolve-mode working execute",
+        "/evolve-mode working plan",
+        "/evolve-mode reasoning standard",
+        "/evolve-mode reasoning first-principles",
+        "/evolve-mode quality off",
+        "/evolve-mode quality general-review",
+        "/evolve-mode quality acceptance-review",
+        "/evolve-mode evolution off",
+        "/evolve-mode evolution propose",
+        "/evolve-mode review <turn>"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## 命令\n\n可在 Web 输入区或命令 API 使用：\n\n```text\n/evolve-mode"
+      ],
+      "usecases": [
+        "| 快速完成日常工作 | `正常 · 标准 · 关` | 保持执行节奏，不增加额外流程。 |",
+        "| 做高影响决策 | `计划 · 第一性原理 · 关` | 先研究并暴露假设，再进入 DSH 的计划审批流程。 |",
+        "| 有把握地交付实现 | `正常 · 标准 · 验收审查` | 完成实现后，由独立审查 Agent 对照任务目标检查结果。 |",
+        "| 挑战高风险答案 | `正常 · 第一性原理 · 对抗性审查` | 显式展开推理，再寻找遗漏、反例、回归和缺少依据的结论。 |",
+        "| 沉淀稳定的个人偏好 | `正常 · 标准 · 关 · 进化 开` | 按默认每 3 次回复一批识别长期规则，只生成提议，不自动启用。 |"
+      ],
+      "outputs": [
+        "正常 · 标准 · 关 · 进化 开",
+        "完成 3 次父 Agent 回复\n        ↓\n隔离的学习请求\n        ↓\n待审阅提议\n        ├─ 应用 → 写入全局 learned instructions\n        └─ 忽略 → 不改变后续行为",
+        "Met\nGap\nUnverified\nEvidence\nConcrete follow-up",
+        "审查报告会显示在对应的助手回复下方。",
+        "已批准规则会写入带有 `<dsh-evolve-modes-learned-instructions>` 标记的 system prompt section，并在 Trajectory 中投影相同内容。"
+      ],
+      "media": [
+        {
+          "excerpt": "![自进化模式全局设置](https://raw.githubusercontent.com/GraySilver/dsh-evolve-modes/main/assets/evolve-modes-review.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "当前版本 `0.3.2` 仅支持 DeepSeek Harness `0.1.1-rc.2`。仍使用 Harness `0.1.0-rc.6` 时，请安装插件 `0.3.1`。",
+        "它默认是 **Propose（提议）**，只提出候选规则，不会自动改变后续行为。",
+        "每个源会话最多取最近 **100 条学习消息**。",
+        "提议的证据必须逐字来自用户消息。助手的推断、一次性任务细节、实现结果、沉默或“没有再次提到”都不能单独成为规则证据。",
+        "学习请求：\n\n- 不继承父会话历史；\n- 不继承父 Agent 的工作型上下文；\n- 不创建学习子 Agent；\n- 不携带工具；",
+        "学习失败会记录在设置页，未完成的批次会保留，方便之后重试；不会阻断父 Agent 的正常回复。",
+        "插件只使用自己的持久化存储，不会写入 `AGENTS.md`、`CLAUDE.md` 或任何项目文件。",
+        "质量审查每个完成的父回复增加一次模型调用和相应延迟，但不会自动执行项目的 test、lint 或 build 命令。",
+        "这是一层工作流策略，不是操作系统级 sandbox。",
+        "插件状态保存在自己的 storage domain，可跨服务重启和会话重新加载继续使用。"
+      ],
+      "concerns": [
+        "The feature table says it automatically optimizes AGENTS.md while also saying it does not modify AGENTS.md; that ambiguous claim was omitted."
+      ]
+    },
+    {
+      "repo": "hyqibot/A-share-Ai",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "🎯 多模型集成：支持幻银超i、DeepSeek、通义千问、豆包等多种大语言模型",
+        "⏰ 秒级别实盘交易支持 - 接入实盘秒级精度交易",
+        "🚀 服务部署与并行执行 - 部署生产服务 + 并行模型执行",
+        "🎯 新增了异步执行功能，提高系统运行速度",
+        "🤖 **4大模型并行**：幻银超i、DeepSeek、Qwen通义千问、豆包同时运行，比较收益",
+        "📈 **全市场选股**：AI自主从全市场选择有潜力的股票，自定义股票池（可选）",
+        "💹 **实时行情**：集成实时A股数据，供ai使用并用于实际交易",
+        "💹 **历史行情+财务数据**：集成A股历史行情和财务数据，供ai分析和训练",
+        "🎯 **智能交易**：基于AI分析生成买卖信号并全自动执行交易",
+        "🌈 **多种策略**：包括趋势跟踪、均线策略、技术指标策略、量化套利策略等，完全由ai自动选择并不断进化",
+        "🔒 **风险控制**：内置仓位控制和止损机制",
+        "🎯 特别功能：交易中可添加实时人工干预和Ai进行互动（可选），接入自产龙虾iClaw，接管互动过程并随时指令四大ai同时干活。"
+      ],
+      "usageItems": [
+        "发送 `@模型名 你的问题`，机器人会调用对应大模型回复（只聊天不下单）。",
+        "发送 `@iClaw 你的自然语言交易意图`，机器人会调用你文本中提到的模型把意图翻译为 JSON 指令，经校验后复用 `/buy`、`/sell` 链路执行。",
+        "**买入/卖出**：`/buy [模型名] 股票代码 数量 [价格]`、`/sell [模型名] 股票代码 数量 [价格]`，模型名可省略。示例：`/buy 000001 1000`、`/sell 幻银超i 000001 500 27.0`",
+        "**批量买入**：`/batch_buy [模型名] 股票代码:数量,股票代码:数量,...`，模型名可省略（省略则用默认模型）。示例：`/batch_buy 000001:1000,000002:500` 或 `/batch_buy 幻银超i 000001:1000,000002:500`",
+        "**条件交易**：`/condition [模型名] 股票代码 条件 买入/卖出 [数量]`，模型名可省略。条件支持 `price>数字`、`price<数字`、`price_between 低 高`，示例：`/condition 000001 price>11 buy 1000`",
+        "**撤销**：`/cancel <条件单ID>`（如 `/cancel COND-1734567890-000001`）。",
+        "在钉钉中发送 `/help` 或 `/h` 可查看完整指令列表与示例。",
+        "发送 `/runapp <应用别名或内置名称>`，由主程序在本机尝试启动白名单中的桌面应用。"
+      ],
+      "usageActions": [
+        "发送 `@模型名 你的问题`",
+        "发送 `@iClaw 你的自然语言交易意图`",
+        "`/buy [模型名] 股票代码 数量 [价格]`",
+        "`/sell [模型名] 股票代码 数量 [价格]`",
+        "`/batch_buy [模型名] 股票代码:数量,股票代码:数量,...`",
+        "`/condition [模型名] 股票代码 条件 买入/卖出 [数量]`",
+        "`/cancel <条件单ID>`",
+        "在钉钉中发送 `/help` 或 `/h` 可查看完整指令列表与示例。",
+        "发送 `/runapp <应用别名或内置名称>`"
+      ],
+      "ioPairs": [
+        "发送 `@模型名 你的问题`，机器人会调用对应大模型回复（只聊天不下单）。",
+        "发送 `@iClaw 你的自然语言交易意图`，机器人会调用你文本中提到的模型把意图翻译为 JSON 指令，经校验后复用 `/buy`、`/sell` 链路执行。",
+        "创建后机器人会返回条件单ID，**撤销**：`/cancel <条件单ID>`（如 `/cancel COND-1734567890-000001`）。"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "🎨 ai交易逻辑展示 - 详细的交易日志可视化（完整交易过程展示）",
+        "📊 **实时监控**：UI界面实时显示收益曲线和交易日志",
+        "程序启动后会直接将每轮交易结果推送到该账号",
+        "创建后机器人会返回条件单ID"
+      ],
+      "media": [],
+      "reliability": [
+        "若长时间收不到私聊指令但交易通知仍正常，日志中会出现 `Stream 已断开，10s 后重连...`；程序会自动重连，无需重启。",
+        "若当下价格未满足条件，系统会在后台按交易轮次间隔持续监控，触发即按市价下单（默认有效期6小时）。",
+        "**条件单监控在独立任务中运行，不占用主程序每轮交易循环**。"
+      ],
+      "concerns": [
+        "The README mixes present features, a commercial closed-source EXE, duplicated translation, and aspirational vision; ambiguous or future-looking claims were omitted."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2695 @@
+{
+  "generatedAt": "2026-09-02T07:36:53.687Z",
+  "source": {
+    "cohortPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/blind/round-03.ndjson",
+    "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-evaluation.json",
+    "pairsPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-03-oracle-review-pairs.json"
+  },
+  "invariant": "No repository-specific exception; propose only cross-project deterministic rules with negative regressions.",
+  "name": "reliability-capability",
+  "question": "Diagnose reliabilityItems under-extraction and capabilityItems saturation/overcounting.",
+  "families": [
+    "reliabilityItems",
+    "capabilityItems"
+  ],
+  "under": [
+    {
+      "repo": "Sanqi-normal/dsh-webui-market-plugin",
+      "practicalScore": 29,
+      "oracleScore": 53,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 1.5,
+          "oracle": 12,
+          "gap": 10.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "- **来源白名单**：安装只接受精选目录（awesome-dsh-plugin.com curated registry）收录的 `github:` 源，目录外的一律拒绝"
+          },
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "- **同源校验**：`install` / `uninstall` / `update` / `kill` 写操作只接受同源 POST（Origin 头与 Host 一致），跨源请求一律 403"
+          },
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "验证失败会给出**真实的启动错误**（如重复 api-gateway / webserver 等）并拒绝安装，此时真实 profile 从未被写入、试装目录自动清理，无需任何回退操作。"
+          },
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "- **安装前自动快照**：写入任一 profile 前会把 `package.json` 备份为同目录 `.mkts-snapshot-<时间戳>.json`"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "每个任务默认超过 120 秒自动超时（可用环境变量 `DSH_MARKET_OP_TIMEOUT_MS` 调大，如 `300000`）"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "遇到 pnpm 的临时网络错误（`GET ... error` / `ETIMEDOUT` / `ECONNRESET` 等）会**自动重试一次**，持续失败时给出代理/镜像排查提示；"
+          },
+          {
+            "heading": "## 安装",
+            "excerpt": "pnpm 11 起，依赖树中\"构建脚本未在 `allowBuilds` 中显式放行或拒绝\"的包会直接导致 `ERR_PNPM_IGNORED_BUILDS`。"
+          },
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "- **跨 profile 同步只增不删**：`syncPlan` 只计算「web 已装、目标缺失」的插件，且要求目标 profile 已初始化（避免误建空 profile）；同步仅补装、绝不删除或降级目标 profile 里已有的任何内容。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-webui-market-plugin[![awesome · DSH plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)",
+            "excerpt": "在 dsh web GUI 内部的社区插件市场：浏览 [awesome-dsh-plugin.com](https://awesome-dsh-plugin.com/) 的插件目录，直接在 **设置 → 插件 → 插件市场** 里安装 / 卸载插件到 profile。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "目录按分类分组，支持搜索与\"已安装\"过滤；每个卡片显示 GitHub Star 数（无数据不显示），可一键按 **最热（Star 降序，无 Star 的排最后）/ 最新（收录日期）** 排序"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "**安装 / 更新 / 卸载** 组成 FIFO 任务队列：多个插件可以连续排队提交，任务面板固定在右下角、不随页面滚动隐藏"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "**跨 Profile 安装 / 一键同步（desktop 等）**：官网目录只发布 `--profile web` 命令，而桌面端（desktop shell）启动的是自己独立的 profile（如 `desktop`），市场装进 web 的插件桌面应用不会自动加载。"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "- **失败后询问 DSH**：安装 / 更新 / 卸载失败（含超时、已终止、已拒绝）后，失败弹窗和任务队列的失败行会出现 **询问 DSH** 按钮"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "- **停用 / 启用**：停用保留依赖与磁盘文件，只把插件移出激活的 bundle 层（重启后仍保持停用）；启用按原顺序恢复，免删装；"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "- **本机插件**：列出所有由依赖管理的插件（含在市场之外安装的、以及未进 bundle 层的 client-only/普通依赖），标注目录内/目录外、已停用、来源类型"
+          },
+          {
+            "heading": "## 安全与限制",
+            "excerpt": "- **热挂载（免重启）**：安装成功后，若新插件的 `cordis.patch.yml` 是纯 `id`/`name` 插入行，会尝试挂入运行中的组合并**自动刷新页面生效**（无需手动操作）；"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "morluto/jacobian",
+      "practicalScore": 22,
+      "oracleScore": 35,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 3.5,
+          "gap": 2.5
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 9.5,
+          "gap": 9
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Quickstart",
+            "excerpt": "tested binary-install contract is CPython 3.12 or 3.13 on glibc Linux x86-64;\nthe release gate installs the built wheel and starts Jacobian on both Python"
+          },
+          {
+            "heading": "## Quickstart",
+            "excerpt": "Other systems may have compatible upstream wheels, but are not part\nof the tested release contract yet. In particular, Alpine/musl cannot install\nthe complete mandatory stack from PyPI."
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "is pre-stable. Its published package and operation contracts\ndescribe the supported surface; experimental operation contracts may change\nbetween releases."
+          },
+          {
+            "heading": "## Quickstart",
+            "excerpt": "tested binary-install contract is CPython 3.12 or 3.13 on glibc Linux x86-64;\nthe release gate installs the built wheel and starts Jacobian on both Python\nversions."
+          },
+          {
+            "heading": "## Status",
+            "excerpt": "Jacobian 0.14.0 <!-- x-release-please-version --> is pre-stable. Its published package and operation contracts\ndescribe the supported surface; experimental operation contracts may change\nbetween releases."
+          },
+          {
+            "heading": "## Quickstart",
+            "excerpt": "Setup\ndoes not install Node.js, Python, `uv`, or an agent."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "Jacobian is an MCP server that gives AI agents a searchable vocabulary of typed\nmathematical operations."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "`math.find` discovers an operation, and `math.run`\nexecutes exactly one bounded mathematical contract and returns its typed\nresult."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "The same mathematical library is also available through a CLI and\nnative Python API."
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "Results are exact where\nclaimed and make approximation, incompleteness, or uncertainty explicit."
+          },
+          {
+            "heading": "## Available mathematics",
+            "excerpt": "- polynomial maps and polynomial algebra;\n- exact linear algebra;\n- graphs, paths, colorings, and isomorphism;\n- bounded SAT and SMT solving;\n- finite algebra, probability, geometry, and topology."
+          },
+          {
+            "heading": "## Compute one bounded result",
+            "excerpt": "`matrix.determinant.compute` accepts one exact rational matrix and returns its\ndeterminant directly."
+          },
+          {
+            "heading": "## Compute one bounded result",
+            "excerpt": "Callers compose results by passing their typed values to a\nsubsequent operation."
+          },
+          {
+            "heading": "## Quickstart",
+            "excerpt": "The npm package deterministically maps its exact package version to the\ncorresponding `uvx` invocation."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Anionex/dsh-turn-rewind",
+      "practicalScore": 32,
+      "oracleScore": 50,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 1,
+          "oracle": 9.5,
+          "gap": 8.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "It never commits, stashes, resets, switches branches, edits the Git index, or decides automatically that a change should be reverted."
+          },
+          {
+            "heading": "## Safety contract",
+            "excerpt": "- **Explicit only:** nothing is restored automatically — every restore starts from the user pressing the final button in the Web dialog, or from an explicit call through the service API."
+          },
+          {
+            "heading": "## Safety contract",
+            "excerpt": "- **No silent omission:** unsupported submodules, sparse checkouts, oversized files, aggregate limits, and unsupported file types fail point creation."
+          },
+          {
+            "heading": "## Safety contract",
+            "excerpt": "- **No path escape:** every durable path is canonical and workspace-relative; restore refuses symlink parents and non-empty directory replacement."
+          },
+          {
+            "heading": "## Safety contract",
+            "excerpt": "- **No stale overwrite:** selected paths and the reviewed HEAD/branch/operation fence are checked again at apply time. Any relevant post-review change invalidates the plan."
+          },
+          {
+            "heading": "## User flow",
+            "excerpt": "Any running Agent using the same worktree, including the source Session, blocks restoration; idle Sessions do not block."
+          },
+          {
+            "heading": "## User flow",
+            "excerpt": "If child creation fails after “restore and restart,” Change Ledger automatically restores the pre-operation files from the backup."
+          },
+          {
+            "heading": "## Scope",
+            "excerpt": "If an ignored or otherwise unmanaged file occupies a path that restoration would replace, the restore fails rather than deleting it."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# DSH Turn Rewind",
+            "excerpt": "Message-anchored project-file recovery for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), with an option to restart from the restored request."
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- content-addressed restore-point manifests;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- Git worktree, HEAD, branch, and in-progress-operation fences;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- stale-plan detection between review and mutation;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- automatic pre-restore rescue points;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- post-restore hash verification;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- rollback after a failed restore;"
+          },
+          {
+            "heading": "## Why it has a Change Ledger engine",
+            "excerpt": "- startup reconciliation of interrupted restore journals;"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "bruc3van/dsh-desktop",
+      "practicalScore": 44,
+      "oracleScore": 59,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 2,
+          "oracle": 10.5,
+          "gap": 8.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- **边界小**：客户端只使用公开的 `dsh web` CLI 和 `/api` 协议，不修改官方仓库，也不依赖 Harness 私有内部包。"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- **窗口加固**：Electron 开启上下文隔离与沙箱、关闭 Node 集成，将页面导航限制在当前 Web UI 源站，外部链接交给系统浏览器打开。"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- **更新链路防劫持**：打包环境下，更新源地址与 GitHub API 地址、数据目录（`DSH_HOME`、`DSH_DESKTOP_HOME`）及连接探测开关均禁止被环境变量覆盖"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "官方 dsh 目前只面向本机使用——默认监听 `127.0.0.1`，暴露到网络的 `0.0.0.0` 绑定会被明确拒绝（会带来远程代码执行风险）"
+          },
+          {
+            "heading": "## 桌面端行为",
+            "excerpt": "- 本地 Web UI 意外退出时，客户端只会进行有限次数的重启，不会无限循环。"
+          },
+          {
+            "heading": "## 桌面端行为",
+            "excerpt": "遗留进程既连不上也结束不掉时，客户端会拒绝启动并说明原因，而不是在它旁边再写一份——两个 harness 同时写同一份会话日志会造成永久损坏。"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- **按来源分层授权**：客户端管理的本机 Web UI 可使用通知、剪贴板读写、全屏、麦克风/摄像头以及用户主动触发的文件选择"
+          },
+          {
+            "heading": "### 下载安装",
+            "excerpt": "当前安装包尚未经过正式的开发者签名认证，首次打开时系统可能会弹出提示"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# DSH Desktop",
+            "excerpt": "DSH Desktop 是一个独立的 DeepSeek Harness（`dsh`）Electron 客户端。窗口里呈现的是官方 Web UI 本体"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "- **长任务常驻桌面。** 关闭窗口不等于中断任务：应用驻留在托盘 / 菜单栏，Harness 服务继续在后台运行，随点随开"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "- **智能模式：复用你正在跑的实例。** 依次探测：`127.0.0.1:3080` 上的官方实例（含 `~/.dsh/profiles/web/cordis.patch.yml` 里配置的其他端口）→ PATH 上的 `dsh` → npx 缓存 → 内置运行时。"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "- **固定地址：连接你自行维护的 Web UI 地址。** 填地址直连，客户端不启动任何运行时；运行时版本、插件与环境完全由你掌控。"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "| 装插件之前想知道它安不安全 | 内置安全市场：目录每日自动采集 + 人工精选，安装前先由 Agent 审查代码 |"
+          },
+          {
+            "heading": "## 安全与隐私",
+            "excerpt": "- **插件先审查、再安装**：内置安全市场默认关闭、开启后才联网；「安全安装」不执行任何安装命令，而是把审查提示词交给 Agent，确认干净后再由你决定是否用官方命令安装"
+          },
+          {
+            "heading": "## 内置安全市场",
+            "excerpt": "「技能」页列出当前会话实际能解析到的技能，并标出每个技能的来源与调用策略。"
+          },
+          {
+            "heading": "## 为什么值得使用",
+            "excerpt": "- **运行时状态透明。** 五种状态精确区分「谁启动了运行时」（复用你的 / 内置 / npx 缓存 / 本机安装 / 固定地址），并同时显示桌面端与内置 dsh 版本号，排障不用猜。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "practicalScore": 57,
+      "oracleScore": 58,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 8,
+          "gap": 8
+        },
+        "capabilityItems": {
+          "machine": 8.5,
+          "oracle": 8,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Supported Agents",
+            "excerpt": "OpenClaw integration requires OpenClaw 2026.5.12 or later."
+          },
+          {
+            "heading": "## Supported Agents",
+            "excerpt": "| Kiro CLI      | Hook / session polling    | Yes          | Yes        | No          | Yes                       |"
+          },
+          {
+            "heading": "### Documented Windows Agent Support",
+            "excerpt": "The following agents are currently explicitly documented as supported on Windows:"
+          },
+          {
+            "heading": "### Documented Windows Agent Support",
+            "excerpt": "| Qoder IDE | Hook / local data source | Yes | Yes | Yes | Yes | Qoder 1.10.0 or later, User edition |"
+          },
+          {
+            "heading": "### Documented Windows Agent Support",
+            "excerpt": "| WorkBuddy | Hook wakeup + local transcript | Yes | Yes | Yes | Yes | WorkBuddy Desktop 5.3.5.0; Windows 11 installed-product E2E |"
+          },
+          {
+            "heading": "### Documented Windows Agent Support",
+            "excerpt": "Agents omitted from this Windows table do not currently have an explicit Windows support statement"
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "Disabled by default, and fully fail-open (never affects normal collection/reporting)."
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "This capability is fail-open and currently does not cover ACP-only downstream trace propagation, subagents, PowerShell, MCP tools, or non-Bash tools."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# LoongSuite Pilot",
+            "excerpt": "It discovers supported agents on a developer machine, installs the required hooks or plugins, normalizes activity into a shared GenAI event schema, and exports logs or traces to your chosen backends."
+          },
+          {
+            "heading": "## Core Capabilities",
+            "excerpt": "| Privacy controls         | Supports per-agent content capture policy and secret masking before output.        |"
+          },
+          {
+            "heading": "## Core Capabilities",
+            "excerpt": "| Local operations         | Provides service status, restart, rollback, and a built-in local dashboard. |"
+          },
+          {
+            "heading": "### Upstream Trace Linking (optional)",
+            "excerpt": "Link collected agent spans to an **upstream** trace so each turn's span tree reparents under the upstream span."
+          },
+          {
+            "heading": "### Documented Windows Agent Support",
+            "excerpt": "Agent definitions live in `agents.d/`. You can add new agents without changing the deployment framework"
+          },
+          {
+            "heading": "## Operate Pilot",
+            "excerpt": "On macOS, Pilot automatically runs a menu bar app after installation — no extra command needed."
+          },
+          {
+            "heading": "## Supported Agents",
+            "excerpt": "The integration captures native LLM, reasoning, tool, token,\nand time-to-first-token events."
+          },
+          {
+            "heading": "## Core Capabilities",
+            "excerpt": "Detects supported agents from local paths and commands."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "N0zoM1z0/th08",
+      "practicalScore": 27,
+      "oracleScore": 43,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 2,
+          "oracle": 10,
+          "gap": 8
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 2.5,
+          "gap": 2
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Repository status",
+            "excerpt": "Running on a modern platform is not an exactness claim, and source presence is\nnot counted as a byte-exact result."
+          },
+          {
+            "heading": "## Platform guides",
+            "excerpt": "They do not bundle the original executable or game archives; players must\nprovide data from a legally obtained copy of TH08."
+          },
+          {
+            "heading": "### Web",
+            "excerpt": "Neither file is uploaded, bundled,\ncached by the site, or placed in persistent browser storage."
+          },
+          {
+            "heading": "### Web",
+            "excerpt": "Chrome is\nrecommended for the best observed frame pacing; Firefox is supported but is\nusually slower."
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "The native i386 ELF has been exercised under WSLg and in a Kali Linux x86-64\nvirtual machine."
+          },
+          {
+            "heading": "#### Known Linux issue",
+            "excerpt": "During the Stage 4-to-5 transition, a dynamic text texture can tile across the\nouter frame and HUD, most visibly as repeated `Yakumo Yukari` text."
+          },
+          {
+            "heading": "### Linux",
+            "excerpt": "On software-rendered systems, a fresh\nconfiguration's fullscreen FPS/vsync calibration can be slow; reusing an\nexisting `th08.cfg` is optional."
+          },
+          {
+            "heading": "### Windows",
+            "excerpt": "native startup is not yet reliable and the build still depends\non a non-redistributable DirectX SDK debug DLL. There is no supported Windows\nrelease asset yet."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Repository status",
+            "excerpt": "| Web | **Playable** | Public WebAssembly/WebGL 2 build |"
+          },
+          {
+            "heading": "## Repository status",
+            "excerpt": "| Linux | **Playable** | Native i386 ELF and portable CI package |"
+          },
+          {
+            "heading": "### Web",
+            "excerpt": "TH08 Web compiles the reconstructed C++ game code with Emscripten and runs it\nas WebAssembly on a browser worker."
+          },
+          {
+            "heading": "## Repository status",
+            "excerpt": "This repository reconstructs the source code of the original Japanese\n`東方永夜抄 ～ Imperishable Night` version 1.00d executable."
+          },
+          {
+            "heading": "## Platform guides",
+            "excerpt": "Playable ports compile the reconstructed authored game code for modern hosts."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Lyn-77/ProMentor",
+      "practicalScore": 24,
+      "oracleScore": 34,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 2,
+          "gap": 1
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 8.5,
+          "gap": 8
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### DSH Web GUI 内置 Dashboard（非DeepSeek Harness不需要看）",
+            "excerpt": "只有 DSH 需要本小节：它的 Dashboard 是 **GUI 内置插件**（Codex / Claude Code\n> 等其他 Agent 的技能包自带静态网页，跳过本小节）。插件预构建产物随 Release 包\n> 分发，仓库本身不含构建产物。"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "- 独立服务模式（备用）：全局单进程，重复启动复用已有进程；网页只存在于技能包\n  `dashboard/` 内，不复制到项目目录；服务启动时读取项目根目录的 `.promentor/` 数据"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "（插件未安装时自动启动独立仪表盘并输出访问地址）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# ProMentor",
+            "excerpt": "ProMentor 是一个 **AI Coding Agent Skill**。装上它，你的 AI 编程助手立刻化身为导师——扫描项目架构、生成阶梯式 Chapter、带你手写核心逻辑、自动判题、AI Code Review。"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "主页概览：总体完成度、当前学习章节、已完成/学习中/未开始统计、每章状态/分数/尝试次数、内容完整性警告"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "章节独立页面：`/dashboard/chapters/<chapter_id>/` 直达任意章节，可刷新、可分享"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "左侧边栏：一键切换讲义（Lecture）与源码导读（Source）"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "Markdown 增强渲染：代码语法高亮、Mermaid 图、数学公式、CJK 排版（Streamdown）"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "`/promentor init` 结束与 `/promentor learn <ch>` 开始时，会提示打开 GUI 内置面板\n（插件未安装时自动启动独立仪表盘并输出访问地址）。"
+          },
+          {
+            "heading": "### 8. 查看仪表盘（网页 Dashboard）",
+            "excerpt": "独立服务模式（备用）：全局单进程，重复启动复用已有进程"
+          },
+          {
+            "heading": "# ProMentor",
+            "excerpt": "> 把任意开源项目转成 MIT 风格的动手工程课程 在实践中学习"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "practicalScore": 27,
+      "oracleScore": 37,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 7.5,
+          "gap": 7.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 6.5,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Features",
+            "excerpt": "The annotation block is removed from your bubble's DOM the moment you send (before the browser paints), leaving only the question + the chip (hover to view); historical messages self-heal after a refresh"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "the Enter interception carries `isComposing` / keyCode 229 guards; never hard-edits the composer textarea's DOM"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "works inside the focus conversation view of [dsh-focus-chat](https://github.com/dingyi222666/dsh-focus-chat)"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "historical bubbles stay parseable across languages; missing locale service falls back to zh"
+          },
+          {
+            "heading": "#   systemctl --user list-units | rg dsh",
+            "excerpt": "Environments without a service manager (e.g. some containers) often need **no restart at all**: `client.js` is served per request with no caching, so a hard refresh (Cmd/Ctrl+Shift+R) picks up plugin changes."
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "The zh delimiter is 「提问：」(ask:) rather than 「问题：」(question:) — the heading line \"回答我的问题：\" also contains the latter, and the bubble-hiding surgery would misfire on it"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "a MutationObserver in the microtask phase (before paint) splits at the last `\\n提问：`, cuts the annotation block, and attaches the chip; a 1 s polling fallback plus historical-message repair after refresh"
+          },
+          {
+            "heading": "### Migrating from the old `@omdsh-dev` package name",
+            "excerpt": "If you installed the plugin before v1.4.2, remove the old dependency before installing the renamed package"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "Selection-annotation plugin for DSH Web: select text → annotate → press Enter to send it along with your message; the model replies to each annotation by number."
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "Select any text in an assistant reply to annotate it (the annotation body may be left empty = just mark the passage). Annotations accumulate across messages and turns."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "A blue numbered marker + highlight anchored to the passage, viewport-anchored with collision avoidance, never lost when scrolled out of view"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Small chip beside the input box; hover shows every annotation, deletable individually"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "**The annotation block never shows up as text in your own message bubble** — only the question plus the chip (content visible on hover; hidden before paint, zero flicker)."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "A format instruction is injected into the message so the model replies `Annotation 1: …` … `Annotation N: …` one by one"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "UI copy and the protocol block follow DSH's `locale` service (`zh`/`en`, live switch)"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Any number of annotations accumulate across messages/turns, numbered from 1"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "THEWOLFWALKER/dsh-notifier",
+      "practicalScore": 45,
+      "oracleScore": 49,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 8,
+          "gap": 7
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Secrets safe** | `role('secret')` keys redacted everywhere; `${ENV:NAME}` refs keep secrets out of the profile. |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Never breaks startup** | Misconfigured channels are skipped silently with a log line. |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "HMAC one-time tokens, same trust chain as approvals"
+          },
+          {
+            "heading": "## Channels",
+            "excerpt": "long-lived connections or long polling, so no public IP is required (only the WxPusher callback needs one)."
+          },
+          {
+            "heading": "## Architecture",
+            "excerpt": "846 tests (node --test)"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "Per-source rate limiting (10/min), 20k-codepoint clamps, never-reject API"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "Empty whitelist boots into a guided state with a bootstrap pairing code on stderr instead of refusing to start."
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "All timings clamp to a 60s floor; disable any of them with `enabled: false`."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-notifier",
+            "excerpt": "Unified notification push plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) — one minimal `notify()` API in front, 27 channels behind."
+          },
+          {
+            "heading": "# dsh-notifier",
+            "excerpt": "session events (`turn/end` · `approval/asked` · `agent/error`) auto-notify, the model calls a `notify` tool directly, and six inbound channels bring approvals and conversations back from your phone."
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Remote approval** | Answer approvals from your phone — Telegram buttons, Feishu cards, QQ / WxPusher / WeChat iLink / DingTalk reply `1`/`2`. Silence never approves. |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Remote conversation** | Chat with your agent: plain text → `followup`/`inject`, `!` prefix steers mid-turn, a merge window reassembles mobile typing. |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "Long-task heartbeats (default 15min start) and stall alerts (default 10min no events); Telegram/Feishu cards carry a ⏹ stop button"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Multi-agent routing** (v0.3.2) | Bidirectional agent × channel matrix; sessions auto-register; `/agent` command family + `route.mjs` CLI. |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "| **Web admin console** (v0.3.3) | 127.0.0.1-only + Bearer token; six pages — dashboard / notify / members (v0.7) / bindings / sessions / channels; responsive ≤768px layout (v0.5). |"
+          },
+          {
+            "heading": "## Core features",
+            "excerpt": "pairing codes (`/pair <code>` in any DM; first redeemer becomes owner)"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "hanshenmesen/dsh-turn-delete",
+      "practicalScore": 12,
+      "oracleScore": 28,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 6,
+          "oracle": 6.5,
+          "gap": 0.5
+        },
+        "capabilityItems": {
+          "machine": 0,
+          "oracle": 6.5,
+          "gap": 6.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Behavior",
+            "excerpt": "Deletion requires confirmation and is disabled while the Session is running."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "The plugin refuses deletion when the target turn is still open or has already been merged into a compaction replacement with other history. This prevents deleting only part of model-visible context."
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "- DeepSeek Harness `0.1.0-rc.6` and `0.1.0-rc.7`"
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "- Node.js 22.19 or newer"
+          },
+          {
+            "heading": "## Compatibility",
+            "excerpt": "After upgrading Harness, verify the plugin once with a disposable Session containing three short turns and delete the middle one."
+          },
+          {
+            "heading": "## Security",
+            "excerpt": "Like every DSH plugin, this package runs with the Harness process's permissions."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "- Deletion requires confirmation and is disabled while the Session is running."
+          },
+          {
+            "heading": "## Design",
+            "excerpt": "DeepSeek Harness does not yet expose a public whole-Turn visibility hook, so the tail contribution applies a narrow presentation compatibility layer to the Chat rows between adjacent Turn tails."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-turn-delete",
+            "excerpt": "Delete one complete closed turn from a DeepSeek Harness conversation without deleting or replacing the Session."
+          },
+          {
+            "heading": "# dsh-turn-delete",
+            "excerpt": "The action appears beside the final assistant response for each completed top-level turn."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "A trash action appears only on completed ordinary Session turns. Subagent transcripts do not expose it."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "The prompt, assistant messages, and tool records for the selected turn are removed from the Session's current model surface."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "The Session id, title, workspace association, later turns, and original append-only event log remain intact."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "A durable zero-content replacement event records the deletion. Reloading the page or restarting the profile preserves it."
+          },
+          {
+            "heading": "## Behavior",
+            "excerpt": "Repeating the same request is idempotent."
+          },
+          {
+            "heading": "# dsh-turn-delete",
+            "excerpt": "Delete one complete closed turn from a DeepSeek Harness conversation without deleting or replacing the Session. The action appears beside the final assistant response for each completed top-level turn."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "practicalScore": 48,
+      "oracleScore": 59,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 3.5,
+          "oracle": 9.5,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "The plugin is bound to no emulator product (AVD, Genymotion, WSA, a cloud device farm), and there is no simulator/real-device split to reason about."
+          },
+          {
+            "heading": "### Core tools",
+            "excerpt": "A failed enumeration throws instead of returning an empty list."
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "Most non-rooted devices refuse that directory, so the tool degrades to the crash buffer (`logcat -b crash -d`) and reports honestly which engine answered and what it cannot see."
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "A missing app returns `installed: false` plus a note naming `android_list_apps` — it does not throw."
+          },
+          {
+            "heading": "## Physical devices",
+            "excerpt": "**Frame rate is lower over USB** — roughly 2–5 fps against a phone versus 5–10 fps on an emulator, because every frame crosses the USB link as a full PNG."
+          },
+          {
+            "heading": "## Physical devices",
+            "excerpt": "**`android_shutdown` cannot power off a phone.** adb has no such verb; the tool says so instead of pretending."
+          },
+          {
+            "heading": "### OCR, logs, and debug tools",
+            "excerpt": "A timeout is a normal `matched:false` answer, never an error."
+          },
+          {
+            "heading": "## Requirements",
+            "excerpt": "On Linux and Windows hosts those three tools report that OCR needs the macOS Vision framework; the other 17 are unaffected."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "The agent can start a stream on an emulator or a USB-connected phone, build and install a Gradle project, drive the UI by `resource-id`/text or by OCR, read logcat, and inspect processes and memory"
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "A `multipart/x-mixed-replace` PNG stream produced **in-process** and served straight from the latest-frame buffer through signed `/_dsh/dsh-android/*` routes."
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "Tap and drag on the live video; a toolbar with **◁ Back · ○ Home · □ Recents** plus rotate, screenshot, and refresh"
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "On an image-capable model every capture tool (screenshot, interact, tap_element, tap_text, tap_row) returns the screenshot ITSELF as an image block — the model sees the screen directly."
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "`android_ui_tree` dumps the `uiautomator` hierarchy and `android_tap_element` taps by `resource-id`, text, or content-description"
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "Devices, boot/shutdown, screenshot, interact, Gradle build &amp; run, app listing/launching, `uiautomator` UI tree + tap-by-element, list/feed row actions, Vision OCR find/tap/wait, logcat"
+          },
+          {
+            "heading": "## Display surfaces",
+            "excerpt": "It renders the live PNG stream and accepts click-to-tap and drag-to-gesture directly on the video"
+          },
+          {
+            "heading": "## Why DSH Android",
+            "excerpt": "Tap and drag on the live video; a toolbar with **◁ Back · ○ Home · □ Recents** plus rotate, screenshot, and refresh; a device menu for the notification shade, quick settings, lock, wake, and the assistant."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-skin-market",
+      "practicalScore": 32,
+      "oracleScore": 49,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 3.5,
+          "oracle": 9.5,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 安全说明",
+            "excerpt": "- 浏览器只能提交 registry 中的 `skinId`，不能提交任意命令或安装地址"
+          },
+          {
+            "heading": "## 安全说明",
+            "excerpt": "- 安装、更新和激活失败时会恢复 profile manifest 快照并清理半安装状态"
+          },
+          {
+            "heading": "## 安全说明",
+            "excerpt": "- 市场不会代替开发者登录 GitHub，也不会静默创建 PR"
+          },
+          {
+            "heading": "## 页面异常时重置皮肤",
+            "excerpt": "该命令会关闭皮肤市场管理的所有皮肤并恢复默认外观，但保留已经安装的皮肤包和皮肤市场。"
+          },
+          {
+            "heading": "## 页面异常时重置皮肤",
+            "excerpt": "命令使用原子写入；任何一步失败都会恢复执行前的 profile 文件。"
+          },
+          {
+            "heading": "## 在线目录更新",
+            "excerpt": "- 验证成功的目录会缓存到当前 profile；离线、超时或远程数据不合法时自动回退到缓存，再回退到插件内置目录"
+          },
+          {
+            "heading": "## 收录你的皮肤",
+            "excerpt": "收录不等于安全认证。不要声称该皮肤已被 DSH 官方、安全团队或市场背书。"
+          },
+          {
+            "heading": "## 收录要求",
+            "excerpt": "- Topic、仓库名称和 Stars 只用于发现与排序，不代表安全审核或官方背书"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# DSH 皮肤市场",
+            "excerpt": "一个嵌入 DSH 设置页的皮肤市场，可以浏览、安装、使用、停用、更新和卸载社区皮肤。"
+          },
+          {
+            "heading": "## 收录要求",
+            "excerpt": "皮肤市场同时支持带 `dsh.bundle` 的完整插件和只有 `dsh.client` 的纯前端皮肤。对于后者，市场会在安装后自动、幂等地写入该皮肤已审核的 `rowId` 和 package 注册项；卸载时一并移除。"
+          },
+          {
+            "heading": "## 在线目录更新",
+            "excerpt": "- 打开市场时由 DSH Host 从 GitHub Pages 拉取最新 `catalog.json`"
+          },
+          {
+            "heading": "## 在线目录更新",
+            "excerpt": "- 页面保持打开时每 5 分钟静默检查一次；窗口重新获得焦点时也会立即静默检查"
+          },
+          {
+            "heading": "## 在线目录更新",
+            "excerpt": "- 列表首批只渲染 20 个皮肤，接近底部时每次无感追加 20 个；搜索和排序仍覆盖完整目录"
+          },
+          {
+            "heading": "## 在线目录更新",
+            "excerpt": "- 浏览器会用 IndexedDB 保留最近一次有效目录；再次打开时先展示缓存，再在后台校验在线目录"
+          },
+          {
+            "heading": "## 仓库健康建议",
+            "excerpt": "市场在同步已收录仓库时会检查三项便于用户理解和安装的基础规范，并在皮肤详情页展示结果："
+          },
+          {
+            "heading": "## 收录你的皮肤",
+            "excerpt": "皮肤市场里的「提交皮肤」也可以根据仓库地址生成这段提示词。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "multica-ai/dsh-multica-runtime",
+      "practicalScore": 5,
+      "oracleScore": 29,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 6,
+          "gap": 5
+        },
+        "capabilityItems": {
+          "machine": 0.5,
+          "oracle": 6.5,
+          "gap": 6
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Privacy",
+            "excerpt": "- This repository contains only the Multica integration layer. It does not\n  vendor or redistribute DeepSeek Harness source code."
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "- Never commit API keys, MCP secrets, session logs, or generated profiles."
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "stdout is protocol-only; diagnostics go to stderr."
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "currently validated against `@deepseek-ai/dsh@0.1.0-rc.6` and its matching\n`@deepseek-ai/dsh-*` package family."
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "`DEEPSEEK_API_KEY` is read by DSH's credential provider at process runtime. It\nmust not be stored in this repository."
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "- DSH telemetry is disabled by the bundle patch."
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "- stdout is protocol-only; diagnostics go to stderr."
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "- narrowly forwards only Multica's server-minted `mat_` task token into DSH's\n  otherwise credential-scrubbed shell, so in-task `multica` commands retain\n  task attribution without exposing model-provider credentials."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# Multica DSH Runtime",
+            "excerpt": "Private, out-of-tree runtime bridge between Multica and the public\n[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It exposes\na versioned JSONL protocol over stdio"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "- model and thinking-level discovery from DSH itself;"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "- committed text, reasoning, tool, result, and token-usage events;"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "- cooperative cancellation and durable session resume;"
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "- headless one-shot approvals, with no interactive question surface."
+          },
+          {
+            "heading": "## Local development",
+            "excerpt": "narrowly forwards only Multica's server-minted `mat_` task token into DSH's\n  otherwise credential-scrubbed shell, so in-task `multica` commands retain"
+          },
+          {
+            "heading": "## Privacy",
+            "excerpt": "DSH telemetry is disabled by the bundle patch."
+          },
+          {
+            "heading": "# Multica DSH Runtime",
+            "excerpt": "a versioned JSONL protocol over stdio and composes over\n`@deepseek-ai/dsh-base`. It does not require changes to DeepSeek Harness."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Fishquito7/dsh-skill-mcp-panel",
+      "practicalScore": 41,
+      "oracleScore": 55,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 9.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11,
+          "gap": -1
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### MCP 子命令",
+            "excerpt": "CLI 只扫描当前目录锚定的项目根与用户根；管理其他工作区的技能请加 `--cwd <工作区路径>`。"
+          },
+          {
+            "heading": "### MCP 子命令",
+            "excerpt": "同名技能存在于多个作用域时，`enable`/`disable`/`delete` 需加 `--global`/`--project`/`--workspace` 指定操作哪一份。"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "找不到指定作用域的条目会直接报错，不会回退误操作。"
+          },
+          {
+            "heading": "### 技能部分：",
+            "excerpt": "随部署附带的技能（bundled）为只读，不可停用或删除"
+          },
+          {
+            "heading": "### 技能部分：",
+            "excerpt": "改变所属位置 = 真实地把文件复制/移动到目标位置的文件夹（先校验、失败回滚）"
+          },
+          {
+            "heading": "### MCP 面板（v2.0.0）",
+            "excerpt": "- `env` / `headers` 密钥在 RPC 与页面中脱敏，编辑时缺省 key 保留旧值；"
+          },
+          {
+            "heading": "### MCP 面板（v2.0.0）",
+            "excerpt": "- `cordis.patch.yml` 面板块外的用户内容逐字节保留。"
+          },
+          {
+            "heading": "# dsh-skill-mcp-panel",
+            "excerpt": "注意：本项目提供的参考命令默认指定profile为默认的--profile web，需要更改profile的请自行注意。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-skill-mcp-panel",
+            "excerpt": "DSH 插件，在 Web 设置页同时提供「技能」与「MCP」两个管理面板，并随包提供统一终端命令 `dsh-panel`（`skill` / `mcp` 两个子命令族）。"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "- skill 卡片列表：预览已注册安装的 skill，点击卡片可展开查看完整内容"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "- skill 管理：开关热启用/停用、删除；按名称搜索；进入页面自动刷新"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "skill 添加（0.7.0 统一入口）：点“+”直接选文件（`.md` / `.zip`），或把文件、压缩包、"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "**批量迁移**：“+”号左侧的迁移按钮：源工作区、目标工作区（**可多选**）与技能都在"
+          },
+          {
+            "heading": "### 技能面板",
+            "excerpt": "**技能分组**（0.5.0）：工作区横栏下方新增分组横栏（全部 + 分组名，可横向滚动），"
+          },
+          {
+            "heading": "### MCP 面板（v2.0.0）",
+            "excerpt": "- 支持 **Stdio**（本地命令）与 **HTTP**（streamable-http）两种调用方式；"
+          },
+          {
+            "heading": "### MCP 面板（v2.0.0）",
+            "excerpt": "- 支持新增、编辑、启停、删除、测试连接；保存后由 DSH HMR 热加载，无需重启网关；"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wink-run/tokenbank",
+      "practicalScore": 59,
+      "oracleScore": 62,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 6.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 12,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### Contributing a worker node",
+            "excerpt": "**Upstream API keys never leave your machine.** Only the worker key and model list are sent during registration."
+          },
+          {
+            "heading": "### Gateway lossless compression",
+            "excerpt": "Non-JSON content is left byte-for-byte untouched — answers stay the same"
+          },
+          {
+            "heading": "### Smart routing",
+            "excerpt": "**Egress guards** — clamp outbound `max_tokens` to upstream limits to cut avoidable 400s"
+          },
+          {
+            "heading": "### Dynamic supply delivery",
+            "excerpt": "**Offline fallback** — built-in defaults when offline; server deltas merged automatically when back online"
+          },
+          {
+            "heading": "### 5 — Earn from idle",
+            "excerpt": "local Ollama, unused upstream quota, private LAN models (outbound WebSocket—no inbound port)"
+          },
+          {
+            "heading": "### Contribute · earn from idle quota",
+            "excerpt": "only the card and bio are public; runs stay on your device"
+          },
+          {
+            "heading": "## Disclaimer",
+            "excerpt": "This project is for educational and research purposes only. Users are responsible for complying with applicable laws, regulations, and upstream service terms."
+          },
+          {
+            "heading": "### Session trace (live proxy + session import)",
+            "excerpt": "| **Dedup** | Same call recorded by both gateway and session file → counted once |"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Overview",
+            "excerpt": "enables one-click onboarding and intelligent orchestration of mainstream AI tools like Claude, Cursor, Codex, and WorkBuddy through a local gateway architecture"
+          },
+          {
+            "heading": "### Technical Highlights",
+            "excerpt": "Declarative application handlers (CLI env injection + config hot-patching) enable seamless onboarding without modifying agent applications."
+          },
+          {
+            "heading": "### Technical Highlights",
+            "excerpt": "Transparent protocol conversion (Anthropic Messages, OpenAI Chat, Codex Responses) allows agents to use third-party models without awareness."
+          },
+          {
+            "heading": "### 1 — See clearly",
+            "excerpt": "Token Bank logs every request: which route it took, which model answered, how many tokens, how long it took."
+          },
+          {
+            "heading": "### Session trace (live proxy + session import)",
+            "excerpt": "Tracked apps that still hit the official API — local session logs (`~/.claude`, `~/.codex`, WorkBuddy Trace, …) are scanned and imported"
+          },
+          {
+            "heading": "### Smart routing",
+            "excerpt": "**Failover** — local source down? try community sharing automatically; fully transparent to the agent"
+          },
+          {
+            "heading": "### Gateway lossless compression",
+            "excerpt": "Optional **lossless JSON compression** before forwarding — fewer input tokens upstream, **semantics unchanged**"
+          },
+          {
+            "heading": "### Multi-device usage aggregation",
+            "excerpt": "Desktop, CLI, and server gateways each register as a device — **usage is reported and merged in the cloud** when signed in"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "tencent-connect/dsh-qqbot",
+      "practicalScore": 20,
+      "oracleScore": 32,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 2,
+          "oracle": 2.5,
+          "gap": 0.5
+        },
+        "capabilityItems": {
+          "machine": 2,
+          "oracle": 7.5,
+          "gap": 5.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# 启动",
+            "excerpt": "> **提示**：建议升级至 `0.4.0` 以上版本扫码，支持点击链接在浏览器打开，避免部分终端二维码渲染错位的问题。"
+          },
+          {
+            "heading": "## 会话路由",
+            "excerpt": "sessionKey: `qqbot:${appId}:${scope}:${peerId}`，由 SHA-256 确定性派生 SessionId，重启后可恢复。"
+          },
+          {
+            "heading": "## 会话路由",
+            "excerpt": "解析策略：进程内复用 → 持久化恢复 → 全新创建。"
+          },
+          {
+            "heading": "# 启动",
+            "excerpt": "避免部分终端二维码渲染错位的问题。"
+          },
+          {
+            "heading": "## 配置项",
+            "excerpt": "`textChunkLimit` | number | `4500` | 单条消息最大字符数"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "**基于 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) 的 QQ Bot 插件，将 DeepSeek AI 助手接入 QQ 私聊与群聊。**"
+          },
+          {
+            "heading": "# 启动",
+            "excerpt": "首次启动时，插件检测到凭据未配置会自动进入扫码引导：终端输出二维码 → 手机 QQ 扫码绑定 → 凭据自动保存到 profile，后续启动无需再次扫码。"
+          },
+          {
+            "heading": "## 设计原则",
+            "excerpt": "- **会话隔离** — 每个 QQ 私聊用户/群聊各一个独立 Agent"
+          },
+          {
+            "heading": "## 设计原则",
+            "excerpt": "- **闲置回收** — 超时自动 dispose Agent，防止内存泄漏"
+          },
+          {
+            "heading": "## 设计原则",
+            "excerpt": "- **Markdown 输出** — 回复以 Markdown 格式发送，支持代码块/表格感知切分"
+          },
+          {
+            "heading": "## 设计原则",
+            "excerpt": "- **问答互动** — 支持 `ask_user_question`，单选生成内联按钮（点一个其余变灰）、多选回复编号，逐题推进 + 问题级超时"
+          },
+          {
+            "heading": "## 会话路由",
+            "excerpt": "sessionKey: `qqbot:${appId}:${scope}:${peerId}`，由 SHA-256 确定性派生 SessionId，重启后可恢复。"
+          },
+          {
+            "heading": "## 设计原则",
+            "excerpt": "- **Preset 支持** — 可通过 `agent-presets` 服务挂载预设（工具集、prompt 等）"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "01Virex/dsh-status-rotator",
+      "practicalScore": 34,
+      "oracleScore": 44,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 9.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 11.5,
+          "gap": -0.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# One-line install",
+            "excerpt": "The elapsed-time clock (which appears after 15 seconds) is untouched."
+          },
+          {
+            "heading": "## Template Placeholders",
+            "excerpt": "Unknown placeholders are left as-is, so `{...}` in a phrase is safe."
+          },
+          {
+            "heading": "## Template Placeholders",
+            "excerpt": "if the session API is unavailable, they stay `—` but the plugin keeps working."
+          },
+          {
+            "heading": "## Live Status Pill",
+            "excerpt": "If the session API is unavailable (older dsh), the DOM clock drives phase/elapsed as a fallback and the live fields show `—` — no crash, no errors."
+          },
+          {
+            "heading": "## Editing the Phrase Bank in the Settings Page",
+            "excerpt": "Submitted content is validated (phrases must be string arrays, presets/schedule must match their shapes); invalid content returns 400 and shows an error on the page, so the config file can't be corrupted."
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "saved edits are written into the **official dsh settings store** (`$DSH_HOME/settings.yaml`, namespace `status-rotator`) — the same store the rest of dsh uses for its settings, which **survives plugin upgrades**"
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "The plugin-directory `config.json` remains as a compatibility mirror and fallback; a one-time import migrates an existing `config.json` into the settings store on first start."
+          },
+          {
+            "heading": "## Configuration",
+            "excerpt": "If a localStorage override matches, the external `config.json` is silently suppressed; the new version logs a `[status-rotator] ⚠ localStorage override active` warning in the browser console"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# One-line install",
+            "excerpt": "Replaces the `Deep diving...` status line in the DeepSeek Harness (dsh) Web UI's turn footer with your own text: phase-aware switching, typewriter output, animated rainbow gradient (optional), timed rotation"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Phase-aware**: three sets of phrases — `thinking` (just started) / `running` (after 15s) / `long` (past the threshold)."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Typewriter effect**: phrases are typed out character by character, speed configurable, 0 disables it;"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Real-time status engine**: subscribes to the dsh session snapshot (session list, conversation snapshot, model RPC, DOM clock fallback)"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Live status pill**: a floating pill in the official `shell.overlay` seat, template-driven live info (`{model} · {phaseLabel} · {elapsed} · ⚡{tps} tok/s`), position/opacity configurable;"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Browser tab title**: rotate `document.title` through your own templates (`⏳ {phase} {elapsed}`), restore the original title when idle (configurable);"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Presets & scheduling**: multiple named phrase banks with their own config, switchable from the settings page or automatically by time-of-day / weekday rules;"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "- **Settings page**: a new \"Status Texts\" page in DSH's Settings, with visual editing for the Chinese/English × three-phase phrase banks, saves take effect immediately;"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "omdsh-dev/dsh-open-in-vscode",
+      "practicalScore": 15,
+      "oracleScore": 19,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 2,
+          "oracle": 7.5,
+          "gap": 5.5
+        },
+        "capabilityItems": {
+          "machine": 5,
+          "oracle": 3,
+          "gap": -2
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Configuration",
+            "excerpt": "A missing executable fails loud with a fix hint; relative paths are refused."
+          },
+          {
+            "heading": "## Capability boundary",
+            "excerpt": "| Open a workspace directory in the editor | Host (user gesture) | No — the user clicked the row |"
+          },
+          {
+            "heading": "## Capability boundary",
+            "excerpt": "The plugin has no tools, no settings namespace, and no model-facing surface"
+          },
+          {
+            "heading": "## Capability boundary",
+            "excerpt": "The plugin adds no tools, no skills, and no settings; it only opens the\ndirectory the user already opened in DSH."
+          },
+          {
+            "heading": "## Capability boundary",
+            "excerpt": "It never reads or writes files\nitself."
+          },
+          {
+            "heading": "## Prerequisites",
+            "excerpt": "On Windows, the default `code` command\n  also discovers standard per-user and system VS Code installations."
+          },
+          {
+            "heading": "## Prerequisites",
+            "excerpt": "DSH `0.1.0-rc.6` or newer."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "Restart the web server (`kill -TERM <pid>` and wait for exit — never\n`kill -9`, it tears the session zstd log mid-frame), then refresh the page."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-open-in-vscode",
+            "excerpt": "Open a workspace directory in VS Code straight from the DeepSeek Harness web\nGUI: every real Workspace row in the sidebar gains an **Open in VSCode** row\ninside its **…** overflow menu."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "The client half uses the harness's `sidebar.workspaces.row-menu` slot when\n  available and falls back to a scoped compatibility adapter on the public\n  DSH `0.1.0-rc.6` build."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "- The host half spawns the configured editor CLI on that directory\n  (`code <path>` by default), detached, so the editor outlives the server."
+          },
+          {
+            "heading": "## What it does",
+            "excerpt": "Both paths render the same locale-following menu row\n  — **在 VSCode 中打开** under the Chinese locale, **Open in VSCode** under\n  English."
+          }
+        ]
+      }
+    }
+  ],
+  "over": [
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "practicalScore": 27,
+      "oracleScore": 37,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 0,
+          "oracle": 7.5,
+          "gap": 7.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 6.5,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Features",
+            "excerpt": "The annotation block is removed from your bubble's DOM the moment you send (before the browser paints), leaving only the question + the chip (hover to view); historical messages self-heal after a refresh"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "the Enter interception carries `isComposing` / keyCode 229 guards; never hard-edits the composer textarea's DOM"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "works inside the focus conversation view of [dsh-focus-chat](https://github.com/dingyi222666/dsh-focus-chat)"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "historical bubbles stay parseable across languages; missing locale service falls back to zh"
+          },
+          {
+            "heading": "#   systemctl --user list-units | rg dsh",
+            "excerpt": "Environments without a service manager (e.g. some containers) often need **no restart at all**: `client.js` is served per request with no caching, so a hard refresh (Cmd/Ctrl+Shift+R) picks up plugin changes."
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "The zh delimiter is 「提问：」(ask:) rather than 「问题：」(question:) — the heading line \"回答我的问题：\" also contains the latter, and the bubble-hiding surgery would misfire on it"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "a MutationObserver in the microtask phase (before paint) splits at the last `\\n提问：`, cuts the annotation block, and attaches the chip; a 1 s polling fallback plus historical-message repair after refresh"
+          },
+          {
+            "heading": "### Migrating from the old `@omdsh-dev` package name",
+            "excerpt": "If you installed the plugin before v1.4.2, remove the old dependency before installing the renamed package"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "Selection-annotation plugin for DSH Web: select text → annotate → press Enter to send it along with your message; the model replies to each annotation by number."
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "Select any text in an assistant reply to annotate it (the annotation body may be left empty = just mark the passage). Annotations accumulate across messages and turns."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "A blue numbered marker + highlight anchored to the passage, viewport-anchored with collision avoidance, never lost when scrolled out of view"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Small chip beside the input box; hover shows every annotation, deletable individually"
+          },
+          {
+            "heading": "# dsh-annotation",
+            "excerpt": "**The annotation block never shows up as text in your own message bubble** — only the question plus the chip (content visible on hover; hidden before paint, zero flicker)."
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "A format instruction is injected into the message so the model replies `Annotation 1: …` … `Annotation N: …` one by one"
+          },
+          {
+            "heading": "## Architecture notes",
+            "excerpt": "UI copy and the protocol block follow DSH's `locale` service (`zh`/`en`, live switch)"
+          },
+          {
+            "heading": "## Features",
+            "excerpt": "Any number of annotations accumulate across messages/turns, numbered from 1"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "PolinniZhong/dsh-omi-voice",
+      "practicalScore": 43,
+      "oracleScore": 32,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 6,
+          "oracle": 6,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 10.5,
+          "oracle": 5,
+          "gap": -5.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 获取豆包 API Key（新手必读）",
+            "excerpt": "API Key 只保存进 Omi 引擎的 macOS Keychain，插件侧零 Key、不出本机。"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "插件零 Key；仅本机 `127.0.0.1` 通信"
+          },
+          {
+            "heading": "## 使用",
+            "excerpt": "- 引擎未启动 / 未配置 Key 时，点击会给出明确提示（含去哪打开 Omi）。"
+          },
+          {
+            "heading": "## FAQ",
+            "excerpt": "| 支持 Windows 吗 | 暂不支持：Omi 引擎仅 macOS Apple Silicon |"
+          },
+          {
+            "heading": "## 成本透明",
+            "excerpt": "豆包 TTS（`seed-tts-1.0`）按**字符数**计费，由你在火山引擎账户自行承担。"
+          },
+          {
+            "heading": "## 成本透明",
+            "excerpt": "- 纯表格/纯代码等无有效内容不发请求（`invalid_text`）。"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "适配平台 | DeepSeek Harness（`dsh web`，含桌面端）+ macOS 上的 Omi 引擎 v0.1.2+"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "| 隐私特性 | API Key 存入 Omi 引擎的 macOS Keychain；插件零 Key；仅本机 `127.0.0.1` 通信 |"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "点一下 🔊，把 AI 回复用豆包的自然音色念给你听——无需复制，不做自动朗读"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "语音由你本机常驻的 Omi 引擎合成"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "点回复旁 🔊 朗读/暂停/继续；只读最终回答，工具日志/代码/表格/图形朗读前自动过滤"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "豆包 TTS 1.0（`seed-tts-1.0`），自然中文音色，支持暂停/继续（从暂停处续播）"
+          },
+          {
+            "heading": "## 成本透明",
+            "excerpt": "引擎对相同文本 3 秒内去重，且进程内 LRU 缓存最近 3 条（≤5MB、纯内存、退出即清），重复朗读不重复计费"
+          },
+          {
+            "heading": "## 架构与协议",
+            "excerpt": "插件只是\"遥控器\"：播放、变速、暂停/继续、缓存、文本清洗全部在 Omi 引擎内完成。"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "让 DeepSeek Harness（DSH）桌面端里的 AI 回复，用**豆包自然音色**读给你听。语音由你本机常驻的 Omi 引擎合成，**豆包 API Key 只留在你自己的钥匙串里（BYOK）**。"
+          },
+          {
+            "heading": "## 快速概览",
+            "excerpt": "| 语音能力 | 豆包 TTS 1.0（`seed-tts-1.0`），自然中文音色，支持暂停/继续（从暂停处续播） |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Mars-Sea/dsh-commandcode-provider",
+      "practicalScore": 45,
+      "oracleScore": 38,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 5,
+          "oracle": 8,
+          "gap": 3
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 7,
+          "gap": -5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "**Image input is model-gated** — only Vision models accept images; text-only models refuse them."
+          },
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "Switching to a text-only model in an image-bearing session is rejected by dsh — pick a model marked *`Image`* or remove the images first."
+          },
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "**No `stop` sequences** — requests carrying one fail."
+          },
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "Reasoning blocks are not replayed into later turns; only tool calls with a paired tool result are replayed."
+          },
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "The model catalog is browsable without a key; chat requests need one."
+          },
+          {
+            "heading": "## Getting an API key",
+            "excerpt": "The sign-in flow needs the Host and your browser on the same machine (loopback callback). With a remote Host, paste the key manually"
+          },
+          {
+            "heading": "## Permissions & privacy",
+            "excerpt": "locally it touches only the credential store and the models cache (plus `~/.commandcode/auth.json` as a last-resort fallback); on the network it calls only the Command Code API. No telemetry."
+          },
+          {
+            "heading": "## Notes & limitations",
+            "excerpt": "- **Image input is model-gated** — only Vision models accept images; text-only models refuse them."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## What you get",
+            "excerpt": "registers a `commandcode` provider route with a live model catalog"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "when one account hits its usage limit, requests switch to the next account automatically"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "start the official authorization flow (the same one `cmd login` runs) from the settings page; the approved key lands in the local credential service automatically"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "minimum plan, active deal or `FREE` badge, peak/off-peak state, image support, and context window; free models listed first"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "models above your subscription tier are hidden by default (toggleable)"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "models with selectable reasoning effort levels expose them in the picker"
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "Vision-capable models accept images."
+          },
+          {
+            "heading": "## What you get",
+            "excerpt": "registers a `commandcode` provider route with a live model catalog."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "pengyue-polaron/deepseek-harness-genui",
+      "practicalScore": 53,
+      "oracleScore": 60,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 4,
+          "oracle": 9,
+          "gap": 5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 7.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## Safety",
+            "excerpt": "Generated code runs in a sandbox."
+          },
+          {
+            "heading": "## Safety",
+            "excerpt": "Direct API requests are limited to declared, credential-free public HTTPS routes."
+          },
+          {
+            "heading": "## Safety",
+            "excerpt": "Temporary links and grants expire after 7 days; saved task state expires 7 days after its last update."
+          },
+          {
+            "heading": "## How It Works",
+            "excerpt": "MCP credentials never enter generated code."
+          },
+          {
+            "heading": "## How It Works",
+            "excerpt": "Before opening a connected app, Harness presents the complete access list for one task-scoped decision; changed capabilities are shown again, and undeclared calls are blocked."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "Every candidate is compiled and checked against the source contracts before it can replace the last working version."
+          },
+          {
+            "heading": "## Install",
+            "excerpt": "The plugin does not download or launch a browser."
+          },
+          {
+            "heading": "## Safety",
+            "excerpt": "Repository tests use Playwright and Vitest."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# DeepSeek Harness GenUI",
+            "excerpt": "DeepSeek Harness GenUI lets an Agent create a focused interface for the current task: something that explains a difficult relationship or collects a complex user response."
+          },
+          {
+            "heading": "# DeepSeek Harness GenUI",
+            "excerpt": "The Coding Agent writes ordinary React + TypeScript, not a component-tree DSL or IR."
+          },
+          {
+            "heading": "# DeepSeek Harness GenUI",
+            "excerpt": "The interface can save what the user selected, entered, or changed so the next Agent turn can read it and continue the task."
+          },
+          {
+            "heading": "## Inline & Canvas",
+            "excerpt": "The same app can sit inside the answer or open beside the conversation."
+          },
+          {
+            "heading": "## How It Works",
+            "excerpt": "Later edits update the same app. A failed update never replaces the current working version."
+          },
+          {
+            "heading": "## DESIGN.md",
+            "excerpt": "`DESIGN.md` controls the design language, not the page structure. React + TypeScript remains free to implement simulations, graphics, maps, timelines, code graphs, animation, and irregular layouts."
+          },
+          {
+            "heading": "## Inline & Canvas",
+            "excerpt": "Inline, Canvas, fullscreen, and CLI/localhost are different surfaces over the same task state."
+          },
+          {
+            "heading": "# DeepSeek Harness GenUI",
+            "excerpt": "The plugin is code-first. The Coding Agent writes ordinary React + TypeScript, not a component-tree DSL or IR."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yxxbc/dsh-balance-plugin",
+      "practicalScore": 40,
+      "oracleScore": 36,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 9,
+          "oracle": 4.5,
+          "gap": -4.5
+        },
+        "capabilityItems": {
+          "machine": 7,
+          "oracle": 8.5,
+          "gap": 1.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "A：静态插件持久安装，重启后仍在。自动读取的 `DEEPSEEK_API_KEY` 无需重配，重启后自动恢复。"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "A：DSH 侧边栏底部插槽会被官方 Cordis 面板插件独占整行。本插件入口固定在**输入框工具行右侧**，不依赖该插槽。"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "A：不会。Key 只保存在本机插件目录 `config.json` 中，界面仅显示掩码；源码与 README 中不含任何密钥。"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "A：npm 上存在他人同名包（`dsh-balance-plugin@0.1.0`），裸包名会装错。请使用一键脚本或 `github:` 源。"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **设置持久化** | 配置自动保存到插件目录 `config.json`，重启后自动恢复 |"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "Key 只保存在本机插件目录 `config.json` 中，界面仅显示掩码；源码与 README 中不含任何密钥。"
+          },
+          {
+            "heading": "## ❓ 常见问题",
+            "excerpt": "静态插件持久安装，重启后仍在。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# 💰 DeepSeek 余额监控与用量统计",
+            "excerpt": "**DeepSeek Harness（DSH）插件** —— 余额监控 · 官方充值入口 · Miyu 风格用量统计 · 三方插件管理"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **余额监控** | 监控 DeepSeek API 余额（CNY / USD 双余额池），支持多账户并行查询；自动读取 DSH 凭据 `DEEPSEEK_API_KEY`，**无需手动填写** |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **低余额告警** | CNY / USD 独立阈值（默认 ¥10 / $2，可配置），低于阈值时余额条标红提醒 |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **一键充值** | 直达 DeepSeek 官方充值页 `platform.deepseek.com/top_up`，另有用量明细页入口 |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **用量统计** | 1:1 复刻 [Miyu WebUI 用量页](https://github.com/SHORiN-KiWATA/Miyu/tree/main/web)：统计瓦片 / GitHub 贡献图风格用量日历 / 三段堆叠趋势柱状图 / 模型消耗环形图与明细表 / 最近 50 条调用记录 |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **性能指标** | 轮次 · 步数 · LLM 时长 · 工具调用时长 · 首 token 平均延迟 · tok/s · 缓存命中率 |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **三方插件管理** | 非官方（非 `@deepseek-ai`）Web 插件清单：包名 / 本地路径 / Bundle rev / 依赖，一键「打开目录」定位源码 |"
+          },
+          {
+            "heading": "## ✨ 功能",
+            "excerpt": "| **设置持久化** | 配置自动保存到插件目录 `config.json`，重启后自动恢复 |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "yyh-001/dsh-meme",
+      "practicalScore": 38,
+      "oracleScore": 40,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 3,
+          "oracle": 6,
+          "gap": 3
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 7.5,
+          "gap": -4.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 已知限制",
+            "excerpt": "- `learn_meme` 自动识图依赖当前默认模型支持图片输入（不支持时可手动指定 tag/caption）；"
+          },
+          {
+            "heading": "## 已知限制",
+            "excerpt": "磁盘上仍是细 tag（angry/baka/…），模型只认六个情绪桶；caption 对不齐时前端会折叠引号后再配图。"
+          },
+          {
+            "heading": "## 图库来源",
+            "excerpt": "⚠️ 上游**未提供 LICENSE**：这套图缺乏显式的再分发许可。"
+          },
+          {
+            "heading": "# 等价于:",
+            "excerpt": "旧包名 `dsh-expression` 已弃用，请改用 `dsh-meme`。"
+          },
+          {
+            "heading": "# 等价于:",
+            "excerpt": "pnpm 有「新包安全期」（默认 24h），刚发布的版本会被静默回落到旧版"
+          },
+          {
+            "heading": "## 分享自己的表情包",
+            "excerpt": "请用插件导出的 ZIP。GitHub 仓库页上的「Download ZIP / 下载源码」是压缩过的，导入会失败。"
+          },
+          {
+            "heading": "## 发图格式（默认）",
+            "excerpt": "直接上传的图片仍是附件，原样进会话；学图走 `learn_meme`"
+          },
+          {
+            "heading": "## 配置",
+            "excerpt": "设置存在 `~/.dsh/dsh-expression.json`，升级插件不丢。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "**纯文本也能斗图**：界面显示表情图片，模型收到的是 `[表情: 描述]`，无需图片输入能力"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "**AI 自动学图**：用户说「入库」时，`learn_meme` 收录最近一张用户附件（不必填附件 id），自动识别分类/描述"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "**情绪主动发图**：先选情绪桶，系统随机抽若干张 caption，模型挑一张贴进回复"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "**像 QQ/微信 一样发图**：输入框 😊 悬浮面板点选表情直接发出"
+          },
+          {
+            "heading": "## 它做什么",
+            "excerpt": "**管理 API** | 上传 / 编辑 / 删除 / 删除分类，全部在设置页完成，数据持久"
+          },
+          {
+            "heading": "## 它做什么",
+            "excerpt": "**导出 / 导入** | 图库一键打包 ZIP 分享，导入别人的包自动切换（零依赖实现）"
+          },
+          {
+            "heading": "## 它做什么",
+            "excerpt": "**图库切换** | 设置页下拉切换已扫描图库；扫描目录默认 `~/.dsh/meme-packs`"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **纯文本也能斗图**：界面显示表情图片，模型收到的是 `[表情: 描述]`，无需图片输入能力"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "volcengine/ark-cli",
+      "practicalScore": 54,
+      "oracleScore": 42,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 1,
+          "oracle": 3,
+          "gap": 2
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 8,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# 购买或续费前先查看参数",
+            "excerpt": "`plans buy` / `plans renew` 是计费操作，Ark CLI 会先展示协议和确认步骤，不会默认直接扣款。"
+          },
+          {
+            "heading": "### 管成本、状态和健康",
+            "excerpt": "`doctor` 默认是只读诊断，不会修改资源。需要修复时会通过确认流程执行。"
+          },
+          {
+            "heading": "# 配置指定 Harness，并同步注入 MCP",
+            "excerpt": "它不会卸载 `arkcli` 命令本身。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**模型调用**：文本对话、多模态输入、流式输出、多轮接续"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**图片 / 视频生成**：Seedream 生图、Seedance 生视频，产物自动下载到本地"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**多模态理解**：OCR、视频总结、语音转写、字幕打轴、文档字段抽取"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**Plan 管理**：Agent Plan / Coding Plan 查询、购买、续费、团队席位管理"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**Agent 接入**：安装 Ark Skills，配置 Harness / MCP，让本地 Agent 调用方舟能力"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**模型生产**：精调任务、自定义模型、训练状态跟踪"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**服务上线**：基础模型或自定义模型一键部署为 Endpoint"
+          },
+          {
+            "heading": "## Ark CLI 能做什么",
+            "excerpt": "**治理闭环**：Usage、Billing、Doctor、监控指标和错误码诊断"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Renzic-Stone/DSH-EasyRewrite",
+      "practicalScore": 40,
+      "oracleScore": 41,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 6,
+          "gap": -4
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 12,
+          "gap": 0
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# dsh-easyrewrite（DSH-EasyRewrite）",
+            "excerpt": "兼容 DeepSeek Harness Web（rc.6+），纯官方扩展点实现，不改 DSH 源码。"
+          },
+          {
+            "heading": "# 或从 GitHub",
+            "excerpt": "DSH 的 fork 只能在闭合回合边界截断，未结束回合内的消息暂时无法撤回——等回复完成后即可。"
+          },
+          {
+            "heading": "### 草稿自动备份（Auto-backup）——已实现（M3）",
+            "excerpt": "恢复兜底：仅当本地没有待定状态时才从备份恢复——绝不覆盖正在编辑的草稿。"
+          },
+          {
+            "heading": "## 设计哲学",
+            "excerpt": "日志只记录本地行为，不上传任何数据。"
+          },
+          {
+            "heading": "## 设计哲学",
+            "excerpt": "卸载即还原：不留配置残留、不改动任何官方文件。"
+          },
+          {
+            "heading": "### 草稿自动备份（Auto-backup）——已实现（M3）",
+            "excerpt": "备份位置：`$DSH_HOME/dsh-easyrewrite/backups/<会话ID>.json`。"
+          },
+          {
+            "heading": "# 或从 GitHub",
+            "excerpt": "**撤回时机说明**：DSH 的 fork 只能在闭合回合边界截断，未结束回合内的消息暂时无法撤回——等回复完成后即可。（界面会提示「该消息所在回合尚未结束…」）"
+          },
+          {
+            "heading": "## 设计哲学",
+            "excerpt": "全链路打点：client 的每个关键步骤（加载、确认、pending、发送钩子、fork、resume）自动上报 host，统一写入 `$DSH_HOME/dsh-easyrewrite.log`。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**撤回键**：每条用户消息的官方复制键旁。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**行内确认胶囊**（dsh 风格灰色胶囊：`撤回这条消息及其后 x 条提问？` + 白底黑字「确定/取消」）。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**惰性提交**：确认只回填输入框，真正截断发生在你按「发送」时；中途关掉 dsh，对话零改动。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**「正在修改」条**：输入框内部（分割线 + 标签 + 圆形 ×）；× 取消撤回并恢复原草稿。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**覆盖 / 合并**回填模式：覆盖模式下原草稿在发送/取消后都会恢复——信息零丢失。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**将删除数量实时统计**（仅用户提问，可开关）；0 条时显示「是否撤回这条消息？」。"
+          },
+          {
+            "heading": "### 撤回（Recall）——端到端完成",
+            "excerpt": "**无痕替换**：发送即执行撤回——原会话**归档**，**同名新会话**（截断到目标消息之前）顶替，修改后的文本自动发出。"
+          },
+          {
+            "heading": "### 内联编辑（Rewrite）——已实现（M2）",
+            "excerpt": "单击气泡 → 原位编辑（保留原始 Markdown 原文），Esc 取消 / Ctrl+Enter 确定。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Jayden-X-L/forkprobe",
+      "practicalScore": 67,
+      "oracleScore": 61,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 8,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 能力矩阵与候选推荐",
+            "excerpt": "外部 GitHub 候选进入执行前仍建议检查 license、依赖和最终产物路径。"
+          },
+          {
+            "heading": "### DeepSeek Harness 原生插件",
+            "excerpt": "`forkprobe_compare` 强制要求 `confirmed=true`，候选 subagent 不获得工具权限，因此不会递归调用 ForkProbe 或改动工作区。"
+          },
+          {
+            "heading": "### 6. Web artifact comparison",
+            "excerpt": "环境中安装 Python Playwright 时，还会用真实浏览器测量移动端横向溢出；不可用时 `qa.json` 会明确记录该项未测量，而不会伪报通过。"
+          },
+          {
+            "heading": "## 多来源候选发现、BYO 与 local-only",
+            "excerpt": "外部发现只使用经过清洗的任务信号，不会直接拿你的原始文档做搜索词，也不会自动安装或执行未经确认的候选。"
+          },
+          {
+            "heading": "## 匿名 Winner 分享（可选）",
+            "excerpt": "不上传任务原文、候选输出、文件、评价理由、本地路径或用户身份。"
+          },
+          {
+            "heading": "## 匿名 Winner 分享（可选）",
+            "excerpt": "事件先写入 `~/.forkprobe/telemetry/outbox/`，网络失败不会阻止 winner 保存或 Agent 继续，后续运行会自动重试。"
+          },
+          {
+            "heading": "## 匿名 Winner 分享（可选）",
+            "excerpt": "统计按任务类型聚合，至少达到 20 次有效选择后才通过公共统计 API 返回 Skill 胜率和两两胜率。"
+          },
+          {
+            "heading": "### DeepSeek Harness artifact 兼容路径",
+            "excerpt": "DeepSeek Harness 当前为 developer preview，建议固定已验证版本用于稳定生产任务。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# ForkProbe：AI Skill 选型与试跑工具",
+            "excerpt": "ForkProbe 是一个 AI Skill 选型与试跑工具。它会把同一个任务交给模型本身和多个候选 skill，并排试跑，生成本地 HTML report，让你看到真实输出之后再选择 winner。"
+          },
+          {
+            "heading": "# ForkProbe：AI Skill 选型与试跑工具",
+            "excerpt": "**v1.1 新增图片提示词 / 风格方向比较：** ForkProbe 现在可以比较 image prompt / style pipelines。"
+          },
+          {
+            "heading": "# ForkProbe：AI Skill 选型与试跑工具",
+            "excerpt": "选定 winner 后，Report 的“继续”按钮会同时保存本地 handoff，并让 Agent 沿胜出 Skill 继续任务。"
+          },
+          {
+            "heading": "## 它怎么工作",
+            "excerpt": "从 curated 目录、本机已安装 Skill、EverMind Skill Hub、GitHub 和 BYO 路径中推荐少量候选 skill 或 artifact pipeline。"
+          },
+          {
+            "heading": "## 它怎么工作",
+            "excerpt": "用同一份输入跑 baseline 和多个候选。"
+          },
+          {
+            "heading": "## 它怎么工作",
+            "excerpt": "展示每一路完整输出、耗时、token 估算、文件预览和 AI 评审建议。"
+          },
+          {
+            "heading": "## 支持的 Agent 工作流",
+            "excerpt": "DeepSeek Harness 原生插件，支持文本候选、AI judge、Report 选择和同一 Agent 继续"
+          },
+          {
+            "heading": "### DeepSeek Harness 原生插件",
+            "excerpt": "插件提供两个工具：`forkprobe_compare` 负责确认后的并行试跑，`forkprobe_resume` 负责在等待窗口结束后恢复 Report 中的选择。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "mexiaosqwq/dsh-web-mobile",
+      "practicalScore": 27,
+      "oracleScore": 28,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 7,
+          "oracle": 3,
+          "gap": -4
+        },
+        "capabilityItems": {
+          "machine": 5,
+          "oracle": 7.5,
+          "gap": 2.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 兼容插件",
+            "excerpt": "- [dsh-web-ui](https://www.npmjs.com/package/@linxin666/dsh-web-ui-all)——**0.1.20**"
+          },
+          {
+            "heading": "## 兼容插件",
+            "excerpt": "- [dshmarket](https://www.npmjs.com/package/dshmarket)——**v1.20.2**"
+          },
+          {
+            "heading": "## 兼容插件",
+            "excerpt": "- [dsh-usage-stats](https://github.com/Ychris12138/dsh-usage-stats)——**0.2.10**"
+          },
+          {
+            "heading": "## 兼容插件",
+            "excerpt": "- [dsh-genui](https://github.com/omdsh-dev/dsh-genui)——**0.9.1**"
+          },
+          {
+            "heading": "## 兼容插件",
+            "excerpt": "- [dsh-meme](https://github.com/mexiaosqwq/dsh-meme)——**v0.1.39**"
+          },
+          {
+            "heading": "## 构建",
+            "excerpt": "`lib/` 与源码同步入库，改动源码后重新构建再提交。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "**dsh-web-mobile** 是 DeepSeek Harness Web UI 的移动端适配插件——让 DSH 在手机竖屏下也能好好用："
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **侧栏变抽屉**：手机竖屏下侧栏收进 overlay 抽屉，会话区全宽，点会话行自动收起"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **弹窗变浮层**：设置、文件树、预览改成底部 sheet，触屏好点"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **状态栏避让**：刘海安全区、深/浅主题、双击缩放都处理"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **输入区不打架**：权限胶囊、模型名、切换菜单在窄屏下不重叠"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **长会话不卡流量**：宿主返回的大 JSON（会话历史等）自动 gzip/brotli 压缩，手机端加载明显提速"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **平板也管**：768–1023px 限宽居中；桌面 ≥1024px 完全 no-op"
+          },
+          {
+            "heading": "(preamble)",
+            "excerpt": "- **诊断方便**：`?mobile-nav-debug=1` 显示悬浮诊断条（视口 / 浮层状态 / JS 错误）"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "wxkingstar/SpecFusion",
+      "practicalScore": 43,
+      "oracleScore": 28,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 5,
+          "oracle": 3,
+          "gap": -2
+        },
+        "capabilityItems": {
+          "machine": 9,
+          "oracle": 5,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "### 方式一：skills CLI（推荐）",
+            "excerpt": "> **⚠️ 必须加 `-g` 参数！** 不加 `-g` 会安装到当前目录，只在该目录下生效。"
+          },
+          {
+            "heading": "### 安装后找不到 Skill？",
+            "excerpt": "| Cursor 找不到 | skills CLI 目前不会为 Cursor 创建规则文件 | 用上面的手动安装命令 |"
+          },
+          {
+            "heading": "### 搜索参数",
+            "excerpt": "| `limit` | 否 | 返回数量，默认 5，最大 20 |"
+          },
+          {
+            "heading": "### 方式一：skills CLI（推荐）",
+            "excerpt": "**⚠️ 必须加 `-g` 参数！** 不加 `-g` 会安装到当前目录，只在该目录下生效。"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "所有 API 返回 Markdown 纯文本（`Content-Type: text/markdown`），可直接阅读。"
+          },
+          {
+            "heading": "### 安装后找不到 Skill？",
+            "excerpt": "| Claude Code 找不到 | 安装时没加 `-g`，只装到了当前目录 | 重新运行 `npx skills add wxkingstar/SpecFusion -g -y` |"
+          },
+          {
+            "heading": "### 文档同步",
+            "excerpt": "（需要 ego lite 桥接）"
+          },
+          {
+            "heading": "### 文档同步",
+            "excerpt": "同步拼多多开放平台文档（需先跑 scripts/pdd-refresh.sh）"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# SpecFusion",
+            "excerpt": "在 Claude Code 里直接搜企业微信、飞书、钉钉、淘宝开放平台、小红书、抖音电商开放平台、微信小程序、微信小店、拼多多开放平台、有赞开放平台、微信支付、支付宝开放平台、京东商家开放平台"
+          },
+          {
+            "heading": "## 为什么用 SpecFusion",
+            "excerpt": "- **中文搜索准确** — jieba 分词 + FTS5 全文索引，`发送应用消息`、`access_token`、`40001` 都能搜到"
+          },
+          {
+            "heading": "### 方式二：DeepSeek Harness 插件",
+            "excerpt": "在 DeepSeek Harness 中安装 SpecFusion 插件（自动注册 skill + 5 个原生搜索工具，无需 Bash + curl）："
+          },
+          {
+            "heading": "## 为什么用 SpecFusion",
+            "excerpt": "**零配置** — 云端服务已部署好，安装 Skill 后即可使用，无需自建后端"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "所有 API 返回 Markdown 纯文本（`Content-Type: text/markdown`），可直接阅读。"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/search?q=关键词&source=wecom&limit=5` | 搜索文档 |"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/doc/{doc_id}` | 获取文档全文 |"
+          },
+          {
+            "heading": "## API 参考",
+            "excerpt": "| `GET /api/recent?source=wecom&days=7` | 最近更新的文档 |"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "franksong2702/dsh-codex-connect",
+      "practicalScore": 73,
+      "oracleScore": 58,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 8,
+          "gap": -4
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "# Codex Connect",
+            "excerpt": "It does not turn a ChatGPT subscription into an OpenAI Platform API credential."
+          },
+          {
+            "heading": "### Version updates",
+            "excerpt": "The plugin never runs an upgrade command by itself."
+          },
+          {
+            "heading": "### 4. Sign in with ChatGPT",
+            "excerpt": "Do not copy an authorization URL, code, token, or account identifier into an issue, log, or configuration file."
+          },
+          {
+            "heading": "## Reauthentication, diagnostics, and conflicts",
+            "excerpt": "OAuth is stored separately at `$DSH_HOME/.openai-codex-auth.json` (`~/.dsh` by default). `~/.codex/auth.json` is never copied or modified."
+          },
+          {
+            "heading": "## Reauthentication, diagnostics, and conflicts",
+            "excerpt": "By default, the OAuth routes accept loopback browser requests only."
+          },
+          {
+            "heading": "## Compatibility and security boundary",
+            "excerpt": "Every DNS result and redirect is checked, and the connection is pinned to the validated address so localhost, private networks, link-local services, and cloud metadata endpoints remain unreachable."
+          },
+          {
+            "heading": "## Compatibility and security boundary",
+            "excerpt": "The only verified compatibility combination is DSH plugin API packages `0.1.1-rc.2`, `@earendil-works/pi-ai` `0.82.1`, and Node.js `^22.19.0 || >=24.0.0`"
+          },
+          {
+            "heading": "## Compatibility and security boundary",
+            "excerpt": "ChatGPT plan eligibility, model access, quotas, and backend behavior are controlled by OpenAI and may change."
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "# Codex Connect",
+            "excerpt": "`dsh-codex-connect` adds the `openai-codex` model catalog and a separate ChatGPT OAuth login."
+          },
+          {
+            "heading": "# Codex Connect",
+            "excerpt": "Models run through Harness's normal LLM service, so streaming, tool calls, reasoning replay, compaction, filesystem controls, permission gates, and approval prompts remain Harness-owned."
+          },
+          {
+            "heading": "# Codex Connect",
+            "excerpt": "When an eligible GPT Codex model is selected, the Composer also shows a conversation-scoped Fast Mode toggle and a compact weekly-quota indicator."
+          },
+          {
+            "heading": "# Codex Connect",
+            "excerpt": "Installation is additive. The bundle does not replace the current default model or search route."
+          },
+          {
+            "heading": "### Version updates",
+            "excerpt": "Codex Connect checks public package metadata and this repository's `verified-compatibility.json` periodically through the DSH Web server."
+          },
+          {
+            "heading": "### Version updates",
+            "excerpt": "When a newer plugin version is available, a frame-wide DSH notice appears even if you switch conversations."
+          },
+          {
+            "heading": "### Composer controls for GPT Codex conversations",
+            "excerpt": "**Fast Mode (lightning icon)** is off by default for each conversation. Click it to request the faster `1.5×` mode; click it again to return to Standard speed."
+          },
+          {
+            "heading": "### Composer controls for GPT Codex conversations",
+            "excerpt": "**Weekly quota bar** is the short horizontal bar beside the model selector. Its color moves from green through yellow/orange to red as the remaining amount falls."
+          }
+        ]
+      }
+    },
+    {
+      "repo": "Leslie-SSS/seeWxapkg",
+      "practicalScore": 56,
+      "oracleScore": 46,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 10,
+          "gap": 0
+        },
+        "capabilityItems": {
+          "machine": 9.5,
+          "oracle": 6,
+          "gap": -3.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "本项目所称“反编译”是对编译产物的**尽力静态恢复**，不是提取原始源码。结果可能缺少原变量名、注释、目录结构或运行时生成内容；“反编译结果已生成”也不代表与原工程完全一致或可以直接运行。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "静态反编译，不通过 `eval`、`Function` 或 VM 执行包内 JavaScript。"
+          },
+          {
+            "heading": "## 支持范围与限制",
+            "excerpt": "反编译无法重新生成编译时已经丢失的注释、原始变量名、源码目录和构建配置，也无法静态确定所有动态生成、运行时注入或强混淆内容。"
+          },
+          {
+            "heading": "## 支持范围与限制",
+            "excerpt": "可以识别；缺少主包运行时时会跳过不可靠处理并标记为 `partial`"
+          },
+          {
+            "heading": "## 支持范围与限制",
+            "excerpt": "当前仅做分类识别，不承诺完整反编译"
+          },
+          {
+            "heading": "### Docker Compose（推荐）",
+            "excerpt": "AppID 在一次解密尝试后即销毁，因此此后若进程意外中断，加密任务需要重新提交。"
+          },
+          {
+            "heading": "## 隐私与部署安全",
+            "excerpt": "解包与打包会检查路径穿越、绝对路径、重复 ZIP 条目和符号链接。"
+          },
+          {
+            "heading": "## 隐私与部署安全",
+            "excerpt": "API 没有内置用户认证和按用户划分的任务权限。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "(preamble)",
+            "excerpt": "它会自动识别包类型，在需要时使用 AppID 解密，并完成解包、反编译、排版整理和结果检查。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "支持普通包、加密包和常见微信 4.x 结构；加密包需要匹配的 AppID。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "自动反编译并整理 JSON、JavaScript、WXML 和 WXSS，无法确认的内容会如实标记。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "提供实时进度、结果状态、静态质量分、检查提示和技术报告。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "下载 ZIP 只包含 `src/`，原始解包依据不会混入交付文件。"
+          },
+          {
+            "heading": "## 主要功能",
+            "excerpt": "支持在线使用与单机 Docker Compose 自托管，不依赖外部数据库、缓存或消息队列。"
+          }
+        ]
+      }
+    },
+    {
+      "repo": "ZASENJC/dsh-plugins-store",
+      "practicalScore": 54,
+      "oracleScore": 44,
+      "familyGaps": {
+        "reliabilityItems": {
+          "machine": 10,
+          "oracle": 8.5,
+          "gap": -1.5
+        },
+        "capabilityItems": {
+          "machine": 12,
+          "oracle": 8.5,
+          "gap": -3.5
+        }
+      },
+      "citations": {
+        "reliabilityItems": [
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "收录仅表示仓库同时出现在 `dsh-plugin` 与 `deepseek-harness` Topic，且未被识别为归档仓库、Fork 或宿主应用，不代表项目已经通过安装、兼容性、安全性或质量验证。"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "沙箱无商店密钥、非 root、资源受限"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "该标记不等于完整安全审计或官方背书。"
+          },
+          {
+            "heading": "## 自动化架构",
+            "excerpt": "验证没有新结果或执行失败时，发布流程继续使用最近一次成功状态，不会中断网站更新。"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "标签不足时，项目会保留为“其他”或“待识别”，不会根据名称强行推断。"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "失败结果带错误码进入人工复核，不会进入源码排除名单。"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "目录同步模块只读取公开仓库元数据，不执行第三方代码"
+          },
+          {
+            "heading": "### 同步目录",
+            "excerpt": "未提供 Token 时会受到 GitHub API 的较低请求限额约束。"
+          }
+        ],
+        "capabilityItems": [
+          {
+            "heading": "## 功能",
+            "excerpt": "自动收录同时带有 `dsh-plugin` 与 `deepseek-harness` Topic 的公开仓库，并排除归档仓库、Fork 和宿主应用"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "提供独立的 [目录](https://dshmk.com/)、[已验证](https://dshmk.com/verified)和 [排行榜](https://dshmk.com/ranking)页面，支持搜索、分类、筛选和排序"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "排行榜支持 24 小时 Star 增速、最多 Star、最新发布和最近更新；项目详情展示分类依据、同标签项目和验证进度"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "每 30 分钟自动同步 GitHub 仓库数据"
+          },
+          {
+            "heading": "## 功能",
+            "excerpt": "配套 DSH Web 插件支持通过 `/store`、设置页和 Agent 会话浏览市场，并在用户明确请求和确认后安装、更新或移除 Web profile 插件"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "独立验证流程先对固定 SHA 做源码特征分类，再只对分类后的待验证目录进入一次性 Linux 沙箱。"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "只有绑定当前仓库 ID、SHA、DSH 版本、平台和验证器版本的通过结果才显示“已验证”"
+          },
+          {
+            "heading": "## 收录与验证",
+            "excerpt": "项目分类优先使用仓库公开的 GitHub Topics，并与站内词典和词根规则比对。"
+          }
+        ]
+      }
+    }
+  ]
+}

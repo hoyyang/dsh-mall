@@ -1,0 +1,695 @@
+{
+  "reviews": [
+    {
+      "repo": "ZSeven-W/dsh-android",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "A `multipart/x-mixed-replace` PNG stream produced **in-process** and served straight from the latest-frame buffer through signed `/_dsh/dsh-android/*` routes.",
+        "Tap and drag on the live video; a toolbar with **◁ Back · ○ Home · □ Recents** plus rotate, screenshot, and refresh; a device menu for the notification shade, quick settings, lock, wake, and the assistant.",
+        "On an image-capable model every capture tool (screenshot, interact, tap_element, tap_text, tap_row) returns the screenshot ITSELF as an image block — the model sees the screen directly.",
+        "`android_ui_tree` dumps the `uiautomator` hierarchy and `android_tap_element` taps by `resource-id`, text, or content-description",
+        "| `android_build_run` | Build a Gradle project (`./gradlew assembleDebug`), install the resulting debug APK (`adb install -r`), and launch it.",
+        "`android_find_text` | OCR the CURRENT screen with the plugin-compiled Vision helper (accurate recognition, zh-Hans + en-US).",
+        "`android_wait_for` | Wait until text appears or disappears, polling the same capture + OCR pipeline every 600 ms until the condition holds or the timeout expires",
+        "`android_backtrace` | Ask the process to dump its stacks (`kill -3`) and read the resulting ANR trace from `/data/anr/`.",
+        "`android_meminfo` | Parse `dumpsys meminfo <package>`: total PSS, the Java/native/graphics split, and the top categories",
+        "`android_ui_rows` | Read a list/feed screen (`RecyclerView` and friends) as ROWS instead of a raw tree: repeated same-shaped children become rows carrying an index, a pixel frame, the aggregated label",
+        "`android_launch_app` | Launch an installed app by `packageName`, or by `name` (a case-insensitive label substring resolved through the same listing).",
+        "`android_logs` | Read what the device logs: `snapshot` (`logcat -d -v time` over a recent window, default 2m) or `follow` (a bounded live capture for `duration_seconds`, default 10, max 60 — never a hanging stream)."
+      ],
+      "usageItems": [
+        "1. **Discover devices** — \"List the Android devices.\" → `android_devices`.",
+        "2. **Start the stream** — \"Stream emulator-5554.\" → `android_boot`. The panel opens with the device live.",
+        "3. **Tap on the video** — tap or drag directly on the panel, or let the agent drive: \"Open Settings, then tap Display.\" → `android_interact`",
+        "4. **Build and run your app** — \"Build and run /path/to/MyApp.\" → `android_build_run`.",
+        "5. **Read the logs** — \"Show the last two minutes of logcat for com.example.app.\" → `android_logs`.",
+        "Counter keys round-trip: pass one exactly as listed to `android_tap_row.expect_count`."
+      ],
+      "usageActions": [
+        "**Discover devices** — \"List the Android devices.\" → `android_devices`.",
+        "**Start the stream** — \"Stream emulator-5554.\" → `android_boot`.",
+        "tap or drag directly on the panel",
+        "**Build and run your app** — \"Build and run /path/to/MyApp.\" → `android_build_run`.",
+        "**Read the logs** — \"Show the last two minutes of logcat for com.example.app.\" → `android_logs`.",
+        "Relaunch the emulator with software rendering:"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "emulator -avd <name> -gpu swiftshader_indirect"
+      ],
+      "usecases": [],
+      "outputs": [
+        "Returns `{device, size, items:[{text, confidence, rect}]}` where rects are **pixel** boxes with a top-left origin, confidence-sorted and capped at ~40 KB.",
+        "Capture a PNG and return a small JSON summary (path, bytes, dimensions, device)",
+        "Dump the foreground app's `uiautomator` hierarchy as nodes — `type` (the class tail), `text`, `contentDesc`, `resourceId`, `bounds` in pixels, `enabled`, `focused`",
+        "on failure the result carries the tail of the Gradle error output.",
+        "Output is capped at ~300 lines / 30 KB with a narrowing hint.",
+        "| Persistent screencap loop | ≈ 8 fps |",
+        "| `input tap` round trip | ~130 ms |"
+      ],
+      "reliability": [
+        "When adb cannot be resolved the tools stay registered and every call fails with an explanatory error naming the fix.",
+        "A timeout is a normal `matched:false` answer, never an error.",
+        "an out-of-range index FAILS rather than clamping",
+        "Most non-rooted devices refuse that directory, so the tool degrades to the crash buffer (`logcat -b crash -d`) and reports honestly which engine answered and what it cannot see.",
+        "**Frame rate is lower over USB** — roughly 2–5 fps against a phone versus 5–10 fps on an emulator, because every frame crosses the USB link as a full PNG.",
+        "**`android_shutdown` cannot power off a phone.** adb has no such verb; the tool says so instead of pretending.",
+        "with zero consumers the stream stops itself after 5 minutes",
+        "On Linux and Windows hosts those three tools report that OCR needs the macOS Vision framework; the other 17 are unaffected.",
+        "Without it, non-ASCII typing is REFUSED with the install hint — never silently mistyped.",
+        "`screencap` itself returns blank frames, so every screen tool is affected)."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/dsh-android-overview.png\" alt=\"DSH Android — a live Android device inside the conversation\" width=\"100%\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Quick-start lines pair a user utterance with a tool call but show no response side, so ioPairs left empty.",
+        "No explicit scenario/use-case section; tool when-to-use guidance kept inside capability.",
+        "Loopback/HMAC security-fence and smoke-suite evidence exceeds the reliability cap and was not separately recorded."
+      ]
+    },
+    {
+      "repo": "alibaba/loongsuite-pilot",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Detects supported agents from local paths and commands.",
+        "Installs hooks or plugins and reads local logs, sessions, or data files.",
+        "Normalizes agent-native events into a shared GenAI schema.",
+        "Exports to JSONL, Alibaba Cloud SLS, HTTP, and OTLP trace backends.",
+        "Supports per-agent content capture policy and secret masking before output.",
+        "Provides service status, restart, rollback, and a built-in local dashboard.",
+        "Pilot automatically runs a menu bar app after installation — no extra command needed. It shows live token, session, request, and tool counts, plus per-agent and per-provider breakdowns",
+        "Link collected agent spans to an **upstream** trace so each turn's span tree reparents under the upstream span.",
+        "Agent definitions live in `agents.d/`. You can add new agents without changing the deployment framework",
+        "Pilot's `PreToolUse(Bash)` hook reserves the TOOL span id, prepends `TRACEPARENT` (and valid `TRACESTATE`, when present) to the Bash command, then reuses that id when the Stop hook builds the TOOL span.",
+        "The local dashboard starts and stops with the collector."
+      ],
+      "usageItems": [
+        "Use the `loongsuite-pilot` command after installation:",
+        "`http://127.0.0.1:8765/`; no separate monitor command is required.",
+        "the caller writes `{sessionId, contentHash, contentPrefix, traceparent}` to `~/.loongsuite-pilot/acp-correlate/<sessionId>.jsonl` when it sends a prompt.",
+        "- **Environment** (`TRACEPARENT` on the agent process): applied to the session's first turn, via the agent's hook.",
+        "Verify the service:"
+      ],
+      "usageActions": [
+        "loongsuite-pilot start",
+        "loongsuite-pilot stop",
+        "loongsuite-pilot restart",
+        "loongsuite-pilot status",
+        "loongsuite-pilot info",
+        "loongsuite-pilot token-usage",
+        "loongsuite-pilot rollback"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "loongsuite-pilot status",
+        "loongsuite-pilot start"
+      ],
+      "usecases": [
+        "Local backup and easy inspection. Enabled by default.",
+        "Alibaba Cloud Log Service reporting. Supports WebTracking, AK, and API Key modes.",
+        "POST batches to a custom endpoint.",
+        "Export GenAI activity as OpenTelemetry traces.",
+        "Use this when the caller cannot obtain a per-turn `sessionId` up front."
+      ],
+      "outputs": [
+        "Local JSONL output is enabled by default under `~/.loongsuite-pilot/logs/output/` on Linux/macOS",
+        "LoongSuite Pilot emits a normalized GenAI event schema across all supported agents.",
+        "the upstream `traceparent` reaches Pilot via one of two schemes and is stamped onto collected records (`trace_id` on the turn, `parent_span_id` on the user-input event)"
+      ],
+      "reliability": [
+        "OpenClaw integration requires OpenClaw 2026.5.12 or later.",
+        "Qoder 1.10.0 or later, User edition",
+        "Disabled by default, and fully fail-open (never affects normal collection/reporting).",
+        "This capability is fail-open and currently does not cover ACP-only downstream trace propagation, subagents, PowerShell, MCP tools, or non-Bash tools.",
+        "Agents omitted from this Windows table do not currently have an explicit Windows support statement; omission does not necessarily mean that the agent cannot run on Windows.",
+        "| Kiro CLI      | Hook / session polling    | Yes          | Yes        | No          | Yes                       |",
+        "environment variables affect only processes that inherit them, and `loongsuite-pilot restart` alone does not change an already-running Claude Code hook environment.",
+        "The downstream CLI must extract Trace Context and configure its own exporter.",
+        "WorkBuddy Desktop 5.3.5.0; Windows 11 installed-product E2E",
+        "| Qoder Work | Hook / local data source | Yes | Yes | No | Yes | User edition |"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/_assets/img/dashboard.png\" alt=\"LoongSuite Pilot local dashboard\" width=\"880\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/_assets/img/menubar.jpg\" alt=\"LoongSuite Pilot macOS menu bar app\" width=\"360\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Dashboard caption not double-counted as an output since it captions the same screenshot.",
+        "No ioPairs; no code fences beyond install/build/verify command groups.",
+        "Supported-agent matrix rows for third-party agents recorded only where they state Pilot's own integration limits."
+      ]
+    },
+    {
+      "repo": "hancao97/hanai-investment-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**市场全景**：六大指数、涨跌停与上涨/下跌家数、两市成交额、行业/概念 `treemap` 和四类榜单并行加载",
+        "**自选分组**：默认分组始终保留，支持新建、重命名、删除自定义分组，以及股票添加、移动、移除和三态排序。",
+        "**多周期行情**：支持分时、日 K、周 K、月 K；K 线统一使用前复权。",
+        "**变盘点标记**：日、周、月 K 保留“巨量分歧、巨量弱收、深跌放量、深跌强收、深跌长影、放量回稳”",
+        "**双均线模式**：可在短线 `MA5 / MA10` 与中线 `MA20 / MA60` 间切换",
+        "**自选估值**：合理估值由价值大师网按分组异步、限并发加载，不阻塞行情表格",
+        "**单专家独立研判**：支持段永平、查理·芒格、沃伦·巴菲特和混江龙四套方法论；每次研判绑定独立工作区和持久 DSH Session。",
+        "**五位对谈专家**：段永平、混江龙、查理·芒格、沃伦·巴菲特均支持研判与开放对谈；孙宇晨视角仅进入开放对谈。",
+        "**持久开放会话**：每次对谈绑定独立专家快照与 DSH Session，支持正常追问、检索、工具调用、队列、steer、取消、审批和历史恢复。",
+        "**全局搜索与深链接**：可按代码、名称或拼音搜索股票",
+        "线上触发不调用大模型，也不读取新闻、基本面或未来数据，而是对当前股票已经取得的前复权 OHLCV 做确定性计算；相同 K 线输入必然得到相同标记。",
+        "**运行中交互**：支持排队发送、立即插话、编辑/移除队列消息、取消运行，以及工具批准和结构化问题回复。"
+      ],
+      "usageItems": [
+        "1. **看市场**：六大指数、市场宽度、行业/概念热力图和涨幅、跌幅、成交额、换手率榜单共同呈现当日结构。",
+        "2. **建自选**：搜索股票，按分组添加、移动和维护标的；刷新当前分组并比较行情、估值与加入以来表现。",
+        "3. **读个股**：结合前复权 K 线、均线、量价观察标记、行情快照、基本面、合理估值和价值曲线建立上下文。",
+        "4. **开放对谈**：不选股票直接选择一位专家，围绕行业周期、商业模式、近期事件或决策问题持续讨论。",
+        "5. **发起研判**：选择股票和一位大师，由 Agent 独立检索和核验公开资料，形成可归档的完整 Markdown 报告。",
+        "6. **继续验证**：开放对谈和研判追问都复用各自原有的 DSH Session；研判还可查看工具过程或显式修订报告。",
+        "日 K 首屏按需加载，向左拖动可继续取得更早数据",
+        "“变盘点”开关默认开启，关闭后只隐藏标记和证据，不停止行情刷新，也不影响 K 线、成交量或均线。"
+      ],
+      "usageActions": [
+        "搜索股票，按分组添加、移动和维护标的；刷新当前分组并比较行情、估值与加入以来表现。",
+        "不选股票直接选择一位专家，围绕行业周期、商业模式、近期事件或决策问题持续讨论。",
+        "选择股票和一位大师，由 Agent 独立检索和核验公开资料，形成可归档的完整 Markdown 报告。",
+        "日 K 首屏按需加载，向左拖动可继续取得更早数据",
+        "工具栏可以一键显示或隐藏全部变盘点。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "变盘点能力审计 | [GitHub Pages 首页](https://hancao97.github.io/hanai-investment-dsh/)",
+        "A 股未来一年周期展望 | [完整门禁版在线报告](https://hancao97.github.io/hanai-investment-dsh/a-share-cycle-outlook.html)",
+        "中国平安在 2026-07-01 命中 `低位破低反包`，悬浮卡同时展示触发条件、20 日历史方向频率、样本数、同场景对照和研究截止日"
+      ],
+      "outputs": [
+        "研究请求 5,813 只当前及历史 A 股证券，成功取得 5,809 只行情；其中 5,704 只达到至少 120 根预热要求，共分析 9,813,872 根有效可交易日 K",
+        "| 低位破低反包 | 20 日上涨 | 3,581 | **65.60%** | **+7.12%** | 65.75% | 显示 `包`；形态独立增量未证实 |",
+        "| 极缩量后脱离平台 | 20 日上涨 | 22,495 | 47.68% | +0.84% | 49.53% | 明确否决为买点 |",
+        "本轮通过数为 **0/16**，因此产品没有新增任何“已验证高胜率买点”。",
+        "[turning-point-capability-audit-2026-08-23.html](docs/turning-point-capability-audit-2026-08-23.html)",
+        "[冻结 JSON](docs/research-data/full-market-turning-point-study-2026-08-22.json)"
+      ],
+      "reliability": [
+        "加载不足 121 根当前周期 K 时不显示，以保证均线、回撤和波动率充分预热。",
+        "最近成功快照标记 stale，完全不可用则显示 unavailable",
+        "缺失值始终显示为 `—`，绝不解释成 `0`",
+        "单只股票估值失败不会拖垮整组。",
+        "北交所退市历史、逐日 ST 状态和完整退市收益仍不完备，因此这里称“实质性全市场扩展”，不称无偏的全历史 A 股。",
+        "DSH 仍处于 pre-release，rc 之间不承诺兼容。仓库把 Host、Client 和 profile 装配都纳入兼容性检查，但升级前仍应运行完整门禁。",
+        "DSH Session 删除与跨版本迁移能力仍有限；备份持续对话时，需要同时保留 Hanai 数据根和 DSH Session 数据。",
+        "全市场新增的 `低位破低反包`、金针观察/确认和 `高位巨量长上影`只有日线证据，因此不外推到周/月 K。",
+        "API Key 是 write-only secret：页面提交后清空输入，RPC 不返回明文，日志和报告也不得包含它。",
+        "仅已完成或失败且会话不在运行的研判允许删除；二次确认后移除全部本地报告/工作文件并归档对应 DSH Session，进行中的研判受到保护。"
+      ],
+      "media": [
+        {
+          "excerpt": "![Hanai Worth · 值见黑夜模式市场页](docs/assets/dashboard-dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Hanai Worth · 值见个股详情与价值曲线](docs/assets/stock-detail-dark.jpg)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Hanai Worth · 值见变盘点——低位破低反包、历史回测证据与显示开关](docs/assets/kline-turning-points.jpg)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Light-mode market screenshot treated as a duplicate view of the dark market page and excluded; hero SVG excluded as brand art.",
+        "All code fences are install/config/dev-gate commands, so codeExamples is empty.",
+        "No ioPairs; product is UI-driven with no command reference in the README."
+      ]
+    },
+    {
+      "repo": "Sanqi-normal/dsh-webui-market-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "目录按分类分组，支持搜索与\"已安装\"过滤",
+        "可一键按 **最热（Star 降序，无 Star 的排最后）/ 最新（收录日期）** 排序，或恢复官网默认顺序",
+        "**跨 Profile 同步** 区把 web 里已装的插件一键补装到目标 profile（只新增缺失项）",
+        "「自动同步到其它 profile」**默认开启**——安装插件时自动装到本机所有已初始化的 profile",
+        "**安装 / 更新 / 卸载** 组成 FIFO 任务队列：多个插件可以连续排队提交，任务面板固定在右下角、不随页面滚动隐藏",
+        "点击后前端会新建一个对话，并把操作目标、状态、环境信息和完整错误日志作为 prompt 自动发送给 AI，方便直接排查或解释状况",
+        "**停用 / 启用**：停用保留依赖与磁盘文件，只把插件移出激活的 bundle 层（重启后仍保持停用）；启用按原顺序恢复，免删装",
+        "**本机插件**：列出所有由依赖管理的插件（含在市场之外安装的、以及未进 bundle 层的 client-only/普通依赖），标注目录内/目录外、已停用、来源类型",
+        "安装状态按「作者 + 仓库」（`owner/repo`）识别",
+        "会尝试挂入运行中的组合并**自动刷新页面生效**（无需手动操作）",
+        "已安装插件卡片自动显示\"更新\"按钮（github 源对比 lockfile 锁定 commit 与 GitHub HEAD；registry 源对比 npm latest 与已装版本；本地 link/file 源不检测）",
+        "**一键更新全部**会把所有可更新插件依次加入队列"
+      ],
+      "usageItems": [
+        "打开 **设置（Settings）→ 插件（Plugins）→ 插件市场（Plugin Market）**",
+        "点 **详情** 查看该插件的官方安装命令（含目标 profile）",
+        "可取消排队项、终止执行项、查看每个任务的 pnpm 日志",
+        "队列头部「清空」可一键清除全部已完成/失败记录（逐条清除也支持）",
+        "点击即重新解析最新版本并作为后台任务执行，完成后下次重启生效",
+        "配合 `dsh plugin --profile <name> remove <包名>` 可手工回退"
+      ],
+      "usageActions": [
+        "打开 **设置（Settings）→ 插件（Plugins）→ 插件市场（Plugin Market）**",
+        "点 **详情** 查看该插件的官方安装命令（含目标 profile）",
+        "可取消排队项、终止执行项、查看每个任务的 pnpm 日志",
+        "队列头部「清空」可一键清除全部已完成/失败记录（逐条清除也支持）",
+        "**一键更新全部**会把所有可更新插件依次加入队列",
+        "配合 `dsh plugin --profile <name> remove <包名>` 可手工回退",
+        "可用 `pnpm run snapshot` 从官网 JSON API 直接抓取刷新"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "官网目录只发布 `--profile web` 命令，而桌面端（desktop shell）启动的是自己独立的 profile（如 `desktop`），市场装进 web 的插件桌面应用不会自动加载。"
+      ],
+      "outputs": [
+        "实时显示「排队中 / 校验中 / 执行中 / 完成 / 失败 / 已终止 / 超时」",
+        "每个卡片显示 GitHub Star 数（无数据不显示）"
+      ],
+      "reliability": [
+        "遇到 pnpm 的临时网络错误（`GET ... error` / `ETIMEDOUT` / `ECONNRESET` 等）会**自动重试一次**，持续失败时给出代理/镜像排查提示",
+        "每个任务默认超过 120 秒自动超时",
+        "遇到 ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION 时市场会自动把违规的 name@version 合并进 profile 的 pnpm-workspace.yaml 的 minimumReleaseAgeExclude",
+        "**来源白名单**：安装只接受精选目录（awesome-dsh-plugin.com curated registry）收录的 `github:` 源，目录外的一律拒绝",
+        "`install` / `uninstall` / `update` / `kill` 写操作只接受同源 POST（Origin 头与 Host 一致），跨源请求一律 403",
+        "只有出现 `dsh web:` 就绪行（Loader 树成功结算后才打印）才判定可装",
+        "同步仅补装、绝不删除或降级目标 profile 里已有的任何内容",
+        "检测失败静默降级为\"无更新\"，不会阻塞列表",
+        "写入任一 profile 前会把 `package.json` 备份为同目录 `.mkts-snapshot-<时间戳>.json`",
+        "抓取失败时按「过期缓存 → 内置离线快照」回退"
+      ],
+      "media": [
+        {
+          "excerpt": "![插件市场效果](img/51766e7935d9e67d7087510e4d6b0cb8.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No ioPairs; no operational code fences (install commands excluded).",
+        "DSH version compatibility statement omitted because the reliability cap of 10 was reached.",
+        "Linked catalog entries' plugin capabilities excluded per the linked-project ownership rule."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh-annotation",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Selection-annotation plugin for DSH Web: select text → annotate → press Enter to send it along with your message; the model replies to each annotation by number.",
+        "A blue numbered marker + highlight anchored to the passage, viewport-anchored with collision avoidance, never lost when scrolled out of view",
+        "Any number of annotations accumulate across messages/turns, numbered from 1",
+        "The annotation block is removed from your bubble's DOM the moment you send (before the browser paints), leaving only the question + the chip (hover to view)",
+        "A format instruction is injected into the message so the model replies `Annotation 1: …` … `Annotation N: …` one by one",
+        "UI copy and the protocol block follow DSH's `locale` service (`zh`/`en`, live switch); historical bubbles stay parseable across languages"
+      ],
+      "usageItems": [
+        "Select assistant text → toolbar \"Annotate\" → write your note (may be empty); dismiss by clicking elsewhere or pressing Esc",
+        "hover to view all annotations, remove them one by one",
+        "Press Enter and the annotation block goes to the model together with whatever question is in the input box."
+      ],
+      "usageActions": [
+        "Select assistant text → toolbar \"Annotate\" → write your note (may be empty); dismiss by clicking elsewhere or pressing Esc",
+        "hover to view all annotations, remove them one by one",
+        "Press Enter and the annotation block goes to the model together with whatever question is in the input box."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "The model replies with `Annotation 1: …` … `Annotation N: …`, one per annotation, and every Annotation label in the reply is a hoverable chip showing the annotated passage and your note."
+      ],
+      "reliability": [
+        "the Enter interception carries `isComposing` / keyCode 229 guards; never hard-edits the composer textarea's DOM",
+        "a 1 s polling fallback plus historical-message repair after refresh",
+        "missing locale service falls back to zh",
+        "`watchInputDraft` can be ineffective before the session is loaded at init; it is only a staging entry",
+        "`client.js` is served per request with no caching, so a hard refresh (Cmd/Ctrl+Shift+R) picks up plugin changes",
+        "works inside the focus conversation view of [dsh-focus-chat](https://github.com/dingyi222666/dsh-focus-chat)",
+        "dsh --profile web --dump-config | rg \"id: dsh-annotation\"   # must be exactly 1 line"
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/c3186efc-44d3-4e7f-9523-1902d9d037e9\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/0b48ac02-4648-4b94-8d8f-344f8b7c25b4\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/8b2610d0-3d00-41be-b314-bac2fe616787\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"2940\" height=\"1770\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9b66deea-3786-4296-9b0d-52873a15f5e1\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Four uncaptioned externally hosted screenshots assumed to be distinct demonstration views; weight 0.5 applied as GitHub user-attachments media.",
+        "Interaction-flow fence pairs the annotation block with the numbered reply but not on a single line, so ioPairs left empty.",
+        "No explicit use-case scenarios or operational code examples beyond install/config fences."
+      ]
+    },
+    {
+      "repo": "Anionex/dsh-turn-rewind",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "Message-anchored project-file recovery for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), with an option to restart from the restored request.",
+        "content-addressed restore-point manifests",
+        "automatic pre-restore rescue points",
+        "post-restore hash verification",
+        "rollback after a failed restore",
+        "startup reconciliation of interrupted restore journals",
+        "a public `ctx.changeLedger` service that other plugins can consume",
+        "Rewind appears as an icon-only third action under each user message, after its timestamp and native Copy action",
+        "the same-origin `/turn-rewind` endpoint resolves the selected `user/message` sequence, exposes a paged file preview, mints a short-lived session-bound restore plan"
+      ],
+      "usageItems": [
+        "Opening it shows the affected files and offers two choices: restore the files and restart from before that message, or restore only the files",
+        "Creates and opens a Session ending before the selected message, then puts that message's text back in the composer.",
+        "If the project files already match the state before the selected message, Turn Rewind performs no action and directs the user to the native **Branch** button for conversation-only branching.",
+        "Recovery uses the public `ctx.changeLedger` service API: `listRecovery` finds the operation's `rescuePointId`, `inspect` reviews that rescue point, then `planRestore`/`applyRestore` handle the affected paths."
+      ],
+      "usageActions": [
+        "press the final restore button in the rewind dialog",
+        "shows a concise preview with a “view all files” action",
+        "create rescue point → restore → verify"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "export const inject = ['changeLedger']"
+      ],
+      "usecases": [],
+      "outputs": [
+        "the dialog preview generates an expiring, session-bound plan from the current tree and changes no files.",
+        "It describes each file as restoring an earlier version, finding a deleted file, removing a later-added file, or restoring permissions/type.",
+        "the plugin captures a hidden checkpoint in the first `agent/pre-step` waterfall before the Agent processes the opening user message."
+      ],
+      "reliability": [
+        "It never commits, stashes, resets, switches branches, edits the Git index, or decides automatically that a change should be reverted.",
+        "**Explicit only:** nothing is restored automatically — every restore starts from the user pressing the final button in the Web dialog, or from an explicit call through the service API.",
+        "**No silent omission:** unsupported submodules, sparse checkouts, oversized files, aggregate limits, and unsupported file types fail point creation.",
+        "**No path escape:** every durable path is canonical and workspace-relative; restore refuses symlink parents and non-empty directory replacement.",
+        "**No stale overwrite:** selected paths and the reviewed HEAD/branch/operation fence are checked again at apply time. Any relevant post-review change invalidates the plan.",
+        "Any running Agent using the same worktree, including the source Session, blocks restoration; idle Sessions do not block.",
+        "If child creation fails after “restore and restart,” Change Ledger automatically restores the pre-operation files from the backup.",
+        "If an ignored or otherwise unmanaged file occupies a path that restoration would replace, the restore fails rather than deleting it.",
+        "Capture failures are reported but do not reject the user's turn; the corresponding message simply has no usable rewind point.",
+        "All size and user-point retention limits fail loudly."
+      ],
+      "media": [
+        {
+          "excerpt": "![Turn Rewind action under a user message](docs/assets/turn-rewind-action.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Turn Rewind review dialog](docs/assets/turn-rewind-dialog.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "No ioPairs and no explicit persona/scenario use cases.",
+        "Git-worktree-only scope statement and the test-suite evidence (real temp Git repos) exceed the reliability cap and were not separately recorded.",
+        "Configuration fence excluded as config evidence."
+      ]
+    },
+    {
+      "repo": "Fishquito7/dsh-skill-mcp-panel",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DSH 插件，在 Web 设置页同时提供「技能」与「MCP」两个管理面板，并随包提供统一终端命令 `dsh-panel`（`skill` / `mcp` 两个子命令族）。",
+        "skill 卡片列表：预览已注册安装的 skill，点击卡片可展开查看完整内容",
+        "skill 管理：开关热启用/停用、删除；按名称搜索；进入页面自动刷新",
+        "技能文件夹直接拖进页面——自动识别目录束/单文件/压缩包结构，不合规内容会被拒绝并提示原因",
+        "“+”号左侧的迁移按钮：源工作区、目标工作区（**可多选**）与技能都在\n  对话框内手动选择，批量**复制**或**移动**",
+        "工作区横栏下方新增分组横栏（全部 + 分组名，可横向滚动），\n  点击只显示该分组下的技能。",
+        "“分组”按钮（迁移按钮左侧）打开分组编辑器：新建/重命名/\n  删除分组、选择工作区、命名并批量勾选成员。",
+        "同名技能同时存在于全局与某工作区时，删除、启停、\n  查看内容均按（名称+作用域）精确操作",
+        "支持新增、编辑、启停、删除、测试连接；保存后由 DSH HMR 热加载，无需重启网关",
+        "支持 **Stdio**（本地命令）与 **HTTP**（streamable-http）两种调用方式",
+        "`env` / `headers` 密钥在 RPC 与页面中脱敏，编辑时缺省 key 保留旧值",
+        "技能实体直接存放在其所属位置里——全局在\n  `~/.dsh/skills`，限定工作区在该工作区的 `.dsh/skills`。"
+      ],
+      "usageItems": [
+        "点击即只显示该工作区下的技能。",
+        "点击只显示该分组下的技能。",
+        "重启后刷新页面：设置 → “插件”下方为“技能”，其下方为“MCP”。",
+        "CLI 只扫描当前目录锚定的项目根与用户根；管理其他工作区的技能请加 `--cwd <工作区路径>`。",
+        "同名技能存在于多个作用域时，`enable`/`disable`/`delete` 需加 `--global`/`--project`/`--workspace` 指定操作哪一份。"
+      ],
+      "usageActions": [
+        "dsh-panel skill list",
+        "dsh-panel skill add <path>",
+        "dsh-panel skill scope <name> --global",
+        "dsh-panel skill migrate <name...|--all> --from <全局|路径> --to <全局|路径> [--copy] [--yes]",
+        "dsh-panel skill disable <name>",
+        "dsh-panel skill enable <name>",
+        "dsh-panel skill delete <name>",
+        "dsh-panel mcp add --name <serverName> --stdio --command <cmd>",
+        "dsh-panel mcp test <serverName> [--profile <name>]",
+        "dsh-panel skill update [--profile <name>]"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "dsh-panel skill list",
+        "dsh-panel mcp list [--profile <name>]"
+      ],
+      "usecases": [],
+      "outputs": [
+        "停用 = 把 `SKILL.md` 改名为 `SKILL.md.disabled`，启用 = 改回来",
+        "MCP 配置写入目标 profile 的 `cordis.patch.yml` 受管块；网关在线时自动热加载。",
+        "改变所属位置 = 真实地把文件复制/移动到目标位置的文件夹"
+      ],
+      "reliability": [
+        "不合规内容会被拒绝并提示原因",
+        "逐个迁移、失败不影响",
+        "移动模式限单个目标",
+        "找不到指定作用域的条目会直接报错，不会回退误操作。",
+        "随部署附带的技能（bundled）为只读，不可停用或删除",
+        "`cordis.patch.yml` 面板块外的用户内容逐字节保留。",
+        "没有隐藏存储或联接点——卸载插件后技能仍是普通文件，照常被 DSH 发现",
+        "CLI 只扫描当前目录锚定的项目根与用户根",
+        "面板块由\n`# >>> dsh-skill-mcp-panel:mcp:begin` / `# <<< ...end` 标记，请勿手改块内内容。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"450\" height=\"450\" alt=\"image\" src=\"https://github.com/user-attachments/assets/63ca0431-c920-4ae3-94c7-2839d78a7896\" />",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img width=\"450\" height=\"450\" alt=\"image\" src=\"https://github.com/user-attachments/assets/16023783-9196-46c1-8a64-df28f23f5bdd\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "Two uncaptioned externally hosted screenshots with generic alt text; assumed to show the skill and MCP panels.",
+        "No ioPairs and no explicit use-case section.",
+        "pnpm allowBuilds install troubleshooting excluded as install/config evidence."
+      ]
+    },
+    {
+      "repo": "omdsh-dev/dsh_workflow",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把 DeepSeek Harness 的一次性多 Agent 调度，升级为可生成、可保存、可治理、可观察、可恢复的 Workflow 层。",
+        "版本化 `dsh.workflow` v1 capsule：manifest、source、intent、inputs、requires、provenance。",
+        "完整 WorkflowApi：`phase`、`spawnAgent`、`runAgent`、`wait`、`snapshot/output`、`send/stop`、`parallel`、`pipeline`、`synthesize`、单层嵌套 workflow、artifact、log、budget。",
+        "两个 built-in：可按 rubric/agent/concurrency 参数化的 `parallel-investigation`，以及完整 packet/schema/read-contract/双 primary/逐 finding verifier/audit artifact 的 `scoped-review`。",
+        "六个标准 pattern：classify-and-act、fan-out-and-synthesize、adversarial-verification、generate-and-filter、tournament、loop-until-done。",
+        "`workflow_list`：发现 built-in、pattern、项目和个人 workflow",
+        "run graph、事件、artifact、结果摘要和成本永久落盘",
+        "按 run snapshot 重跑，或用 effect cache 续跑未完成部分",
+        "`resume-run`：相同调用序号 + 相同 task input 命中缓存，其余任务继续执行。",
+        "`/workflow review` 可直接捕获当前 Git 范围并启动该流程",
+        "`workflow_manage`：查看、暂停、恢复、停止、重跑、续跑、保存、改名、修订、删除和清理。",
+        "`run_workflow`：运行命名 workflow、从自然语言 scout-then-author，或执行受限 inline workflow。"
+      ],
+      "usageItems": [
+        "`/workflow show` 默认显示最新 run，`/workflow stop` 默认停止当前活动 run。",
+        "支持等待的子命令显式传入 `--wait`（工具参数为 `wait: true`）才等待终态。",
+        "必要时点击“展开其余 N 个会话”，或将视图排序切换为“最近更新”让活动会话自动前置。",
+        "终态 run 自动按 `maxRetainedRuns` 清理；也可 preview/执行 `prune`。"
+      ],
+      "usageActions": [
+        "/workflow list",
+        "/workflow create <request>",
+        "/workflow review [base | sha <hash>] [--lean] [--risk low|medium|high] [--requirement \"...\"] [--test-evidence \"...\"] [--wait] [-- <focus>]",
+        "/workflow <name> [JSON args]",
+        "/workflow runs [--all|--limit N]",
+        "/workflow show [--full] [runId]",
+        "/workflow pause|resume|stop [runId]",
+        "/workflow rerun|resume-run <runId|savedName> [JSON args] [--wait]",
+        "/workflow save <runId> <name> [project|personal]",
+        "/workflow prune [--dry-run] [--keep N] [--older-than 7d|24h]"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "/workflow list"
+      ],
+      "usecases": [
+        "/workflow parallel-investigation {\"question\":\"为什么这个测试会间歇失败？\"}",
+        "/workflow create 为这个仓库设计一个并行安全评审流程"
+      ],
+      "outputs": [
+        ".dsh/workflow-runs/<run-id>/",
+        "workflow 启动和 `run_workflow` 默认立即返回 `{ runId, status, jobId? }`，不会让一个长流程占住当前 turn",
+        "公共 `writeReviewPackets()` 从调用方已经捕获的 diff、约束和测试证据生成工作区内 content-addressed、不可覆写的分区文件",
+        "稳定的 ProcessSnapshot、WorkflowOutcome 与 AgentResult 投影：包含 item/count/progress、失败与未验证结果、structured output、验证证据、路由、usage、artifact 和缓存重放来源。"
+      ],
+      "reliability": [
+        "生成脚本运行在 QuickJS WebAssembly 独立堆中；宿主只暴露 JSON capability RPC。静态 policy 还会拒绝 import/require、process、文件、shell、网络、timer 与非确定性 API。",
+        "同步执行、总墙钟、WASM 内存与栈都有上限；主函数返回或墙钟超时时会关闭 RPC、abort run",
+        "`readOnly: true` 使用“当前父 Agent 可见工具 ∩ 可信只读 allow-list”，未来新增写工具默认不可见",
+        "workflow 声明的 requirement 不在清单中时会失败，不会偷偷降级。",
+        "无效条目会报告但不会执行。",
+        "如果脚本或子任务字段无效（例如 `modelHint` 不是 `fast | balanced | deep`），插件会在启动任何真实子 Agent 前返回精确错误",
+        "符号链接、路径逃逸、超大文件、未知 capsule 字段、版本不兼容和 manifest/文件名不一致都会在执行前失败。",
+        "token budget 在子 Agent 发布前预留，本地 Agent 有 usage 时按 Session 实际值核算。",
+        "当前 DSH 通用 subagent seam 不直接支持 existing-agent target、per-agent effort 和 worktree；相应请求需要部署注册 dispatch/isolation adapter，未注册时 fail loud。",
+        "trusted-local workflow 会以 Node 宿主权限执行，不要把不可信第三方源码标为 trusted-local。"
+      ],
+      "media": [],
+      "concerns": [
+        "No image/GIF/video media; the mermaid flowchart is an architecture diagram, not media evidence.",
+        "No ioPairs; slash-command examples show no response side.",
+        "179-test verification and 并发同名保存 guarantees exceed the reliability cap and were not separately recorded."
+      ]
+    },
+    {
+      "repo": "kingOfSoySauce/dsh-skin-market",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "一个嵌入 DSH 设置页的皮肤市场，可以浏览、安装、使用、停用、更新和卸载社区皮肤。",
+        "打开市场时由 DSH Host 从 GitHub Pages 拉取最新 `catalog.json`",
+        "页面保持打开时每 5 分钟静默检查一次；窗口重新获得焦点时也会立即静默检查",
+        "列表首批只渲染 20 个皮肤，接近底部时每次无感追加 20 个；搜索和排序仍覆盖完整目录",
+        "npm 上出现更高的市场插件版本时，标题右侧会显示下载按钮；悬停后显示“更新”，安装完成后提示重启生效",
+        "浏览器会用 IndexedDB 保留最近一次有效目录；再次打开时先展示缓存，再在后台校验在线目录",
+        "市场在同步已收录仓库时会检查三项便于用户理解和安装的基础规范，并在皮肤详情页展示结果",
+        "皮肤市场同时支持带 `dsh.bundle` 的完整插件和只有 `dsh.client` 的纯前端皮肤。",
+        "皮肤市场里的「提交皮肤」也可以根据仓库地址生成这段提示词。",
+        "暂未满足某项规范时，页面会说明如何完善，而不会把仓库描述为“不可用”。"
+      ],
+      "usageItems": [
+        "在「设置 → 皮肤市场」标题右侧点击“更新”，完成后会提醒重启 DSH Web。",
+        "确认重启后可从“设置 → 皮肤市场”打开。",
+        "先停止当前 DSH 进程，再执行："
+      ],
+      "usageActions": [
+        "在「设置 → 皮肤市场」标题右侧点击“更新”",
+        "~/.dsh/profiles/web/node_modules/.bin/dsh-skin-market-reset --profile web"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "~/.dsh/profiles/web/node_modules/.bin/dsh-skin-market-reset --profile web"
+      ],
+      "usecases": [
+        "如果皮肤冲突导致 DSH 页面无法操作，先停止当前 DSH 进程",
+        "本地开发 DSH 皮肤时，市场默认仍会从 GitHub Pages 请求远程 `catalog.json`，因此刚写入本地 `registry/skins` 的条目可能被远程目录覆盖。"
+      ],
+      "outputs": [
+        "该命令会关闭皮肤市场管理的所有皮肤并恢复默认外观，但保留已经安装的皮肤包和皮肤市场。"
+      ],
+      "reliability": [
+        "浏览器只能提交 registry 中的 `skinId`，不能提交任意命令或安装地址",
+        "安装、更新和激活失败时会恢复 profile manifest 快照并清理半安装状态",
+        "离线、超时或远程数据不合法时自动回退到缓存，再回退到插件内置目录",
+        "远程目录通过 schema、唯一 ID/package/rowId、GitHub 仓库地址和固定 commit 安装目标校验后，才会进入可安装生命周期",
+        "命令使用原子写入；任何一步失败都会恢复执行前的 profile 文件。",
+        "当前面向 DSH Web `0.1.0-rc.6`。",
+        "皮肤市场 `0.1.15`：132 条目录校验、70 项自动化测试、类型检查、Host/Client 构建、站点构建和 package preflight 全部通过",
+        "这组结果证明上述版本组合可以启动和运行，不代表市场内所有第三方皮肤都已完成同等级别的人工兼容或安全审核。",
+        "收录不等于安全认证。不要声称该皮肤已被 DSH 官方、安全团队或市场背书。",
+        "市场不会代替开发者登录 GitHub，也不会静默创建 PR"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/assets/skin-market-liang.png\" alt=\"DSH 设置中的皮肤市场发现页\" width=\"70%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/assets/skin-market-deep-whale.png\" alt=\"DSH 皮肤市场中的 Deep Whale 皮肤详情弹窗\" width=\"70%\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Prompt-based install/update/submission flows excluded as install/config/marketing evidence despite their detail.",
+        "No ioPairs.",
+        "Repo-health and submission-requirement lists recorded only for the market's own validation/maintenance behavior."
+      ]
+    },
+    {
+      "repo": "orziz/odai",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "`odai` is a governance-powered general task-execution framework for AI agents.",
+        "then choose the shortest sufficient path, combine the right capabilities, act, verify, and keep moving until the task is genuinely deliverable.",
+        "ask only when the missing answer would change the goal, scope, authorization, acceptance, risk, or stop line",
+        "verify what it can verify from files, commands, logs, tests, or project context before asking you",
+        "avoid claiming that something was tested, delegated, reviewed, or verified when it was not",
+        "respond early and humanely to persistent low mood or self-harm/suicide inclination without diagnosing, labeling, waiting for a plan, or causing secondary harm",
+        "`odai` infers the required depth, capability, domain knowledge, and verification from the task and project evidence.",
+        "Before loading any playbook, it applies a silent light-task gate. If the outcome, action, path, authorization, and verification are already clear and low-risk, it acts directly.",
+        "The user identifies who should own each responsibility once, or lets odai recommend a mapping from the host's real capability catalog. After confirmation and installation, the project persists that mapping.",
+        "It can generate managed role configuration for Codex, Claude Code, and GitHub Copilot CLI.",
+        "The repository keeps one dependency-free runtime and generates native host adapters on demand instead of maintaining six platform mirrors"
+      ],
+      "usageItems": [
+        "Then invoke it with `/odai`.",
+        "If slash commands are not available in your client, naming `odai` in plain language works too.",
+        "After installing the skill, say:",
+        "To remove it, ask odai to uninstall capability routing for the current project.",
+        "From a cloned or downloaded copy, choose a pet and copy its two runtime files into the matching Codex pet directory.",
+        "Then open **Codex Settings → Pets**, refresh the list, and select `dai` or `odai`. You can also open the pet picker with `/pet`."
+      ],
+      "usageActions": [
+        "/odai update the onboarding flow copy.",
+        "/odai handle this. Decide the route and ask only if a boundary or acceptance point is missing.",
+        "/odai review the current diff. Report findings first and do not modify files.",
+        "/odai refresh this repository README. Remove outdated screenshots and keep the install path clear.",
+        "/odai install and verify capability routing for this project.",
+        "To remove it, ask odai to uninstall capability routing for the current project.",
+        "node skills/odai/scripts/build-hooks.mjs --host all --out /tmp/odai-hooks"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "/odai update the onboarding flow copy.",
+        "node skills/odai/scripts/build-hooks.mjs --host all --out /tmp/odai-hooks"
+      ],
+      "usecases": [
+        "`odai` is for people who want agents to move with autonomy, but not with false confidence.",
+        "Choose Plugin for profile-wide behavior or Agent for a selectable preset. Installing both is normally redundant and is only for a deliberate combination of those scopes.",
+        "Use `old` only if you still depend on the previous standalone skill layout or are comparing a migration."
+      ],
+      "outputs": [
+        "All nine runners produced a positive paired gain.",
+        "| GPT-5.6-sol / high | **144/144** | **96/96** | 80/96 | **+16** | 396,899 / 317,761 (+24.9%) |",
+        "Eight runners used more tokens with odai, while Gemini 3.6 used 38.2% fewer"
+      ],
+      "reliability": [
+        "The Plugin command requires `pnpm` on `PATH`; the current Plugin and Agent releases support exactly `dsh@0.1.1-rc.2`.",
+        "The ceiling never changes child-agent, compaction, checkpoint, or internal context budgets and may be exceeded or ignored by the provider.",
+        "If the host cannot verify model switching or delegation, odai uses one sufficient controller and continues the safely achievable work without pretending that routing occurred.",
+        "If a needed responsibility is still unconfigured, Odai names it and asks for the model instead of claiming that route ran.",
+        "deterministic invalid mappings are backed up and removed by exact match, while authentication, quota, rate-limit, or network failures affect only the current fallback.",
+        "New sessions treat it as historical care preference, never as present-risk evidence, diagnosis, or a hidden score, and child agents never receive it.",
+        "With no policy file, they are silent no-ops.",
+        "Grok Build currently exposes `PreToolUse` as the blocking boundary, so its adapter does not pretend that Stop validation is enforceable.",
+        "The runtime checks structured write tools and project-declared commands only. It does not parse arbitrary shell writes or infer user intent, target files, or test strategy.",
+        "Hooks are a lightweight fuse alongside host permissions, sandboxing, and human confirmation—not a complete security boundary."
+      ],
+      "media": [],
+      "concerns": [
+        "Mascot badge image excluded as decorative art; no other media present.",
+        "No ioPairs; prompt examples show request text only, no response side.",
+        "Evaluation caveats (historical rows predating the isolation contract, only two low-risk controls) exceed the reliability cap."
+      ]
+    }
+  ]
+}

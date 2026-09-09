@@ -1,0 +1,98 @@
+[
+  {
+    "repo": "alibaba/anolisa",
+    "capability": 21,
+    "usage": 15,
+    "usecases": 12,
+    "demo": 9,
+    "reliability": 7,
+    "total": 64,
+    "confidence": "medium",
+    "evidence": "cosh-ng, Token-less, AgentSight, ws-ckpt, SkillFS, Sec Core etc.; 3-min Claude Code scenario + tokenless stats cmds; videos; measured 62.9% token cut",
+    "concern": "Evidence routes to external docs; savings are single-task claims"
+  },
+  {
+    "repo": "Nagi-ovo/dsh-ads",
+    "capability": 10,
+    "usage": 4,
+    "usecases": 5,
+    "demo": 7,
+    "reliability": 6,
+    "total": 32,
+    "confidence": "medium",
+    "evidence": "4 ad slots (sidebar/chat/inference/right-bottom), zh/en modes live-switch, 20s rotation, per-ad toggles, topic feed; in-repo screenshots",
+    "concern": "Satire plugin; post-install usage thin; video demo is another project's"
+  },
+  {
+    "repo": "yjh051108/dsh-routing-suite",
+    "capability": 13,
+    "usage": 5,
+    "usecases": 3,
+    "demo": 6,
+    "reliability": 8,
+    "total": 35,
+    "confidence": "medium",
+    "evidence": "dev_* injector tools + router presets: per-model persona, weak routing, plan-mode retention, dev_router tools; changelog; P1-P23 metrics (96%/0-100%)",
+    "concern": "Post-install usage is preset selection only; methodology outside README"
+  },
+  {
+    "repo": "volcengine/OpenViking",
+    "capability": 23,
+    "usage": 18,
+    "usecases": 12,
+    "demo": 10,
+    "reliability": 9,
+    "total": 72,
+    "confidence": "high",
+    "evidence": "viking:// FS, L0/L1/L2 tiers, recursive retrieval, session memory; ov ls/tree/find/grep; 11+ integrations; LoCoMo 24-82%, tau2 +11.87pp; benchmark scripts",
+    "concern": "Setup depth on external docs; Helper/VikingBot beta"
+  },
+  {
+    "repo": "Small-tailqwq/dsh-deep-whale",
+    "capability": 12,
+    "usage": 12,
+    "usecases": 6,
+    "demo": 8,
+    "reliability": 12,
+    "total": 50,
+    "confidence": "high",
+    "evidence": "Two skins + manager: hot-reload switch, dual-patch mutex, atomic fallback, recovery script, verify cmds; light/dark previews; troubleshooting table",
+    "concern": "Value is cosmetic theming; use cases limited to GUI personalization"
+  },
+  {
+    "repo": "tong-io/tongflow",
+    "capability": 24,
+    "usage": 19,
+    "usecases": 14,
+    "demo": 10,
+    "reliability": 11,
+    "total": 78,
+    "confidence": "high",
+    "evidence": "60+ nodes, 6 API+7 router+30 GPU plugins, ABI+SDK; 3 workflows (avatar, MV) with results; execute mode; @tongflow sessions",
+    "concern": "Node checklist self-claimed; GPU plugins need Modal tokens"
+  },
+  {
+    "repo": "Molunerfinn/PicGo",
+    "capability": 21,
+    "usage": 16,
+    "usecases": 9,
+    "demo": 7,
+    "reliability": 9,
+    "total": 62,
+    "confidence": "high",
+    "evidence": "Drag/paste/hotkey/context-menu upload, auto-copy, global hotkey, HTTP API, editor workflow, plugin hosts, AI Skills/dsh plugin; GIF demos; Linux-unverified",
+    "concern": "AI/dsh integration claims not demonstrable from this README"
+  },
+  {
+    "repo": "dsh-market/dsh-market",
+    "capability": 23,
+    "usage": 17,
+    "usecases": 10,
+    "demo": 5,
+    "reliability": 13,
+    "total": 68,
+    "confidence": "high",
+    "evidence": "Browse/search, themes, install, backup/restore (merge+rollback), updates, hot disable, diagnostics, load-order drag, AI-fix, log export; version gating",
+    "concern": "Single demo screenshot; catalog depends on external registry"
+  }
+]

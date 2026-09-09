@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-08-27",
+  "design": {
+    "blindReadmes": 175,
+    "primaryReviewers": 2,
+    "overlapReadmes": 40,
+    "overlapReviewer": 1,
+    "selection": "stratified for old-score ties, extreme changes, language, category, popularity and identity",
+    "representativeOfCatalog": false,
+    "holdoutStatus": "development evidence, not a pristine holdout"
+  },
+  "reviewerConsistency": {
+    "overlapN": 40,
+    "spearman": 0.9024699832266132,
+    "meanAbsoluteDifference": 7.825,
+    "within15PointsShare": 0.85
+  },
+  "spearman": {
+    "reviewerA": {
+      "n": 88,
+      "old": -0.2309003680497249,
+      "practicalV2": 0.5433936447812008
+    },
+    "reviewerB": {
+      "n": 87,
+      "old": 0.3976106893773819,
+      "practicalV2": 0.6577498651373589
+    },
+    "pooled": {
+      "n": 175,
+      "old": 0.06959209378218865,
+      "practicalV2": 0.5925618501327945
+    },
+    "reviewerCOverlap": {
+      "n": 40,
+      "old": 0.11176230957899744,
+      "practicalV2": 0.6659930884687748
+    }
+  },
+  "independentAlternativeReview": {
+    "implementation": "/tmp/dsh-mall-practical-eval/v3-agent/v3-parser.mjs",
+    "sourceModified": false,
+    "pooledSpearman": 0.481,
+    "reviewerA": 0.396,
+    "reviewerB": 0.594,
+    "reviewerC": 0.64,
+    "interpretation": "The independent preregistered parser supports the same deterministic multi-evidence direction, but ranks below canonical production v2 on the existing review set."
+  },
+  "interpretation": "All reviewers show the same directional improvement over the retired formula. Because the 175 items influenced development and were stratified for difficult cases, these values compare algorithms on this set; they are not a catalog-wide accuracy estimate."
+}

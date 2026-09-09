@@ -1,0 +1,562 @@
+{
+  "reviews": [
+    {
+      "repo": "LayneChai/superpowers-dsh",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "插件会向 `ctx.skills` 注册表的 **host 层** 注册一个技能提供者，因此每个\nagent preset 的作用域链都会合并这些技能。",
+        "安装后会把下面的 14 个技能注册进\nhost 技能注册表，你 profile 里的每个 agent 会话都能在技能目录中看到它们",
+        "| `brainstorming` | 通过协作对话把想法变成设计 |",
+        "| `test-driven-development` | RED-GREEN-REFACTOR 实施循环 |",
+        "| `subagent-driven-development` | 每个任务派发全新子代理并评审 |",
+        "| `dispatching-parallel-agents` | 把独立工作扇出到并行代理 |",
+        "| `systematic-debugging` | 先找根因的调试纪律 |",
+        "| `writing-skills` | 以 TDD 方式编写并验证新技能 |",
+        "  - `list()` 扫描包内 `skills/` 目录，把每个 `<name>/SKILL.md` 作为候选，\n    从 YAML frontmatter 解析出 `name`、`description`、`whenToUse`。",
+        "  - `get()` 按需读取候选技能正文，返回完整技能定义，`resourceBase` 指向\n    技能所在目录，使相对引用（脚本、提示模板）可以正确解析。",
+        "无需改任何\n代码：`list()` 会自动发现它。",
+        "- `using-superpowers` 现在介绍 DSH 的 `skill` 工具，并指向\n  `skills/using-superpowers/references/dsh-tools.md`——完整的\n  Claude-Code → DSH 工具映射（`pwsh`、`subagent`、`workflow`、`goal` ...）。"
+      ],
+      "usageItems": [
+        "之后技能会出现在 agent 技能目录中（`using-superpowers` 是入口技能），\n可以用 `skill` 工具加载。"
+      ],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "> 必须用 `dsh plugin` 形式——直接 `npm install superpowers-dsh` 只会把包当\n> 普通库装到当前目录，**不会**注册进任何 DeepSeek Harness profile，技能\n> 永远不会被加载。",
+        "bundle 层在 profile 启动时挂载，所以需要**重启 profile**（停掉后重新运行\n`dsh web` / `npx @deepseek-ai/dsh web`，再刷新浏览器）。",
+        "- 使用者**不需要 npm 账号，也不需要 2FA**——安装只是普通的包下载",
+        "- 从文件夹或 `file:` 规格安装的插件是链接安装（不是复制）：修改该文件夹后，\n  下次重启 profile 生效",
+        "- `brainstorming` 的视觉伴侣补充了 Windows 说明：Node 服务\n  （`scripts/server.cjs`）全平台可跑；`.sh` 辅助脚本仅限 bash。"
+      ],
+      "media": [
+        {
+          "excerpt": "![superpowers-dsh](static/home.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![安装成功截图](static/install-success.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "All command fences are installation/verification commands, so codeExamples and usageActions are empty.",
+        "No paired input/output example appears in the README, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "chokwinlee/deepseek-harness-desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "DSH Desktop runs the official [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI and runtime in a desktop window.",
+        "The desktop app manages the local Harness process automatically, so users do not need to install Node.js or start `dsh web` themselves.",
+        "paste or attach images and send them through the normal Harness conversation flow when the selected provider and model declare image input support",
+        "**Usage at a glance on macOS** — see today and seven-day token totals, estimated cost, active task count, and aggregate running throughput without leaving the current session.",
+        "Open it for input, output, cache, cost, and live-throughput details. Usage is calculated locally from Harness session history, with estimated costs based on available public model prices.",
+        "**Visible runtime alignment** — the sidebar identifies both the Desktop release and its bundled Harness version, such as `DSH Desktop v0.4.1 · Harness rc.8`.",
+        "then browse projects, create sessions, steer tasks, handle approvals, send images, and follow subagents without moving execution off the computer",
+        "Desktop parses supported install commands without running pasted text through a shell, then checks that Harness restarts successfully.",
+        "Desktop exposes an opt-in, authenticated LAN endpoint on a trusted private network. No Tailscale account is required.",
+        "Android uses the same local-first Remote v1 contract, QR format, Desktop LAN proxy, and Tailscale HTTPS flow as iOS."
+      ],
+      "usageItems": [
+        "Paste or attach an image when the selected model supports image input.",
+        "Open a project, create or continue a session, and keep all execution on the computer."
+      ],
+      "usageActions": [
+        "In Desktop, open **Settings → General → Mobile Remote → Connect phone**.",
+        "start local pairing and scan the QR code in DSH Remote",
+        "open **Settings → Plugins → Install & manage**",
+        "Paste or attach an image when the selected model supports image input.",
+        "Open a project, create or continue a session, and keep all execution on the computer."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "- **Away from the local network:** both devices join the user's own tailnet, and Desktop configures a private Tailscale Serve HTTPS entry. Do not use Funnel."
+      ],
+      "outputs": [],
+      "reliability": [
+        "Cost figures are estimates derived from local token logs and available public model prices. Unmatched models stay visibly unpriced rather than being counted as free.",
+        "It does not run an agent, repository, terminal, or model provider on the phone. Work continues on the computer; the iPhone is a narrow control surface.",
+        "code, prompts, model credentials, tool execution, and session history remain on the user's computer.",
+        "Use direct same-Wi-Fi mode only on a trusted private network: it is authenticated but not encrypted.",
+        "The computer must remain online with Desktop and Harness running. Local notifications are best effort",
+        "It requires Android 8.0 or later and the matching DSH Desktop build from that release.",
+        "Camera and notification permissions are optional. QR images stay on-device, while the bundled Google ML Kit scanner sends Google the diagnostic and usage metrics",
+        "If startup fails, it restores the previous plugin configuration.",
+        "Third-party plugins run code on the local machine, so review their source and publisher before installation.",
+        "A free Apple Account can use an Xcode Personal Team for personal on-device testing, but the app must be re-provisioned periodically."
+      ],
+      "media": [
+        {
+          "excerpt": "![DSH Desktop](docs/images/readme-hero-en.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Multimodal session and usage insights](docs/images/readme-features-en.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/remote-home-en.png\" width=\"30%\" alt=\"DSH Remote same-Wi-Fi pairing in English\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/remote-projects-en.png\" width=\"30%\" alt=\"DSH Remote projects and running sessions in English\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/android-remote-home-en.png\" width=\"42%\" alt=\"DSH Remote Android onboarding in English\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/android-remote-conversation-en.png\" width=\"42%\" alt=\"DSH Remote Android approval and conversation controls in English\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Media cap 6 forced dropping two additional local screenshots (remote-conversation-en and the icon/logo).",
+        "All fenced code blocks are install/build commands, so codeExamples is empty."
+      ]
+    },
+    {
+      "repo": "awesome-dsh-plugin/dsh-find-plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "and it searches the DSH plugin ecosystem on GitHub for you — top results by\nstars, each with a one-line description and an install command.",
+        "- Live GitHub repository search scoped to the official `dsh-plugin` topic,\n  re-ranked by stars (5-minute per-query cache, anonymous API).",
+        "its hand-written\n  bilingual description from `plugins.json` replaces the GitHub one (the\n  `lang` parameter picks the language) — ranking is untouched."
+      ],
+      "usageItems": [
+        "Restart `dsh web` after installing, then just talk to the agent — it calls\n`find_dsh_plugin` on its own whenever plugin discovery helps"
+      ],
+      "usageActions": [
+        "ask the agent to install one and\nit can run the command for you"
+      ],
+      "ioPairs": [
+        "\"notify me on WeChat when a task finishes\"),\nand it searches the DSH plugin ecosystem on GitHub for you — top results by\nstars, each with a one-line description and an install command."
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "Each result comes back with stars, a description, the repo link, and a\nready-to-run `dsh plugin add` command"
+      ],
+      "reliability": [
+        "Plugins\n  are third-party code — review the source and pin a commit."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/awesome-dsh-plugin/dsh-find-plugin/main/assets/demo-en.png\" alt=\"find_dsh_plugin in action\" width=\"640\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The demo image is served via raw.githubusercontent.com; counted as repository-hosted (weight 1), though hosting classification is mildly ambiguous.",
+        "README has no operational code fences, so codeExamples is empty."
+      ]
+    },
+    {
+      "repo": "dhicoc/dsh-reverse-skill",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把上游 [`zhaoxuya520/reverse-skill`](https://github.com/zhaoxuya520/reverse-skill)（27k★，MIT）全部 **87 个 SKILL.md** 原样封装成一个 dsh Cordis 插件，随包分发、随插件加载，无需手动维护候选清单。",
+        "1. 递归遍历 `skills/` 与 `CTF-Sandbox-Orchestrator/`，找到每个 `SKILL.md`；",
+        "2. 解析前导 matter（把 `metadata.user-invocable` 提升为顶层 `user-invocable`；上游文件原样打包，CRLF / BOM 在运行时归一化）；",
+        "加载后，插件在 `apply(ctx)` 里调用 `ctx.skills.registerProvider(...)`，把 87 个技能注册进 `ctx.skills`。",
+        "本仓库同时携带完整的 `skills/` 与 `CTF-Sandbox-Orchestrator/` 目录，可作为 preset 直接挂载，无需构建",
+        "新增/删除技能只需改目录，插件自动同步。",
+        "**插件路径**使用本仓库自带的递归 scanner（能发现根 `skills/SKILL.md` 路由器与嵌套子技能）"
+      ],
+      "usageItems": [
+        "用户也可通过技能名手动调用（受各 SKILL.md 的 `user-invocable` 控制）"
+      ],
+      "usageActions": [
+        "npm test"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "本仓库内容仅用于 **授权的** 逆向工程、渗透测试与安全研究。使用者须确保对目标系统拥有合法授权。一切未授权行为与本仓库无关。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "- **`agents/*.yaml` 不可移植**：上游 43 个 OpenAI Agents SDK 的 agent 定义无法映射到 dsh 的 `ctx.subagent`（dsh 仅支持拉起 Codex / Claude Code CLI）。这些 agent 定义未纳入插件。",
+        "- **`allowed-tools` / `disallowed-tools` 不被 dsh 强制**：dsh 当前把这两项视为未知字段，延迟执行。技能内的工具约束需自行在 harness 层保证。",
+        "- **MCP 工具（如 burp-mcp）需另行配置**：技能正文里引用的外部 MCP server 不在本插件范围内，请按 dsh 的 `mcp.servers` 自行接入。",
+        "若改用可选 preset 回退（dsh 扁平发现，只扫直接子目录），根 `SKILL.md` 路由器不在子目录内、不会被发现——因此推荐用插件路径。",
+        "该命令会重新编译插件，并通过实际注册的 `SkillProvider` 断言 87 个已打包技能都能被 `list()` 发现、名称无重复且均能按需 `get()` 返回非空正文。",
+        "测试还会临时创建一个带 UTF-8 BOM 和 CRLF 的 `SKILL.md`，确认扫描器不会静默跳过此类文件",
+        "多套 `dirname` 会把它截断成包根目录，从而把 `node_modules` 里的 SKILL.md 也算进来。",
+        "**文档链接已重写**：正文内相对链接已改为 `../`（及 CTF 相关为 `../../CTF-Sandbox-Orchestrator/`），以适配 dsh 扁平挂载路径。"
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "All fenced code blocks are install/build/config commands, so codeExamples is empty."
+      ]
+    },
+    {
+      "repo": "Hilbert-beinghappy/seektty",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "use the native Agent, Session, model, permission, Settings, Profile, plugin, and persistence services of [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) in one terminal workspace.",
+        "Models, Providers, Agent Presets, permissions, commands, tools, Settings, Skills, MCP servers, and marketplace sources are discovered from the running Harness.",
+        "**SeekTTY** | Detects the Clarify Remote, adds `/clarify`, renders the terminal interaction, supplies the active Session and draft, and returns an accepted Draft to the composer.",
+        "| Conversation | Streaming Markdown/GFM, syntax-highlighted code, links, tables, reasoning visibility, tool-card display modes, retries, compaction, cancellation, and error states |",
+        "| Sessions and workspaces | Create, resume, search, rename, fork, archive, reorder, copy, export, and switch workspaces without deleting project files or logs |",
+        "| Queue and interaction | Queue or steer prompts during a run; edit queue entries; answer single-choice, multi-select, custom, skip, cancel, and plan-review prompts |",
+        "| Images | Paste or attach PNG, JPEG, GIF, or WebP; enforce live Host limits; restore pending attachments; render inline when the terminal supports it |",
+        "| Subagents and background work | Inspect or stop direct subagents; view jobs, workflow phases, results, failures, token use, duration, and structured trajectory data |",
+        "`deepseek --update` is self-first: it checks SeekTTY before dsh, installs at most one compatible component per run, and never installs an untested gap or future Host.",
+        "Clarify asks one focused question at a time, carries accepted decisions forward, and refreshes the Draft preview after every answer.",
+        "Typing `/` opens a searchable menu that merges SeekTTY commands, Host commands for the active Agent, and user-invocable Skills.",
+        "Direct subcommands include `list`, `search`, `info`, `install`, `remove`, `update`, `reorder`, `source`, and `doctor`."
+      ],
+      "usageItems": [
+        "- Choose `/clarify` from the command palette to use the whole composer as the seed.",
+        "- Type `/clarify some text` to use its argument as the seed.",
+        "- End an existing draft with a standalone `/clarify` token or line to use the preceding text as the seed.",
+        "Run `/plan` after submission when an implementation proposal is useful.",
+        "`/theme` opens the theme center",
+        "Use `/language` or a direct command to switch the terminal copy live",
+        "`/plugin` opens the active Profile's plugin center; `/plugins` is an alias."
+      ],
+      "usageActions": [
+        "Choose `/clarify` from the command palette to use the whole composer as the seed.",
+        "Type `/clarify some text` to use its argument as the seed.",
+        "Run `/plan` after submission when an implementation proposal is useful.",
+        "| Sessions | `/new`, `/resume`, `/sessions`, `/rename`, `/fork`, `/archive`, `/export`, `/export md`, `/copy` |",
+        "| `/` | Open command and Skill candidates |",
+        "| Ctrl+C | Stop the active turn, clear a draft, or confirm exit with a second press |",
+        "| Shift+Tab | Cycle permission presets, confirming full access first |",
+        "| Ctrl+M / Ctrl+S | Open model selection / open Session resume |",
+        "| Ctrl+O / Ctrl+T | Cycle tool-card display / show or hide reasoning |",
+        "| F2 / Ctrl+, / Cmd+, | Open Settings |"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "/theme dark\n/theme light\n/theme code [auto|dark|light|<name>]\n/theme use <name>\n/theme edit [name]\n/theme palette [name]\n/theme import [name] [local-file]\n/theme delete <name>",
+        "/language auto\n/language zh\n/language en",
+        "deepseek \"check this project\"\ndeepseek --cwd ../project\ndeepseek --resume\ndeepseek --resume <sessionId>\ndeepseek --profile team-tui\ndeepseek --version\ndeepseek --update"
+      ],
+      "usecases": [
+        "For requirements that still need definition, the optional [Clarify Host plugin](https://github.com/Hilbert-beinghappy/dsh-plugin-clarify) adds a guided `/clarify` workflow."
+      ],
+      "outputs": [
+        "`/status` displays validated Official, Auxiliary, and derived Combined totals without changing official Agent `tokenUsage`."
+      ],
+      "reliability": [
+        "SeekTTY `1.2.1` is currently a source candidate tested with official Harness `0.1.1-rc.2`; no `v1.2.1` release tarball is published.",
+        "Hosts older than the declared minimum are rejected. Newer-than-tested Hosts may boot with a notice, but automatic updates install only an explicitly compatible range.",
+        "The attachment compatibility adapter handles only the exact tested legacy image-limit shape and fails closed for unknown shapes.",
+        "Questions, options, previews, and refine feedback remain in Host memory and become stale after 15 minutes without interaction by default.",
+        "Auxiliary usage is stored in the official `storageDomain` under `auxiliary_runtime`; prompts, answers, model output, credentials, and filesystem paths are excluded.",
+        "SeekTTY does not read it back or put it in Settings, logs, screenshots, or Session data. Saving does not make a paid validation request",
+        "Real PTY coverage for startup, navigation, dark/light/custom themes, 80/120/160-column layouts, locale switching, and restart restoration",
+        "First-run credential setup and a real multi-turn Provider session without credential leakage into output, screenshots, or the repository.",
+        "These observations do not establish full Web UI, GIF/WebP, over-limit, interruption-recovery, or cost/cache coverage.",
+        "User packages are distributed as prebuilt tarballs attached to matching GitHub Releases. There is currently no npm Registry release."
+      ],
+      "media": [
+        {
+          "excerpt": "![SeekTTY DeepSeek light start screen](assets/seektty-tui.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SeekTTY DeepSeek dark start screen](assets/seektty-tui-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SeekTTY light TypeScript syntax highlighting](assets/seektty-code-light.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SeekTTY dark tool and Diff syntax highlighting](assets/seektty-code-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SeekTTY dark first-run API key prompt](assets/seektty-onboarding-dark.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![SeekTTY light first-run API key prompt](assets/seektty-onboarding-light.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Cap limits forced omissions despite more available claims (e.g. \"Update failures do not block startup\", credential-failure fallback, theme-import details); the logo image is excluded as a logo.",
+        "No paired input/output example appears in the README, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "pingfanfan/hello-dsh",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "This repo walks you from \"open a terminal\" to building your own plugin and watching its lifecycle.",
+        "Every section ends with a checkpoint — **you don't move on until you see the expected result**.",
+        "Once you're through the tutorial, [`examples/skills/`](examples/skills/) has 22 Chinese-language skills ready to use.",
+        "It checks Node, DSH, and the API key first, then copies files.",
+        "`dsh-doctor` — config health checks that catch silent failures"
+      ],
+      "usageItems": [
+        "Once installed, say **\"hello dsh\"** to DSH and it walks you through, one layer at a time.",
+        "Hand this link to Codex, Claude Code, or DSH itself"
+      ],
+      "usageActions": [
+        "Open Settings → Plugins → Plugin list and look at the count",
+        "Once installed, say **\"hello dsh\"** to DSH and it walks you through, one layer at a time.",
+        "Hand this link to Codex, Claude Code, or DSH itself:"
+      ],
+      "ioPairs": [
+        "Once installed, say **\"hello dsh\"** to DSH and it walks you through, one layer at a time."
+      ],
+      "codeExamples": [
+        "## Companion tool\n\n`dsh-doctor` — config health checks that catch silent failures:\n\n```sh\nnpx dsh-doctor\n```"
+      ],
+      "usecases": [
+        "It assumes you have nothing: no Node.js, no command-line experience.",
+        "| `dsh-troubleshoot` | Won't start, config not applying, UNKNOWN_TOOL, missing skills |",
+        "| `plan-before-code` | A task spanning several files, with unknowns |",
+        "| `code-review-cn` | Reviewing a change, PR, or diff |",
+        "| `debug-systematically` | A bug, a failing test, \"it worked yesterday\" |",
+        "| `web-research` | Researching online, verifying facts, evaluating options |"
+      ],
+      "outputs": [
+        "Steps 1–8 take about 30 minutes and leave you with a working setup."
+      ],
+      "reliability": [
+        "| The web profile ships with `tool-skill` and `skill-filesystem` **disabled**; `headless` has them on | Same skill works in the CLI, silently does nothing in the web UI, with no error |",
+        "| A stale DSH process holding port 3080 makes the page **load normally** | New instance exits with `EADDRINUSE`; the browser silently talks to the old one and no config change appears to take effect |",
+        "| `--patch` **inserts** rather than overrides, so patched plugins mount twice | Harmless, but the plugin list shows 7 skill plugins instead of 5 |",
+        "| A camelCase frontmatter key drops the **entire skill**, warning only | Documented fail-closed behavior, but hard to diagnose without knowing it |",
+        "Read-only. Every rule maps to a real failure documented in DeepSeek's own docs or postmortems.",
+        "⚠️ **Launch the web UI with `--patch`**, or skills silently do nothing.",
+        "All verified on `0.1.0-rc.6`."
+      ],
+      "media": [
+        {
+          "excerpt": "![Plugin list](assets/05-plugin-list-133.png)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "The banner image is excluded as decorative art; the plugin-list screenshot demonstrates DSH behavior quoted by the tutorial rather than this repo's own UI.",
+        "Skill-table \"Use it when\" cells were assigned to usecases rather than capability to keep single ownership."
+      ]
+    },
+    {
+      "repo": "wink-run/tokenbank",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "enables one-click onboarding and intelligent orchestration of mainstream AI tools like Claude, Cursor, Codex, and WorkBuddy through a local gateway architecture",
+        "Declarative application handlers (CLI env injection + config hot-patching) enable seamless onboarding without modifying agent applications.",
+        "Transparent protocol conversion (Anthropic Messages, OpenAI Chat, Codex Responses) allows agents to use third-party models without awareness.",
+        "Token Bank logs every request: which route it took, which model answered, how many tokens, how long it took.",
+        "Tracked apps that still hit the official API — local session logs (`~/.claude`, `~/.codex`, WorkBuddy Trace, …) are scanned and imported",
+        "**Failover** — local source down? try community sharing automatically; fully transparent to the agent",
+        "Optional **lossless JSON compression** before forwarding — fewer input tokens upstream, **semantics unchanged**",
+        "Desktop, CLI, and server gateways each register as a device — **usage is reported and merged in the cloud** when signed in",
+        "Run multiple logins of the same CLI (Claude Code / Codex). The gateway picks the right instance by **working directory** so configs never collide",
+        "The main agent can plan steps and dispatch to other onboarded agents (including Kimi / Cursor runtimes)",
+        "**Community agents**: hire on demand from Contribute; tasks run on **their device**, without downloading their source — lower risk than running unknown agents locally",
+        "The system automatically extracts work portraits from real call records and session patterns, driving personalized recommendations for MCP/Skill/Prompt/Agent"
+      ],
+      "usageItems": [
+        "Open the **Gateway** tab — installed tools appear automatically (desktop apps can be added manually)",
+        "Click **Track** → start counting that app's token usage (even on the official subscription)",
+        "Pick a **model or scene route** in the dropdown → config is rewritten automatically; traffic goes through the gateway",
+        "Click **Revert** → restore the official config and stop tracking",
+        "For apps without stdio: pick app → bind prompts/models/resources → copy relay config"
+      ],
+      "usageActions": [
+        "Click **Track** → start counting that app's token usage (even on the official subscription)",
+        "Pick a **model or scene route** in the dropdown → config is rewritten automatically; traffic goes through the gateway",
+        "Click **Revert** → restore the official config and stop tracking",
+        "Open the **Gateway** tab"
+      ],
+      "ioPairs": [
+        "Claude Code requests claude-sonnet-4-6\n        ↓  gateway keyScene transparent rewrite\nActually routed → Groq llama-3.3-70b / local Ollama / DeepSeek / …"
+      ],
+      "codeExamples": [
+        "curl http://localhost:11430/v1/chat/completions \\\n  -H \"Authorization: Bearer your-local-key\" \\\n  -H \"Content-Type: application/json\" \\"
+      ],
+      "usecases": [
+        "Many model plans, little clarity on where tokens go each day",
+        "Free quotas sit unused while paid bills rise; local models idle",
+        "Month-end plan credits expire unused"
+      ],
+      "outputs": [
+        "Trace data appears on the **Dashboard** sliced by **app · provider · model · supply type · device · time**; the call log shows route result and latency per request.",
+        "- **Dashboard** shows compression count, tokens saved, and ratio; cloud merge across devices when signed in",
+        "Dashboard can export four poster styles (pro / cute / humor / minimal)",
+        "Claude / Codex subscription meters; tray and app list show today’s usage"
+      ],
+      "reliability": [
+        "**Upstream API keys never leave your machine.** Only the worker key and model list are sent during registration.",
+        "Non-JSON content is left byte-for-byte untouched — answers stay the same",
+        "**Egress guards** — clamp outbound `max_tokens` to upstream limits to cut avoidable 400s",
+        "**Offline fallback** — built-in defaults when offline; server deltas merged automatically when back online",
+        "local Ollama, unused upstream quota, private LAN models (outbound WebSocket—no inbound port)",
+        "only the card and bio are public; runs stay on your device",
+        "This project is for educational and research purposes only. Users are responsible for complying with applicable laws, regulations, and upstream service terms.",
+        "| **Dedup** | Same call recorded by both gateway and session file → counted once |"
+      ],
+      "media": [
+        {
+          "excerpt": "![Gateway · apps & toolbox](server/static/screenshots/gateway-apps.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Gateway · sessions](server/static/screenshots/gateway-sessions.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Session Trace](server/static/screenshots/session-trace.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Providers](server/static/screenshots/providers.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Playground · Agent mode](server/static/screenshots/playground.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Usage](server/static/screenshots/usage.webp)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Twelve local screenshots exist; media cap 6 forced dropping six (assets-agents, assets-for-you, circles, contribute, network, tray).",
+        "Most fenced code blocks are install/config commands and were excluded from codeExamples; env-var configuration steps were excluded from usage arrays."
+      ]
+    },
+    {
+      "repo": "Alex-Yanggg/awesome-DSH-plugin",
+      "inferredType": "catalog-list",
+      "capability": [
+        "A community-curated, vendor-neutral catalog of plugins for DeepSeek Harness (DSH) — from developer tooling and data workflows to media, operations, and everyday life.",
+        "This list is intentionally broad: if it gives an agent a useful real-world capability, it belongs here.",
+        "The English catalog in this README is maintained by hand.",
+        "The first command regenerates the Simplified Chinese mirror; the second validates its catalog data and verifies that mirror is current.",
+        "- Entries need a stable public URL, a concise factual description, and both English and Simplified Chinese copy.",
+        "- Keep entries vendor-neutral, useful, and non-duplicative.",
+        "- Do not include secrets, affiliate links, unmaintained forks without context, or projects that primarily distribute malware, credential theft, or policy-violating automation.",
+        "- The plugin must be relevant to DeepSeek Harness or provide clear installation/integration instructions for it."
+      ],
+      "usageItems": [
+        "Browse a category below and open a plugin's repository or marketplace page.",
+        "Add matching bilingual metadata to [`catalog/plugins.json`](catalog/plugins.json) to update the Simplified Chinese mirror, then run"
+      ],
+      "usageActions": [
+        "Browse a category below and open a plugin's repository or marketplace page."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```bash\npython scripts/generate_readmes.py\npython scripts/generate_readmes.py --check\n```"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "The catalog links to third-party projects. Review a plugin's source, permissions, and data-handling policy before installing it."
+      ],
+      "media": [],
+      "concerns": [
+        "Per catalog rule, all listed plugins' capabilities were excluded; only the catalog's own curation/validation/maintenance behavior is recorded.",
+        "No screenshots or other media are present in the README."
+      ]
+    },
+    {
+      "repo": "e2mcc/dsh-popout-sidebar",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**可弹出式侧边栏**：侧边栏展示产物与文件树，支持多种文件预览形式；并可弹出为独立浏览器标签页（可拖至另一显示器上更大更清晰的观看）；兼容其他 sidebar 插件，可以同时显示。",
+        "- 🗂 **产物侧边栏**：实时列出代理通过 `write` / `edit` 创建或修改的文件，以及 `bash` / `pwsh` 命令在工作区里产生的文件（如脚本生成的图片）；列表与预览区之间的分界线可拖动调整。",
+        "- 🌳 **文件树**：侧边栏与独立标签页内都有「文件树」，可浏览当前工作区目录（懒加载展开，点击文件即预览），并**实时跟随工作区切换**。",
+        "- 👀 **多类型预览**：按文件类型预览——代码 / 纯文本（语法高亮 + 行号）、Markdown 渲染、图片、PDF（浏览器原生查看器）、HTML（沙箱 iframe），超长内容自动截断。",
+        "- 📝 **编辑差异**：`edit` 修改过的文件在预览里展示「删除 / 新增」改动片段对比。",
+        "- 🔗 **复制 / 引用**：一键复制文件路径，或把 `@path` 引用写入会话输入框（悬浮在列表行）。",
+        "- ⚙️ **设置面板**：DSH 设置里新增「Popout Sidebar」选项卡，可开关默认展开、自动刷新、文件树，设置最短面板宽度（存于 `localStorage`）；面板更宽可通过拖动左边缘调整。",
+        "- 🗑 **清除模式**：右上角进入清除模式后，点击产物将其标红，再点红色 × 移除列表条目（仅移除条目，不动磁盘文件）。",
+        "  - 监听 `tools/execute` 事件，对 `bash` / `pwsh` 这类「不透明」执行器做工作区前后快照对比（`fs.listDir` 递归 + 版本 token 指纹，跳过 `node_modules`/`.git` 等大目录），把命令间接新增/改写的文件并入产物列表。"
+      ],
+      "usageItems": [
+        "点击「产物」按钮；点面板右上角 ↗ 打开独立标签页。"
+      ],
+      "usageActions": [
+        "在 Harness 会话中调用 `cordis_define`：`code.host` 填 `src/host.js` 的 `return { ... }` 主体；`code.client` 填 `src/client.js` 的 `return { ... }` 主体。",
+        "调用 `cordis_run` 激活返回的 `pluginId` / `packageId`。",
+        "点击「产物」按钮；点面板右上角 ↗ 打开独立标签页。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "两种模式下 host 与 client 都通过 `/popout-sidebar/*` HTTP 路由通信（动态模式另保留 `harness.handle` RPC 兼容），因此行为一致。",
+        "设置保存在浏览器 `localStorage`（键 `dsh-popout-sidebar:settings`），刷新后仍然生效。",
+        "- 独立**标签页**刻意固定为浅色配色（保证在另一显示器上内容清晰稳定）；如需深色，可在地址后手动加 `?scheme=dark`。",
+        "- 本插件从 **GitHub 源码**安装（未发布 npm），更新按 **commit 比对**",
+        "之后每次 `git commit` 会自动重建 bundle，若产物与源码不同步会直接拦截提交，杜绝「源码新、产物旧」。"
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "All fenced code blocks are install commands, so codeExamples is empty; no paired input/output example appears, so ioPairs is empty."
+      ]
+    },
+    {
+      "repo": "mishibeikejie/zat-dsh-engine",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "It lists the entire `dsh-plugin` topic community from GitHub, shows bilingual intros, and installs plugins with one click.",
+        "- **Full community catalog** — live GitHub search of the `dsh-plugin` topic (1700+ repositories, growing daily)",
+        "and the AI searches the market, recommends candidates, and reports each one's **pre-install health + security scan** (✅/⚠️/❌) — problems are reported honestly, nothing is blindly recommended",
+        "- **Live search** — type to filter, no Enter key needed; clearing the box returns to the full list",
+        "- **Monorepo-aware install** — repositories that bundle several plugins install correctly: a single-plugin repo installs silently, multi-plugin repos offer a plain-language picker",
+        "- **Installed detection** — marks plugins you already have, with version comparison and an **update badge** when a newer version is released",
+        "- **Pre-install conflict gate + 🩺 health check** — blocking two marketplaces at once, official-package hijack, duplicate patch rows / registered names; one-click health report on conflicts and dependency issues",
+        "every candidate is checked before install (entry files, build artifacts, dependency style, network destinations, OS support)",
+        "- **One-click check + repair** — detects network/pnpm/entry/OS/past-error problems in one click, auto-fixes what it can (installs pnpm, enables plugins, fills deps), and explains the rest",
+        "- **Safe by default** — install/uninstall/toggle roll back automatically on failure; a last-known-good backup restores a broken profile with one command",
+        "- **One-click enable/disable** — toggle plugins right on the card (official core and the market itself are protected)",
+        "- **Bilingual intros** — 999 pre-translated Chinese intros bundled; new plugins keep their English intro"
+      ],
+      "usageItems": [
+        "Click the **🛒 Plugin Market** tab on the right of the plugin list.",
+        "Browse, search, filter by category or install state, and click **Install** on any card."
+      ],
+      "usageActions": [
+        "Click the **🛒 Plugin Market** tab on the right of the plugin list.",
+        "Browse, search, filter by category or install state, and click **Install** on any card."
+      ],
+      "ioPairs": [
+        "(e.g. \"find me a plugin that lets the model see images\") and the AI searches the market, recommends candidates, and reports each one's **pre-install health + security scan**"
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "**The market shows at most 1000 plugins in the All view.** GitHub's search API caps any query at 1000 results. Search and category filters reach every plugin regardless.",
+        "The mirror is only used when a direct GitHub request fails, and only for public repository metadata.",
+        "Credentials only go to api.github.com; they are never written to disk, logged, or sent anywhere else.",
+        "install/update/uninstall means running pnpm. The market only runs the pnpm/curl/wget/powershell commands it assembles itself",
+        "Every change is backed up to `zat-backup/` first, and failed operations restore automatically.",
+        "This restores the state right after the last successful operation, so the plugin that broke startup is removed from the enabled list and the profile boots normally.",
+        "No — the install gate blocks it: two market/manager plugins register the same settings pages and services, which can take dsh down.",
+        "duplicates the id and makes dsh fail to start. If dsh already won't start, delete the hand-written `plugin-market` row from your profile's `cordis.patch.yml` and reinstall with the command below.",
+        "**Works without a VPN**: proxy → direct → mirror → built-in fetch fallback"
+      ],
+      "media": [],
+      "concerns": [
+        "No screenshots or other media are present in the README.",
+        "All fenced code blocks are install/uninstall commands, so codeExamples is empty.",
+        "Changelog entries repeat feature claims already counted from Features; they were treated as duplicated text and counted once."
+      ]
+    }
+  ]
+}

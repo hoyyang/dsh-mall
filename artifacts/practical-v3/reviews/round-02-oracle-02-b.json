@@ -1,0 +1,301 @@
+{
+  "reviews": [
+    {
+      "repo": "ZJU-LLMs/OpenStory",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "现在可以通过 `dsh-openstory` 将 OpenStory 多智能体推演接入 DeepSeek Harness，让 agent 直接启动模拟、查看角色、下达指令并逐回合推进故事。",
+        "同时新增故事回溯功能，可回到过往节点重选。",
+        "底层采用强大的 Agent-Kernel 架构，支持在推演过程中**动态增删智能体**。",
+        "系统能够根据性格设定与环境变化，自动生成跌宕起伏、精彩绝伦且极具戏剧张力与冲击力的推演剧情！",
+        "涵盖智能体感知、计划、执行、反思等完整生命周期插件",
+        "输入一句自然语言设想，系统自动生成角色、地点、路径与规则，并接入可交互的多智能体模拟。"
+      ],
+      "usageItems": [
+        "在项目根目录下，选择要运行的故事并执行相应命令。",
+        "并在页面中选择游玩自由模式或剧情模式。",
+        "在页面中描述你想生成的世界，或选择已有本地世界进入模拟。",
+        "查看大观园等场景地图。",
+        "点击**开始推演** / **下一回合 (Tick)** 观察人物的行动与交互。",
+        "点击左侧人物列表，查看详细的“人物档案”与实时状态。",
+        "如果您需要修改或重新生成《红楼梦》的人物数据，可以参考 `data/raw/` 目录下的生成脚本。"
+      ],
+      "usageActions": [
+        "python -m examples.story_of_the_stone.run_simulation",
+        "python -m examples.WestWorld.run_all",
+        "python -m worldkernel.server",
+        "在页面中描述你想生成的世界，或选择已有本地世界进入模拟。",
+        "查看大观园等场景地图。",
+        "点击**开始推演** / **下一回合 (Tick)** 观察人物的行动与交互。",
+        "点击左侧人物列表，查看详细的“人物档案”与实时状态。"
+      ],
+      "ioPairs": [
+        "输入一句自然语言设想，系统自动生成角色、地点、路径与规则，并接入可交互的多智能体模拟。"
+      ],
+      "codeExamples": [
+        "#### 红楼梦\n\n```bash\npython -m examples.story_of_the_stone.run_simulation"
+      ],
+      "usecases": [
+        "无论你是想续写经典、打破原著框架，还是创造一个完全属于你的平行宇宙",
+        "本项目中的 `examples/story_of_the_stone` 示例以中国古典名著《红楼梦》为背景。",
+        "本项目中的 `examples/WestWorld` 示例以科幻剧集《西部世界》为背景，构建了一座由多智能体共同驱动的仿真乐园。",
+        "你可以创造「西游记·大闹天宫」，也可以生成一座靠交易记忆运转的风暴档案城。"
+      ],
+      "outputs": [
+        "系统会初始化 `Ray` 的运行时环境。",
+        "构建并加载所有的插件、配置文件和《红楼梦》人物数据。",
+        "启动 API Server，默认监听在 `0.0.0.0:8000`。",
+        "`profile_generator.py`：基于 `database.jsonl` 过滤存活角色并生成唯一的编码 ID 与基础设定。"
+      ],
+      "media": [
+        {
+          "excerpt": "![Frontend Preview](assets/frontend.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "西部世界与红楼梦都会使用 `8000` 端口，因此请勿同时运行两者。",
+        "WorldKernel 使用 `8100` 端口，可与红楼梦 / 西部世界分开启动。",
+        "进入模拟时仍需本地 Redis。"
+      ],
+      "concerns": [
+        "Story 4 is explicitly in progress and was excluded.",
+        "Cover and logo images were excluded as ambiguous or decorative media.",
+        "Installation and model/YAML configuration material was excluded."
+      ]
+    },
+    {
+      "repo": "WYH66666666/DSH-Transparent-UI-Plugin",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "The header, sidebar, composer, stats line, and trajectory view all become panes of frosted glass.",
+        "you can put video for wallpaper",
+        "**Mica** restyles the layout into floating glass cards (blur and frost adjustable)",
+        "**Compatibility Mode** keeps the stock layout byte-for-byte and only swaps the material to generic glass — other plugins' UI gets the same treatment automatically",
+        "a living fluid board (hue adjustable) or your own wallpaper (fills the page, aspect preserved, with its own blur and frost)",
+        "follows the resolved scheme — dark mode darkens (0–50), light mode brightens (50–100), 50 is unchanged",
+        "the deepseek.com/harness centerpiece fish (a 2D port of the site's particle engine), centered in the chat area right of the sidebar — white particles on dark, gray on light, toggleable in settings",
+        "in dark mode the sidebar wordmark wears the official nameplate pill (135° gradient ring + soft glow); light mode keeps the stock plate",
+        "5px gradient blur bands pinned to the top and bottom of the page, above the chat content"
+      ],
+      "usageItems": [
+        "Reload the web UI.",
+        "the master switch lives in **Settings → Plugins → Glass theme**",
+        "every other control sits directly under **Settings → General → Appearance**"
+      ],
+      "usageActions": [
+        "Reload the web UI.",
+        "Switch it off and the stock UI comes back exactly"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "light wallpapers look best in light mode, dark wallpapers in dark mode"
+      ],
+      "outputs": [
+        "One switch: off restores the stock UI exactly, and every effect is removed with the plugin",
+        "With the master switch off, the whole control block under Appearance is hidden.",
+        "Aqua is **on by default**"
+      ],
+      "media": [
+        {
+          "excerpt": "![](assets/1.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/2.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/3.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![](assets/4.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "As DSH has been updated, I am unable to promptly update the plugin with the new APIdue to my academic commitments."
+      ],
+      "concerns": [
+        "The README warns of API lag and installation crash risk; installation-only wording was not counted as evidence.",
+        "The four uncaptained local screenshots were treated as distinct paths, but their semantic uniqueness cannot be confirmed from README text alone."
+      ]
+    },
+    {
+      "repo": "text2future/flowix",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Use agents inside Flowix or connect **Codex**, **Claude Code**, **OpenCode**, **Hermes**, and other MCP or CLI tools — all working from the same notes and context.",
+        "the agent gets the `mcp__flowix__memo` tool to search, read, create, and edit Flowix memos (including mind maps)."
+      ],
+      "usageItems": [
+        "Write in Markdown, point an agent to the context it needs, and save the result back to the same note — ready to review, edit, and reuse next time.",
+        "Create a new local folder, or register an existing folder as a notebook.",
+        "Create a document and write down the task background, reference materials, goals and constraints.",
+        "Call an agent from within the document, or keep organizing content with tags and properties."
+      ],
+      "usageActions": [
+        "Write in Markdown, point an agent to the context it needs, and save the result back to the same note — ready to review, edit, and reuse next time.",
+        "Create a new local folder, or register an existing folder as a notebook.",
+        "Create a document and write down the task background, reference materials, goals and constraints.",
+        "Call an agent from within the document, or keep organizing content with tags and properties."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "| **Product work** | Keep requirements, feedback, decisions, and PRDs up to date. |",
+        "| **Software development** | Give coding agents the context to continue your project. |",
+        "| **Research** | Keep sources, analysis, and conclusions together and reusable. |",
+        "| **Personal knowledge** | Turn notes, plans, and preferences into useful agent context. |"
+      ],
+      "outputs": [
+        "Flowix keeps your work as plain Markdown files on your device."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"./docs/images/readme-introduce.gif\" width=\"100%\" alt=\"Flowix\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/home-write.png\" width=\"100%\" alt=\"Flowix notes shown across light and dark themes\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<p align=\"center\"><img src=\"./docs/images/home-nav.png\" width=\"60%\" alt=\"Flowix navigation for notes, conversations, tasks, and tags\" /></p>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<p align=\"center\"><img src=\"./docs/images/home-agent.png\" width=\"60%\" alt=\"Flowix connecting Codex, Claude Code, OpenCode, Hermes, and Flowix Agent to the same note\" /></p>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/gh-detail-4.png\" width=\"100%\" alt=\"Full-text and file search\" />",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"./docs/images/gh-detail-6.png\" width=\"100%\" alt=\"Code file browsing and editing\" />",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "You choose what agents can access, when context is sent, and how your files are synced, backed up, or versioned.",
+        "the desktop app supports macOS 14+ and Windows 10+."
+      ],
+      "concerns": [
+        "The bundled DSH plugin capability was counted, but its installation and CLI-path configuration were excluded.",
+        "Product-preview media was capped at six distinct local demonstrations."
+      ]
+    },
+    {
+      "repo": "yjh051108/dsh-router-standard",
+      "inferredType": "dsh-plugin",
+      "capability": [],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "## 当前状态（v1.19.1，2026-08-24 · 研发线，尚未发布）",
+        "router-pro 线已退役删除。"
+      ],
+      "concerns": [
+        "Current feature bullets belong to an explicitly unreleased development line, so they were not treated as presently shipped behavior.",
+        "All material after the explicit historical-document marker was excluded as stale v0.3-era evidence."
+      ]
+    },
+    {
+      "repo": "morluto/rea",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Open Mach-O, ELF, PE, `.app`, ZIP, APK, IPA, ASAR, plist, JavaScript, source-map, and generic analysis-database targets; Hopper remains the only adapter that accepts legacy `.hop` databases.",
+        "capture exact-origin web structure, safe metadata, approved value-free payload shapes, bundle/source-map evidence, WebMCP declarations, user-action timelines, capture diffs, and explicitly approved screenshots",
+        "Inspect Electron `file://` renderer pages through a separate canonical-root permission boundary without invoking Electron APIs",
+        "Attach to one exact approved Node or Electron V8 Inspector target and retain bounded `scriptParsed` plus execution-context lifecycle metadata",
+        "Reconstruct bounded static package, entrypoint, Webpack/Rspack module, import, worker, endpoint, storage, source-map, BrowserWindow, preload, contextBridge, IPC, utility-process, and native-add-on structure",
+        "Reconcile that static graph with existing passive web or Electron Evidence through `reconcile_javascript_runtime` or `rea reconcile-javascript-runtime`.",
+        "Classify PE/CLI managed artifacts with `inspect_managed_artifact` / `rea inspect-managed-artifact`, inspect bounded metadata members, signatures, raw CIL hashes",
+        "Traverse content-addressed artifact graphs without extraction",
+        "Export and import evidence bundles across sessions.",
+        "Capture approved PTY scenarios as Process Capture v4 Evidence",
+        "Track residual unknowns through immutable CAS revisions, evidence-qualified resolution, contradictions, probes, and validated dependency relationships."
+      ],
+      "usageItems": [
+        "Name any app you want to understand, or ask the agent to start with an overview.",
+        "Run `npx -y rea-agents@latest --help` for direct decompilation, bounded search and\nother options.",
+        "REA accepts a Mac `.app` folder directly.",
+        "If an agent cannot find an app by name, tell it where the app is installed.",
+        "Use `read_function_instructions` or `rea instructions` when raw instruction orientation is enough",
+        "When REA feeds a shell pipeline, enable `pipefail` so a downstream formatter\ncannot hide its failure:",
+        "pass `snapshot_path` to `open_binary` to import a snapshot atomically while\nopening its matching target",
+        "Pass `snapshot_path` and, when required, `overwrite: true` to\n`close_binary` to save atomically before Hopper resources are released.",
+        "If a dossier has already timed out, inspect `analysis_activity`"
+      ],
+      "usageActions": [
+        "Reverse engineer the Notes app. Find how offline search works, explain it,\nand build a version for my project using TypeScript and SQLite.",
+        "npx -y rea-agents@latest doctor",
+        "npx -y rea-agents@latest analyze /Applications/Notes.app",
+        "npx -y rea-agents@latest search /Applications/Notes.app \"offline\"",
+        "npx -y rea-agents@latest function /Applications/Notes.app 0x1000",
+        "npx -y rea-agents@latest xrefs /Applications/Notes.app 0x1000",
+        "npx -y rea-agents@latest trace /Applications/Notes.app \"offline\"",
+        "npx -y rea-agents@latest compare /absolute/path/to/left-evidence.json /absolute/path/to/right-evidence.json",
+        "npx -y rea-agents@latest investigate-versions /path/to/v1 /path/to/v2 /absolute/path/to/evidence/releases.json --yes",
+        "rea capture-process ./scenario.json > authority.json"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## One prompt, a full investigation\n\n```text\nReverse engineer the Notes app. Find how offline search works, explain it,\nand build a version for my project using TypeScript and SQLite.",
+        "## CLI\n\nThe agent workflow above is the easiest way to use REA. For a one-off overview from the Terminal:\n\n```bash\nnpx -y rea-agents@latest analyze /Applications/Notes.app",
+        "When REA feeds a shell pipeline, enable `pipefail` so a downstream formatter\ncannot hide its failure:\n\n```bash\nset -o pipefail\nrea inventory-artifact ./app.asar --json | jq . > inventory.json",
+        "Capture a scenario or compare two saved Process Capture v4 Evidence records:\n\n```bash\nrea capture-process ./scenario.json > authority.json"
+      ],
+      "usecases": [
+        "Investigate a feature you like and build a version tailored to your own product.",
+        "Explain how a feature works when its source code is unavailable.",
+        "Reconstruct an app's authentication, storage, update, or networking flow.",
+        "Recover enough structure to document an undocumented format or interface.",
+        "Trace a suspicious behavior from a string or symbol to the code that implements it.",
+        "Run, checkpoint, resume, and reuse a content-addressed artifact investigation across two versions.",
+        "Analyze Swift and Objective-C metadata without manually untangling every mangled symbol.",
+        "Leave names, comments, and bookmarks in Hopper so human and agent analysis reinforce each other."
+      ],
+      "outputs": [
+        "Record every successful result as deterministic Evidence v2 with artifact and provider identity, confidence, authority, limitations, and locations.",
+        "ordered events return typed decisions, actions, captured aliases, transition journals, final state, and exact limit use without echoing request or captured values.",
+        "The comparison reports each observed dimension separately and identifies the\nfirst terminal, interaction, exit, filesystem, protocol, process, or shim\ndivergence.",
+        "Build bounded function dossiers with pseudocode, assembly, CFG edges, comments, calls, references, strings, and names.",
+        "`rea doctor --json` is read-only and distinguishes unsupported hosts, missing dependencies, a missing local analysis engine, configuration drift, and healthy checks.",
+        "Validate finite replay machines without launching a target through `run_replay_machine` or `rea run-replay-machine`;",
+        "Integrity failures identify the logical\npath, declared and calculated SHA-256 values, and whether the entry was\nunpacked"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "It does not claim to recover original source code or automatically clone an application.",
+        "Analysis runs on your supported local host. REA does not upload the app to a hosted analysis service.",
+        "provider failures never trigger transparent fallback.",
+        "An analysis timeout, scan or inventory safety limit, request timeout, or oversized response fails explicitly instead of returning a partial result labeled complete.",
+        "Exports never replace an existing file unless `--overwrite` is explicit. Imports are size/depth bounded, validate every Evidence v2 ID and manifest, and never execute bundle content.",
+        "Snapshot files can contain proprietary analysis\nresults and local paths, so REA keeps them local, writes them with owner-only\npermissions, and requires a separate approved root:",
+        "Query values, credentials, cookies, authorization headers, storage values, and raw JSON or WebSocket values are never retained.",
+        "Automation has no default\ngrant: use the shared project/session policy, or set\n`REA_BROWSER_SCENARIO_AUTO_GRANT=true` only for a trusted unattended\nenvironment.",
+        "REA reports timeouts and remediation through CLI or MCP results instead of attempting to answer UI prompts.",
+        "If shutdown or cleanup cannot be verified, `close_binary` returns `cleanup_incomplete` with the affected local resources."
+      ],
+      "concerns": [
+        "Roadmap items and linked-document-only claims were excluded.",
+        "Installation, setup, provider-path, and permission-root configuration examples were excluded from practical evidence.",
+        "Only the single clearly demonstrative local image was counted; badges and decorative elements were excluded."
+      ]
+    }
+  ]
+}

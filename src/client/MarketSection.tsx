@@ -156,6 +156,11 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
   const [toast, setToast] = useState<string | null>(null)
   const [verifyBusy, setVerifyBusy] = useState(false)
   const [detail, setDetail] = useState<MarketEntry | null>(null)
+  const detailCurrent = useMemo(() => {
+    if (detail === null || data === null) return detail
+    const key = (detail.owner + '/' + detail.name).toLowerCase()
+    return data.plugins.find(entry => (entry.owner + '/' + entry.name).toLowerCase() === key) ?? detail
+  }, [detail, data])
   const [updateBusy, setUpdateBusy] = useState(false)
   const [updatingNames, setUpdatingNames] = useState<Set<string>>(new Set())
   const [selfUpdateBusy, setSelfUpdateBusy] = useState(false)
@@ -240,6 +245,7 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
                 const merged = { ...e }
                 if (old.downloads !== undefined) merged.downloads = old.downloads
                 if (old.totalDownloads !== undefined) merged.totalDownloads = old.totalDownloads
+                if (old.downloadFreshness !== undefined) merged.downloadFreshness = old.downloadFreshness
                 if (old.repoVersion !== undefined) merged.repoVersion = old.repoVersion
                 // v1.7.45：刷新轮询同样会冲掉页级富化——bundled/hasSkill/score/
                 // installCmds 按 owner/name 保留（与下载量同款合并）。
@@ -248,6 +254,13 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
                 if (old.bundled !== undefined && old.bundled !== null) merged.bundled = old.bundled
                 if (old.bundledAt !== undefined) merged.bundledAt = old.bundledAt
                 if (old.hasSkill !== undefined && old.hasSkill !== null) merged.hasSkill = old.hasSkill
+                // 页级 bundle 扫描是本会话更新的确定正证据；旧索引仍为 unknown 时
+                // 保留它，避免 5s registry 轮询把“已验证插件”冲回待判定。
+                if (merged.pluginStatus === 'unknown' && old.pluginStatus === 'verified-plugin' && (old.pluginEvidence ?? []).includes('index-bundle-scan')) {
+                  merged.isPlugin = true
+                  merged.pluginStatus = old.pluginStatus
+                  merged.pluginEvidence = old.pluginEvidence
+                }
                 if (old.score !== undefined && merged.score === undefined) merged.score = old.score
                 if (old.installCmds !== undefined) merged.installCmds = old.installCmds
                 if (old.cmdSource !== undefined) merged.cmdSource = old.cmdSource
@@ -382,10 +395,20 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
     return () => clearInterval(timer)
   }, [refreshing, installing, fetchRegistry, fetchStatus])
 
-  // On-demand verification of unknown entries on the current page.
+  // On-demand positive verification of unknown entries on the current page.
+  // A root-manifest miss remains unknown; remember attempts for this UI session
+  // so an undecidable monorepo does not trigger an infinite verification loop.
+  const verifyRequested = useRef<Map<string, number>>(new Map())
   const verifyPage = useCallback((entries: MarketEntry[]) => {
-    const unknown = entries.filter(e => e.isPlugin === null).map(e => e.owner + '/' + e.name).slice(0, 12)
+    const now = Date.now()
+    const unknown = entries
+      .filter(e => e.pluginStatus === 'unknown' || (e.pluginStatus === undefined && e.isPlugin === null))
+      .map(e => e.owner + '/' + e.name)
+      .filter(repo => (verifyRequested.current.get(repo.toLowerCase()) ?? 0) <= now)
+      .slice(0, 12)
     if (unknown.length === 0 || verifyBusy) return
+    // 正常未命中 30 分钟后再试；请求失败在 catch 中缩短到 60 秒。
+    for (const repo of unknown) verifyRequested.current.set(repo.toLowerCase(), now + 30 * 60_000)
     setVerifyBusy(true)
     fetch('/dsh-mall/verify', {
       method: 'POST',
@@ -393,7 +416,7 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       body: JSON.stringify({ repos: unknown }),
     })
       .then(res => res.json())
-      .then((body: { ok?: boolean; verdicts?: Record<string, boolean> }) => {
+      .then((body: { ok?: boolean; verdicts?: Record<string, true>; error?: string; retryAfterMs?: number }) => {
         const verdicts = body.verdicts ?? {}
         setData((prev: Registry | null) => {
           if (prev === null) return prev
@@ -402,12 +425,29 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
             plugins: prev.plugins.map((e: MarketEntry) => {
               const v = verdicts[(e.owner + '/' + e.name).toLowerCase()]
               if (v === undefined) return e
-              return { ...e, isPlugin: v }
+              const evidence = e.pluginEvidence ?? []
+              const conflict = evidence.includes('index-non-plugin')
+              return {
+                ...e,
+                isPlugin: conflict ? null : true,
+                pluginStatus: conflict ? 'conflict' : 'verified-plugin',
+                pluginEvidence: [...new Set([...evidence, 'manifest-contract' as const])],
+              }
             }),
           }
         })
+        if (body.ok !== true) {
+          const retryMs = Math.max(60_000, Math.min(body.retryAfterMs ?? 60_000, 60 * 60_000))
+          const retryAt = Date.now() + retryMs
+          for (const repo of unknown) {
+            if (verdicts[repo.toLowerCase()] !== true) verifyRequested.current.set(repo.toLowerCase(), retryAt)
+          }
+        }
       })
-      .catch(() => {})
+      .catch(() => {
+        const retryAt = Date.now() + 60_000
+        for (const repo of unknown) verifyRequested.current.set(repo.toLowerCase(), retryAt)
+      })
       .finally(() => setVerifyBusy(false))
   }, [verifyBusy])
 
@@ -440,6 +480,8 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       created: null,
       pushed: null,
       isPlugin: true,
+      pluginStatus: 'verified-plugin',
+      pluginEvidence: ['manifest-contract'],
       curated: false,
       npm: name,
       avatar: '',
@@ -573,7 +615,7 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       if (scannedOnly && p.bundled !== true) continue
       if (skillOnly && p.hasSkill !== true) continue
       if (kind === 'plugin' && p.isPlugin !== true) continue
-      if (kind === 'nonplugin' && p.isPlugin === true) continue
+      if (kind === 'nonplugin' && p.isPlugin !== false) continue
       if (curatedOnly && !p.curated) continue
       if (verifiedOnly && p.verified == null) continue
       if (installedOnly && !isInstalled(p)) continue
@@ -634,7 +676,7 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       return mon.getFullYear() + '-' + String(mon.getMonth() + 1).padStart(2, '0') + '-' + String(mon.getDate()).padStart(2, '0')
     }
     const computePicks = (pluginsAll: MarketEntry[]): MarketEntry[] => pluginsAll
-      .filter(p => p.curated === true && p.excluded == null && p.isPlugin !== false)
+      .filter(p => p.curated === true && p.excluded == null && p.pluginStatus === 'verified-plugin')
       .sort((a, b) => (b.score?.total ?? 0) - (a.score?.total ?? 0))
       .slice(0, 6)
     useEffect(() => {
@@ -652,7 +694,8 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       } catch { /* 忽略损坏的本地存储 */ }
       if (storedWeek === wk && storedNames.length > 0) {
         const byKey = new Map(data.plugins.map(p => [(p.owner + '/' + p.name).toLowerCase(), p]))
-        const restored = storedNames.map(n => byKey.get(n.toLowerCase())).filter((p): p is MarketEntry => p !== undefined)
+        const restored = storedNames.map(n => byKey.get(n.toLowerCase()))
+          .filter((p): p is MarketEntry => p !== undefined && p.excluded == null && p.pluginStatus === 'verified-plugin')
         if (restored.length === 6) {
           setPicks(restored)
           return
@@ -768,9 +811,10 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
       body: JSON.stringify({ names: todo.slice(0, 1500) }),
     })
       .then(res => res.json())
-      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null> }) => {
+      .then((body: { downloads?: Record<string, number | null>; totals?: Record<string, number | null>; freshness?: Record<string, NonNullable<MarketEntry['downloadFreshness']>> }) => {
         const got = body.downloads ?? {}
         const totals = body.totals ?? {}
+        const freshness = body.freshness ?? {}
         setData((prev: Registry | null) => {
           if (prev === null) return prev
           return {
@@ -778,11 +822,13 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
             plugins: prev.plugins.map((e: MarketEntry) => {
               const hit = e.npm !== null ? got[e.npm] : undefined
               const tot = e.npm !== null ? totals[e.npm] : undefined
-              if (hit === undefined && tot === undefined) return e
+              const fresh = e.npm !== null ? freshness[e.npm] : undefined
+              if (hit === undefined && tot === undefined && fresh === undefined) return e
               return {
                 ...e,
                 downloads: hit === undefined ? e.downloads : hit,
                 totalDownloads: tot === undefined ? e.totalDownloads : tot,
+                downloadFreshness: fresh === undefined ? e.downloadFreshness : fresh,
               }
             }),
           }
@@ -843,7 +889,17 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
               const hitS = gotS[key]
               if (hitB === undefined && hitS === undefined) return e
               const next: MarketEntry = { ...e }
-              if (hitB !== undefined) { next.bundled = hitB; next.bundledAt = new Date().toISOString().slice(0, 10) }
+              if (hitB !== undefined) {
+                next.bundled = hitB
+                next.bundledAt = new Date().toISOString().slice(0, 10)
+                if (hitB === true) {
+                  const priorEvidence = next.pluginEvidence ?? []
+                  const conflict = priorEvidence.includes('index-non-plugin')
+                  next.pluginEvidence = [...new Set([...priorEvidence, 'index-bundle-scan' as const])]
+                  next.pluginStatus = conflict ? 'conflict' : 'verified-plugin'
+                  next.isPlugin = conflict ? null : true
+                }
+              }
               if (hitS !== undefined) next.hasSkill = hitS
               return next
             }),
@@ -1857,9 +1913,10 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
                       <span className="pcm-updated" title={entry.pushed ?? undefined}>{t('updatedShort') + ' ' + relativeFromNow(entry.pushed, t)}</span>
                     </div>
                     <div className="pcm-badges">
-                      {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin">{t('pluginBadge')}</span>}
-                      {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin">{t('nonpluginBadge')}</span>}
-                      {entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
+                      {entry.isPlugin === true && <span className="pcm-badge pcm-badge-plugin" title={(entry.pluginEvidence ?? []).join(' · ')}>{t('pluginBadge')}</span>}
+                      {entry.isPlugin === false && <span className="pcm-badge pcm-badge-nonplugin" title={(entry.pluginEvidence ?? []).join(' · ')}>{t('nonpluginBadge')}</span>}
+                      {entry.pluginStatus === 'conflict' && <span className="pcm-badge pcm-badge-nonplugin" title={(entry.pluginEvidence ?? []).join(' · ')}>{t('conflictBadge')}</span>}
+                      {(entry.pluginStatus === 'unknown' || entry.pluginStatus === undefined) && entry.isPlugin === null && <span className="pcm-badge pcm-badge-pending">{t('pendingBadge')}</span>}
                       {entry.local === true && <span className="pcm-badge pcm-badge-local">{t('localBadge')}</span>}
                       {entry.dormant === true && (
                         <span className="pcm-badge pcm-badge-dormant" title={t('dormantHint')}>{t('dormantBadge')}</span>
@@ -1981,33 +2038,33 @@ const [sortDim, setSortDim] = useState<'stars' | 'today' | 'created' | 'download
         />
       </div>
 
-      {detail !== null && (
+      {detailCurrent !== null && (
         <DetailPanel
           t={t}
-          entry={detail}
+          entry={detailCurrent}
           langChoice={langChoice}
           categoryLabel={(cat: string) => data?.categories?.[cat]?.[(langChoice === 'zh' ? 'zh' : 'en')] ?? cat}
-          isFav={isFav(detail)}
-          isInstalled={isInstalled(detail)}
-          installedSpec={installedSpecOf(detail)}
+          isFav={isFav(detailCurrent)}
+          isInstalled={isInstalled(detailCurrent)}
+          installedSpec={installedSpecOf(detailCurrent)}
           installing={installing}
-          update={updateFor(detail)}
+          update={updateFor(detailCurrent)}
           updating={(() => {
-            const u = updateFor(detail)
+            const u = updateFor(detailCurrent)
             return u !== null && updatingNames.has(u.name.toLowerCase())
           })()}
           related={(() => {
-            const self = (detail.owner + '/' + detail.name).toLowerCase()
+            const self = (detailCurrent.owner + '/' + detailCurrent.name).toLowerCase()
             return data === null ? [] : data.plugins
-              .filter(p => p.category === detail.category && p.excluded == null && (p.owner + '/' + p.name).toLowerCase() !== self)
+              .filter(p => p.category === detailCurrent.category && p.excluded == null && (p.owner + '/' + p.name).toLowerCase() !== self)
               .sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0))
               .slice(0, 6)
           })()}
           onOpenEntry={e => setDetail(e)}
-          onToggleFav={() => toggleFav(detail)}
-          onInstall={() => setConfirming(detail)}
-          onUninstall={() => { if (detail.local === true) setRemovingLocal(detail); else setRemoving(detail) }}
-          onUpdate={() => { const u = updateFor(detail); if (u !== null) doUpdateOne(u) }}
+          onToggleFav={() => toggleFav(detailCurrent)}
+          onInstall={() => setConfirming(detailCurrent)}
+          onUninstall={() => { if (detailCurrent.local === true) setRemovingLocal(detailCurrent); else setRemoving(detailCurrent) }}
+          onUpdate={() => { const u = updateFor(detailCurrent); if (u !== null) doUpdateOne(u) }}
           onClose={() => setDetail(null)}
         />
       )}
@@ -2156,8 +2213,22 @@ function InstallModal(props: {
 }) {
   const { t, entry, installing, statusLine } = props
   const target = entry.npmLinked === false ? 'github:' + entry.owner + '/' + entry.name : (entry.npm ?? 'github:' + entry.owner + '/' + entry.name)
-  const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
-  const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
+  const riskClass = entry.curated
+    ? 'pcm-risk pcm-risk-curated'
+    : entry.pluginStatus === 'verified-plugin'
+      ? 'pcm-risk pcm-risk-community'
+      : entry.pluginStatus === 'verified-non-plugin' || entry.pluginStatus === 'conflict'
+        ? 'pcm-risk pcm-risk-nonplugin'
+        : 'pcm-risk pcm-risk-community'
+  const riskText = entry.curated
+    ? t('riskCurated')
+    : entry.pluginStatus === 'verified-plugin'
+      ? t('riskCommunity')
+      : entry.pluginStatus === 'verified-non-plugin'
+        ? t('riskNonplugin')
+        : entry.pluginStatus === 'conflict'
+          ? t('riskConflict')
+          : t('riskUnknown')
   // v1.7.45：README 安装命令参考区（展示-only，不执行）——优先用页级富化缓存。
   const [readmeCmds, setReadmeCmds] = useState<{ commands: string[]; source: string }>(() =>
     entry.installCmds !== undefined && entry.installCmds !== null
@@ -2230,8 +2301,22 @@ function UpdateModal(props: {
 }) {
   const { t, entry, upd, busy, statusLine } = props
   const target = entry.npmLinked === false ? 'github:' + entry.owner + '/' + entry.name : (entry.npm ?? 'github:' + entry.owner + '/' + entry.name)
-  const riskClass = entry.curated ? 'pcm-risk pcm-risk-curated' : entry.isPlugin === true ? 'pcm-risk pcm-risk-community' : 'pcm-risk pcm-risk-nonplugin'
-  const riskText = entry.curated ? t('riskCurated') : entry.isPlugin === true ? t('riskCommunity') : t('riskNonplugin')
+  const riskClass = entry.curated
+    ? 'pcm-risk pcm-risk-curated'
+    : entry.pluginStatus === 'verified-plugin'
+      ? 'pcm-risk pcm-risk-community'
+      : entry.pluginStatus === 'verified-non-plugin' || entry.pluginStatus === 'conflict'
+        ? 'pcm-risk pcm-risk-nonplugin'
+        : 'pcm-risk pcm-risk-community'
+  const riskText = entry.curated
+    ? t('riskCurated')
+    : entry.pluginStatus === 'verified-plugin'
+      ? t('riskCommunity')
+      : entry.pluginStatus === 'verified-non-plugin'
+        ? t('riskNonplugin')
+        : entry.pluginStatus === 'conflict'
+          ? t('riskConflict')
+          : t('riskUnknown')
   return (
     <Modal
       open

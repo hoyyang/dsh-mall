@@ -1,0 +1,251 @@
+{
+  "reviews": [
+    {
+      "repo": "yogsoth-ai/de-anthropocentric-research-engine",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "**Deep literature acquisition** — multi-pass academic paper discovery via Semantic Scholar, citation chaining, snowball sampling, cross-database verification. Not keyword search — systematic coverage",
+        "**Gap discovery at scale** — 15+ gap detection methods (coverage analysis, white-space identification, niche mapping, boundary unfolding) that find what the field is missing, not what you tell it to find",
+        "**Structured hypothesis formation** — abductive, inductive, and deductive generation pipelines with falsifiability audits and competing hypothesis matrices",
+        "**31+ ideation methods** — SCAMPER, component surgery, cross-domain collision, biomimicry, TRIZ contradiction resolution, morphological analysis, concept blending, lateral thinking, and more",
+        "**Adversarial stress testing** — multi-perspective attack, sacred cow hunting, assumption destruction, worst-case design, winner stress testing. Ideas must survive attack before acceptance",
+        "**Convergence & synthesis** — multi-criteria scoring, Pareto frontier construction, pairwise ranking, structured consensus, dialectical synthesis across competing threads",
+        "**Experiment design** — full experimental methodology generation (factor-level design, parameter screening, sensitivity analysis) ready for execution",
+        "**7 MCP integrations** — Semantic Scholar, Brave Search, Tavily, Keenable, AlphaXiv, Apify web scraping, and Wiki Vault for persistent knowledge graphs",
+        "**executing-specs** runs a spec stage-by-stage with context protocol, deviation tracking, and backtrack handling",
+        "**research-catalog** is the \"strategy book\" — CC reads it before generating any spec to understand what campaigns and strategies are available",
+        "The `cross-domain-collision` tactic, for example, orchestrates: domain-scanning → organism-discovery → analogy-extraction → forced-bridge-construction → blend-evaluation."
+      ],
+      "usageItems": [
+        "Use DARE to turn this research direction into an executable Research Spec: ...",
+        "To execute the spec later, invoke `/executing-specs`.",
+        "The human's role: approve the spec (including its backtrack conditions and recommended campaign combinations) before execution begins."
+      ],
+      "usageActions": [
+        "Use DARE to turn this research direction into an executable Research Spec: ...",
+        "/de-anthropocentric-research-engine",
+        "/executing-specs docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md"
+      ],
+      "ioPairs": [
+        "You: /de-anthropocentric-research-engine\n     \"I'm interested in improving LLM reasoning faithfulness\"\n\nPhase 1 — North Star Crystallization (warm-start)\n  → Dialogue to narrow scope, identify obstacles, decompose goals",
+        "You: /executing-specs docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md\n  → Agent reads spec, executes stage by stage"
+      ],
+      "codeExamples": [
+        "4. Invoke the entry point:\n\n   ```bash\n   /de-anthropocentric-research-engine"
+      ],
+      "usecases": [
+        "cold-start from zero, warm-start from vague interest, or hot-start from specific question.",
+        "Research campaigns span multiple sessions."
+      ],
+      "outputs": [
+        "Develop methods to detect and correct unfaithful\n     chain-of-thought reasoning in LLMs, focusing on cases where\n     the stated reasoning diverges from the model's actual\n     decision process",
+        "Full Research Spec written, self-reviewed, saved to\n     docs/de-anthropocentric/specs/2026-05-19-cot-faithfulness-spec.md",
+        "Final output: complete research design document"
+      ],
+      "media": [],
+      "reliability": [
+        "Session recovery is automatic: read the spec, find the first unchecked box, read the latest context checkpoint, resume.",
+        "±10% deviation rules: CC can adjust within bounds, must document deviations",
+        "The tradeoff is that execution depends entirely on CC's ability to follow complex multi-step instructions",
+        "the entire 900+ skill call graph is reconstructable from frontmatter alone, and is machine-verified closed (every declared edge resolves to a real skill — 2476 / 2476 skill→skill edges).",
+        "Requires Node.js 22 or newer.",
+        "`context-checkpoint` appends ≥500 lines of process + results after each strategy",
+        "New sessions recover by reading INDEX → latest checkpoint → resume from spec state"
+      ],
+      "concerns": [
+        "Roadmap, installation, configuration, marketing, and linked-project claims were omitted."
+      ]
+    },
+    {
+      "repo": "yjh051108/dsh-router-standard",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "reads the session's first REAL user message, classifies\nthe task (build → react / fix → spec / ambiguous → weak), and on the first\nmodel request injects the matching persona while keeping the full prompt",
+        "the first-turn core tool surface follows the band\n(spec=read/edit/glob/grep, react=read/write/edit, weak=read/write/edit, each\nplus the platform shell).",
+        "Weak-band sessions also get a near-field routing\nguide in the SAME request as every real user message.",
+        "After the first durable tool call the full Standard catalog is exposed and the\nrouter stops touching anything.",
+        "`personaFor(mode, modelId)` reads the session's model route and\nselects the measured optimum automatically"
+      ],
+      "usageItems": [
+        "`dev_router_status` — current mode, band, persona, core tools, override state",
+        "`dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>` — explicit mode",
+        "`dev_mode_subagent <spec|react|balanced> <task>` — run one task in a\n  DIFFERENT reasoning mode inside a fresh isolated context (its own system\n  prompt), leaving the current trajectory untouched."
+      ],
+      "usageActions": [
+        "`dev_router_status` — current mode, band, persona, core tools, override state",
+        "`dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>` — explicit mode",
+        "`dev_mode_subagent <spec|react|balanced> <task>` — run one task in a\n  DIFFERENT reasoning mode inside a fresh isolated context (its own system\n  prompt), leaving the current trajectory untouched."
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## Tests\n\n```sh\nnode --test router.test.mjs"
+      ],
+      "usecases": [
+        "**simple tasks** → fast-convergence guide (P30: 1 step, zero waste);",
+        "**complex tasks** → decision-closure deep guide"
+      ],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "the router captures\n  the first REAL user message there (`source.kind === 'user'` only), so the\n  first request is classified instead of unconditionally falling into weak.",
+        "The guide is now\n  inserted into `decision.messages` at `agent/pre-step`: same request as the\n  user message, near-field, cache-neutral, zero extra round-trips.",
+        "`router.integration.test.mjs` replays the real claim → assemble →\n  pre-step ordering against the actual bootstrap code.",
+        "The mode is derived from durable session\nevents, so resume/reload keeps it.",
+        "The plan-mode prompt section is preserved,\nso plan boundaries do not reset the model's focus.",
+        "transition band is never selected automatically.",
+        "The model is fixed at the first request (path commitment), so the persona is\nlocked for the session; switching the GUI model starts a new session with the\nmatching configuration.",
+        "`parentSession` 会话跳过路由层（社区 #5 修复），shell-less\n   子代理不再崩溃。",
+        "node --test router.test.mjs   # 11 tests: classification, bands, personas, plan-section survival"
+      ],
+      "concerns": [
+        "当前状态（v1.19.1，2026-08-24 · 研发线，尚未发布）",
+        "【历史文档 · v0.3 时代】"
+      ]
+    },
+    {
+      "repo": "Zhiyuan-Fan/Awesome-DeepSeek-Harness-Plugins",
+      "inferredType": "catalog-list",
+      "capability": [
+        "directory of public plugins and extensions for [DeepSeek Harness](https://www.deepseek.com/harness/en/) (DSH)",
+        "Every entry links to its canonical GitHub repository",
+        "Inclusion: public, useful, maintained, and clearly built for DSH.",
+        "The taxonomy follows the capability seams defined by the [official Harness overview](https://www.deepseek.com/harness/en/)."
+      ],
+      "usageItems": [
+        "Open a pull request, or add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "usageActions": [
+        "Open a pull request",
+        "add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your repository so the curator can find it."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "media": [],
+      "reliability": [
+        "This list is reviewed daily by a local Codex scheduled task using public sources only."
+      ],
+      "concerns": [
+        "Linked-project capabilities, commands, media, references, reliability, and popularity material were excluded under catalog ownership."
+      ]
+    },
+    {
+      "repo": "whitelonng/dshcode",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "插件化框架，内置 bash、文件系统、网页搜索/抓取、终端、LSP 与子进程工具",
+        "Subagent 并行委派，以及可跨多个 Agent 分阶段并行展开的 Workflow。",
+        "执行前先审查再批准的 Plan 模式、跨轮次持续进行的 Goal 目标、可恢复的会话。",
+        "按供应商调节推理强度（关闭到最高）、最大输出 token 数，以及图像输入、图像生成与图像识别等多模态能力开关。",
+        "主题与皮肤合集、选区批注工作流、命令快捷键、中英双语界面。",
+        "搜索已归档会话，可恢复或彻底删除。",
+        "托盘图标、系统通知、单实例运行、加固的 Electron 窗口。",
+        "应用会启动内置的 Harness Web profile，并在经过安全加固的 Electron 窗口中显示。"
+      ],
+      "usageItems": [
+        "安装 DSHCode 安装包后，从 macOS“应用程序”文件夹或 Windows“开始”菜单打开 `DSHCode`。"
+      ],
+      "usageActions": [
+        "从 macOS“应用程序”文件夹或 Windows“开始”菜单打开 `DSHCode`。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "内联渲染的 GenUI 卡片：图表、表格、测验、3D 场景、示意图、表单与进度视图。",
+        "构建产物写入 `.artifacts/desktop/release/`。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/readme/dshcode-dark.png\" alt=\"DSHCode 深色主题\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-model-config.png\" alt=\"自定义供应商模型的思考等级与多模态能力\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-plugin-manager.png\" alt=\"插件的下载、更新与管理\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-safe-mode.png\" alt=\"可禁用故障插件或安全模式启动\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-agent-repair.png\" alt=\"让 Agent 修复故障插件\" width=\"49%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"assets/readme/readme-archives.png\" alt=\"归档管理：搜索、恢复与删除\" width=\"60%\">",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "支持沙箱隔离与逐操作审批提示。",
+        "会话日志完整记录模型所见内容，任何一次运行都可被重建。",
+        "加载失败的插件会连同诊断信息一起报告：可禁用该插件、以安全模式启动，或让 Agent 携带失败上下文自动修复。",
+        "每个版本都会随安装包发布 SHA-256 校验和（`SHA256SUMS.txt`）。",
+        "预览版安装包尚未进行代码签名或公证，因此 macOS Gatekeeper 与 Windows SmartScreen 可能在首次启动前发出警告。",
+        "该服务只绑定 `127.0.0.1`，并让操作系统分配一个可用的临时端口，因此不会占用固定端口，通常也不会与其他本地服务冲突。",
+        "DSHCode 只允许一个应用实例，只加载其自身的精确回环地址；进程退出前会先释放 Harness 树，所以关闭应用也会停止服务并释放端口。",
+        "安装版用户得到的是普通应用；Node.js、CLI 与终端只在从源码运行或自行构建安装包时才需要。"
+      ],
+      "concerns": [
+        "Installation commands, API-key configuration, branding, and linked third-party project claims were omitted."
+      ]
+    },
+    {
+      "repo": "hust-open-atom-club/oh-dsh",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "使用同一个 <code>ohdsh</code> 命令启动 Desktop、Web 或 TUI。三端共享会话、凭据、皮肤与插件缓存，同时保留独立 Profile。",
+        "内置 Workspace、PTY 终端、浏览器、文件浏览、Side chat 与 Trajectory；面板可以折叠、固定、分屏或全屏展开。",
+        "查看工作区改动与 commit diff，在代码行上添加 review comment，并在同一个侧边栏完成分支、提交和推送操作。",
+        "<code>@oh-dsh/skins</code> 为 Desktop、Web 与 TUI 提供统一主题，并针对各界面的布局和可读性分别适配。",
+        "内置的 `@oh-dsh/vision` 为三端提供同一个 `view_image` 工具，让用户对 Workspace\n内的本地图片、HTTP(S) 图片或 image data URL 做 OCR、读图与界面诊断。"
+      ],
+      "usageItems": [
+        "ohdsh desktop          # 启动 Oh-DSH Desktop",
+        "ohdsh web              # 启动 Oh-DSH Web",
+        "ohdsh tui              # 启动 Oh-DSH TUI"
+      ],
+      "usageActions": [
+        "ohdsh desktop          # 启动 Oh-DSH Desktop",
+        "ohdsh web              # 启动 Oh-DSH Web",
+        "ohdsh tui              # 启动 Oh-DSH TUI"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "## 使用\n\n```sh\nohdsh desktop          # 启动 Oh-DSH Desktop",
+        "本地开发时，也可以用仓库根目录的 Makefile 快速启动指定交互端：\n\n```sh\nmake build"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "media": [
+        {
+          "excerpt": "<img src=\"./assets/oh-dsh-desktop-readme.png\" alt=\"Oh-DSH Desktop 界面展示\" width=\"100%\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Oh-DSH 插件市场](./assets/oh-dsh-plugin-marketplace.png)",
+          "weight": 1
+        },
+        {
+          "excerpt": "![Oh-DSH 跨界面皮肤](./assets/oh-dsh-desktop-skins.png)",
+          "weight": 1
+        }
+      ],
+      "reliability": [
+        "某些插件只在 Web 或 Desktop 生效、在 TUI 不生效，界面上会明确区分。",
+        "三端默认共同使用 `~/.ohdsh` 存放缓存、配置、会话、凭据与插件状态。",
+        "不另加输入栏气泡或引用协议。TUI 通过 Workspace\n图片路径或 URL 使用同一能力。",
+        "每个 Make 目标只会暂存\n对应交互端的 Oh-DSH package，不会把其它交互端一起带入开发 runtime。"
+      ],
+      "concerns": [
+        "Installation, upgrade, uninstall, configuration, and linked plugin-recommendation claims were omitted."
+      ]
+    }
+  ]
+}

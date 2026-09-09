@@ -1,0 +1,2293 @@
+{
+  "generatedAt": "2026-09-02T03:58:02.704Z",
+  "evaluationPath": "/Users/hoy/Desktop/DSH/dsh-mall/artifacts/practical-v3/round-02-production-scorer-evaluation-iteration-20.json",
+  "invariant": "Popularity, identity, README length, installation and target score distribution are absent. Dimension maxima and family point allocations are fixed; every candidate maps rubric-cap evidence to 100.",
+  "searchSpace": {
+    "exponents": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1
+    ],
+    "anchorFractions": [
+      0.5,
+      0.625,
+      0.75,
+      0.875,
+      1
+    ],
+    "evidenceCaps": {
+      "capabilityItems": 12,
+      "usageItems": 10,
+      "usageActions": 10,
+      "ioPairs": 8,
+      "codeExamples": 4,
+      "usecaseItems": 10,
+      "outputItems": 8,
+      "media": 6,
+      "reliabilityItems": 10
+    },
+    "candidatesEvaluated": 34375
+  },
+  "current": {
+    "config": {
+      "exponent": 1,
+      "anchorFractions": {
+        "capability": 0.875,
+        "usage": 1,
+        "usecases": 1,
+        "demo": 0.625,
+        "reliability": 1
+      },
+      "anchors": {
+        "capabilityItems": 10.5,
+        "usageItems": 10,
+        "usageActions": 10,
+        "ioPairs": 8,
+        "codeExamples": 4,
+        "usecaseItems": 10,
+        "outputItems": 5,
+        "media": 3.75,
+        "reliabilityItems": 10
+      }
+    },
+    "selection": "Robust full-range choice: CV-majority reliability anchor 10 instead of full-cohort best 8.75; all other anchors are the dominant CV/full-cohort neighborhood.",
+    "fullScoreAtRubricCaps": 100,
+    "metrics": {
+      "count": 100,
+      "spearman": 0.775,
+      "topQuartileRecall": 0.64,
+      "severeFalseNegativeRate": 0.04,
+      "severeFalsePositiveRate": 0.03,
+      "within20Share": 0.87,
+      "meanError": -3.98,
+      "meanAbsoluteError": 10.5,
+      "maximumTypeSevereRate": 0.0556,
+      "byType": {
+        "catalog-list": {
+          "n": 9,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0
+        },
+        "dsh-plugin": {
+          "n": 54,
+          "severeFalseNegativeRate": 0.037,
+          "severeFalsePositiveRate": 0.0556
+        },
+        "standalone-nonplugin": {
+          "n": 37,
+          "severeFalseNegativeRate": 0.0541,
+          "severeFalsePositiveRate": 0
+        }
+      }
+    }
+  },
+  "top": [
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7716,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.88,
+        "meanError": -4.19,
+        "meanAbsoluteError": 10.55,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.75,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 6,
+          "media": 4.5,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7707,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.85,
+        "meanError": -4.54,
+        "meanAbsoluteError": 10.62,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7701,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.84,
+        "meanError": -4.85,
+        "meanAbsoluteError": 10.83,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 0.75
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 7.5
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7672,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.88,
+        "meanError": -4.51,
+        "meanAbsoluteError": 10.65,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 0.75,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7639,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.82,
+        "meanError": -5.68,
+        "meanAbsoluteError": 11.42,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0741
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 0.75,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7614,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.82,
+        "meanError": -5.18,
+        "meanAbsoluteError": 11.2,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0741
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 0.75,
+          "usecases": 1,
+          "demo": 0.75,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 10,
+          "outputItems": 6,
+          "media": 4.5,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7601,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -5.19,
+        "meanAbsoluteError": 11.13,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 0.75,
+          "usecases": 0.875,
+          "demo": 0.625,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 8.75,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7588,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.81,
+        "meanError": -5,
+        "meanAbsoluteError": 11.34,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.1111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 0.75,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7579,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.82,
+        "meanError": -5.55,
+        "meanAbsoluteError": 11.33,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7802,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.84,
+        "meanError": -4.3,
+        "meanAbsoluteError": 10.52,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.78,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -4.96,
+        "meanAbsoluteError": 10.82,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 0.95,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7782,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -5.35,
+        "meanAbsoluteError": 10.99,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 0.875,
+          "demo": 1,
+          "reliability": 0.75
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 8.75,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 7.5
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7756,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.89,
+        "meanError": -4.03,
+        "meanAbsoluteError": 10.49,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7755,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.85,
+        "meanError": -4.67,
+        "meanAbsoluteError": 10.63,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7753,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -5.5,
+        "meanAbsoluteError": 11.04,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.0556,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 0.95,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7751,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -4.99,
+        "meanAbsoluteError": 10.87,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.775,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.87,
+        "meanError": -3.98,
+        "meanAbsoluteError": 10.5,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.875,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 8.75,
+          "usageActions": 8.75,
+          "ioPairs": 7,
+          "codeExamples": 3.5,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7743,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.84,
+        "meanError": -4.51,
+        "meanAbsoluteError": 10.75,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 0.75,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 7.5,
+          "usageActions": 7.5,
+          "ioPairs": 6,
+          "codeExamples": 3,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.774,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.83,
+        "meanError": -5.16,
+        "meanAbsoluteError": 11.16,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    },
+    {
+      "config": {
+        "exponent": 0.85,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7738,
+        "topQuartileRecall": 0.64,
+        "severeFalseNegativeRate": 0.04,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.85,
+        "meanError": -5.52,
+        "meanAbsoluteError": 10.9,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.2
+    }
+  ],
+  "leaders": {
+    "highestTopQuartileRecall": {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.5,
+          "usage": 0.5,
+          "usecases": 0.625,
+          "demo": 0.625,
+          "reliability": 0.75
+        },
+        "anchors": {
+          "capabilityItems": 6,
+          "usageItems": 5,
+          "usageActions": 5,
+          "ioPairs": 4,
+          "codeExamples": 2,
+          "usecaseItems": 6.25,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 7.5
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7182,
+        "topQuartileRecall": 0.72,
+        "severeFalseNegativeRate": 0.13,
+        "severeFalsePositiveRate": 0.02,
+        "within20Share": 0.7,
+        "meanError": -11.6,
+        "meanAbsoluteError": 14.74,
+        "maximumTypeSevereRate": 0.1622,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0.1111,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.1111,
+            "severeFalsePositiveRate": 0.037
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.1622,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 1,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": false,
+        "severeFalsePositiveRate": true,
+        "within20Share": false,
+        "typeSevereRate": false
+      },
+      "deficit": 2.489
+    },
+    "highestSpearman": {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.5,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.875,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 6,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 7,
+          "media": 5.25,
+          "reliabilityItems": 10
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7856,
+        "topQuartileRecall": 0.6,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.02,
+        "within20Share": 0.89,
+        "meanError": -6.03,
+        "meanAbsoluteError": 10.33,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.0556,
+            "severeFalsePositiveRate": 0.037
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0541,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.25
+    },
+    "lowestSevereFalseNegativeRate": {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 1,
+          "reliability": 0.5
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 5
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7367,
+        "topQuartileRecall": 0.56,
+        "severeFalseNegativeRate": 0.02,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.89,
+        "meanError": -2.78,
+        "meanAbsoluteError": 10.54,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.1111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.0185,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 4,
+      "pass": false,
+      "gates": {
+        "spearman": false,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.3177
+    },
+    "lowestMeanAbsoluteError": {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 1,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 1,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 12,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7726,
+        "topQuartileRecall": 0.56,
+        "severeFalseNegativeRate": 0.03,
+        "severeFalsePositiveRate": 0.04,
+        "within20Share": 0.9,
+        "meanError": -2.24,
+        "meanAbsoluteError": 10.04,
+        "maximumTypeSevereRate": 0.0556,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0.1111
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.027,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.3
+    },
+    "bestTopQuartileWithOtherCoreGates": {
+      "config": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 8.75
+        }
+      },
+      "metrics": {
+        "count": 100,
+        "spearman": 0.7716,
+        "topQuartileRecall": 0.68,
+        "severeFalseNegativeRate": 0.05,
+        "severeFalsePositiveRate": 0.03,
+        "within20Share": 0.88,
+        "meanError": -4.19,
+        "meanAbsoluteError": 10.55,
+        "maximumTypeSevereRate": 0.0811,
+        "byType": {
+          "catalog-list": {
+            "n": 9,
+            "severeFalseNegativeRate": 0,
+            "severeFalsePositiveRate": 0
+          },
+          "dsh-plugin": {
+            "n": 54,
+            "severeFalseNegativeRate": 0.037,
+            "severeFalsePositiveRate": 0.0556
+          },
+          "standalone-nonplugin": {
+            "n": 37,
+            "severeFalseNegativeRate": 0.0811,
+            "severeFalsePositiveRate": 0
+          }
+        }
+      },
+      "passCount": 5,
+      "pass": false,
+      "gates": {
+        "spearman": true,
+        "topQuartileRecall": false,
+        "severeFalseNegativeRate": true,
+        "severeFalsePositiveRate": true,
+        "within20Share": true,
+        "typeSevereRate": true
+      },
+      "deficit": 0.15
+    }
+  },
+  "crossValidation": [
+    {
+      "fold": 0,
+      "trainCount": 87,
+      "holdoutCount": 13,
+      "selectedConfig": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.625,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 5,
+          "media": 3.75,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 1,
+          "anchorFractions": {
+            "capability": 0.875,
+            "usage": 1,
+            "usecases": 1,
+            "demo": 0.625,
+            "reliability": 1
+          },
+          "anchors": {
+            "capabilityItems": 10.5,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 5,
+            "media": 3.75,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 87,
+          "spearman": 0.7769,
+          "topQuartileRecall": 0.6818,
+          "severeFalseNegativeRate": 0.023,
+          "severeFalsePositiveRate": 0.0345,
+          "within20Share": 0.8736,
+          "meanError": -3.9885,
+          "meanAbsoluteError": 10.5172,
+          "maximumTypeSevereRate": 0.0667,
+          "byType": {
+            "catalog-list": {
+              "n": 8,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 45,
+              "severeFalseNegativeRate": 0.0222,
+              "severeFalsePositiveRate": 0.0667
+            },
+            "standalone-nonplugin": {
+              "n": 34,
+              "severeFalseNegativeRate": 0.0294,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.1477
+      },
+      "holdout": {
+        "passCount": 4,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": false,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 2.1394,
+        "metrics": {
+          "count": 13,
+          "spearman": 0.7735,
+          "topQuartileRecall": 0.75,
+          "severeFalseNegativeRate": 0.1538,
+          "severeFalsePositiveRate": 0,
+          "within20Share": 0.8462,
+          "meanError": -3.9231,
+          "meanAbsoluteError": 10.3846,
+          "maximumTypeSevereRate": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 1,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 9,
+              "severeFalseNegativeRate": 0.1111,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin": {
+              "n": 3,
+              "severeFalseNegativeRate": 0.3333,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "trainCount": 82,
+      "holdoutCount": 18,
+      "selectedConfig": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 1,
+          "anchorFractions": {
+            "capability": 0.875,
+            "usage": 1,
+            "usecases": 1,
+            "demo": 0.5,
+            "reliability": 1
+          },
+          "anchors": {
+            "capabilityItems": 10.5,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 4,
+            "media": 3,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 82,
+          "spearman": 0.7538,
+          "topQuartileRecall": 0.6667,
+          "severeFalseNegativeRate": 0.0366,
+          "severeFalsePositiveRate": 0.0244,
+          "within20Share": 0.8293,
+          "meanError": -4.0976,
+          "meanAbsoluteError": 10.439,
+          "maximumTypeSevereRate": 0.0465,
+          "byType": {
+            "catalog-list": {
+              "n": 7,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 43,
+              "severeFalseNegativeRate": 0.0465,
+              "severeFalsePositiveRate": 0.0465
+            },
+            "standalone-nonplugin": {
+              "n": 32,
+              "severeFalseNegativeRate": 0.0313,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.1667
+      },
+      "holdout": {
+        "passCount": 4,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": true,
+          "severeFalseNegativeRate": false,
+          "severeFalsePositiveRate": false,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.2222,
+        "metrics": {
+          "count": 18,
+          "spearman": 0.8599,
+          "topQuartileRecall": 0.8,
+          "severeFalseNegativeRate": 0.0556,
+          "severeFalsePositiveRate": 0.0556,
+          "within20Share": 0.8889,
+          "meanError": -5.2222,
+          "meanAbsoluteError": 10.8889,
+          "maximumTypeSevereRate": 0.0909,
+          "byType": {
+            "catalog-list": {
+              "n": 2,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 11,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0.0909
+            },
+            "standalone-nonplugin": {
+              "n": 5,
+              "severeFalseNegativeRate": 0.2,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "trainCount": 72,
+      "holdoutCount": 28,
+      "selectedConfig": {
+        "exponent": 0.95,
+        "anchorFractions": {
+          "capability": 0.5,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 1,
+          "reliability": 1
+        },
+        "anchors": {
+          "capabilityItems": 6,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 8,
+          "media": 6,
+          "reliabilityItems": 10
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.95,
+          "anchorFractions": {
+            "capability": 0.5,
+            "usage": 1,
+            "usecases": 1,
+            "demo": 1,
+            "reliability": 1
+          },
+          "anchors": {
+            "capabilityItems": 6,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 8,
+            "media": 6,
+            "reliabilityItems": 10
+          }
+        },
+        "metrics": {
+          "count": 72,
+          "spearman": 0.7912,
+          "topQuartileRecall": 0.6667,
+          "severeFalseNegativeRate": 0.0417,
+          "severeFalsePositiveRate": 0.0278,
+          "within20Share": 0.9028,
+          "meanError": -5.5556,
+          "meanAbsoluteError": 10.4167,
+          "maximumTypeSevereRate": 0.0526,
+          "byType": {
+            "catalog-list": {
+              "n": 8,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 38,
+              "severeFalseNegativeRate": 0.0526,
+              "severeFalsePositiveRate": 0.0526
+            },
+            "standalone-nonplugin": {
+              "n": 26,
+              "severeFalseNegativeRate": 0.0385,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.1667
+      },
+      "holdout": {
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.2857,
+        "metrics": {
+          "count": 28,
+          "spearman": 0.7604,
+          "topQuartileRecall": 0.5714,
+          "severeFalseNegativeRate": 0.0357,
+          "severeFalsePositiveRate": 0,
+          "within20Share": 0.8571,
+          "meanError": -7.9643,
+          "meanAbsoluteError": 10.3929,
+          "maximumTypeSevereRate": 0.0625,
+          "byType": {
+            "catalog-list": {
+              "n": 1,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 16,
+              "severeFalseNegativeRate": 0.0625,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin": {
+              "n": 11,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "trainCount": 79,
+      "holdoutCount": 21,
+      "selectedConfig": {
+        "exponent": 0.9,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.5,
+          "reliability": 0.875
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 4,
+          "media": 3,
+          "reliabilityItems": 8.75
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 0.9,
+          "anchorFractions": {
+            "capability": 0.875,
+            "usage": 1,
+            "usecases": 1,
+            "demo": 0.5,
+            "reliability": 0.875
+          },
+          "anchors": {
+            "capabilityItems": 10.5,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 4,
+            "media": 3,
+            "reliabilityItems": 8.75
+          }
+        },
+        "metrics": {
+          "count": 79,
+          "spearman": 0.8156,
+          "topQuartileRecall": 0.75,
+          "severeFalseNegativeRate": 0.038,
+          "severeFalsePositiveRate": 0.0253,
+          "within20Share": 0.8481,
+          "meanError": -5.9747,
+          "meanAbsoluteError": 10.4557,
+          "maximumTypeSevereRate": 0.0714,
+          "byType": {
+            "catalog-list": {
+              "n": 7,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 44,
+              "severeFalseNegativeRate": 0.0227,
+              "severeFalsePositiveRate": 0.0455
+            },
+            "standalone-nonplugin": {
+              "n": 28,
+              "severeFalseNegativeRate": 0.0714,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.0625
+      },
+      "holdout": {
+        "passCount": 3,
+        "pass": false,
+        "gates": {
+          "spearman": false,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": false,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 1.5009,
+        "metrics": {
+          "count": 21,
+          "spearman": 0.5841,
+          "topQuartileRecall": 0.5,
+          "severeFalseNegativeRate": 0.0952,
+          "severeFalsePositiveRate": 0.0476,
+          "within20Share": 0.8095,
+          "meanError": -4.381,
+          "meanAbsoluteError": 12.7619,
+          "maximumTypeSevereRate": 0.1,
+          "byType": {
+            "catalog-list": {
+              "n": 2,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 10,
+              "severeFalseNegativeRate": 0.1,
+              "severeFalsePositiveRate": 0.1
+            },
+            "standalone-nonplugin": {
+              "n": 9,
+              "severeFalseNegativeRate": 0.1111,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "trainCount": 80,
+      "holdoutCount": 20,
+      "selectedConfig": {
+        "exponent": 1,
+        "anchorFractions": {
+          "capability": 0.875,
+          "usage": 1,
+          "usecases": 1,
+          "demo": 0.875,
+          "reliability": 0.75
+        },
+        "anchors": {
+          "capabilityItems": 10.5,
+          "usageItems": 10,
+          "usageActions": 10,
+          "ioPairs": 8,
+          "codeExamples": 4,
+          "usecaseItems": 10,
+          "outputItems": 7,
+          "media": 5.25,
+          "reliabilityItems": 7.5
+        }
+      },
+      "train": {
+        "config": {
+          "exponent": 1,
+          "anchorFractions": {
+            "capability": 0.875,
+            "usage": 1,
+            "usecases": 1,
+            "demo": 0.875,
+            "reliability": 0.75
+          },
+          "anchors": {
+            "capabilityItems": 10.5,
+            "usageItems": 10,
+            "usageActions": 10,
+            "ioPairs": 8,
+            "codeExamples": 4,
+            "usecaseItems": 10,
+            "outputItems": 7,
+            "media": 5.25,
+            "reliabilityItems": 7.5
+          }
+        },
+        "metrics": {
+          "count": 80,
+          "spearman": 0.7717,
+          "topQuartileRecall": 0.65,
+          "severeFalseNegativeRate": 0.05,
+          "severeFalsePositiveRate": 0.0375,
+          "within20Share": 0.875,
+          "meanError": -4.025,
+          "meanAbsoluteError": 10.6,
+          "maximumTypeSevereRate": 0.0714,
+          "byType": {
+            "catalog-list": {
+              "n": 6,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 46,
+              "severeFalseNegativeRate": 0.0435,
+              "severeFalsePositiveRate": 0.0652
+            },
+            "standalone-nonplugin": {
+              "n": 28,
+              "severeFalseNegativeRate": 0.0714,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        },
+        "passCount": 5,
+        "pass": false,
+        "gates": {
+          "spearman": true,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.1875
+      },
+      "holdout": {
+        "passCount": 4,
+        "pass": false,
+        "gates": {
+          "spearman": false,
+          "topQuartileRecall": false,
+          "severeFalseNegativeRate": true,
+          "severeFalsePositiveRate": true,
+          "within20Share": true,
+          "typeSevereRate": true
+        },
+        "deficit": 0.3065,
+        "metrics": {
+          "count": 20,
+          "spearman": 0.7076,
+          "topQuartileRecall": 0.6,
+          "severeFalseNegativeRate": 0,
+          "severeFalsePositiveRate": 0,
+          "within20Share": 0.95,
+          "meanError": -3.1,
+          "meanAbsoluteError": 9.1,
+          "maximumTypeSevereRate": 0,
+          "byType": {
+            "catalog-list": {
+              "n": 3,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "dsh-plugin": {
+              "n": 8,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            },
+            "standalone-nonplugin": {
+              "n": 9,
+              "severeFalseNegativeRate": 0,
+              "severeFalsePositiveRate": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

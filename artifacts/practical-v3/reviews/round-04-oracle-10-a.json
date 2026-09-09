@@ -1,0 +1,559 @@
+{
+  "reviews": [
+    {
+      "repo": "dundunhan/dsh-video-lens",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "**Video understanding for DeepSeek Harness — give text-only agents eyes and ears on video.**",
+        "| `video_probe` | Cheap, instant metadata via `ffprobe`: container, duration, resolution, fps, codecs, audio tracks, subtitles. |",
+        "| `video_analyze` | Content understanding: **scene-change-aware frame sampling** (`ffmpeg scdet`), **optional ASR transcript** (speech with timestamps), fused with any OpenAI-compatible vision model",
+        "| `video_ask` | **Time-anchored Q&A**: parses explicit time references (\"at 3:20\", \"第2分钟\") or locates relevant speech via transcript keyword matching, re-samples frames from the matched windows",
+        "> v0.3.1. The plugin never locks you into a provider: vision and ASR are both OpenAI-compatible endpoints configured via `baseUrl` + `model` + key env var."
+      ],
+      "usageItems": [
+        "> \"What's in /tmp/demo.mp4?\"",
+        "The agent calls `video_probe` first, then `video_analyze`. Evidence includes:"
+      ],
+      "usageActions": [],
+      "ioPairs": [
+        "> \"What's in /tmp/demo.mp4?\"\n\nThe agent calls `video_probe` first, then `video_analyze`."
+      ],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "\"metadata\": { \"container\": \"mov,mp4,m4a,3gp,3g2,mj2\", \"durationSec\": 268.4,"
+      ],
+      "reliability": [
+        "- Scene changes are detected with ffmpeg's `scdet` filter (ffmpeg ≥ 6.0). Videos without detectable cuts fall back to uniform midpoint sampling.",
+        "- ASR is **strictly additive**: if `asrApiKeyEnv` is unset or the provider fails, the visual analysis still completes and `transcript` is `null`.",
+        "- **Executes**: `ffprobe` and `ffmpeg` from `PATH` (never a shell — argv arrays only).",
+        "- **Does not**: execute shells, eval code, phone home, auto-update, or read files on its own.",
+        "- The real access boundary is the DSH host sandbox; the plugin's readability check is a UX guard, not a security boundary.",
+        "- Tested with DSH profile bundles `@deepseek-ai/dsh-base` + `@deepseek-ai/dsh-web-app`.",
+        "- ffmpeg ≥ 6.0 for `scdet`; older versions degrade to uniform sampling.",
+        "- macOS / Linux tested; Windows untested.",
+        "- Payload sizes are bounded: `maxFrames` × ~100–300 KB (768px JPEG) per analysis call."
+      ],
+      "media": [],
+      "concerns": [
+        "README 无图片/演示媒体，media 为空。",
+        "Roadmap 条目为未来计划，未计入。",
+        "配置键表与安装/密钥导出命令按规则排除，codeExamples 为空。"
+      ]
+    },
+    {
+      "repo": "Links2008/DeepSeek-Harness-Desktop",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "轻量、快速、完整离线的 DeepSeek Harness Windows 桌面发行版。",
+        "| 原生 Windows 壳 | 单实例、系统通知、无边框窗口、快捷方式和完整卸载 |",
+        "| 轻量离线安装 | 一次下载即可使用，不在首启临时下载运行时 |",
+        "| 更新可靠 | 下载、校验、退出进程树、静默覆盖安装和快捷方式恢复形成闭环 |",
+        "用户点击侧栏更新按钮后，桌面端从本仓库 Releases 检查并下载完整安装包。",
+        "- 侧栏和窗口控件动效使用可中断的合成动画；系统“减少动态效果”开启时自动降级。"
+      ],
+      "usageItems": [],
+      "usageActions": [],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [
+        "- v4.0.0 安装包为 **166,768,057 字节（159.04 MiB）**，较 v3 基线减少 **55.36 MiB / 25.82%**；Release 同时公布 SHA-256 供复核。"
+      ],
+      "reliability": [
+        "> 安装包暂未使用商业代码签名证书，SmartScreen 可能显示“未知发布者”。请在 Release 页面核对安装包字节数和 SHA-256。",
+        "- 不打包 API Key、Token、Cookie、`.credentials.yaml`、`~/.dsh`、用户会话或日志。",
+        "- 后端只监听本机 `127.0.0.1:3080`。",
+        "- Release 发布前验证安装、启动、原生模块、清理和卸载。",
+        "- 单个第三方插件缺失构建产物时可隔离故障项，避免拖垮整个后端。",
+        "- 保留 `~/.dsh` 中已有的 DSH-IM、Aqua、会话、模型配置和凭据；升级不会重置 profile。",
+        "GitHub Actions 仅以只读权限执行测试、归档、SHA-512、隔离安装、AppID、Harness 版本、HTTP 200、原生模块、端口释放和卸载验收，不提交代码或发布 Release。"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/images/desktop-home.png\" width=\"100%\" alt=\"DeepSeek Harness Desktop 主界面\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<td width=\"50%\"><img src=\"docs/images/agent-presets.png\" alt=\"Agent 预设\"></td>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<td width=\"50%\"><img src=\"docs/images/compact-sidebar.png\" alt=\"紧凑侧栏\"></td>",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "为 Windows 桌面发行版而非 DSH 插件；inferredType 记 standalone-nonplugin（诊断性）。",
+        "「一分钟开始」步骤属安装流程，按规则未计入 usage/usageActions。",
+        "顶部鲸鱼图标为 logo，未计入 media。"
+      ]
+    },
+    {
+      "repo": "cosyncing/cosyncing",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "Synchronize and control your agents — from CLI to GUI, from desktop to phone. Pick up right where you left",
+        "a client that shows each one — grouped by project, with its transcript, diffs, commands, and any",
+        "Read a session, answer a prompt, or take over.",
+        "Foreground clients can join the same broker-owned Codex or Pi Drive session without starting a",
+        "connects to a `dsh web` host and gives active foreground clients a shared transcript and control",
+        "starts a host when none is running, restarts one that crashes, and stops the one it started."
+      ],
+      "usageItems": [
+        "cosy restart\ncosy doctor\ncosy status\ncosy pair",
+        "`cosy pair --broker-url https://cosy.example.com` includes that client-reachable origin in a",
+        "Scan the QR from a client to grant access;",
+        "After setup, `cosy doctor` diagnoses the machine without changing it, and `cosy status` summarizes"
+      ],
+      "usageActions": [
+        "cosy pair --broker-url https://cosy.example.com",
+        "cosy devices list",
+        "cosy devices revoke <id>",
+        "cosy doctor"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Claude Code sessions open read-only",
+        "Background Observe connections stay read-only.",
+        "The broker is local-only by default. Cross-device use requires a proxy, tunnel, VPN,",
+        "General file attachments are not supported — the host accepts image content",
+        "Native Windows and Intel macOS server hosting are not supported in this release.",
+        "cosyncing does not",
+        "session content",
+        "The broker refuses to start until setup has"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://cosyncing.com/assets/sync/sync-demo-light.gif\"",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/workspace.png\"",
+          "weight": 0.5
+        },
+        {
+          "excerpt": "<img src=\"https://cosyncing.com/assets/shots/demo/real/light/sessions.png\"",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "为独立 agent 同步 broker/client（DSH 仅为其中一个适配器）；inferredType 记 standalone-nonplugin（诊断性）。",
+        "品牌 lockup 与 social banner 为营销/logo 图片，未计入 media；演示 GIF 与截图为外链，记 0.5 权重。",
+        "reliability 中多条为跨行句子的首行片段（如 session content），指向完整的隐私/兼容声明。"
+      ]
+    },
+    {
+      "repo": "SenmuuuuW/dsh-whale-report",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "把 DSH 的 session、token、cost、tool call、风险与异常，转成可以真正读懂的诊断结论与可验证的改进建议。",
+        "DeepTrace 不是 log viewer，也不是普通 dashboard——它把会话事件日志聚合成报告，让这些问题有答案。",
+        "- **默认只读**：DeepTrace 永远先只产出建议与证据",
+        "- **每次 Apply 都需要用户明确批准**（Review change → Apply）",
+        "- 当前 v0.6 只支持一个受控修改：**Repeated bash timeout → `shell.timeoutMs` 调整**",
+        "10 条确定性 Finding 规则：深夜消耗、峰谷时段成本、重试风暴、缓存命中率变化、致命级操作、需留意操作、会话碎片化、疑似密钥、费用趋势、工具健康。",
+        "| **Provider balance** | 模型平台实时余额（DeepSeek 已支持，可扩展）；key 只在本机服务端使用 |",
+        "- **会话轨迹**：单独导出的 PNG，仅含会话轨迹 + 会话索引（追查专用）"
+      ],
+      "usageItems": [
+        "- **面板（主入口）**：装了 better-sidebar 时在 \"+\" 菜单里打开「深迹」Tab；未装时右下角悬浮按钮兜底",
+        "- **对话**：直接说\"给我一份周报\"——`whale_report` 工具输出 markdown 报告",
+        "pnpm report                  # 周报（最近 7 天）",
+        "pnpm report -- --from 2026-08-01 --to 2026-08-14   # 自定义区间"
+      ],
+      "usageActions": [
+        "pnpm report                  # 周报（最近 7 天）",
+        "pnpm report -- --daily       # 或 --monthly / --yearly / --all",
+        "给我一份周报"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```sh\npnpm install && pnpm build\npnpm report                  # 周报（最近 7 天）"
+      ],
+      "usecases": [
+        "Agent 跑完之后，真正难回答的问题不是\"它做了什么\"，而是："
+      ],
+      "outputs": [
+        "| Refresh / Overview | ~31s（重放 + 重新聚合 session） | ~7ms median（纯索引查询） |",
+        "| Refresh ×100 压测 | — | p95 8.3ms / max 11.3ms |",
+        "- 窗口边界逐事件精确过滤（无比例近似），Raw Oracle 对账 costDiff = 0.0000"
+      ],
+      "reliability": [
+        "- **费用为估算**：按官方峰谷价分段估算，以平台账单为准",
+        "| **Secret scan** | 6 类常见密钥模式的存在性检测，**只报有无，不存原文** |",
+        "- **只读**：绝不改写任何 session 历史；统计排除 DeepTrace 自身的 `whale/*` 事件",
+        "- **损坏日志不泄错误**：fault isolation 只披露会话 id 与粗分类原因（corrupt-log / read-failed），错误消息 / 堆栈从不进报告",
+        "Browser cross-origin mutation requests are fenced（cross-site / foreign Origin / null Origin / host rebinding 全部拒绝）；按 DSH trust semantics，trusted loopback 本地客户端仍可调用 API",
+        "- **本机围栏**：API 只服务本机 loopback + 同源标记",
+        "- **会话跳转**：报告提供 Session ID 复制，尚未实现\"一键跳回原会话\"（待官方 client API 明确）",
+        "当前 version：**v0.6.0**（官方兼容基线 DSH 0.1.1-rc.2）",
+        "Runtime-tested against DSH 0.1.2-alpha.1 during development, but prerelease 0.1.2-alpha.1 is not included in the current npm peer range",
+        "pnpm test       # 314 个单测（28 个文件）：引擎与统计 / 洞察与 Improve 规则 / fault isolation / salvage / usage 口径 / 主题 / 峰谷计价 / 导出 / 客户端刷新韧性 / Query Engine 与周期不变量 / Oracle 对账 / 增量 ingest / 时区矩阵 / persistence"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"docs/images/deeptrace-overview.png\" alt=\"DeepTrace inside DSH\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/overview.png\" alt=\"DeepTrace overview\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img src=\"docs/images/report.png\" alt=\"Full report\" width=\"100%\" style=\"border:1px solid #d9e3e8;border-radius:14px\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "截图下的 caption 与 media 一一对应，未再计入 outputs。",
+        "「立即体验」fence 中 pnpm build 属构建，与 pnpm report 合并记录为一条 codeExample。",
+        "What it measures 表中多条为口径定义，仅选取有用户可见行为的条目。"
+      ]
+    },
+    {
+      "repo": "jsdvjx/dsh-strata",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "turns it into a scaled, colored picture of the whole",
+        "| **Full-width blue** | your message (and steering) — always the widest, brightest, never thinner than 5px |",
+        "| Red | a failed turn — or any tool/command row that reported an error |",
+        "| Horizontal rule | a compaction checkpoint: where the model stopped seeing the history above |",
+        "red for every failed tool call or command**. Click one to jump there.",
+        "**Hovering a user anchor dot** floats the clue wall over the right half of",
+        "- **近** (initial) restores the view from when the session opened",
+        "own *load older* fires, the map rescaling as history arrives."
+      ],
+      "usageItems": [
+        "- **Click an anchor dot** to jump to that message or failure.",
+        "- **Hover** the rail — it widens and shows a preview card for the row under the cursor",
+        "- **Click** a band to scroll it into reading position; the row flashes when it lands.",
+        "- **Click empty track or drag** to scrub proportionally, like a scrollbar.",
+        "- **Wheel** over the rail or the dots to scroll the transcript.",
+        "- **Double-click** to pin the rail open (persisted per browser)."
+      ],
+      "usageActions": [
+        "- **Click an anchor dot** to jump to that message or failure.",
+        "- **Click empty track or drag** to scrub proportionally, like a scrollbar.",
+        "- **Double-click** to pin the rail open (persisted per browser)."
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "comes straight back, and uninstalling restores it permanently.",
+        "The map hides itself when there is nothing to navigate: no session, a transcript that does",
+        "- **The map covers the loaded window.** DSH pages older history in on demand; until it is",
+        "- **Chat view only.** The Trajectory tab renders its own event ledger with different",
+        "- The rail occupies a ~14px strip of the transcript's right padding, so clicks in that",
+        "Pure browser half; the Node half is empty and no session data crosses the wire for it.",
+        "disables the transitions.",
+        "npm test                      # node --test over the DOM-free internals"
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"https://raw.githubusercontent.com/jsdvjx/dsh-strata/main/docs/demo.gif\" alt=\"Live demo: hovering expands the rail with a preview card",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "无明确场景/用例章节，usecases/outputs 为空。",
+        "演示 GIF 为 GitHub raw 外链，记 0.5 权重；完整 alt 文本超长，摘取前段。",
+        "「How it works」中的锚点选择器列表为实现细节，未计入。"
+      ]
+    },
+    {
+      "repo": "Nexus-Aethra/DSHBox",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "installs, launches, and manages independent DSH **Containers** — each with its own DSH version, profile, plugins, skills, workspace, and logs",
+        "- **Embedded WebView, no browser needed** — the DSH frontend opens in a native WebView window managed by DSH Box.",
+        "- **Version manager built in** — browse DSH releases from `deepseek-ai/deepseek-harness`, install or uninstall any tag with one click, and pin a version per Container.",
+        "- **Boxfile / sealed-template pipeline** — describe a Container with a small declarative `.dsh` script",
+        "- **Extension & Skill repository** — import plugins and skills from a GitHub URL, a local directory, or a tarball, then install them into any Container's profile with a single click.",
+        "- **Bundle (整合包) workflow** — group any mix of plugins and skills into a named bundle, then export it two ways:",
+        "- **Smart background tasks** — every long operation (install, start, rebuild, import, export) runs as a visible queued task with real-time scrolling logs, cancel/retry/delete, and history paging.",
+        "- **In-container agent awareness** — DSH Box injects a `dsh-box-context` plugin into every Container so the in-session agent sees `paths.dshboxHome` and `paths.dshboxCli`",
+        "- **Background service & tray** — a small `dshboxd` sidecar keeps things tidy, and a system tray icon lets you control it without keeping the main window open.",
+        "- **Zero-dependency install** — a private Node, npm, pnpm, and Git (Windows) runtime is bundled with every release.",
+        "- **Dual-mode RPC + live event stream** — the daemon owns all state changes and exposes them through a single `POST /rpc`"
+      ],
+      "usageItems": [
+        "2. Open **Resources** → **DSH Versions** → **Load versions**, then install the DSH tag you want.",
+        "3. Open **Resources** → **Templates**, then pull an official DSH template or build a reusable template from a Boxfile.",
+        "4. Open **Container** → create a Container from that template (name and profile).",
+        "5. The first create prepares the Container in its final directory (offline dependency install, local plugins, frontend build). Press **Start** — DSH Box launches that prepared copy",
+        "Use the tray menu to open the window or start/stop/restart the `dshboxd` background service."
+      ],
+      "usageActions": [
+        "Open **Resources** → **DSH Versions** → **Load versions**, then install the DSH tag you want.",
+        "Open **Container** → create a Container from that template (name and profile).",
+        "Press **Start** — DSH Box launches that prepared copy"
+      ],
+      "ioPairs": [],
+      "codeExamples": [
+        "```text\nFROM github.com/deepseek-ai/deepseek-harness:latest\nPROFILE web"
+      ],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "Git-backed Boxfile sources (`github.com/owner/repo:tag`) resolve through the managed binary in DSH Box's clean-room environment — host `~/.gitconfig` never leaks into builds.",
+        "- **Windows-first runtime recovery** — on Windows, DSH Box recovers from a first-run pnpm junction-validation failure after dependencies were materialised,",
+        "No runtime prerequisites on Windows — the bundled Node/npm/pnpm/Git runtime travels inside the installer. Linux needs a system Git (`apt install git` or your distro equivalent)",
+        "`runtime:prepare` verifies every archive against the SHA-256 pins in `runtime-lock.json` before extraction and aborts on mismatch.",
+        "Deletion is `soft-delete → fast queue → permanent delete`; references between Container ↔ template ↔ plugin are kept in lockstep so an entity still in use is never garbage-collected.",
+        "Listens on `127.0.0.1` to the daemon's loopback HTTP server.",
+        "cd src-tauri && cargo test --workspace",
+        "This is a schema break: legacy shared `runtimes/<version>/source` layouts are not used by new builds."
+      ],
+      "media": [
+        {
+          "excerpt": "<img width=\"1920\" height=\"983\" alt=\"image\" src=\"https://github.com/user-attachments/assets/26a17954-b864-43f4-ba19-36f85db738ae\" />",
+          "weight": 0.5
+        }
+      ],
+      "concerns": [
+        "为 Tauri 桌面运行时管理器而非 DSH 插件；inferredType 记 standalone-nonplugin（诊断性）。",
+        "产品截图为 GitHub user-attachments 外链，记 0.5 权重。",
+        "Boxfile 指令表与 <src> 形态列表为语法参考，仅最小示例计入 codeExamples。"
+      ]
+    },
+    {
+      "repo": "Anionex/dsh-computer-use",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "DSH Computer Use gives an Agent fresh Accessibility observations, exact process/window targeting, stale-state rejection, scoped application access, and verified post-action state.",
+        "- **No system-cursor movement:** the helper contains no cursor-warp path.",
+        "- **A separate Agent cursor:** click, scroll, and drag actions animate a click-through, nonactivating software cursor while the macOS system cursor remains untouched.",
+        "- **Observe before acting.** Return a bounded Accessibility tree, indexed elements, exact app/process/window metadata, permission state, and an optional screenshot Artifact.",
+        "- **Prefer semantic input.** Use `AXPress`, editable values, selected-text assignment, and advertised Accessibility actions before pointer fallback.",
+        "- **Scope application access.** Read and control leases are separated by Agent, Session, turn, and exact bundle id; high-impact actions require one-use confirmation.",
+        "- **Keep the model surface focused.** Execution Tools appear only after the current Agent loads the Computer Use Skill.",
+        "- **Return fresh evidence.** Every successful action settles for a bounded interval and returns a new full or diff observation.",
+        "| `computer_observe` | Return a fresh full/diff Accessibility observation and optional screenshot Artifact |",
+        "| `computer_click` | Prefer `AXPress`; accept an exact index or opaque target handle, with optional safe rebinding, before target-process coordinate fallback |"
+      ],
+      "usageItems": [
+        "Load the Skill in that Session:",
+        "/computer-use",
+        "> Use Computer Use to inspect the running DSH Computer Use Fixture, enable its deterministic option, and report the fresh status.",
+        "Restart a running `dsh web` host after changing the installed plugin, then start a new Session so the host reloads the Bundle and Skill catalog."
+      ],
+      "usageActions": [
+        "/computer-use",
+        "dsh --profile web --dump-config | grep computer-use"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "- browser tasks should use browser automation and DOM/CDP state;",
+        "- APIs, CLIs, and purpose-built application plugins remain preferable when available;",
+        "domain bundles such as `dsh-design` can compose Computer Use when a workflow crosses into a native application."
+      ],
+      "outputs": [],
+      "reliability": [
+        "- The current provider is macOS-only. Windows UI Automation and Linux providers are not implemented.",
+        "- On non-macOS hosts the plugin degrades gracefully: the DSH profile starts normally, Computer Use Tools and the Skill are not registered",
+        "- Target-process pointer delivery uses dynamically resolved SkyLight SPI. If it is unavailable, pointer fallback fails closed rather than switching to global input.",
+        "Minimized, hidden, or windowless targets fail closed.",
+        "Secure text values are emitted as `[secure]`; they do not enter target descriptors, tree text, Tool results, screenshot metadata, or native errors.",
+        "A user rejection is final for that app and scope for the rest of the Session.",
+        "- The package captures requested discrete observations, not a live desktop feed.",
+        "The model cannot override these host policies through Tool arguments.",
+        "- Status: early `0.2.1`; model-facing and provider behavior may change before a stable release.",
+        "It requires an isolated process group plus parent-owned standard transports, so ordinary shell redirection fails closed before command parsing."
+      ],
+      "media": [
+        {
+          "excerpt": "<img src=\"assets/computer-use-fixture.png\" width=\"760\" alt=\"The never-active deterministic native fixture before target-process pointer input, showing the dedicated pointer probe and ready status.\" />",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "「Scope」中的三条边界建议同时是能力边界与使用指引，归 usecases，未在 capability 重复。",
+        "Tool 词汇表折叠区仅摘两行代表性条目（command-reference 计入 capability）。",
+        "配置字段表为配置参考，按规则未计入 usage/codeExamples。"
+      ]
+    },
+    {
+      "repo": "Aik358/dsh-auto-memory",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "memory is recalled by situation and injected into the next turn without the model ever asking for it",
+        "| **Three-layer memory engine** | User rules → project notes → daily logs; injected + on-demand recall |",
+        "| **Memory writes itself** | A subagent quietly evaluates every turn and files topic-grouped entries — you never \"remember to log\" |",
+        "| **Proactive reminders** | The AI spots deadlines and promises in conversation, files them into the calendar and reminds you later |",
+        "| **External memory inheritance** | Memories from WorkBuddy / CodeBuddy / Claude Code / Codex are scanned, importable, per-source managed |",
+        "Ask in natural language — the AI expands your query into keywords, scans every memory layer, and answers conversationally with sources cited; cross-workspace search included.",
+        "A period-aware greeting (morning/afternoon/evening) that mentions your most important work; return after an hour away and the memory panel auto-opens with \"welcome back\" plus a recent-work digest;",
+        "frequent workflows crystallize into skill checklists that attach automatically, promote after cross-session validation"
+      ],
+      "usageItems": [
+        "Reopen anytime via **Settings → Appearance → Welcome tour → ▶ Replay**.",
+        "**Every \"should I interrupt\" decision can be reviewed and graded** in the Recall review tab (A activate / P prefetch / S suppress / H harmful / E edit)",
+        "Settings → Debug Center \"Scan dirty tokens\": one-click scan of user memory / notes / logs / reflections, reported by line range (locations only, no content)",
+        "The Settings → Auto Memory page has a \"Check for updates\" button comparing your version with the npm registry; registry installs get a one-click update."
+      ],
+      "usageActions": [
+        "Reopen anytime via **Settings → Appearance → Welcome tour → ▶ Replay**",
+        "pnpm approve-builds\npnpm add @huggingface/transformers"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [
+        "Running long pipelines or automated flows? Settings → Automation offers **Unattended mode**",
+        "**The problem it solves**: AI assistants start from zero every session, and every existing memory solution still relies on the model \"remembering to look\""
+      ],
+      "outputs": [
+        "dense: BGE-M3 int8 + para-512 chunks + cosine (R@5 0.925)",
+        "67 human-labeled verdicts: actPrecision 0.917 / harmful injections 0 / echo tier 7/7"
+      ],
+      "reliability": [
+        "- All three write tools run `sanitizeForWrite`: GBK mojibake (34-feature table), stutter degeneration, consecutive duplicate lines, external-AI-profile JSON signatures, base64 residue",
+        "Credential/secret sections are **always filtered out of prompts**.",
+        "- **Rate-limited AI**: auto-consolidation ≤8×/day with cooldown; useful memory without burning budget",
+        "- Memory files are plain-text Markdown; no secrets stored unless explicitly requested.",
+        "- `memory_recall` session search depends on the deployed session-query index; without it, only local search works.",
+        "- Plugin-set changes require a dsh restart.",
+        "- **Zero runtime dependencies** beyond Node built-ins",
+        "failures queue and retry every 5 minutes (a 15-second heartbeat file proves the loop is alive)."
+      ],
+      "media": [
+        {
+          "excerpt": "<a href=\"docs/screenshots/promo/promo-0-banner-v2.png\"><img width=\"820\" alt=\"dsh-auto-memory hero: she remembers, unbidden\" src=\"docs/screenshots/promo/promo-0-banner-v2.png\"></a>",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img width=\"720\" alt=\"welcome tour\" src=\"docs/screenshots/tour-welcome.png\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img width=\"720\" alt=\"refine\" src=\"docs/screenshots/panel-refine.png\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img width=\"480\" alt=\"overview\" src=\"docs/screenshots/panel-overview.png\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img width=\"480\" alt=\"hub\" src=\"docs/screenshots/panel-hub.png\">",
+          "weight": 1
+        },
+        {
+          "excerpt": "<img width=\"480\" alt=\"calendar\" src=\"docs/screenshots/calendar-zh.png\">",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "Promo 缩略图与详情帧存在重复视图；已按去重选取 6 张不重复截图，恰好达到 media 上限。",
+        "配置 JSON 示例与安装命令按规则排除。",
+        "Highlights 表首行与导语为同一主张，仅在 capability 计一次。"
+      ]
+    },
+    {
+      "repo": "taptap/instant-games-open-mcp",
+      "inferredType": "standalone-nonplugin",
+      "capability": [
+        "基于 Model Context Protocol (MCP) 的 **TapTap 小游戏和 H5 游戏**服务器，提供排行榜、分享、多人联机、云存档，以及当前游戏 DC 数据查询、统计概览与评价操作能力，并支持 **OAuth 2.0 零配置认证**。",
+        "- **🔐 零配置认证** - OAuth 2.0 Device Code Flow，扫码即用",
+        "- **⚙️ 服务端管理** - 创建/管理排行榜，自动处理 ID",
+        "- **🎮 H5 游戏支持** - 上传、发布、状态查询",
+        "- **📺 广告接入闭环** - 仅用于 TapTap 小游戏/H5，自动查询广告状态和广告位 ID，不与 Maker MCP 混用",
+        "- **🧭 当前游戏 DC 能力** - 商店/评价/社区统计概览、商店快照、论坛内容、评价列表、评价点赞、官方回复",
+        "- **🚀 三种传输模式** - stdio（本地）、SSE（远程/实时）、HTTP（兼容）",
+        "Maker MCP 也提供部分远端 proxy 能力，当前包括 `generate_image`、`batch_generate_images`、"
+      ],
+      "usageItems": [
+        "- **零配置 OAuth**：首次使用会提示扫码授权，token 自动保存！",
+        "> 使用 `$taptap-dc-ops-brief` 生成当前游戏的 7 日运营简报，并给出是否建议点赞/回复评价（先出草稿，等我确认再发）。",
+        "- `get_debug_feedbacks` - 拉取用户调试反馈并下载日志/截图"
+      ],
+      "usageActions": [
+        "taptap-maker init\ntaptap-maker login\ntaptap-maker doctor\ntaptap-maker apps --json",
+        "taptap-maker install",
+        "taptap-maker mcp verify",
+        "taptap-maker init --create --name \"my-local-game\""
+      ],
+      "ioPairs": [
+        "用户: \"我想在游戏中接入排行榜\"\n\nAI 调用: get_integration_guide\n→ 返回完整工作流（创建排行榜 → 客户端代码 → 测试）",
+        "用户: 扫码后告知 \"已授权\"\n\nAI 调用: complete_oauth_authorization\n→ ✅ 授权完成，token 已保存"
+      ],
+      "codeExamples": [],
+      "usecases": [
+        "本仓库内置一个面向运营/工作室的 Codex Skill：`taptap-dc-ops-brief`，用于把“当前游戏 DC 数据”整理成 30 秒可读的结论简报",
+        "🐣 **完全不懂技术？** [快速开始（零基础版）](docs/QUICK_START.md) - 3 分钟搞定 Cursor 配置，复制粘贴就能用。"
+      ],
+      "outputs": [],
+      "reliability": [
+        "- **Windows 启动报 `Received protocol 'c:'`**：这是旧版本 Windows ESM 动态导入路径兼容问题，请升级到包含该修复的最新版本。",
+        "初始化会暂停在登录、项目拉取和 MCP 配置之前；修复后重新运行 `taptap-maker init`。",
+        "push 失败时不会继续 build，会返回本地 commit、ahead 状态、stderr/stdout 和下一步建议，",
+        "如果 Maker MCP tools 缺失或出现 `-32000` / `Connection closed`，先按",
+        "只有连接断开、会话失效等",
+        "MCP 未连接时不要依赖 MCP tools 自检。",
+        "- Node.js 18.14.1+",
+        "归档下载限制为 64 MiB，最多 1000 个条目、解压后最多 128 MiB。",
+        "报告不包含完整聊天、项目源码、其它 MCP server、PAT/token 或完整环境变量；用户主目录"
+      ],
+      "media": [],
+      "concerns": [
+        "为 TapTap 官方 MCP 服务器（npm 包），DSH 仅为受支持客户端之一；inferredType 记 standalone-nonplugin（诊断性）。",
+        "README 无图片媒体，media 为空。",
+        "大段插件迁移/安装流程属安装与迁移规程，仅摘取失败与回滚语义计入 reliability。"
+      ]
+    },
+    {
+      "repo": "Ewnscat-ya/dsh-client-ui-skin-denia",
+      "inferredType": "dsh-plugin",
+      "capability": [
+        "- **双形态切换**：布景之形（亮色）/ 幻灭之形（暗色），含形态切换动画",
+        "- **左右全身立绘** + Q版动态 GIF 吉祥物",
+        "- **玻璃卡片层级**：root 半透明 + backdrop-filter 模糊",
+        "- **泡泡粒子场**：双层虹彩气泡上浮",
+        "- **锁链边框**：深紫锁链，跟随侧栏宽度",
+        "- **渐变文字**：工作区/会话标题粉紫渐变",
+        "- **新会话欢迎界面注入**：达妮娅标题 + 副标题 + 台词",
+        "- **侧栏收起/展开自适应布局**：立绘 + Q版 + 文字居中联动",
+        "- **黑白娅分别背景图**"
+      ],
+      "usageItems": [
+        "重启 DSH 后在设置 → 皮肤中选择\"达妮娅 · 虚无之泡\"。",
+        "皮肤加载后，界面右下角会出现一个默认折叠的调色板面板，点击 `🎨` 展开。",
+        "| 背景图 | 上传自定义背景 / 清除恢复默认 |",
+        "点击「♻ 恢复默认设置」可一键还原所有选项。"
+      ],
+      "usageActions": [
+        "点击 `🎨` 展开",
+        "点击「♻ 恢复默认设置」可一键还原所有选项。"
+      ],
+      "ioPairs": [],
+      "codeExamples": [],
+      "usecases": [],
+      "outputs": [],
+      "reliability": [
+        "- DSH Web：0.1.0-rc.6 至 0.1.1-rc.2（dsh-web-frontend）",
+        "- 最近验证日期：2026-08-24",
+        "设置会保存到当前 DSH profile 的皮肤专属文件；刷新、重启、清除浏览器站点存储后仍可恢复。"
+      ],
+      "media": [
+        {
+          "excerpt": "[![布景之形](preview/light.webp)](preview/light.webp)",
+          "weight": 1
+        },
+        {
+          "excerpt": "[![幻灭之形](preview/dark.webp)](preview/dark.webp)",
+          "weight": 1
+        }
+      ],
+      "concerns": [
+        "更新日志章节按 changelog 排除，其中的修复/新增未计入。",
+        "调色板控件表为配置参考，仅保留入口与恢复操作计入 usage。",
+        "版权/致谢表为零贡献。"
+      ]
+    }
+  ]
+}
